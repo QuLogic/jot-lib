@@ -1,0 +1,55 @@
+// halo shader vertex program
+// (adapted from GLSL pg 418)
+
+uniform float pixel_width;
+//uniform float camera_distance;
+
+
+//Hi,
+//I figured it out, <-  or so I think :P 
+//You cannot ignore the "w" component when you multiply by matrices
+//dividing the resulting "xyz" portion by "w" makes it behave correctly
+//My halftone_ex had problems because of this.
+
+//-Karol
+
+
+void main() 
+{
+   
+   // vertex normal in world space, normalized so that we can move
+   // some number of units along the normal
+   vec3 n = normalize(gl_Normal);
+   
+   // declare a vec4 to provide a sample 1-unit translation in NDC-space
+   vec4 translation = (gl_ModelViewProjectionMatrixInverse) * vec4(1.0,0.0,0.0,1.0);
+   
+   // declare the displaced vertex that will be created - divide by w to get 
+   // vector of correct length in object space
+   vec3 haloVertex = gl_Vertex.xyz + ((translation.xyz)/translation.w);
+
+   float dist = distance((gl_Vertex.xyz), haloVertex);
+   
+   //haloVertex = gl_Vertex.xyz + (camera_distance/60.0)*n;
+   haloVertex = gl_Vertex.xyz + (dist/pixel_width) * 10.0 * n;
+   
+   
+   
+   
+   // now convert the normal to eye space for dot product computation
+   n = normalize(gl_NormalMatrix * gl_Normal);
+   
+   
+   vec3 position = vec3(gl_ModelViewMatrix * vec4(haloVertex, 1.0));
+   vec3 l = normalize(-position);
+   
+   // get n*l, clamp negative values to 0:
+   float nl = clamp(dot(n,l), 0.0, 1.0);
+
+   // texture coordinate is just n*l:
+   gl_TexCoord[0] = vec4(nl,vec3(0.0));
+   gl_FrontColor  = gl_Color;
+   gl_Position    = gl_ModelViewProjectionMatrix * vec4(haloVertex, 1.0);
+}
+
+// halo2.vp

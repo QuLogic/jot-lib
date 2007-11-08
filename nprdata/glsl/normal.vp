@@ -1,0 +1,12 @@
+varying vec3 normal;
+
+void main() 
+{
+   // light direction
+   normal = normalize(gl_NormalMatrix * gl_Normal);
+
+   // texture coordinate is just n*l:
+   gl_Position    = ftransform();
+}
+
+// normal.vp

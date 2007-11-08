@@ -1,0 +1,31 @@
+#!/bin/zsh -f
+
+#######################################################
+# usage:
+#######################################################
+USAGE="Usage: `basename $0` <sm-files>"
+
+if [[ $# -lt 1 ]]; then
+   echo $USAGE
+   exit 1
+fi
+
+#######################################################
+# main loop
+#######################################################
+
+if [[ ! -x `which sm2obj` ]]; then
+   echo "sm2obj not found"
+   exit 1
+fi
+
+for i in $* ; do
+   if [[ -f $i ]]; then
+      echo "converting $i ..."
+      sm2obj < $i > $i:r.obj
+   else
+      echo "file not found: $i"
+   fi
+done  
+
+exit 0

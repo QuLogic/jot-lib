@@ -1,0 +1,18 @@
+
+BaseStroke 	{ 
+	color 	{0.65 0.56264 0.338 }
+	alpha 	0.835 
+	width 	28 
+	halo 	0 
+	taper 	40 
+	flare 	0.35 
+	aflare 	0.46 
+	fade 	45 
+	angle 	0 
+	contrast 	0.615 
+	brightness 	0.8 
+	press_vary_width 	1 
+	press_vary_alpha 	1 
+	stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+	paper_texture_file 	{ nprdata/paper_textures/paper3.png } 
+	} 

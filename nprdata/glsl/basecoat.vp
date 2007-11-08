@@ -1,0 +1,70 @@
+// basecoat shader vertex program.
+
+varying vec4 P; // vertex position, eye space
+varying vec3 N; // vertex normal,   eye space
+
+attribute vec3 blendNorm;
+attribute float local_edge_len;
+
+uniform int blend_normal;
+uniform float edge_len_scale, unit_len, user_depth, ratio_scale;
+
+uniform mat4 P_matrix;
+uniform float global_edge_len;
+
+float edge_length_in_pix(in float e_l)
+{
+   vec4 v0 = vec4(0.0, -e_l, length(P), 1.0); 
+   vec4 v1 = vec4(0.0, e_l, length(P), 1.0);
+
+   vec4 p0, p1;
+
+   p0 = P_matrix * v0;
+   p1 = P_matrix * v1;
+
+   return length(p0/p0.w-p1/p1.w);
+}
+
+float depth(float maxFactor,float targetLength, float z)
+{
+   float length = (1000.0 * targetLength) + (1.0 * (1.0 - targetLength));
+   return log(z/length) / log(maxFactor);
+}
+
+void main() 
+{
+   // Surface location and normal in eye space:
+   P = gl_ModelViewMatrix * gl_Vertex;
+   N = normalize(gl_NormalMatrix * gl_Normal);
+   vec3 bNorm = normalize(gl_NormalMatrix * blendNorm);   // per-fragment "abstract" normal
+
+   float blend;
+
+   if(blend_normal == 0){
+      blend = 0.0;
+   }
+   if(blend_normal == 1){
+     blend = 1.0 - edge_length_in_pix(unit_len) * edge_len_scale;
+   }
+   if(blend_normal == 2){
+      blend = 1.0 - edge_length_in_pix(global_edge_len)*edge_len_scale;
+   }
+   if(blend_normal == 3){
+      blend = 1.0 - edge_length_in_pix(local_edge_len)*edge_len_scale;
+   }
+   if(blend_normal == 4){
+      blend = local_edge_len/global_edge_len * ratio_scale;
+   }
+   if(blend_normal == 5){
+      blend = user_depth;
+   }
+
+   blend = clamp(blend,0.0,1.0);
+   N =  ((1.0 - blend) * N) + (blend * bNorm);  //mix(N,bNorm,blend);   
+
+   gl_FrontColor  = gl_Color;
+   gl_Position    = ftransform();
+   gl_TexCoord[0] = gl_MultiTexCoord0;
+}
+
+// basecoat.vp

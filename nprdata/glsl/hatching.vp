@@ -1,0 +1,17 @@
+// hatching vertex program
+
+varying float nv;       // n dot v
+
+void main()
+{
+   // vertex normal in eye coordinates:
+   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+   vec4 p = gl_ModelViewMatrix * gl_Vertex; // vert position in eye coords
+   vec3 v = normalize(-p.xyz);              // view vector in eye coords
+   nv = dot(n,v);                           // n*v, for silhouettes
+
+   gl_FrontColor = gl_Color;
+   gl_Position   = ftransform();
+}
+
+// hatching.vp

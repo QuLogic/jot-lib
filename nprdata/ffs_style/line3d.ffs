@@ -1,0 +1,38 @@
+Bla 	{ 
+base_prototype 	{
+														OutlineStroke 	{
+															color 	{.66 .066 .227}
+															alpha 	1
+															width 	3
+															halo 	0
+															taper 	35
+															flare 	0
+															aflare 	0
+															fade 	20
+															angle 	3
+															contrast 	0.55
+															brightness 	0.5
+															offset_stretch 	1
+															offset_phase 	0
+															press_vary_width 	1
+															press_vary_alpha 	1
+															stroke_texture_file 	{ nprdata/stroke_textures/mydot4.png }
+															paper_texture_file 	{ nprdata/paper_textures/basic_paper.png }
+															orig_mesh_size 	80
+															} }
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	1
+													coher_cover_type 	2
+													coher_pix 	48
+													coher_wf 	1
+													coher_ws 	1
+													coher_wb 	1
+													coher_wh 	1
+													coher_mv 	2
+													coher_mp 	5
+													coher_m5 	5
+													coher_hj 	3
+													coher_ht 	15 
+}
+

@@ -1,0 +1,82 @@
+<HTML><HEAD><TITLE>Creating a new jot library</TITLE></head><body>
+<p>
+<h1>How do I create a new library in jot?</h1>
+<OL>
+<LI>Create a new directory under jot - make sure this name makes sense (you
+may want to discuss it with one of the jot czars).  Replace newjotdir in the
+following directions with the directory name you choose.
+<pre>
+mkdir newjotdir
+</pre>
+<LI>Create newjotdir/Makefile
+<UL>
+<LI>The following Makefile will create libnewjotdir.a containing compiled 
+newfile.C (newfile.o)
+<pre>
+NAME    = newjotdir
+SOURCES = newfile.C
+ALLSRC  = $(SOURCES) $(OTHERSRC) 
+
+# Remove this line if OpenGL include files aren't needed
+PLATIFLAGS = $(OGLINC)
+
+#################################################################
+# Compiler specifications 
+#################################################################
+include $(JOT_ROOT)/Makefile.local
+include $(JOT_ROOT)/include/makefiles/std
+</pre>
+<LI>The following will create libNEWJOTDIR.so containing compiled newfile.C
+(newfile.o), suitable for dynamic loading
+<pre>
+NAME    = newjotdir
+ALLSRC = $(SOURCES) $(OTHERSRC) $(DYNLOAD_SRC)
+
+DYNLOAD_LIB = libNEWJOTDIR.so
+DYNLOAD_SRC = newfile.C
+
+# Remove this line if OpenGL include files aren't needed
+PLATIFLAGS = $(OGLINC)
+PLATIFLAGS = $(OGLINC)
+
+#################################################################
+# Compiler specifications 
+#################################################################
+include $(JOT_ROOT)/Makefile.local
+include $(JOT_ROOT)/include/makefiles/std
+</pre>
+<LI>If one of the above Makefile's does not fit your needs, please email <a
+href="mailto:lsh@cs.brown.edu">lsh@cs.brown.edu</a>
+</UL>
+<p>
+<LI>Create all the source files you need by following <a
+href="newfile.html">these directions</a>, but skip the cvs commands
+<p>
+<LI>Test your build until it works to your satisfaction
+<p>
+<LI>From the jot directory (where your Makefile.local is), add 
+the new directory to the repository:
+<pre>
+cvs add newjotdir
+</pre>
+<LI>Go to newjotdir and add the new files to the CVS repository
+<br>
+<b>Note</b> - You have to change the parameters below if you have other files to
+add to the CVS repository (other than a Makefile and .C and .H files).  You
+can add a comment with -m'comment', but this is not required.
+<pre>
+cd newjotdir
+cvs add *.[CH] Makefile
+</pre>
+<LI>While still in your new directory, you need to commit your changes to CVS
+<br>
+<b>Note</b> - Please include a more descriptive comment!  If you want to
+specify your comment in an editor (you have a multi-line comment, for
+example), do not include the -m'...' parameter (a comment is required).
+<pre>
+cvs commit -m'Adding newjotdir functonality'
+</pre>
+</OL>
+<p>
+<a href="home.html">Back to main Jot page</a>
+</body></html>

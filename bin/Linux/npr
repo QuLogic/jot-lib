@@ -1,0 +1,10 @@
+#!/bin/zsh -f
+#######################################################
+# npr
+#
+#   run jot with WYSIWYG NPR functionality turned on.
+#######################################################
+
+JOT_WINDOW_NAME="WYSIWYG NPR" jot $*
+
+exit 0

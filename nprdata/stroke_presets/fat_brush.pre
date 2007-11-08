@@ -1,0 +1,18 @@
+
+BaseStroke 	{ 
+	color 	{0.1554 0.555 0.207348 }
+	alpha 	0.815 
+	width 	80 
+	halo 	0 
+	taper 	0 
+	flare 	0.03 
+	aflare 	0.07 
+	fade 	45 
+	angle 	0 
+	contrast 	0.985 
+	brightness 	0.6 
+	press_vary_width 	1 
+	press_vary_alpha 	1 
+	stroke_texture_file 	{ nprdata/stroke_textures/quite_noisy.png } 
+	paper_texture_file 	{ nprdata/paper_textures/crusty_src.png } 
+	} 

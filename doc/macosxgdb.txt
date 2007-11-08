@@ -1,0 +1,15 @@
+# Start gdb with the below commands to use the debug malloc dynamic library.
+set start-with-shell 0
+set env DYLD_INSERT_LIBRARIES /usr/lib/libMallocDebug.A.dylib
+set env DYLD_FORCE_FLAT_NAMESPACE 1
+set env MallocBadFreeAbort 1   
+set env MallocCheckHeapAbort 1
+set env MallocGuardEdges 1
+set env MallocScribble 1
+set env MallocCheckHeapSleep 1000
+set env MallocCheckHeapEach 1
+set env MallocCheckHeapStart 1
+set env MallocCheckHeapAbort 1
+set env MallocBadFreeAbort 1
+set env MallocHelp 1
+run $JOT_ROOT/models/animals/cow.sm

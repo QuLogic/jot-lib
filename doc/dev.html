@@ -1,0 +1,262 @@
+<HTML>
+<HEAD>
+   <TITLE>Jot Device library</TITLE>
+</HEAD>
+<BODY>
+
+<H1>
+Jot Device library</H1>
+
+<UL>
+<LI>
+<A HREF="#devinput">Device input using the DEV class libraries</A></LI>
+
+<LI>
+<A HREF="#newdrivers">Writing drivers for new devices</A></LI>
+
+<LI>
+<A HREF="#switching">Switching between physical devices</A></LI>
+
+<LI>
+<A HREF="#combine_separate">Combining and separating devices</A></LI>
+
+<LI>
+<A HREF="#detail">DEV in detail</A></LI>
+    <UL>
+<LI><A HREF="#DEVice">DEVice</A>
+<LI><A HREF="#DEVhandler">DEVhandler</A>
+<LI><A HREF="#Evd">Evd</A>
+<LI><A HREF="#Modifiers">Modifiers</A></LI>
+    </UL>
+
+<LI>
+<A HREF="#Example">Example</A></LI>
+</UL>
+
+<H2>
+ <A NAME="devinput"></A>Device input using the DEV class libraries</H2>
+The DEV class libraries are used to get input from a wide range of input
+devices including mice, tablets, the Magellan Space Mouse, the Ascension
+Bird, and the Cyber and Super gloves. The concept behind DEV is to provide
+an abstract set of logical devices that both mask the details of physical
+devices and also allow for interchangeability between physical devices
+with a minimum of impact on application code.
+<P>By using the programming abstraction of DEV's logical devices, DEV simplifies
+:
+<UL>
+<LI>
+writing drivers for new devices</LI>
+
+<LI>
+changing between physical devices using logical devices</LI>
+
+<LI>
+combining and separating devices</LI>
+</UL>
+
+<H2>
+<A NAME="newdrivers"></A>Writing drivers for new devices</H2>
+DEV makes it easy to write drivers for new devices (assuming the new device
+has similar degrees of freedom to some existing DEV device), because the
+programmer only needs to write code that converts between raw device data
+and the format required by DEV's logical devices. The rest of the device
+handling code is encapsulated in DEV's logical devices. To facilitate writing
+the conversion code, DEV also provides a number of utilities for reading
+data from a serial port.
+<P>Device driver's in DEV usually are described by a class that can read
+from the physical device, and that both contain and write to logical devices.
+The application typically only sees the logical devices.
+<H2>
+<A NAME="switching"></A>Switching between physical devices</H2>
+Switching between physical devices is simplified in DEV since applications
+never communicate directly with the physical device. Instead applications
+are buffered from physical devices by communciating with logical devices.
+<P>DEV is organized around 2 logical valuator devices : DEVice_2d, and
+DEVice_6d, and one logical button device : DEVice_buttons.
+<P>All of the logical devices have a relatively simple interface that allows
+data to be *pushed* into the logical device (from a physical device handler).
+In addition, all devices support a list of observers, DEVhandlers, that
+are notified whenever data has been pushed into the logical device.
+<P>A DEVhandler of a logical valuator device can access both the current
+value of the device, and the old value of the device through the cur()
+and old() methods on the logical device. In the case of 2D devices, cur()
+and old() return 2D points, and in the case of 6D devices, they return
+transformations.
+<P>A DEVhandler of a logical button device can access the state of any
+of the buttons in the device (a maximum of 8 buttons are allowed in any
+one logical button device). The state of a given button is accessed with
+the get() function on the device.
+<P>Thus to switch between physical devices in an application, all that
+needs to be done is to either have a different physical device write to
+the logical device that the application is observing, or to have the application
+observer a different logical device (being written to by a different physical
+device).
+<H2>
+<A NAME="combine_separate"></A>Combining and separating devices</H2>
+Some 2D and 6D physical devices also have buttons attached to them (i.e.,
+a 3-button mouse). In other situations, users attach two or more different
+physical devices together to *appear* as a single physical device (i.e.,
+when buttons from a mouse are attached to a Bird that doesn't have otherwise
+have buttons). In either case, the user thinks of a single physical device,
+even though the application must process the input using at least two different
+serial ports.
+<P>Therefore, DEV always distinguishes between valuator and button devices.
+For example, even a three-button mouse is represented in DEV by two devices
+: a logical 2D device, and a logical button device. Alternatively, a Bird
+that has no buttons can be augmented with buttons from a mouse. Then in
+the application, the logical 6D valuator of the Bird and the logical three
+buttons of the mouse are indistinguishable from an integrated 6D three-button
+device.
+<P>NOTE: Since events generated with the mouse buttons typically require
+information stored in the valuator device, DEV enables any button device
+to contain a reference to either a 2D or a 6D valuator device.
+<H2>
+<A NAME="detail"></A>DEV in detail</H2>
+All logical devices in DEV are subclasses of an abstract DEVice class.
+<H3>
+<A NAME="DEVice"></A>DEVice</H3>
+
+<LI>
+DEVice_buttons - any button device (including buttons on a mouse!)</LI>
+
+<LI>DEVice_2d - a 2D valuator device (just the 2D stuff, no buttons)</LI>
+
+<LI>DEVice_2d_absrel - like DEVice_2d, but supports absolute/relative addressing</LI>
+<LI>DEVice_6d - a 6D valuator device (once again, no buttons)</LI>
+<LI>DEVice_cglove/DEVice_sglove - Cyberglove and Superglove, respectively</LI>
+<P>Since all DEVice's are logical, they must be notified whenever the physical
+device that controls them has changed. To change a logical devices data,
+its event() method must be called. This method receives appropriate data
+(i.e, a 2D point for a 2D device) and then maps it to logical data. This
+mapping is different for each logical device and is controlled by setting
+parameters such as the scale and offset for 2D devices, or a mapping transformation
+for 6D devices. The event() method expects absolute coordinates as input.
+If the physical device generates relative coordinates (such as for a mouse),
+then the event_delta() method should be used.
+<H3>
+<A NAME="DEVhandler">DEVhandler</A></H3>
+Each logical DEVice stores a list of device observers, DEVhandlers. These
+observers are all notified whenever data is pushed into the DEVice through
+the event() methods.
+<P>Each DEVhandler subclass must implement handle_event() method. The handle_event()
+method is called with an event description, Evd, that describes what happened
+to the device.
+<H3>
+<A NAME="Evd"></A>Evd</H3>
+When an observer is notified, it is sent an event description structure,
+Evd, that contains :
+<LI>
+DEVice * - a pointer to the device that generated the event</LI>
+
+<LI>
+DEVact - an enumeration describing the type of event that occured</LI>
+
+<LI>
+DEVmod - a bit flag of all of the modifiers active when the event occured.</LI>
+<P>The Event description specifies the device, the modifier keys and the
+event type that occurred. For valuator devices, the event type is always
+MOV. For button devices, the event type determines which button was pressed
+or released.
+<H3>
+<A NAME="Modifiers"></A>Modifiers</H3>
+Each event contains a set of bit flags corresponding to which modifier
+keys have been pressed. Since we don't want to tie our device package to
+a windowing system like X11, we have a general mechanism, DEVmod_gen, that
+can be used to implement modifier keys in whatever way suits an application.
+Whenever an event occurs, a static method, mods(), on DEVmod_gen is called
+to get the active modifiers. This method unions together the results of
+three mechanisms for specifying modifiers.
+<P>The first mechanism simply is a static class variable that specifies
+active modifiers. This variable can be explicitly set from anywhere within
+the application by calling the static method DEVmod_gen::force_mods().
+<P>The second mechanism allows any DEVbuttons object to be logically mapped,
+using a DEVmod_desc, to any modifier. Thus when the DEVmod_gen static method,
+mods(), is called, it samples the state of all the DEVbuttons objects that
+have been mapped as modifier keys, and returns the corresponding modifiers.
+<P>The last mechanism allows any DEVmod_gen subclass object to be registered
+with the DEVmod_gen class. Then when the mods() method is called on the
+class, it will in trun call the subclass's gen_mod() method. The subclass's
+gen_mod() method is expected to return the active modifiers. For an X11
+based system, gen_mod() can be implemented to query the X keyboard to determine
+the state of the modifier keys.
+<H2>
+<A NAME="Example"></A>Example</H2>
+
+<PRE>
+#include "dev/tty_unix.H"
+#include "dev/dev.H"
+#include "dev/magellan.H"
+
+class handle_btn : public DEVhandler {
+   public :
+      handle_btn() { }
+      void handle_event(CEvd &amp;e) {
+          DEVice_buttons *btns((DEVice_buttons *)e._d);
+          int action = e._a;
+          cerr &lt;&lt; "Button " &lt;&lt; action / 2 &lt;&lt;
+                  " went " &lt;&lt; ((action % 2) ? "down" : "up") &lt;&lt;
+                  " when pointer is at " &lt;&lt; btns->ptr6d()->cur().origin() &lt;&lt;
+                  endl;
+      }
+};
+
+class handle_6D : public DEVhandler { 
+   public :
+      handle_6D() { }
+      void handle_event(CEvd &amp;e) {
+          cerr &lt;&lt; ((DEVice_6d *)(e._d))->delta_rot()  * Xaxis&lt;&lt; endl;
+      }
+};
+
+main(
+   int,
+   char **
+   )
+{
+   // A UNIX_MANAGER is an object that blocks on a set of
+   // file descriptor objects.  Whenever one of the file
+   // descriptor objects has data pending, then it gets
+   // called back.  All of our device objects are subclasses
+   // of this file descriptor object, so they can all be
+   // added to the fd_manager.  For people coming for the X11
+   // world, the fd_manager is equivalent in functionality
+   // to XtAddInput; however, if you're running an X11 based
+   // application, you should create an XT_MANAGER instead.
+   UNIX_MANAGER     fd_manager;
+ 
+   // Now we create a Magellan device driver, and
+   // connect it to the specified serial port.  Our device
+   // driver gets called whenever there are events on the
+   // serial port by the fd_manager that we pass in.
+   Magellan mag(&amp;fd_manager,    "/dev/ttyd2");
+   
+
+   // Our device driver contains (and writes to) two logical 
+   // devices corresponding to the 6 DOF valuator and the
+   // 8 buttons.  We get references to these two objects from 
+   // the device driver.
+   DEVice_6d       &amp;ptr(mag.pointer());
+   DEVice_buttons  &amp;btn(mag.buttons());
+
+   // We want our application code to handle events on the
+   // valuator and the buttons, so we have to pass in 
+   // callback objects that get notified whenever the
+   // logical devices change.
+   ptr.add_handler(new handle_6D ());
+   btn.add_handler(new handle_btn());
+
+
+   // Finally, we activate hte magellan.  This just tells
+   // the raw hardware to start sending data.
+   mag.activate();
+
+
+   // Last, go into an infinite loop that continually 
+   // blocks on all the file descriptor objects that have
+   // been added to the fd_manager, and then calls them
+   // back when they have data to read.
+   fd_manager.loop();
+}</PRE>
+
+</BODY>
+</HTML>

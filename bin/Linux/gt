@@ -1,0 +1,26 @@
+#!/bin/zsh -f
+#######################################################
+# gt:
+#
+#       search jot source files (with grep) for the 
+#       given string.
+#
+#       it's just a convenience to save some typing.
+#
+#       e.g.:
+#
+#          % gt init_polygon_offset
+#
+#       will grep for the string 'init_polygon_offset'
+#       in all the source files of your jot hierarchy.
+#######################################################
+
+if [[ $# -ne 1 ]]; 
+then
+	echo "Usage: $0 <search_string>"
+        exit 1
+fi
+
+grep $1 "$JOT_ROOT"/*/*.[HC]
+
+exit 0

@@ -1,0 +1,81 @@
+ffs ui
+frame rate control
+simulation rate control
+relaxation for Bbases
+
+fix curve oversketch
+fix inflate
+skin curves
+
+fix toon shader on windows
+
+add curve distance / alignment functions
+
+Widgets:
+  Tube
+  Revolve
+  Curve oversketch: in-plane, stereo, shadow
+  Inflate
+  Floor: Add interactivity: re-orient, resize
+  DrawAxis: add grid
+  Bulge editor
+  Skin
+  Paper doll
+
+undo for selection
+  write selection command class
+  modify selection widget and cancel action to use selection command
+  investigate interaction with subdivision level
+
+undo for crease edits
+
+DrawManip:
+  - Fix to work correctly again with points and shadows.
+
+-----------------------------------------------------------------
+done
+-----------------------------------------------------------------
+
+6/18: fix tube caps
+
+6/15: fix sleeve non-penetration
+
+6/12: sketch creases
+
+2/02: LMESH subdivision detail
+2/02: inflate via skin
+      fix sleeves special cases
+
+1/09: fix subdivision uv-coords
+
+1/07/2005: FLOOR: -- Brian
+  - Auto-detect when realign is needed and do it.
+    Remove code that currently calls FLOOR::realign explicitly
+
+1/1/2005 - overhaul selection widget
+
+12/28/2004: Primitive orientation bug:
+  - Fix bug where handles get inconsistent orientation
+  - BMESH::fix_orientation: leave mesh unchanged when it can't fix
+  - Crashes when trying to extend quad created using sweep line. 
+
+12/26/2004: Clear view rendering style
+
+12/21/2004: Rendering:
+  - Move gl_extensions.[HC] to gtex
+  - Move npr_toon_texture.[HC] to gtex, rename toon_texture
+  - Change "control line" style to use a toon texture as base coat
+    (select or create an appropriate 1D texture)
+
+12/19/2004: Shape modeling:
+  - Implement sleeves (via Skin) and replace current code in Primitive
+
+12/19/2004: Bcurve
+  - Timeout for bcurve selection should be defined as 1e6
+
+11/24/2004: SWEEP_LINE
+  - fix bug operation yields empty Panel sometimes, depending on
+    orientation of line WRT sweep line -- Brian
+
+11/28/2004: SELECTION WIDGET
+  - Fix so cursors work again (small circles not recognized now)

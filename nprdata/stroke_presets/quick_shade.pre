@@ -1,0 +1,18 @@
+
+BaseStroke 	{ 
+	color 	{0.85 0.72964 0.09775 }
+	alpha 	0.815 
+	width 	80 
+	halo 	0 
+	taper 	0 
+	flare 	0.03 
+	aflare 	0.07 
+	fade 	45 
+	angle 	0 
+	contrast 	0.985 
+	brightness 	0.6 
+	press_vary_width 	1 
+	press_vary_alpha 	1 
+	stroke_texture_file 	{ nprdata/stroke_textures/fingers_in_sand2.png } 
+	paper_texture_file 	{ nprdata/paper_textures/handmade_paper_stock.png } 
+	} 

@@ -1,0 +1,15 @@
+// dots_tx vertex program
+
+varying   float opacity;
+attribute float opacity_attr;
+
+
+
+void main()
+{
+   opacity = opacity_attr;
+   gl_FrontColor = gl_Color;
+   gl_Position   = ftransform();
+}
+
+// dots_tx.vp

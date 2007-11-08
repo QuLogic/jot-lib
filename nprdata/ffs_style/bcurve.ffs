@@ -1,0 +1,37 @@
+Bla 	{ 
+base_prototype 	{
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper  20
+															flare 	0.2
+															aflare 	0.15
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+}

@@ -1,0 +1,17 @@
+#!/bin/zsh -f
+#######################################################
+# gm:
+#
+#       search jot make files (with grep) for the 
+#       given string. similar to gt.
+#######################################################
+
+if [[ $# -ne 1 ]]; 
+then
+	echo "Usage: $0 <search_string>"
+        exit 1
+fi
+
+grep $1 "$JOT_ROOT"/Makefile* "$JOT_ROOT"/*/Makefile "$JOT_ROOT"/include/makefiles/std
+
+exit 0

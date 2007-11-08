@@ -1,0 +1,26 @@
+// Toon shader vertex program.
+
+void main() 
+{
+   // Surface location in eye space:
+   vec4 p = gl_ModelViewMatrix * gl_Vertex;
+
+   // Light coordinates in eye space (using light 0):
+   vec4 q = gl_LightSource[0].position;
+
+   // Direction to light from p:
+   vec3 l = normalize(((q.w == 0.0) ? q : (q - p)).xyz);
+
+   // Vertex normal in eye space:
+   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+
+   // Get n*l, clamp negative values to 0:
+   float nl = max(dot(n,l), 0.0);
+
+   // Texture coordinate is just n*l:
+   gl_TexCoord[0] = vec4(nl, vec3(0.0));
+   gl_FrontColor  = gl_Color;
+   gl_Position    = ftransform();
+}
+
+// toon.vp

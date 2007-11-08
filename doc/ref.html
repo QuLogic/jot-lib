@@ -1,0 +1,157 @@
+<HTML>
+<HEAD>
+   <TITLE>Reference counting</TITLE>
+</HEAD>
+<BODY>
+<H1>Reference counting</H1>
+<LI><a href="#intro">Introduction</a>
+<LI><A HREF="#baseclass">Reference Count Base Class</A>
+<LI><A HREF="#templ_smart_ptrs">Templated Smart Pointers</A>
+<LI><A HREF="#Constructors">Constructors</A>
+<LI><A HREF="#Inheritance">Inheritance</A>
+<LI><A HREF="#example">Source Code Example</A>
+
+<h2><a name="intro">Introduction</a></h2>
+Jot provides a reference counting (RC) mechanism that attempts to automate
+the memory management process. The goal of Jot's RC mechanism is to make
+memory de-allocation completely transparent to the application programmer.
+However, for a variety of C++ reasons, this goal is difficult to completely
+achieve. Thus Jot's RC mechanism is nearly transparent, but there are still
+a couple of situations where the application programmer must be aware of
+RC details.
+<P>Jot's RC mechanism consists of three types of objects:
+<OL>
+<LI>
+a reference count REFcounter;</LI>
+
+<LI>
+a templated smart pointer REFptr; and</LI>
+
+<LI>
+a destruction lock, REFlock.</LI>
+</OL>
+The reference count is an abstraction that contains an integer and methods
+for incrementing and decrementing that integer, and automatically freeing
+itself when its reference count transitions to zero. The smart pointer
+is a container that allows transparent access to the cotained object while
+at the same time automatically managing to decrement and increment the
+reference count whenever the object is de/referenced. The destruction lock
+is used only to overcome a shortcoming with C++'s definition of constructors.
+<H2><A NAME="baseclass">Reference Count Base Class</A></H2>
+Objects in Jot that want to use the RC mechanism must be sub-classes of
+the REFcounter class. The REFcounter class is a very simple base class for manipulating
+a reference count integer. In addition, the REFcounter class implements the
+protocol that whenever the reference count transitions to zero, the REFcounter
+instance calls its own destructor in order to automatically de-allocate
+itself.
+<H2>
+<A NAME="templ_smart_ptrs">Templated Smart Pointers</A></H2>
+The templated REFptr base class provides a mechanism for containing and
+transparently accessing a reference counted object while at the same time
+automatically incrementing and decrementing the object's reference count.
+<P>REFptr's are templated because they must appear to be as similar as
+possible to a normal pointer variable. Thus for example, the return type
+of the de-reference "-&gt;" operator for a REFptr must be of the template
+type.
+<P>REFptr's overload all assignment, construction and destruction operators
+in order to automatically adjust the referenced object's reference count.
+REFptrs are generally allocated as stack or class member variables to avoid
+the issue of reference counting smart pointers themselves! Since there
+is slight inefficiency when passing REFptrs by value (parameter passing,
+for example, implicitly creates a new copy of the REFptr which in turn
+increments the reference count), REFptrs are frequently received as either
+'const REFptr &amp;'s or 'REFptr &amp;'s.
+<P>If all accesses to a reference counted object are made through REFptr's,
+then as REFptr's for a particular reference counted object go out of scope
+the object's reference count is automatically decremented. When the last
+REFptr goes out of scope, the reference count will transition to zero,
+and the reference counted object will automatically be destructed.
+<H2>
+<A NAME="Constructors">Constructors</A></H2>
+Although the majority of reference counting operations occur implicitly
+though assignment and parameter construction operations, there is one situation
+where the programmer must be aware of the reference counting process. When
+a REFcounter sub-class is being constructed, no REFptr's can yet exist to reference
+the new object. Thus it's reference count will be zero. This is usually
+not a problem because the reference counted object will only be freed when
+its reference count *transitions* to zero. However, if while in the body
+of the constructor, a temporary REFptr variable is made that references
+the object being constructed, the reference count will increment. If that
+temporary variable goes out of scope at the end of (or during) the constructor
+body, and if no other REFptr references the new object, then a transition
+of the reference count back to zero will occur, and the object being constructed
+will be destroyed.
+<P>Ideally we would just lock the reference counted object in the constructor
+of the REFcounter base-class and then unlock the object after the constructor
+for the last sub-class of the REFcounter had been called. However, in C++ there
+is no mechanism for having a function automatically called after all of
+the object's constructors.
+<P>Therefore, we provide a third mechanism, a REFlock, to handle this situation.
+To be safe, at the start of every constructor for any reference counted
+object, a REFlock temporary variable should be created that references
+the object being constructed. The REFlock variable, when constructed, sets
+a 'lock' flag on the reference counted object. This lock flag prevents
+the reference counted object from being destructed when its reference count
+transitions to zero. Since the REFlock variable exists only during the
+scope of the constructor, the REFlock's destructor unsets the 'lock' flag
+so that the lock autmatically goes away at the end of the constructor body.
+<H2><A NAME="Inheritance">Inheritance</a></H2>
+The last issue with smart pointers is how they participate in inheritance
+relationships. A normal pointer in C++ for an object of a particular type, T,
+can be assigned to any lvalue of type (T *) or to any type (B *), where B is
+a base class of T. However, since Jot's REFptr's are templated, a
+REFptr&lt;T&gt; cannot be assigned to an lvalue for a REFptr&lt;B&gt; since
+there is no inheritance relationship between REFptr&lt;B&gt; and
+REFptr&lt;T&gt;. In addition, we cannot define a sub-class of REFptr&lt;B&gt;
+for type T since the return types of the dereferencing operators are define
+to return "B types", thereby making it impossible to access methods unique to
+T without a cast operation.
+
+<P>Our solution to this is somewhat intricate and may be unnecessary in
+the next generation of C++ compilers. However, for now, we provide a macro,
+MAKE_PTR_SUBC, that does allow inheritance to work properly between smart
+pointers. The details of this macro are quite tricky, but the overview
+is that for the previous example smart pointers can be created for B and
+T. These smart pointers, Bptr and Tptr, do allow any Tptr to be assigned
+to a Bptr, or used wherever a Bptr is used.
+<P>
+<h2><A NAME="example">Source Code Example</A></h2>
+This should compile if you have the <a href="../std/ref.H">ref.H</a> file and include paths are set up
+correctly.
+<PRE>#include "<a href="../std/ref.H">std/ref.H</a>"
+
+MAKE_PTR_BASEC(AA);&nbsp;&nbsp; // defines AAptr
+MAKE_PTR_SUBC(BB,AA); // defines BBptr
+MAKE_PTR_SUBC(CC,BB); // defines CCptr
+
+class AA : public REFcounter {
+&nbsp; public:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AA() { };
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; virtual ~AA() { cerr &lt;&lt; "bye AA\n";}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int&nbsp; a () { return 1; }
+};
+
+class BB : public AA {
+&nbsp; public:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BB() { };
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; virtual ~BB() { cerr &lt;&lt; "bye BB\n";}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int b () { return 2; }
+};
+
+class CC : public BB {
+&nbsp; public:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CC()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { };
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; virtual ~CC()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; { cerr &lt;&lt; "bye CC\n";}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int&nbsp; c () const { return 3; }
+};
+
+inline AAptr func( const BBptr &amp;x ) { return x; }
+
+inline int&nbsp;&nbsp; bar ( const CCptr &amp;y ) { return func(y)-&gt;a() + y-&gt;c(); }
+
+main()
+{
+&nbsp;&nbsp; CCptr ptr(new CC);
+
+&nbsp;&nbsp; cerr &lt;&lt; bar(ptr) &lt;&lt; endl;
+}</PRE>
+
+</BODY>
+</HTML>

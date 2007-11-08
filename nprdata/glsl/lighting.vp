@@ -1,0 +1,14 @@
+varying vec3 N;  // per-fragment normal in eye coords
+varying vec4 P;  // per-fragment position in eye coords
+
+void main() 
+{
+   // compute the vertex normal and position in eye coordinates:
+   N = gl_NormalMatrix * gl_Normal;
+   P = gl_ModelViewMatrix * gl_Vertex;
+
+   // output vertex position in clip coordinates
+   gl_Position = ftransform();
+}
+
+// lighting.vp

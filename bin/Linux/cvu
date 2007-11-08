@@ -1,0 +1,11 @@
+#!/bin/zsh -f
+#######################################################
+# cvu
+#
+#   run cvs update with recommended flags; 
+#   keep a copy of the output in /tmp/up.txt.
+#######################################################
+
+cvs up -Pd | tee /tmp/up.txt
+
+exit 0

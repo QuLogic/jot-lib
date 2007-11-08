@@ -1,0 +1,6 @@
+Debugging Jot in VS. net:
+
+1. Run Jot
+2. Open VS.net
+3. From VS.net: Tools->Debug Processes.
+4. Select jot.exe from list and Press 'Attach'.

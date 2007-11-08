@@ -1,0 +1,36 @@
+//Experimental halftone vertex program 
+//by Karol Szerszen
+
+
+varying vec3 normal;
+varying vec4 position;
+
+varying vec3 dU;
+varying vec3 dV;
+
+attribute vec3 dU_XYZ;
+attribute vec3 dV_XYZ;
+
+
+
+
+	
+	
+void main()
+{
+
+
+	dU =  dU_XYZ;
+	dV =  dV_XYZ;
+
+	normal = gl_NormalMatrix * gl_Normal;
+	
+	gl_FrontColor = gl_Color;
+	gl_TexCoord[0] = gl_MultiTexCoord0;
+	
+	
+	position = (gl_ModelViewProjectionMatrix * gl_Vertex);
+
+	
+	gl_Position = ftransform();
+}

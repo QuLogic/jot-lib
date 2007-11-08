@@ -1,0 +1,107 @@
+
+Painterly 	{ 
+	paper_name 	{ furry_bark.png } 
+	layer 	{ 0 
+		layer_paint_t 	{ 
+			pattern_name 	{ apple.png } 
+			mode 	1 
+			highlight 	{0 }
+			pattern_scale 	23.3869 
+			ink_color 	{0 0 0 }
+			channel 	0 
+			angle 	45 
+			paper_contrast 	1.6 
+			paper_scale 	25.5 
+			tone_push 	0 
+			} } 
+	layer 	{ 1 
+		layer_paint_t 	{ 
+			pattern_name 	{ apple1.png } 
+			mode 	1 
+			highlight 	{0 }
+			pattern_scale 	23.3869 
+			ink_color 	{0 0 0 }
+			channel 	1 
+			angle 	45 
+			paper_contrast 	1.6 
+			paper_scale 	25.5 
+			tone_push 	0 
+			} } 
+	layer 	{ 2 
+		layer_paint_t 	{ 
+			pattern_name 	{ apple2.png } 
+			mode 	1 
+			highlight 	{0 }
+			pattern_scale 	23.3869 
+			ink_color 	{0 0 0 }
+			channel 	2 
+			angle 	45 
+			paper_contrast 	1.6 
+			paper_scale 	25.5 
+			tone_push 	0 
+			} } 
+	layer 	{ 3 
+		layer_paint_t 	{ 
+			pattern_name 	{ apple3.png } 
+			mode 	1 
+			highlight 	{0 }
+			pattern_scale 	23.3869 
+			ink_color 	{0 0 0 }
+			channel 	3 
+			angle 	45 
+			paper_contrast 	1.6 
+			paper_scale 	25.5 
+			tone_push 	0 
+			} } 
+	tone_shader 	{ 
+		ToneShader 	{ 
+			layer 	{ 0 
+				tone_layer_t 	{ 
+					is_enabled 	1 
+					remap_nl 	0 
+					remap 	1 
+					backlight 	1 
+					e0 	0 
+					e1 	1 
+					s0 	0.5 
+					s1 	1 
+					} } 
+			layer 	{ 1 
+				tone_layer_t 	{ 
+					is_enabled 	1 
+					remap_nl 	0 
+					remap 	1 
+					backlight 	0 
+					e0 	0 
+					e1 	1 
+					s0 	0.5 
+					s1 	1 
+					} } 
+			layer 	{ 2 
+				tone_layer_t 	{ 
+					is_enabled 	1 
+					remap_nl 	0 
+					remap 	1 
+					backlight 	2 
+					e0 	0 
+					e1 	1 
+					s0 	0.50505 
+					s1 	1 
+					} } 
+			layer 	{ 3 
+				tone_layer_t 	{ 
+					is_enabled 	1 
+					remap_nl 	0 
+					remap 	1 
+					backlight 	1 
+					e0 	0 
+					e1 	1 
+					s0 	0.5 
+					s1 	0.757576 
+					} } 
+			} } 
+	base_shader 	{ 
+		SolidColoring 	{ 
+			color 	{1 1 1 }
+			} } 
+	} 

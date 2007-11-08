@@ -1,0 +1,14 @@
+This document has been created to get down some of the things you notice that you can do with FFS. Whether intentional or no, this is a good start identifying all that one can do with the program.
+
+My idea, so I'll start. :)
+
+--- 08-05-04 by Brian
+
+Steps:
+Create a surface. 
+Inflate the surface and double-click on one of its quads in the ribbon.
+Cross out the quad by drawing two strokes to opposite corners.
+
+Result: FFS created a new modeling plane for creating new lines and surfaces.
+
+---

@@ -1,0 +1,260 @@
+Information for new jot developers.
+
+This file assumes knowledge of basic UNIX commands like cd, ls, etc.
+
+If you haven't used CVS before it's a good idea to read a little about
+it before you start. Take a look at one of the following:
+
+  * http://ximbiot.com/cvs/wiki/index.php?title=CVS--Concurrent_Versions_System_v1.12.12.1
+  * or the man pages for cvs, 
+  * or the output of cvs --help.
+
+Or see the quick intro at the bottom of this document.
+
+- - Setting up your own jot hierarchy -
+
+-----------------------------------------------------------------
+1. Get an account on the Princeton cvs server:
+
+*** Skip this if you already have the source code ***
+
+   https://cvs.cs.princeton.edu/
+
+Point your browser there, look for the "action" links on the left,
+click 'Register', and follow the directions.
+
+Next, back on the main page, click 'Join a repository', and follow
+those directions to join 'jot'.  You'll have to wait to get approved
+by a jot administrator, who may be busy diapering babies or something,
+so you might want to go play frisbee for a while before moving on to
+step 2.
+
+-----------------------------------------------------------------
+2. Check out the source code
+
+*** Skip this if you already have the source code ***
+
+The following is written from a UNIX point of view.  On a Windows
+command prompt it should still be applicable provided you have cvs in
+your path. (cygwin also works.)
+
+Ensure ssh is in your path. Then set the following environment
+variable using whatever method is used for your kind of shell:
+  bash> export CVS_RSH=ssh
+  tcsh> setenv CVS_RSH ssh
+  DOS>  set CVS_RSH=ssh
+  
+Now decide where you want to create your jot directory.  If you always
+work on the same machine, consider putting your jot directory on the
+local disk of that machine. That makes compiling a lot faster. On the
+other hand, putting the source files on the department fileserver
+ensures that the files will be backed up regularly. (But compiling
+will be slower.) If you use a local disk, you should back up your
+files regularly, e.g. by committing your changes regularly to cvs.
+
+Once you decide where you want to put jot, cd to the directory that
+will CONTAIN the jot directory, and run the following command,
+replacing <your-login> with the username created in step 1 (above) for
+use with the Princeton cvs server.
+
+  cvs -d :ext:<your-login>@cvs.cs.princeton.edu:/cvs checkout -P jot
+
+It prompts for your password that was created in step 1 above.
+
+Optional:
+--------
+You can also checkout a bunch of model files (jot format):
+  cvs -d :ext:<your-login>@cvs.cs.princeton.edu:/cvs checkout -P models
+
+-----------------------------------------------------------------
+3. Customize your copy of Makefile.local
+
+Chose a directory where you will compile (i.e. where the object files
+will be created). We'll refer to this as the "compile directory". By
+default, this directory is called 'lib' and is in your jot root.
+
+If your jot root is not on the local disk of the machine where you're
+working, you should choose a different compile directory that is on
+the local disk, so compiling will go faster. You can select the
+compile directory by editing your Makefile.local (define the variable
+COMP_DIR_BASE in that file).
+ 
+cd to your jot directory (referred to as your jot root), and do
+the following (note the '.' at the end of the line):
+
+  % cp doc/Makefile.local .
+
+Edit your copy of Makefile.local (in your jot root) 
+according to the directions in it. 
+(Look for 'XXX').
+Sometimes on Windows machines using "Docume~1" for "Documents and Settings" can 
+get interpreted as 3 separate paths. In that case the easiest thing to do is 
+to create a jot folder so the path contains no spaces. Ex : C:/uniquename/jot
+
+-----------------------------------------------------------------
+4. Install needed header files and libraries on your system.
+   (Not needed if another jot developer has already gotten
+    set up on the same machine.)
+
+WINDOWS
+-------
+Nothing to do: glext.h is in: $(JOT_ROOT)/include/WIN32/
+libpng and zlib are now built into jot.
+
+Linux
+-----
+Nothing to do: glext.h is in: $(JOT_ROOT)/include/linux/
+libpng and zlib are now built into jot.
+  
+MacOS X
+-------
+  You'll need Xcode (Apple's developer tools) and X11R6 for
+  MacOS X, available here:
+    http://www.apple.com/macosx/features/x11/download/
+  
+-----------------------------------------------------------------
+5. Define needed environment variables
+
+WINDOWS
+-------
+
+cd to your jot root and copy doc/setup.bat into your jot root
+(note the '.' at the end of the line):
+
+  % cp doc/setup.bat .
+
+Edit it as needed (look for 'XXX').
+
+Put a shortcut (named JOT) on your windows desktop with the following target. 
+Replace <JOT_ROOT> with your real JOT_ROOT:
+
+%SystemRoot%\system32\cmd.exe /k <JOT_ROOT>\setup.bat
+
+To start a session, double click on the JOT shortcut created above
+
+Linux
+-----
+Define the following in your startup files for convenience, and
+then you can skip this step from then on.
+
+(For tcsh replace 'export VAR=VALUE' with 'setenv VAR VALUE').
+
+  export JOT_ROOT=<your jot directory created in step 2>
+  export ARCH=linux
+  export UGA_ARCH=$ARCH
+  export CVS_RSH=ssh
+
+Optional: select your preferred default window size:
+  export JOT_WINDOW_WIDTH=1024
+  export JOT_WINDOW_HEIGHT=768
+
+Skip the copyright notice:
+  export NO_SPLASH=true
+
+-----------------------------------------------------------------
+<- After the first time you can start here
+6. cd to your jot directory created in step 2.
+
+You can skip the following the first time through.
+
+If you want to make sure you have the latest source files, run
+cvs update: 
+
+  % cvs update
+
+or
+
+  % cvs up
+
+(abbreviations work); or
+
+   % cvs up -Pd
+
+(The latter also gets newly created directories, if any).
+
+-----------------------------------------------------------------
+7. Compile:
+
+  % make smview
+
+(If necessary, try gmake instead of make.)
+
+If compiled successfully, smview will be found in:
+
+   <comp_dir>/<arch>/D
+
+where <comp_dir> refers to the compile directory that you
+specified in your Makefile.local. (If you didn't specify one it will
+be set to <jot_root>/lib where <jot_root> is your jot directory.)
+<arch> refers to linux or WIN32, depending on whether you are
+compiling on linux or windows. The D stands for debugging, which is
+the default, and usually what you want (the other options are O for
+optimized and P for profiling).
+
+To compile optimized, use:
+
+  make jot M=O
+
+To compile multiple (e.g. 3) source files simultaneously use:
+
+  make jot JOBS=3
+
+or
+
+  make jot JOBS=3 M=O
+
+-----------------------------------------------------------------
+8. jot configuration file
+
+Jot expects to find a configuration file in your jot root.
+Currently, it complains bitterly if there isn't one, and
+generally fails to get off to a good start. Someone should fix
+that, but in the meantime you might want to copy the following
+minimal configuration file to your jot root to avoid the problem:
+
+  http://www.eecs.umich.edu/~sapo/jot/jot.cfg
+
+-----------------------------------------------------------------
+9. Troubleshooting
+
+Some compile/link problems that may come up on Redhat systems
+are discussed here (with solutions):
+  doc/redhat.txt
+
+-----------------------------------------------------------------
+11. CVS info
+
+When you start, all the source files in the underlying
+directories will only be readable and *not* writable.  This is
+because all the files are under CVS, the "Concurrent Versions
+System", which takes care of keeping track of multiple revisions
+of files.
+
+CVS is set up to have files checked out read-only to encourage
+you to run "cvs edit" in order to make changes.
+
+Really quick partial summary for those who get bored easily:
+
+  "cvs update" to update your tree to the current versions
+  "cvs update -d" to also create and update any newly added directories
+  "cvs commit" to commit changes you've made (including file
+     additions/deletions)
+  "cvs add <filename>" and "cvs remove <filename>" 
+     to tell cvs you're adding or deleting files
+  "cvs diff <file or directory>" to get your changes 
+     (NOT necessarily a diff against the current version, if 
+     it's been changed since you last updated)
+  "cvs status <file or directory>" to get status info
+  "cvs -n update" to get summary status for a directory tree
+  "cvs log <file or directory>" to get a log of changes, etc like rlog)
+(Thanks to tsm@cs.brown.edu for the summary.)
+  also:
+  "cvs update -p -r <revision#> <filename> > <output_file>" to save old
+  revision of a certain file to a standard output
+
+For more info, see the links at the top of this file.
+
+This file is available as doc/start-here.txt in your jot
+hierarchy, and is based on an older version by Loring Holden.
+
+ - Lee Markosian <sapo@umich.edu>

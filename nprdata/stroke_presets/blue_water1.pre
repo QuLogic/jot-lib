@@ -1,0 +1,13 @@
+
+BaseStroke 	{ 
+	color 	{0.085 0.18 0.805 }
+	alpha 	0.415 
+	width 	12 
+	halo 	0 
+	taper 	94 
+	flare 	0.75 
+	aflare 	0.88 
+	fade 	20 
+	stroke_texture_file 	{ nprdata/stroke_textures/mydot3.png } 
+	paper_texture_file 	{ nprdata/paper_textures/silk_fine.png } 
+	} 

@@ -1,0 +1,29 @@
+// Marble shader vertex program
+
+
+varying vec4 P;
+
+void main() 
+{
+   // Take the light direction from light 0.
+   // XXX - The following assumes a directional light;
+   //       should be fixed to handle postional lights too.
+   vec3 l = normalize(gl_LightSource[0].position.xyz);
+
+   // vertex normal in eye space:
+   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+
+   // get n*l, clamp negative values to 0:
+   float nl = max(dot(n,l), 0.0); 
+
+   // texture coordinate is just n*l:
+   gl_TexCoord[0] = vec4(nl,vec3(0.0));
+   gl_FrontColor  = gl_Color;
+   gl_Position    = ftransform();
+   
+   // output vertex position in clip coordinates
+//    P =  gl_ModelViewMatrix * gl_Vertex;
+   P =  gl_Vertex;
+}
+
+// marble.vp

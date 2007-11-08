@@ -1,0 +1,178 @@
+
+/////////////////////////////////////
+//varying values
+/////////////////////////////////////
+varying vec2 coord;   //coord to access for color
+
+//////////////////////////////////
+//attribute vales
+/////////////////////////////////
+attribute vec3 blendNorm;
+
+//////////////////////////////////
+//uniform vales
+/////////////////////////////////
+
+uniform float detailMap;
+uniform float targetLength;
+uniform float maxFactor;
+uniform vec4  focusPoint;
+
+uniform float smoothFactor;
+uniform float smoothDetail;
+
+uniform float lightIndex;
+uniform float lightDir;
+uniform float lightCam;
+uniform vec3  lightCoords;
+
+
+//////////////////////////////////
+//functions
+//////////////////////////////////
+
+vec3 light(float index, float dir, float cam, vec3 pos, vec3 point);
+float depth(float max,float min, float z);
+float DOF(float maxFactor,float targetLength, float dv, float dc);
+float backLight(vec3 N,vec3 V, float R);
+float highLights(vec3 N,vec3 R, float S);
+
+
+/////////////////////////////
+//Main Function
+////////////////////////////
+void main() {
+
+   float D;       //Detail value
+   float blend;   //normal blending value
+   vec3 N = normalize(gl_NormalMatrix * gl_Normal);       // per-fragment normal
+   vec3 bNorm = normalize(gl_NormalMatrix * blendNorm);   // per-fragment "abstract" normal
+   vec3 EyeDir = vec3(gl_ModelViewMatrix * gl_Vertex);    // per-fragment view vector
+   vec3 Fpoint = vec3(gl_ModelViewMatrix * focusPoint);   //focal point
+   vec3 L = light(lightIndex,lightDir,lightCam,lightCoords,EyeDir);
+      
+   vec3 R = normalize(reflect(L,N));
+
+   //calculate the blending value for the correct uniform mapping
+   if(smoothDetail == 1.0)
+		blend = depth(maxFactor,targetLength,length(EyeDir));
+   else if(smoothDetail == 2.0)
+    	blend = DOF(maxFactor,targetLength, length(EyeDir), length(Fpoint));
+   //else if(smoothDetail == 4.0)
+	//	blend = backLight(N,EyeDir,targetLength);	
+  //Highlights don't work for some reason(I don't think they make sense for this anyways)
+  // else if(smoothDetail == 5.0)
+  //	blend = highLights(N,R,targetLength);
+   else
+		blend = smoothFactor;
+
+   
+   
+   //calculate the detail value for the correct uniform mapping
+   if(detailMap == 1.0)
+		D = depth(maxFactor,targetLength,length(EyeDir));
+   else if(detailMap == 2.0)
+		D = DOF(maxFactor,targetLength, length(EyeDir), length(Fpoint));
+   else if(detailMap == 4.0)
+		D = backLight(N,normalize(EyeDir),targetLength);
+   else if(detailMap == 5.0)
+		D = highLights(N,R,targetLength);
+   else
+		D = smoothFactor;
+    
+   //clamp calculated details between 0 and 1
+   blend = clamp(blend,0.0,1.0);
+   D = clamp(D,0.0,1.0);
+    
+   //blend normals based on calculated normal detail
+   vec3 norm =  ((1.0 - blend) * N) + (blend * bNorm);  //mix(N,bNorm,blend);   
+   
+   //assign coordinate to be accessed by fragment shader
+   coord = vec2(max(dot(norm,L),0.0),D);
+ 
+   
+   // output vertex position in clip coordinates
+   gl_Position = ftransform();
+}
+
+
+///////////////////////////////
+//Light Function
+//Calculates light vector
+//////////////////////////////
+vec3 light(float index, float dir, float cam, vec3 pos, vec3 point)
+{
+if (index == -1.0)  //custom light
+   {
+   if (dir ==  1.0) //then the light is directional
+      return normalize(pos); 
+   else //the light is positional
+      return normalize(pos - point);
+   }
+else //we're using a GL light
+   {
+   if (gl_LightSource[int(index)].position.w != 0.0) //if light is positional
+      return normalize(vec3(gl_LightSource[int(index)].position) - point);
+   else //its directional
+      return normalize(vec3(gl_LightSource[int(index)].position));
+   }
+}
+
+
+
+/////////////////////////////
+//Depth Function
+/////////////////////////////
+float depth(float maxFactor,float targetLength, float z)
+{
+float length = (1000.0 * targetLength) + (1.0 * (1.0 - targetLength));
+return log(z/length) / log(maxFactor);
+}
+
+/////////////////////////////
+//Depth-of-Focus Function
+/////////////////////////////
+float DOF(float maxFactor,float targetLength, float dv, float dc)
+{
+float length = (100.0 * targetLength) + (1.0 * (1.0 - targetLength));
+float dmin;
+float dmax;
+float result;
+
+if(dv > dc)
+    {
+	dmin = dc + length;
+	dmax = dc + (maxFactor * length);
+	result = log(dv /dmin)/log(dmax/dmin); 
+	}
+else
+    {
+	dmin = dc - length;
+	dmax = dc - (maxFactor * length);
+	result =  1.0 - log(dv /dmax)/log(dmin/dmax); 
+	}
+	return result;
+}
+
+
+///////////////////////////////
+//Backlight function
+///////////////////////////////
+float backLight(vec3 N,vec3 V, float R)
+{
+//cutting cost...
+//float r = 1.0 / R - 1.0;
+return 1.0 - pow(dot(N,V),2.0) / (1.0 / R - 1.0);   
+}
+
+///////////////////////////////
+//high Light function
+//////////////////////////////
+float highLights(vec3 N,vec3 R, float S)
+{
+//trying to cut costs...
+//float s = 1.0/(1.0-S);
+//return pow(abs(dot(V,R)),S);
+
+return 1.0 - pow(abs(dot(N,R)),1.0/(1.0-S));
+}

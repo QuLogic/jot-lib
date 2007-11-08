@@ -1,0 +1,362 @@
+#################################################################
+#   Before you can compile any jot applications, copy this  file
+#   to your jot directory and modify accordingly options marked
+#   with XXX.  Other settings should contain reasonable defaults.
+#
+#   You only have to change the parts corresponding to platforms 
+#   (WIN32 or linux) that you plan to compile on.
+#
+#   Conventions...
+#
+#   Compiler settings
+#   OTHERCFLAGS - Options flags    (e.g. -Zm200 on WIN32)
+#   OTHERDFLAGS - Definitions      (e.g. -DUSE_GLUT_WACOM on linux)
+#   OTHERIFLAGS - Include paths    (e.g. -I/usr/include on linux)
+#
+#   Linker settings
+#   OTHERLFLAGS - Any linker flags (e.g. -VERBOSE:LIB on WIN32)
+#
+#   Library settings
+#   *_INCS  - Include flags (e.g. OGL_INCS = -I/usr/include on linux)
+#   *_LIBS  - Library flags (e.g. OGL_LIBS = -lGLU -lGL on linux)
+#   *_FLAGS - Library paths (e.g. OGL_PATHS = -L/usr/lib -Wl,-rpath /usr/lib on linux)
+#
+#################################################################
+
+#################################################################
+# WIN32 (VS60 or VS71)
+#################################################################
+ifeq ($(ARCH),WIN32)
+
+# NOTE: When defining paths, substitute '/' for '\' even
+#       though the latter looks more correct for windows. 
+
+# NOTE: If paths contains spaces use DOS 8.3 convention e.g.:
+#
+#     C:/Documents and Settings/sayliab/My Documents/jot 
+#
+#  becomes
+#
+#     C:/Docume~1/sayliab/MyDocu~1/jot
+
+# XXX - Location of jot source tree...
+JOT_ROOT      = c:/jotdevel/jot
+
+# XXX - By default, puts object files and executables in 'jot/lib',
+# where 'jot' refers to your jot root. If your jot root is on a
+# network drive (i.e., not the local disk) then compiling will be
+# faster if you set up a "compile directory" on the local disk where
+# object files and executables will be placed. If this applies to you,
+# then uncomment the following and fill in the directory you chose:
+#COMP_DIR_BASE = <path you chose>
+
+# Default Warning Level: -W0=None -W1=Severe -W2=Intermediate -W3=Mild -W4=Lint
+# Might get overriden in a library makefile...
+WARNINGCFLAGS = -W1
+
+# (Optionally) refuse to continue if warnings are generated:
+ifneq ($(KILLER_WARNINGS),)
+WARNINGCFLAGS := $(WARNINGCFLAGS) -WX  
+endif
+
+# If you've got jot/bin/WIN32/rm.exe in your path then...
+WIN32_USE_RM = yes
+
+#
+# Library vars
+#
+
+# GLUT
+#
+# XXX - Modify the following if NOT using the internal glut_jot
+#       library and your external version is somewhere non-standard...
+#
+# Use jot's internal glut sources to build glut_jot
+BUILD_GLUT = yes
+ifneq ($(BUILD_GLUT),)
+# Default: build the jot internal version of glut
+GLUT_INCS  = -I$(JOT_ROOT)/glut_jot 
+GLUT_LIBS  = glut_jot.lib winmm.lib
+GLUT_FLAGS = 
+else
+# Use system-provided glut
+GLUT_INCS  = 
+GLUT_LIBS  = glut32.lib
+GLUT_FLAGS = 
+endif
+
+#
+# OpenGL
+#
+# Standard lib and inc directories are defined by default
+OGL_INCS  = 
+OGL_LIBS  = opengl32.lib glu32.lib
+OGL_FLAGS = 
+
+#
+# OpenInventor
+#
+# Only available for linux
+OIV_INCS  = 
+OIV_LIBS  = 
+OIV_FLAGS = 
+
+# Platform specific settings...
+# Increase heap size to avoid crash during compiling...
+OTHERCFLAGS = -Zm200
+OTHERIFLAGS = 
+OTHERDFLAGS = 
+OTHERLFLAGS = 
+
+# Cause linker to show what libraries are used to resolve symbols...
+#OTHERLFLAGS = $(OTHERLFLAGS) -VERBOSE:LIB
+
+# Compiler flags take the order CFLAGS,IFLAGS,DFLAGS,FINALCFLAGS
+# This var is handy when a flags must preceed the source filename (e.g. -Tc)
+FINALCFLAGS =  
+
+# XXX - Usually need standard c .h directory and platform definitions.
+#       Fill in the right Vc7 include paths: One for standard C++ and 
+#		the other for platform.
+# ex: 'c:/Progra~1/Micros~1/Vc7/include' 'c:/Progra~1/Micros~1/Vc7/Platfo~1/include' 
+MKDEP      = $(JOT_ROOT)/bin/WIN32/makedep.exe
+MKDEPFLAGS = -D_M_IX86 $(GLUT_INCS) -Ic:/Progra~1/Micros~1.Net/Vc7/include -Ic:/Progra~1/Micros~1.Net/Vc7/Platfo~1/include 
+
+else
+#################################################################
+# linux
+#################################################################
+ifeq ($(ARCH),linux)
+
+# XXX - Replace with jot source tree location...
+JOT_ROOT = $(HOME)/jot
+
+# XXX - Replace with location that jot should compile to...
+#       (Defaults to JOT_ROOT/lib if undefined).
+#       See verbose explanation under WIN32 section above.
+#COMP_DIR_BASE = /home/$(USER)-local/jot-local
+
+# Optimize RefImage calls when using 32-bit RGBA framebuffer:
+REF_IMG_32_BIT=yes
+
+# XXX - Default warning level. Note that it might
+#       be overriden in library Makefiles...
+WARNINGCFLAGS = -Wall
+
+# Libraries...
+#
+# XXX - Update if libraries have non-standard locations...
+
+#
+# OpenGL
+#
+OGL_INCS  = -I/usr/include
+OGL_LIBS  = -lGLU -lGL 
+OGL_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+
+#
+# OpenInventor
+#
+OIV_INCS  = -I/usr/include/Inventor
+OIV_LIBS  = -lInventor 
+OIV_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+
+#
+# GLUT
+#
+# XXX - Uncomment the following if using jot's internal glut library.
+#       ** Not supported under linux at present **
+#BUILD_GLUT = yes
+ifeq ($(BUILD_GLUT),)
+# Default: use system-provded glut:
+GLUT_INCS  = -I/usr/include
+GLUT_LIBS  = -lglut 
+GLUT_FLAGS = 
+else
+# Not supported yet: use jot-provided glut:
+GLUT_INCS  = -I$(JOT_ROOT)/glut_jot
+GLUT_LIBS  = -lglut_jot
+GLUT_FLAGS = 
+endif
+
+# Platform specific settings...
+# Make sure glext.h emits the right function protos
+OTHERCFLAGS = 
+OTHERIFLAGS = 
+OTHERDFLAGS = -DGL_GLEXT_PROTOTYPES
+OTHERLFLAGS = 
+
+# XXX - Uncomment the following if not using Nvidia hardware
+#OTHERDFLAGS := $(OTHERDFLAGS) -DNON_NVIDIA_GFX
+# Uncomment the following if not using ATI hardware
+#OTHERDFLAGS := $(OTHERDFLAGS) -DNON_ATI_GFX
+
+# XXX - In order to compile the command-line apps in mesh lib, 
+#       this hack prevents disp lib from referencing geom lib...
+#OTHERDFLAGS := $(OTHERDFLAGS) -DDONT_LINK_GEOM_IN_DISP
+
+# XXX - If your linux system has built-in support for the Wacom tablet 
+#       and a tablet is plugged in and being used, uncomment this:
+#USE_GLUT_WACOM=yes
+ifneq ($(USE_GLUT_WACOM),)
+GWPATH = $(JOT_ROOT)/glutwacom/lib
+GLUT_LIBS   := -lglutwacom $(GLUT_LIBS)
+GLUT_FLAGS  := -L$(GWPATH) -Wl,-rpath $(GWPATH) $(GLUT_FLAGS)
+OTHERDFLAGS := $(OTHERDFLAGS) -DUSE_GLUT_WACOM
+endif
+
+# (Optionally) refuse to continue if warnings are generated:
+ifneq ($(KILLER_WARNINGS),)
+WARNINGCFLAGS := $(WARNINGCFLAGS) -Werror
+endif
+
+# Used to show where included files come from...
+ifneq ($(TRACK_INCLUDES),)
+OTHERDFLAGS := $(OTHERDFLAGS) -M
+endif
+
+# Choose the g++ compiler:
+CC = g++
+
+else
+#################################################################
+# macosx
+#################################################################
+ifeq ($(ARCH),macosx)
+
+# XXX - Replace with jot source tree location...
+JOT_ROOT = /Users/jamesni/cvs/jot
+
+# XXX - Replace with location that jot should compile to...
+#       (Defaults to JOT_ROOT/lib if undefined).
+#       See verbose explanation under WIN32 section above.
+COMP_DIR_BASE = /Users/jamesni/cvs/jot/lib
+
+# Optimize RefImage calls when using 32-bit RGBA framebuffer:
+REF_IMG_32_BIT=yes
+
+# XXX - Default warning level. Note that it might
+#       be overriden in library Makefiles...
+WARNINGCFLAGS = -Wall
+
+# Libraries...
+#
+# XXX - Update if libraries have non-standard locations...
+FRAMEWORKS = -framework GLUT -framework OpenGL -framework Foundation
+
+
+#
+# OpenGL
+#
+OGL_INCS  = 
+OGL_LIBS  = 
+OGL_FLAGS = 
+
+#
+# OpenInventor
+#
+OIV_INCS  = -I/usr/include/Inventor
+OIV_LIBS  = -lInventor 
+OIV_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+
+#
+# GLUT
+#
+# XXX - Uncomment the following if using jot's internal glut library.
+#       ** Not supported under linux at present **
+#BUILD_GLUT = yes
+ifeq ($(BUILD_GLUT),)
+# Default: use system-provded glut:
+GLUT_INCS  = -I/usr/include
+GLUT_LIBS  =
+GLUT_FLAGS = 
+else
+# Not supported yet: use jot-provided glut:
+GLUT_INCS  = -I$(JOT_ROOT)/glut_jot
+GLUT_LIBS  = -lglut_jot
+GLUT_FLAGS = 
+endif
+
+# Platform specific settings...
+# Make sure glext.h emits the right function protos
+OTHERCFLAGS = 
+OTHERIFLAGS = 
+OTHERDFLAGS = -DGL_GLEXT_PROTOTYPES
+OTHERLFLAGS = 
+
+# XXX - Uncomment the following if not using Nvidia hardware
+#OTHERDFLAGS := $(OTHERDFLAGS) -DNON_NVIDIA_GFX
+
+# XXX - In order to compile the command-line apps in mesh lib, 
+#       this hack prevents disp lib from referencing geom lib...
+#OTHERDFLAGS := $(OTHERDFLAGS) -DDONT_LINK_GEOM_IN_DISP
+
+# XXX - If your linux system has built-in support for the Wacom tablet 
+#       and a tablet is plugged in and being used, uncomment this:
+#USE_GLUT_WACOM=yes
+ifneq ($(USE_GLUT_WACOM),)
+GWPATH = $(JOT_ROOT)/glutwacom/lib
+GLUT_LIBS   := -lglutwacom $(GLUT_LIBS)
+GLUT_FLAGS  := -L$(GWPATH) -Wl,-rpath $(GWPATH) $(GLUT_FLAGS)
+OTHERDFLAGS := $(OTHERDFLAGS) -DUSE_GLUT_WACOM
+endif
+
+# (Optionally) refuse to continue if warnings are generated:
+ifneq ($(KILLER_WARNINGS),)
+WARNINGCFLAGS := $(WARNINGCFLAGS) -Werror
+endif
+
+# Used to show where included files come from...
+ifneq ($(TRACK_INCLUDES),)
+OTHERDFLAGS := $(OTHERDFLAGS) -M
+endif
+
+# Choose the g++ compiler:
+CC = g++
+
+# XXX - Usually need standard c .h directory and platform definitions.
+#       Fill in the right VC98 include path...
+#MKDEP      = $(JOT_ROOT)/bin/WIN32/makedep.exe
+#MKDEPFLAGS = -D_M_IX86 $(GLUT_INCS) -I'c:/Progra~1/Micros~1s/VC98/Include' 
+MKDEP      = /usr/X11R6/bin/makedepend
+
+endif
+endif
+endif
+
+##################################################################
+# The remainder are platform independent, and need no changes...
+##################################################################
+
+##################################################################
+# Compile Mode (M) 
+#
+# P - Profile   (Profiling Code, Debugging Symbols)
+# D - Debug     (Debugging Symbols)
+# Q - Optimized (Optimized Code, Debugging Symbols)
+# O - Optimized (Optmized Code)
+# R - Release   (Optmized Code and No Assertions)
+# 
+# Usage at command line:
+# 
+# % gmake jot M=O
+#
+#################################################################
+ifeq ($(M),)
+M = D
+endif
+
+##################################################################
+# Compile Theadings (JOBS)
+#
+# Simultaneous instances of CC. They >1 for multi CPU machines...
+#
+#
+# Usage at command line:
+# 
+# % gmake jot JOBS=2
+#
+#################################################################
+ifeq ($(JOBS),)
+JOBS=1
+endif

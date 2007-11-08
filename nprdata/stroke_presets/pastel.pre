@@ -1,0 +1,16 @@
+
+BaseStroke 	{ 
+	color 	{0.76 0.45 0.88 }
+	alpha 	0.44 
+	width 	13 
+	halo 	0 
+	taper 	151 
+	flare 	0 
+	aflare 	0 
+	fade 	4 
+	angle 	0 
+	contrast 	0.65 
+	brightness 	0.775 
+	stroke_texture_file 	{ nprdata/stroke_textures/mydot2.png } 
+	paper_texture_file 	{ nprdata/paper_textures/cane.png } 
+	} 

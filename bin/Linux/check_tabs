@@ -1,0 +1,25 @@
+#!/bin/zsh -f
+#######################################################
+# check_tabs:
+#
+#       print names of files with tabs
+#
+#######################################################
+USAGE="Usage: $0 <file> [ files ]"
+
+if [[ $# -lt 1 ]]; 
+then
+	echo $USAGE
+        exit 1
+fi
+
+while [[ "$#" -ne 0 ]]; do
+   if [[ -f $1 ]]; then
+      if od -c $1 | grep -qs '\\t' ; then
+         echo $1
+      fi
+   fi
+shift
+done
+
+exit 0

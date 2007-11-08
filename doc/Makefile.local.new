@@ -1,0 +1,176 @@
+#################################################################
+#   Before you can compile any jot applications, copy this 
+#   file and rename it Makefile.local (in your jot directory). 
+#
+#   Then fill in the missing parts below, marked with XXX. 
+#
+#   You only have to change the parts corresponding to platforms 
+#   (linux, sgi, WIN32, etc.) that you plan to compile on.
+#################################################################
+
+#################################################################
+# WIN32
+#
+#       NOTE: when defining paths, substitute '/' for '\' even
+#       though the latter looks more correct for windows. 
+#################################################################
+ifeq ($(ARCH),WIN32)
+
+JOT_ROOT      = e:/coding/jot
+
+COMP_DIR_BASE = e:/coding/jot-local
+
+#Warning Level: -W0=None -W1=Severe -W2=Intermediate -W3=Mild -W4=Lint
+#Might get overrided in a library makefile...
+WARNINGCFLAGS = -W3 
+
+#Promote warnings to errors...
+#WARNINGCFLAGS := $(WARNINGCFLAGS) -WX  
+
+#Various settings...
+#
+#If you've got jot/bin/WIN32/rm.exe then...
+WIN32_USE_RM = yes
+#
+#If if know I will have 32-bit RGBA in the framebuffer then...
+#REF_IMG_32_BIT = yes
+#
+BUILD_GLUT = yes
+
+#
+#Library vars
+#
+ifneq ($(BUILD_GLUT),)
+GLUT_INCS  = -I$(JOT_ROOT)/glut 
+GLUT_LIBS  = glut.lib winmm.lib
+GLUT_FLAGS = 
+else
+#In standard lib and inc directories
+GLUT_INCS  = 
+GLUT_LIBS  = glut32.lib
+GLUT_FLAGS = 
+endif
+#
+#In standard lib and inc directories
+OGL_INCS  = 
+OGL_LIBS  = opengl32.lib glu32.lib
+OGL_FLAGS = 
+#
+#Only for linux
+OIV_INCS  = 
+OIV_LIBS  = 
+OIV_FLAGS = 
+
+#Platform specific settings...
+#Increase heap size to avoid crash during compiling...
+OTHERCFLAGS = -Zm200
+OTHERIFLAGS = 
+OTHERDFLAGS = 
+OTHERLFLAGS = 
+
+#Cause linker to show where what libraries are used to resolve symbols...
+#OTHERLFLAGS = $(OTHERLFLAGS) -VERBOSE:LIB
+
+#Compiler flags take the order CFLAGS,IFLAGS,DFLAGS,FINALCFLAGS
+#This var is handy when a flag must preceed the source filename (e.g. -Tc)
+FINALCFLAGS =  
+
+#Usually need standard c .h directory and platform definitions...
+MKDEP         = d:/apps/jot-stuff/makedep.exe 
+MKDEPFLAGS    = $(GLUT_INCS) -I$(JOT_ROOT)/include -I'd:/Apps/Micros~2/VC98/Include' -D_M_IX86
+
+else
+
+#################################################################
+# linux
+#################################################################
+ifeq ($(ARCH),linux)
+
+JOT_ROOT = $(HOME)/jot
+COMP_DIR_BASE = /home/sapo-local/jot-local
+
+CC = g++
+
+# Not supported on linux.... yet...
+#BUILD_GLUT = yes
+
+#
+# Library vars...
+#
+# GLUT
+#
+ifneq ($(BUILD_GLUT),)
+GLUT_INCS  = -I$(JOT_ROOT)/glut 
+GLUT_LIBS  = glut
+GLUT_FLAGS = 
+else
+#In standard lib and inc directories
+GLUT_INCS  = -I/usr/include
+GLUT_LIBS  = -lglut 
+GLUT_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+endif
+#
+# OpenGL headers:
+OGL_INCS  = -I/usr/include
+OGL_LIBS  = -lGLU -lGL 
+OGL_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+
+# OpenIventor
+OIV_INCS  = -I/usr/include/Inventor
+OIV_LIBS  = -lInventor 
+OIV_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+
+# I know I will have 32-bit RGBA in the framebuffer:
+# (Note: should check for 32bit and fail to run other wise...)
+REF_IMG_32_BIT=yes
+
+
+# Warning level...
+# May be overriden in library makefiles
+WARNINGCFLAGS = -Wall
+
+#Promote warnings to errors...
+WARNINGCFLAGS := $(WARNINGCFLAGS) -Werror
+
+
+# Used to show where included files come from:
+ifneq ($(TRACK_INCLUDES),)
+OTHERCFLAGS = -M
+endif
+
+OTHERIFLAGS = 
+
+# Use a hack for DBL_MAX because it's not defined in redhat 7.2:
+OTHERDFLAGS := $(OTHERDFLAGS) -DINCLUDE_FLOAT_H
+# this line seems to be needed too...
+OTHERDFLAGS := $(OTHERDFLAGS) -DGL_GLEXT_PROTOTYPES
+# If no Nvidia hardware is present:
+OTHERDFLAGS := $(OTHERDFLAGS) -DNON_NVIDIA_GFX
+# If no ATI hardware is present:
+#OTHERDFLAGS := $(OTHERDFLAGS) -DNON_ATI_GFX
+
+OTHERLFLAGS = 
+
+# Use glutwacom?
+USE_GLUT_WACOM = yes
+
+ifneq ($(USE_GLUT_WACOM),)
+OTHERDFLAGS := $(OTHERDFLAGS) -DUSE_GLUT_WACOM
+GLUT_LIBS   := $(GLUT_LIBS) -lglutwacom 
+GLUT_FLAGS  := $(GLUT_FLAGS) -L$(JOT_ROOT)/glutwacom/lib -Wl,-rpath $(JOT_ROOT)/glutwacom/lib 
+endif
+
+endif
+endif
+
+##################################################################
+# Defaults... 
+#################################################################
+ifeq ($(M),)
+M = D
+endif
+
+ifeq ($(JOBS),)
+JOBS = 1
+endif
+

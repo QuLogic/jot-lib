@@ -1,0 +1,4 @@
+GLUT_ICON ICON jotapp.ico
+JOT_FILE ICON jotfile.ico
+JOT_CMD ICON jotcmd.ico
+

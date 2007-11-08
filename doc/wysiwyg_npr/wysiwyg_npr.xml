@@ -1,0 +1,2330 @@
+<!-- Compile with -->
+<!-- docbook2html wysiwyg_npr.xml -->
+<!-- docbook2pdf wysiwyg_npr.xml -->
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.0//EN" [
+  <!ENTITY app "<application>Jot</application>">
+  <!ENTITY Robert.D.Kalnins "<firstname>Robert</firstname><othername>D.</othername><surname>Kalnins</surname>">
+  <!ENTITY Robert.D.Kalnins.email "<email>rkalnins@cs.princeton.edu</email>">
+  <!ENTITY Philip.L.Davidson "<firstname>Philip</firstname><othername>L.</othername><surname>Davidson</surname>">
+  <!ENTITY Philip.L.Davidson.email "<email>philipd@cs.princeton.edu</email>">
+  <!ENTITY David.M.Bourguignon "<firstname>David</firstname><othername>M.</othername><surname>Bourguignon</surname>">
+  <!ENTITY David.M.Bourguignon.email "<email>bourgui@cs.princeton.edu</email>">
+]>
+
+<book lang="en">
+
+<bookinfo>
+
+<title>&app; user manual</title>
+<authorgroup>
+<author>
+&Robert.D.Kalnins;
+<affiliation>
+<address>&Robert.D.Kalnins.email;</address>
+</affiliation>
+</author>
+<author>
+&Philip.L.Davidson;
+<affiliation>
+<address>&Philip.L.Davidson.email;</address>
+</affiliation>
+</author>
+<author>
+&David.M.Bourguignon;
+<affiliation>
+<address>&David.M.Bourguignon.email;</address>
+</affiliation>
+</author>
+</authorgroup>
+
+<copyright>
+<year>2003</year>
+<holder>Princeton University</holder>
+</copyright>
+<date>2003-04-01</date>
+<releaseinfo>0.01.00</releaseinfo>
+
+<abstract>
+<para>Here is the &app; user manual abstract.</para>
+</abstract>
+
+<keywordset>
+<keyword>computer graphics</keyword>
+<keyword>non-photorealistic rendering</keyword>
+</keywordset>
+
+</bookinfo>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="introduction">
+<title>Introduction</title>
+<!-- OLD
+<para>Please refer to the corresponding papers: <ulink url="http://www.cs.princeton.edu/gfx/proj/wnpr/">WYSIWYG NPR: Drawing Strokes Directly on 3D Models</ulink> and <ulink url="http://www.cs.princeton.edu/gfx/proj/css/">Coherent Stylized Silhouettes</ulink>.</para>-->
+
+<para>Jot is a program that lets designers, artists and animators to directly annotate 3D computer graphics models (and animation) for stylized (NPR) rendering. Jot currently implements many of the ideas described in the research papers <ulink url="http://www.cs.princeton.edu/gfx/proj/wnpr">WYSIWYG NPR</ulink> and <ulink url="http://www.cs.princeton.edu/gfx/proj/css">Coherent Stylized Silhouettes</ulink>, and will soon include <ulink url="http://www.cs.princeton.edu/gfx/proj/sc">Suggestive Contours</ulink> as well. The long-range goals of the project are described <ulink url="http://www.cs.princeton.edu/gfx/proj/3Dcontent">here</ulink>.</para>
+<para>The Jot software is under development at Princeton University, in collaboration with researchers at Brown, Rutgers, and the University of Michigan. The implementation is intended as a research prototype, not commercial software, so it comes with the usual caveats: we know it has bugs, the UI is not well-designed, and so forth. Nonetheless, if you encounter obvious bugs, please send email to <email>jot-bugs@cs.princeton.edu</email>. For other concerns, such as problems with these web pages, send mail to <email>jot-admin@cs.princeton.edu</email>.</para>
+<para>Our current release runs on PC/Windows only, though we anticipate a release on LINUX soon and Mac OS-X after that. We are currently releasing software executables only, but intend to make source code available in the long run.</para>
+
+<para>Made with <ulink url="http://opensource.bureau-cornavin.com/crash-course/index.html">DocBook</ulink>!</para>
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="license">
+<title>License Information</title>
+
+<para>License info coming soon.</para>
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="tutorial">
+<title>Tutorials</title>
+<para>We present below two tutorials of increasing complexity to describe
+&app; work flow.</para>
+
+<sect1 id="tutorial1">
+<title>Basic Tutorial</title>
+
+<procedure>
+<title>Drawing the Cactus Picture!</title>
+<para>In this tutorial, we will create a picture of a cactus.</para>
+
+<step performance="required">
+<para>Loading the cactus model in flat rendering.</para>
+
+<screen>
+<prompt>C:\</prompt> <command>cd <replaceable>JOT_ROOT</replaceable></command>
+<prompt>C:\</prompt> <command>cd manual\tutorials\tutorial-1</command>
+<prompt>C:\</prompt> <command>jotq cactus-1.jot</command>
+</screen>
+
+<para><screenshot>
+<screeninfo>Cactus model</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-1.png" format="png"></imageobject>
+<textobject><phrase>Cactus model</phrase></textobject>
+<caption>
+<para>The 3D geometric model of the cactus, in flat shading.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Rendering the model in default NPR renderer (black silhouettes and no
+fill).</para>
+<para>Click with left mouse button on the model.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with default NPR rendering</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-2.png" format="png"></imageobject>
+<textobject><phrase>Cactus model with default NPR rendering</phrase>
+</textobject>
+<caption>
+<para>The 3D geometric model of the cactus, with default NPR rendering.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Editing the silhouette</para>
+
+<substeps>
+<step performance="required">
+<para>Select the silhouette by clicking on it with left mouse button. The
+silhouette turns red.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with selected silhouette</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-3.png" format="png"></imageobject>
+<textobject><phrase>Cactus model with selected silhouette</phrase>
+</textobject>
+<caption>
+<para>Cactus model with selected silhouette.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Adjust stroke width with the slider: <menuchoice><guimenu>NPR Stroke
+Editor</guimenu><guisubmenu>Stroke Shape/Appearance</guisubmenu></menuchoice>
+</para>
+</step>
+
+<step performance="required">
+<para>Adjust stroke flare to zero: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Style</guisubmenu></menuchoice></para>
+</step>
+
+<step performance="required">
+<para>Apply change permanently: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Style</guisubmenu></menuchoice> and press <guibutton>Apply Current</guibutton>.</para>
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Sketching the silhouette offset pattern.</para>
+
+<substeps>
+<step performance="required">
+<para>With the silhouette selected, sketch the silhouette offset pattern, such as the one on the lower right
+of the figure, using the left mouse button.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with modified silhouette and offset pattern
+</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-4.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with modified silhouette and offset pattern
+</phrase>
+</textobject>
+<caption>
+<para>Cactus model with modified silhouette and offset pattern.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Apply offset pattern to the strokes: <menuchoice><guimenu>NPR Stroke
+Editor</guimenu><guisubmenu>Stylization</guisubmenu></menuchoice> and press <guibutton>Apply Sketch</guibutton>.
+</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with modified silhouette with offset pattern
+</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-5.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with modified silhouette with offset pattern
+</phrase>
+</textobject>
+<caption>
+<para>Cactus model with modified silhouette with offset pattern.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Setting the basecoat</para>
+
+<substeps>
+<step performance="required">
+<para>Switch to basecoat editing mode. Click on <guibutton>Previous Mode</guibutton> to enter <guimenu>Basecoat mode</guimenu>. Click on the model to select it again.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model selected</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-6.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model selected</phrase>
+</textobject>
+<caption>
+<para>Cactus model selected.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Add a normal shader: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Layer Editor</guisubmenu></menuchoice>. Select <guibutton>Norm</guibutton> and press
+<guibutton>Add</guibutton>. Adjust hue (0.3), saturation (0.5), value (0.6).
+</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with normal shader</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-7.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with normal shader</phrase>
+</textobject>
+<caption>
+<para>Cactus model with normal shader.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Add a toon shader: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Layer Editor</guisubmenu></menuchoice>. Select <guibutton>Toon</guibutton> and press
+<guibutton>Add</guibutton>.</para>
+<para>Select <filename>alpha_thin.png</filename> texture: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Texture</guisubmenu></menuchoice> and adjust alpha (0.5): <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Alpha</guisubmenu></menuchoice>.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with toon shader</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-8.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with toon shader</phrase>
+</textobject>
+<caption>
+<para>Cactus model with toon shader.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Adjust lighting: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Toon Lighting</guisubmenu></menuchoice>. Select custom light <guibutton>L?</guibutton> and adjust lighting direction with <guibutton>Dir/Pos</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with lighting</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-9.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with lighting</phrase>
+</textobject>
+<caption>
+<para>Cactus model with lighting.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Done!</para>
+
+<para><screenshot>
+<screeninfo>Cactus model completed</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-1-10.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model completed</phrase>
+</textobject>
+<caption>
+<para>Cactus model completed.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</procedure>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="tutorial2">
+<title>Intermediate Tutorial</title>
+
+<procedure>
+<title>Drawing the Mechanical Part Picture!</title>
+<para>In this tutorial, we will create a picture of a mechanical part.</para>
+
+<step performance="required">
+<para>Loading the model in flat rendering.</para>
+
+<screen>
+<prompt>C:\</prompt> <command>cd <replaceable>JOT_ROOT</replaceable></command>
+<prompt>C:\</prompt> <command>cd manual\tutorials\tutorial-2</command>
+<prompt>C:\</prompt> <command>jotq mechanical-1.jot</command>
+</screen>
+
+<para><screenshot>
+<screeninfo>Mechanical part model</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-1.png" format="png"></imageobject>
+<textobject><phrase>Mechanical part model</phrase></textobject>
+<caption>
+<para>The 3D geometric model of the mechanical part, in flat shading.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Setting the background</para>
+
+<substeps>
+<step performance="required">
+<para>while in the the WYSIWYG NPR window, press <keycap>v</keycap> for bringing up <guimenu>Global Parameters</guimenu></para>
+</step>
+
+<step performance="required">
+<para>Adjust color: <menuchoice><guimenu>Global Parameters</guimenu><guisubmenu>Background</guisubmenu></menuchoice>. Adjust hue (0.65), saturation (0.12), value (0.9), alpha (0.9). Check box <guibutton>Apply Paper to Bkg</guibutton>.</para>
+</step>
+
+<step performance="required">
+<para>Adjust paper: <menuchoice><guimenu>Global Parameters</guimenu><guisubmenu>Paper</guisubmenu></menuchoice>. Check box <guibutton>Active</guibutton>. Select <filename>p-cement-6.png</filename> in paper in <guibutton>Texture</guibutton>. Adjust brightness (0.6), contrast (0.3).</para>
+</step>
+
+</substeps>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with background</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-2.png" format="png"></imageobject>
+<textobject><phrase>Mechanical part model with background</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with background.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+<para>Type <keycap>v</keycap> again to hide the <guimenu>Global Parameters</guimenu> window.</para>
+
+</step>
+
+<step performance="required">
+<para>Setting the basecoat</para>
+
+<substeps>
+<step performance="required">
+<para>Switch to basecoat editing mode. Click on <guibutton>Previous Mode</guibutton> to enter <guimenu>Basecoat mode</guimenu>. Click on the model to select it again.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model selected</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-3.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model selected</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model selected.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Add a toon shader: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Layer Editor</guisubmenu></menuchoice>. Select <guibutton>Toon</guibutton> and press
+<guibutton>Add</guibutton>.</para>
+<para>Select <filename>alpha_thin.png</filename> texture: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Texture</guisubmenu></menuchoice> and adjust alpha (0.5): <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Alpha</guisubmenu></menuchoice>.</para>
+<para>Select <guibutton>Apply Paper Effect</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with toon shader</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-4.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with toon shader</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with toon shader.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Adjust lighting: <menuchoice><guimenu>Base Coat Editor</guimenu> <guisubmenu>Base Coat</guisubmenu> <guisubmenu>Toon Lighting</guisubmenu></menuchoice>.</para>
+<para>Select custom light <guibutton>L?</guibutton> and adjust lighting direction with <guibutton>Dir/Pos</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with lighting</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-5.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with lighting</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with lighting.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Stylizing visible lines</para>
+
+<substeps>
+<step performance="required">
+<para>Switch to line editing mode. Click on <guibutton>Next Mode</guibutton> to enter <guimenu>Line mode</guimenu>. Click on a visible crease line (CRE_VIS) to select it.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with line selected</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-6.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with line selected</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with line selected.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Select a preset line style: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Stroke Editor</guisubmenu> <guisubmenu>Presets</guisubmenu></menuchoice>. Select preset <filename>mech-solid</filename>.</para>
+<para>Apply change permanently:  <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Line Plug-in Controls</guisubmenu> <guisubmenu>Stylization</guisubmenu> <guisubmenu>Style</guisubmenu> </menuchoice>. Select <guibutton>Apply Current</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with new crease line style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-7.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with new crease line style</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with new crease line style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Apply the same active style to silhouette lines: Select a silhouette line (SIL_VIS). Apply change permanently: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Line Plug-in Controls</guisubmenu> <guisubmenu>Stylization</guisubmenu> <guisubmenu>Style</guisubmenu> </menuchoice>. Select <guibutton>Apply Current</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with new silhouette line style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-8.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with new silhouette line style</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with new silhouette line style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Stylizing hidden lines</para>
+
+<substeps>
+<step performance="required">
+<para>Enable hidden lines: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Line Plug-in Controls</guisubmenu> <guisubmenu>Line Types</guisubmenu> </menuchoice>. Select <guibutton>See Thru</guibutton>, <guibutton>Sil-Hid</guibutton> and <guibutton>Cre-Hid</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with hidden lines in default style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-9.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with hidden lines in default style</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with hidden lines in default style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Apply style to hidden crease lines: Select a hidden crease line (CRE_HID).</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with selected hidden crease line</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-10.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with selected hidden crease line</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with selected hidden crease line.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<para>Select a preset line style: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Stroke Editor</guisubmenu> <guisubmenu>Presets</guisubmenu></menuchoice>. Select preset <filename>mech-light</filename>.</para>
+<para>Adjust period of 2D texture: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Stroke Editor</guisubmenu> <guisubmenu>Stroke Color/Texture</guisubmenu> </menuchoice>. Adjust <guibutton>Period</guibutton> to 20 pixels (use <keycap>arrow keys</keycap> for fine adjustment).</para>
+<para>Apply change permanently: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Line Plug-in Controls</guisubmenu> <guisubmenu>Stylization</guisubmenu> <guisubmenu>Style</guisubmenu> </menuchoice>. Select <guibutton>Apply Current</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with new hidden crease line style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-11.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with hidden crease line style</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with hidden crease line style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Apply style to hidden silhouette lines: Manipulate the camera to reveal a hidden silhouette line (SIL_HID). (Learn about <link linkend="camera">camera manipulation</link>). Select it.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with selected hidden silhouette line</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-12.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with selected silhouette line</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with selected hidden silhouette line.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<para>Apply the same active style to hidden silhouette lines: Apply change permanently: <menuchoice><guimenu>NPR Stroke Editor</guimenu> <guisubmenu>Line Plug-in Controls</guisubmenu> <guisubmenu>Stylization</guisubmenu> <guisubmenu>Style</guisubmenu> </menuchoice>. Select <guibutton>Apply Current</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model with new hidden silhouette line style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-13.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model with new hidden silhouette line style</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model with new hidden silhouette line style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+<step performance="required">
+<para>Done!</para>
+
+<para><screenshot>
+<screeninfo>Mechanical part model completed</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-2-14.png" format="png">
+</imageobject>
+<textobject><phrase>Mechanical part model completed</phrase>
+</textobject>
+<caption>
+<para>Mechanical part model completed.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</procedure>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="tutorial3">
+<title>Advanced Tutorial</title>
+<para>This tutorial will include Hatching Editing Mode.</para>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="tutorial4">
+<title>Animation Tutorial</title>
+
+<procedure>
+<title>Dances with Cactii</title>
+<para>In this tutorial, we will export from Lightwave an animated scene and then import the result to &app;.</para>
+
+<step performance="required">
+<para>Load the lightwave scene in Ligthwave.</para>
+
+<screen>
+<prompt>C:\</prompt> <command>cd <replaceable>JOT_ROOT</replaceable></command>
+<prompt>C:\</prompt> <command>cd manual\tutorials\tutorial-4\lw_files</command>
+<prompt>C:\</prompt> <command>lightwav.exe cactus_dancing.lws</command>
+</screen>
+
+</step>
+
+<step performance="required">
+<para>Manually indicate to Lightwave the location of object file: <filename>manual\tutorials\tutorial-4\lw_files\cactus_dancing.lwo</filename>.</para>
+
+<para><screenshot>
+<screeninfo>Cactus model loaded in Lightwave</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-1.png" format="png"></imageobject>
+<textobject><phrase>Cactus model loaded in Lightwave</phrase>
+</textobject>
+<caption>
+<para>Cactus model loaded in Lightwave.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+
+
+
+
+
+
+
+
+<step performance="optional">
+<para>If this is the first time you are exporting from Lightwave to Jot, load the Jot Export plugin</para>
+<substeps>
+	<step performance="required">
+	<para>In the Layout menu, select Plug-ins > Add Plug-in</para>
+	</step>
+	
+	<step performance="required">
+	<para>Navigate to the file "Jot Export.p", located in <filename>scripts\lw2jot.p</filename>. Click "Ok".</para>
+	</step>
+	
+	<step performance="required">
+	<para>Click "Ok" in the Information dialog.</para>
+	</step>
+</substeps>
+</step>
+
+<step performance="required">
+<para>Start the Jot Export plug-in, from the Layout > Plugins > Generic menu.</para>
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-2.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+</step>
+
+<step performance="required">
+<para>The left-hand list ("All Objects") shows a list of objects in the scene, and, if the object is textured, the number of textures on that object.</para>
+<substeps>
+	<step performance="optional">
+	<para>To export geometry but not texture information:</para>
+	<substeps>
+		<step performance="required">
+		<para>Select the object you wish to export from the "All Objects" list. Click <guibutton>Export</guibutton>. This will move the object you have selected from the "All Objects" list to the "Export List", and will disregard any textures belonging to that object.</para>
+		<!-- Export button, item selected -->
+		<para><screenshot>
+		<screeninfo>Lightwave GUI</screeninfo>
+		<mediaobject>
+		<imageobject><imagedata fileref="figs/tutorial-4-3.png" format="png"></imageobject>
+		<textobject><phrase>Lightwave GUI</phrase>
+		</textobject>
+		<caption>
+		<para>Lightwave GUI.</para>
+		</caption>
+		</mediaobject>
+		</screenshot></para>
+		
+		<!-- show obj. in "Export List" -->
+		<para><screenshot>
+		<screeninfo>Lightwave GUI</screeninfo>
+		<mediaobject>
+		<imageobject><imagedata fileref="figs/tutorial-4-4.png" format="png"></imageobject>
+		<textobject><phrase>Lightwave GUI</phrase>
+		</textobject>
+		<caption>
+		<para>Lightwave GUI.</para>
+		</caption>
+		</mediaobject>
+		</screenshot></para>
+		</step>
+		<step performance="required">
+		<para>Alternately, to export all objects (without texture information), click <guibutton>Export All</guibutton>. This will move all objects in the "All Objects" list to the "Export List", and will disregard any textures belonging to these objects. Objects already exported with textures will remain unchanged.</para>
+		<!-- show Export All button -->
+		<para><screenshot>
+		<screeninfo>Lightwave GUI</screeninfo>
+		<mediaobject>
+		<imageobject><imagedata fileref="figs/tutorial-4-5.png" format="png"></imageobject>
+		<textobject><phrase>Lightwave GUI</phrase>
+		</textobject>
+		<caption>
+		<para>Lightwave GUI.</para>
+		</caption>
+		</mediaobject>
+		</screenshot></para>
+		</step>
+	</substeps>
+	</step>
+	<step performance="required">
+	<para>To export geometry with texture information:</para>
+	<substeps>
+		<step performance="required">
+		<para>Select the object you wish to export from the "All Objects" list (it must be an object with at least one texture). Click the <guibutton>Export with Texture</guibutton> button.</para>
+		<!-- show Export w/ Texture button -->
+		<para><screenshot>
+		<screeninfo>Lightwave GUI</screeninfo>
+		<mediaobject>
+		<imageobject><imagedata fileref="figs/tutorial-4-6.png" format="png"></imageobject>
+		<textobject><phrase>Lightwave GUI</phrase>
+		</textobject>
+		<caption>
+		<para>Lightwave GUI.</para>
+		</caption>
+		</mediaobject>
+		</screenshot></para>
+		</step>
+		<step performance="required">
+		<para>If the object has more than one texture, you must choose one to be exported with the object from the dialog box that appears.</para>
+		<para><screenshot>
+		<screeninfo>Lightwave GUI</screeninfo>
+		<mediaobject>
+		<imageobject><imagedata fileref="figs/tutorial-4-7.png" format="png"></imageobject>
+		<textobject><phrase>Lightwave GUI</phrase>
+		</textobject>
+		<caption>
+		<para>Lightwave GUI.</para>
+		</caption>
+		</mediaobject>
+		</screenshot></para>
+		<para>The object now appears in the "Export List", with "+ tex" after it to indicate that this object is being exported with texture coordinates.</para>
+		</step>
+	</substeps>
+	</step>
+</substeps>
+</step>
+
+<step performance="required">
+<para>Enter the starting frame in the <guibutton>First Frame</guibutton> field, and the final frame in the <guibutton>Last Frame</guibutton> field. The scene will be exported including both the first and last frames.</para>
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-8.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+</step>
+
+<step performance="required">
+<para>Enter a filename to save the exported scene as. The extension of the file will be changed to ".jot" regardless of what extension is entered here. Additionally, potentially many other files will be created during the export, so you may want to create a directory to save the exported files in.</para>
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-9.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+</step>
+
+<step performance="required">
+<para>Click "Ok". The frame slider will move from the first frame to the last frame you entered, and you will see your scene animated as it is exporting. A dialog box will alert you to the end of the export process.</para>
+</step>
+
+
+
+
+
+
+
+<!-- -->
+
+<!-- LSCRIPT STUFF 
+
+<step performance="required">
+<para>Attach script <filename>scripts\lw2jot_point_position.ls</filename> to every piece of geometry to be exported.</para>
+
+<substeps>
+<step performance="required">
+<para>Click on <guibutton>Objects</guibutton> and then click on <guibutton>Item Properties</guibutton>. This will bring up the object properties window.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-2.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-3.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Select <guimenu>Deform tab</guimenu>.
+</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-4.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>For each non null object in the scene</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-5.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+<substeps>
+
+<step performance="required">
+<para>Click on <guibutton>Add Displacement</guibutton> and choose "LScript".</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-6.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Double click on <guibutton>LScript</guibutton> and choose file <filename>scripts\lw2jot_point_position.ls</filename>.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-7.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-8.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+
+</step>
+
+</substeps>
+
+</step>
+
+<step performance="required">
+<para>Execute the export script <filename>scripts\lw2jot.ls</filename>.</para>
+
+<substeps>
+
+<step performance="required">
+<para>Click <guimenu>LScript tab</guimenu>.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-9.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click <menuchoice><guimenu>LScript Tools</guimenu><guisubmenu>LScript</guisubmenu></menuchoice> and choose the file <filename>scripts\lw2jot.ls</filename>.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-10.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click through the warning box.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-11.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Set "Start Frame" to 1 and "End Frame" to 120. Change the "Save Path" to <filename>\manual\tutorials\tutorial-4\jot_files\</filename> and export file prefix <filename>cactus_export</filename>.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-12.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click through this info box.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-13.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Set "First Frame" to 1 and "Last Frame" to "First Frame" + 1 = 2.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-14.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click on <guibutton>End Preview</guibutton> and the time line should run from start to end frame.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-15.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click through the info box.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-16.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Set "Start Frame" to 1 and "End Frame" to 120. The time line should run from start to end frame again.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-17.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click on <guibutton>End Preview</guibutton>.</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-15.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Click through the info box and wait for the export to proceed...</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-18.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Done!</para>
+
+<para><screenshot>
+<screeninfo>Lightwave GUI</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-19.png" format="png"></imageobject>
+<textobject><phrase>Lightwave GUI</phrase>
+</textobject>
+<caption>
+<para>Lightwave GUI.</para>
+</caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</substeps>
+</step>
+
+END LSCRIPT STUFF -->
+
+<step performance="required">
+<para>Now import the exported files in directory <filename>manual\tutorials\tutorial-4\jot_files</filename> into &app;. (A copy of the files which should have exported into the directory <filename>manual\tutorials\tutorial-4\jot_files</filename> is provided in <filename>manual\tutorials\tutorial-4\jot_files.bak</filename>.)</para>
+
+<screen>
+<prompt>C:\</prompt> <command>cd <replaceable>JOT_ROOT</replaceable></command>
+<prompt>C:\</prompt> <command>cd manual\tutorials\tutorial-4\jot_files</command>
+<prompt>C:\</prompt> <command>jotq cactus_export.jot</command>
+</screen>
+
+<para><screenshot>
+<screeninfo>Cactus model with default style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-20.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with default style</phrase>
+</textobject>
+<caption>
+<para>Cactus model with default style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>The various components of the cactus can be stylized using the techniques demonstrated in the previous tutorials. You may stylized this cactus and save the result by pressing <keycap>s</keycap>. However, <filename>manual\tutorials\tutorial-4\jot_files.npr</filename> contains another copy of the exported files which already have been stylized.</para>
+
+<screen>
+<prompt>C:\</prompt> <command>cd <replaceable>JOT_ROOT</replaceable></command>
+<prompt>C:\</prompt> <command>cd manual\tutorials\tutorial-4\jot_files.npr</command>
+<prompt>C:\</prompt> <command>jotq cactus_export.jot</command>
+</screen>
+
+<para><screenshot>
+<screeninfo>Cactus model with npr style</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-21.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with npr style</phrase>
+</textobject>
+<caption>
+<para>Cactus model with npr style.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>To access the other frames of the animation, engage Animator Mode by pressing <keycap>X</keycap>. (WYSIWYG NPR rendering window must have focus to receive keystroke commands.)</para>
+
+<para><screenshot>
+<screeninfo>Cactus model with Animator Mode ON</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-22.png" format="png">
+</imageobject>
+<textobject><phrase>Cactus model with Animator Mode ON</phrase>
+</textobject>
+<caption>
+<para>Cactus model with Animator Mode ON.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Step through the frames using the numeric keypad: <keycap>4</keycap> and <keycap>6</keycap> step backward and forward by one frame; <keycap>2</keycap> and <keycap>8</keycap> step backward and forward by ten frames; <keycap>5</keycap> returns to the first frame.</para>
+
+<para><screenshot>
+<screeninfo>Stepping through the frames of the cactus animation</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-23.png" format="png">
+</imageobject>
+<textobject><phrase>Stepping through the frames of the cactus animation</phrase>
+</textobject>
+<caption>
+<para>Stepping through the frames of the cactus animation.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>To play back the entire animation, press <keycap>/</keycap>. Press <keycap>+</keycap> to stop. (Each frame is loaded from disk, so playback is slooow. Don't ask...)</para>
+
+<para><screenshot>
+<screeninfo>Playing the cactus animation</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-24.png" format="png">
+</imageobject>
+<textobject><phrase>Playing the cactus animation</phrase>
+</textobject>
+<caption>
+<para>Playing the cactus animation.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>To render frames to disk, engage time sync with <keycap>-</keycap> and render mode with <keycap>*</keycap>.</para>
+
+<para><screenshot>
+<screeninfo>Engaging render to disk mode</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-25.png" format="png">
+</imageobject>
+<textobject><phrase>Engaging render to disk mode</phrase>
+</textobject>
+<caption>
+<para>Engaging render to disk mode.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+<step performance="required">
+<para>Pressing <keycap>/</keycap> now with render to disk mode on will play back the frames and render them to disk. (A DivX movie file of these frames is provided: <filename>manual\tutorials\tutorial-4\jot_files.npr\cactus_export.avi</filename>).</para>
+
+<para><screenshot>
+<screeninfo>Frames are rippen to disk</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/tutorial-4-26.png" format="png">
+</imageobject>
+<textobject><phrase>Frames are rippen to disk</phrase>
+</textobject>
+<caption>
+<para>Frames are rippen to disk.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</step>
+
+</procedure>
+
+</sect1>
+
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="reference">
+<title>Reference guide</title>
+
+<sect1 id="camera">
+<title>Camera Manipulation</title>
+
+<sect2 id="mouse_camera_control">
+<title>Mouse</title>
+
+<sect3 id="left_button">
+<title>Left button: Model Interaction</title>
+<para>The <mousebutton>left</mousebutton> button is used for selection and stylization of the scene. This specific behavior depends upon the <link linkend="modes">current mode</link>.</para>
+
+<variablelist>
+<varlistentry>
+<term>In general, click once on an object to select it</term>
+<listitem>
+<para><action>Object attributes can now be edited.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>In general, hold the button down and move to draw</term>
+<listitem>
+<para><action>The lines you draw affect stylization.</action></para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="right_button">
+<title>Right button: Navigation</title>
+<para>In all modes, the right mouse button is used for camera manipulation.</para>
+
+<variablelist>
+<varlistentry>
+<term>Click in the center of the window and drag with horizontal motion</term>
+<listitem>
+<para><action>Translation parallel to image plane.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Click in the center of the window and drag with vertical motion</term>
+<listitem>
+<para><action>Translation perpendicular to image plane ("zooming").</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Click near the border of the window and drag</term>
+<listitem>
+<para><action>Rotation.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Click anywhere and release, then drag</term>
+<listitem>
+<para><action>Define a center of rotation (blue sphere) and use
+it.</action></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term>Double click on the model</term>
+<listitem>
+<para><action>Define a point on the model surface and position it at
+the center of the window.</action></para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect3>
+
+</sect2>
+
+<sect2 id="tablet_camera_control">
+<title>Tablet</title>
+<para>TODO.</para>
+</sect2>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="modes">
+<title>Editing Mode - Overview</title>
+<para>At any given time, &app; is in one of three Editing Modes. The current is indicated in the upper left of the rendering window. In each different mode the <mousebutton>left</mousebutton> mouse button, some key strokes, and the GUI window behave differently.</para>
+
+<para>We describe in the following sections the three Editing Modes. The first concerns <link linkend="line">line editing</link> (e.g. silhouettes and creases), the second <link linkend="hatching">hatching editing</link>, the third <link linkend="basecoat">basecoat editing</link> (i.e. shaders for the triangle meshes).</para>
+
+</sect1>
+
+<sect1 id="line">
+<title>Editing Mode - Line Editing Mode</title>
+<para>In this mode, various lines types arising from the geometry (e.g. silhouettes, creases) or sketched unto mesh surfaces by the user (e.g. decals) can be selected and stylized. Stylization controls described in this section include appearance parameters (e.g. width, color), path parameters (e.g. directly oversketched wiggles), and temporal parameters (e.g. frame-to-frame coherence behavior and stroke animation).</para>
+
+<sect2 id="mouse_line">
+<title>Mouse</title>
+<para>In general, the <mousebutton>left</mousebutton> mouse button is used to select line entities (e.g. decals, silhouettes) to be stylized, and then sketch their associated stylization. If a mesh, or existing decal is left-clicked, then decal editing mode is entered as indicated at the top of the rendering window and in the status field of the GUI. The selected mesh will be indicated by showing a bounding box, and any selected decal will be highlighted.  Sketching in decal mode serves to define additional decals.</para>
+<para>If any other line type (i.e. silhouette, crease, border) is selected, then line editing mode is entered as indicated at the top of the rendering window and in the status field of the GUI.  The selected mesh will be indicated by showing a bounding box, and selected line will be highlighted.  Sketching in line mode serves to define offset-based stylization for the selected line type.</para>
+<para>Clicking on the background or another entity will deselect the current entity.  If stroke style changes in the GUI, or sketched offsets are not yet "applied" they will be lost upon deselection.</para>
+</sect2>
+
+<sect2 id="gui_line">
+<title>GUI</title>
+<para>In this mode the GUI is used to edit the stylization and behavior of the currently selected line type. Controls common to this mode and <link linkend="hatching">hatching</link> mode are described first, followed by the controls specific to line editing mode.</para>
+
+<sect3 id="gui_line1">
+<title>Common Stroke Controls</title>
+<para>These controls comprise the parameters which govern stroke rendering.</para>
+
+<sect4 id="gui_line1_pre">
+<title>Presets Management</title>
+<para>Strokes parameter sets can be grouped together into named presets and saved to disk.</para>
+
+<para><screenshot>
+<screeninfo>Presets Management</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-preset.png" format="png">
+</imageobject>
+<textobject><phrase>Presets Management</phrase>
+</textobject>
+<caption>
+<para>Presets Management.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Presets</guibutton></term> <listitem><para><action>List box for selecting amongst the available presets.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Save</guibutton></term> <listitem><para><action>If "-=NEW=-" preset is selected, a new preset will be created from the current settings. If an existing preset is selected, it will be overwritten with the current settings.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Debug</guibutton></term> <listitem><para><action>Don't ask...</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Preview</guibutton></term> <listitem><para><action>Displays the current active settings. Up to five example strokes can be sketched in this box.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line1_col">
+<title>Color and Texture Settings</title>
+<para>Parameters which govern the rendering of the stroke triangle strip.</para>
+
+<para><screenshot>
+<screeninfo>Color and Texture Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-coltex.png" format="png">
+</imageobject>
+<textobject><phrase>Color and Texture Settings</phrase>
+</textobject>
+<caption>
+<para>Color and Texture Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Hue, Saturation, Value</guibutton></term> <listitem><para><action>Set the stroke color.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Alpha</guibutton></term> <listitem><para><action>Set the stroke alpha. This is analogous to pressure wrt paper effect simulation shader.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Texture</guibutton></term> <listitem><para><action>Select an alpha texture. The texture can be applied as a 1D or 2D texture. If 1D then the Y direction is mapped across the width of the stroke. If 2D then the X direction is mapped along the length of the stroke.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Period</guibutton></term> <listitem><para><action>If ZERO then texture considered 1D. If NON_ZERO then the texture is considered 2D with period equal to NON_ZERO pixel length.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Phase</guibutton></term> <listitem><para><action>Phase offset (as a fraction of period length) applied to stroke parameterization (i.e. longitude in texture coordinates or sketched offset parameterization).</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Paper</guibutton></term> <listitem><para><action>Paper height field texture for paper simulation shader</action> (n.b. strokes do not use the <link linkend="paper">globally selected paper texture</link>).</para></listitem></varlistentry>
+<varlistentry><term><guibutton>Contrast, Brightness</guibutton></term> <listitem><para><action>Modify the paper height field texture.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line1_sha">
+<title>Shape and Appearance</title>
+<para>These controls influence mainly the shape of the stroke.</para>
+
+<para><screenshot>
+<screeninfo>Shape and Appearance</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-appear.png" format="png">
+</imageobject>
+<textobject><phrase>Shape and Appearance</phrase>
+</textobject>
+<caption>
+<para>Shape and Appearance.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Width</guibutton></term> <listitem><para><action>Pixel width of the stroke.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Halo</guibutton></term> <listitem><para><action>Don't ask...</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Taper</guibutton></term> <listitem><para><action>Distance in pixels over which the end points are tapered.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Fade</guibutton></term> <listitem><para><action>Distance in pixels over which the end points are faded using alpha.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Flare</guibutton></term> <listitem><para><action>Fraction of the stroke over which the width is tapered from one end.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>AFlare</guibutton></term> <listitem><para><action>Fraction of the stroke over which the width is faded from one end.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+</sect3>
+
+<sect3 id="gui_line2">
+<title>Line Mode Specific Controls</title>
+<para>These remaining controls are specific to the line mode.</para>
+
+<sect4 id="gui_line2_typ">
+<title>Line Type Settings</title>
+<para>These flags control which line types are rendered for the selected mesh. Silhouette (SIL), backfacing silhouette (BAK), border (BOR), and crease (CRE) line types can be optionally rendered. The visible (VIS), hidden (HID), and occluded (OCC) portions of each line type can be toggled for rendering separately.</para>
+
+<para><screenshot>
+<screeninfo>Line Type Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-types.png" format="png">
+</imageobject>
+<textobject><phrase>Line Type Settings</phrase>
+</textobject>
+<caption>
+<para>Line Type Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>See Thru</guibutton></term> <listitem><para><action>"See thru" objects can render hidden and occluded line types. Non "see thru" objects can render only visible types. Non "see thru" objects can cause hidden lines on "see thru" objects to become occluded lines.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Sil-Vis, Bak-Vis, Bor-Vis, Cre-Vis</guibutton></term> <listitem><para><action>Toggle rendering of the visible line types.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Sil-Hid, Bak-Hid, Bor-Hid, Cre-Hid</guibutton></term> <listitem><para><action>Toggle rendering of the hidden line types.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Sil-Occ, Bak-Occ, Bor-Occ, Cre-Occ</guibutton></term> <listitem><para><action>Toggle rendering of the occluded line types.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line2_coh">
+<title>Coherence Settings</title>
+<para>Settings which govern how a coherent parameterization is applied to each line type from frame to frame (see corresponding <ulink url="http://www.cs.princeton.edu/gfx/proj/css/">paper</ulink>).</para>
+
+<para><screenshot>
+<screeninfo>Coherence Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-coh.png" format="png">
+</imageobject>
+<textobject><phrase>Coherence Settings</phrase>
+</textobject>
+<caption>
+<para>Coherence Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Global</guibutton></term> <listitem><para><action>If checked, all other parameters in this section are ignored and the global defaults are used.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>NoSig</guibutton></term> <listitem><para><action>If checked, the onscreen mesh size doesn't influence parameterization (i.e. sigma, rho = 1)</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Major, 1 to 1, Hybrid</guibutton></term> <listitem><para><action>Policy for assigning brush paths.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Rand, ArcL, Phase, Interp, Optim</guibutton></term> <listitem><para><action>Policy for fitting parameterization to brush paths.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Pix</guibutton></term> <listitem><para><action>Pixel spacing of polylines vertices for optimization fitting policy.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Wf, Ws, Wb, Wh</guibutton></term> <listitem><para><action>Weights in energy expression for optimization fitting policy.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Mv</guibutton></term> <listitem><para><action>Minimum number of votes per vote group.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Mp</guibutton></term> <listitem><para><action>Minimum pixel length per vote group.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>M%</guibutton></term> <listitem><para><action>Minimum percentage of the lenght of the silhouette path per vote group.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Hj</guibutton></term> <listitem><para><action>Pixel length threshold for healing together brush paths.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Ht</guibutton></term> <listitem><para><action>Pixel length threshold for coercing brush paths to heal.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line2_mes">
+<title>Mesh Settings</title>
+<para>Various meshwide settings.</para>
+
+<para><screenshot>
+<screeninfo>Mesh Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-mesh.png" format="png">
+</imageobject>
+<textobject><phrase>Mesh Settings</phrase>
+</textobject>
+<caption>
+<para>Mesh Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Crease Detect Angle</guibutton></term> <listitem><para><action>Dihedral angle threshold for considering a mesh edge to be a crease.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Regen. Creases</guibutton></term> <listitem><para><action>Regenerates the mesh creases using the current Crease Detect Angle threshold.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Crease Joint Angle</guibutton></term> <listitem><para><action>Adjacent crease edge joint angle threshold for connecting creases in contiguous paths.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Crease Visibility Step</guibutton></term> <listitem><para><action>Pixel spacing of crease visibility testing under legacy crease rendering mode (don't ask...).</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Polygon Offset Factor, Polygon Offset Units</guibutton></term> <listitem><para><action>Polygon offset parameters used to render mesh in ID image. Increase these values if line visibility is lousy.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line2_noi">
+<title>Noise Settings</title>
+<para>Line stylization noise (a.k.a. animation of stroke stylization) is achieved by assigning more than one stylization to a given line type and changing among them in time. Note, all additional stylization prototypes for a given line type must share the period (or sketched offset baseline length) of the first prototype.</para>
+
+<para><screenshot>
+<screeninfo>Noise Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-noise.png" format="png">
+</imageobject>
+<textobject><phrase>Noise Settings</phrase>
+</textobject>
+<caption>
+<para>Noise Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Selected</guibutton></term> <listitem><para><action>Indicate which stylization prototype is selected.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Next</guibutton></term> <listitem><para><action>Changes to the next stylization prototype.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Del</guibutton></term> <listitem><para><action>Delete current prototype.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Add</guibutton></term> <listitem><para><action>Add new prototype.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Lock</guibutton></term> <listitem><para><action>Force rendering to lock to current prototype.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Motion Only</guibutton></term> <listitem><para><action>Animation only occurs when camera is in motion.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Frequency</guibutton></term> <listitem><para><action>Number of times per second that the prototype is cycled.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Rand. Order</guibutton></term> <listitem><para><action>Degree to which the prototype cycling order is randomized.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Rand. Duration</guibutton></term> <listitem><para><action>Degree to which the prototype cycling duration is randomized.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_line2_sty">
+<title>Stylization Controls</title>
+<para>These controls govern the selection, adding, removal, and editing of stroke stylization for lines types.</para>
+
+<para><screenshot>
+<screeninfo>Stylization Controls</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/line-stylization.png" format="png">
+</imageobject>
+<textobject><phrase>Stylization Controls</phrase>
+</textobject>
+<caption>
+<para>Stylization Controls.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Status</guibutton></term> <listitem><para><action>This field indicates the currently selected entity.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Line Types</guibutton></term> <listitem><para><action>Cycle selection between the line types (e.g. SIL-VIS, CRE-HID).</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Decal Marks</guibutton></term> <listitem><para><action>Enter decal editing mode and cycle selection of existing decals.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Crease Paths</guibutton></term> <listitem><para><action>Cycle selection of legacy style crease paths (don't ask...).</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Crease Strokes</guibutton></term> <listitem><para><action>Don't ask...</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>h</keycap></shortcut>
+<guibutton>Edit Selected</guibutton></menuchoice></term> <listitem><para><action>Edit the sketched offset stylization of selected line types.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Clear Selected</guibutton></term> <listitem><para><action>Clear the sketched offset stylization of selected line types, or clear the selected decal.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>Esc</keycap></shortcut>
+<guibutton>Undo Sketch</guibutton></menuchoice></term> <listitem><para><action>Remove the last mark from the current set of sketched offsets.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>y</keycap></shortcut>
+<guibutton>Apply Sketch</guibutton></menuchoice></term> <listitem><para><action>Apply the current set of sketched offsets to the chosen line type, or generate decals.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>u</keycap></shortcut>
+<guibutton>Apply Current</guibutton></menuchoice></term> <listitem><para><action>Apply the current stroke parameters (as seen in the Preview window) to the currently selected entity.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>j</keycap></shortcut>
+<guibutton>Get Selected</guibutton></menuchoice></term> <listitem><para><action>Replace the current stroke parameters (as seen in the Preview window) with those of the currently selected entity.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Vary Width, Vary Alpha</guibutton></term> <listitem><para><action>Toggle effects caused by tablet pressure.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Virtual Baseline, Selected Baseline</guibutton></term> <listitem><para><action>Type of baseline for sketched offsets.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Add New, Delete</guibutton></term> <listitem><para><action>Add and remove legacy style crease strokes (don't ask...).</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Synthesis</guibutton></term> <listitem><para><action>Stylization synthesis for legacy style crease strokes (don't ask...).</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="hatching">
+<title>Editing Mode - Hatching Editing Mode</title>
+<para>TODO.</para>
+
+<sect2 id="mouse_hatch">
+<title>Mouse</title>
+<para>TODO.</para>
+</sect2>
+
+<sect2 id="gui_hatch">
+<title>GUI</title>
+<para>TODO.</para>
+
+<sect3 id="gui_hatch1">
+<title>Common Stroke Controls</title>
+<para>See previous line editing <link linkend="gui_line1">section</link>.</para>
+</sect3>
+
+<sect3 id="gui_hatch2">
+<title>Hatching Mode Specific Controls</title>
+<para>TODO.</para>
+
+<sect4 id="gui_hatch2_ctrl">
+<title>Editing Controls</title>
+<para>TODO.</para>
+
+<para><screenshot>
+<screeninfo>Editing Controls</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/hatching-controls.png" format="png">
+</imageobject>
+<textobject><phrase>Editing Controls</phrase>
+</textobject>
+<caption>
+<para>Editing Controls.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Type</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Curves</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Style</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>All</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Last</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Apply</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+<sect4 id="gui_hatch2_anim">
+<title>Animation Settings</title>
+<para>TODO.</para>
+
+<para><screenshot>
+<screeninfo>Animation Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/hatching-anim.png" format="png">
+</imageobject>
+<textobject><phrase>Animation Settings</phrase>
+</textobject>
+<caption>
+<para>Animation Settings.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Lo Thresh</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Hi Thresh</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Lo Width</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Hi Width</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Global Scale</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Limit Scale</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Trans. Time</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Max. LOD</guibutton></term> <listitem><para><action></action></para></listitem></varlistentry>
+</variablelist>
+
+</sect4>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="basecoat">
+<title>Editing Mode - Basecoat Editing Mode</title>
+<para>The triangle meshes of objects can be rendered using an arbitrary number of shaders composited in layers. The result is called the basecoat.</para>
+
+<sect2 id="mouse_base">
+<title>Mouse</title>
+<para>Left-clicking the mesh will select it.</para>
+</sect2>
+
+<sect2 id="gui_base">
+<title>GUI</title>
+<para>The GUI displays the basecoat configuration of the currently selected object.</para>
+
+<sect3 id="gui_base1">
+<title>Layer management</title>
+<para>The basecoat is composed of shaders arranged in layers. The layer editor displays the current set of layers in the order in which they are composited. It also facilitates the adding and removing of shader layers.</para>
+
+<para><screenshot>
+<screeninfo>Layer management</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/basecoat-layer.png" format="png">
+</imageobject>
+<textobject><phrase>Layer management</phrase>
+</textobject>
+<caption>
+<para>Layer management.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Layer Editor List Box</guibutton></term> <listitem><para><action>Selects the current active layer. A layer consists of one shader either a normal shader or a toon shader. Layers are numbered in order and layer zero is composited first. A selection "----" indicates that no layer is selected.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Layer Editor Text Box</guibutton></term> <listitem><para><action>Text entered here is used to name the active layer.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Norm, Toon</guibutton></term> <listitem><para><action>Selects the type of shader to be created, when a layer is added.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Add</guibutton></term> <listitem><para><action>Adds a new layer of the currently selected type after the current active layer. To insert a layer before the zero layer, set the active layer to "----".</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Del</guibutton></term> <listitem><para><action>Deletes the current active layer.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Transparency to Background</guibutton></term> <listitem><para><action>If checked, a special layer is composited first, before the zero layer. This shader renders the mesh triangles to look identical to the background, accounting for the current background texture, paper, etc.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Annotatable</guibutton></term> <listitem><para><action>If unchecked, this object is not rendered into the ID image. This will cause visibility to fail on all stroke-based effects. This can be useful to achieve transparent objects which do not occlude the strokes of objects behind them.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="gui_base2">
+<title>Normal Shaders</title>
+<para>When a normal shader layer is selected, the remaining basecoat controls adapt to display the relevent settings. The normal shader consists of a solid color, optional texture map, optional alpha and optional paper shader, and can be lit by the <link linkend="lighting">global lighting environment</link>.</para>
+
+<para><screenshot>
+<screeninfo>Normal Shaders</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/basecoat-norm.png" format="png">
+</imageobject>
+<textobject><phrase>Normal Shaders</phrase>
+</textobject>
+<caption>
+<para>Normal Shaders.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Hue, Saturation, Value</guibutton></term> <listitem><para><action>Sets the solid color of the shader.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Alpha</guibutton></term> <listitem><para><action>Sets the alpha used for compositing this layer. This is analogous to pressure w.r.t. paper effect simulation shader.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Texture</guibutton></term> <listitem><para><action>Selects an optional texture map to modulate the triangles. This texture map could include alpha.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Apply Paper Effect</guibutton></term> <listitem><para><action>Enable paper effect shader on this layer.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Mobile Paper Co-ords</guibutton></term> <listitem><para><action>If unchecked, the paper shader's height field texture, for this layer, is fixed in screen space. If checked, the height field texture moves with the bounding box of the object.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Use Global Lighting</guibutton></term> <listitem><para><action>If checked, triangles are modulated by the current diffuse lighting environment.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Specular Lighting</guibutton></term> <listitem><para><action>Adds a white specular component to each active light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Refresh</guibutton></term> <listitem><para><action>Regenerates the texture list.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="gui_base3">
+<title>Toon Shaders</title>
+<para>When a toon shader layer is selected, the remaining basecoat controls adapt to display the relevent settings. Toon shading is defined by a diffuse lighting calculations which looks up into a 1D texture. Here, the toon shader consists of a solid color, a 1D texture map, a lighting description, an optional alpha and an optional paper shader.</para>
+
+<para><screenshot>
+<screeninfo>Toon Shaders</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/basecoat-toon.png" format="png">
+</imageobject>
+<textobject><phrase>Toon Shaders</phrase>
+</textobject>
+<caption>
+<para>Toon Shaders.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Hue, Saturation, Value</guibutton></term> <listitem><para><action>Sets the solid color.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Alpha</guibutton></term> <listitem><para><action>Sets the alpha used for compositing this layer. This is analogous to pressure w.r.t. paper effect simulation shader.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Texture</guibutton></term> <listitem><para><action>Sets the 1D lookup texture. Optionaly contains alpha.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Apply Paper Effect</guibutton></term> <listitem><para><action>Enable paper effect shader on this layer.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Mobile Paper Co-ords</guibutton></term> <listitem><para><action>If unchecked, the paper shader's height field texture, for this layer, is fixed in screen space. If checked, the height field texture moves with the bounding box of the object.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>L0, L1, L2, L3, L?</guibutton></term> <listitem><para><action>Switch the light to use. L0 through L3 are the</action> <link linkend="lighting">global lights</link>. L? specifies a light unique to the active layer.</para></listitem></varlistentry>
+<varlistentry><term><guibutton>Direction</guibutton></term> <listitem><para><action>If checked, directional light, if unchecked, positional light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Cam Frame</guibutton></term> <listitem><para><action>If checked, light is stationary in camera frame, if unchecked, light is stationary in world frame.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Dir/Pos</guibutton></term> <listitem><para><action>Sets direction/position of light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Radius</guibutton></term> <listitem><para><action>Sets the radius of light from the camera/world origin.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Refresh</guibutton></term> <listitem><para><action>Regenerates the texture list.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect3>
+
+<sect3 id="gui_base4">
+<title>Transform</title>
+<para>Controls for transforming objects in the scene. This is mostly a hack, these operations will be performed in Maya, Lightwave, etc.</para>
+
+<para><screenshot>
+<screeninfo>Transform</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/basecoat-trans.png" format="png">
+</imageobject>
+<textobject><phrase>Transform</phrase>
+</textobject>
+<caption>
+<para>Transform.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="parameters">
+<title>Global Parameters</title>
+<para>These windows collect all the global settings such as background and lighting.</para>
+
+<sect2 id="lighting">
+<title>Lighting</title>
+<para>&app; supports up to four positional/directional light sources and one global ambient light source. Lighting can have an effect on the normal and toon shaders described in the <link linkend="basecoat">basecoat</link> section.</para>
+
+<para><screenshot>
+<screeninfo>Global lighting parameters</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/global-light.png" format="png">
+</imageobject>
+<textobject><phrase>Global lighting parameters</phrase>
+</textobject>
+<caption>
+<para>Global lighting parameters.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>0, 1, 2, 3</guibutton></term> <listitem><para><action>Select one of the four positional/directional lights to edit. When a light is selected the other controls will change to reflect the chosen light settings.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>G</guibutton></term> <listitem><para><action>Select global ambient light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>On</guibutton></term> <listitem><para><action>Light is active when checked.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Dir</guibutton></term> <listitem><para><action>Light is directional when checked, positional when not checked.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Cam</guibutton></term> <listitem><para><action>Light position/direction is defined in terms of camera frame when checked, world frame when not checked.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Dif/Amb</guibutton></term> <listitem><para><action>Select the editing of diffuse/ambient color of light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Pos/Dir</guibutton></term> <listitem><para><action>Adjust position/direction of the light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Radius</guibutton></term> <listitem><para><action>Adjust the radius from world/cam origin associated with positional light.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Hue, Saturation, Value</guibutton></term> <listitem><para><action>Adjust color of the chosen light.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="background">
+<title>Background</title>
+<para>The background is rendered as a solid colored quad with optional texture mapping and paper shader.</para>
+
+<para><screenshot>
+<screeninfo>Global background parameters</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/global-bkg.png" format="png">
+</imageobject>
+<textobject><phrase>Global background parameters</phrase>
+</textobject>
+<caption>
+<para>Global background parameters.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><guibutton>Hue, Saturation, Value</guibutton></term> <listitem><para><action>Adjust the color of the background.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Alpha</guibutton></term> <listitem><para><action>Adjust the alpha of the background. This has effect in conjunction with the paper shader.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Texture</guibutton></term> <listitem><para><action>Select an optional texture map to apply to background quad. The list box is populated with textures from the appropriate directory</action> (see description of <link linkend="files">file tree</link>).</para></listitem></varlistentry>
+<varlistentry><term><guibutton>Apply Paper to Bkg</guibutton></term> <listitem><para><action>Apply paper shader.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="paper">
+<title>Paper</title>
+<para>A paper effect shader can be applied to basecoat shader, strokes, and the background. The paper parameters selected here affect only basecoat and the background.</para>
+
+<para><screenshot>
+<screeninfo>Global paper parameters</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/global-paper.png" format="png">
+</imageobject>
+<textobject><phrase>Global paper parameters</phrase>
+</textobject>
+<caption>
+<para>Global paper parameters.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut><keycap>p</keycap></shortcut>
+<guibutton>Active</guibutton></menuchoice></term> <listitem><para><action>Global override to disable all paper shaders, including strokes.</action></para></listitem></varlistentry>
+<varlistentry><term><guibutton>Texture</guibutton></term> <listitem><para><action>Select global paper height field texture. The list box is populated with textures from the appropriate directory</action> (see description of <link linkend="files">file tree</link>).</para></listitem></varlistentry>
+<varlistentry><term><guibutton>Brightness, Contrast</guibutton></term> <listitem><para><action>Adjust the global height field texture.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="antialias">
+<title>Antialiasing</title>
+<para>Full scene jittered antialiasing is implemented using the accumulation buffer. This incurses a tremendous performance hit, making it useful for batch rendering of animations.</para>
+
+<para><screenshot>
+<screeninfo>Global antialiasing parameters</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="figs/global-anti.png" format="png">
+</imageobject>
+<textobject><phrase>Global antialiasing parameters</phrase>
+</textobject>
+<caption>
+<para>Global antialiasing parameters.</para></caption>
+</mediaobject>
+</screenshot></para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut><keycap>a</keycap></shortcut>
+<guibutton>Active</guibutton></menuchoice></term> <listitem><para><action>Toggle antialiasing on and off.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>A</keycap></shortcut>
+<guibutton>Mode</guibutton></menuchoice></term> <listitem><para><action>Select an antialiasing scheme, i.e., number of jittered passes.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+</sect1>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<sect1 id="keys">
+<title>Keyboard Commands</title>
+<warning><para>Key commands are only accepted when the WYSIWYG NPR rendering window has focus! They are case-sensitive. <keycap>Tab</keycap>, <keycap>Arrows</keycap> and modifiers (<keycap>Ctrl</keycap>, etc.) affect GUI windows which have focus.</para></warning>
+
+<sect2 id="keys_global">
+<title>Global Commands</title>
+<para>These commands operate under all modes.</para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut><keycap>q</keycap></shortcut>
+<guibutton>Quit</guibutton></menuchoice></term> <listitem><para><action>Terminates the application.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>s</keycap></shortcut>
+<guibutton>Save scene</guibutton></menuchoice></term> <listitem><para><action>Save the entire scene to</action> <filename>out.jot</filename>.</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>w</keycap></shortcut>
+<guibutton>Write mesh</guibutton></menuchoice></term> <listitem><para><action>Write the mesh under the mouse cursor to</action> <filename>out.sm</filename>.</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>.</keycap></shortcut>
+<guibutton>Next Mode</guibutton></menuchoice></term> <listitem><para><action>Change to the next Editing Mode (e.g. Basecoat Edition Mode).</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>,</keycap></shortcut>
+<guibutton>Previous Mode</guibutton></menuchoice></term> <listitem><para><action>Change to the previous Editing Mode (e.g. Basecoat Edition Mode).</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>M</keycap></shortcut>
+<guibutton>Render Mode Menu</guibutton></menuchoice></term> <listitem><para><action>Toggle display of the Render Mode Menu. Allows global override control of various shaders. (Select Textured Patch to render with NPR stylization shaders/strokes.)</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>v</keycap></shortcut>
+<guibutton>Global Parameters Menu</guibutton></menuchoice></term> <listitem><para><action>Toggle display of the</action> <link linkend="parameters">Global Parameters Menu</link>.</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>V</keycap></shortcut>
+<guibutton>Reset View</guibutton></menuchoice></term> <listitem><para><action>Adjust camera such that entire scene fits in render window.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>X</keycap></shortcut>
+<guibutton>Toggle Animator Mode</guibutton></menuchoice></term> <listitem><para><action>Engage frame stepping of exported animation</action> (see <link linkend="tutorial4">Tutorial</link>).</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>'</keycap></shortcut>
+<guibutton>Change Selected Style</guibutton></menuchoice></term> <listitem><para><action>Cycles through various selection representations (e.g. wireframe, bounding box, etc.)</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>`</keycap></shortcut>
+<guibutton>Toggle Repair</guibutton></menuchoice></term> <listitem><para><action>Toggles whether or not system attempts to "repair" strokes with tight bends (work in progress...).</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>p</keycap></shortcut>
+<guibutton>Toggle Paper Shader</guibutton></menuchoice></term> <listitem><para><action>Toggles globally enabled/defeat paper shader.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>a</keycap></shortcut>
+<guibutton>Toggle Antialiasing</guibutton></menuchoice></term> <listitem><para><action>Toggles full scene antialiasing.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>A</keycap></shortcut>
+<guibutton>Antialiasing Mode</guibutton></menuchoice></term> <listitem><para><action>Cycle through the available Antialiasing Modes. (All of which are slow without a hardware accumulation buffer.)</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="keys_line">
+<title>Line Mode Commands</title>
+<para>See section on <link linkend="line">Line Mode</link>.</para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut><keycap>h</keycap></shortcut>
+<guibutton>Edit Selected</guibutton></menuchoice></term> <listitem><para><action>Edit the sketched offset stylization of selected line types.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>Esc</keycap></shortcut>
+<guibutton>Undo Sketch</guibutton></menuchoice></term> <listitem><para><action>Remove the last mark from the current set of sketched offsets.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>y</keycap></shortcut>
+<guibutton>Apply Sketch</guibutton></menuchoice></term> <listitem><para><action>Apply the current set of sketched offsets to the chosen line type, or generate decals.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>u</keycap></shortcut>
+<guibutton>Apply Current</guibutton></menuchoice></term> <listitem><para><action>Apply the current stroke parameters (as seen in the Preview window) to the currently selected entity.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>j</keycap></shortcut>
+<guibutton>Get Selected</guibutton></menuchoice></term> <listitem><para><action>Replace the current stroke parameters (as seen in the Preview window) with those of the currently selected entity.</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="keys_hatch">
+<title>Hatching Mode Commands</title>
+<para>See section on <link linkend="hatching">Hatching Mode</link>.</para>
+<para>TODO.</para>
+
+</sect2>
+
+<sect2 id="keys_anim">
+<title>Animation Commands</title>
+<para>See tutorial on <link linkend="tutorial4">Animation</link>.</para>
+
+<variablelist>
+<varlistentry><term><menuchoice><shortcut><keycap>X</keycap></shortcut>
+<guibutton>Toggle Animator Mode</guibutton></menuchoice></term> <listitem><para><action>Engage frame stepping of exported animation</action> (see <link linkend="tutorial4">Tutorial</link>).</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>4</keycap></shortcut>
+<guibutton>Back 1 Frame</guibutton></menuchoice></term> <listitem><para><action>Step 1 frame backward.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>6</keycap></shortcut>
+<guibutton>Forward 1 Frame</guibutton></menuchoice></term> <listitem><para><action>Step 1 frame forward.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>2</keycap></shortcut>
+<guibutton>Back 10 Frames</guibutton></menuchoice></term> <listitem><para><action>Step 10 frames backward.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>8</keycap></shortcut>
+<guibutton>Forward 10 Frames</guibutton></menuchoice></term> <listitem><para><action>Step 10 frames forward.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>5</keycap></shortcut>
+<guibutton>First Frame</guibutton></menuchoice></term> <listitem><para><action>Go to first frame.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>/</keycap></shortcut>
+<guibutton>Play</guibutton></menuchoice></term> <listitem><para><action>Play entire animation.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>+</keycap></shortcut>
+<guibutton>Stop</guibutton></menuchoice></term> <listitem><para><action>Stop playing animation.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>-</keycap></shortcut>
+<guibutton>Toggle Sync</guibutton></menuchoice></term> <listitem><para><action>When engaged, system time is synchronized with frame number. When disengaged, system time is interactive real-time.</action></para></listitem></varlistentry>
+<varlistentry><term><menuchoice><shortcut><keycap>*</keycap></shortcut>
+<guibutton>Toggle Disk</guibutton></menuchoice></term> <listitem><para><action>Toggle if playback causes frames to be rendered to disk. (Requires Sync Mode to be enabled.)</action></para></listitem></varlistentry>
+</variablelist>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="setup">
+<title>&app; Setup</title>
+
+<sect1 id="getting_app">
+<title>How to obtain &app;</title>
+<para>Got to the <ulink url="http://www.cs.princeton.edu/gfx/proj/jot/">Jot Homepage</ulink>.</para>
+</sect1>
+
+<sect1 id="requirements">
+<title>Requirements</title>
+<para>&app; requires nVidia GeForce or ATI Radeon 8000 series graphics hardware on Microsoft Windows (Linux coming soon).</para>
+</sect1>
+
+<sect1 id="installation">
+<title>Installation</title>
+
+<procedure>
+<step performance="required">
+<para>Unpack the <filename>jot.zip</filename> in the desired directory <replaceable>DEST</replaceable>.</para>
+</step>
+
+<step performance="required">
+<para>Edit <filename>jot-config.bat</filename> so that <replaceable>JOT_ROOT</replaceable> is now equal to <replaceable>DEST</replaceable><filename>\jot</filename>.</para>
+</step>
+
+<step performance="required">
+<para>For MS Windows users: Edit the properties of the <filename>jot-cmd</filename> file and set its target to <replaceable>DEST</replaceable><filename>\jot\batch\jot-config.bat</filename>.</para>
+</step>
+
+<step performance="required">
+<para>Execute <filename>jot-cmd</filename> shortcut to launch &app; command line.</para>
+</step>
+
+<step performance="required">
+<para>Start out with the <link linkend="tutorial1">basic tutorial</link>.</para>
+</step>
+
+</procedure>
+</sect1>
+
+<sect1 id="files">
+<title>File Tree and File Formats</title>
+
+<sect2 id="tree">
+<title>File Tree</title>
+
+<variablelist>
+<varlistentry>
+<term><filename>jot\</filename></term>
+<listitem>
+<variablelist>
+<varlistentry>
+<term></term>
+<listitem><para>Location of &app; command line shortcuts and README.txt.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>batch\</filename></term>
+<listitem><para>Various batch files for configuring and invoking &app;.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>bin\</filename></term>
+<listitem>
+<variablelist>
+<varlistentry>
+<term></term>
+<listitem><para>Handy shell tools for MS Windows, e.g. <filename>cd</filename>, <filename>ls</filename> and <filename>tiff2png</filename>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>D\</filename></term>
+<listitem><para>Debug binary (invoke with <filename>jotd.bat</filename>).</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>Q\</filename></term>
+<listitem><para>Optimized binary (invoke with <filename>jotq.bat</filename>).</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>R\</filename></term>
+<listitem><para>Release binary (invoke with <filename>jotr.bat</filename>).</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>manual\</filename></term>
+<listitem>
+<variablelist>
+<varlistentry>
+<term></term>
+<listitem><para>This manual in html and pdf format.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>tutorials\</filename></term>
+<listitem>
+<variablelist>
+<varlistentry>
+<term><filename>tutorial-1\</filename></term>
+<listitem><para>&app; scene files for the <link linkend="tutorial1">basic tutorial</link>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>tutorial-2\</filename></term>
+<listitem><para>&app; scene files for the <link linkend="tutorial2">intermediate tutorial</link>.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>tutorial-4\</filename></term>
+<listitem><para>Lightwave scene files and sample exported &app; scenes for the <link linkend="tutorial4">animation tutorial</link>.</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>models\</filename></term>
+<listitem><para>Sample models in &app; format.</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>nprdata\</filename></term>
+<listitem>
+<variablelist>
+<varlistentry>
+<term><filename>background_textures\</filename></term>
+<listitem><para>Background images. Can contain alpha.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>debugging\</filename></term>
+<listitem><para>Don't ask...</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>other_textures\</filename></term>
+<listitem><para>2D Texture maps for the Normal Shader. Can contain alpha.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>paper_textures\</filename></term>
+<listitem><para>Can contain alpha as well.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>stroke_presets\</filename></term>
+<listitem><para>Saved stroke styles.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>stroke_textures\</filename></term>
+<listitem><para>Stroke texture maps. Can be 1D or 2D. White in the color channel and "pressure" in the alpha channel.</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>system_textures\</filename></term>
+<listitem><para>Don't ask...</para></listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>toon_textures\</filename></term>
+<listitem><para>1D Texture maps for the Toon Shader. Can contain alpha.</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><filename>scripts\</filename></term>
+<listitem><para>Script files for exporting to &app; format from Lightwave, 3DS Max, Blender, etc.</para></listitem>
+</varlistentry>
+</variablelist>
+</listitem>
+</varlistentry>
+</variablelist>
+
+</sect2>
+
+<sect2 id="format">
+<title>File Formats</title>
+
+<sect3 id="format_jot">
+<title><filename>.jot</filename> File Format</title>
+<para>Contains entire scene.</para>
+
+</sect3>
+
+<sect3 id="format_sm">
+<title><filename>.sm</filename> File Format</title>
+<para>Contains a single mesh.</para>
+
+</sect3>
+
+<sect3 id="format_npr">
+<title><filename>.npr</filename> File Format</title>
+<para>Contains stylization information.</para>
+
+</sect3>
+
+<sect3 id="format_view">
+<title><filename>.view</filename> File Format</title>
+<para>Contains global scene parameters.</para>
+
+</sect3>
+
+<sect3 id="format_anim">
+<title>Animation File Format</title>
+<para>TODO.</para>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+<chapter id="faq">
+<title>Questions and Answers</title>
+
+<qandaset id="faqlist">
+<qandaentry>
+<question>
+<para>What is &app;?</para>
+</question>
+<answer>
+<para>No one can tell you what &app; is -- you must see for yourself.</para>
+</answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+<!---------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------->
+
+</book>

@@ -1,0 +1,15 @@
+#!/bin/zsh -f
+#######################################################
+# cvn
+#
+#   find out what would happen if we ran cvs update,
+#   but don't actually run the command. the output
+#   of cvs is saved in /tmp/up.txt and also displayed
+#   on the command line.
+#######################################################
+
+cvs -n up -Pd | tee /tmp/up.txt
+echo "\n--------\n"
+cat /tmp/up.txt
+
+exit 0

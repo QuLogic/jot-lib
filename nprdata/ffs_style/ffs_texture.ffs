@@ -1,0 +1,645 @@
+						FFSTexture 	{ 
+							npr_data_file 	{ NULL_STR }   
+		view_color 	{ {1 0.9808 0.97 }} 
+		view_alpha 	{ 1 } 
+		view_paper_use 	{ 0 } 
+		view_paper_name 	{ nprdata/paper_textures/simon.png  } 
+		view_paper_active 	{ 1 } 
+		view_texture 	{ NULL_STR } 
+		view_light_coords 	{ {{0 0 1 }{0 0 1 }{0 0 1 }{0 0 1 }}} 
+		view_light_positional 	{ {0 0 0 0 }} 
+		view_light_cam_space 	{ {1 1 1 1 }} 
+		view_light_color_diff 	{ {{0.9 0.9 0.9 }{0.9 0 0 }{0 0.9 0 }{0 0 0.9 }}} 
+		view_light_color_amb 	{ {{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }}} 
+		view_light_global 	{ {0.1 0.1 0.1 }} 
+		view_light_enable 	{ {1 0 0 0 }} 
+             	
+							collection 	{ 
+								HatchingCollection 	{ 
+									} } 
+							feature_stroke_texture 	{ 
+								FeatureStrokeTexture 	{ 
+									decal_pool 	{ 
+										DecalStrokePool 	{ 
+											base_prototype 	{ 
+												DecalLineStroke 	{ 
+													color 	{0 0 0 }
+													alpha 	1 
+													width 	7 
+													halo 	0 
+													taper  60
+													flare 	0.2
+													aflare 	0 
+													fade 	0 
+													angle 	0 
+													contrast 	0.5 
+													brightness 	0.5 
+													offset_stretch 	1 
+													offset_phase 	0 
+													press_vary_width 	0 
+													press_vary_alpha 	0 
+													stroke_texture_file 	{ NULL_STR } 
+													paper_texture_file 	{ NULL_STR } 
+													orig_mesh_size 	0 
+													} } 
+											} } 
+									sil_and_crease_texture 	{ 
+										SilAndCreaseTexture 	{ 
+											crease_max_bend_angle 	60 
+											crease_thresh 	0.5 
+											noise_frequency 	0 
+											noise_order 	0 
+											noise_duration 	0 
+											noise_motion 	{0 }
+											sil_pool 	{ 0 SIL_VIS
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper 	60
+															flare 	0.2
+															aflare 	0 
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 1 SIL_HID
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.4 
+															width 	8 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 2 SIL_OCC
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.2 
+															width 	8 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 3 SILB_VIS
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper 	60
+															flare 	0.2 
+															aflare 	0.15 
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 4 SILB_HID
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.4 
+															width 	7 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 5 SILB_OCC
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.2 
+															width 	7 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 6 CRE_VIS
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper 	60 
+															flare 	0.2 
+															aflare 	0.15 
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 7 CRE_HID
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.4 
+															width 	6 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 8 CRE_OCC
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.2 
+															width 	6 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 9 BOR_VIS
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper 	60 
+															flare 	0.2 
+															aflare 	0.15 
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 10 BOR_HID
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.4 
+															width 	5 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 11 BOR_OCC
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.2 
+															width 	5 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 12 SUG_VIS
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0.12 0.0204 0.0204 }
+															alpha 	0.71 
+															width 	10
+															halo 	1 
+															taper 	60
+															flare 	0.2 
+															aflare 	0.15 
+															fade 	0 
+															angle 	0 
+															contrast 	1 
+															brightness 	0.435 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	1 
+															press_vary_alpha 	1 
+															stroke_texture_file 	{ nprdata/stroke_textures/one_d.png } 
+															paper_texture_file 	{ nprdata/paper_textures/p-rough-3.png } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 13 SUG_HID
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.4 
+															width 	4 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											sil_pool 	{ 14 SUG_OCC
+												SilStrokePool 	{ 
+													base_prototype 	{ 
+														OutlineStroke 	{ 
+															color 	{0 0 0 }
+															alpha 	0.2 
+															width 	4 
+															halo 	0 
+															taper 	40 
+															flare 	0.2 
+															aflare 	0 
+															fade 	3 
+															angle 	0 
+															contrast 	0.5 
+															brightness 	0.5 
+															offset_stretch 	1 
+															offset_phase 	0 
+															press_vary_width 	0 
+															press_vary_alpha 	0 
+															stroke_texture_file 	{ nprdata/stroke_textures/1D--dark-8.png } 
+															paper_texture_file 	{ NULL_STR } 
+															orig_mesh_size 	1.95824 
+															} } 
+													coher_global 	{1 }
+													coher_sigma_one 	{0 }
+													coher_fit_type 	4 
+													coher_cover_type 	2 
+													coher_pix 	48 
+													coher_wf 	1 
+													coher_ws 	1 
+													coher_wb 	1 
+													coher_wh 	1 
+													coher_mv 	2 
+													coher_mp 	5 
+													coher_m5 	5 
+													coher_hj 	3 
+													coher_ht 	15 
+													} } 
+											} } 
+									} } 
+							transparent 	1 
+							annotate 	1 
+							polygon_offset_factor 	1 
+							polygon_offset_units 	1 
+							see_thru 	{ 0 } 
+							see_thru_flags 	{ 15 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 } 
+							basecoat 	{ 
+								NPRToonTexture 	{ 
+									use_paper 	1 
+									travel_paper 	1 
+									COLOR 	{0.14 0 0 }
+									alpha 	0.50 
+									light_index 	0 
+									light_dir 	1 
+									light_cam 	1 
+									light_coords 	{0 0 1 }
+									texture 	{ nprdata/toon_textures/simon_thin.png } 
+									layer_name 	{ Shader } 
+									} } 
+							} } 

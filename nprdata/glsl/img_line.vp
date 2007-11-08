@@ -1,0 +1,18 @@
+// img_line vertex shader:
+//
+
+varying vec4 P; // vertex position, eye space
+varying float local_e_l;
+attribute float local_edge_len;
+
+
+void main()
+{
+   P = gl_ModelViewMatrix * gl_Vertex;
+
+   local_e_l = local_edge_len;
+
+   gl_Position = ftransform();
+}
+
+// img_line.vp

@@ -1,0 +1,18 @@
+// msld vertex shader:
+
+varying float nv;
+
+void main()
+{
+//  gl_TexCoord[0] = gl_MultiTexCoord0;
+
+   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+   vec4 p = gl_ModelViewMatrix * gl_Vertex; // vert position in eye coords
+   vec3 v = normalize(-p.xyz);              // view vector in eye coords
+   nv = dot(n,v);                           // n*v, for silhouettes
+
+  gl_PointSize = 5.0;
+  gl_Position = ftransform();
+}
+
+// msld.vp

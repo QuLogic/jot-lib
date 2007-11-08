@@ -1,0 +1,84 @@
+
+
+LIGHTWAVE 3D EXPORT SCRIPT
+
+(mhibbs@cs.princeton.edu)
+
+
+
+There are two scripts necessary to export animations from Lightwave into Jot.
+They are functional, but not 
+
+STEPS:
+
+Open the Lightwave .lws file in Lightwave.  
+
+For each object in the scene you wish to export, you will need to add a Lightwave lscript file. 
+	(Nulls, cameras, and lights do not need the lscript ) 
+
+For each object:
+	1) 	Select the Item, and then bring up the Item Properties dialog box ('p' key), and select the "Deform" tag
+	2)  	Click the "add displacement" button and select 'LScript':
+	3) 	An unspecified "Lscript" item will appear in the list below.  Double-click the item to specify 
+	     		the path to the "pointposition.ls" file in the "lightwave export" folder
+
+Once all of the objects have been modified with the Lscript, select the "LScript" tab at the top of the Lightwave Window.
+Select the "LScript Tools->LScript" option from the list that appears at left, and select  the 
+"JotConvert.ls" file from the "lightwave_export" folder
+
+The script will now run with instructions, which we will follow out here
+
+	A reminder appears to attach the export scripts as we have done above.    
+	
+	The next window allows you to set the range to export. 
+	???FIRST FRAME must be greater than or equal to 1???
+	You may also set the path where the export files will be saved.
+
+	"\existing_path\myfolder\myname" will save the file 'myname.jot' and the associated object files inside 'myfolder'
+
+	Click "OK" to continue
+
+	The script will ask for you to preview the first and second frames of the animation,  and then to "end preview". Set start and end appropriately, and click "ok"
+
+	the two frames will run, and once "end preview" has been selected it will run quickly through animation frames
+
+	The script will again bring up a window, this time asking to preview all frames of the animation.  
+	set start and end to the entire segment to be exported, and preview again
+
+	Once all of the frames have run though, click on "end preview:"  The program may pause for several minutes to properly
+	arrange the exported Jot files ( This time will increase in proportion to the complexity of the scene ).  Once Lightwave
+	has become responsive again, check the directory you specified for the exported scene files.  change into this directory
+	and run "jot myname.jot" to open the scene inside Jot.  
+
+
+... animation controls
+
+	The animation controls must first be enabled by pressing "x"
+
+	Animation controls -overview
+
+	'5' reset to first frame of the animation
+	'6' forward one frame
+	'4' back one frame
+	'8' forward by 10 frames
+	'2' back by 10 frames
+	'/'  play all frames
+
+	'-'  sync animation to timer
+	'*'  enable render to disk mode
+	'+' stop
+
+	To watch the sequence play back in the display window, '/' is sufficient. 
+
+	For offscreen rendering
+		'-' to enable time-sync mode
+		'*' to enable writing to disk
+		'/' to start recording
+	the images will be saved as a numbered sequence of .PNG files. 
+
+
+	
+
+
+
+

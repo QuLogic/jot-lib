@@ -1,0 +1,193 @@
+JOT Project Coding and Style Conventions
+
+Introduction:
+
+This document contains coding and style conventions to be used when writing
+code for the JOT project.  Note that currently, much of the JOT code does
+not necessarily use these conventions (or at least, all of these conventions).
+However, new code being added to JOT should follow these conventions and any
+old code that is being revised or rewritten should be modified to follow these
+conventions.
+
+Change Log:
+
+08-Mar-2005
+Added section on line length.
+
+21-Feb-2005
+Initial draft.  Not all conventions have been thought of or handled at this
+point.  Numerous additions (and probably changes as well) are likely to come
+in the (hopefully near) future.  As a result, try to follow the conventions
+that are here.  For anything that isn't here, either ask about it or code as
+you like (but try to be consistent).
+
+Table of Contents:
+
+1. General Conventions
+   a.  Indentation
+   b.  Variable Naming
+   c.  Code Block Layout
+   d.  Include Guards
+   e.  File Names
+   f.  Line Length
+2. Documentation and Commenting
+   a.  Doxygen
+3.  Function Conventions
+   a.  Naming
+   b.  Layout
+4.  Class Conventions
+   a.  Naming
+
+
+1.  General Conventions
+
+1a. Indentation
+
+When indenting, the indent size should be 3 spaces.  Space (' ') characters
+should be used instead of the tab characters (in most editors you should be
+able to enable an option similar to 'use spaces instead of tabs').
+
+1b. Variables Naming
+
+All variable names should be in lowercase with underscores ('_')
+between words.
+
+Example:
+
+   bool is_rigid_motion;
+
+1c. Code Blocks
+
+Unless otherwise stated, general code blocks should be laid out in so-called
+"Linux style".  That is, opening curly-braces ('{') should be at the end of the
+statement begining the block and closing curly-braces ('}') should be on a
+line by themselves on the same indentation level as the statement begining the
+block.  The contents of the block should be indented.
+
+Example:
+
+   if (is_rigid_motion) {
+      rigid_motion_func();
+   } else {
+      non_rigid_motion_func()
+   }
+
+1d. Include Guards
+
+To prevent multiple declaration of code in header files, all header files should
+have include guards.  At the begining of every header file (that is, before any
+other code), there should be two preprocessor statements.  The first checks to
+see if a unique preprocessor symbol has not yet been defined (this is #ifndef).
+The second defines that unique symbol (this is #define).  The unique symbol
+should be in all uppercase and use the following pattern:
+
+<header file name>_IS_INCLUDED
+
+Periods in the header file name should be repaces with underscores ('_').
+There should also be one preprocessor statement at the end of each header file
+(that is, after all code in the file).  This should be a #endif statement
+followed on the same line by a comment containing the unique preprocessor symbol
+for the header file.
+
+Example:
+
+#ifndef MLIB_H_IS_INCLUDED
+#define MLIB_H_IS_INCLUDED
+
+// ... Code for the header file ...
+
+#endif // MLIB_H_IS_INCLUDED
+
+// end of file mlib.H
+
+(A comment should indicate the end of the file, as above).
+
+1e. File Names
+
+File names should end in '.C' for C++ source files and '.H' for C++ header files.
+
+1f. Line Length
+
+Lines in source code should be approximately 80 characters long.  That is, try
+to keep all lines to less than or equal to 80 character in length, but if you
+need to go a few characters over to squeeze something in, that's ok.
+
+2.  Documentation and Commenting
+
+2a. Doxygen
+
+The JOT project is using Doxygen to autmatically generate documentation for its
+code.  It is recommended that everyone working on JOT read through the first
+few sections of the Doxygen manual to learn how it works.
+
+A short tutorial on Doxygen will probably be written here at some point in
+addition to some conventions on the particular Doxygen commenting style to use.
+For now, we recommend QT style (using '!').
+
+Example:
+
+/*!
+ *  \file points.H
+ *  \brief Definitions of geometry classes for various coordinate systems.
+ *  \ingroup group_MLIB
+ *
+ *  \remark This file should probably be renamed to something like
+ *  coordinate_systems.H.
+ *
+ */
+
+3.  Function Conventions
+
+3a. Naming
+
+Function names will be all lowercase with underscores ('_') between words.
+Function parameters will use the same conventions.
+
+3b. Layout
+
+As with regular code blocks, functions will be laid out "Linux style".  That is,
+the return value of a function will be on a line by itself immediately
+preceeding the function name and parameter list.  The opening curly-brace ('{')
+of the function will also be on a line by itself, immediately after the function
+name and parameter list.  Thus function code will be indented after the opening
+curly-brace and will have the closing curly-brace ('}') after it, on a line by
+itself at the same indent level as the opening curly-brace.
+
+Examples:
+
+Mat4
+Mat4::Inverse()
+{
+
+   // ... Function code here ...
+   
+}
+
+4.  Class Conventions
+
+4a. Naming
+
+Class names should start with an uppercase letter (or, occasionally, with a few
+uppercase letters) and then use lowercase characters thereafter.  Underscores
+should be used to seperate words (except between the uppercase and lowercase
+part of the name).
+
+Examples:
+
+class Wpoint;
+class XYpoint;
+class XYpoint_list;
+
+It is common practive in the JOT source code to typedef const versions of a
+class as the name of the class prepended with an uppercase 'C'.
+
+Examples:
+
+typedef const Wpoint CWpoint;
+
+If a class is reference counted (using the JOT reference counting code), its
+name should be in all uppercase characters.
+
+Examples:
+
+   GELptr gel = new GEL();

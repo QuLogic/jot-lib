@@ -1,0 +1,45 @@
+/*****************************************************************
+ * This file is part of jot-lib (or "jot" for short):
+ *   <http://code.google.com/p/jot-lib/>
+ * 
+ * jot-lib is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ * 
+ * jot-lib is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
+ *****************************************************************/
+
+#ifndef DEVPOLL
+#define DEVPOLL
+
+#include "std/support.H"
+
+// DEVpoll defines an interface for pollable devices.
+// 
+
+class DEVpoll
+{
+ protected:
+   static ARRAY<DEVpoll *> _pollable;
+
+ public:
+   virtual ~DEVpoll() {}
+            DEVpoll() {}
+
+   virtual void exec_poll() = 0;
+
+   static void add_pollable( DEVpoll *dp ) { _pollable += dp; }
+   static void rem_pollable( DEVpoll *dp ) { _pollable -= dp; }
+
+   static ARRAY<DEVpoll *> &pollable() { return _pollable; }
+};
+
+#endif
+

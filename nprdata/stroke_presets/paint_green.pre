@@ -1,0 +1,18 @@
+
+BaseStroke 	{ 
+	color 	{0.039 0.65 0.11843 }
+	alpha 	0.93 
+	width 	43.5 
+	halo 	1 
+	taper 	0 
+	flare 	0.02 
+	aflare 	0.1 
+	fade 	30 
+	angle 	0 
+	contrast 	0.72 
+	brightness 	0.775 
+	press_vary_width 	1 
+	press_vary_alpha 	1 
+	stroke_texture_file 	{ nprdata/stroke_textures/mydot6.png } 
+	paper_texture_file 	{ nprdata/paper_textures/tissue.png } 
+	} 

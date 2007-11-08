@@ -1,0 +1,108 @@
+sbm paper:
+  create paper from latex templates
+  write outline, plan demos
+
+cover:
+  tube, with oversketch
+  revolve
+  smooth join
+  3D curve oversketch
+    planar
+    shadow
+    stereo
+    curves, points
+  crease widget
+  direct-draw mode?
+    3D cursor for drawing e.g. swingset
+  better rendering?
+
+demos:
+  rocket ship
+  octopus
+  simple swingset
+
+later submission:
+  punch out, inflate, cut out
+  paper doll
+  procedural generation
+
+-----------------------------------------------------------------
+
+bug/fixes:
+  skin smoothing
+  fix crease editing (wanghx)
+  inflate widget:
+    too hard to activate and define offset
+  inflate bsurface:
+    use of skin is problematic; should be more robust
+
+doc
+   user guide (wanghx)
+     add gesture details
+     widgets
+
+UI
+  cursor 3d (sapo)
+  floor widget for transforming objects (sapo)
+  fix draw manip (sapo)
+  better selection UI
+    edges
+    faces
+
+curves/points
+  fix shadow interaction
+    points
+    curves
+  implement stereo for points/curves
+    or fix current implementation
+  be able to lengthen a curve by oversketch
+  fix curve oversketch to be smoother (sapo)
+  fix use of coord systems in drawing curves
+    better choice of plane
+    use cursor 3D
+
+inflation:
+   disable auto crease generation (wanghx)
+   
+primitive:
+   provide support for gradual change along the skeleton 
+     when building tube (wanghx)
+   
+panel:
+  more tessellation (sapo)
+  interactive re-triangulation
+
+sweep
+  support modification after create (wanghx)
+  revolve: better handling of resolution at profile  
+
+roof:
+  inflation
+
+paper doll:
+  oversketch doll using cursor 3d
+  oversketch skeleton using control level (wanghx)
+
+-----------------------------------------------------------------
+done
+-----------------------------------------------------------------
+paper doll:
+  define skeleton from panel
+  oversketch skeleton
+  fix panel creation so it is robust
+  class for paper doll (like Primitive)
+    (related to inflate)
+  toggle between display modes: ribbon vs. doll
+
+manip:
+  drag curve: move both endpoints
+  move just the selected component
+  
+roof:
+  corner detection
+  
+inflation:
+   editing
+   
+primitive:
+   generalize base areas for building tubes

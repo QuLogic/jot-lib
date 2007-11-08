@@ -1,0 +1,51 @@
+#!/bin/zsh -f
+#######################################################
+# dewin:
+#
+#       Remove ^M (line feed) characters from given
+#       files, if ^M characters are present.
+#
+#######################################################
+USAGE="Usage: `basename $0` [ -R ] <file> [ files ]"
+
+#######################################################
+# Options
+#######################################################
+RECURSE=no
+while getopts R OPTION
+do
+   case "$OPTION"
+   in
+      R) RECURSE=yes ;;
+      ?) echo $USAGE ; exit 1
+   esac
+done
+
+shift `expr $OPTIND - 1`
+
+#######################################################
+# Check args
+#######################################################
+if [[ $# -lt 1 ]]; then
+   echo $USAGE
+   exit 1
+fi
+
+#######################################################
+# Main loop
+#######################################################
+while [[ "$#" -ne 0 ]]; do
+   if [[ -f $1 ]]; then
+      if file $1 | grep -qs ASCII ; then
+         if od -c $1 | grep -qs '\\r' ; then
+            echo "dos2unix $1 ..."
+            dos2unix -q $1
+         fi
+      fi
+   elif [[ $RECURSE == yes && -d $1 && `basename $1` != CVS ]]; then
+      $0 -R $1/*
+   fi
+   shift
+done
+
+exit 0

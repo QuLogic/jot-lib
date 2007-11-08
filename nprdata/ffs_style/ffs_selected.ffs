@@ -1,0 +1,35 @@
+						FFSTexture 	{ 
+							npr_data_file 	{ NULL_STR }					
+							
+							transparent 	1 
+							annotate 	1 
+							polygon_offset_factor 	1 
+							polygon_offset_units 	1 
+							see_thru 	{ 0 } 
+							see_thru_flags 	{ 15 1 0 0 0 0 0 1 0 0 1 0 0 0 0 0 } 
+							basecoat 	{ 
+								NPRSolidTexture 	{ 
+									use_paper 	0 
+									travel_paper 	0 
+									use_lighting 	0 
+									light_specular 	0 
+									COLOR 	{0.312 0.45312 0.6 }
+									alpha 	0.15
+									texture 	{ NULL_STR } 
+									layer_name 	{ Shader } 
+									} } 
+							basecoat 	{ 
+								NPRToonTexture 	{ 
+									use_paper 	1 
+									travel_paper 	1 
+									COLOR 	{0.2499 0.374752 0.49 }
+									alpha 	0.5 
+									light_index 0
+									light_dir 	1 
+									light_cam 	1 
+									light_coords 	{0 0 1 }
+									texture 	{ nprdata/toon_textures/simon_thin.png } 
+									layer_name 	{ Shader } 
+									} } 
+							}
+

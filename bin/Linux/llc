@@ -1,0 +1,26 @@
+#!/bin/zsh -f
+#######################################################
+# llh:
+#
+#       Variant of lch:
+#       convenient way to view given jot source files 
+#       (.H and .C) with less.
+#
+#       e.g.:
+#         
+#           % llc draw
+#
+#       will produce the same result as:
+#
+#           % less $JOT_ROOT/draw/draw.[HC]
+#######################################################
+
+if [[ $# -ne 1 ]]; 
+then
+	echo "Usage: $0 <beginning_of_file_name>"
+        exit 1
+fi
+
+less "$JOT_ROOT"/*/"$1".[HC]
+
+exit 0

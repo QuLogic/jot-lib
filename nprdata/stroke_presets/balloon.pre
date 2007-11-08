@@ -1,0 +1,16 @@
+
+BaseStroke 	{ 
+	color 	{0.51 0.375 0.815 }
+	alpha 	0.415 
+	width 	11.5 
+	halo 	0 
+	taper 	94 
+	flare 	0.75 
+	aflare 	0.24 
+	fade 	20 
+	angle 	0 
+	contrast 	0.66 
+	brightness 	0.66 
+	stroke_texture_file 	{ nprdata/stroke_textures/noisy1.png } 
+	paper_texture_file 	{ nprdata/paper_textures/loom_woven.png } 
+	} 

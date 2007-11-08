@@ -1,0 +1,219 @@
+Hatching Documentation
+----------------------
+
+There are two flavors of hatching: Fixed and Free
+
+Fixed Hatching
+--------------
+
+-Remains stuck to the surface at the location it's drawn
+-Can be drawn at any location on a surface
+
+Free Hatching
+-------------
+
+-Are capable of repositioning within a UV region on a surface to
+simulate a lighting model in which the lighting remains fixed
+with respect to the observer
+-Can only be drawn (entirely) within a particular UV region
+
+
+Drawing - Common
+-------
+
+Fixed and Free groups are drawn in similar fashion.
+
+-If no hatch group is currently being drawn, then drawing a stroke
+ over a model will change the rending mode to TexturePatch, and set
+ that model's preferred texture to HatchingStrokeTexture.
+-The hatch is associated with whatever mesh lies under the midpoint
+ of the gesture (so if the midpoint lies on the background the
+ gesture will be ignored)
+-Hatches (for now) MUST be drawn in a consistent order (i.e. top to
+ bottom and left to right, or vice versa)
+-While a hatch group is being drawn it cannot be deselected
+-The model and camera can be freely positioned while drawing a group
+-A hatch group is completed by tapping on the background
+-When a hatch group is completed its screenspace size defines the base LOD
+ (HINT: to avoid drawing lots of hatches, just draw a few and zoom out
+ before tapping...)
+
+Drawing - Fixed
+-------
+
+Issues pertaining to the drawing of fixed groups
+
+-The visibility of fixed hatches is determined by the colletion of faces
+ that lie underneath it (in screen space) when it is completed
+-A fixed group should be completly visible when it is completed (i.e.
+ it should not cover backfacing parts of the mesh, or be occluded by
+ it's own or another mesh)
+
+Drawing - Free
+-------
+
+Issue pertaining to the drawing of free groups
+
+-Free hatch groups must reside entirely with a particular uv region
+ on a surface (they will be clipped to this region)
+-The first hatch in the group with define the uv region for its group
+-There is a delay when a uv region is drawn upon for the first time
+ (while a data structure is generated -- which is destroyed when
+ all hatch groups in that uv region are destroyed)
+-Visibility of free groups is determined in uv space on the surface
+ of the model
+-It is not necessary to position the group as entirely visible
+ before completing it
+-Free groups do not reposition themselves until the group is complete
+-The orientation/position of the group when it is completed defines the
+ lighting direction used to dynamically place the group in subsequent frames
+-If the uv region wraps (e.g. a cylinder), then the hatch group will
+ slide across this, but if it is not (e.g. a wall) the group will get stuck
+ at the edges
+
+
+Selection/Deletion
+------------------
+
+-Hatch groups are selected by tapping on them
+-If more that one hatch group exists under the tap, then repeated taps will
+ cycle selection through the groups
+-Hatch groups are deselected by tapping on the background, by selecting
+ another hatch group, or by beginning the drawing of a new hatch group
+-If a new hatch group is not complete, then it cannot be deselected
+-A hatch group is deleted by selecting it and clicking Delete in the GUI
+-Hatch groups which are not complete CAN be deleted
+
+
+Style
+-----
+
+-Hatch group stroke and animation parameters are shown in the GUI
+-If a group is selected, its parameters are displayed in the GUI
+-To change any parameters, just operate the spinners (or type the values)
+ and click Apply
+-New hatch groups will take the parameters shown in the GUI at their
+ time of creation
+
+        Color/Alpha
+        -----------
+
+        -Color and Alpha...
+
+        Texture
+        -------
+
+        -An alpha texture applied to the stroke to fade its ends and edges
+        -If no texture is selected (i.e. "-----") then texturing is disabled
+         and the stroke is rendered are an antialiased monochromatic strip
+
+        Width
+        -----
+
+        -Pixel width of stroke
+
+        Fade
+        ----
+
+        -Fades the alpha of the stroke along its length
+        -"-1" = along whole stroke
+        -"0" = disabled
+        -">0" = start fade at given position
+        -NOTE: The range for >0 should be 0-1 to indicate the position
+         along the stroke.... It's not like that yet...
+
+        Halo
+        ----
+
+        -Halo the ends of the strokes where they are clipped by
+         occlusions (e.g. offscreen, backfacing)
+        -Should be a pixel measure, but isn't yet...
+
+        Taper
+        -----
+
+        -Cause the stroke to be tapered
+        -"-1" - Round off the edges (be adding tapered extensions)
+        -"0" - disabled
+        -">0" - Taper existing ends inward up to some distance
+        -NOTE: Should be a 0-1 parameter (like Fade) but isn't yet...
+       
+        Flare
+        -----
+
+        -Cause the stroke to be thick at one end and thin at the other
+
+Style Hints
+-----------
+
+The stroke parameters are the result of legacy code, and as such, some of
+the parameters don't work in a a fashion suitable for hatching, etc.
+This will be repaired eventually... In the meantime, only width and texture
+are likely to be widely used:
+
+-Fade is probably not very useful (atleast in present form)
+-Tablet pressure attenuates stroke width (so taper and flare are not
+ typically necessary unless the mouse is used)
+-Stroke textures fade the ends and edges of strokes giving a flared
+ and tapered appearance (again, avoiding the need for taper and flare)
+-Halo is nice, but need adjustment so that the value reflect a pixel measure
+
+Animation
+---------
+
+-When a hatch group is completed, the screenspace length of the backbone
+ defines the base LOD
+-If the hatch group becomes larger in screen space, then additional hatches
+ are interpolated in between the visible hatches
+-At each frame, a LOD parameter is computed which dictates how many sets of
+ additional interpolates hatches are required.
+-The original LOD is 1. LOD 2 adds hatches between each pair of hatches in
+ LOD 1, LOD 3 add hatches between each pair of hatches in the union
+ of LOD 1 and LOD 2, etc.
+-In general the desired LOD is a fraction LOD (e.g. 2.6), so a threshold
+ (with hysteresis) is used to determine then the LOD changes
+-When the LOD is > "Hi Thresh" % of the way to the the next LOD, the transition
+ will begin to increase the LOD
+-When the LOD is < "Lo Thresh" % of the way to the the prev LOD, the transition
+ will begin to decrease the LOD
+-Rather that have addition LOD hatches "pop in" or "pop out", they fade in over
+ a period of Trans. Time seconds
+-Furthermore, to maintain the appearance of constant tone, the widths of the
+ stroke are adjusted at the fraction LOD varies.
+-When the fractional LOD is less than the current LOD, hatches will be narrowed
+ by as much as the "Lo Width" factor (depending upon how far the fractional
+ LOD is from the current integer LOD).
+-When the fractional LOD is greater than the current LOD, hatches will be widened
+ by as much as the "Hi Width" factor (depending upon how far the fractional
+ LOD is from the current integer LOD).
+
+-NOTE: The transition animation time should not be fixed, but rather scale
+ with a measure of the rate of change of fraction LOD... This is coming...
+ In the meantime, you have to move the camera at an appropriate speed to
+ sync naturally with the animations
+
+
+Environment Variables
+---------------------
+
+SHOW_FEATURE_STROKES  -- Currently the model is drawn in white with sils.
+                         Define this to turn on sil/crease over sketching
+ANTIALIAS_SILS -- If the above is not set, then define this
+TMOD_NO_RECENTER -- Necessary for the file I/O will work (otherwise hatches
+                    end up off of the model)
+TMOD_DEBUG_UV -- Caused FLAT SHADING to color the mesh faces as a function
+                 of uv (helpful for seeing where the uv regions are)
+HATCHING_DEBUG_VIS -- (overrides TMOD_DEBUG_UV) revals the faces associated
+                      with fixed hatchgroup visibility
+HATCHING_DEBUG_MAPPING -- Shows the uv->modelspace bin structure (one pixel
+                          per bin) of the selected free hatch group. The
+                          greyscale indicated the number of mesh faces in
+                          that pixel's uv bin. Holes appear in blue.  All
+                          queries to the structure, for the selected group,
+                          and shown in red. (**USE THIS**)
+HATCHING_DEBUG_STROKES - Render the strokes using dots at each vertex
+HATCHING_DEBUG_BACKBONE - Render the backbones of strokes.
+HATCHING_DEBUG_PLACEMENT - Render center, left and right positions of free groups.
+
+HATCHING_OFFSETS - Use screenspace wiggly offsets.
+

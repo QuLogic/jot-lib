@@ -1,0 +1,76 @@
+documentation:
+  add doxygen tags to all libraries
+  add overview per library, and overall
+  check setup/compile instructions
+
+prune dependencies between libraries
+
+remove unused libraries:
+  curvature
+
+remove unused code:
+  BOOTH stuff
+
+geom:
+  simplify GEOM class, remove DEFINER stuff
+  merge TEXBODY into GEOM?
+
+separate interface aspects of draw into wnpr, ffs, pattern
+  allow one to be added on top of another
+
+make separate smview target using fewer libs; e.g.:
+  base_jotapp/
+  dev/
+  disp/
+  dlhandler/
+  geom/
+  glui/
+  glut_winsys/
+  gtex/
+  libpng/
+  manip/
+  mesh/
+  mlib/
+  net/
+  npr/
+  pattern/
+  src/
+  std/
+  stroke/
+  widgets/
+  zlib/
+
+switch to STL
+  str_ptr --> string
+  use new fstream
+  switch from ARRAY to vector in places where it's easy
+  change ARRAY to use a vector internally
+
+mesh lib
+  clean up + document
+  separate lmesh and bmesh lib?
+  add obj reader (use convert/obj2sm.C) - In Progress
+    fix UV coordinates
+    add texturing support
+    add crease detection
+    add support for more material properties in patches (shininess, colors)
+  reduce memory use in Bsimplex classes
+
+cli:
+  fix prompt
+  remove obsolete commands
+  add new commands
+
+-----------------------------------------------------------------
+done
+-----------------------------------------------------------------
+
+Before 2005-06-22:
+
+   mesh lib:
+      add curvature computation to mesh
+
+   gtex:
+      add GPU implementation for:
+         - sils
+         - suggestive contours

@@ -1,0 +1,18 @@
+
+BaseStroke 	{ 
+	color 	{0.12636 0.405 0.0567 }
+	alpha 	0.47 
+	width 	28.5 
+	halo 	0 
+	taper 	92 
+	flare 	1 
+	aflare 	1 
+	fade 	8 
+	angle 	0 
+	contrast 	0.785 
+	brightness 	0.535 
+	press_vary_width 	1 
+	press_vary_alpha 	1 
+	stroke_texture_file 	{ nprdata/stroke_textures/water.png } 
+	paper_texture_file 	{ nprdata/paper_textures/silk_fine.png } 
+	} 

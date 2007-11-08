@@ -1,0 +1,813 @@
+#
+# ARCH must be: linux, WIN32, macosx
+#
+# M must be: D, O, Q, R, or P 
+#
+# JOBS must be: 1, 2, ...
+#
+
+ifeq ($(ARCH),)
+#What now?!
+endif
+
+ifeq ($(M),)
+M = D
+endif
+
+ifneq ($(JOBS),)
+MULTJOB = -j $(JOBS)
+endif
+
+################################################
+# Chose the directory where compilation will occur.
+# COMP_DIR_BASE defaults to $(JOT_ROOT)/lib.
+#
+# Main compilation directory COMP_DIR is
+# $(COMP_DIR_BASE)/$(ARCH)$(EXT)/$(M)
+#
+# Libraries named LIBNAME are compiled in
+# $(COMP_DIR)/$(LIBNAME)
+#################################################
+
+ifeq ($(COMP_DIR_BASE),)
+COMP_DIR_BASE  = $(JOT_ROOT)/lib
+endif
+
+COMP_DIR_ROOT 	= $(COMP_DIR_BASE)/$(ARCH)$(EXT)/$(M)
+
+# LIBNAME is defined if we are compiling a specific library
+ifneq ($(LIBNAME),)
+COMP_DIR       = $(COMP_DIR_ROOT)/$(LIBNAME)
+else
+COMP_DIR       = $(COMP_DIR_ROOT)
+endif
+
+# DIRNAME is the subdir of JOT_ROOT that we're compiling
+ifeq ($(DIRNAME),)
+DIRNAME        = $(LIBNAME)
+endif
+
+SRC_DIR        = $(JOT_ROOT)/$(DIRNAME)
+
+#################################################################
+# MacOS X compiler specifications
+#################################################################
+ifeq ($(ARCH),macosx)
+
+# Programs
+
+RC =
+
+ifeq ($(CC),)
+CC = g++
+endif
+
+ifeq "$(origin AR)" "default"
+AR = ar rl
+endif
+
+LINK = $(CC)
+
+# Object suffix
+DOTO   = .o
+
+# Resource suffix
+DOTRES = 
+
+# Library prefix
+DOTAPRE    = lib
+# Library suffix
+DOTA       = .a
+
+# Library link include prefix
+DOTA_L     = -l
+# Library link include suffix
+DOTA_LPOST = 
+
+
+# Clean up
+CLEANFILES    = *~
+
+
+# Standard libraries
+FRAMEWORKS = -framework GLUT -framework OpenGL -framework Foundation
+
+#
+# OpenGL (and GLU)
+#
+ifeq ($(OGL_LIBS),)
+OGL_INCS  =
+OGL_LIBS  =
+OGL_FLAGS =
+#-Wl,-rpath /usr/lib
+endif
+
+#
+# GLUT
+#
+ifeq ($(GLUT_LIBS),)
+GLUT_INCS  = -I/usr/include
+GLUT_LIBS  =
+GLUT_FLAGS = 
+endif
+
+#
+# OpenInventor
+#
+ifeq ($(OIV_LIBS),)
+OIV_INCS  = -I/usr/include/Inventor
+OIV_LIBS  = -lInventor
+OIV_FLAGS = -L/usr/lib 
+#-Wl,-rpath /usr/lib
+endif
+
+#
+# Windowing
+#
+WIN_LIBS    =
+#
+# Networking
+#
+NET_LIBS    = -ldl
+#
+# Misc
+#
+OTH_LIBS    = -lm 
+
+#
+# Warnings
+#
+ifeq ($(WARNINGCFLAGS),)
+WARNINGCFLAGS = -Wall
+endif
+
+#
+# Make depend
+#
+ifeq ($(MKDEP),)
+MKDEP = /usr/bin/X11/makedepend
+endif
+
+ifeq ($(MKDEPFLAGS),)
+MKDEPFLAGS = -I/usr/include/g++-3 -Dmacosx -Dunix
+endif
+
+#
+# Compiler flags
+#
+PLATCFLAGS = -fPIC
+PLATDFLAGS = 
+PLATIFLAGS = -I$(JOT_ROOT)/include/macosx -I/usr/X11R6/include -I/usr/include -Dmacosx
+PLATLFLAGS = -L$(COMP_DIR_ROOT) $(FRAMEWORKS) -Dmacosx
+
+
+ifeq ($(JOT_BUILD_MULTITHREAD),yes)
+# XXX - Does $(MTHTREAD) get set, or...?!
+PLATDFLAGS  := $(PLATDFLAGS) -DUSE_PTHREAD $(MTHTREAD)
+THREAD_LIBS  = -lpthread
+endif
+
+# Release (should supress assertions... anyone know the flags for this?!)
+ifeq ($(M),R)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -DNDEBUG
+endif
+
+# Optimized
+ifeq ($(M),O)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -DNDEBUG
+endif
+
+#Optimized with debug symbols
+ifeq ($(M),Q)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -g 
+endif
+
+#Debug
+ifeq ($(M),D)
+PLATCFLAGS	:= $(PLATCFLAGS) -g 
+endif
+
+#Profile
+ifeq ($(M),P)
+PLATCFLAGS	:= $(PLATCFLAGS) -pg
+endif
+
+SYS_LIBS    = $(THREAD_LIBS) $(NET_LIBS) $(OTH_LIBS) 
+
+endif
+
+#################################################################
+# Linux compiler specifications
+#################################################################
+ifeq ($(ARCH),linux)
+
+# Programs
+
+RC =
+
+ifeq ($(CC),)
+CC = g++
+endif
+
+ifeq "$(origin AR)" "default"
+AR = ar rl
+endif
+
+LINK = $(CC)
+
+# Object suffix
+DOTO   = .o
+
+# Resource suffix
+DOTRES = 
+
+# Library prefix
+DOTAPRE    = lib
+# Library suffix
+DOTA       = .a
+
+# Library link include prefix
+DOTA_L     = -l
+# Library link include suffix
+DOTA_LPOST = 
+
+
+# Clean up
+CLEANFILES    = *~
+
+
+# Standard libraries
+
+#
+# OpenGL (and GLU)
+#
+ifeq ($(OGL_LIBS),)
+OGL_INCS  = -I/usr/include
+OGL_LIBS  = -lGL -lGLU
+OGL_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+endif
+
+#
+# GLUT
+#
+ifeq ($(GLUT_LIBS),)
+GLUT_INCS  = -I/usr/include
+GLUT_LIBS  = -lglut
+GLUT_FLAGS = 
+endif
+
+#
+# OpenInventor
+#
+ifeq ($(OIV_LIBS),)
+OIV_INCS  = -I/usr/include/Inventor
+OIV_LIBS  = -lInventor
+OIV_FLAGS = -L/usr/lib -Wl,-rpath /usr/lib
+endif
+
+#
+#
+#
+# Windowing
+#
+WIN_LIBS    = -lX11 -lXext
+#
+# Networking
+#
+NET_LIBS    = -ldl
+#
+# Misc
+#
+OTH_LIBS    = -lm 
+
+#
+# Warnings
+#
+ifeq ($(WARNINGCFLAGS),)
+WARNINGCFLAGS = -Wall
+endif
+
+#
+# Make depend
+#
+ifeq ($(MKDEP),)
+MKDEP = /usr/bin/X11/makedepend
+endif
+
+# The default flags for makedepend given below work for Redhat 9
+# with g++ 3.2.2. For other systems you may need to change the
+# defaults by defining MKDEPFLAGS in your Makefile.local.
+#
+# XXX - On the line below, adding the following flags:
+#
+#    -I/usr/include/c++/3.2.2 
+#    -I/usr/include/c++/3.2.2/i386-redhat-linux
+#
+# has two effects: (1) It stops makedepend from complaining
+# about its inability to find the header backward/iostream.h;
+# and (2) makedepend takes over ten times longer to run. So by
+# default we're leaving it out. You can over-ride this default
+# in your Makefile.local by defining MKDEPFLAGS there.
+ifeq ($(MKDEPFLAGS),)
+MKDEPFLAGS = -I/usr/include/g++-3 -Dlinux -Dunix
+endif
+
+#
+# Compiler flags
+#
+PLATCFLAGS = -fPIC
+PLATDFLAGS = 
+PLATIFLAGS = -I/usr/X11R6/include -I$(JOT_ROOT)/include/linux
+ifeq ($(DO_64_BIT),)
+PLATLFLAGS = -rdynamic -L$(COMP_DIR_ROOT) -L/usr/X11R6/lib
+else
+PLATLFLAGS = -rdynamic -L$(COMP_DIR_ROOT) -L/usr/X11R6/lib64
+endif
+
+ifeq ($(JOT_BUILD_MULTITHREAD),yes)
+# XXX - Does $(MTHTREAD) get set, or...?!
+PLATDFLAGS  := $(PLATDFLAGS) -DUSE_PTHREAD $(MTHTREAD)
+THREAD_LIBS  = -lpthread
+endif
+
+#Release (should supress assertions... anyone know the flags for this?!)
+ifeq ($(M),R)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -DNDEBUG
+endif
+
+#Optimized
+ifeq ($(M),O)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -DNDEBUG
+endif
+
+#Optimized with debug symbols
+ifeq ($(M),Q)
+PLATCFLAGS	:= $(PLATCFLAGS) -O2 -g 
+endif
+
+#Debug
+ifeq ($(M),D)
+PLATCFLAGS	:= $(PLATCFLAGS) -g 
+endif
+
+#Profile
+ifeq ($(M),P)
+PLATCFLAGS	:= $(PLATCFLAGS) -pg
+endif
+
+SYS_LIBS    = $(THREAD_LIBS) $(NET_LIBS) $(OTH_LIBS) 
+
+endif
+
+#################################################################
+# WIN32 compiler specifications
+#################################################################
+ifeq ($(ARCH),WIN32)
+
+RC   = rc
+CC   = cl -nologo 
+AR	  = lib -nologo
+LINK = link -nologo 
+
+# Object suffix
+DOTO   = .obj
+
+# Resource suffix
+DOTRES = .res
+
+# Library prefix
+DOTAPRE    = 
+# Library suffix
+DOTA       = .lib
+
+# Library link include prefix
+DOTA_L     = 
+# Library link include suffix
+DOTA_LPOST = .lib
+
+CLEANFILES    = *.exp *.ilk *.pdb
+
+ifneq ($(WIN32_USE_RM),)
+RM = rm -f
+else
+RM = del
+endif
+
+# Standard libraries
+
+
+#
+# OpenGL (and GLU)
+#
+OGL_INCS   =
+OGL_LIBS   = opengl32.lib glu32.lib
+OGL_FLAGS  =
+
+#
+# GLUT
+#
+ifeq ($(GLUT_LIBS),)
+GLUT_INCS  = 
+GLUT_LIBS  = glut32.lib
+GLUT_FLAGS = 
+endif
+
+#
+#
+# OpenInventor
+#
+ifeq ($(OIV_LIBS),)
+OIV_INCS  = 
+OIV_LIBS  = 
+OIV_FLAGS = 
+endif
+
+#
+# Windowing
+#
+WIN_LIBS   = gdi32.lib
+#
+# Networking
+#
+NET_LIBS   = wsock32.lib
+#
+# C
+# 
+# (Depends upon M)
+C_LIBS   = 
+#
+# Misc
+#
+OTH_LIBS   = kernel32.lib user32.lib
+
+#
+# Warnings
+#
+ifeq ($(WARNINGCFLAGS),)
+WARNINGCFLAGS = -W3
+endif
+
+ifeq ($(VSVER),60)
+#
+# Make depend
+#
+ifeq ($(MKDEP),)
+MKDEP = $(JOT_ROOT)/bin/WIN32/makedep.exe
+endif
+
+ifeq ($(MKDEPFLAGS),)
+MKDEPFLAGS = -D_M_IX86 -I'c:/Progra~1/Micros~1/VC98/Include' 
+endif
+
+#
+# Compiler flags
+#
+C_LIBS     = oldnames.lib 
+PLATCFLAGS = -TP -GX -GR
+PLATIFLAGS = -I$(JOT_ROOT)/include/WIN32
+PLATDFLAGS = -D_WIN32 -DWIN32 -D_WINDOWS 
+PLATLFLAGS = -subsystem:console -NODEFAULTLIB -libpath:$(COMP_DIR_ROOT) 
+#-VERBOSE:LIB
+
+ifeq ($(M),R)
+C_LIBS     := $(C_LIBS) libc.lib libci.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy -DNDEBUG
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),O)
+C_LIBS     := $(C_LIBS) libc.lib libci.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy 
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),Q)
+C_LIBS     := $(C_LIBS) libcd.lib libcid.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),D)
+#Should be libcd.lib libcid.lib, but that crashes
+#out glut library right now...
+C_LIBS     := $(C_LIBS) libcd.lib libcid.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),P)
+C_LIBS     := $(C_LIBS) libcd.lib libcid.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML 
+PLATLFLAGS := $(PLATLFLAGS) -PROFILE 
+endif
+
+else
+# WIN32 VS71 compiler specifications *new* 5-28-04 
+# VS8 support added on 9-13-06 
+
+# the VSYEAR variable diferenciates the 2003 from 2005 version
+# except for a few flags, lack of single threaded libraries
+# and path the two versions are compatible
+
+
+
+ifeq ($(VSVER),71)
+
+#
+# Make depend
+#
+ifeq ($(MKDEP),)
+MKDEP = $(JOT_ROOT)/bin/WIN32/makedep.exe
+endif
+
+ifeq ($(MKDEPFLAGS),)
+
+MKDEPFLAGS = -D_M_IX86
+
+ifeq ($VSYEAR),2003)
+MKDEPFLAGS := $(MKDEPFLAGS) -I'c:/Progra~1/Micros~1/Vc7/Include' -I'c:/Progra~1/Micros~1/Vc7/Platfo~1/Include'
+endif
+
+ifeq ($(VSYEAR),2005)
+MKDEPFLAGS := $(MKDEPFLAGS) -I'c:/Progra~1/Micros~3/VC/Include' -I'c:/Progra~1/Micros~3/VC/Platfo~1/Include'
+endif 
+
+# The following doesn't work because makedep doesn't quote paths with spaces in them:
+#MKDEPFLAGS = -D_M_IX86 -I"c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\Include" -I"c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\PlatformSDK\Include"
+endif
+
+#
+# Compiler flags
+#
+
+# Visual Studio 2003 flags
+
+ifeq ($(VSYEAR),2003)
+
+C_LIBS     = oldnames.lib 
+PLATCFLAGS = -TP -GX -GR
+PLATIFLAGS = -I$(JOT_ROOT)/include/WIN32
+PLATDFLAGS = -D_WIN32 -DWIN32 -D_WINDOWS 
+PLATLFLAGS = -subsystem:console -NODEFAULTLIB -libpath:$(COMP_DIR_ROOT) 
+#-VERBOSE:LIB
+
+ifeq ($(M),R)
+C_LIBS     := $(C_LIBS) libc.lib libcp.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy -DNDEBUG
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),O)
+C_LIBS     := $(C_LIBS) libc.lib libcp.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy 
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),Q)
+C_LIBS     := $(C_LIBS) libcd.lib libcpd.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Otiygb2 -Gs -Gf -Gy -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),D)
+C_LIBS     := $(C_LIBS) libcd.lib libcpd.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),P)
+C_LIBS     := $(C_LIBS) libcd.lib libcpd.lib
+PLATCFLAGS := $(PLATCFLAGS) -ML 
+PLATLFLAGS := $(PLATLFLAGS) -PROFILE 
+endif
+
+endif # end of 2003 flags 
+
+
+
+
+
+# Visual Studio 2005 flags
+
+ifeq ($(VSYEAR),2005)
+
+C_LIBS     = oldnames.lib 
+PLATCFLAGS = -TP -EHsc -GR
+PLATIFLAGS = -I$(JOT_ROOT)/include/WIN32
+PLATDFLAGS = -D_WIN32 -DWIN32 -D_WINDOWS 
+PLATLFLAGS = -subsystem:console -NODEFAULTLIB -libpath:$(COMP_DIR_ROOT) 
+#-VERBOSE:LIB
+
+ifeq ($(M),R)
+C_LIBS     := $(C_LIBS) libcmt.lib libcpmt.lib
+PLATCFLAGS := $(PLATCFLAGS) -MT -Otiygb2 -Gs -Gf -Gy -DNDEBUG
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),O)
+C_LIBS     := $(C_LIBS) libcmt.lib libcpmt.lib
+PLATCFLAGS := $(PLATCFLAGS) -MT -Otiygb2 -Gs -Gf -Gy 
+PLATLFLAGS := $(PLATLFLAGS) 
+endif
+
+ifeq ($(M),Q)
+C_LIBS     := $(C_LIBS) libcmtd.lib libcpmtd.lib
+PLATCFLAGS := $(PLATCFLAGS) -MTd -Otiygb2 -Gs -Gf -Gy -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),D)
+C_LIBS     := $(C_LIBS)  libcmtd.lib libcpmtd.lib
+PLATCFLAGS := $(PLATCFLAGS) -MTd -Z7
+PLATLFLAGS := $(PLATLFLAGS) -DEBUG 
+endif
+
+ifeq ($(M),P)
+C_LIBS     := $(C_LIBS)  libcmtd.lib libcpmtd.lib
+PLATCFLAGS := $(PLATCFLAGS) -MTd
+PLATLFLAGS := $(PLATLFLAGS) -PROFILE 
+endif
+endif # end of 2005 flags 
+
+
+endif
+endif
+
+SYS_LIBS   = $(C_LIBS) $(NET_LIBS) $(OTH_LIBS) 
+
+endif
+
+#################################################################
+# multi-platform rules
+#################################################################
+
+CFLAGS  = $(PLATCFLAGS) $(WARNINGCFLAGS) $(OTHERCFLAGS) $(LIBRARYCFLAGS)
+
+IFLAGS  = $(LIBRARYIFLAGS) $(OTHERIFLAGS) $(PLATIFLAGS) -I$(JOT_ROOT)  
+
+DFLAGS  = $(PLATDFLAGS) $(OTHERDFLAGS) $(LIBRARYDFLAGS)
+
+LFLAGS  = $(PLATLFLAGS) $(OTHERLFLAGS)
+
+#XXX - Need this?!
+ifeq ($(ARCH),linux)
+LFLAGS += $(CFLAGS) $(DFLAGS)
+endif
+
+#################################################################
+# symbols for all programs
+#################################################################
+_TEST_MAX =  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 \
+	21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
+
+ifeq ($(ALLSRC),)
+ALLSRC  = $(foreach NUM,$(_TEST_MAX),$(PROG_$(NUM)SRC))
+endif
+
+ALLOBJS = $(addsuffix $(DOTO),   $(basename $(ALLSRC)  .C))
+
+ifeq ($(ALLRC),)
+ALLRC   = $(foreach NUM,$(_TEST_MAX),$(PROG_$(NUM)RC)) 
+endif
+
+ALLRES  = $(addsuffix $(DOTRES), $(basename $(ALLRC)   .rc)) 
+
+LIBOBJS = $(addsuffix $(DOTO),   $(basename $(SOURCES) .C)) 
+
+#################################################################
+# This stuff changes the cwd to the COMP_DIR
+#################################################################
+
+ifeq ($(MAKEFILE),)
+MROOT = $(SRC_DIR)/Makefile
+else
+MROOT = $(shell echo $cwd)/$(MAKEFILE)
+endif
+
+ifeq ($(REAL_MAKE),)
+Makefile : ;
+
+% %$(DOTO):
+	@if test ! -d ${COMP_DIR}; then \
+	  mkdir -p $(COMP_DIR); \
+	  echo Creating $(COMP_DIR); \
+	fi;
+	@$(MAKE) -f $(MROOT) -r MAKE_TARG=$@ -C $(COMP_DIR) REAL_MAKE=TRUE $(MULTJOB) $@
+
+# XXX - shouldn't duplicate mkdir code
+%$(DOTO) : %.C
+	@if test ! -d ${COMP_DIR}; then \
+	  mkdir -p $(COMP_DIR); \
+	  echo Creating $(COMP_DIR); \
+	fi;
+	@$(MAKE) -f $(MROOT) -r MAKE_TARG=$@ -C $(COMP_DIR) REAL_MAKE=TRUE $@
+
+else
+
+VPATH = $(SRC_DIR)
+
+#################################################################
+# Targets
+#################################################################
+
+ifneq ($(LIBNAME),)
+# If there are no SOURCES, then there is no library to be made
+ifneq ($(SOURCES),)
+_LIB = ../$(DOTAPRE)$(DIRNAME)$(DOTA)
+endif
+endif
+
+# Figure out what program we're compiling
+ifeq ($(MAKE_TARG),all)
+_TEST_NUM      = $(subst $(PROG)&,,     $(filter $(PROG)&%,       $(foreach N,$(_TEST_MAX),$(PROG_$(N))&$(N))))
+else
+_TEST_NUM      = $(subst $(MAKE_TARG)&,,$(filter $(MAKE_TARG)&%,  $(foreach N,$(_TEST_MAX),$(PROG_$(N))&$(N))))
+endif
+
+_TEST_O_LIST   = $(addsuffix $(DOTO),   $(basename $(PROG_$(_TEST_NUM)SRC)))
+
+_TEST_RES_LIST = $(addsuffix $(DOTRES), $(basename $(PROG_$(_TEST_NUM)RC)))
+
+_TEST_RCDEP    = $(PROG_$(_TEST_NUM)RCDEP)
+
+_TEST_TARG     = $(PROG_$(_TEST_NUM))
+
+_TEST_LD       = $(PROG_$(_TEST_NUM)LDFLAGS)
+
+_TEST_LIB      = $(PROG_$(_TEST_NUM)LIB) \
+                  $(patsubst %,$(DOTA_L)%$(DOTA_LPOST), $(PROG_$(_TEST_NUM)JOT_LIBS))
+
+_TEST_DEP      = $(PROG_$(_TEST_NUM)DEP) \
+                  $(patsubst %,$(COMP_DIR_ROOT)/$(DOTAPRE)%$(DOTA), $(PROG_$(_TEST_NUM)JOT_LIBS))
+
+
+ifeq ($(ARCH),WIN32)
+OUTTARG     = -OUT:$(_TEST_TARG).exe
+else
+ifeq ($(ARCH),VS71)
+OUTTARG     = -OUT:$(_TEST_TARG).exe
+else
+OUTTARG     = -o $(_TEST_TARG)
+endif
+endif
+
+ifneq ($(_TEST_TARG),)
+$(_TEST_TARG) : $(_TEST_O_LIST) $(_TEST_RES_LIST) $(_TEST_DEP) 
+	$(LINK) $(OUTTARG) $(_TEST_LD) $(LFLAGS) $(_TEST_O_LIST) $(_TEST_RES_LIST) $(_TEST_LIB)
+endif
+
+all: $(_LIB) $(_TEST_TARG)
+
+$(_LIB) : $(LIBOBJS)
+ifeq ($(ARCH),WIN32)
+	$(AR) -out:$(_LIB) $(LIBOBJS)
+else
+ifeq ($(ARCH),VS71)
+	$(AR) -out:$(_LIB) $(LIBOBJS)
+else
+ifeq ($(ARCH),macosx)
+	-@$(RM) $(_LIB)
+	$(AR) $(_LIB) $(LIBOBJS)
+	ranlib $(_LIB)
+else
+	-@$(RM) $(_LIB)
+	$(AR) $(_LIB) $(LIBOBJS)
+endif
+endif
+endif
+
+ifeq ($(ARCH),WIN32)
+%$(DOTRES) : %.rc $(_TEST_RCDEP)
+	$(RC) -fo ./$*$(DOTRES) -r $(SRC_DIR)/$*.rc
+endif
+
+%$(DOTO) : %.C
+	$(CC) -c $(CFLAGS) $(IFLAGS) $(DFLAGS) $(FINALCFLAGS) $(SRC_DIR)/$*.C
+
+clean:
+	$(RM) -r $(ALLOBJS) $(ALLRES) $(_LIB) $(CLEANFILES) *.dep
+
+
+DEPFILE = $(COMP_DIR)/Makefile$(DIRNAME).dep
+TMPDEPFILE = /tmp/TMPdepfile.$(DIRNAME).$(LOGNAME)
+
+ifeq ($(ARCH),WIN32)
+$(DEPFILE)  depend:
+	touch $(DEPFILE)
+	$(MKDEP) -f $(DEPFILE) $(MKDEPFLAGS) $(IFLAGS) $(DFLAGS) $(addprefix $(SRC_DIR)/, $(ALLSRC))
+else
+ifeq ($(ARCH),VS71)
+$(DEPFILE)  depend:
+	touch $(DEPFILE)
+	$(MKDEP) -f $(DEPFILE) $(MKDEPFLAGS) $(IFLAGS) $(DFLAGS) $(addprefix $(SRC_DIR)/, $(ALLSRC))
+else
+$(DEPFILE)  depend:
+	touch $(TMPDEPFILE)
+	$(MKDEP) -f $(TMPDEPFILE) -- $(MKDEPFLAGS) $(IFLAGS) $(DFLAGS) -DMAKE_DEPEND-- $(addprefix $(SRC_DIR)/, $(ALLSRC))
+	-sed 's:^$(SRC_DIR)/::' $(TMPDEPFILE) > $(DEPFILE)
+	-rm -f $(TMPDEPFILE) $(TMPDEPFILE).bak
+endif
+endif
+
+include $(DEPFILE)
+endif

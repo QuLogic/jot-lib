@@ -1,0 +1,10 @@
+#!/bin/zsh -f
+#######################################################
+# npr
+#
+#   run jot with free-form sketch functionality turned on.
+#######################################################
+
+ENABLE_FFS=true SUPPRESS_NPR=true JOT_WINDOW_NAME="Free-Form Sketch" jot $*
+
+exit 0

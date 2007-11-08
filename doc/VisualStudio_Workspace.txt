@@ -1,0 +1,154 @@
+by Karol Szerszen
+June 30th 2006
+
+Version 1.2
+
+
+
+
+                  boing         boing         boing
+              e-e           . - .         . - .         . - .
+             (\_/)\       '       `.   ,'       `.   ,'       .
+              `-'\ `--.___,         . .           . .          .
+                 '\( ,_.-'
+                    \\               "             "            a:f
+                    ^'
+
+
+
+
+
+
+What is it ?
+
+- A Visual Studio .NET 2003 Workspace has been added to JOT in order to take advantage
+	of the user friendly interfaces that it provides. 
+	
+	There is one Workspace file called "jot.sln"
+	it is linked with a series of "*.vcproj" files that reside 
+	inside the library folders. The actual JOT application is 
+	contained in the "src.vcproj" inside /src folder. It depends 
+	on the other libraries at link time.
+	
+	
+	The solution is shared between all of the JOT users !!!
+	Please do not make machine specific modifications.
+
+
+
+	
+How to use it ?
+
+- Simply check out the newest version of JOT. Got to Windows Control Panel -> System
+	-> Advanced -> Environment Variables,  and add variable named JOT_ROOT. 
+	Set the value to the path of your JOT program ex : c:\uniquename\jot
+	Be sure that the path does not end with "\" !!
+	
+	Next open the workspace named "jot.sln" and build the project. 
+	There are two build models Debug and Release, the Release version is stripped 
+	of the browse info and is not suitable for bug tracking. 
+	Also, it is optimised for Pentium III/IV/Athlon XP with SSE instructions. 
+	Older machines may have trouble running the code. Always try the Debug build first.
+
+
+
+	
+Using Custom Configuration
+
+
+- JOT uses a configuration file in order to setup environmental flags enbling
+	its many diverse functions. By default it uses "jot-default.cfg" which 
+	defines the bare minimum in order to run JOT. 
+	The best way to use your own configuration is to copy that file and rename it 
+	"jot.cfg". JOT will automaticly switch to this file instead of the default. 
+	You can edit it to suit you own unique needs.
+
+
+
+
+
+What about the command line parameters ? (I wanna load some models..)
+
+
+- Right click on the "src" project in the Solution Explorer. Under Configuration 
+	Properties select Debugging. Type the desired command line parameters 
+	in the Command Arguments field. Note that the Release build also has 
+	its own Debugging properties allowing you to specify a separate set of 
+	command line arguments.
+	
+	Every time you hit Run (F5) your JOT will run with these parameters.
+	
+
+
+
+
+Adding new files
+
+- On Windows machines with VS.NET simply add new files to the appropriate library by 
+	right clicking on it in the Solution Explorer window. Than edit the appropriate 
+	Makefile so your file is included with the command line build as well.
+	
+
+- On Linux/Windows with **NO** VS.NET go to the library folder. 
+	Open the file library_name.vcproj (where the library name is the same as its
+	folder name). The file is in XML format. 
+	
+	Inside you will see a block like this :		
+			
+			
+	<Filter
+		Name="Source Files"
+		Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+		UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+		<File
+			RelativePath=".\adler32.C">
+		</File>
+		<File
+			RelativePath=".\compress.C">
+		</File>
+		<File
+			RelativePath=".\crc32.C">
+		</File>
+		
+		...
+		...
+		...
+		...
+		
+		<File
+			RelativePath=".\Your_New_File.C">
+		</File>
+	</Filter>
+		
+		
+	Add your file's Relative path in the same manner using the "File" tags.
+	
+	The header files go into the next block that looks like this :
+	
+	
+	<Filter
+		Name="Header Files"
+		Filter="h;hpp;hxx;hm;inl;inc;xsd"
+		UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+		<File
+			RelativePath=".\deflate.h">
+		</File>
+		<File
+			RelativePath=".\infblock.h">
+		</File>
+		<File
+			RelativePath=".\infcodes.h">
+		</File>
+		
+		...
+		...
+		...
+		
+		<File
+			RelativePath=".\Your_Header_File.H">
+		</File>
+	</Filter>
+	
+	
+	
+	Of course don't forget to add your files to the Makefile.

@@ -1,0 +1,45 @@
+jot 2.0 todo                    7/14/2005
+
+enable minimal app
+  (simple viewer, extensible interface)
+strip unused code, libs
+BMESH derive from GEL
+remove GEOM
+  rename TEXBODY
+
+use STL where possible
+replace ARRAY<T> with vector<T> in most places
+keep ARRAY (Array?) class that has a vector,
+  subclassed e.g. for Bface_list
+eliminate LIST
+  if using boost
+replace str_ptr --> string
+remove strstream
+clean up std
+  logical file names, contents
+
+add doxygen docs to additional libs
+
+RTTI - do upcasts using C++ dynamic_cast
+consolidate:
+  RTTI_METHODS_BASE
+  RTTI_METHODS
+  RTTI_METHODS2
+  RTTI_METHODS3
+
+into:
+  RTTI_METHODS_BASE
+  RTTI_METHODS
+
+replace REFptr with boost smart pointers
+
+add visual studio project files
+
+add xcode 2 project files (lee)
+
+remove the "C" thing
+
+remove or fix cli
+
+transition glui --> FLTK
+  (using bridge)

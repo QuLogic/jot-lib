@@ -1,0 +1,43 @@
+Additional info about compiling jot on Redhat systems.
+
+-----------------------------------------------------------------
+Redhat 9: problems with glut at link time.
+-----------------------------------------------------------------
+
+Lee <sapo@umich.edu> 9/23/2003:
+
+jot doesn't link because libglut can't find symbols from libX11.
+
+There's a discussion of this problem here:
+  http://www.opengl.org/discussion_boards/ubb/Forum4/HTML/001014.html
+
+On that page someone posted a solution, which worked for me:
+
+  1) download the files glut-3.7-8.i386.rpm and glut-devel-3.7-8.i386.rpm from redhats website
+
+  2) you need to force install them on your system:
+  rpm -i --force glut-3.7-8.i386.rpm
+  rpm -i --force glut-devel-3.7-8.i386.rpm
+
+  3) erase the old libraries (devel first)
+  rpm --erase glut-devel-3.7-12
+  rpm --erase glut-3.7-12
+
+  4) repeat step 2 to freshen up the system
+
+  5) type /sbin/ldconfig to refresh the system libraries
+
+  Thats it, works perfectly and also fixes the FTGL problems! 
+
+-----------------------------------------------------------------
+Using non-nvidia graphics card: jot doesn't link
+(Redhat 9)
+-----------------------------------------------------------------
+Lee <sapo@umich.edu> 9/23/2003:
+
+In your Makefile.local add this line:
+
+# If no Nvidia hardware is present:
+OTHERCFLAGS := $(OTHERCFLAGS) -DNON_NVIDIA_GFX
+
+That prevents Nvidia-specific symbols from being referenced.

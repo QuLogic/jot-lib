@@ -1,0 +1,20 @@
+// 1D toon shader vertex program
+
+void main() 
+{
+   // light direction
+   vec3 l = normalize(gl_LightSource[0].position.xyz);
+
+   // vertex normal in eye space:
+   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+
+   // get n*l, clamp negative values to 0:
+   float nl = max(dot(n,l), 0.0);
+
+   // texture coordinate is just n*l:
+   gl_TexCoord[0] = vec4(nl,vec3(0.0));
+   gl_FrontColor  = gl_Color;
+   gl_Position    = ftransform();
+}
+
+// binary.vp

@@ -1,0 +1,89 @@
+// Prototype:
+//
+// A. Widget Name
+//
+// A.1 Activation: (gestures that activate this mode)
+// 
+// (effects of activation)
+//
+// A.2 Operations: (gestures that have call backs in the current
+//     mode, ordered by priority)
+//
+// A.2.1 (name of first gesture)
+//
+// (what does it do? any constraints?)
+//
+// A.2...
+//
+// A.3 Deactivation: (gestures that deactivate this mode)
+//
+// (effects of deactivation)
+//
+
+1. Sweep
+
+1.1 Activation: Slash on a line or Delayed slash on a panel 
+
+After activation, a dotted guideline will appear. Mode becomes
+"revolve". Probably there're some red dots denoting folding
+points if a delayed slash starts at a panel.
+
+1.1.1 Slash on a line
+
+A slash can be a delayed slash. The slash should be straight
+enough. The line cannot be connected to other curves. And the
+slash should start near the center of the straight line curve and
+be perpendicular to the line.
+
+1.1.2 Delayed slash on a panel
+
+The boundary of the panel should be a single piece. And the panel
+should be planar enough.
+
+1.2 Operations: Tap, Line, Slash, Stroke
+
+1.2.1 Tap
+
+Tap near end of guideline, the system will do uniform sweep based
+on guideline length.
+
+Tap elsewhere on the guideline, it will do uniform sweep based on
+tap location.
+
+1.2.2 Line
+
+If it is a trim stroke, it has to be short and run across the
+guideline. Then it is handled the same as a slash as described in
+the next section.
+
+If it starts at sweep origin and ends near the guideline, the
+system will do uniform sweep.
+
+If it starts near guideline end and is nearly parallel to the
+guideline, the system extends the guideline.
+
+Else, it is treated the same as a stroke, as described below.
+
+1.2.3 Slash
+
+The slash should intersect the guideline and be short. A slash
+gesture across the guideline trims its tip.
+
+1.2.4 Stroke
+
+If the mode is activated by delayed slash on a panel, stroke
+shouldn't be closed or self-intersecting and cannot cross the
+guideline. It must start at a red dot.  If the stroke starts at a
+red dot and end near the guideline, then we're building a
+cone. If the panel is constructed by a single closed curve, then
+we're building a surface of revolution. Else, we're building a
+box.
+
+If the mode is activated by slash on a line, stroke currently
+does nothing.
+
+1.3 Deactivation: Tap anywhere not near the guideline or Finish
+  of successful operations
+
+After deactivation, guideline disappears. Mode returns to
+previous mode.

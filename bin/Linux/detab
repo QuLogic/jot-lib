@@ -1,0 +1,28 @@
+#!/bin/zsh -f
+#######################################################
+# detab:
+#
+#       Expand tabs to 3 spaces
+#
+#######################################################
+USAGE="Usage: `basename $0` <file> [ files ]"
+
+detab () { perl -i~ -e 'use Text::Tabs; $tabstop=3; while (<>) { print expand($_) }' $1 }
+
+if [[ $# -lt 1 ]]; 
+then
+	echo $USAGE
+        exit 1
+fi
+
+while [[ "$#" -ne 0 ]]; do
+   if [[ -f $1 ]]; then
+      if od -c $1 | grep -qs '\\t' ; then
+         echo "detabbing $1 ..."
+         detab $1
+      fi
+   fi
+shift
+done
+
+exit 0

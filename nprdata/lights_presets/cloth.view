@@ -1,0 +1,34 @@
+
+VIEW 	{ 
+	view_animator 	{ 
+		Animator 	{ 
+			fps 	12 
+			start_frame 	0 
+			end_frame 	0 
+			name 	{ animation  } 
+			} } 
+	view_data_file 	{ NULL_STR } 
+	view_color 	{ {0.87451 0.85098 0.72549 }} 
+	view_alpha 	{ 1 } 
+	view_paper_use 	{ 0 } 
+	view_paper_name 	{ NULL_STR } 
+	view_paper_active 	{ 0 } 
+	view_paper_brig 	{ 0.5 } 
+	view_paper_cont 	{ 0.5 } 
+	view_texture 	{ NULL_STR } 
+	view_light_coords 	{ {{0 0 1 }{-0.685394 6.08378e-009 0.728172 }{-0.988102 -0.121886 0.093801 }{0.933345 0.276671 0.228734 }{0 0 1 }{0 0 1 }{0 0 1 }{0 0 1 }}} 
+	view_light_positional 	{ {0 0 0 0 0 0 0 0 }} 
+	view_light_cam_space 	{ {1 1 1 1 1 1 1 1 }} 
+	view_light_color_diff 	{ {{0.9 0.9 0.9 }{0.9 0.9 0.9 }{0.9 0.9 0.9 }{0.9 0.9 0.9 }{1 1 1 }{1 1 1 }{1 1 1 }{1 1 1 }}} 
+	view_light_color_amb 	{ {{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }{0 0 0 }}} 
+	view_light_global 	{ {0.1 0.1 0.1 }} 
+	view_light_enable 	{ {1 1 1 1 0 0 0 0 }} 
+	view_light_spot_direction 	{ {{0 0 -1 }{0 0 -1 }{0 0 -1 }{0 0 -1 }{0 0 -1 }{0 0 -1 }{0 0 -1 }{0 0 -1 }}} 
+	view_light_spot_exponent 	{ {0 0 0 0 0 0 0 0 }} 
+	view_light_spot_cutoff 	{ {180 180 180 180 180 180 180 180 }} 
+	view_light_constant_attenuationt 	{ {1 1 1 1 1 1 1 1 }} 
+	view_light_linear_attenuation 	{ {0 0 0 0 0 0 0 0 }} 
+	view_light_quadratic_attenuation 	{ {0 0 0 0 0 0 0 0 }} 
+	view_antialias_enable 	{ 0 } 
+	view_antialias_mode 	{ 2 } 
+	} 
