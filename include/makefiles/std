@@ -291,7 +291,7 @@ endif
 # Make depend
 #
 ifeq ($(MKDEP),)
-MKDEP = /usr/bin/X11/makedepend
+MKDEP = makedepend
 endif
 
 # The default flags for makedepend given below work for Redhat 9
