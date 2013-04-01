@@ -1,13 +1,11 @@
 # Ensure $JOT_ROOT matches the location of this Makefile
 
 ifeq ($(ARCH),)
-default %: 
-	@echo Set ARCH to be one of WIN32, linux, or ...
+$(error Set ARCH to be one of WIN32, linux, or ...)
 else
 
 ifeq ($(JOT_ROOT),)
-default %:
-	@echo Set JOT_ROOT to root of jot hierarchy
+$(error Set JOT_ROOT to root of jot hierarchy)
 endif
 
 # General targets
