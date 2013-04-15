@@ -19,6 +19,7 @@
 #define JOT_DATA_ITEM_H_IS_INCLUDED
 
 #include "std/hash.H"
+#include "mlib/points.H"
 #include "net/stream.H"
 #include "net/net_types.H"
 
@@ -31,8 +32,6 @@ TAGlist *CLASS_NAME::_##CLASS_NAME##tags = 0; \
 static int CLASS_NAME##st=DECODER_ADD(CLASS_NAME);
 
 class COLOR;
-class mlib::Wvec;
-class mlib::Wpt;
 extern Cstr_ptr  NAME_INT;
 extern Cstr_ptr  NAME_DOUBLE;
 extern Cstr_ptr  NAME_COLOR;
