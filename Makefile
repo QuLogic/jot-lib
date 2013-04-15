@@ -31,7 +31,7 @@ DIRS_jot = dev disp dlhandler ffs geom gest glew glui glut_jot glut_winsys \
         tess widgets wnpr libpng zlib triangle sps proxy_pattern 
 
 DIRS_smview = dev disp dlhandler geom gest glew glui glut_jot glut_winsys \
-        gtex base_jotapp manip mesh mlib net std widgets libpng zlib
+        gtex base_jotapp manip mesh mlib net std widgets libpng zlib npr
 
 # Setup program targets
 PROGS         = $(NORMPROGS) $(SPECPROGS)

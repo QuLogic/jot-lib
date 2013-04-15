@@ -35,7 +35,7 @@ PROG_2SRC	= smview.C
 PROG_2RC	= $(JOTRC)
 PROG_2RCDEP	= $(JOTICOS)
 LIB_LIST	= base_jotapp glut_winsys glui widgets manip gest geom disp\
-		gtex mesh sps net dev std mlib dlhandler libpng zlib glew 
+		gtex mesh sps net dev std mlib dlhandler libpng zlib glew  npr
 # doubling up the lib list is a hack to make linking work on linux:
 PROG_2JOT_LIBS	:= $(LIB_LIST) $(LIB_LIST) 
 PROG_2LIB	= $(OGL_LIBS) $(GLUT_LIBS) $(WIN_LIBS) $(SYS_LIBS)
