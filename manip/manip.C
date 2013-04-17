@@ -81,11 +81,11 @@ Simple_int::add_events(
  * ------------------------------------------------------------- */
 void
 Key_int::add_event(
-   char  *k,
+   const char  *k,
    State *start     // where to go when this FSA finishes
    )
 {
-   for (char *c = k; *c; c++) {
+   for (const char *c = k; *c; c++) {
       Event  down_ev(NULL, Evd(*c, KEYD));
       Event  up_ev  (NULL, Evd(*c, KEYU));
       _key_down += Arc(up_ev,   Cb(&Key_int::up,    start));

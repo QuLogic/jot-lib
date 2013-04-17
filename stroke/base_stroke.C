@@ -42,8 +42,8 @@ using namespace mlib;
  * Stroke Texture Remapping
  *****************************************************************/
 
-char *stroke_remap_base = "nprdata/stroke_textures/";
-char *stroke_remap_fnames[][2] = 
+const char *stroke_remap_base = "nprdata/stroke_textures/";
+const char *stroke_remap_fnames[][2] =
 {
    {"mydot3.png",    "2D--gauss-nar-8-s.png"},
    {"one_d.png",     "1D--gauss-med-16.png"},

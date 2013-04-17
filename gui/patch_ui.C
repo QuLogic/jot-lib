@@ -414,7 +414,7 @@ PatchUI::update_dynamic_params()
 //      cerr << "PatchUI::update_dynamic_params() no patch" << endl;
       return;
    }
-   char* name = get_current_tex_name();
+   const char *name = get_current_tex_name();
    if(name){
       int val = (_listbox[LIST_TEX_SEL]->get_item_ptr(name)) 
          ? _listbox[LIST_TEX_SEL]->get_item_ptr(name)->id
@@ -567,7 +567,7 @@ PatchUI::fill_texture_listbox()
     fill_listbox(_listbox[LIST_TEX_SEL], rend_modes);      
 }
 
-char* 
+const char *
 PatchUI::get_current_tex_name()
 {
    if(!_patch)
@@ -576,7 +576,7 @@ PatchUI::get_current_tex_name()
    if(!tex)
       return "Other...";
   
-   char* r;
+   const char *r;
    
    if(tex->is_of_type("Smooth Shading"))
       r = "Smooth Shading";

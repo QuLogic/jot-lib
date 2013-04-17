@@ -50,8 +50,8 @@ LIST<str_ptr>*    NPRSolidTexture::_solid_texture_remap_new_names = 0;
  * Texture Remapping
  *****************************************************************/
 
-char *solid_remap_base = "nprdata/other_textures/";
-char *solid_remap_fnames[][2] = 
+const char *solid_remap_base = "nprdata/other_textures/";
+const char *solid_remap_fnames[][2] =
 {
    {"apple4.png",       "o-still-apple.png"},
    {"ban2.png",         "o-still-banana.png"},

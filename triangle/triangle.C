@@ -3280,7 +3280,7 @@ void internalerror()
 /*****************************************************************************/
 
 #ifdef ANSI_DECLARATORS
-void parsecommandline(int argc, char **argv, struct behavior *b)
+void parsecommandline(int argc, const char **argv, struct behavior *b)
 #else /* not ANSI_DECLARATORS */
 void parsecommandline(argc, argv, b)
 int argc;
@@ -15674,11 +15674,11 @@ struct behavior *b;
 
 
 #ifdef ANSI_DECLARATORS
-void triangulate(char *triswitches, struct triangulateio *in,
+void triangulate(const char *triswitches, struct triangulateio *in,
                  struct triangulateio *out, struct triangulateio *vorout)
 #else /* not ANSI_DECLARATORS */
 void triangulate(triswitches, in, out, vorout)
-char *triswitches;
+const char *triswitches;
 struct triangulateio *in;
 struct triangulateio *out;
 struct triangulateio *vorout;

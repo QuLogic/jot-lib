@@ -43,7 +43,7 @@ class Key_int : public Interactor<Key_int,Event,State> {
    Key_int(char k[],State *start)       { add_event(k, start); }
    Key_int()                            { _entry.set_name("Key_int entry"); }
 
-   void add_event(char k[], State *start);
+   void add_event(const char k[], State *start);
    void add_event(char k,   State *start);
 };
 

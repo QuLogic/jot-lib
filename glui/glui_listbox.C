@@ -141,7 +141,7 @@ void   GLUI_Listbox::update_size( void )
 }
 
 /********************************* GLUI_Listbox::check_item_fit() **************/
-int	GLUI_Listbox::check_item_fit(char *s)
+int	GLUI_Listbox::check_item_fit(const char *s)
 {
 
   if ( w < text_x_offset + string_width(s) + 20 )
@@ -182,7 +182,7 @@ void    GLUI_Listbox::draw_active_area( void )
 
 /**************************************** GLUI_Listbox::add_item() **********/
 
-int  GLUI_Listbox::add_item( int id, char *new_text )
+int  GLUI_Listbox::add_item( int id, const char *new_text )
 {
   GLUI_Listbox_Item *new_node = new GLUI_Listbox_Item;
   GLUI_Listbox_Item *head;
@@ -228,7 +228,7 @@ int  GLUI_Listbox::add_item( int id, char *new_text )
 
 /************************************** GLUI_Listbox::delete_item() **********/
 
-int  GLUI_Listbox::delete_item( char *text )
+int  GLUI_Listbox::delete_item( const char *text )
 {
   GLUI_Listbox_Item *node = get_item_ptr( text );
 
@@ -289,7 +289,7 @@ void     GLUI_Listbox::dump( FILE *output )
 
 /************************************ GLUI_Listbox::get_item_ptr() **********/
 
-GLUI_Listbox_Item *GLUI_Listbox::get_item_ptr( char *text )
+GLUI_Listbox_Item *GLUI_Listbox::get_item_ptr( const char *text )
 {
   GLUI_Listbox_Item *item;
 

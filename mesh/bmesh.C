@@ -1602,7 +1602,7 @@ BMESH::triangulate(Wpt_list &verts, FACElist &faces)
 }
 
 BMESHptr
-BMESH::read_jot_file(char* filename, BMESHptr ret)
+BMESH::read_jot_file(const char* filename, BMESHptr ret)
 {
    // Opens the file and calls BMESH::read_jot_stream().
    
@@ -1705,7 +1705,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
 }
 
 bool
-BMESH::read_file(char* filename)
+BMESH::read_file(const char* filename)
 {
    // Read a mesh file into *this* mesh:
 
@@ -1725,7 +1725,7 @@ BMESH::read_file(char* filename)
 // XXX - Deprecated (now TEXBODY's mesh_data_update_file tag
 //       also just uses read_file)
 int
-BMESH::read_update_file(char* filename)
+BMESH::read_update_file(const char* filename)
 {
    if (!filename) {
       err_ret( "BMESH::read_update_file: filename is NULL");
@@ -2097,7 +2097,7 @@ BMESH::read_patch(istream& is, str_list &leftover)
 }
 
 int
-BMESH::write_file(char* filename)
+BMESH::write_file(const char* filename)
 {
    fstream fout;
    fout.open(filename, ios::out);

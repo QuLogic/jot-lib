@@ -2000,8 +2000,9 @@ NPRPenUI::rename_layer()
 {
    bool fix,good;
    int i,j,k;
-   char *goodchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_!*=+[]{}|,.";
-   char *origtext,*newtext;
+   const char *goodchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_!*=+[]{}|,.";
+   const char *origtext;
+   char *newtext;
    int origlen;
 
 

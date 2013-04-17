@@ -762,7 +762,7 @@ operator << (STDdstream &ds, unsigned char data)
 
 
 void
-STDdstream::ws(char *x)
+STDdstream::ws(const char *x)
 {
    if (ascii())
       (*this) << x;

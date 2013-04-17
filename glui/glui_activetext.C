@@ -146,7 +146,7 @@ void    GLUI_ActiveText::draw( int x, int y )
 
 /********************************* GLUI_Listbox::check_fit() **************/
 
-int	GLUI_ActiveText::check_fit(char *s)
+int	GLUI_ActiveText::check_fit(const char *s)
 {
 
   if ( w < string_width(s) + 6 )
@@ -170,7 +170,7 @@ void   GLUI_ActiveText::update_size( void )
 
 /************************************** GLUI_ActiveText::set_text() **********/
 
-void    GLUI_ActiveText::set_text( char *text )
+void    GLUI_ActiveText::set_text( const char *text )
 {
   if (strcmp(text,name) == 0) return;
 

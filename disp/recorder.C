@@ -269,7 +269,7 @@ Recorder::new_path()
    str_ptr filename = ( **_name_buf != NULL ) ? _name_buf : str_ptr ( "path");
    _campaths.add ( new CameraPath( filename ));
    int id       = _campaths.num()-1;
-   _ui->add_path_entry ( id, (char*) **filename );
+   _ui->add_path_entry ( id, **filename );
    _cur_path_num = id;
    _cur_path    = _campaths[_cur_path_num];
    _path_pos    = 0;
@@ -312,7 +312,7 @@ Recorder::save_path ( int pathnum ) {
 }
 
 int 
-Recorder::open_path ( char * filename ) { 
+Recorder::open_path ( const char * filename ) {
    cerr << "Recorder::open_path  - - Nothin yet" << endl;
    cerr << "filename is " << filename << endl; 
    fstream fin;

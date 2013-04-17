@@ -45,7 +45,7 @@
 /*  The calling convention for triangulate() follows.                        */
 /*                                                                           */
 /*      void triangulate(triswitches, in, out, vorout)                       */
-/*      char *triswitches;                                                   */
+/*      const char *triswitches;                                             */
 /*      struct triangulateio *in;                                            */
 /*      struct triangulateio *out;                                           */
 /*      struct triangulateio *vorout;                                        */
@@ -287,7 +287,7 @@ struct triangulateio {
 #endif
 
 #ifdef ANSI_DECLARATORS
-void triangulate(char *, struct triangulateio *, struct triangulateio *,
+void triangulate(const char *, struct triangulateio *, struct triangulateio *,
                  struct triangulateio *);
 void trifree(VOID *memptr);
 #else /* not ANSI_DECLARATORS */

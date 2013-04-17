@@ -221,7 +221,7 @@ RecorderUI::update()
 
 
 int 
-RecorderUI::add_path_entry (int id, char* text )
+RecorderUI::add_path_entry (int id, const char* text )
 { 
    return _path_listbox->add_item( id, text);
   

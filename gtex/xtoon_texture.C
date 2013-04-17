@@ -67,8 +67,8 @@ LIST<str_ptr>*    XToonTexture::_toon_texture_remap_new_names = 0;
  * Texture Remapping
  *****************************************************************/
 
-char *toon_remap_base = "nprdata/toon_textures/";
-char *toon_remap_fnames[][2] = 
+const char *toon_remap_base = "nprdata/toon_textures/";
+const char *toon_remap_fnames[][2] =
 {
 //   {"dark-8.png",    "1D--dark-8.png"},
 //   {"mydot4.png",    "2D--dash-normal-8-32.png"},

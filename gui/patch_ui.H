@@ -149,7 +149,7 @@ class PatchUI : public BaseUI {
    void apply_changes_to_patch(operation_id_t op, Patch* p);
    
    void  fill_texture_listbox();
-   char* get_current_tex_name();
+   const char *get_current_tex_name();
    /******** STATIC CALLBACK METHODS ********/
    static void  button_cb(int id);
    static void  listbox_cb(int id);  

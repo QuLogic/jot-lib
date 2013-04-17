@@ -82,7 +82,7 @@ class RecorderUI : public RecorderUIBase {
          _glui->sync_live() ;
    }
   
-   virtual int add_path_entry(int, char*);
+   virtual int add_path_entry(int, const char*);
    virtual int del_path_entry(int );
 
    virtual void update_checks();

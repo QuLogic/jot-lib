@@ -91,7 +91,7 @@ public:
 
 
   // Stroke methods
-  CARRAY<char*>& attribute_preset_names() {return _attribute_presets_names; }
+  CARRAY<const char*>& attribute_preset_names() {return _attribute_presets_names; }
   void set_epsilon(double eps);
   void set_style_adjust(double sa);
   void pop_stroke();
@@ -190,7 +190,7 @@ private:
 
   // Stroke vars
   BBOXpix                     _picture_bbox;
-  ARRAY<char*>                _attribute_presets_names;
+  ARRAY<const char*>          _attribute_presets_names;
   ARRAY<GestureStrokeDrawer*> _stroke_drawers; 
   int                         _current_attribute_id;
   std::vector<GestureStroke>  _current_strokes;

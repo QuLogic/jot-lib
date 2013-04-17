@@ -38,7 +38,7 @@ void    GLUI_StaticText::draw( int x, int y )
 
 /****************************** GLUI_StaticText::set_text() **********/
 
-void    GLUI_StaticText::set_text( char *text )
+void    GLUI_StaticText::set_text( const char *text )
 {
   int orig;
 
@@ -77,7 +77,7 @@ void    GLUI_StaticText::set_text( char *text )
 }
 
 /********************************* GLUI_Listbox::check_fit() **************/
-int	GLUI_StaticText::check_fit(char *s)
+int	GLUI_StaticText::check_fit(const char *s)
 {
 
   if ( w < string_width(s) )

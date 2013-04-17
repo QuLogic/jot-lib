@@ -195,9 +195,9 @@ void
 PresetsUI::preset_save_text()
 {
    int i,j;
-   char *goodchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
+   const char *goodchars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-_";
 
-   char *origtext = _edittext[EDITTEXT_SAVE]->get_text();
+   const char *origtext = _edittext[EDITTEXT_SAVE]->get_text();
    int origlen = strlen(origtext);
 
    char *newtext;

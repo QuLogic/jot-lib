@@ -1045,7 +1045,7 @@ Network::_die(
 }
 
 
-char *
+const char *
 Network::configure(
    int port, 
    int backlog
@@ -1102,7 +1102,7 @@ Network::start(
    int myPort
    )
 { 
-   char *msg;
+   const char *msg;
 
    // if myPort is 0, then we arbitrarily determine that this Network
    // will be responsible for configuring all new clients when they

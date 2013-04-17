@@ -169,7 +169,7 @@ class Network: public FD_EVENT {
    virtual void  remove_stream(NetStream *s);
 
    void         _die       (const char *msg);
-   char         *configure (int port, int backlog = NETWORK_SERVER_BACKLOG);
+   const char   *configure (int port, int backlog = NETWORK_SERVER_BACKLOG);
    void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 
                                             s->subscribe(tags_); }
    virtual void accept_stream(void);

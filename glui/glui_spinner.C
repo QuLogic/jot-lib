@@ -548,7 +548,7 @@ void    GLUI_Spinner::increase_growth( void )
 
 /*************************************** GLUI_Spinner:get_text() *************/
 
-char    *GLUI_Spinner::get_text( void )
+const char    *GLUI_Spinner::get_text( void )
 { 
   if (edittext) 
     return edittext->text; 

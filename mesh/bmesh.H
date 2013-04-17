@@ -550,14 +550,14 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    static BMESHptr read_jot_stream(istream& is, BMESHptr ret=0);
 
    // Opens the file and calls BMESH::read_jot_stream(), above.
-   static BMESHptr read_jot_file(char* filename, BMESHptr ret=0);
+   static BMESHptr read_jot_file(const char* filename, BMESHptr ret=0);
 
    // Read a mesh file into *this* mesh:
-   bool read_file(char* filename);
+   bool read_file(const char* filename);
 
    // XXX - the following are all deprecated in favor of the
    //       new I/O using tags:
-   virtual int  read_update_file  (char* filename);
+   virtual int  read_update_file  (const char* filename);
    virtual int  read_update_stream(istream& is);
 
    virtual int  read_stream     (istream& is);  // deprecated: old .sm format
@@ -574,7 +574,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    virtual int  read_include    (istream& is, str_list &leftover);
 
    //******** I/O - WRITE ********
-   virtual int  write_file      (char *filename);
+   virtual int  write_file      (const char *filename);
    virtual int  write_stream    (ostream& os);
    //virtual int  write_header    (ostream& os) const;
    virtual int  write_vertices  (ostream& os) const;

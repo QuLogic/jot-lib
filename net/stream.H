@@ -73,7 +73,7 @@ class STDdstream {
    int     check() { char brace = peekahead(); return brace == '}' ? 0 : 1; }
    int     eof() const { return istr() ? istr()->eof(): !_in_queue.count(); }
 
-   void    ws(char *);
+   void    ws(const char *);
    STDbool operator ! ()        const { return _fail; }
    STDbool fail       ()        const { return _fail; }
    STDbool block      ()        const { return _block; }

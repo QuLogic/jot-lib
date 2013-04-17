@@ -27,8 +27,8 @@
  * Paper Texture Remapping
  *****************************************************************/
 
-char *paper_remap_base = "nprdata/paper_textures/";
-char *paper_remap_fnames[][2] = 
+const char *paper_remap_base = "nprdata/paper_textures/";
+const char *paper_remap_fnames[][2] =
 {
    {"pube.png",                  "p-combed-1.png"},
    {"basic_paper.png",           "p-noisy-1.png"},

@@ -164,7 +164,7 @@ class Recorder {
     */
 
    int save_path(int pathnum);
-   int open_path(char * filename);
+   int open_path(const char * filename);
 
    //create/delete paths;
    int new_path();
@@ -217,7 +217,7 @@ class RecorderUIBase {
 
    virtual void sync_live()                     = 0;
   
-   virtual int add_path_entry(int, char*)       = 0;
+   virtual int add_path_entry(int, const char*) = 0;
    virtual int del_path_entry(int )             = 0;
 };
 

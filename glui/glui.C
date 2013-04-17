@@ -28,7 +28,7 @@ GLUI_Master_Object GLUI_Master;
 
 /************************************************ GLUI::GLUI() **********/
 
-int GLUI::init( char *text, long Flags, int x, int y, int Parent_window ) 
+int GLUI::init( const char *text, long Flags, int x, int y, int Parent_window )
 {
   int old_glut_window;
 
@@ -78,7 +78,7 @@ int GLUI::init( char *text, long Flags, int x, int y, int Parent_window )
   return true;
 }
 
-int GLUI::rename( char *text )
+int GLUI::rename( const char *text )
 {
   int old_glut_window;
 
@@ -116,7 +116,7 @@ int GLUI::reposition( int x, int y )
 /**************************** GLUI_Main::create_standalone_window() ********/
 
 void    
-GLUI_Main::create_standalone_window( char *name, int x, int y )
+GLUI_Main::create_standalone_window( const char *name, int x, int y )
 {
   glutInitWindowSize( 100, 100 );
   if ( x >= 0 OR y >= 0 )
@@ -438,7 +438,7 @@ void glui_idle_func(void)
 
 /*********************************** GLUI_Master_Object::create_glui() ******/
 
-GLUI    *GLUI_Master_Object::create_glui( char *name, long flags,int x,int y )
+GLUI    *GLUI_Master_Object::create_glui( const char *name, long flags,int x,int y )
 {
   GLUI *new_glui;
 
@@ -615,9 +615,9 @@ void    GLUI_Main::display( void )
 
 /*************************************** _glutBitmapWidthString() **********/
 
-int _glutBitmapWidthString( void *font, char *s )
+int _glutBitmapWidthString( void *font, const char *s )
 {
-  char *p = s;
+  const char *p = s;
   int  width = 0;
 
   while( *p != '\0' )  {
@@ -632,9 +632,9 @@ int _glutBitmapWidthString( void *font, char *s )
 /* Displays the contents of a string using GLUT's bitmap character function */
 /* Does not handle newlines                                             */
 
-void _glutBitmapString( void *font, char *s )
+void _glutBitmapString( void *font, const char *s )
 {
-  char *p = s;
+  const char *p = s;
 
   while( *p != '\0' )  {
     glutBitmapCharacter( font, *p );
@@ -1200,7 +1200,7 @@ GLUI_Main::GLUI_Main( void )
   main_panel              = new GLUI_Panel;
   main_panel->set_int_val( GLUI_PANEL_NONE );
   main_panel->glui        = (GLUI*) this;
-  main_panel->name        = "\0";
+  main_panel->set_name( "\0" );
 }
 
 /************************************ GLUI_Main::draw_raised_box() **********/

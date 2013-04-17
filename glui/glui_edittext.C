@@ -779,7 +779,7 @@ int    GLUI_EditText::special_handler( int key,int modifiers )
 int    GLUI_EditText::find_word_break( int start, int direction )
 {
   int    i, j;
-  char   *breaks = " :-.,";
+  const char *breaks = " :-.,";
   int     num_break_chars = (int)strlen(breaks), text_len = (int)strlen(text);
   int     new_pt;
 
@@ -875,7 +875,7 @@ void   GLUI_EditText::update_size( void )
 
 /****************************** GLUI_EditText::set_text() **********/
 
-void    GLUI_EditText::set_text( char *new_text )
+void    GLUI_EditText::set_text( const char *new_text )
 {
   strncpy(text,new_text,sizeof(GLUI_String));
   substring_start = 0;
@@ -1022,7 +1022,7 @@ void    GLUI_EditText::set_numeric_text( void )
 
 /*************************************** GLUI_EditText::dump() **************/
 
-void   GLUI_EditText::dump( FILE *out, char *name )
+void   GLUI_EditText::dump( FILE *out, const char *name )
 {
   fprintf( out, 
 	   "%s (edittext@%p):  ins_pt:%d  subs:%d/%d  sel:%d/%d   len:%d\n",

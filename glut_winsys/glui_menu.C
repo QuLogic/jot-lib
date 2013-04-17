@@ -120,7 +120,7 @@ GLUIMoveMenu::create_menu()
       for (int i = 0; i < _item_list.num(); i++) {
          // Tell the menu item which menu it belongs to
          items[i]->menu(this);
-         char *label = 0;
+         const char *label = 0;
          // Make default label if one doesn't exist
          if (!items[i]->label()) {
             label ="----";

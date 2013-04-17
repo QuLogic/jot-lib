@@ -23,7 +23,7 @@
 
 /*********************************** GLUI:: add_checkbox() ************/
 
-GLUI_Checkbox   *GLUI:: add_checkbox( char *name, int *value_ptr,
+GLUI_Checkbox   *GLUI:: add_checkbox( const char *name, int *value_ptr,
 				      int id, GLUI_Update_CB callback )
 {
   return add_checkbox_to_panel( main_panel,
@@ -34,7 +34,7 @@ GLUI_Checkbox   *GLUI:: add_checkbox( char *name, int *value_ptr,
 /*********************************** GLUI:: add_checkbox_to_panel() **********/
 
 GLUI_Checkbox   *GLUI::add_checkbox_to_panel( GLUI_Panel *panel,
-					      char *name, int *value_ptr,
+					      const char *name, int *value_ptr,
 					      int id, 
 					      GLUI_Update_CB callback )
 {
@@ -110,7 +110,7 @@ int    GLUI_Main::add_control( GLUI_Node *parent, GLUI_Control *control )
 
 /********************************************* GLUI::add_panel() *************/
 
-GLUI_Panel     *GLUI::add_panel( char *name, int type )
+GLUI_Panel     *GLUI::add_panel( const char *name, int type )
 {
   return add_panel_to_panel( main_panel, name, type );
 }
@@ -119,7 +119,7 @@ GLUI_Panel     *GLUI::add_panel( char *name, int type )
 /**************************************** GLUI::add_panel_to_panel() *********/
 
 GLUI_Panel     *GLUI::add_panel_to_panel( GLUI_Panel *parent_panel,
-					  char *name, int type )
+					  const char *name, int type )
 {
   GLUI_Panel *panel;
   
@@ -192,7 +192,7 @@ GLUI_RadioGroup *GLUI::add_radiogroup_to_panel(  GLUI_Panel *panel,
 /***************************** GLUI::add_radiobutton_to_group() *************/
 
 GLUI_RadioButton *GLUI::add_radiobutton_to_group(  GLUI_RadioGroup *group,
-						   char *name )
+						   const char *name )
 {
   GLUI_RadioButton *control;
 
@@ -234,7 +234,7 @@ GLUI_RadioButton *GLUI::add_radiobutton_to_group(  GLUI_RadioGroup *group,
 
 /********************************** GLUI::add_statictext() ************/
 
-GLUI_StaticText  *GLUI::add_statictext( char *name )
+GLUI_StaticText  *GLUI::add_statictext( const char *name )
 {
   return add_statictext_to_panel( main_panel, name );
 }
@@ -243,7 +243,7 @@ GLUI_StaticText  *GLUI::add_statictext( char *name )
 /******************************* GLUI::add_statictext_to_panel() **********/
 
 GLUI_StaticText  *GLUI::
-add_statictext_to_panel( GLUI_Panel *panel, char *name )
+add_statictext_to_panel( GLUI_Panel *panel, const char *name )
 {
   GLUI_StaticText *control;
 
@@ -264,7 +264,7 @@ add_statictext_to_panel( GLUI_Panel *panel, char *name )
 
 /***************************************** GLUI:: add_button() ************/
 
-GLUI_Button   *GLUI:: add_button( char *name, 
+GLUI_Button   *GLUI:: add_button( const char *name,
 				  int id, GLUI_Update_CB callback )
 {
   return add_button_to_panel( main_panel,
@@ -275,7 +275,7 @@ GLUI_Button   *GLUI:: add_button( char *name,
 /*********************************** GLUI:: add_button_to_panel() **********/
 
 GLUI_Button   *GLUI::add_button_to_panel( GLUI_Panel *panel,
-					  char *name, 
+					  const char *name,
 					  int id, 
 					  GLUI_Update_CB callback )
 {
@@ -326,7 +326,7 @@ void      GLUI::add_separator_to_panel( GLUI_Panel *panel )
 
 /********************************** GLUI::add_edittext() ************/
 
-GLUI_EditText  *GLUI::add_edittext( char *name, 
+GLUI_EditText  *GLUI::add_edittext( const char *name,
 				    int data_type, void *data,
 				    int id, GLUI_Update_CB callback)
 {
@@ -338,7 +338,7 @@ GLUI_EditText  *GLUI::add_edittext( char *name,
 /******************************* GLUI::add_edittext_to_panel() **********/
 
 GLUI_EditText  *GLUI::
-add_edittext_to_panel( GLUI_Panel *panel, char *name, 
+add_edittext_to_panel( GLUI_Panel *panel, const char *name,
 		       int data_type, void *data,
 		       int id, GLUI_Update_CB callback)
 {
@@ -387,7 +387,7 @@ add_edittext_to_panel( GLUI_Panel *panel, char *name,
 
 /********************************** GLUI::add_spinner() ************/
 
-GLUI_Spinner  *GLUI::add_spinner( char *name, 
+GLUI_Spinner  *GLUI::add_spinner( const char *name,
 				  int data_type, void *data,
 				  int id, GLUI_Update_CB callback)
 {
@@ -399,7 +399,7 @@ GLUI_Spinner  *GLUI::add_spinner( char *name,
 /******************************* GLUI::add_spinner_to_panel() **********/
 
 GLUI_Spinner  *GLUI::
-add_spinner_to_panel( GLUI_Panel *panel, char *name, 
+add_spinner_to_panel( GLUI_Panel *panel, const char *name,
 		      int data_type, void *data,
 		      int id, GLUI_Update_CB callback)
 {
@@ -480,7 +480,7 @@ void   GLUI::add_column_to_panel( GLUI_Panel *panel, int draw_bar )
 
 /*********************************** GLUI:: add_listbox() ************/
 
-GLUI_Listbox   *GLUI:: add_listbox( char *name, int *value_ptr,
+GLUI_Listbox   *GLUI:: add_listbox( const char *name, int *value_ptr,
 				    int id, GLUI_Update_CB callback )
 {
   return add_listbox_to_panel( main_panel,
@@ -491,7 +491,7 @@ GLUI_Listbox   *GLUI:: add_listbox( char *name, int *value_ptr,
 /*********************************** GLUI:: add_listbox_to_panel() **********/
 
 GLUI_Listbox   *GLUI::add_listbox_to_panel( GLUI_Panel *panel,
-					    char *name, int *value_ptr,
+					    const char *name, int *value_ptr,
 					    int id, 
 					    GLUI_Update_CB callback )
 {
@@ -519,7 +519,7 @@ GLUI_Listbox   *GLUI::add_listbox_to_panel( GLUI_Panel *panel,
 
 /*********************************** GLUI:: add_rotation() ************/
 
-GLUI_Rotation   *GLUI:: add_rotation( char *name, float *value_ptr,
+GLUI_Rotation   *GLUI:: add_rotation( const char *name, float *value_ptr,
 				      int id, GLUI_Update_CB callback )
 {
   return add_rotation_to_panel( main_panel,
@@ -530,7 +530,7 @@ GLUI_Rotation   *GLUI:: add_rotation( char *name, float *value_ptr,
 /*********************************** GLUI:: add_rotation_to_panel() **********/
 
 GLUI_Rotation   *GLUI::add_rotation_to_panel( GLUI_Panel *panel,
-					      char *name, float *value_ptr,
+					      const char *name, float *value_ptr,
 					      int id, 
 					      GLUI_Update_CB callback )
 {
@@ -576,7 +576,7 @@ GLUI_Rotation   *GLUI::add_rotation_to_panel( GLUI_Panel *panel,
 /*********************************** GLUI:: add_slider() ************/
 
 GLUI_Slider   *GLUI:: add_slider( 
-	char *name,
+	const char *name,
 	int data_type,
 	float lo,
 	float hi,
@@ -592,7 +592,7 @@ GLUI_Slider   *GLUI:: add_slider(
 /*********************************** GLUI:: add_slider_to_panel() **********/
 GLUI_Slider   *GLUI::add_slider_to_panel( 
 	GLUI_Panel *panel,
-	char *name,
+	const char *name,
 	int data_type,
 	float lo,
 	float hi,
@@ -657,7 +657,7 @@ GLUI_Slider   *GLUI::add_slider_to_panel(
 /*********************************** GLUI:: add_bitmapbox() ************/
 
 GLUI_BitmapBox   *GLUI:: add_bitmapbox( 
-	char *name,
+	const char *name,
 	int id, 
 	GLUI_Update_CB callback,
    bool active)
@@ -669,7 +669,7 @@ GLUI_BitmapBox   *GLUI:: add_bitmapbox(
 /*********************************** GLUI:: add_bitmapbox_to_panel() **********/
 GLUI_BitmapBox  *GLUI::add_bitmapbox_to_panel( 
 	GLUI_Panel *panel,
-	char *name,
+	const char *name,
 	int id, 
 	GLUI_Update_CB callback,
    bool active)
@@ -699,7 +699,7 @@ GLUI_BitmapBox  *GLUI::add_bitmapbox_to_panel(
 /*********************************** GLUI:: add_graph() ************/
 
 GLUI_Graph   *GLUI:: add_graph( 
-	char *name,
+	const char *name,
 	int id, 
 	GLUI_Update_CB callback )
 {
@@ -710,7 +710,7 @@ GLUI_Graph   *GLUI:: add_graph(
 /*********************************** GLUI:: add_graph_to_panel() **********/
 GLUI_Graph  *GLUI::add_graph_to_panel( 
 	GLUI_Panel *panel,
-	char *name,
+	const char *name,
 	int id, 
 	GLUI_Update_CB callback )
 {
@@ -745,7 +745,7 @@ GLUI_Graph  *GLUI::add_graph_to_panel(
 
 /***************************************** GLUI:: add_activetext() ************/
 
-GLUI_ActiveText   *GLUI:: add_activetext( char *name, 
+GLUI_ActiveText   *GLUI:: add_activetext( const char *name,
 				  int id, GLUI_Update_CB callback )
 {
   return add_activetext_to_panel( main_panel,
@@ -756,7 +756,7 @@ GLUI_ActiveText   *GLUI:: add_activetext( char *name,
 /*********************************** GLUI:: add_activetext_to_panel() **********/
 
 GLUI_ActiveText   *GLUI::add_activetext_to_panel( GLUI_Panel *panel,
-					  char *name, 
+					  const char *name,
 					  int id, 
 					  GLUI_Update_CB callback )
 {
@@ -799,7 +799,7 @@ GLUI_ActiveText   *GLUI::add_activetext_to_panel( GLUI_Panel *panel,
 /*********************************** GLUI:: add_translation() ************/
 
 GLUI_Translation   
-  *GLUI:: add_translation( char *name, int trans_type,
+  *GLUI:: add_translation( const char *name, int trans_type,
 			   float *value_ptr, int id, GLUI_Update_CB callback )
 {
   return add_translation_to_panel( main_panel,name,trans_type, 
@@ -811,7 +811,7 @@ GLUI_Translation
 
 GLUI_Translation   
    *GLUI::add_translation_to_panel( 
-				   GLUI_Panel *panel, char *name, 
+				   GLUI_Panel *panel, const char *name,
 				   int trans_type, float *value_ptr,
 				   int id, GLUI_Update_CB callback )
 {
@@ -852,7 +852,7 @@ GLUI_Translation
 
 /********************************** GLUI::add_rollout() **************/
 
-GLUI_Rollout   *GLUI::add_rollout( char *name, int open )
+GLUI_Rollout   *GLUI::add_rollout( const char *name, int open )
 {
   return add_rollout_to_panel( main_panel, name, open );
 }
@@ -860,7 +860,7 @@ GLUI_Rollout   *GLUI::add_rollout( char *name, int open )
 
 /****************************** GLUI::add_rollout_to_panel() *********/
 
-GLUI_Rollout *GLUI::add_rollout_to_panel(GLUI_Panel *panel,char *name,int open)
+GLUI_Rollout *GLUI::add_rollout_to_panel(GLUI_Panel *panel,const char *name,int open)
 {
   GLUI_Rollout     *rollout;
   
