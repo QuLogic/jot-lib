@@ -261,7 +261,8 @@ CIRCLE_WIDGET::init(CGESTUREptr&  gest)
    me->_center = c;
 
    me->_init_stamp = VIEW::stamp();
-   if( me->_suggest_active = suggest_active ) {
+   me->_suggest_active = suggest_active;
+   if (suggest_active) {
       me->create_literal(gest);
    }
    //PIXEL gest_center = gest->center();

@@ -1243,18 +1243,18 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
       else if (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
          start_x = shadow_pts.num()-1;
 
-      if (start_x != 0 & shadow_pix_line(0, shadow_pts, shadow_normals).dist(end) < PIX_THRESH)
+      if ((start_x != 0) && (shadow_pix_line(0, shadow_pts, shadow_normals).dist(end) < PIX_THRESH))
          end_x = 0;
-      else if (start_x != shadow_pts.num()-1 &
-         shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH)
+      else if ((start_x != shadow_pts.num()-1) &&
+         (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH))
          end_x = shadow_pts.num()-1;
    }
 
    PIXEL foo; // dummy variable
    int idx;
-   if (start_x == -1 & upperlist.closest(start, foo, idx) < PIX_THRESH)
+   if ((start_x == -1) && (upperlist.closest(start, foo, idx) < PIX_THRESH))
       start_x = idx;
-   if (end_x == -1 & upperlist.closest(  end, foo, idx) < PIX_THRESH)
+   if ((end_x == -1) && (upperlist.closest(  end, foo, idx) < PIX_THRESH))
       end_x   = idx;
 
    /*// If not closed curve, allow to not intersect curve, but
