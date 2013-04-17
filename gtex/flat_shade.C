@@ -51,7 +51,7 @@ FlatShadeStripCB::faceCB(CBvert* v, CBface* f)
    }
 
    // texture coords
-   if (_do_texcoords) 
+   if (_do_texcoords) {
       if (_use_auto) { //force automatic 
          //use spherical text coord gen
          glTexCoord2dv(_auto_UV->uv_from_vert(v,f).data());
@@ -68,6 +68,7 @@ FlatShadeStripCB::faceCB(CBvert* v, CBface* f)
          else if (UVdata::lookup(f))
             glTexCoord2dv(UVdata::get_uv(v,f).data());
       }
+   }
   
    // vertex coords
    glVertex3dv(v->loc().data());

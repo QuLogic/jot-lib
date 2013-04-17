@@ -502,7 +502,7 @@ SELECT_WIDGET::tap_cb(CGESTUREptr& g, DrawState*& s)
    {
 	   //pattern editing
 		Bface* f = find_face(g->start(),0.25,MIN_PIX_AREA);
-		if (f)
+		if (f) {
 			if (select_list.contains(f)||select_list.contains(f->quad_partner()))
 			{
 	
@@ -528,8 +528,8 @@ SELECT_WIDGET::tap_cb(CGESTUREptr& g, DrawState*& s)
 			}
 			else
 				cerr << "tap found a NULL face !" << endl;
-		
-		   
+		}
+
 		return cancel_cb(g,s);
 
 
@@ -594,9 +594,8 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 		select_list.clear();
 
 		Bface* f = find_face(gest->start(),0.25,MIN_PIX_AREA);
-		if (f)//f should be the currently selected face
-		if (f->is_selected())
-		if (f->is_quad())
+		// f should be the currently selected face
+		if (f && f->is_selected() && f->is_quad())
 		{
 	
 			f=f->quad_rep();

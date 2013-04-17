@@ -2990,9 +2990,11 @@ Bcurve::splice_curve_on_closed(
          * (crv_a[1] - crv_a[0]).normalized();
       double neg_amt =   (crv_b[(start_i + crv_b.num() - 1) % crv_b.num()] - crv_b[start_i]).normalized()
          * (crv_a[1] - crv_a[0]).normalized();
-      if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && DIR_THRESH > 0.75) )
+      if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && DIR_THRESH > 0.75) ) {
          if (debug) cerr << " start is too close to call, will have to wait for end..." << endl;
-      else start_dir = (pos_amt > DIR_THRESH)?( 1 ):( -1 );
+      } else {
+          start_dir = (pos_amt > DIR_THRESH)?( 1 ):( -1 );
+      }
    }
 
    { //determine end_dir:
@@ -3004,7 +3006,7 @@ Bcurve::splice_curve_on_closed(
          * (crv_a[crv_a.num() - 2] - crv_a.last()).normalized();
       double neg_amt =   (crv_b[(end_i + crv_b.num() - 1) % crv_b.num()] - crv_b[end_i]).normalized()
          * (crv_a[crv_a.num() - 2] - crv_a.last()).normalized();
-      if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && neg_amt > DIR_THRESH) )
+      if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && neg_amt > DIR_THRESH) ) {
          if (start_dir == 0) {
             if (debug) cerr << "both start and end too close to call, aborting" << endl;
             return false;
@@ -3012,7 +3014,7 @@ Bcurve::splice_curve_on_closed(
             if (debug) cerr << "guessing end direction from start direction" << endl;
             end_dir = -start_dir;
          }
-      else {
+      } else {
          end_dir = (pos_amt > DIR_THRESH)?( 1 ):( -1 );
          if (start_dir == 0) {
             start_dir = -end_dir;
