@@ -460,13 +460,13 @@ Primitive::create_ball(Bpoint* skel, double pix_rad, MULTI_CMDptr cmd)
    // Check out this so-called "skeleton"
    if (!(skel && skel->mesh())) {
       err_adv(debug, "Primitive::create_ball: bad skeleton/mesh");
-      return false;
+      return 0;
    } else if (!(skel->vert() && skel->vert() && skel->vert()->degree() == 0)) {
       err_adv(debug, "Primitive::create_ball: non-isolated  skeleton");
-      return false;
+      return 0;
    } else if (!skel->ndc().in_frustum()) {
       err_adv(debug, "Primitive::create_ball: skeleton outside frustum");
-      return false;
+      return 0;
    }
 
    LMESHptr mesh = skel->get_inflate_mesh();

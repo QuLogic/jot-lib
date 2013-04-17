@@ -134,7 +134,7 @@ near_edge(Bface* f, CWvec& bc)
    if (!f)
       return 0;
    if (max(max(bc[0],bc[1]),bc[2]) > 0.75)
-      return false;     // too near a vertex
+      return 0;     // too near a vertex
    double m = min(min(bc[0],bc[1]),bc[2]);
    if (m > 0.25)
       return 0;         // too near the center
@@ -168,7 +168,7 @@ near_vert(Bface* f, CWvec& bc)
       return 0;
    double m = max(max(bc[0],bc[1]),bc[2]);
    if (m < 0.75)
-      return false;     // too far from any vertex
+      return 0;     // too far from any vertex
 
    // If max barycentric coord is bc[0] ( == v1), then
    // nearest vert is v1, etc.

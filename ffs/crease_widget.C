@@ -171,14 +171,14 @@ find_match_align(CGESTUREptr& g)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_adv(debug, "find_match_align: can't get vis ref image");
-      return false;
+      return 0;
    }
 
    const double RAD = 8;
    Bface_list faces = get_top_level(vis_ref->get_faces(g->pts(), RAD));
    if (!faces.same_mesh()) {
       err_adv(debug, "find_match_align: can't get top-level faces for gesture");
-      return false;
+      return 0;
    }
 
    err_adv(debug, "find_match_align: %d top-level faces", faces.num());
@@ -241,14 +241,14 @@ find_match_cross(CGESTUREptr& g)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_adv(debug, "find_match_cross: can't get vis ref image");
-      return false;
+      return 0;
    }
 
    const double RAD = 8;
    Bface_list faces = get_top_level(vis_ref->get_faces(g->pts(), RAD));
    if (!faces.same_mesh()) {
       err_adv(debug, "find_match_cross: can't get top-level faces for gesture");
-      return false;
+      return 0;
    }
 
    err_adv(debug, "find_match_cross: %d top-level faces", faces.num());
