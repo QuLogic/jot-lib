@@ -197,15 +197,15 @@ class BaseStrokeOffsetLIST : public REFcounter,
    /******** EXPOSED ARRAY<> METHODS ********/
 
    // 'Real' array accessors
-   ARRAY<BaseStrokeOffset>::num;
-   ARRAY<BaseStrokeOffset>::empty;
-   ARRAY<BaseStrokeOffset>::clear;
-   ARRAY<BaseStrokeOffset>::add;
-   ARRAY<BaseStrokeOffset>::operator[];
-   ARRAY<BaseStrokeOffset>::operator+=;
-   ARRAY<BaseStrokeOffset>::last;
-   ARRAY<BaseStrokeOffset>::first;
-   ARRAY<BaseStrokeOffset>::pop;
+   using ARRAY<BaseStrokeOffset>::num;
+   using ARRAY<BaseStrokeOffset>::empty;
+   using ARRAY<BaseStrokeOffset>::clear;
+   using ARRAY<BaseStrokeOffset>::add;
+   using ARRAY<BaseStrokeOffset>::operator[];
+   using ARRAY<BaseStrokeOffset>::operator+=;
+   using ARRAY<BaseStrokeOffset>::last;
+   using ARRAY<BaseStrokeOffset>::first;
+   using ARRAY<BaseStrokeOffset>::pop;
 
    // 'Fake' array accessors 
    void                 fetch(int i,BaseStrokeOffset& o);

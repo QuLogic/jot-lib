@@ -264,9 +264,9 @@ public:
 
    /******** EXPOSED ARRAY<> METHODS ********/
 
-   ARRAY<HatchingHatchBase*>::num;
-   ARRAY<HatchingHatchBase*>::pop;
-   ARRAY<HatchingHatchBase*>::operator[];
+   using ARRAY<HatchingHatchBase*>::num;
+   using ARRAY<HatchingHatchBase*>::pop;
+   using ARRAY<HatchingHatchBase*>::operator[];
 
    /******** DATA_ITEM METHODS ********/
  public:
