@@ -41,7 +41,7 @@ class SimplexArray : public ARRAY<T> {
 
    SimplexArray(const ARRAY<T>& list)  : ARRAY<T>(list) {}
    explicit SimplexArray(int n=0)      : ARRAY<T>(n)    {}
-   explicit SimplexArray(T s)          : ARRAY<T>()     { add(s); }
+   explicit SimplexArray(T s)          : ARRAY<T>()     { this->add(s); }
 
    virtual ~SimplexArray() {
       if (_do_index)

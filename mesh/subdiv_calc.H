@@ -179,7 +179,7 @@ class LoopCalc : public SubdivCalc<T> {
        {
           // regular centroid -- average of all neighboring verts
           T ret;
-          clear(ret);
+          this->clear(ret);
           Bvert_list nbrs;
           v->get_p_nbrs(nbrs);
           int n = nbrs.num();
@@ -196,7 +196,7 @@ class LoopCalc : public SubdivCalc<T> {
           //       should we simplify the code to rely on that?
           //       ... naaah.
           T ret;
-          clear(ret);
+          this->clear(ret);
           int count = 0;
           Bvert_list nbrs;
           v->get_p_nbrs(nbrs);
@@ -445,7 +445,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       // At non-manifold parts of the mesh, take neighbors
       // just from the primary level.
       T ret;
-      clear(ret);
+      this->clear(ret);
       Bedge_list adj;    // adjacent edges from primary level
       v->get_manifold_edges(adj);
       int count = 0;
@@ -472,7 +472,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       // returns average of the face centroids in the given list
       // (usually from the 1-ring of a given vertex)
       T ret;
-      clear(ret);
+      this->clear(ret);
       if (faces.empty()) {
          err_msg("CatmullClarkCalc::fcentroids: error: empty face list");
          return ret;
@@ -616,7 +616,7 @@ class HybridCalc : public SubdivCalc<T> {
    //******** HELPER FUNCTIONS ********
    T sum(CBvert_list & p) const {
       T ret;
-      clear(ret);
+      this->clear(ret);
       for (int i=0; i<p.num(); i++)
          ret = ret + get_val(p[i]);
       return ret;

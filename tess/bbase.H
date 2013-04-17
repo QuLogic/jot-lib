@@ -494,7 +494,7 @@ class _Bbase_list : public RIC_array<T> {
    _Bbase_list(const RIC_array<T>& list) : RIC_array<T>(list) {}
 
    // Construct the list with a single element:
-   _Bbase_list(T* el) : RIC_array<T>(1) { add(el); }
+   _Bbase_list(T* el) : RIC_array<T>(1) { this->add(el); }
 
    Bnode_list bnodes() const {
       Bnode_list ret;
