@@ -274,7 +274,7 @@ ProxyUVStroke::stroke_setup(Bface* face, bool selected)
             col_ref = ColorRefImage::lookup(0, VIEW::peek());
             col_ref_stamp = VIEW::stamp();
          }
-         COLOR col = col_ref->color(p);
+//         COLOR col = col_ref->color(p);
 //     double x = clamp(1.0 - col.luminance(), 0.0,1.0);
       
 

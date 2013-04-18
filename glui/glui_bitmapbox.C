@@ -38,7 +38,7 @@
 
 int    GLUI_BitmapBox::mouse_down_handler( int local_x, int local_y )
 {
-	int bitmap_x, bitmap_y, old_inside;
+	int bitmap_x, bitmap_y;
 
 	bitmap_x = local_x - x_abs - (w - image_w)/2;
 	if (bitmap_x < 0) bitmap_x = 0;
@@ -56,7 +56,6 @@ int    GLUI_BitmapBox::mouse_down_handler( int local_x, int local_y )
 	event_key = -1;
 	event_mod = -1;
 
-   old_inside = currently_inside;
    currently_inside = true;
 	
    currently_pressed = true;

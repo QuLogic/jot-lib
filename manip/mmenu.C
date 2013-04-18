@@ -82,7 +82,6 @@ MMENU::move(
    for(int i=0;i<_items.num();i++){
       GEOMptr gp(_items[i]._g);
       if(gp){
-         CBBOX b = gp->bbox();
          if (TEXT2D::isa(gp)) {
             TEXT2Dptr  t2d  = (TEXT2D *)&*gp;
 

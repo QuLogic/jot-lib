@@ -974,8 +974,7 @@ ZXedgeStrokeTexture::draw_id_ref()
 
    bool started = false;
 
-   bool lvis = false;
-   bool vis = false;
+   bool vis;
 
    int path_id = gen_id();
 
@@ -1040,8 +1039,6 @@ ZXedgeStrokeTexture::draw_id_ref()
 
          setIDcolor(path_id);
       }
-
-      lvis = vis;
    }
    //   cerr << "\n" << endl;
    glPopAttrib();
@@ -1099,17 +1096,13 @@ ZXedgeStrokeTexture::draw_id_ref_param_invis_pass()
    int  index_start = 0;
    int  index_end   = 0;
 
-   int  cur_vis = SIL_VISIBLE;
-   int  vis_mode = SIL_VISIBLE;
-
-   int  cur_type = STYPE_SIL;
    int  type_mode = STYPE_SIL;
 
 
    for ( i=0; i < _ref_segs.num(); i++) {
 
-      cur_vis = _ref_segs[i].v();
-      cur_type = _ref_segs[i].type();
+      int cur_vis = _ref_segs[i].v();
+      int cur_type = _ref_segs[i].type();
 
       assert ( cur_vis==SIL_VISIBLE );
 
@@ -1121,7 +1114,6 @@ ZXedgeStrokeTexture::draw_id_ref_param_invis_pass()
          assert ( _ref_segs[i].e() );
          started = true;
          index_start = i;
-         vis_mode = cur_vis;
          type_mode = cur_type;
       }
 
@@ -1216,17 +1208,12 @@ ZXedgeStrokeTexture::draw_id_ref_param_vis_pass()
    int  index_start = 0;
    int  index_end   = 0;
 
-   int  cur_vis = SIL_VISIBLE;
-   int  vis_mode = SIL_VISIBLE;
-
-   int  cur_type = STYPE_SIL;
    int  type_mode = STYPE_SIL;
-
 
    for ( i=0; i < _ref_segs.num(); i++) {
 
-      cur_vis = _ref_segs[i].v();
-      cur_type = _ref_segs[i].type();
+      int cur_vis = _ref_segs[i].v();
+      int cur_type = _ref_segs[i].type();
 
       assert ( cur_vis == SIL_VISIBLE );
 
@@ -1244,7 +1231,6 @@ ZXedgeStrokeTexture::draw_id_ref_param_vis_pass()
          assert ( _ref_segs[i].e() );
          started = true;
          index_start = i;
-         vis_mode = cur_vis;
          type_mode = cur_type;
       }
 

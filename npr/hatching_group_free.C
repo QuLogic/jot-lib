@@ -3817,7 +3817,6 @@ HatchingPositionFree::update()
    while (_curr_placements->num() > _group->instances().num())
       _group->instances().add(_group->base_instance()->clone());
 
-   double maxu;
    double leftu, rightu;
    double maxdot;
 
@@ -3835,7 +3834,6 @@ HatchingPositionFree::update()
                   }
                else
                   {
-                     maxu = (*_curr_placements)[k].maxu;
                      leftu = (*_curr_placements)[k].leftu;
                      rightu = (*_curr_placements)[k].rightu;
                      maxdot = (*_curr_placements)[k].maxdot;

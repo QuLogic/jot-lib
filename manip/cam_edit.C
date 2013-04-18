@@ -512,7 +512,7 @@ Cam_int_edit::rot(
       data->rotate(Wline(data->center(), Wvec::Y()),
                    -2*Acos(dot) * Sign(te[0]-tp[0]));
 
-      Wvec   dvec  = data->from() - data->center();
+//      Wvec   dvec  = data->from() - data->center();
       double rdist = te[1]-tp[1];
 //      double tdist = Acos(Wvec::Y() * dvec.normalized());
 

@@ -158,8 +158,6 @@ remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<Octre
       to_remove += false;
    }
 
-   clock_t start;
-
    for (int i = 0; i < pts.num(); i++) {
       for (int j = 0; j < t[i]->neibors().num(); j++) {
          int index = t[i]->neibors()[j]->get_term_index();
@@ -179,7 +177,6 @@ remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<Octre
       }
    }
 
-   start = clock();
    priority_queue< Priority, vector<Priority> > queue;
    ARRAY<int> versions;
    for (int i = 0; i < pts.num(); i++) {

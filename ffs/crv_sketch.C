@@ -1746,7 +1746,6 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
       int j;
       bool first = true;
       PIXEL best_intersection;
-      int best_seg;
 
       // search through each span for the best intersection
       for (j = 0; j < plist.num() - 1; j++) {
@@ -1760,7 +1759,6 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
          
          if ((pline.dist(isect) < pline.dist(best_intersection)) || first) {
             best_intersection = isect;
-            best_seg = 0;
             first = false;
          }
       }

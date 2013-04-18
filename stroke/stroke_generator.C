@@ -86,7 +86,7 @@ StrokeGenerator::add_example(BaseStrokeOffsetLISTptr o) {
          // The next resampled point lies on the current segment.
          curr_pos += seg_left;
          seg_left = _resample_rate;
-         double p = len1 + (len2 - len1) * (curr_pos / delta_pos);
+         double p = len1 + delta_len * (curr_pos / delta_pos);
          ex.add(p);
 
       } else {

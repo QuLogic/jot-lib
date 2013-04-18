@@ -201,8 +201,8 @@ Cam_int::CAMwidget::display_anchor(
    _a_displayed = 1;
 
    Wvec    delt(p-Wpt(XYpt(p)+XYvec(VEXEL(5,5)), p));
-   Wtransf ff = Wtransf(p) * Wtransf::scaling(delt.length()); 
-   _anchor->set_xform(Wtransf(p) * Wtransf::scaling(1.5*delt.length())); 
+   Wtransf ff = Wtransf(p) * Wtransf::scaling(1.5*delt.length());
+   _anchor->set_xform(ff);
 }
 
 void 
@@ -214,7 +214,7 @@ Cam_int::CAMwidget::drag_anchor(
    Wpt     p   (Wplane(apos,Wvec(XYpt())).intersect(p2d));
    double  rad = (p-apos).length();
    Wtransf ff  = Wtransf(apos) * Wtransf::scaling(rad);
-   _anchor->set_xform(Wtransf(apos) * Wtransf::scaling(rad));
+   _anchor->set_xform(ff);
 }
 
 int
@@ -576,7 +576,6 @@ Cam_int::rot(
       data->rotate(Wline(data->center(), Wvec::Y()),
                    -2*Acos(dot) * Sign(te[0]-tp[0]));
 
-      Wvec   dvec  = data->from() - data->center();
       double rdist = te[1]-tp[1];
 
       CAMdata   dd = CAMdata(*data);

@@ -268,8 +268,6 @@ NPRview::draw_background()
       str_ptr     tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
    
-      double width=0.0, height=0.0;
-        
       if ((tex_name != NULL_STR) && (tex_ptr == NULL)) {
          Image image(tex_name);
 
@@ -277,8 +275,6 @@ NPRview::draw_background()
             TEXTUREglptr t = new TEXTUREgl();
             t->set_save_img(true);
             t->set_image(image.copy(),image.width(),image.height(),image.bpp());
-            width = image.width();
-            height = image.height();
             err_mesg(ERR_LEV_INFO, 
                      "NPRview::draw_background() - Loaded new background: w=%d h=%d bpp=%u", 
                      image.width(), image.height(), image.bpp());
@@ -394,8 +390,7 @@ NPRview::draw_background()
    
       str_ptr     tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
-      double width=0.0, height=0.0;
-        
+
       if ((tex_name != NULL_STR) && (tex_ptr == NULL)) {
          Image image(tex_name);
 
@@ -455,8 +450,8 @@ NPRview::draw_background()
          _view->set_bkg_tf(tf);
          tex_ptr->apply_texture(&tf);              // GL_TEXTURE_BIT
         
-         width = (double)tex_ptr->image().width();
-         height = (double)tex_ptr->image().height();
+         double width = (double)tex_ptr->image().width();
+         double height = (double)tex_ptr->image().height();
        
          double s_width = (double)_view->width();
          double s_height = (double)_view->height();

@@ -706,7 +706,7 @@ SCREEN::push_eye_offset(
 
    // save the "up vector" to redefine
    // the 'up' point after assigning a new 'from' position.
-   Wvec up_vec  = data->up_v();
+   data->up_v();
 
    double dist_to_screen = (data->from() - data->at()).length();
    data->set_focal(dist_to_screen * clip_ratio);

@@ -1070,7 +1070,9 @@ bool ntt_init_vertex_program_arb()
    assert(!ntt_is_init_vertex_program);
 
    if (GLExtensions::gl_arb_vertex_program_supported()) {
+#ifdef GL_ARB_vertex_program
      bool success = false, native = false;
+#endif
      err_mesg(ERR_LEV_INFO, "XToonTexture::init() - Can use ARB vertex programs!");
 #ifdef GL_ARB_vertex_program
      glGenProgramsARB(1, &ntt_toon_prog_detail_arb); 

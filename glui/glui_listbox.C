@@ -327,13 +327,13 @@ GLUI_Listbox_Item *GLUI_Listbox::get_item_ptr( int id )
 
 static void listbox_callback( int i )
 {
-  int old_val;
+//  int old_val;
 
   if ( NOT GLUI_Master.curr_left_button_glut_menu OR 
        GLUI_Master.curr_left_button_glut_menu->type != GLUI_CONTROL_LISTBOX ) 
     return;
 
-  old_val = ((GLUI_Listbox*)GLUI_Master.curr_left_button_glut_menu)->int_val;
+//  old_val = ((GLUI_Listbox*)GLUI_Master.curr_left_button_glut_menu)->int_val;
   ((GLUI_Listbox*)GLUI_Master.curr_left_button_glut_menu)->set_int_val(i);
 
   /****   If value changed, execute callback   ****/

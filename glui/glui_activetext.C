@@ -5,11 +5,8 @@
 
 int    GLUI_ActiveText::mouse_down_handler( int local_x, int local_y )
 {
-   int old_inside;
-
    set_int_val( 1 );   
 
-   old_inside  = currently_inside;
    currently_inside = true;
 
    currently_pressed = true;

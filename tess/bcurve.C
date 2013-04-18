@@ -3405,7 +3405,7 @@ intersect_line_polyline(const PIXELline&  line,
       }
    }
 
-   return true;
+   return success;
 }
 
 //! Intersects the screen projections of the given world lines

@@ -372,7 +372,7 @@ ImgLineTexture::apply_snake(ARRAY<Point2i> &point_array, ARRAY<float> &width_arr
 void
 ImgLineTexture::get_snake_matrix(const int size)
 {
-   int i, j, k, s;
+   int i, j, k;
    double dBeta[3];
 
    _matrix.init(size, size); 
@@ -384,8 +384,6 @@ ImgLineTexture::get_snake_matrix(const int size)
    dBeta[0] = dBeta[1] = dBeta[2] = 10.0;
 
    for (k = 2; k < size-2 ; k++) {
-      s = k+1; 
-
       _matrix[k][k-2] = dBeta[0];
       _matrix[k][k-1] = -(2*dBeta[0]+2*dBeta[1]);
       _matrix[k][k] =	dBeta[0] + 4*dBeta[1] + dBeta[2];
@@ -394,14 +392,14 @@ ImgLineTexture::get_snake_matrix(const int size)
    }
 
    // first row
-   k = 0; s = 1;
+   k = 0;
 
    _matrix[0][0] = dBeta[0] + 4*dBeta[1] + dBeta[2];
    _matrix[0][1] = -(2*dBeta[1] + 2*dBeta[2]);
    _matrix[0][2] = dBeta[2];
 
    // second row
-   k = 1; s = 2;
+   k = 1;
 
    _matrix[1][0] = -(2*dBeta[0] + 2*dBeta[1]);
    _matrix[1][1] = dBeta[0] + 4*dBeta[1] + dBeta[2];
@@ -409,14 +407,14 @@ ImgLineTexture::get_snake_matrix(const int size)
    _matrix[1][3] = dBeta[2];
 
    // the last row
-   k = size-1; s = size; // size == num_points-2
+   k = size-1; // size == num_points-2
 
    _matrix[size-1][size-3] = dBeta[0];
    _matrix[size-1][size-2] = -(2*dBeta[0] + 2*dBeta[1]);
    _matrix[size-1][size-1] = dBeta[0] + 4*dBeta[1] + dBeta[2];
 
    // second from the last
-   k = size-2; s = size-1; 
+   k = size-2;
 
    _matrix[size-2][size-4] = dBeta[0];
    _matrix[size-2][size-3] = -(2*dBeta[0] + 2*dBeta[1]);
