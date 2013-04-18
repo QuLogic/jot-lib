@@ -165,6 +165,7 @@ GLint  ToneShader::_is_reciever_loc = -1;
 
 ToneShader::ToneShader(Patch* p) :
    GLSLShader(p, new ToneStripCB),
+   _tex_2d(0),
    _smoothNormal(1),
    _normals_smoothed(false),
    _normals_elliptic(false),
@@ -175,8 +176,7 @@ ToneShader::ToneShader(Patch* p) :
    _edge_len_scale(0.1),
    _user_depth(0.0),
    _ratio_scale(0.5),
-   _global_edge_len(-1.0),
-   _tex_2d(0)
+   _global_edge_len(-1.0)
 {
    set_tex(Config::get_var_str(
               "TONE_SHADER_FILENAME",
