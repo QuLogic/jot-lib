@@ -1,0 +1,81 @@
+#
+# jot-lib - C++ libraries for 3D graphics, especially NPR
+#
+
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+PROJECT(jot)
+
+# Temporarily force 32-bit compile
+SET(CMAKE_C_FLAGS "-Wall -m32")
+SET(CMAKE_CXX_FLAGS "-Wall -m32")
+
+
+## Check for things we need
+
+# gettimeofday include files
+INCLUDE(CheckSymbolExists)
+CHECK_SYMBOL_EXISTS(gettimeofday sys/time.h HAVE_GETTIMEOFDAY)
+IF(HAVE_GETTIMEOFDAY)
+ADD_DEFINITIONS("-DHAVE_GETTIMEOFDAY")
+ENDIF(HAVE_GETTIMEOFDAY)
+
+# OpenGL and GLUT libraries
+INCLUDE(${CMAKE_ROOT}/Modules/FindOpenGL.cmake)
+FIND_PACKAGE(OpenGL REQUIRED)
+FIND_PACKAGE(GLUT REQUIRED)
+SET(CMAKE_REQUIRED_LIBRARIES ${GL_LIBRARY})
+INCLUDE_DIRECTORIES(include ${PROJECT_SOURCE_DIR} ${OPENGL_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
+
+IF(UNIX)
+SET(REF_IMG_32_BIT BOOL True)
+ADD_DEFINITIONS("-DGL_GLEXT_PROTOTYPES")
+ENDIF(UNIX)
+
+# XXX - Uncomment the following if not using Nvidia hardware
+#ADD_DEFINITIONS("-DNON_NVIDIA_GFX")
+
+# Uncomment the following if not using ATI hardware
+#ADD_DEFINITIONS("-DNON_ATI_GFX")
+
+# XXX - In order to compile the command-line apps in mesh lib,
+#       this hack prevents disp lib from referencing geom lib...
+#ADD_DEFINITIONS("-DDONT_LINK_GEOM_IN_DISP")
+
+
+## Subdirectories
+
+ADD_SUBDIRECTORY(convert)
+ADD_SUBDIRECTORY(dev)
+ADD_SUBDIRECTORY(disp)
+ADD_SUBDIRECTORY(dlhandler)
+ADD_SUBDIRECTORY(ffs)
+ADD_SUBDIRECTORY(geom)
+ADD_SUBDIRECTORY(gest)
+ADD_SUBDIRECTORY(glew)
+ADD_SUBDIRECTORY(glui)
+ADD_SUBDIRECTORY(glut_jot)
+ADD_SUBDIRECTORY(glut_winsys)
+ADD_SUBDIRECTORY(gtex)
+ADD_SUBDIRECTORY(gui)
+ADD_SUBDIRECTORY(base_jotapp)
+ADD_SUBDIRECTORY(libpng)
+ADD_SUBDIRECTORY(manip)
+ADD_SUBDIRECTORY(map3d)
+ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(mlib)
+ADD_SUBDIRECTORY(net)
+ADD_SUBDIRECTORY(npr)
+#ADD_SUBDIRECTORY(nprdata)
+ADD_SUBDIRECTORY(pattern)
+ADD_SUBDIRECTORY(proxy_pattern)
+ADD_SUBDIRECTORY(sps)
+ADD_SUBDIRECTORY(src)
+ADD_SUBDIRECTORY(std)
+ADD_SUBDIRECTORY(stroke)
+ADD_SUBDIRECTORY(tess)
+ADD_SUBDIRECTORY(triangle)
+ADD_SUBDIRECTORY(widgets)
+ADD_SUBDIRECTORY(wnpr)
+ADD_SUBDIRECTORY(zlib)
+

@@ -16,17 +16,18 @@ don't expect me to go fixing bugs in any of the algorithms.
 I am currently targetting Linux distributions, but I'm also aiming to make the
 code more portable where possible.
 
-How to use
-----------
+How to build
+------------
 
-Based on the original instructions, copy `doc/Makefile.local` to the toplevel
-directory. Edit `JOT_ROOT` to point to the toplevel directory. Then run make:
+First run `cmake` to check for dependencies and set up compilation flags. Then
+run `make` to build everything.
 
-    $ make ARCH=linux JOT_ROOT=`pwd`
+    $ mkdir build
+    $ cmake ..
+    $ make -j$NUM_PROCS
 
 **Note:** The code does not presently compile in a 64-bit world. Make sure to
-install 32-bit development libraries and then set `CC = g++ -m32` in your
-`Makefile.local` to force a 32-bit compile.
+install 32-bit development libraries, as `cmake` will force a 32-bit compile.
 
 [1] http://code.google.com/p/jot-lib/
 

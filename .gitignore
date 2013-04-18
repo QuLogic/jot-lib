@@ -1,4 +1,9 @@
-Makefile.local
+build
+CMakeCache.txt
+CMakeFiles/
+Makefile
+*.cmake
+*.a
 doxygen_docs
 jot.prj
 jot.prj.*
@@ -6,7 +11,6 @@ jot.pws
 nprdata/debugging/*.sil
 *.sil
 setup.bat
-lib
 bin
 models
 data

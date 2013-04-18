@@ -345,7 +345,10 @@
 #include <string.h>
 #include <math.h>
 #ifndef NO_TIMER
-#include "time.h"
+#ifdef HAVE_GETTIMEOFDAY
+#include <sys/time.h>
+#endif
+#include <time.h>
 #endif /* not NO_TIMER */
 #ifdef CPU86
 #include <float.h>
