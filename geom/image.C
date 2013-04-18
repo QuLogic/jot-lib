@@ -479,7 +479,7 @@ Image::expand_power2()
    return true;
 }
 
-#include "libpng/png.h"
+#include <png.h>
 static const unsigned int PNG_BYTES_TO_CHECK = 8;
 
 /***********************************************************************
@@ -563,7 +563,7 @@ Image::read_png(FILE* fp)
    }
 
    // Set error handling
-   if (setjmp(png_ptr->jmpbuf)) {
+   if (setjmp(png_jmpbuf(png_ptr))) {
       // jump here from error encountered inside PNG code...
       // free all memory associated with the png_ptr and info_ptr
       png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
@@ -704,7 +704,7 @@ Image::write_png(const char* file) const
    }
 
    // Set error handling
-   if (setjmp(png_ptr->jmpbuf)) {
+   if (setjmp(png_jmpbuf(png_ptr))) {
       // jump here from error encountered inside PNG code...
       // free all memory associated with the png_ptr and info_ptr
       fclose(fp);
