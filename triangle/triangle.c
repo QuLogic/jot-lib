@@ -15668,14 +15668,6 @@ struct behavior *b;
 
 #ifdef TRILIBRARY
 
-
-#ifdef WIN32
-
-#else
-#include <sys/time.h> 
-#endif
-
-
 #ifdef ANSI_DECLARATORS
 void triangulate(const char *triswitches, struct triangulateio *in,
                  struct triangulateio *out, struct triangulateio *vorout)
@@ -15711,9 +15703,7 @@ char **argv;
   /* Variables for timing the performance of Triangle.  The types are */
   /*   defined in sys/time.h.                                         */
   struct timeval tv0, tv1, tv2, tv3, tv4, tv5, tv6;
-  //struct tm tv0, tv1, tv2, tv3, tv4, tv5, tv6;
   struct timezone tz;
-  //long tz;
 #endif /* not NO_TIMER */
 
 #ifndef NO_TIMER
