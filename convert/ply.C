@@ -2925,13 +2925,13 @@ typedef struct RuleName {
 } RuleName;
 
 RuleName rule_name_list[] = {
-  AVERAGE_RULE, "avg",
-  RANDOM_RULE, "rnd",
-  MINIMUM_RULE, "max",
-  MAXIMUM_RULE, "min",
-  MAJORITY_RULE, "major",
-  SAME_RULE, "same",
-  -1, "end_marker",
+  { AVERAGE_RULE, "avg" },
+  { RANDOM_RULE, "rnd" },
+  { MINIMUM_RULE, "max" },
+  { MAXIMUM_RULE, "min" },
+  { MAJORITY_RULE, "major" },
+  { SAME_RULE, "same" },
+  { -1, "end_marker" }
 };
 
 
