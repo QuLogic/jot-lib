@@ -213,7 +213,7 @@ char **get_obj_info_ply(PlyFile *, int *);
 char **get_element_list_ply(PlyFile *, int *);
 void setup_property_ply(PlyFile *, PlyProperty *);
 void get_element_ply (PlyFile *, void *);
-char *setup_element_read_ply (PlyFile *, int, int *);
+const char *setup_element_read_ply (PlyFile *, int, int *);
 PlyOtherProp *get_other_properties_ply(PlyFile *, int);
 
 void element_count_ply(PlyFile *, char *, int);
@@ -226,7 +226,7 @@ PlyProperty **get_element_description_ply(PlyFile *, char *, int*, int*);
 void element_layout_ply(PlyFile *, char *, int, int, PlyProperty *);
 
 void header_complete_ply(PlyFile *);
-void put_element_setup_ply(PlyFile *, char *);
+void put_element_setup_ply(PlyFile *, const char *);
 void put_element_ply(PlyFile *, void *);
 void put_other_elements_ply(PlyFile *);
 
@@ -239,7 +239,7 @@ void set_prop_rules_ply (PlyFile *, PlyRuleList *);
 PlyRuleList *append_prop_rule (PlyRuleList *, char *, char *);
 int matches_rule_name (char *);
 
-int equal_strings(char *, char *);
+int equal_strings(const char *, const char *);
 char *recreate_command_line (int, char *argv[]);
 
 

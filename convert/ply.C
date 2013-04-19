@@ -55,12 +55,12 @@ WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 
 #include "ply.H"
 
-char *type_names[] = {  /* names of scalar types */
+const char *type_names[] = {  /* names of scalar types */
 "invalid",
 "int8", "int16", "int32", "uint8", "uint16", "uint32", "float32", "float64",
 };
 
-char *old_type_names[] = {  /* old names of types for backward compatability */
+const char *old_type_names[] = {  /* old names of types for backward compatability */
 "invalid",
 "char", "short", "int", "uchar", "ushort", "uint", "float", "double",
 };
@@ -78,13 +78,13 @@ int ply_type_size[] = {
 #define NAMED_PROP       1
 
 /* returns 1 if strings are equal, 0 if not */
-int equal_strings(char *, char *);
+int equal_strings(const char *, const char *);
 
 /* find an element in a plyfile's list */
-PlyElement *find_element(PlyFile *, char *);
+PlyElement *find_element(PlyFile *, const char *);
 
 /* find a property in an element's list */
-PlyProperty *find_property(PlyElement *, char *, int *);
+PlyProperty *find_property(PlyElement *, const char *, int *);
 
 /* write to a file the word describing a PLY file data type */
 void write_scalar_type (FILE *, int);
@@ -123,7 +123,7 @@ void ascii_get_element(PlyFile *, char *);
 void binary_get_element(PlyFile *, char *);
 
 /* memory allocation */
-static char *my_alloc(int, int, char *);
+static void *my_alloc(int, int, const char *);
 
 
 /*************/
@@ -451,7 +451,7 @@ Entry:
   elem_name - name of element we're talking about
 ******************************************************************************/
 
-void put_element_setup_ply(PlyFile *plyfile, char *elem_name)
+void put_element_setup_ply(PlyFile *plyfile, const char *elem_name)
 {
   PlyElement *elem;
 
@@ -1131,7 +1131,7 @@ Exit:
 
 PlyOtherProp *ply_get_other_properties(
   PlyFile *plyfile,
-  char *elem_name,
+  const char *elem_name,
   int offset
 )
 {
@@ -1176,7 +1176,7 @@ PlyOtherElems *get_other_element_ply (PlyFile *plyfile)
 {
   int i;
   PlyElement *elem;
-  char *elem_name;
+  const char *elem_name;
   int elem_count;
   PlyOtherElems *other_elems;
   OtherElem *other;
@@ -1320,7 +1320,7 @@ void get_info_ply(PlyFile *ply, float *version, int *file_type)
 Compare two strings.  Returns 1 if they are the same, 0 if not.
 ******************************************************************************/
 
-int equal_strings(char *s1, char *s2)
+int equal_strings(const char *s1, const char *s2)
 {
   int i;
 
@@ -1379,7 +1379,7 @@ Exit:
   returns the element, or NULL if not found
 ******************************************************************************/
 
-PlyElement *find_element(PlyFile *plyfile, char *element)
+PlyElement *find_element(PlyFile *plyfile, const char *element)
 {
   int i;
 
@@ -1403,7 +1403,7 @@ Exit:
   returns a pointer to the property, or NULL if not found
 ******************************************************************************/
 
-PlyProperty *find_property(PlyElement *elem, char *prop_name, int *index)
+PlyProperty *find_property(PlyElement *elem, const char *prop_name, int *index)
 {
   int i;
 
@@ -2439,11 +2439,11 @@ Entry:
   fname - file name from which memory was requested
 ******************************************************************************/
 
-static char *my_alloc(int size, int lnum, char *fname)
+static void *my_alloc(int size, int lnum, const char *fname)
 {
-  char *ptr;
+  void *ptr;
 
-  ptr = (char *) malloc (size);
+  ptr = malloc (size);
 
   if (ptr == 0) {
     fprintf(stderr, "Memory allocation bombed on line %d in %s\n", lnum, fname);
@@ -2659,7 +2659,7 @@ Exit:
   returns pointer to the name of this next element
 ******************************************************************************/
 
-char *setup_element_read_ply (PlyFile *ply, int index, int *elem_count)
+const char *setup_element_read_ply (PlyFile *ply, int index, int *elem_count)
 {
   PlyElement *elem;
 
@@ -2934,7 +2934,7 @@ void describe_other_elements_ply (
 
 typedef struct RuleName {
   int code;
-  char *name;
+  const char *name;
 } RuleName;
 
 RuleName rule_name_list[] = {

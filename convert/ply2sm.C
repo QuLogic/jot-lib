@@ -60,24 +60,24 @@ typedef struct Face {
    void *other_props;       /* other properties */
 } Face;
 
-char *elem_names[] = { /* list of the elements in the object */
+const char *elem_names[] = { /* list of the elements in the object */
    "vertex", "face"
 };
 
 PlyProperty vert_props[] = { /* list of property information for a vertex */
-   {"x", Float32, Float32, offsetof(Vertex,x), 0, 0, 0, 0},
-   {"y", Float32, Float32, offsetof(Vertex,y), 0, 0, 0, 0},
-   {"z", Float32, Float32, offsetof(Vertex,z), 0, 0, 0, 0},
-   {"r", Float32, Float32, offsetof(Vertex,r), 0, 0, 0, 0},
-   {"g", Float32, Float32, offsetof(Vertex,g), 0, 0, 0, 0},
-   {"b", Float32, Float32, offsetof(Vertex,b), 0, 0, 0, 0},
-   {"nx", Float32, Float32, offsetof(Vertex,nx), 0, 0, 0, 0},
-   {"ny", Float32, Float32, offsetof(Vertex,ny), 0, 0, 0, 0},
-   {"nz", Float32, Float32, offsetof(Vertex,nz), 0, 0, 0, 0},
+   {(char *)"x", Float32, Float32, offsetof(Vertex,x), 0, 0, 0, 0},
+   {(char *)"y", Float32, Float32, offsetof(Vertex,y), 0, 0, 0, 0},
+   {(char *)"z", Float32, Float32, offsetof(Vertex,z), 0, 0, 0, 0},
+   {(char *)"r", Float32, Float32, offsetof(Vertex,r), 0, 0, 0, 0},
+   {(char *)"g", Float32, Float32, offsetof(Vertex,g), 0, 0, 0, 0},
+   {(char *)"b", Float32, Float32, offsetof(Vertex,b), 0, 0, 0, 0},
+   {(char *)"nx", Float32, Float32, offsetof(Vertex,nx), 0, 0, 0, 0},
+   {(char *)"ny", Float32, Float32, offsetof(Vertex,ny), 0, 0, 0, 0},
+   {(char *)"nz", Float32, Float32, offsetof(Vertex,nz), 0, 0, 0, 0},
 };
 
 PlyProperty face_props[] = { /* list of property information for a face */
-   {"vertex_indices", Int32, Int32, offsetof(Face,verts),
+   {(char *)"vertex_indices", Int32, Int32, offsetof(Face,verts),
     1, Uint8, Uint8, offsetof(Face,nverts)},
 };
 
@@ -118,7 +118,7 @@ read_file()
 
       /* prepare to read the i'th list of elements */
       int elem_count=0;
-      char *elem_name = setup_element_read_ply (in_ply, i, &elem_count);
+      const char *elem_name = setup_element_read_ply (in_ply, i, &elem_count);
 
       err_adv(debug, "%s: %d elements", elem_name, elem_count);
 
