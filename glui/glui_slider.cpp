@@ -293,7 +293,7 @@ void    GLUI_Slider::draw( int x, int y )
 
    draw_bkgd_box( GLUI_SLIDER_NAME_INDENT-1,
                   GLUI_SLIDER_NAME_INDENT +
-                  string_width(name.string) +
+                  string_width(name) +
                   2*GLUI_SLIDER_NAME_SIDE_BORDER - 1,
                   0,
                   0 +
@@ -312,7 +312,7 @@ void    GLUI_Slider::draw( int x, int y )
 
    draw_active_box(        GLUI_SLIDER_NAME_INDENT,
                            GLUI_SLIDER_NAME_INDENT +
-                           string_width(name.string) +
+                           string_width(name) +
                            2*GLUI_SLIDER_NAME_SIDE_BORDER - 1,
                            0,
                            GLUI_SLIDER_FONT_FULL_HEIGHT +
@@ -344,7 +344,7 @@ void   GLUI_Slider::update_size( void )
            2;
 
    min_w = GLUI_SLIDER_NAME_INDENT +
-           string_width(name.string) +
+           string_width(name) +
            2*GLUI_SLIDER_NAME_SIDE_BORDER +
            string_width(GLUI_SLIDER_TRUNCATE_STRING) +
            2*GLUI_SLIDER_VAL_SIDE_BORDER +
@@ -419,7 +419,7 @@ void   GLUI_Slider::draw_val( void )
 
    max_w = w +1 -
            (GLUI_SLIDER_NAME_INDENT +
-            string_width(name.string) +
+            string_width(name) +
             2*GLUI_SLIDER_NAME_SIDE_BORDER +
             2*GLUI_SLIDER_VAL_SIDE_BORDER + 2);
 
@@ -442,7 +442,7 @@ void   GLUI_Slider::draw_val( void )
 
    draw_bkgd_box(
       GLUI_SLIDER_NAME_INDENT +
-      string_width(name.string) +
+      string_width(name) +
       2*GLUI_SLIDER_NAME_SIDE_BORDER +
       GLUI_SLIDER_VAL_SIDE_BORDER - 1,
 
@@ -677,7 +677,7 @@ void   GLUI_Slider::set_num_graduations( int g )
 
 GLUI_Slider::GLUI_Slider( void )
 {
-   sprintf( name, "Slider: %p", this );
+   glui_format_str( name, "Slider: %p", this );
 
    w            = GLUI_SLIDER_WIDTH;
    h            = GLUI_SLIDER_HEIGHT;

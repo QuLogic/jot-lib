@@ -200,7 +200,7 @@ public:
   int check_fit(const char *s);
 
   GLUI_ActiveText( void ) {
-    sprintf( name, "ActiveText: %p", this );
+    glui_format_str( name, "ActiveText: %p", this );
     h            = GLUI_ACTIVETEXT_SIZE;
     w            = 100;
     alignment    = GLUI_ALIGN_LEFT;

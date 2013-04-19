@@ -161,7 +161,7 @@ void    GLUI_Graph::draw( int x, int y )
 
 	draw_bkgd_box( GLUI_GRAPH_NAME_INDENT-1,
 						GLUI_GRAPH_NAME_INDENT +
-						string_width(name.string) +
+						string_width(name) +
 						2*GLUI_GRAPH_NAME_SIDE_BORDER - 1,
 						0,
 						0 +
@@ -180,7 +180,7 @@ void    GLUI_Graph::draw( int x, int y )
 
 	draw_active_box(	GLUI_GRAPH_NAME_INDENT,
 							GLUI_GRAPH_NAME_INDENT +
-							string_width(name.string) +
+							string_width(name) +
 							2*GLUI_GRAPH_NAME_SIDE_BORDER - 1,
 							0,
 							GLUI_GRAPH_FONT_FULL_HEIGHT +
@@ -209,7 +209,7 @@ void   GLUI_Graph::update_size( void )
 			1;
 
 	name_w =	GLUI_GRAPH_NAME_INDENT +
-				string_width(name.string) +
+				string_width(name) +
 				2*GLUI_GRAPH_NAME_SIDE_BORDER +
 				GLUI_GRAPH_NAME_INDENT -
 				1;
@@ -483,7 +483,7 @@ void    GLUI_Graph::execute_callback( void )
 
 GLUI_Graph::GLUI_Graph( void )
 {
-	sprintf( name, "Graph: %p", this );
+	glui_format_str( name, "Graph: %p", this );
 
 	w								= GLUI_GRAPH_WIDTH;
 	h								= GLUI_GRAPH_HEIGHT;

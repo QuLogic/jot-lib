@@ -169,11 +169,11 @@ void   GLUI_ActiveText::update_size( void )
 
 void    GLUI_ActiveText::set_text( const char *text )
 {
-  if (strcmp(text,name) == 0) return;
+  if (name == text) return;
 
   int old_w = w;
 
-  strncpy((char*)name,text,sizeof(GLUI_String));
+  name = text;
 
   update_size();
 
@@ -205,7 +205,7 @@ void    GLUI_ActiveText::set_text( char *text )
 {
   int orig;
 
-  if (strcmp(text,name) == 0) return;
+  if (name == text) return;
 
   if ( can_draw() )
   {
@@ -219,7 +219,7 @@ void    GLUI_ActiveText::set_text( char *text )
   }
 
   int old_w = w;
-  strncpy((char*)name,text,sizeof(GLUI_String));
+  name = text;
   update_size();
   if ((w != old_w)&&(glui)) glui->refresh();
 

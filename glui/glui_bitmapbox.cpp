@@ -305,7 +305,7 @@ void    GLUI_BitmapBox::draw( int x, int y )
 
    if (border && (margin>=2))
    {
-      if (string_width(name.string) > 0)
+      if (string_width(name) > 0)
       {
 	      draw_emboss_box(	margin - 2,
 							      (w-1) - margin + 2,
@@ -319,7 +319,7 @@ void    GLUI_BitmapBox::draw( int x, int y )
                         GLUI_BITMAPBOX_NAME_INDENT-1,
 						      margin +
                         GLUI_BITMAPBOX_NAME_INDENT +
-						      string_width(name.string) +
+						      string_width(name) +
 						      2*GLUI_BITMAPBOX_NAME_SIDE_BORDER - 1,
 						      margin, /* -2 negative?! */
 						      margin +
@@ -349,13 +349,13 @@ void    GLUI_BitmapBox::draw( int x, int y )
 
    if (border && (margin >= 2))
    {
-      if (string_width(name.string) > 0)
+      if (string_width(name) > 0)
       {
 	      draw_active_box(	margin +
                            GLUI_BITMAPBOX_NAME_INDENT,
 							      margin +
                            GLUI_BITMAPBOX_NAME_INDENT +
-							      string_width(name.string) +
+							      string_width(name) +
 							      2*GLUI_BITMAPBOX_NAME_SIDE_BORDER - 1,
 							      margin - 2,
 							      margin +
@@ -396,7 +396,7 @@ void   GLUI_BitmapBox::update_size( void )
 
    if (border && (margin >=2))
    {
-      if (string_width(name.string) > 0)
+      if (string_width(name) > 0)
       {
 	      h =	margin +
                GLUI_BITMAPBOX_NAME_TOP_BORDER +
@@ -409,7 +409,7 @@ void   GLUI_BitmapBox::update_size( void )
 
 	      name_w =	margin +
                   GLUI_BITMAPBOX_NAME_INDENT +
-				      string_width(name.string) +
+				      string_width(name) +
 				      2*GLUI_BITMAPBOX_NAME_SIDE_BORDER +
 				      GLUI_BITMAPBOX_NAME_INDENT +
                   margin;
@@ -685,7 +685,7 @@ void    GLUI_BitmapBox::execute_callback( void )
 
 GLUI_BitmapBox::GLUI_BitmapBox( void )
 {
-	sprintf( name, "BitmapBox: %p", this );
+	glui_format_str( name, "BitmapBox: %p", this );
 
 	w								= GLUI_BITMAPBOX_WIDTH;
 	h								= GLUI_BITMAPBOX_HEIGHT;
