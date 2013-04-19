@@ -832,7 +832,7 @@ Primitive::extend_branch(
    // proposed plane normal the stroke will project into:
    const double MAXDOT = 0.71;
    if (fabs(P1.normal() * n) > MAXDOT ||
-      (!base2.empty()) && fabs(P2.normal() * n) > MAXDOT) {
+      (!base2.empty() && fabs(P2.normal() * n) > MAXDOT)) {
       err_adv(debug, "Primitive::extend_branch: surface normals too incompatible");
       return 0;
    }

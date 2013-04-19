@@ -1090,8 +1090,8 @@ Cam_int_fp::focus(
       geom->intersect(sil_l);
 
       if ((r.norm().normalized() * Wvec::Y()) < 0.98 &&
-          ( sil_r.success() && !sil_l.success()) ||
-          (!sil_r.success() &&  sil_l.success())) {
+          (( sil_r.success() && !sil_l.success()) ||
+           (!sil_r.success() &&  sil_l.success()))) {
          Wvec sil_comp;                         // do silhouette focus
          if (sil_r.success())
             sil_comp = -data->right_v() * 6.0 * r.dist();

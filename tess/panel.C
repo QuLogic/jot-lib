@@ -926,8 +926,9 @@ Panel::re_tess(PIXEL_list pts, bool scribble) // pass by copy
       if (!bc2) return false;
       if (curves().num() == 3)
          return split_tri(bp1, bc2, pts, scribble);
-      else;
+      else {
          // XXX - to fill in
+      }
 
    } else if (!bp1 && !bp2){ // 2 curves or a disk
       if ((!bc1 || !bc2) && !disk) return false;  
