@@ -215,7 +215,7 @@ NPRview::draw_setup()
    // But not the first time round -- goes wacky
    // for some obscure gl reason...
    AuxRefImage *aux = AuxRefImage::lookup(_view);
-   if (started_drawing && aux && VIEW::stamp()>=0) aux->update();
+   if (started_drawing && aux) aux->update();
 
    started_drawing = true; // don't ask =(
 

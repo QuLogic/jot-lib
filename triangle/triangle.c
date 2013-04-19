@@ -632,7 +632,7 @@ struct memorypool {
   VOID *deaditemstack;
   VOID **pathblock;
   VOID *pathitem;
-  int alignbytes;
+  size_t alignbytes;
   int itembytes;
   int itemsperblock;
   int itemsfirstblock;
@@ -3934,14 +3934,14 @@ struct memorypool *pool;
 
 #ifdef ANSI_DECLARATORS
 void poolinit(struct memorypool *pool, int bytecount, int itemcount,
-              int firstitemcount, int alignment)
+              int firstitemcount, size_t alignment)
 #else /* not ANSI_DECLARATORS */
 void poolinit(pool, bytecount, itemcount, firstitemcount, alignment)
 struct memorypool *pool;
 int bytecount;
 int itemcount;
 int firstitemcount;
-int alignment;
+size_t alignment;
 #endif /* not ANSI_DECLARATORS */
 
 {
@@ -4320,7 +4320,7 @@ struct behavior *b;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  int trisize;
+  size_t trisize;
 
   /* The index within each triangle at which the extra nodes (above three)  */
   /*   associated with high order elements are found.  There are three      */
