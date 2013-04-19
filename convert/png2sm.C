@@ -56,7 +56,7 @@ main(int argc, char *argv[])
    for (z=0; z<img.height(); z++) {
       top_verts += Bvert_list();
       for (x=0; x<img.width(); x++) {
-         top_verts.last() += mesh->add_vertex(Wpt(x,img.pixel(x,z),z));
+         top_verts.last() += mesh->add_vertex(Wpt(x,img.pixel_grey_dbl(x,z),z));
       }
    }
 
