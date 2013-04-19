@@ -32,5 +32,11 @@ ADD_LIBRARY(glui
 	arcball.cpp
 	algebra3.cpp
 	quaternion.cpp
-	viewmodel.cpp)
+	viewmodel.cpp
+	# The following four files appear to be custom items.
+	glui_activetext.cpp
+	glui_bitmapbox.cpp
+	glui_graph.cpp
+	glui_slider.cpp
+)
 
