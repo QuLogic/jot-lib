@@ -90,7 +90,7 @@ class TEXTUREgl : public TEXTURE {
    void    set_mipmap(bool mipmap);
 
    void    set_save_img(bool b = 1) { _save_img = b; }
-   const   GLenum  target() const {return _target; }
+   GLenum  target() const {return _target; }
    
    void declare_texture();
  
@@ -107,7 +107,7 @@ protected:
    GLint        _wrap_s;
    GLint        _wrap_t;
    GLint        _tex_fn;    // texture function (GL_DECAL etc.)
-   const GLenum _target;    // GL_TEXTURE_2D, GL_TEXTURE_3D, or
+   GLenum       _target;    // GL_TEXTURE_2D, GL_TEXTURE_3D, or
                             // GL_TEXTURE_CUBE_MAP
 
    GLenum bpp_to_format() const {
