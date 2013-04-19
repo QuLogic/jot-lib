@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "glut_winsys.H"
 #include "tty_glut.H"

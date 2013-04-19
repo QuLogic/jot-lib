@@ -31,7 +31,7 @@
 #define BUFFER_DIRECTORY         "nprdata/debugging/"
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "geom/winsys.H"
 #include "geom/world.H"

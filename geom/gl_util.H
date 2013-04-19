@@ -27,7 +27,7 @@
 #include <cassert>
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "disp/color.H"
 #include "mlib/points.H"

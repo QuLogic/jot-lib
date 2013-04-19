@@ -20,7 +20,7 @@
 #endif
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "std/stop_watch.H"
 #include "gtex/buffer_ref_image.H"

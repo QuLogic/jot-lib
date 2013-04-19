@@ -27,7 +27,7 @@
  */
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 /*!
  *  \brief Jot interface for loading OpenGL extensions.

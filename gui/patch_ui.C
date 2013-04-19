@@ -22,7 +22,7 @@
 #include "mesh/bmesh.H"
 #include "mesh/patch.H"
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "geom/winsys.H"
 #include "geom/world.H"

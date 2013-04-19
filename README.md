@@ -24,6 +24,7 @@ libraries:
 
  * OpenGL
  * GLUT
+ * GLEW
  * libpng
 
 How to build

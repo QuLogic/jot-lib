@@ -24,7 +24,8 @@
  *
  */
 
-#include "glew/glew.H"
+#include <GL/glew.h>
+#include "glew/glew_singleton.H"
 #include "gl_extensions.H"
 #include "std/config.H"
 

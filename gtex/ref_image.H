@@ -22,7 +22,7 @@
 #define REF_IMAGE_H_IS_INCLUDED
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "disp/colors.H"         // Color namespace and utility functions
 #include "disp/ref_img_client.H" 

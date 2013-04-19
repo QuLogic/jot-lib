@@ -21,7 +21,7 @@
 
 #include "disp/view.H"
 #include "geom/winsys.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 #include "glui/glui.h" 
 #include "std/support.H"
 #include "base_ui.H"

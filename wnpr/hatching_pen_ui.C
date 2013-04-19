@@ -38,7 +38,7 @@
 #define HATCHING_SLIDER_W            250
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "geom/winsys.H"
 #include "glui/glui.h"

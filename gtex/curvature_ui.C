@@ -30,7 +30,7 @@
 using namespace std;
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "geom/winsys.H"
 #include "glui/glui.h"

@@ -1,7 +1,7 @@
 
 # Common flags...
-SET(PROG_JOT_LIBS mesh mlib disp geom net std dlhandler dev sps glew)
-SET(PROG_LIBS ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${PNG_LIBRARIES})
+SET(PROG_JOT_LIBS mesh mlib disp geom net std dlhandler dev sps)
+SET(PROG_LIBS ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${PNG_LIBRARIES})
 
 #
 # Program 1 - m2sm

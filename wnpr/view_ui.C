@@ -29,7 +29,7 @@
 #define ID_MASK                  ((1<<ID_SHIFT)-1)
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "geom/winsys.H"
 #include "geom/world.H"

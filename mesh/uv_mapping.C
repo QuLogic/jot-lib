@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "std/support.H" 
-#include "glew/glew.H" // XXX - remove when debugging phase is over
+#include <GL/glew.h> // XXX - remove when debugging phase is over
 
 #include "uv_data.H"
 #include "uv_mapping.H"

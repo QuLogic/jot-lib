@@ -11,7 +11,7 @@
 using namespace std;
 
 #include "glew/glew_singleton.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 GLEWSingleton::GLEWSingleton()
    : initialized(false)

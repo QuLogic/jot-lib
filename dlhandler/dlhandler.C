@@ -23,7 +23,7 @@
  ***********************************************************************/
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "dlhandler.H"
 #include "std/config.H"

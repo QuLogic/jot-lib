@@ -19,7 +19,7 @@
 #include <unistd.h>
 #endif
 
-#include "glew/glew.H" // must come first
+#include <GL/glew.h> // must come first
 
 #include "std/config.H"
 #include "glut_winsys.H"

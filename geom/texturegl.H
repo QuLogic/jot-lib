@@ -22,7 +22,7 @@
 #define __TEXTUREGL_H
 
 #include "std/support.H"
-#include "glew/glew.H" // must come first
+#include <GL/glew.h> // must come first
 
 #include "texture.H"
 #include "disp/view.H"

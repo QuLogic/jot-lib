@@ -20,7 +20,7 @@
  *************************************************************************/
 
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "disp/colors.H"
 #include "geom/gl_util.H"       // float4

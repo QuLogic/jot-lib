@@ -22,7 +22,7 @@
  *    DATE: Tue Apr  1 22:57:46 US/Eastern 1997
  *************************************************************************/
 #include "std/support.H"
-#include "glew/glew.H"
+#include <GL/glew.h>
 
 #include "disp/colors.H"
 #include "geom/text2d.H"
