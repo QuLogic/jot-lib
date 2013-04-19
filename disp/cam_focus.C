@@ -414,12 +414,7 @@ CamCruise::tick(void)
    CAMdataptr data(_cam->data());
    //data->set_center(_cent);
    
-
-   XYpt        cpt   = data->center();
    XYvec      delta(te-tp);
-   double     ratio;
-
-
 
    if(_travel)
       {
@@ -446,8 +441,6 @@ CamCruise::tick(void)
             data->set_center(data->at());
             data->translate(velocity);
   
-            ratio = data->height() / data->width() * 
-               (movec * data->at_v()) * data->width() / data->focal();
             data->changed();
 
       }

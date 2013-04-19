@@ -266,18 +266,6 @@ ProxyUVStroke::stroke_setup(Bface* face, bool selected)
          Wpt pt = _ps->getWptfromUV(base_uv + _uv_pts[i]);
          CNDCZpt p = NDCZpt(pt);
 
-     
-         static ColorRefImage* col_ref = 0;
-         static uint     col_ref_stamp = UINT_MAX;
-         // cache col ref image for the current frame
-         if (col_ref_stamp != VIEW::stamp()) {
-            col_ref = ColorRefImage::lookup(0, VIEW::peek());
-            col_ref_stamp = VIEW::stamp();
-         }
-//         COLOR col = col_ref->color(p);
-//     double x = clamp(1.0 - col.luminance(), 0.0,1.0);
-      
-
          double w = (selected) ? 1.0 : 1.0;
          double a = (selected) ? 1.0 : 1.0;
 

@@ -638,14 +638,11 @@ Cam_int_fp::cruise_zoom(
    State *&
    )
 {
-   //XYvec      delta(_te-_tp);
-   //double     ratio;
-
    DEVice_2d *ptr=(DEVice_2d *)e._d;
    CAMptr     cam  (e.view()->cam());
    CAMdataptr data (cam->data());
    XYvec      delta(ptr->delta());
-   double     ratio;
+   //double     ratio;
 
    _tp    = ptr->old(); 
    _te    = ptr->cur();
@@ -667,8 +664,8 @@ Cam_int_fp::cruise_zoom(
       // data->translate(.1 * movec.normalized() * (movec.length() * delta[1] * -4));
       data->translate(_speed * movec.normalized() * (movec.length() * delta[1] * -4));
 
-      ratio = cam->height() / cam->width() * 
-         (movec * data->at_v()) * data->width() / data->focal();
+      //ratio = cam->height() / cam->width() *
+      //   (movec * data->at_v()) * data->width() / data->focal();
 
    } else {
       Wpt     spt  (XYpt(ptr->cur()[0],_scale_pt[1]));
@@ -677,7 +674,7 @@ Cam_int_fp::cruise_zoom(
       data->translate( svec * (1.0 - sfact));
       data->set_width (data->width() * sfact);
       data->set_height(data->height()* sfact);
-      ratio = data->height();
+      //ratio = data->height();
    }
 
    //data->translate(-delta[0]/2 * data->right_v() * ratio);

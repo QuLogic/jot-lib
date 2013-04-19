@@ -1742,7 +1742,6 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 
    bool close_loop = false;    
    double sample_scale = _vis_sampling * _pix_to_ndc_scale;
-   double dist_from_last_sample =0;
    while ( lb < zn ) {
 
       //
@@ -1788,7 +1787,6 @@ ZXedgeStrokeTexture::sils_to_ndcz()
       // index in _npoints of the start of the path we'll build:
       pstart = _sil_segs.num();
 
-      dist_from_last_sample = 0;
       // Iterate over zx strip from lb to le:
       for (int i = lb; i <= le; i++ ) {
 
@@ -1806,9 +1804,6 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 
          double seg_len = (npt_last - npt1).planar_length();
 
-         // dist_from_last_sample + seg_len > sample_scale
-         //
-         //
          double dl = seg_len / sample_scale;
          if (dl < 1 && i != le  && i != lb) {
             continue;
@@ -2093,15 +2088,12 @@ ZXedgeStrokeTexture::resample_ndcz_seethru()
    int i, j, last;
    int loop_begin=0;
    int loop_end=0;
-   int seg_start;
-   int seg_end;
-
 
    int sections=0;
 
    int ref_num = _ref_segs.num();
 
-  double dist_from_last_sample=0;
+  double dist_from_last_sample;
 
    _sil_segs.clear(); //clear out the new array
 
@@ -2123,10 +2115,7 @@ ZXedgeStrokeTexture::resample_ndcz_seethru()
       }        
       assert(cur_type == _ref_segs[loop_end].type());
 
-      seg_start = _sil_segs.num();
       last= loop_begin;
-
-
 
       for ( i=loop_begin; i <= loop_end; i++ ) {
 
@@ -2264,8 +2253,6 @@ ZXedgeStrokeTexture::resample_ndcz_seethru()
          }
       }
 
-      seg_end = _sil_segs.num();
-
       loop_begin = loop_end + 1;
    }
 }
@@ -2291,8 +2278,10 @@ ZXedgeStrokeTexture::resample_ndcz()
    int i, j, last;
    int loop_begin=0;
    int loop_end=0;
+#if 0
    int seg_start;
    int seg_end;
+#endif
 
    int sections=0;
 
@@ -2312,7 +2301,9 @@ ZXedgeStrokeTexture::resample_ndcz()
       while ( loop_end+1 < ref_num && _ref_segs[++loop_end].e() )
          ; // loop_end stops on on first break
 
+#if 0
       seg_start = _sil_segs.num();
+#endif
 
       last= loop_begin;
 
@@ -2381,11 +2372,10 @@ ZXedgeStrokeTexture::resample_ndcz()
          }
       }
 
+#if 0
       seg_end = _sil_segs.num();
 
-
       //clean up loops after this pass as well
-      /*
       if ( 2==3 && seg_end-seg_start > 0 && _sil_segs[seg_start].p() == _sil_segs[seg_end].p() && _sil_segs[seg_start].v() == SIL_VISIBLE) { 
          //we's in a LOOP!
 
@@ -2411,7 +2401,7 @@ ZXedgeStrokeTexture::resample_ndcz()
             }
          }
       }
-      */
+#endif
 
       loop_begin = loop_end + 1;
 
@@ -4501,7 +4491,6 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
 
       double   brute_min_dist  = DBL_MAX;   // distance to nearest point
       int      brute_min_index = -1;
-      double   brute_s         = -1;               // arc-len param of nearest point
       double   brute_ffs       = -1;
       NDCpt    brute_min_pt;   // for debugging
 
@@ -4518,7 +4507,6 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
          if (d < brute_min_dist) {
             brute_min_index = j;
             brute_min_dist = d;
-            brute_s = get_s(j) + q.dist(pt(j)); // arc-len parameter of q
             brute_ffs= ff_len(j) + q.dist(pt(j));
             brute_min_pt = q;
          }

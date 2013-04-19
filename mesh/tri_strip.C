@@ -84,7 +84,6 @@ TriStrip::backup_strip(Bface* f, Bvert*& a)
 
    Bface* ret = f;
    Bvert* b   = f->next_vert_ccw(a);
-   Bvert* c   = f->next_vert_ccw(b);
    Bedge* e;
 
    int i = 0;
@@ -96,7 +95,6 @@ TriStrip::backup_strip(Bface* f, Bvert*& a)
       mark_face(f);
       ret = f;
       Bvert* d = f->other_vertex(a,b);
-      c = b;
       b = a;
       a = d;
       i++;
