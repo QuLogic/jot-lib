@@ -687,7 +687,6 @@ GLUI_BitmapBox::GLUI_BitmapBox( void )
 {
 	sprintf( name, "BitmapBox: %p", this );
 
-	type							= GLUI_CONTROL_BITMAPBOX;
 	w								= GLUI_BITMAPBOX_WIDTH;
 	h								= GLUI_BITMAPBOX_HEIGHT;
 	can_activate				= true;

@@ -485,7 +485,6 @@ GLUI_Graph::GLUI_Graph( void )
 {
 	sprintf( name, "Graph: %p", this );
 
-	type							= GLUI_CONTROL_GRAPH;
 	w								= GLUI_GRAPH_WIDTH;
 	h								= GLUI_GRAPH_HEIGHT;
 	can_activate				= true;

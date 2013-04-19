@@ -679,7 +679,6 @@ GLUI_Slider::GLUI_Slider( void )
 {
    sprintf( name, "Slider: %p", this );
 
-   type         = GLUI_CONTROL_SLIDER;
    w            = GLUI_SLIDER_WIDTH;
    h            = GLUI_SLIDER_HEIGHT;
    can_activate = true;
