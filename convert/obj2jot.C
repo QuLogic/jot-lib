@@ -103,8 +103,6 @@
 #include "std/config.H"
 #include "net/io_manager.H"
 
-static bool debug = true; //Config::get_var_bool("DEBUG_OBJ2JOT",false,true);
-
 inline void
 skip_line(istream& in)
 {
