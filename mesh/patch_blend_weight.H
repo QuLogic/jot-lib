@@ -76,9 +76,8 @@ class PatchBlendWeight : public SimplexData {
    //******** LOOKUP ********
 
    // the unique ID used to lookup PatchBlendWeight:
-   static uint key() {
-      // XXX - not 64-bit safe:
-      return uint(**static_name());
+   static uintptr_t key() {
+      return uintptr_t(**static_name());
    }
 
    // Lookup a PatchBlendWeight* from a Bvert

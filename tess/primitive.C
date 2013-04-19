@@ -393,7 +393,7 @@ Primitive::create_wafer(CWpt_list& pts, Bpoint* skel)
    assert(skel);
    assert(mesh() && patch());
 
-   SimplexFrame* f = new BpointFrame((uint)this, skel);
+   SimplexFrame* f = new BpointFrame((uintptr_t)this, skel);
 
    // create top verts and faces
    VertMapper vmap;
@@ -521,7 +521,7 @@ Primitive::build_ball(Bpoint* skel, double pix_rad)
    absorb_skel(skel);
 
    VertFrame* frame = new VertFrame(
-      (uint)this,
+      (uintptr_t)this,
       skel->vert(),
       skel->frame().X(),
       skel->frame().Y()
@@ -1179,7 +1179,7 @@ create_skel_point(const LMESHptr& mesh, CBface_list& disk, CWvec& n, CWpt& p)
 }
 
 inline SimplexFrame*
-get_end_frame(uint key, Bpoint* b, Bcurve* c, int bnum, CWvec& n)
+get_end_frame(uintptr_t key, Bpoint* b, Bcurve* c, int bnum, CWvec& n)
 {
    if (b)
       return new BpointFrame(key, b);
@@ -1407,7 +1407,7 @@ Primitive::build_tube(
    // Do internal rings and bands (if any)
    for (int k=0; k<edges.num(); k++) {
       // Get frame for the ring
-      SimplexFrame* frame = new EdgeFrame((uint)this, edges[k], n);
+      SimplexFrame* frame = new EdgeFrame((uintptr_t)this, edges[k], n);
 
       // Generate the ring of verts.
       // Interpolate local coords if using 2 sets:
@@ -1448,7 +1448,7 @@ Primitive::build_tube(
 
    } else {
       // no quad 2: use frame from skel point or curve (whichever exists):
-      f2 = get_end_frame((uint)this, skel_point, skel_curve, 2, n);
+      f2 = get_end_frame((uintptr_t)this, skel_point, skel_curve, 2, n);
       // use u1 local coords shifted forward by
       // displacement from q1 to 1st control point:
       double offset = L*pcalc.c(0);
@@ -1523,7 +1523,7 @@ extract_sides(CBface_list& bases, CEdgeStrip& side, Bvert_list& side2, Bvert_lis
 }
 
 inline SimplexFrame*
-get_frame(uint key, CBface_list& bases, CWvec& n, Bvert* a1, Bvert* a2, Bvert* a4, Bvert* a3, Bvert_list& vlist)
+get_frame(uintptr_t key, CBface_list& bases, CWvec& n, Bvert* a1, Bvert* a2, Bvert* a4, Bvert* a3, Bvert_list& vlist)
 {
    Bedge* start = lookup_edge(a1, a2);
    Bedge* end = lookup_edge(a3, a4);
@@ -1641,10 +1641,10 @@ Primitive::extend(
    // get simplex frame
    SimplexFrame* f1;
    if (side.num()%2 == 0)
-      f1 = new VertFrame((uint)this, side.vert(side.num()/2), Wvec(1,1,1), n);
+      f1 = new VertFrame((uintptr_t)this, side.vert(side.num()/2), Wvec(1,1,1), n);
    else {
       Bedge* e = side.edge(side.num()/2);
-      f1 = new EdgeFrame((uint)this, e, n, 0.5, side.vert(side.num()/2)==e->v1());
+      f1 = new EdgeFrame((uintptr_t)this, e, n, 0.5, side.vert(side.num()/2)==e->v1());
    }
 
    // create vertices of based on wpt_listmap:
@@ -1716,7 +1716,7 @@ Primitive::extend(
    // Do internal cross sections and bands (if any)
    for (int k=side2.num()-2; k>=0; k--) {
       // Get frame for the ring
-      SimplexFrame* frame = get_frame((uint)this, bases, n, side2[k], side2[k+1], side4[k], side4[k+1], cur_cross);
+      SimplexFrame* frame = get_frame((uintptr_t)this, bases, n, side2[k], side2[k+1], side4[k], side4[k+1], cur_cross);
 
       // Generate the cross section of verts.
       cur.clear();
@@ -2113,20 +2113,20 @@ Primitive::build_simple_tube(
    Bvert_list cur (u.num());
 
    // build 1st ring, add end cap
-   CoordFrame* f1 = new SkelFrame((uint)this, b1->vert(), n, 0, edges.first());
+   CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, 0, edges.first());
    build_ring(f1, Wtransf::translation(Wvec(-w/2,0,0)) * u, prev);
    build_cap(prev[1], prev[0], prev[3], prev[2]);
 
    // Do internal rings and bands (if any)
    double dv = 1.0/(edges.num() + 1);
    for (int k=0; k<edges.num(); k++) {
-      build_ring(new EdgeFrame((uint)this, edges[k], n), u, cur);
+      build_ring(new EdgeFrame((uintptr_t)this, edges[k], n), u, cur);
       build_band(prev, cur, 1.0/cur.num(), k*dv, (k+1)*dv);
       prev=cur;
    }
 
    // build last ring, add end cap
-   CoordFrame* f2 = new SkelFrame((uint)this, b2->vert(), n, edges.last(), 0);
+   CoordFrame* f2 = new SkelFrame((uintptr_t)this, b2->vert(), n, edges.last(), 0);
    build_ring(f2, Wtransf::translation(Wvec(w/2,0,0)) * u, cur);
    build_cap(cur[0], cur[1], cur[2], cur[3]);
 

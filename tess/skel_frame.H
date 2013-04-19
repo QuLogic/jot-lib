@@ -45,7 +45,7 @@ class SkelFrame : public VertFrame {
 
    //******** MANAGERS ********
 
-   SkelFrame(uint key,
+   SkelFrame(uintptr_t key,
              Bvert* v,
              CWvec& n,
              Bedge* prev=0,
@@ -59,7 +59,7 @@ class SkelFrame : public VertFrame {
       _dirty = 1;
    }
 
-   SkelFrame(uint key,
+   SkelFrame(uintptr_t key,
              Bvert* v,
              CWvec& t,
              CWvec& n,

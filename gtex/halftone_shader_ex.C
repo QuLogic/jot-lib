@@ -179,7 +179,7 @@ class StripTexCoordsCB2 : public GLStripCB {
 		   gradient.U_grad[2] = derivative[0]; 
 		   gradient.V_grad[2] = derivative[1]; 
          
-         face_gradient_map[int(faces[i])]= gradient; //uses the face pointer as a key
+         face_gradient_map[faces[i]]= gradient; //uses the face pointer as a key
 
       }
 
@@ -214,7 +214,7 @@ class StripTexCoordsCB2 : public GLStripCB {
 	   {
          //getting the previously computed face gradients
 
-         UV_grad grad = face_gradient_map[int(faces[i])];
+         UV_grad grad = face_gradient_map[faces[i]];
          
          U_vec = grad.U_grad;
          V_vec = grad.V_grad;
@@ -253,7 +253,7 @@ protected :
 	GLint	 dU_loc;
 	GLint	 dV_loc;
 
-   map<int,UV_grad> face_gradient_map;
+   map<Bface*,UV_grad> face_gradient_map;
    bool valid_gradients;
 
 };

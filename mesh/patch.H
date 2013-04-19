@@ -892,7 +892,7 @@ class PatchBlend : public SimplexData {
  public:
    //******** MANAGERS ********
    // using key, record data on v
-   PatchBlend(uint key, Bvert* v, double blend) :
+   PatchBlend(uintptr_t key, Bvert* v, double blend) :
       SimplexData(key, v),
       _blend(blend) {}
 
@@ -906,10 +906,10 @@ class PatchBlend : public SimplexData {
 
    //******** LOOKUPS ********
    // get the PatchBlend on v
-   static PatchBlend* lookup(uint key, Bvert* v) {
+   static PatchBlend* lookup(uintptr_t key, Bvert* v) {
       return v ? upcast(v->find_data(key)) : 0;
    }   
-   static void lookup_create(uint key, Bvert* v, double b) {
+   static void lookup_create(uintptr_t key, Bvert* v, double b) {
       PatchBlend* ret = lookup(key,v);
       if (!ret) {
          ret = new PatchBlend(key,v, b);
@@ -918,7 +918,7 @@ class PatchBlend : public SimplexData {
 
    // If one already exists overwrites the values to given one if
    // already exists
-   static void lookup_create_overwrite(uint key, Bvert* v, double b) {
+   static void lookup_create_overwrite(uintptr_t key, Bvert* v, double b) {
       PatchBlend* ret = lookup(key,v);
       if (!ret) {
          ret = new PatchBlend(key,v, b);

@@ -39,7 +39,7 @@ class SimplexFrame : public SimplexData, public CoordFrame {
 
    //******** MANAGERS ********
 
-   SimplexFrame(uint key, Bsimplex* s, CWvec& t, mlib::CWvec& n) :
+   SimplexFrame(uintptr_t key, Bsimplex* s, CWvec& t, mlib::CWvec& n) :
       SimplexData(key, s),
       _dirty(1) { set_(t,n); }
 

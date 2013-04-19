@@ -96,8 +96,8 @@ class InflateVertData : public SimplexData {
    ARRAY<OffsetVert> _verts;
 
    // The unique ID used to lookup InflateVertData:
-   static uint key() {
-      static uint ret = (uint)**static_name();
+   static uintptr_t key() {
+      static uintptr_t ret = (uintptr_t)**static_name();
       return ret;
    }
 

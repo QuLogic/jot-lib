@@ -86,8 +86,8 @@ class Bsimplex {
 
    //******** KEY/LOOKUP ********
 
-   uint  key() const { return _key ? _key : ((Bsimplex*)this)->generate_key();}
-   static Bsimplex* lookup(uint k) {
+   uintptr_t key() const { return _key ? _key : ((Bsimplex*)this)->generate_key();}
+   static Bsimplex* lookup(uintptr_t k) {
       return (k<(uint)_table.num()) ? _table[k] : 0;
    }
 
@@ -132,12 +132,12 @@ class Bsimplex {
 
    //******** SIMPLEX DATA ********
 
-   SimplexData* find_data(uint key) const {
+   SimplexData* find_data(uintptr_t key) const {
       return _data_list ? _data_list->get_item(key) : 0;
    }
 
-   SimplexData* find_data(Cstr_ptr& s) const { return find_data((uint)**s);}
-   SimplexData* find_data(void *key)   const { return find_data((uint)key);}
+   SimplexData* find_data(Cstr_ptr& s) const { return find_data((uintptr_t)**s);}
+   SimplexData* find_data(void *key)   const { return find_data((uintptr_t)key);}
    
    void add_simplex_data(SimplexData* sd);
    void rem_simplex_data(SimplexData* sd) {
@@ -259,7 +259,7 @@ class Bsimplex {
  // PROTECTED
  //*******************************************************
  protected:
-   uint              _key;       // unique id for looking up this simplex
+   uintptr_t         _key;       // unique id for looking up this simplex
    uint              _flag;      // for graph searching and boolean states
    BMESH*            _mesh;      // mesh containing this simplex
    SimplexDataList*  _data_list; // optional simplex data list
@@ -267,7 +267,7 @@ class Bsimplex {
    //******** INTERNAL METHODS ********
 
    // called once (first time _key is accessed):
-   uint generate_key();
+   uintptr_t generate_key();
 
    // Table for looking up a Bsimplex from its "key" value. First slot
    // contains a null item, so index of 0 always looks up a null item.

@@ -99,7 +99,7 @@ class ProxySurface {
 class ProxyData : public SimplexData {
  public:
    ProxyData(Bsimplex* s, ProxySurface* p, bool marked) :
-      SimplexData(uint(p), s),
+      SimplexData(uintptr_t(p), s),
       _marked(marked) {}
 
    //******** RUN TIME TYPE ID ********
@@ -109,7 +109,7 @@ class ProxyData : public SimplexData {
 
    // return the data stored on a simplex:
    static ProxyData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uint(p))) : 0;
+      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : 0;
    }
 
    // return the data stored on a simplex, and create it if needed:
@@ -150,7 +150,7 @@ class ProxyData : public SimplexData {
 class PixelsData : public SimplexData {
  public:
    PixelsData(Bsimplex* s, ProxySurface* p, PIXEL px) :
-      SimplexData(uint(p), s),
+      SimplexData(uintptr_t(p), s),
       _pixel(px) {}
 
    //******** RUN TIME TYPE ID ********
@@ -160,7 +160,7 @@ class PixelsData : public SimplexData {
 
    // return the data stored on a simplex:
    static PixelsData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uint(p))) : 0;
+      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : 0;
    }
 
    // return the data stored on a simplex, and create it if needed:

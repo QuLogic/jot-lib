@@ -44,10 +44,10 @@ class SimplexData {
    //******** MANAGERS ********
 
    // Store the data on the simplex with a given "owner ID":
-   void set(uint id, Bsimplex* s);
-   void set(Cstr_ptr& str, Bsimplex* s) { set((uint)**str, s); }
+   void set(uintptr_t id, Bsimplex* s);
+   void set(Cstr_ptr& str, Bsimplex* s) { set((uintptr_t)**str, s); }
 
-   SimplexData(uint key, Bsimplex* s)     : _id(0), _simplex(0) { set(key, s);}
+   SimplexData(uintptr_t key, Bsimplex* s): _id(0), _simplex(0) { set(key, s);}
    SimplexData(Cstr_ptr& str, Bsimplex* s): _id(0), _simplex(0) { set(str, s);}
   
    virtual ~SimplexData();
@@ -56,7 +56,7 @@ class SimplexData {
    DEFINE_RTTI_METHODS_BASE("SimplexData", CSimplexData*);
 
    //******** ACCESSORS ********
-   uint       id()                      const   { return _id; }
+   uintptr_t  id()                      const   { return _id; }
    Bsimplex*  simplex()                 const   { return _simplex; }
 
    //******** VIRTUAL METHODS ********
@@ -106,7 +106,7 @@ class SimplexData {
 
  //*****************************************************************
  protected:
-   uint      _id;       // unique ID of the owner of this data
+   uintptr_t _id;       // unique ID of the owner of this data
    Bsimplex* _simplex;  // the simplex this is attached to.
 };
 
@@ -124,7 +124,7 @@ class SimplexDataList : public ARRAY<SimplexData*> {
    ~SimplexDataList();
 
    //******** LOOKUP ********
-   SimplexData* get_item(uint key) const {
+   SimplexData* get_item(uintptr_t key) const {
       for (int k=0; k<_num; k++)
          if (_array[k]->id() == key)
             return _array[k];

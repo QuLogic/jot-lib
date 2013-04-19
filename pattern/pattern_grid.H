@@ -227,7 +227,7 @@ public:
     static MaskData* lookup(CBsimplex* s, PatternGrid* p) {
         MaskData *one;
         if(s) {
-          one = (MaskData*)(s->find_data(uint(p)));
+          one = (MaskData*)(s->find_data(uintptr_t(p)));
           if(one && !one->is_of_type(MaskData::static_name())) return 0;
           return (one) ? one : 0;
         }
@@ -244,8 +244,8 @@ public:
 protected:
     double _mask_val;
 
-    static uint key() {
-      uint ret = (uint)**static_name();
+    static uintptr_t key() {
+      uintptr_t ret = (uintptr_t)**static_name();
       return ret;
     }
 

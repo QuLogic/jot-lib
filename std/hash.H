@@ -18,6 +18,7 @@
 #ifndef HASH_NODE_INCLUDED
 #define HASH_NODE_INCLUDED
 
+#include <stdint.h>
 
 class hash_node {
     private:
@@ -50,7 +51,7 @@ class HASH {
 	int         _mask;
 	int         _seq_val;
 	hash_node **table() const {return _table;}
-	int         _lastval;
+	uintptr_t   _lastval;
 	int  hash(const long key) const;
 	long hash(const char *) const;
         // Returns 0 if done

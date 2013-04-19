@@ -227,7 +227,7 @@ EdgeStrokePool::~EdgeStrokePool()
       Bedge* edge = _strip.edges()[i];
       assert(edge);
       //SimplexData* d = edge->find_data(this->static_name());
-      SimplexData* d = edge->find_data((unsigned int)&(this->foo));
+      SimplexData* d = edge->find_data((uintptr_t)&(this->foo));
 
       edge->rem_simplex_data(d);
    }

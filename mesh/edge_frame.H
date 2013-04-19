@@ -49,7 +49,7 @@ class EdgeFrame : public SimplexFrame {
 
    //******** MANAGERS ********
 
-   EdgeFrame(uint key, Bedge* e, CWvec& n, double s=0.5, bool flip=false) :
+   EdgeFrame(uintptr_t key, Bedge* e, CWvec& n, double s=0.5, bool flip=false) :
       SimplexFrame(key, e, (flip?(-e->vec()):(e->vec())), n),
       _orig_n(n),
       _flip(flip),

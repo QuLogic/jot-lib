@@ -29,7 +29,9 @@
 void 
 PatchIDStripCB::faceCB(CBvert* v, CBface* f)
 {
-   uint rgba = IDRefImage::key_to_rgba(uint(f->patch()));
+   /* FIXME: QuLogic: I don't understand how this will work, since f->patch()
+    * is a pointer, and the key is some internal thing. */
+   uint rgba = IDRefImage::key_to_rgba(uintptr_t(f->patch()));
    glColor4ubv((GLubyte*)&rgba);
 
    glVertex3dv(v->loc().data());

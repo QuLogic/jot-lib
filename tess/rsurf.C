@@ -43,7 +43,7 @@ class RmemeVertPair : public VertPair {
    //******** MANAGERS ********
 
    // using key, record data on v, associating to partner p
-   RmemeVertPair(uint key, Bvert* v, Rmeme* r) :
+   RmemeVertPair(uintptr_t key, Bvert* v, Rmeme* r) :
       VertPair(key, v, r->vert()), _r(r) { assert(r != NULL); }
 
    //******** RUN TIME TYPE ID ********
@@ -53,7 +53,7 @@ class RmemeVertPair : public VertPair {
    //******** LOOKUPS ********
 
    // get the RmemeVertPair on v
-   static RmemeVertPair* find_pair(uint key, CBvert* v) {
+   static RmemeVertPair* find_pair(uintptr_t key, CBvert* v) {
       return upcast(VertPair::find_pair(key, v));
    }
 
@@ -159,7 +159,7 @@ HybridDisp::get_val(CBvert* v) const
 Rmeme::Rmeme(
    Bbase* b,             // Rsurface
    Lvert* v,             // vertex of thememe
-   uint pair_lookup_key, // key for accessing vert pairs
+   uintptr_t pair_key,   // key for accessing vert pairs
    Lvert* ref,           // reference vert on side-A
    double h,             // offset amount
    double s,             // additional scale factor (used at creases)
@@ -168,7 +168,7 @@ Rmeme::Rmeme(
    _ref(ref),
    _h(0),       // set below
    _s(s), 
-   _pair_key(pair_lookup_key)
+   _pair_key(pair_key)
 {
    assert(_ref);
 
@@ -180,7 +180,7 @@ Rmeme::Rmeme(
 }
 
 // constructor for Rmeme at subdiv level > 0:
-Rmeme::Rmeme(Bbase* b, Lvert* v, uint pair_lookup_key) :
+Rmeme::Rmeme(Bbase* b, Lvert* v, uintptr_t pair_lookup_key) :
    VertMeme(b, v),
    _ref(0),
    _h(0),

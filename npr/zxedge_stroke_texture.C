@@ -3914,7 +3914,7 @@ LuboPath::get_faces(TAGformat &d)
    *d >> num;
 
    for (int i=0; i<num; i++) {
-      int face_pointer;
+      uintptr_t face_pointer;
       *d >> face_pointer;
       _simplexes.add((Bsimplex*)face_pointer);
    }
@@ -3932,7 +3932,7 @@ LuboPath::put_faces(TAGformat &d) const
    d.id();
    *d << _simplexes.num();
    for (int i=0; i<_simplexes.num(); i++) {
-      *d << (int)_simplexes[i];
+      *d << (uintptr_t)_simplexes[i];
    }
    d.end_id();
 

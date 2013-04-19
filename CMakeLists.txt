@@ -6,10 +6,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(jot)
 
-# Temporarily force 32-bit compile
-SET(CMAKE_C_FLAGS "-Wall -m32")
-SET(CMAKE_CXX_FLAGS "-Wall -m32")
-
+SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
 
 ## Check for things we need
 

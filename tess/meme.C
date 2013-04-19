@@ -41,7 +41,7 @@ Meme::Meme(Bbase* base, Bsimplex* s, bool force_boss) :
          cur_boss->get_demoted();
          cur_boss = 0;
       }
-      SimplexData::set(cur_boss ? (uint)_owner : Bbase::key(), s);
+      SimplexData::set(cur_boss ? (uintptr_t)_owner : Bbase::key(), s);
    }
 }
 
@@ -91,7 +91,7 @@ Meme::get_demoted()
    static bool debug = Config::get_var_bool("DEBUG_MEME_DEMOTION",false);
    err_adv(debug, "%s::get_demoted", **class_name());
 
-   if (_id == (uint)_owner) {
+   if (_id == (uintptr_t)_owner) {
       // Already been demoted
       return false;
    }
@@ -100,10 +100,10 @@ Meme::get_demoted()
    assert(_id == Bbase::key());
 
    // The lookup key we'll switch to cannot already be in use:
-   assert(!_simplex->find_data((uint)_owner));
+   assert(!_simplex->find_data((uintptr_t)_owner));
 
    // make the switch
-   _id = (uint)_owner;
+   _id = (uintptr_t)_owner;
 
    // Notify Bbase
    bbase()->invalidate();

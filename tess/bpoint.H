@@ -389,7 +389,7 @@ class BpointFrame : public VertFrame {
    //******** MANAGERS ********
 
    // The Bpoint or its map cannot be NULL:
-   BpointFrame(uint key, Bpoint* p) :
+   BpointFrame(uintptr_t key, Bpoint* p) :
       VertFrame(key, p->vert()), _bp(p) {}
 
    //******** RUN-TIME TYPE ID ********

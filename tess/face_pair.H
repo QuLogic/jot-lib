@@ -44,7 +44,7 @@ class FacePair : public SimplexData {
    //******** MANAGERS ********
 
    // using key, record data on v, associating to partner p
-   FacePair(uint key, Bface* f, Bface* p) : SimplexData(key, f), _p(p) {}
+   FacePair(uintptr_t key, Bface* f, Bface* p) : SimplexData(key, f), _p(p) {}
 
    //******** RUN TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("FacePair", FacePair*, SimplexData, CSimplexData*);
@@ -63,19 +63,19 @@ class FacePair : public SimplexData {
    // find the partner of a given face f
 
    // get the FacePair on f
-   static FacePair* find_pair(uint key, CBface* f) {
+   static FacePair* find_pair(uintptr_t key, CBface* f) {
       return f ? upcast(f->find_data(key)) : 0;
    }
 
    // find the partner of f
-   static Bface* map_face(uint key, CBface* f) {
+   static Bface* map_face(uintptr_t key, CBface* f) {
       FacePair* pair = find_pair(key, f);
       return pair ? pair->partner() : 0;
    }
 
    // find the partners of a whole set of faces
    // (returns all on success, or none)
-   static bool map_faces(uint key, CBface_list& faces, Bface_list& ret) {
+   static bool map_faces(uintptr_t key, CBface_list& faces, Bface_list& ret) {
       ret.clear();
       for (int i=0; i<faces.num(); i++) {
          Bface* f = map_face(key, faces[i]);
@@ -105,10 +105,10 @@ class FacePair : public SimplexData {
  *****************************************************************/
 class FacePairFilter : public SimplexFilter {
  public:
-   FacePairFilter(uint key) : _key(key) {}
+   FacePairFilter(uintptr_t key) : _key(key) {}
 
-   uint key()           const   { return _key; }
-   void set_key(uint k)         { _key = k; }
+   uintptr_t key()           const   { return _key; }
+   void set_key(uintptr_t k)         { _key = k; }
 
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
@@ -116,7 +116,7 @@ class FacePairFilter : public SimplexFilter {
    }
 
  protected:
-   uint _key;   // for looking up FaceData
+   uintptr_t _key;   // for looking up FaceData
 };
 
 typedef const FacePair CFacePair;

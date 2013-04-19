@@ -48,7 +48,7 @@ class VertFrame : public SimplexFrame {
 
    //******** MANAGERS ********
 
-   VertFrame(uint key, Bvert* v, CWvec& t=mlib::Wvec::X(), mlib::CWvec& n=mlib::Wvec::Z()) :
+   VertFrame(uintptr_t key, Bvert* v, CWvec& t=mlib::Wvec::X(), mlib::CWvec& n=mlib::Wvec::Z()) :
       SimplexFrame(key, v, t, n) {}
 
    //******** RUN-TIME TYPE ID ********

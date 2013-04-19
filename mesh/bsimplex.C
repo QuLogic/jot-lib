@@ -33,7 +33,7 @@ Bsimplex::~Bsimplex()
    }
 }
 
-uint 
+uintptr_t
 Bsimplex::generate_key() 
 {
    // called once to generate the "key" for this simplex 

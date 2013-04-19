@@ -40,11 +40,11 @@ class Rmeme : public VertMeme {
    //******** MANAGERS ********
 
    // constructor for Rmeme of the control surface:
-   Rmeme(Bbase* b, Lvert* v, uint pair_lookup_key,
+   Rmeme(Bbase* b, Lvert* v, uintptr_t pair_key,
          Lvert* ref, double h=0, double s=0, bool scale_h=true);
 
    // constructor for Rmeme at subdiv level > 0:
-   Rmeme(Bbase* b, Lvert* v, uint pair_lookup_key);
+   Rmeme(Bbase* b, Lvert* v, uintptr_t pair_key);
 
    virtual ~Rmeme();
 
@@ -89,7 +89,7 @@ class Rmeme : public VertMeme {
    Lvert*         _ref;      // reference vertex this one sticks to
    double         _h;        // displacement due to inflation/extrude
    double         _s;        // additional scale factor for _h
-   uint           _pair_key; // key for finding VertPair
+   uintptr_t      _pair_key; // key for finding VertPair
 
    //******** VertMeme VIRTUAL METHODS ********
 
@@ -150,7 +150,7 @@ class Rsurface: public Bsurface {
 
    Rmeme* rmeme(int i) const;
 
-   uint pair_lookup_key() const { return (uint)this; }
+   uintptr_t pair_lookup_key() const { return (uintptr_t)this; }
 
    //******** A --> B MAPPING ********
 

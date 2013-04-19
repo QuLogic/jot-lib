@@ -126,7 +126,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Bbase class name converted to unsigned int,
    // for SimplexData lookup:
-   static uint key();
+   static uintptr_t key();
 
    // Returns the boss meme (if any) on the given simplex:
    static Meme* find_boss_meme(CBsimplex* s) {

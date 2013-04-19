@@ -46,7 +46,7 @@ class VertPair : public SimplexData {
    //******** MANAGERS ********
 
    // using key, record data on v, associating to partner p
-   VertPair(uint key, Bvert* v, Bvert* p) : SimplexData(key, v), _p(p) {}
+   VertPair(uintptr_t key, Bvert* v, Bvert* p) : SimplexData(key, v), _p(p) {}
 
    //******** RUN TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("VertPair", VertPair*, SimplexData, CSimplexData*);
@@ -64,23 +64,23 @@ class VertPair : public SimplexData {
    // find the partner of a given vertex v
 
    // get the VertPair on v
-   static VertPair* find_pair(uint key, CBvert* v) {
+   static VertPair* find_pair(uintptr_t key, CBvert* v) {
       return v ? upcast(v->find_data(key)) : 0;
    }
 
    // find the partner of v
-   static Bvert* map_vert(uint key, CBvert* v) {
+   static Bvert* map_vert(uintptr_t key, CBvert* v) {
       VertPair* pair = find_pair(key, v);
       return pair ? pair->partner() : 0;
    }
 
    // return a normal WRT the original face set:
-   static Wvec vert_normal(uint key, CBvert* v) {
+   static Wvec vert_normal(uintptr_t key, CBvert* v) {
       return v ? v->norm(FacePairFilter(key)) : Wvec::null();
    }
 
    // find the partners of a whole set of verts
-   static bool map_verts(uint key, CBvert_list& verts, Bvert_list& ret) {
+   static bool map_verts(uintptr_t key, CBvert_list& verts, Bvert_list& ret) {
       ret.clear();
       for (int i=0; i<verts.num(); i++) {
          Bvert* v = map_vert(key, verts[i]);
@@ -92,7 +92,7 @@ class VertPair : public SimplexData {
 
    // map an edge strip to corresponding strip made up of partners
    // (returns matching strip on success, or empty strip on failure):
-   static bool map_strip(uint key, CEdgeStrip& strip, EdgeStrip& ret) {
+   static bool map_strip(uintptr_t key, CEdgeStrip& strip, EdgeStrip& ret) {
       ret.reset();
       for (int i=0; i<strip.num(); i++) {
          Bvert* u1 = map_vert(key, strip.vert(i));

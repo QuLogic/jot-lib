@@ -62,7 +62,7 @@ class EdgeStrokePool : public BStrokePool {
       // edge.
       EdgeData(EdgeStrokePool* p, Bedge* e) :
          //SimplexData(p->static_name(), e),
-         SimplexData((unsigned int)&(p->foo), e),
+         SimplexData((uintptr_t)&(p->foo), e),
          _pool(p) {}
 
       //******** ACCESSORS ********
