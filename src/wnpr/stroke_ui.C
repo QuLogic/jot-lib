@@ -60,7 +60,7 @@
 #include "base_jotapp/base_jotapp.H"
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 #include "std/config.H"
 
 #include "stroke_ui.H"

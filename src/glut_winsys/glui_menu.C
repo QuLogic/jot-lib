@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "glui_menu.H" 
-#include "glui/glui.h"
+#include <GL/glui.h>
 
 ARRAY<MenuItem *> GLUIMoveMenu::_menu_items(10);
 

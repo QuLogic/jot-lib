@@ -36,7 +36,7 @@
 #include "geom/winsys.H"
 #include "geom/world.H"
 #include "tess/tex_body.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 #include "std/stop_watch.H"
 #include "npr/npr_texture.H"
 #include "std/config.H"

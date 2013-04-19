@@ -33,7 +33,7 @@
 #include <GL/glew.h>
 
 #include "geom/winsys.H"
-#include "glui/glui.h" 
+#include <GL/glui.h>
 #include "base_jotapp/base_jotapp.H"
 #include "stroke/base_stroke.H"
 

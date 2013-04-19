@@ -20,7 +20,7 @@
 
 #include "glut_winsys.H"
 #include "tty_glut.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 #include "kbd.H"
 #include "geom/fsa.H"
 #include "std/config.H"

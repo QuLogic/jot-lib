@@ -21,7 +21,7 @@
 #include "glut_winsys.H" 
 #include "glui_dialogs.H" 
 #include "tty_glut.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 #include "std/file.H"
 #include "widgets/alert_box_icon_exclaim.H"
 #include "widgets/alert_box_icon_question.H"

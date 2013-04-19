@@ -31,7 +31,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 // #include "draw/draw.H"
 #include "base_jotapp/base_jotapp.H"
 #include "npr_pen.H"

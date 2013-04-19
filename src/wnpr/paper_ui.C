@@ -19,7 +19,7 @@
 #include "disp/view.H"
 #include "geom/winsys.H"
 #include "gtex/paper_effect.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 
 #include "paper_ui.H"
 

@@ -22,7 +22,7 @@
 // PatchSelectionUI
 ////////////////////////////////////////////
 
-#include "glui/glui.h"
+#include <GL/glui.h>
 #include "gui/base_ui.H"
 #include "gui/gui.H"
 

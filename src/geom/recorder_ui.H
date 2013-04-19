@@ -20,7 +20,7 @@
 
 
 #include "disp/recorder.H"
-#include "glui/glui.h"
+#include <GL/glui.h>
 
 /*****************************************************************
  * RecorderUI
