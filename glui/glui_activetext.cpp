@@ -85,7 +85,7 @@ void    GLUI_ActiveText::draw_translated_active_area( )
    if ( NOT can_draw() ) return;
 
    orig  = set_to_glut_window();
-   state = glui->set_front_draw_buffer();
+   state = glui->set_current_draw_buffer();
 
    glPushMatrix();
       translate_to_origin();
@@ -292,7 +292,7 @@ void    GLUI_ActiveText::draw_translated_active_area( )
 
 	orig = set_to_glut_window();
 
-	state = glui->set_front_draw_buffer();
+	state = glui->set_current_draw_buffer();
 
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();

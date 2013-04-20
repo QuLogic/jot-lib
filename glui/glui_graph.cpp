@@ -241,7 +241,7 @@ void    GLUI_Graph::draw_translated_active_area( int front )
 	win_h = glutGet(GLUT_WINDOW_HEIGHT);
 	win_w = glutGet(GLUT_WINDOW_WIDTH);
 
-	if (front) state = glui->set_front_draw_buffer();
+	if (front) state = glui->set_current_draw_buffer();
 
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();
