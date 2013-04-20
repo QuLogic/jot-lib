@@ -236,35 +236,35 @@ NPRPenUI::build()
    _other_filenames = dir_list(Config::JOT_ROOT()+OTHER_DIRECTORY);
 
    // Panel containing pen buttons
-   _panel[PANEL_PEN] = _glui->add_panel("");
+   _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
    assert(_panel[PANEL_PEN]);
 
    //Prev pen
-   _button[BUT_PREV_PEN] = _glui->add_button_to_panel(
+   _button[BUT_PREV_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Previous Mode", 
       id+BUT_PREV_PEN, button_cb);
    assert(_button[BUT_PREV_PEN]);
 
-   _glui->add_column_to_panel(_panel[PANEL_PEN],false);
+   new GLUI_Column(_panel[PANEL_PEN], false);
 
    //Prev pen
-   _button[BUT_NEXT_PEN] = _glui->add_button_to_panel(
+   _button[BUT_NEXT_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Next Mode", 
       id+BUT_NEXT_PEN, button_cb);
    assert(_button[BUT_NEXT_PEN]);
 
    //Gtex
-   _rollout[ROLLOUT_GTEX] = _glui->add_rollout("Basecoat",true);
+   _rollout[ROLLOUT_GTEX] = new GLUI_Rollout(_glui, "Basecoat", true);
    assert(_rollout[ROLLOUT_GTEX]);
 
    //Global panel
-   _panel[PANEL_GTEX_GLOBS] = _glui->add_panel_to_panel(
+   _panel[PANEL_GTEX_GLOBS] = new GLUI_Panel(
       _rollout[ROLLOUT_GTEX],
       "");
    assert(_panel[PANEL_GTEX_GLOBS]);
 
    //Transparency
-   _checkbox[CHECK_TRANS] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TRANS] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_GLOBS],
       "Transparency to Background ",
       NULL,
@@ -272,10 +272,10 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_TRANS]);
 
-   _glui->add_column_to_panel(_panel[PANEL_GTEX_GLOBS],false);
+   new GLUI_Column(_panel[PANEL_GTEX_GLOBS], false);
 
    //Annotatable
-   _checkbox[CHECK_ANNOTATE] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ANNOTATE] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_GLOBS],
       "Annotatable ",
       NULL,
@@ -284,19 +284,19 @@ NPRPenUI::build()
    assert(_checkbox[CHECK_ANNOTATE]);
 
    //Layer Selection
-   _panel[PANEL_GTEX_LAYER_NAME] = _glui->add_panel_to_panel(
+   _panel[PANEL_GTEX_LAYER_NAME] = new GLUI_Panel(
       _rollout[ROLLOUT_GTEX],
       "Layer Editor");
    assert(_panel[PANEL_GTEX_LAYER_NAME]);
 
-   _listbox[LIST_LAYER] = _glui->add_listbox_to_panel(
+   _listbox[LIST_LAYER] = new GLUI_Listbox(
       _panel[PANEL_GTEX_LAYER_NAME], 
       "", NULL,
       id+LIST_LAYER, listbox_cb);
    assert(_listbox[LIST_LAYER]);
    _listbox[LIST_LAYER]->set_w(172);
 
-   _edittext[EDIT_NAME] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_NAME] = new GLUI_EditText(
       _panel[PANEL_GTEX_LAYER_NAME],
       "", GLUI_EDITTEXT_TEXT,
       NULL, 
@@ -307,33 +307,33 @@ NPRPenUI::build()
   ////////////////////////////////////////////
   //RadGroup for selecting which shader to add
   ////////////////////////////////////////////
-   _glui->add_column_to_panel(_panel[PANEL_GTEX_LAYER_NAME],false);
+   new GLUI_Column(_panel[PANEL_GTEX_LAYER_NAME], false);
 
    //take out for space
-   //_glui->add_separator_to_panel(_panel[PANEL_GTEX_LAYER_NAME]);
+   //_new GLUI_Separator(_panel[PANEL_GTEX_LAYER_NAME]);
 
-   _radgroup[RADGROUP_GTEX] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_GTEX] = new GLUI_RadioGroup(
       _panel[PANEL_GTEX_LAYER_NAME],
       NULL,
       id+RADGROUP_GTEX, radiogroup_cb);
    assert(_radgroup[RADGROUP_GTEX]);
 
    //Normal NPR shader radbutton
-   _radbutton[RADBUT_SOLID] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_SOLID] = new GLUI_RadioButton(
       _radgroup[RADGROUP_GTEX],
       "Norm");
    assert(_radbutton[RADBUT_SOLID]);
    _radbutton[RADBUT_SOLID]->set_w(5);
 
    //Regular X-Toon shader radbutton
-   _radbutton[RADBUT_TOON] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TOON] = new GLUI_RadioButton(
       _radgroup[RADGROUP_GTEX],
       "'Toon");
    assert(_radbutton[RADBUT_TOON]);
    _radbutton[RADBUT_TOON]->set_w(5);
 
    //GLSL X-Toon shader radbutton
-   _radbutton[RADBUT_XTOON] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_XTOON] = new GLUI_RadioButton(
    _radgroup[RADGROUP_GTEX],
       "XToon");
     assert(_radbutton[RADBUT_XTOON]);
@@ -342,8 +342,8 @@ NPRPenUI::build()
    /////////////////////////////////////////
    //Column for adding and removing textures
    /////////////////////////////////////////
-   _glui->add_column_to_panel(_panel[PANEL_GTEX_LAYER_NAME],false);
-   _button[BUT_ADD] = _glui->add_button_to_panel(
+   new GLUI_Column(_panel[PANEL_GTEX_LAYER_NAME], false);
+   _button[BUT_ADD] = new GLUI_Button(
       _panel[PANEL_GTEX_LAYER_NAME],
       "Add",
       id+BUT_ADD,
@@ -351,7 +351,7 @@ NPRPenUI::build()
    assert(_button[BUT_ADD]);
    _button[BUT_ADD]->set_w(45);
 
-   _button[BUT_DEL] = _glui->add_button_to_panel(
+   _button[BUT_DEL] = new GLUI_Button(
       _panel[PANEL_GTEX_LAYER_NAME],
       "Del",
       id+BUT_DEL,
@@ -361,12 +361,12 @@ NPRPenUI::build()
 
 
    //Layer Opts
-   _panel[PANEL_GTEX_LAYER_OPTS] = _glui->add_panel_to_panel(
+   _panel[PANEL_GTEX_LAYER_OPTS] = new GLUI_Panel(
       _rollout[ROLLOUT_GTEX],
       "");
    assert(_panel[PANEL_GTEX_LAYER_OPTS]);
 
-   _checkbox[CHECK_PAPER] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_PAPER] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Apply Paper Effect",
       NULL,
@@ -374,7 +374,7 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_PAPER]);
 
-   _checkbox[CHECK_TRAVEL] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TRAVEL] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Mobile Paper Co-ords",
       NULL,
@@ -382,9 +382,9 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_TRAVEL]);
 
-   _glui->add_column_to_panel(_panel[PANEL_GTEX_LAYER_OPTS],false);
+   new GLUI_Column(_panel[PANEL_GTEX_LAYER_OPTS], false);
 
-   _checkbox[CHECK_LIGHT] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Use Global Lighting",
       NULL,
@@ -392,7 +392,7 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_LIGHT]);
 
-   _checkbox[CHECK_SPEC] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_SPEC] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Specular Lighting",
       NULL,
@@ -402,55 +402,55 @@ NPRPenUI::build()
 
 
    //Light (toon)
-   _rollout[ROLLOUT_LIGHT] = _glui->add_rollout_to_panel(
+   _rollout[ROLLOUT_LIGHT] = new GLUI_Rollout(
       _rollout[ROLLOUT_GTEX],
       "Toon Lighting", true);
    assert(_rollout[ROLLOUT_LIGHT]);
 
-   _radgroup[RADGROUP_LIGHT] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_LIGHT] = new GLUI_RadioGroup(
       _rollout[ROLLOUT_LIGHT],
       NULL,
       id+RADGROUP_LIGHT, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHT]);
 
-   _radbutton[RADBUT_LIGHT0] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT0] = new GLUI_RadioButton(
       _radgroup[RADGROUP_LIGHT],
       "L0");
    assert(_radbutton[RADBUT_LIGHT0]);
    _radbutton[RADBUT_LIGHT0]->set_w(5);
 
-   _radbutton[RADBUT_LIGHT1] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT1] = new GLUI_RadioButton(
       _radgroup[RADGROUP_LIGHT],
       "L1");
    assert(_radbutton[RADBUT_LIGHT1]);
    _radbutton[RADBUT_LIGHT1]->set_w(5);
 
-   _radbutton[RADBUT_LIGHT2] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT2] = new GLUI_RadioButton(
       _radgroup[RADGROUP_LIGHT],
       "L2");
    assert(_radbutton[RADBUT_LIGHT2]);
    _radbutton[RADBUT_LIGHT2]->set_w(5);
 
-   _radbutton[RADBUT_LIGHT3] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT3] = new GLUI_RadioButton(
       _radgroup[RADGROUP_LIGHT],
       "L3");
    assert(_radbutton[RADBUT_LIGHT3]);
    _radbutton[RADBUT_LIGHT3]->set_w(5);
 
-   _radbutton[RADBUT_LIGHTC] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHTC] = new GLUI_RadioButton(
       _radgroup[RADGROUP_LIGHT],
       "L?");
    assert(_radbutton[RADBUT_LIGHTC]);
    _radbutton[RADBUT_LIGHTC]->set_w(5);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_LIGHT],false);
+   new GLUI_Column(_rollout[ROLLOUT_LIGHT], false);
 
-   _panel[PANEL_GTEX_LIGHT_OPTS] = _glui->add_panel_to_panel(
+   _panel[PANEL_GTEX_LIGHT_OPTS] = new GLUI_Panel(
       _rollout[ROLLOUT_LIGHT],
       "");
    assert(_panel[PANEL_GTEX_LIGHT_OPTS]);
 
-   _checkbox[CHECK_DIR] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_DIR] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LIGHT_OPTS],
       "Direction",
       NULL,
@@ -458,9 +458,9 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_DIR]);
 
-   _glui->add_column_to_panel(_panel[PANEL_GTEX_LIGHT_OPTS],false);
+   new GLUI_Column(_panel[PANEL_GTEX_LIGHT_OPTS], false);
 
-   _checkbox[CHECK_CAM] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_CAM] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LIGHT_OPTS],
       "Cam Frame",
       NULL,
@@ -468,22 +468,22 @@ NPRPenUI::build()
       checkbox_cb);
    assert(_checkbox[CHECK_CAM]);
 
-   _slider[SLIDE_R] = _glui->add_slider_to_panel(
+   _slider[SLIDE_R] = new GLUI_Slider(
       _rollout[ROLLOUT_LIGHT], 
       "Radius", 
+      id+SLIDE_R, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1000,
-      NULL,
-      id+SLIDE_R, slider_cb);
+      NULL);
    assert(_slider[SLIDE_R]);
    _slider[SLIDE_R]->set_num_graduations(1001);
    _slider[SLIDE_R]->set_w(200);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_LIGHT],false);
+   new GLUI_Column(_rollout[ROLLOUT_LIGHT], false);
 
-   //_glui->add_statictext_to_panel(_rollout[ROLLOUT_LIGHT]," ")->set_w(1);
+   //new GLUI_StaticText(_rollout[ROLLOUT_LIGHT], " ")->set_w(1);
 
-   _rotation[ROT_L] = _glui->add_rotation_to_panel(
+   _rotation[ROT_L] = new GLUI_Rotation(
       _rollout[ROLLOUT_LIGHT],
       "Dir/Pos",
       NULL,
@@ -491,12 +491,12 @@ NPRPenUI::build()
    assert(_rotation[ROT_L]);
 
    //Toon
-    _rollout[ROLLOUT_TOON] = _glui->add_rollout_to_panel(
+    _rollout[ROLLOUT_TOON] = new GLUI_Rollout(
       _rollout[ROLLOUT_GTEX],
       "Toon Params", true);
    assert(_rollout[ROLLOUT_TOON]);  
 
-   _listbox[LIST_DETAIL] = _glui->add_listbox_to_panel(
+   _listbox[LIST_DETAIL] = new GLUI_Listbox(
       _rollout[ROLLOUT_TOON], 
       "", NULL,
       id+LIST_DETAIL, listbox_cb);
@@ -509,35 +509,35 @@ NPRPenUI::build()
    _listbox[LIST_DETAIL]->add_item(4, "Backlights");
    _listbox[LIST_DETAIL]->add_item(5, "Highlights");
 
-   _slider[SLIDE_T] = _glui->add_slider_to_panel(
+   _slider[SLIDE_T] = new GLUI_Slider(
       _rollout[ROLLOUT_TOON], 
       "Target size", 
+      id+SLIDE_T, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_T, slider_cb);
+      NULL);
    assert(_slider[SLIDE_T]);
    _slider[SLIDE_T]->set_num_graduations(201);
 
 
-    _slider[SLIDE_F] = _glui->add_slider_to_panel(
+    _slider[SLIDE_F] = new GLUI_Slider(
       _rollout[ROLLOUT_TOON], 
       "Max factor", 
+      id+SLIDE_F, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.1, 50.0,
-      NULL,
-      id+SLIDE_F, slider_cb);
+      NULL);
    assert(_slider[SLIDE_F]);
    _slider[SLIDE_F]->set_num_graduations(201);
    //////////////////////////////////
    // Panel containing normal buttons
    //////////////////////////////////
-   _panel[PANEL_NORMALS] = _glui->add_panel_to_panel(_rollout[ROLLOUT_TOON],"Normals");
+   _panel[PANEL_NORMALS] = new GLUI_Panel(_rollout[ROLLOUT_TOON], "Normals");
    assert(_panel[PANEL_NORMALS]);
-   _glui->add_column_to_panel(_panel[PANEL_NORMALS],false);
+   new GLUI_Column(_panel[PANEL_NORMALS], false);
    //----------------------------
    //rollout of normal map to use
-   _listbox[LIST_DETAIL2] = _glui->add_listbox_to_panel(
+   _listbox[LIST_DETAIL2] = new GLUI_Listbox(
       _rollout[ROLLOUT_TOON], 
       "", NULL,
       id+LIST_DETAIL2, listbox_cb);
@@ -552,97 +552,97 @@ NPRPenUI::build()
 
   //-----------------------------
   //Smooth and Elliptic Button
-  _glui->add_column_to_panel(_panel[PANEL_NORMALS],false);
+  new GLUI_Column(_panel[PANEL_NORMALS], false);
 
-    _button[BUT_SMOOTH] = _glui->add_button_to_panel(
+    _button[BUT_SMOOTH] = new GLUI_Button(
       _panel[PANEL_NORMALS], "Smooth", 
       id+BUT_SMOOTH, button_cb);
     assert(_button[BUT_SMOOTH]);
  
-    _button[BUT_ELLIPTIC] = _glui->add_button_to_panel(
+    _button[BUT_ELLIPTIC] = new GLUI_Button(
       _panel[PANEL_NORMALS], "Elliptic", 
       id+BUT_ELLIPTIC, button_cb);
     assert(_button[BUT_ELLIPTIC]);
 
   //-----------------------------
   //Spheric and Cylindric Button
-    _glui->add_column_to_panel(_panel[PANEL_NORMALS],false);
+    new GLUI_Column(_panel[PANEL_NORMALS], false);
 
-    _button[BUT_SPHERIC] = _glui->add_button_to_panel(
+    _button[BUT_SPHERIC] = new GLUI_Button(
       _panel[PANEL_NORMALS], "Spheric", 
       id+BUT_SPHERIC, button_cb);
     assert(_button[BUT_SPHERIC]);
 
-    _button[BUT_CYLINDRIC] = _glui->add_button_to_panel(
+    _button[BUT_CYLINDRIC] = new GLUI_Button(
       _panel[PANEL_NORMALS], "Cylindric", 
       id+BUT_CYLINDRIC, button_cb);
     assert(_button[BUT_CYLINDRIC]);
  
 
-//     _button[BUT_CURV] = _glui->add_button_to_panel(
+//     _button[BUT_CURV] = new GLUI_Button(
 //       _rollout[ROLLOUT_TOON], "Compute curvatures", 
 //       id+BUT_CURV, button_cb);
 //    assert(_button[BUT_CURV]);
 
-   _slider[SLIDE_L] = _glui->add_slider_to_panel(
+   _slider[SLIDE_L] = new GLUI_Slider(
       _rollout[ROLLOUT_TOON], 
       "Smooth factor", 
+      id+SLIDE_L, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_L, slider_cb);
+      NULL);
    assert(_slider[SLIDE_L]);
    _slider[SLIDE_L]->set_num_graduations(201);
 
 
 
   //Color
-   _slider[SLIDE_H] = _glui->add_slider_to_panel(
+   _slider[SLIDE_H] = new GLUI_Slider(
       _rollout[ROLLOUT_GTEX], 
       "Hue", 
+      id+SLIDE_H, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_H, slider_cb);
+      NULL);
    assert(_slider[SLIDE_H]);
    _slider[SLIDE_H]->set_num_graduations(201);
 
-   _slider[SLIDE_S] = _glui->add_slider_to_panel(
+   _slider[SLIDE_S] = new GLUI_Slider(
       _rollout[ROLLOUT_GTEX],
       "Saturation", 
+      id+SLIDE_S, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_S, slider_cb);
+      NULL);
    assert(_slider[SLIDE_S]);
    _slider[SLIDE_S]->set_num_graduations(201);
 
-   _slider[SLIDE_V] = _glui->add_slider_to_panel(
+   _slider[SLIDE_V] = new GLUI_Slider(
       _rollout[ROLLOUT_GTEX],
       "Value", 
+      id+SLIDE_V, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_V, slider_cb);
+      NULL);
    assert(_slider[SLIDE_V]);
    _slider[SLIDE_V]->set_num_graduations(201);
 
-   _slider[SLIDE_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_A] = new GLUI_Slider(
       _rollout[ROLLOUT_GTEX], "Alpha", 
+      id+SLIDE_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_A, slider_cb);
+      NULL);
    assert(_slider[SLIDE_A]);
    _slider[SLIDE_A]->set_num_graduations(201);
 
    //Tex
-   _panel[PANEL_TEX] = _glui->add_panel_to_panel(
+   _panel[PANEL_TEX] = new GLUI_Panel(
       _rollout[ROLLOUT_GTEX],
       "Texture");
    assert(_panel[PANEL_TEX]);
 
-   _checkbox[CHECK_INV] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_INV] = new GLUI_Checkbox(
       _panel[PANEL_TEX],
       "Invert detail",
       NULL,
@@ -651,13 +651,13 @@ NPRPenUI::build()
    _checkbox[CHECK_INV]->set_int_val(0);
    assert(_checkbox[CHECK_INV]);
 
-   _listbox[LIST_TEX] = _glui->add_listbox_to_panel(
+   _listbox[LIST_TEX] = new GLUI_Listbox(
       _panel[PANEL_TEX], 
       "", NULL,
       id+LIST_TEX, listbox_cb);
    assert(_listbox[LIST_TEX]);
 
-   _button[BUT_REFRESH] = _glui->add_button_to_panel(
+   _button[BUT_REFRESH] = new GLUI_Button(
       _rollout[ROLLOUT_GTEX],
       "Refresh",
       id+BUT_REFRESH,
@@ -665,25 +665,25 @@ NPRPenUI::build()
    assert(_button[BUT_REFRESH]);
 
    //Xform
-   _rollout[ROLLOUT_XFORM] = _glui->add_rollout("Transformation",true);
+   _rollout[ROLLOUT_XFORM] = new GLUI_Rollout(_glui, "Transformation", true);
    assert(_rollout[ROLLOUT_XFORM]);
 
-   _panel[PANEL_XFORM] = _glui->add_panel_to_panel(
+   _panel[PANEL_XFORM] = new GLUI_Panel(
       _rollout[ROLLOUT_XFORM],
       "");
    assert(_panel[PANEL_XFORM]);
 
    //Rot
-   _rotation[ROT_ROT] = _glui->add_rotation_to_panel(
+   _rotation[ROT_ROT] = new GLUI_Rotation(
       _panel[PANEL_XFORM],
       "Rotation",
       NULL,
       id+ROT_ROT, rotation_cb);
    assert(_rotation[ROT_ROT]);
 
-   _glui->add_column_to_panel(_panel[PANEL_XFORM],false);
+   new GLUI_Column(_panel[PANEL_XFORM], false);
 
-   _translation[TRAN_X] = _glui->add_translation_to_panel(
+   _translation[TRAN_X] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "X", GLUI_TRANSLATION_X,
       NULL, 
@@ -691,9 +691,9 @@ NPRPenUI::build()
    assert(_translation[TRAN_X]);
    _translation[TRAN_X]->set_speed(0.1);
 
-   _glui->add_column_to_panel(_panel[PANEL_XFORM],false);
+   new GLUI_Column(_panel[PANEL_XFORM], false);
 
-   _translation[TRAN_Y] = _glui->add_translation_to_panel(
+   _translation[TRAN_Y] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Y", GLUI_TRANSLATION_Y,
       NULL, 
@@ -701,9 +701,9 @@ NPRPenUI::build()
    assert(_translation[TRAN_Y]);
    _translation[TRAN_Y]->set_speed(0.1);
 
-   _glui->add_column_to_panel(_panel[PANEL_XFORM],false);
+   new GLUI_Column(_panel[PANEL_XFORM], false);
 
-   _translation[TRAN_Z] = _glui->add_translation_to_panel(
+   _translation[TRAN_Z] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Z", GLUI_TRANSLATION_Z,
       NULL, 
@@ -711,9 +711,9 @@ NPRPenUI::build()
    assert(_translation[TRAN_Z]);
    _translation[TRAN_Z]->set_speed(0.1);   
 
-   _glui->add_column_to_panel(_panel[PANEL_XFORM],false);
+   new GLUI_Column(_panel[PANEL_XFORM], false);
 
-   _scale[SCALE_UNIFORM] = _glui->add_translation_to_panel(
+   _scale[SCALE_UNIFORM] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Scale", GLUI_TRANSLATION_Y,
       NULL, 
@@ -724,23 +724,23 @@ NPRPenUI::build()
 
 
    //Some temp hacks
-   _rollout[ROLLOUT_HACK] = _glui->add_rollout_to_panel(
+   _rollout[ROLLOUT_HACK] = new GLUI_Rollout(
       _rollout[ROLLOUT_XFORM],
       "Hacks", true);
    assert(_rollout[ROLLOUT_HACK]);
 
    // Center at origin
-   _checkbox[CHECK_CENTER] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_CENTER] = new GLUI_Checkbox(
       _rollout[ROLLOUT_HACK],
       "Center at world origin",
-      NULL,
+      NULL /*,
       id+CHECK_CENTER,
-      NULL);
+      NULL*/);
    assert(_checkbox[CHECK_CENTER]);
 
    // Editable xforms
 
-   _panel[PANEL_EDIT_XFORM] = _glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_XFORM] = new GLUI_Panel(
       _rollout[ROLLOUT_HACK],
       "");
    assert(_panel[PANEL_EDIT_XFORM]);
@@ -749,14 +749,14 @@ NPRPenUI::build()
    float min_scale = .00001;
    float max_scale = 1000;
 
-   _edittext[EDIT_TRAN_X] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_TRAN_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Trans X", GLUI_EDITTEXT_FLOAT,
       NULL, 
       id+EDIT_TRAN_X, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_X]);
 
-   _edittext[EDIT_SCALE_X] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_SCALE_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Scale X", GLUI_EDITTEXT_FLOAT,
       NULL, 
@@ -764,7 +764,7 @@ NPRPenUI::build()
    assert(_edittext[EDIT_SCALE_X]);
    _edittext[EDIT_SCALE_X]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
 
-   _edittext[EDIT_ROT_X] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_ROT_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Rot X", GLUI_EDITTEXT_FLOAT,
       NULL, 
@@ -772,16 +772,16 @@ NPRPenUI::build()
    assert(_edittext[EDIT_ROT_X]);
    _edittext[EDIT_ROT_X]->set_alignment(GLUI_ALIGN_RIGHT);
 
-   _glui->add_column_to_panel(_panel[PANEL_EDIT_XFORM],false);
+   new GLUI_Column(_panel[PANEL_EDIT_XFORM], false);
 
-   _edittext[EDIT_TRAN_Y] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_TRAN_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
       NULL, 
       id+EDIT_TRAN_Y, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_Y]);
 
-   _edittext[EDIT_SCALE_Y] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_SCALE_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
       NULL, 
@@ -789,23 +789,23 @@ NPRPenUI::build()
    assert(_edittext[EDIT_SCALE_Y]);
    _edittext[EDIT_SCALE_Y]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
 
-   _edittext[EDIT_ROT_Y] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_ROT_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
       NULL, 
       id+EDIT_ROT_Y, edit_xform_cb);
    assert(_edittext[EDIT_ROT_Y]);
 
-   _glui->add_column_to_panel(_panel[PANEL_EDIT_XFORM],false);
+   new GLUI_Column(_panel[PANEL_EDIT_XFORM], false);
 
-   _edittext[EDIT_TRAN_Z] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_TRAN_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
       NULL, 
       id+EDIT_TRAN_Z, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_Z]);
 
-   _edittext[EDIT_SCALE_Z] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_SCALE_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
       NULL, 
@@ -813,7 +813,7 @@ NPRPenUI::build()
    assert(_edittext[EDIT_SCALE_Z]);
    _edittext[EDIT_SCALE_Y]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
 
-   _edittext[EDIT_ROT_Z] = _glui->add_edittext_to_panel(
+   _edittext[EDIT_ROT_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
       NULL, 

@@ -50,29 +50,29 @@ FileListbox::init(
    _glui->set_main_gfx_window(main_win_id);
 
    // Create label
-   _glui->add_statictext(**label); 
+   new GLUI_StaticText(_glui, **label);
    // Followed by a separator
-   _glui->add_separator();
+   new GLUI_Separator(_glui);
 
    // Create the texture list box
-   _listbox = _glui->add_listbox(**listbox_name,
-                                 NULL, // not using live var
-                                 _file_list_boxes.num()-1,
-                                 FileListbox::listbox_cb
-                                 // registering the callback func
-                                 );
+   _listbox = new GLUI_Listbox(_glui, **listbox_name,
+                               NULL, // not using live var
+                               _file_list_boxes.num()-1,
+                               FileListbox::listbox_cb
+                               // registering the callback func
+                               );
    assert(_listbox);
 
    // Another separator
-   _glui->add_separator();
+   new GLUI_Separator(_glui);
 
    // Add a button for setting the attributes to the stroke
-   _glui->add_button(**button_name, _file_list_boxes.num()-1,
-                     FileListbox::set_cb);
+   new GLUI_Button(_glui, **button_name, _file_list_boxes.num()-1,
+                   FileListbox::set_cb);
 
    // Add a button for setting the attributes to the stroke
-   _glui->add_button("Hide", _file_list_boxes.num()-1,
-                     FileListbox::hide_cb);
+   new GLUI_Button(_glui, "Hide", _file_list_boxes.num()-1,
+                   FileListbox::hide_cb);
 
    _glui->hide();
 }

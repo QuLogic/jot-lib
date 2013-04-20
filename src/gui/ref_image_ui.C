@@ -55,58 +55,58 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
    _glui = glui; 
    int id = _id << ID_SHIFT;
 
-  _rollout[ROLLOUT_MAIN] = (base) ? glui->add_rollout_to_panel(base, "Ref Images",open)
-                                   : glui->add_rollout("RefImageUI",open);  
+  _rollout[ROLLOUT_MAIN] = (base) ? new GLUI_Rollout(base, "Ref Images", open)
+                                   : new GLUI_Rollout(glui, "RefImageUI", open);
 
 
 
-  _radgroup[RADGROUP_REF_IMAGES] = glui->add_radiogroup_to_panel(
+  _radgroup[RADGROUP_REF_IMAGES] = new GLUI_RadioGroup(
                                      _rollout[ROLLOUT_MAIN],
                                      NULL,
                                      id+RADGROUP_REF_IMAGES, radiogroup_cb);
 
 
-   _radbutton[RADBUT_MAIN] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_MAIN] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_REF_IMAGES],
                                    "regular");
 
-   _radbutton[RADBUT_TONE0] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TONE0] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_REF_IMAGES],
                                    "tone_0");
 
-   _radbutton[RADBUT_TONE1] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TONE1] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_REF_IMAGES],
                                    "tone_1");
 
-   _radbutton[RADBUT_HALO] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_HALO] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_REF_IMAGES],
                                    "halo");
   
-    glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+    new GLUI_Column(_rollout[ROLLOUT_MAIN],true);
 
    _radgroup[RADGROUP_REF_IMAGES]->set_int_val(0);
 
 
-   _slider[SLIDER_HALO] = glui->add_slider_to_panel(_rollout[ROLLOUT_MAIN],
-                                                      "Halo kernel size",1,
-                                                      0,50,0,id+SLIDER_HALO,slider_cb);
+   _slider[SLIDER_HALO] = new GLUI_Slider(_rollout[ROLLOUT_MAIN],
+                                          "Halo kernel size",
+                                          id+SLIDER_HALO,slider_cb,1,0,50,0);
 
    _slider[SLIDER_HALO]->set_int_val(HaloRefImage::lookup()->get_kernel_size());
 
 
 
-   _listbox[LISTBOX_SKY] = glui->add_listbox_to_panel(_rollout[ROLLOUT_MAIN],
-                                                      "Sky",
-                                                      0,id+LISTBOX_SKY,
-                                                      listbox_cb);
+   _listbox[LISTBOX_SKY] = new GLUI_Listbox(_rollout[ROLLOUT_MAIN],
+                                            "Sky",
+                                            0,id+LISTBOX_SKY,
+                                            listbox_cb);
 
     fill_directory_listbox(_listbox[LISTBOX_SKY],_sky_filenames, Config::JOT_ROOT() + "/nprdata/sky_textures/", ".png", false);
 
 
-   _checkbox[CHECKBOX_SKY] = glui->add_checkbox_to_panel(_rollout[ROLLOUT_MAIN],
-                                                         "draw skybox",
-                                                         0,id+CHECKBOX_SKY,
-                                                         checkbox_cb);
+   _checkbox[CHECKBOX_SKY] = new GLUI_Checkbox(_rollout[ROLLOUT_MAIN],
+                                               "draw skybox",
+                                               0,id+CHECKBOX_SKY,
+                                               checkbox_cb);
    _checkbox[CHECKBOX_SKY]->set_int_val(0);
                                                          
 

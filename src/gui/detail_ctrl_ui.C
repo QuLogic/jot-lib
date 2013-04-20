@@ -61,133 +61,133 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    int id = _id << ID_SHIFT;
 
    _rollout[ROLLOUT_MAIN] 
-      = (base) ? glui->add_rollout_to_panel(base, "Detail Control UI",open)
-	 : glui->add_rollout("Detail Control UI",open);
+      = (base) ? new GLUI_Rollout(base, "Detail Control UI", open)
+	 : new GLUI_Rollout(glui, "Detail Control UI", open);
 
-    _panel[PANEL_DETAIL_TYPE] = glui->add_panel_to_panel( _rollout[ROLLOUT_MAIN], "Detail Types");
+    _panel[PANEL_DETAIL_TYPE] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "Detail Types");
 
-   _radgroup[RADGROUP_DETAIL_TYPE] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_DETAIL_TYPE] = new GLUI_RadioGroup(
 				       _panel[PANEL_DETAIL_TYPE],
 				       NULL,
 				       id+RADGROUP_DETAIL_TYPE, radiogroup_cb);
 
-   _radbutton[RADBUT_DETAIL_ALL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_ALL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_TYPE],
 					  "All");
 
-   _radbutton[RADBUT_DETAIL_LINE_WIDTH] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_LINE_WIDTH] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_TYPE],
 					  "Line Width");
 
-   _radbutton[RADBUT_DETAIL_BLUR_SIZE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_BLUR_SIZE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_TYPE],
 					  "Blur Size");
 
-   _radbutton[RADBUT_DETAIL_TONE_NORMAL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_TONE_NORMAL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_TYPE],
 					  "Normal Blending (Tone)");
-   _radbutton[RADBUT_DETAIL_BASE_NORMAL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_BASE_NORMAL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_TYPE],
 					  "Normal Blending (Basecoat)");
 
-    _panel[PANEL_DETAIL_FUNC] = glui->add_panel_to_panel( _rollout[ROLLOUT_MAIN], "Detail Factors");
+    _panel[PANEL_DETAIL_FUNC] = new GLUI_Panel( _rollout[ROLLOUT_MAIN], "Detail Factors");
 
-   _radgroup[RADGROUP_DETAIL_FUNC] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_DETAIL_FUNC] = new GLUI_RadioGroup(
 				       _panel[PANEL_DETAIL_FUNC],
 				       NULL,
 				       id+RADGROUP_DETAIL_FUNC, radiogroup_cb);
 
-   _radbutton[RADBUT_DETAIL_FUNC_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "None");
 
-   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_UNIFORM] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_UNIFORM] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "Depth");
 
-   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_GLOBAL_LENGTH] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_GLOBAL_LENGTH] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "Depth (Global Length)");
 
-   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_LOCAL_LENGTH] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_DEPTH_LOCAL_LENGTH] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "Depth (Local Length)");
 
-   _radbutton[RADBUT_DETAIL_FUNC_RELATIVE_LENGTH] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_RELATIVE_LENGTH] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "Relative Length");
 
-   _radbutton[RADBUT_DETAIL_FUNC_USER] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DETAIL_FUNC_USER] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DETAIL_FUNC],
 					  "User");
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
 
-   _spinner[SPINNER_BOX_SIZE] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_BOX_SIZE] = new GLUI_Spinner(
                               _rollout[ROLLOUT_MAIN],
                              "Box size",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_BOX_SIZE, spinner_cb);
 
-   _slider[SLIDE_USER_DEPTH] = _glui->add_slider_to_panel(
+   _slider[SLIDE_USER_DEPTH] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "User Depth", 
+      id+SLIDE_USER_DEPTH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_USER_DEPTH, slider_cb);
+      NULL);
    _slider[SLIDE_USER_DEPTH]->set_num_graduations(100);
    _slider[SLIDE_USER_DEPTH]->set_w(200);
 
 
-   _slider[SLIDE_UNIT_LEN] = glui->add_slider_to_panel(
+   _slider[SLIDE_UNIT_LEN] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Unit Length", 
+      id+SLIDE_UNIT_LEN, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_UNIT_LEN, slider_cb);
+      NULL);
    _slider[SLIDE_UNIT_LEN]->set_num_graduations(100);
    _slider[SLIDE_UNIT_LEN]->set_w(200);
 
-   _slider[SLIDE_EDGE_LEN_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDE_EDGE_LEN_SCALE] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Edge Length Scale", 
+      id+SLIDE_EDGE_LEN_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_EDGE_LEN_SCALE, slider_cb);
+      NULL);
    _slider[SLIDE_EDGE_LEN_SCALE]->set_num_graduations(100);
    _slider[SLIDE_EDGE_LEN_SCALE]->set_w(200);
 
-   _slider[SLIDE_RATIO_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDE_RATIO_SCALE] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Ratio Scale", 
+      id+SLIDE_RATIO_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 10.0,
-      NULL,
-      id+SLIDE_RATIO_SCALE, slider_cb);
+      NULL);
    _slider[SLIDE_RATIO_SCALE]->set_num_graduations(100);
    _slider[SLIDE_RATIO_SCALE]->set_w(200);
 
-   _radgroup[RADGROUP_NORMAL] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_NORMAL] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_MAIN],
 				       NULL,
 				       id+RADGROUP_NORMAL, radiogroup_cb);
 
-   _radbutton[RADBUT_NORMAL_SMOOTH] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_NORMAL_SMOOTH] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_NORMAL],
 					  "Smooth");
 
-   _radbutton[RADBUT_NORMAL_SPHERIC] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_NORMAL_SPHERIC] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_NORMAL],
 					  "Spheric");
-   _radbutton[RADBUT_NORMAL_ELLIPTIC] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_NORMAL_ELLIPTIC] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_NORMAL],
 					  "Elliptic");
 
-   _radbutton[RADBUT_NORMAL_CYLINDRIC] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_NORMAL_CYLINDRIC] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_NORMAL],
 					  "Cylindric");
 

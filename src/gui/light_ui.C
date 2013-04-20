@@ -56,62 +56,62 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 {   
    _glui = glui;
    //Lighting
-   _rollout[ROLLOUT_LIGHT] = (base) ? glui->add_rollout_to_panel(base, "Lighting",open)
-                                    : glui->add_rollout("Lighting",open);
+   _rollout[ROLLOUT_LIGHT] = (base) ? new GLUI_Rollout(base, "Lighting", open)
+                                    : new GLUI_Rollout(glui, "Lighting", open);
    
 
    assert(_rollout[ROLLOUT_LIGHT]);
 
    //Top panel
-   _panel[PANEL_LIGHTTOP] = glui->add_panel_to_panel(
+   _panel[PANEL_LIGHTTOP] = new GLUI_Panel(
                                _rollout[ROLLOUT_LIGHT],
                                "");
    assert(_panel[PANEL_LIGHTTOP]);
 
    //Number
-   _radgroup[RADGROUP_LIGHTNUM] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_LIGHTNUM] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
                                      NULL,
                                      RADGROUP_LIGHTNUM, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTNUM]);
 
-   _radbutton[RADBUT_LIGHT0] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT0] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "0");
    assert(_radbutton[RADBUT_LIGHT0]);
-   _radbutton[RADBUT_LIGHT1] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT1] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "1");
    assert(_radbutton[RADBUT_LIGHT1]);
-   _radbutton[RADBUT_LIGHT2] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT2] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "2");
    assert(_radbutton[RADBUT_LIGHT2]);
-   _radbutton[RADBUT_LIGHT3] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT3] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "3");
-   _radbutton[RADBUT_LIGHT4] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT4] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "4");
-   _radbutton[RADBUT_LIGHT5] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT5] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "5");
-   _radbutton[RADBUT_LIGHT6] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT6] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "6");
-   _radbutton[RADBUT_LIGHT7] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT7] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "7");
    assert(_radbutton[RADBUT_LIGHT2]);
-   _radbutton[RADBUT_LIGHTG] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHTG] = new GLUI_RadioButton(
                                   _radgroup[RADGROUP_LIGHTNUM],
                                   "G");
    assert(_radbutton[RADBUT_LIGHTG]);
 
-   glui->add_column_to_panel(_panel[PANEL_LIGHTTOP],true);
+   new GLUI_Column(_panel[PANEL_LIGHTTOP], true);
 
    //Enable, Position/Direction, Amb/Diff
-   _checkbox[CHECK_ENABLE] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ENABLE] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "On",
                                 NULL,
@@ -119,14 +119,14 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                                 checkbox_cb);
    assert(_checkbox[CHECK_ENABLE]);
 
-    _checkbox[CHECK_SHOW_WIDGET] = glui->add_checkbox_to_panel(
+    _checkbox[CHECK_SHOW_WIDGET] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "Show Widget",
                                 NULL,
                                 CHECK_SHOW_WIDGET,
                                 checkbox_cb);
 
-   _checkbox[CHECK_POS] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_POS] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Dir",
                              NULL,
@@ -134,7 +134,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              checkbox_cb);
    assert(_checkbox[CHECK_POS]);
 
-   _checkbox[CHECK_CAM] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_CAM] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Cam",
                              NULL,
@@ -142,25 +142,25 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              checkbox_cb);
    assert(_checkbox[CHECK_CAM]);
 
-   _radgroup[RADGROUP_LIGHTCOL] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_LIGHTCOL] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
                                      NULL,
                                      RADGROUP_LIGHTCOL, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTCOL]);
 
-   _radbutton[RADBUT_DIFFUSE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DIFFUSE] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_LIGHTCOL],
                                    "Dif");
    assert(_radbutton[RADBUT_DIFFUSE]);
-   _radbutton[RADBUT_AMBIENT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_AMBIENT] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_LIGHTCOL],
                                    "Amb");
    assert(_radbutton[RADBUT_AMBIENT]);
 
-   glui->add_column_to_panel(_panel[PANEL_LIGHTTOP],true);
+   new GLUI_Column(_panel[PANEL_LIGHTTOP], true);
 
    //Rot
-   _rotation[ROT_LIGHT] = glui->add_rotation_to_panel(
+   _rotation[ROT_LIGHT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHTTOP],
                              "Pos/Dir",
                              NULL,
@@ -168,101 +168,101 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    assert(_rotation[ROT_LIGHT]);
   
 
-   _spinner[SPINNER_LIGHT_DIR_X] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_LIGHT_DIR_X] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "x",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_DIR_X, spinner_cb);
    _spinner[SPINNER_LIGHT_DIR_X]->set_w(20);
-   _spinner[SPINNER_LIGHT_DIR_Y] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_LIGHT_DIR_Y] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "y",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_DIR_Y, spinner_cb);
    _spinner[SPINNER_LIGHT_DIR_Y]->set_w(20);
-    _spinner[SPINNER_LIGHT_DIR_Z] = glui->add_spinner_to_panel(
+    _spinner[SPINNER_LIGHT_DIR_Z] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "z",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_DIR_Z, spinner_cb);
     _spinner[SPINNER_LIGHT_DIR_Z]->set_w(20);
-    glui->add_column_to_panel(_panel[PANEL_LIGHTTOP],false);
+    new GLUI_Column(_panel[PANEL_LIGHTTOP], false);
     
     _presets_ui->build(glui,_panel[PANEL_LIGHTTOP], true); 
    
     // Spotlight Menu
-    _rollout[ROLLOUT_SPOT] = glui->add_rollout_to_panel( _rollout[ROLLOUT_LIGHT], "Point Light",false);
+    _rollout[ROLLOUT_SPOT] = new GLUI_Rollout(_rollout[ROLLOUT_LIGHT], "Point Light", false);
    
 
-    _panel[PANEL_LIGHT_SPOTDIR] = glui->add_panel_to_panel( _rollout[ROLLOUT_SPOT], "");
+    _panel[PANEL_LIGHT_SPOTDIR] = new GLUI_Panel(_rollout[ROLLOUT_SPOT], "");
     
-    _rotation[ROT_SPOT] = glui->add_rotation_to_panel(
+    _rotation[ROT_SPOT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHT_SPOTDIR],
                              "Spot Dir",
                              NULL,
                              ROT_SPOT, rotation_cb);
-     glui->add_column_to_panel(_panel[PANEL_LIGHT_SPOTDIR],false);
-    _spinner[SPINNER_LIGHT_SPOT_X] = glui->add_spinner_to_panel(
+     new GLUI_Column(_panel[PANEL_LIGHT_SPOTDIR], false);
+    _spinner[SPINNER_LIGHT_SPOT_X] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "x",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_SPOT_X, spinner_cb);
-    _spinner[SPINNER_LIGHT_SPOT_Y] = glui->add_spinner_to_panel(
+    _spinner[SPINNER_LIGHT_SPOT_Y] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "y",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_SPOT_Y, spinner_cb);
-    _spinner[SPINNER_LIGHT_SPOT_Z] = glui->add_spinner_to_panel(
+    _spinner[SPINNER_LIGHT_SPOT_Z] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "z",
                              GLUI_SPINNER_FLOAT,
                              NULL,
                              SPINNER_LIGHT_SPOT_Z, spinner_cb);
-    //_glui->add_column_to_panel(_rollout[ROLLOUT_SPOT],true);
-    _slider[SLIDE_SPOT_EXPONENT] = glui->add_slider_to_panel(
+    //_new GLUI_Column(_rollout[ROLLOUT_SPOT], true);
+    _slider[SLIDE_SPOT_EXPONENT] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
                           "Spot Exponent",
+                          SLIDE_SPOT_EXPONENT, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL,
-                          SLIDE_SPOT_EXPONENT, slider_cb);
+                          NULL);
     
-    _slider[SLIDE_SPOT_CUTOFF] = glui->add_slider_to_panel(
+    _slider[SLIDE_SPOT_CUTOFF] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
                           "Spot Cutoff",
+                          SLIDE_SPOT_CUTOFF, slider_cb,
                           GLUI_SLIDER_INT,
                           0, 90,
-                          NULL,
-                          SLIDE_SPOT_CUTOFF, slider_cb);
+                          NULL);
     _slider[SLIDE_SPOT_CUTOFF]->set_int_val(90);
-    _slider[SLIDE_SPOT_K0] = glui->add_slider_to_panel(
+    _slider[SLIDE_SPOT_K0] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
                           "Constatnt Attenuation",
+                          SLIDE_SPOT_K0, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL,
-                          SLIDE_SPOT_K0, slider_cb);
+                          NULL);
     _slider[SLIDE_SPOT_K0]->set_float_val(1.0);
-    _slider[SLIDE_SPOT_K1] = glui->add_slider_to_panel(
+    _slider[SLIDE_SPOT_K1] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
                           "Linear Attenuation",
+                          SLIDE_SPOT_K1, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL,
-                          SLIDE_SPOT_K1, slider_cb);
+                          NULL);
    
-    _slider[SLIDE_SPOT_K2] = glui->add_slider_to_panel(
+    _slider[SLIDE_SPOT_K2] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
                           "Quadratic Attenuation",
+                          SLIDE_SPOT_K2, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 0.5,
-                          NULL,
-                          SLIDE_SPOT_K2, slider_cb);
+                          NULL);
    
 
  

@@ -109,7 +109,7 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
 
    //Sub-panel containing animation controls
-   _rollout[ROLLOUT_ANIM] = glui->add_rollout_to_panel(p,"Animation Settings",true);
+   _rollout[ROLLOUT_ANIM] = new GLUI_Rollout(p, "Animation Settings", true);
    assert(_rollout[ROLLOUT_ANIM]);
 
    //       COL1  COL2  Col3
@@ -118,105 +118,105 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    // ROW3  Glob  Limit Foo
 
    //COL1
-   _slider[SLIDE_LO_THRESH] = glui->add_slider_to_panel(
+   _slider[SLIDE_LO_THRESH] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Lo Thresh", 
+      id+SLIDE_LO_THRESH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.1, 0.9,
-      &(_pen->params().anim_lo_thresh_()),
-      id+SLIDE_LO_THRESH, slider_cb);
+      &(_pen->params().anim_lo_thresh_()));
    assert(_slider[SLIDE_LO_THRESH]);
    _slider[SLIDE_LO_THRESH]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_LO_THRESH]->set_num_graduations(81);
 
-   _slider[SLIDE_HI_THRESH] = glui->add_slider_to_panel(
+   _slider[SLIDE_HI_THRESH] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Hi Thresh", 
+      id+SLIDE_HI_THRESH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.1, 0.9, 
-      &(_pen->params().anim_hi_thresh_()),
-      id+SLIDE_HI_THRESH, slider_cb);
+      &(_pen->params().anim_hi_thresh_()));
    assert(_slider[SLIDE_HI_THRESH]);
    _slider[SLIDE_HI_THRESH]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_HI_THRESH]->set_num_graduations(81);
 
-   _slider[SLIDE_GLOBAL_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDE_GLOBAL_SCALE] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Global Scale", 
+      id+SLIDE_GLOBAL_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 0.2, 
-      &(_pen->params().anim_global_scale_()),
-      id+SLIDE_GLOBAL_SCALE, slider_cb);
+      &(_pen->params().anim_global_scale_()));
    assert(_slider[SLIDE_GLOBAL_SCALE]);
    _slider[SLIDE_GLOBAL_SCALE]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_GLOBAL_SCALE]->set_num_graduations(201);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_ANIM],false);
+   new GLUI_Column(_rollout[ROLLOUT_ANIM], false);
 
    // COL2
-   _slider[SLIDE_LO_WIDTH] = glui->add_slider_to_panel(
+   _slider[SLIDE_LO_WIDTH] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Lo Width", 
+      id+SLIDE_LO_WIDTH, slider_cb,
       GLUI_SLIDER_FLOAT,
       0.1, 1.0,
-      &(_pen->params().anim_lo_width_()),
-      id+SLIDE_LO_WIDTH, slider_cb);
+      &(_pen->params().anim_lo_width_()));
    assert(_slider[SLIDE_LO_WIDTH]);
    _slider[SLIDE_LO_WIDTH]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_LO_WIDTH]->set_num_graduations(91);
 
-   _slider[SLIDE_HI_WIDTH] = glui->add_slider_to_panel(
+   _slider[SLIDE_HI_WIDTH] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Hi Width", 
+      id+SLIDE_HI_WIDTH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0, 10.0, 
-      &(_pen->params().anim_hi_width_()),
-      id+SLIDE_HI_WIDTH, slider_cb);
+      &(_pen->params().anim_hi_width_()));
    assert(_slider[SLIDE_HI_WIDTH]);
    _slider[SLIDE_HI_WIDTH]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_HI_WIDTH]->set_num_graduations(91);
 
-   _slider[SLIDE_LIMIT_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDE_LIMIT_SCALE] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Limit Scale", 
+      id+SLIDE_LIMIT_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      &(_pen->params().anim_limit_scale_()),
-      id+SLIDE_LIMIT_SCALE, slider_cb);
+      &(_pen->params().anim_limit_scale_()));
    assert(_slider[SLIDE_LIMIT_SCALE]);
    _slider[SLIDE_LIMIT_SCALE]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_LIMIT_SCALE]->set_num_graduations(1001);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_ANIM],false);
+   new GLUI_Column(_rollout[ROLLOUT_ANIM], false);
 
    //COL3
-   _slider[SLIDE_TRANS_TIME] = glui->add_slider_to_panel(
+   _slider[SLIDE_TRANS_TIME] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Trans. Time", 
+      id+SLIDE_TRANS_TIME, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 5.0,
-      &(_pen->params().anim_trans_time_()),
-      id+SLIDE_TRANS_TIME, slider_cb);
+      &(_pen->params().anim_trans_time_()));
    assert(_slider[SLIDE_TRANS_TIME]);
    _slider[SLIDE_TRANS_TIME]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_TRANS_TIME]->set_num_graduations(51);
 
-   _slider[SLIDE_MAX_LOD] = glui->add_slider_to_panel(
+   _slider[SLIDE_MAX_LOD] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Max. LOD", 
+      id+SLIDE_MAX_LOD, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 5.0,
-      &(_pen->params().anim_max_lod_()),
-      id+SLIDE_MAX_LOD, slider_cb);
+      &(_pen->params().anim_max_lod_()));
    assert(_slider[SLIDE_MAX_LOD]);
    _slider[SLIDE_MAX_LOD]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_MAX_LOD]->set_num_graduations(51);
 
-   _slider[SLIDE_FOO] = glui->add_slider_to_panel(
+   _slider[SLIDE_FOO] = new GLUI_Slider(
       _rollout[ROLLOUT_ANIM], "Foo", 
+      id+SLIDE_FOO, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL,
-      id+SLIDE_FOO, slider_cb);
+      NULL);
    assert(_slider[SLIDE_FOO]);
    _slider[SLIDE_FOO]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_FOO]->set_num_graduations(11);
    _slider[SLIDE_FOO]->disable();
 
    // Subpanel with control buttons
-   _panel[PANEL_CONTROLS] = glui->add_panel_to_panel(p,"");
+   _panel[PANEL_CONTROLS] = new GLUI_Panel(p, "");
    assert(_panel[PANEL_CONTROLS]);
 
    //        COL1     COL2     COL3
@@ -224,25 +224,25 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    //  ROW2  DelAll  DelLast  Apply
 
    // COL1
-   _panel[PANEL_TYPE] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],
+   _panel[PANEL_TYPE] = new GLUI_Panel(_panel[PANEL_CONTROLS],
                **(str_ptr("Mode: ") + HatchingGroup::name(_pen->hatch_mode())) );
    assert(_panel[PANEL_TYPE]);
-   _button[BUT_TYPE] = glui->add_button_to_panel(
+   _button[BUT_TYPE] = new GLUI_Button(
       _panel[PANEL_TYPE], "Type", 
       id+BUT_TYPE, button_cb);
    assert(_button[BUT_TYPE]);
 
-   _panel[PANEL_DELETE_ALL] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],"Delete");
+   _panel[PANEL_DELETE_ALL] = new GLUI_Panel(_panel[PANEL_CONTROLS], "Delete");
    assert(_panel[PANEL_DELETE_ALL]);
-   _button[BUT_DELETE_ALL] = glui->add_button_to_panel(
+   _button[BUT_DELETE_ALL] = new GLUI_Button(
       _panel[PANEL_DELETE_ALL],  "All", 
       id+BUT_DELETE_ALL, button_cb);
    assert(_button[BUT_DELETE_ALL]);
 
-   glui->add_column_to_panel(_panel[PANEL_DELETE_ALL],false);
+   new GLUI_Column(_panel[PANEL_DELETE_ALL], false);
 
    _delete_confirm = 0;
-   _checkbox[CHECK_CONFIRM] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_CONFIRM] = new GLUI_Checkbox(
       _panel[PANEL_DELETE_ALL], "", 
       &_delete_confirm,
       id+CHECK_CONFIRM, checkbox_cb);
@@ -251,40 +251,40 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    _button[BUT_DELETE_ALL]->set_w(_button[BUT_DELETE_ALL]->get_w() - 2*_checkbox[CHECK_CONFIRM]->get_w());
 
    // COL2
-   glui->add_column_to_panel(_panel[PANEL_CONTROLS],false);
+   new GLUI_Column(_panel[PANEL_CONTROLS], false);
 
-   _panel[PANEL_CURVES] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],
+   _panel[PANEL_CURVES] = new GLUI_Panel(_panel[PANEL_CONTROLS],
                **(str_ptr("Mode: ") + HatchingGroup::curve_mode_name(_pen->curve_mode())) );
    assert(_panel[PANEL_CURVES]);
-   _button[BUT_CURVES] = glui->add_button_to_panel(
+   _button[BUT_CURVES] = new GLUI_Button(
       _panel[PANEL_CURVES], "Curves", 
       id+BUT_CURVES, button_cb);
    assert(_button[BUT_CURVES]);
 
 
-   _panel[PANEL_UNDO_LAST] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],"Undo");
+   _panel[PANEL_UNDO_LAST] = new GLUI_Panel(_panel[PANEL_CONTROLS], "Undo");
    assert(_panel[PANEL_UNDO_LAST]);
-   _button[BUT_UNDO_LAST] = glui->add_button_to_panel(
+   _button[BUT_UNDO_LAST] = new GLUI_Button(
       _panel[PANEL_UNDO_LAST],  "Last", 
       id+BUT_UNDO_LAST, button_cb);
    assert(_button[BUT_UNDO_LAST]);
 
    
    // COL3
-   glui->add_column_to_panel(_panel[PANEL_CONTROLS],false);
+   new GLUI_Column(_panel[PANEL_CONTROLS], false);
    
-   _panel[PANEL_STYLE] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],
+   _panel[PANEL_STYLE] = new GLUI_Panel(_panel[PANEL_CONTROLS],
                **(str_ptr("Mode: ") + HatchingGroup::style_mode_name(_pen->params().anim_style())) );
    assert(_panel[PANEL_STYLE]);
-   _button[BUT_STYLE] = glui->add_button_to_panel(
+   _button[BUT_STYLE] = new GLUI_Button(
       _panel[PANEL_STYLE], "Style", 
       id+BUT_STYLE, button_cb);
    assert(_button[BUT_STYLE]);
 
    
-   _panel[PANEL_APPLY] = glui->add_panel_to_panel(_panel[PANEL_CONTROLS],"Settings");
+   _panel[PANEL_APPLY] = new GLUI_Panel(_panel[PANEL_CONTROLS], "Settings");
    assert(_panel[PANEL_APPLY]);
-   _button[BUT_APPLY] = glui->add_button_to_panel(
+   _button[BUT_APPLY] = new GLUI_Button(
       _panel[PANEL_APPLY],    "Apply", 
       id+BUT_APPLY, button_cb);
    assert(_button[BUT_APPLY]);

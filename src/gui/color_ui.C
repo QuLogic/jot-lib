@@ -62,74 +62,74 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _glui = glui; 
    int id = _id << ID_SHIFT;
    //Lighting
-   _rollout[ROLLOUT_MAIN] = (base) ? glui->add_rollout_to_panel(base, "Color",open)
-                                   : glui->add_rollout("ColorUI",open);  
+   _rollout[ROLLOUT_MAIN] = (base) ? new GLUI_Rollout(base, "Color", open)
+                                   : new GLUI_Rollout(glui, "ColorUI", open);
    
-   //_panel[PANEL_COLORS] = glui->add_panel_to_panel(_rollout[ROLLOUT_MAIN], "hello");
+   //_panel[PANEL_COLORS] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "hello");
    
    for(int i=PRESET; i < PRESET+PRESET_NUMBER; ++i){
-     _button[i] = glui->add_button_to_panel(
+     _button[i] = new GLUI_Button(
          _rollout[ROLLOUT_MAIN],  "", 
          id+i, button_cb);
       _button[i]->set_w(20);
       _button[i]->set_h(20);
       if(i == ((PRESET+PRESET_NUMBER)/2))
-         glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],false);
+         new GLUI_Column(_rollout[ROLLOUT_MAIN], false);
    }
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
-   _button[BUT_CURRENT] = glui->add_button_to_panel(
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
+   _button[BUT_CURRENT] = new GLUI_Button(
          _rollout[ROLLOUT_MAIN],  "Now", 
          id+BUT_CURRENT, button_cb);
    _button[BUT_CURRENT]->set_w(40);
    _button[BUT_CURRENT]->set_h(40);
-   _button[BUT_LAST] = glui->add_button_to_panel(
+   _button[BUT_LAST] = new GLUI_Button(
          _rollout[ROLLOUT_MAIN],  "Last", 
          id+BUT_LAST, button_cb);
    _button[BUT_LAST]->set_w(40);
    _button[BUT_LAST]->set_h(40);
-   _radgroup[RADGROUP_COLOR] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COLOR] = new GLUI_RadioGroup(
                                      _rollout[ROLLOUT_MAIN],
                                      NULL,
                                      id+RADGROUP_COLOR, radiogroup_cb);
-   _radbutton[RADBUT_HSV] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_HSV] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR],
                                    "HSV");
-   _radbutton[RADBUT_RGB] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_RGB] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR],
                                    "RGB");
    _radgroup[RADGROUP_COLOR]->set_int_val(int(_rgb));
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
 
-   _slider[SLIDER_R] = glui->add_slider_to_panel(
+   _slider[SLIDER_R] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], "Hue", 
+      id+SLIDER_R, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL,
-      id+SLIDER_R, slider_cb);
+      NULL);
    _slider[SLIDER_R]->set_w(150);
    _slider[SLIDER_R]->set_num_graduations(200);
   
-   _slider[SLIDER_G] = glui->add_slider_to_panel(
+   _slider[SLIDER_G] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], "Saturation", 
+      id+SLIDER_G, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL,
-      id+SLIDER_G, slider_cb);
+      NULL);
    _slider[SLIDER_G]->set_w(150);
    _slider[SLIDER_G]->set_num_graduations(200);
 
-   _slider[SLIDER_B] = glui->add_slider_to_panel(
+   _slider[SLIDER_B] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], "Value", 
+      id+SLIDER_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL,
-      id+SLIDER_B, slider_cb);
+      NULL);
    _slider[SLIDER_B]->set_w(150);
    _slider[SLIDER_B]->set_num_graduations(200);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
 
-   _edittext[EDITTEXT_R] =  glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_R] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "H", 
 		GLUI_EDITTEXT_INT, 
@@ -137,7 +137,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 		id+EDITTEXT_R, edittext_cb);
    _edittext[EDITTEXT_R]->set_w(40);
    _edittext[EDITTEXT_R]->set_int_limits(0,100);
-   _edittext[EDITTEXT_G] =  glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_G] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "S", 
 		GLUI_EDITTEXT_INT, 
@@ -145,7 +145,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 		id+EDITTEXT_G, edittext_cb);
    _edittext[EDITTEXT_G]->set_w(40);
    _edittext[EDITTEXT_G]->set_int_limits( 0,100);
-   _edittext[EDITTEXT_B] =  glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_B] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "V", 
 		GLUI_EDITTEXT_INT, 
@@ -154,7 +154,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _edittext[EDITTEXT_B]->set_w(40);
    _edittext[EDITTEXT_B]->set_int_limits( 0,100);
 
-    _edittext[EDITTEXT_A] =  glui->add_edittext_to_panel(
+    _edittext[EDITTEXT_A] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "A", 
 		GLUI_EDITTEXT_INT, 
@@ -163,7 +163,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _edittext[EDITTEXT_A]->set_w(40);
    _edittext[EDITTEXT_A]->set_int_limits( 0,100);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
    
    _presets_ui->build(glui,_rollout[ROLLOUT_MAIN], true); 
 

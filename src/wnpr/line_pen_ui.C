@@ -189,22 +189,22 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_statictext.num()==0);   for (i=0; i<TEXT_NUM; i++)     _statictext.add(0);
 
    //Sub-panel containing silhouette flag controls
-   _rollout[ROLLOUT_FLAGS] = glui->add_rollout_to_panel(p,"Line Types",true);
+   _rollout[ROLLOUT_FLAGS] = new GLUI_Rollout(p, "Line Types", true);
    assert(_rollout[ROLLOUT_FLAGS]);
 
-   glui->add_separator_to_panel(_rollout[ROLLOUT_FLAGS]);
-   _checkbox[CHECK_FLAG_SEE_THRU] = glui->add_checkbox_to_panel(
+   new GLUI_Separator(_rollout[ROLLOUT_FLAGS]);
+   _checkbox[CHECK_FLAG_SEE_THRU] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "See Thru",
       NULL,
       id+CHECK_FLAG_SEE_THRU,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SEE_THRU]);
-   glui->add_separator_to_panel(_rollout[ROLLOUT_FLAGS]);
+   new GLUI_Separator(_rollout[ROLLOUT_FLAGS]);
   
-   glui->add_column_to_panel(_rollout[ROLLOUT_FLAGS],false);
+   new GLUI_Column(_rollout[ROLLOUT_FLAGS], false);
 
-   _checkbox[CHECK_FLAG_SIL_VIS] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SIL_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Vis",
       NULL,
@@ -212,7 +212,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_VIS]);
 
-   _checkbox[CHECK_FLAG_SIL_HID] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SIL_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Hid",
       NULL,
@@ -220,7 +220,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_HID]);
 
-   _checkbox[CHECK_FLAG_SIL_OCC] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SIL_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Occ",
       NULL,
@@ -228,9 +228,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_OCC]);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_FLAGS],false);
+   new GLUI_Column(_rollout[ROLLOUT_FLAGS], false);
 
-   _checkbox[CHECK_FLAG_SILBF_VIS] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SILBF_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Vis",
       NULL,
@@ -238,7 +238,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_VIS]);
 
-   _checkbox[CHECK_FLAG_SILBF_HID] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SILBF_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Hid",
       NULL,
@@ -246,7 +246,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_HID]);
 
-   _checkbox[CHECK_FLAG_SILBF_OCC] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_SILBF_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Occ",
       NULL,
@@ -254,9 +254,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_OCC]);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_FLAGS],false);
+   new GLUI_Column(_rollout[ROLLOUT_FLAGS], false);
 
-   _checkbox[CHECK_FLAG_BORDER_VIS] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_BORDER_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Vis",
       NULL,
@@ -264,7 +264,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_VIS]);
 
-   _checkbox[CHECK_FLAG_BORDER_HID] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_BORDER_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Hid",
       NULL,
@@ -272,7 +272,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_HID]);
 
-   _checkbox[CHECK_FLAG_BORDER_OCC] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_BORDER_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Occ",
       NULL,
@@ -280,9 +280,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_OCC]);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_FLAGS],false);
+   new GLUI_Column(_rollout[ROLLOUT_FLAGS], false);
 
-   _checkbox[CHECK_FLAG_CREASE_VIS] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_CREASE_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Vis",
       NULL,
@@ -290,7 +290,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_VIS]);
 
-   _checkbox[CHECK_FLAG_CREASE_HID] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_CREASE_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Hid",
       NULL,
@@ -298,7 +298,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_HID]);
 
-   _checkbox[CHECK_FLAG_CREASE_OCC] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_FLAG_CREASE_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Occ",
       NULL,
@@ -306,20 +306,20 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_OCC]);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_FLAGS],false);
+   new GLUI_Column(_rollout[ROLLOUT_FLAGS], false);
 
 
    //Sub-panel containing silhouette coherence controls
-   _rollout[ROLLOUT_COHER] = glui->add_rollout_to_panel(p,"Coherence",true);
+   _rollout[ROLLOUT_COHER] = new GLUI_Rollout(p, "Coherence", true);
    assert(_rollout[ROLLOUT_COHER]);
 
 //
-   _panel[PANEL_COHER_OPTS] = glui->add_panel_to_panel(
+   _panel[PANEL_COHER_OPTS] = new GLUI_Panel(
       _rollout[ROLLOUT_COHER],
       "");
    assert(_panel[PANEL_COHER_OPTS]);
 
-   _checkbox[CHECK_COHER_GLOBAL] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_COHER_GLOBAL] = new GLUI_Checkbox(
       _panel[PANEL_COHER_OPTS],
       "Global",
       NULL,
@@ -327,7 +327,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_COHER_GLOBAL]);
 
-   _checkbox[CHECK_COHER_SIG_1] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_COHER_SIG_1] = new GLUI_Checkbox(
       _panel[PANEL_COHER_OPTS],
       "NoSig",
       NULL,
@@ -335,276 +335,276 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_COHER_SIG_1]);
 
-   _radgroup[RADGROUP_COHER_COVER] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COHER_COVER] = new GLUI_RadioGroup(
       _panel[PANEL_COHER_OPTS],
       NULL,
       id+RADGROUP_COHER_COVER, radiogroup_cb);
    assert(_radgroup[RADGROUP_COHER_COVER]);
 
-   _radbutton[RADBUT_COHER_COVER_MAJ] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_COVER_MAJ] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_COVER],
       "Major");
    assert(_radbutton[RADBUT_COHER_COVER_MAJ]);
    _radbutton[RADBUT_COHER_COVER_MAJ]->set_w(5);
 
-   _radbutton[RADBUT_COHER_COVER_1_TO_1] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_COVER_1_TO_1] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_COVER],
       "1 to 1");
    assert(_radbutton[RADBUT_COHER_COVER_1_TO_1]);
    _radbutton[RADBUT_COHER_COVER_1_TO_1]->set_w(5);
 
-   _radbutton[RADBUT_COHER_COVER_TRIM] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_COVER_TRIM] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_COVER],
       "Hybrid");
    assert(_radbutton[RADBUT_COHER_COVER_TRIM]);
    _radbutton[RADBUT_COHER_COVER_TRIM]->set_w(5);
 
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _panel[PANEL_COHER_FIT] = glui->add_panel_to_panel(
+   _panel[PANEL_COHER_FIT] = new GLUI_Panel(
       _rollout[ROLLOUT_COHER],
       "");
    assert(_panel[PANEL_COHER_FIT]);
 
-   _radgroup[RADGROUP_COHER_FIT] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COHER_FIT] = new GLUI_RadioGroup(
       _panel[PANEL_COHER_FIT],
       NULL,
       id+RADGROUP_COHER_FIT, radiogroup_cb);
    assert(_radgroup[RADGROUP_COHER_FIT]);
 
-   _radbutton[RADBUT_COHER_FIT_RAND] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_FIT_RAND] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_FIT],
       "Rand");
    assert(_radbutton[RADBUT_COHER_FIT_RAND]);
    _radbutton[RADBUT_COHER_FIT_RAND]->set_w(5);
 
-   _radbutton[RADBUT_COHER_FIT_ARC] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_FIT_ARC] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_FIT],
       "ArcL");
    assert(_radbutton[RADBUT_COHER_FIT_ARC]);
    _radbutton[RADBUT_COHER_FIT_ARC]->set_w(5);
 
-   _radbutton[RADBUT_COHER_FIT_PHASE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_FIT_PHASE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_FIT],
       "Phase");
    assert(_radbutton[RADBUT_COHER_FIT_PHASE]);
    _radbutton[RADBUT_COHER_FIT_PHASE]->set_w(5);
 
-   _radbutton[RADBUT_COHER_FIT_INTERP] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_FIT_INTERP] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_FIT],
       "Interp");
    assert(_radbutton[RADBUT_COHER_FIT_INTERP]);
    _radbutton[RADBUT_COHER_FIT_INTERP]->set_w(5);
 
-   _radbutton[RADBUT_COHER_FIT_OPTIM] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COHER_FIT_OPTIM] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COHER_FIT],
       "Optim");
    assert(_radbutton[RADBUT_COHER_FIT_OPTIM]);
    _radbutton[RADBUT_COHER_FIT_OPTIM]->set_w(5);
 
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _slider[SLIDE_COHER_PIX] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_PIX] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Pix", 
+      id+SLIDE_COHER_PIX, slider_cb,
       GLUI_SLIDER_FLOAT, 
       6, 200,
-      NULL,
-      id+SLIDE_COHER_PIX, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_PIX]);
    _slider[SLIDE_COHER_PIX]->set_num_graduations(195);
 
-   _slider[SLIDE_COHER_MV] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_MV] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Mv", 
+      id+SLIDE_COHER_MV, slider_cb,
       GLUI_SLIDER_INT, 
       1, 20,
-      NULL,
-      id+SLIDE_COHER_MV, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_MV]);
    _slider[SLIDE_COHER_MV]->set_num_graduations(20);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _slider[SLIDE_COHER_WF] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_WF] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Wf", 
+      id+SLIDE_COHER_WF, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_WF, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_WF]);
    _slider[SLIDE_COHER_WF]->set_num_graduations(201);
 
-   _slider[SLIDE_COHER_MP] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_MP] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Mp", 
+      id+SLIDE_COHER_MP, slider_cb,
       GLUI_SLIDER_INT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_MP, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_MP]);
    _slider[SLIDE_COHER_MP]->set_num_graduations(101);
 
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _slider[SLIDE_COHER_WS] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_WS] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Ws", 
+      id+SLIDE_COHER_WS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_WS, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_WS]);
    _slider[SLIDE_COHER_WS]->set_num_graduations(201);
 
-   _slider[SLIDE_COHER_M5] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_M5] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "M%", 
+      id+SLIDE_COHER_M5, slider_cb,
       GLUI_SLIDER_INT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_M5, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_M5]);
    _slider[SLIDE_COHER_M5]->set_num_graduations(101);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _slider[SLIDE_COHER_WB] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_WB] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Wb", 
+      id+SLIDE_COHER_WB, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_WB, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_WB]);
    _slider[SLIDE_COHER_WB]->set_num_graduations(201);
 
-   _slider[SLIDE_COHER_HJ] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_HJ] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Hj", 
+      id+SLIDE_COHER_HJ, slider_cb,
       GLUI_SLIDER_INT, 
       1, 100,
-      NULL,
-      id+SLIDE_COHER_HJ, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_HJ]);
    _slider[SLIDE_COHER_HJ]->set_num_graduations(100);
 
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_COHER],false);
+   new GLUI_Column(_rollout[ROLLOUT_COHER], false);
 
-   _slider[SLIDE_COHER_WH] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_WH] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Wh", 
+      id+SLIDE_COHER_WH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL,
-      id+SLIDE_COHER_WH, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_WH]);
    _slider[SLIDE_COHER_WH]->set_num_graduations(201);
 
-   _slider[SLIDE_COHER_HT] = glui->add_slider_to_panel(
+   _slider[SLIDE_COHER_HT] = new GLUI_Slider(
       _rollout[ROLLOUT_COHER], 
       "Ht", 
+      id+SLIDE_COHER_HT, slider_cb,
       GLUI_SLIDER_INT, 
       1, 1000,
-      NULL,
-      id+SLIDE_COHER_HT, slider_cb);
+      NULL);
    assert(_slider[SLIDE_COHER_HT]);
    _slider[SLIDE_COHER_HT]->set_num_graduations(1000);
 
    
    //Mesh/Crease rollout
-   _rollout[ROLLOUT_MESH] = glui->add_rollout_to_panel(p,"Mesh",true);
+   _rollout[ROLLOUT_MESH] = new GLUI_Rollout(p, "Mesh", true);
    assert(_rollout[ROLLOUT_MESH]);
 
-   glui->add_separator_to_panel(_rollout[ROLLOUT_MESH]);
-   _button[BUT_MESH_RECREASE] = glui->add_button_to_panel(
+   new GLUI_Separator(_rollout[ROLLOUT_MESH]);
+   _button[BUT_MESH_RECREASE] = new GLUI_Button(
       _rollout[ROLLOUT_MESH],
       "Regen. Creases",
       id+BUT_MESH_RECREASE,
       button_cb);
    assert(_button[BUT_MESH_RECREASE]);
    _button[BUT_MESH_RECREASE]->set_w(1);
-   glui->add_separator_to_panel(_rollout[ROLLOUT_MESH]);
+   new GLUI_Separator(_rollout[ROLLOUT_MESH]);
 
-   _slider[SLIDE_MESH_CREASE_VIS_STEP] = glui->add_slider_to_panel(
+   _slider[SLIDE_MESH_CREASE_VIS_STEP] = new GLUI_Slider(
       _rollout[ROLLOUT_MESH], 
       "Crease Visibility Step", 
+      id+SLIDE_MESH_CREASE_VIS_STEP, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1, 200,
-      NULL,
-      id+SLIDE_MESH_CREASE_VIS_STEP, slider_cb);
+      NULL);
    assert(_slider[SLIDE_MESH_CREASE_VIS_STEP]);
    _slider[SLIDE_MESH_CREASE_VIS_STEP]->set_w(150);
    _slider[SLIDE_MESH_CREASE_VIS_STEP]->set_num_graduations(200);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MESH],false);
+   new GLUI_Column(_rollout[ROLLOUT_MESH], false);
 
-   _slider[SLIDE_MESH_CREASE_DETECT_ANGLE] = glui->add_slider_to_panel(
+   _slider[SLIDE_MESH_CREASE_DETECT_ANGLE] = new GLUI_Slider(
       _rollout[ROLLOUT_MESH], 
       "Crease Detect Angle", 
+      id+SLIDE_MESH_CREASE_DETECT_ANGLE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 180,
-      NULL,
-      id+SLIDE_MESH_CREASE_DETECT_ANGLE, slider_cb);
+      NULL);
    assert(_slider[SLIDE_MESH_CREASE_DETECT_ANGLE]);
    _slider[SLIDE_MESH_CREASE_DETECT_ANGLE]->set_w(150);
    _slider[SLIDE_MESH_CREASE_DETECT_ANGLE]->set_num_graduations(361);
 
-   _slider[SLIDE_MESH_CREASE_JOINT_ANGLE] = glui->add_slider_to_panel(
+   _slider[SLIDE_MESH_CREASE_JOINT_ANGLE] = new GLUI_Slider(
       _rollout[ROLLOUT_MESH], 
       "Crease Joint Angle", 
+      id+SLIDE_MESH_CREASE_JOINT_ANGLE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 180,
-      NULL,
-      id+SLIDE_MESH_CREASE_JOINT_ANGLE, slider_cb);
+      NULL);
    assert(_slider[SLIDE_MESH_CREASE_JOINT_ANGLE]);
    _slider[SLIDE_MESH_CREASE_JOINT_ANGLE]->set_w(150);
    _slider[SLIDE_MESH_CREASE_JOINT_ANGLE]->set_num_graduations(361);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MESH],false);
+   new GLUI_Column(_rollout[ROLLOUT_MESH], false);
 
-   _slider[SLIDE_MESH_POLY_FACTOR] = glui->add_slider_to_panel(
+   _slider[SLIDE_MESH_POLY_FACTOR] = new GLUI_Slider(
       _rollout[ROLLOUT_MESH], 
       "Polygon Offset Factor", 
+      id+SLIDE_MESH_POLY_FACTOR, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL,
-      id+SLIDE_MESH_POLY_FACTOR, slider_cb);
+      NULL);
    assert(_slider[SLIDE_MESH_POLY_FACTOR]);
    _slider[SLIDE_MESH_POLY_FACTOR]->set_w(150);
    _slider[SLIDE_MESH_POLY_FACTOR]->set_num_graduations(301);
 
-   _slider[SLIDE_MESH_POLY_UNITS] = glui->add_slider_to_panel(
+   _slider[SLIDE_MESH_POLY_UNITS] = new GLUI_Slider(
       _rollout[ROLLOUT_MESH], 
       "Polygon Offset Units", 
+      id+SLIDE_MESH_POLY_UNITS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL,
-      id+SLIDE_MESH_POLY_UNITS, slider_cb);
+      NULL);
    assert(_slider[SLIDE_MESH_POLY_UNITS]);
    _slider[SLIDE_MESH_POLY_UNITS]->set_w(150);
    _slider[SLIDE_MESH_POLY_UNITS]->set_num_graduations(301);
 
    //Noise rollout
-   _rollout[ROLLOUT_NOISE] = glui->add_rollout_to_panel(p,"Noise",true);
+   _rollout[ROLLOUT_NOISE] = new GLUI_Rollout(p, "Noise", true);
    assert(_rollout[ROLLOUT_NOISE]);
 
-   _panel[PANEL_NOISE_PROTOTYPE] = glui->add_panel_to_panel(
+   _panel[PANEL_NOISE_PROTOTYPE] = new GLUI_Panel(
       _rollout[ROLLOUT_NOISE],
       "Per-Line-Type Prototype Controls");
    assert(_panel[PANEL_NOISE_PROTOTYPE]);
 
-   _panel[PANEL_NOISE_PROTOTYPE_TEXT] = glui->add_panel_to_panel(
+   _panel[PANEL_NOISE_PROTOTYPE_TEXT] = new GLUI_Panel(
       _panel[PANEL_NOISE_PROTOTYPE],
       "Selected");
    assert(_panel[PANEL_NOISE_PROTOTYPE_TEXT]);
 
-   _statictext[TEXT_NOISE_PROTOTYPE] = glui->add_statictext_to_panel(
+   _statictext[TEXT_NOISE_PROTOTYPE] = new GLUI_StaticText(
       _panel[PANEL_NOISE_PROTOTYPE_TEXT],
       "00 of 00");
    assert(_statictext[TEXT_NOISE_PROTOTYPE]);
@@ -612,41 +612,41 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _statictext[TEXT_NOISE_PROTOTYPE]->set_alignment(GLUI_ALIGN_CENTER);
    _panel[PANEL_NOISE_PROTOTYPE_TEXT]->set_w(50);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_PROTOTYPE],false);
+   new GLUI_Column(_panel[PANEL_NOISE_PROTOTYPE], false);
 
-   _panel[PANEL_NOISE_PROTOTYPE_CONTROLS] = glui->add_panel_to_panel(
+   _panel[PANEL_NOISE_PROTOTYPE_CONTROLS] = new GLUI_Panel(
       _panel[PANEL_NOISE_PROTOTYPE],
       "Editing");
    assert(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS]);
 
-   _button[BUT_NOISE_PROTOTYPE_NEXT] = glui->add_button_to_panel(
+   _button[BUT_NOISE_PROTOTYPE_NEXT] = new GLUI_Button(
       _panel[PANEL_NOISE_PROTOTYPE_CONTROLS],
       "Next",
       id+BUT_NOISE_PROTOTYPE_NEXT,
       button_cb);
    assert(_button[BUT_NOISE_PROTOTYPE_NEXT]);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS],false);
+   new GLUI_Column(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS], false);
 
-   _button[BUT_NOISE_PROTOTYPE_DEL] = glui->add_button_to_panel(
+   _button[BUT_NOISE_PROTOTYPE_DEL] = new GLUI_Button(
       _panel[PANEL_NOISE_PROTOTYPE_CONTROLS],
       "Del",
       id+BUT_NOISE_PROTOTYPE_DEL,
       button_cb);
    assert(_button[BUT_NOISE_PROTOTYPE_DEL]);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS],false);
+   new GLUI_Column(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS], false);
 
-   _button[BUT_NOISE_PROTOTYPE_ADD] = glui->add_button_to_panel(
+   _button[BUT_NOISE_PROTOTYPE_ADD] = new GLUI_Button(
       _panel[PANEL_NOISE_PROTOTYPE_CONTROLS],
       "Add",
       id+BUT_NOISE_PROTOTYPE_ADD,
       button_cb);
    assert(_button[BUT_NOISE_PROTOTYPE_ADD]);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS],false);
+   new GLUI_Column(_panel[PANEL_NOISE_PROTOTYPE_CONTROLS], false);
 
-   _checkbox[CHECK_NOISE_PROTOTYPE_LOCK] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_NOISE_PROTOTYPE_LOCK] = new GLUI_Checkbox(
       _panel[PANEL_NOISE_PROTOTYPE_CONTROLS],
       "Lock",
       NULL,
@@ -654,83 +654,83 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_NOISE_PROTOTYPE_LOCK]);
 
-   _panel[PANEL_NOISE_OBJECT] = glui->add_panel_to_panel(
+   _panel[PANEL_NOISE_OBJECT] = new GLUI_Panel(
       _rollout[ROLLOUT_NOISE],
       "Per-Patch Noise Controls");
    assert(_panel[PANEL_NOISE_OBJECT]);
 
-   glui->add_separator_to_panel(_panel[PANEL_NOISE_OBJECT]);
-   _checkbox[CHECK_NOISE_OBJECT_MOTION] = glui->add_checkbox_to_panel(
+   new GLUI_Separator(_panel[PANEL_NOISE_OBJECT]);
+   _checkbox[CHECK_NOISE_OBJECT_MOTION] = new GLUI_Checkbox(
       _panel[PANEL_NOISE_OBJECT],
       "Motion Only",
       NULL,
       id+CHECK_NOISE_OBJECT_MOTION,
       checkbox_cb);
    assert(_checkbox[CHECK_NOISE_OBJECT_MOTION]);
-   glui->add_separator_to_panel(_panel[PANEL_NOISE_OBJECT]);
+   new GLUI_Separator(_panel[PANEL_NOISE_OBJECT]);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_OBJECT],false);
+   new GLUI_Column(_panel[PANEL_NOISE_OBJECT], false);
 
-   _slider[SLIDE_NOISE_OBJECT_FREQUENCY] = glui->add_slider_to_panel(
+   _slider[SLIDE_NOISE_OBJECT_FREQUENCY] = new GLUI_Slider(
       _panel[PANEL_NOISE_OBJECT], "Frequency", 
+      id+SLIDE_NOISE_OBJECT_FREQUENCY, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL,
-      id+SLIDE_NOISE_OBJECT_FREQUENCY, slider_cb);
+      NULL);
    assert(_slider[SLIDE_NOISE_OBJECT_FREQUENCY]);
    _slider[SLIDE_NOISE_OBJECT_FREQUENCY]->set_num_graduations(61);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_OBJECT],false);
+   new GLUI_Column(_panel[PANEL_NOISE_OBJECT], false);
 
-   _slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER] = glui->add_slider_to_panel(
+   _slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER] = new GLUI_Slider(
       _panel[PANEL_NOISE_OBJECT], "Rand. Order", 
+      id+SLIDE_NOISE_OBJECT_RANDOM_ORDER, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1,
-      NULL,
-      id+SLIDE_NOISE_OBJECT_RANDOM_ORDER, slider_cb);
+      NULL);
    assert(_slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER]);
    _slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER]->set_num_graduations(101);
 
-   glui->add_column_to_panel(_panel[PANEL_NOISE_OBJECT],false);
+   new GLUI_Column(_panel[PANEL_NOISE_OBJECT], false);
 
-   _slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION] = glui->add_slider_to_panel(
+   _slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION] = new GLUI_Slider(
       _panel[PANEL_NOISE_OBJECT], "Rand. Duration", 
+      id+SLIDE_NOISE_OBJECT_RANDOM_DURATION, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1,
-      NULL,
-      id+SLIDE_NOISE_OBJECT_RANDOM_DURATION, slider_cb);
+      NULL);
    assert(_slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION]);
    _slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION]->set_num_graduations(101);
 
    //Edit rollout
-   _rollout[ROLLOUT_EDIT] = glui->add_rollout_to_panel(p,"Stylization",true);
+   _rollout[ROLLOUT_EDIT] = new GLUI_Rollout(p, "Stylization", true);
    assert(_rollout[ROLLOUT_EDIT]);
 
-   _panel[PANEL_EDIT_STATUS] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_STATUS] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Status");
    assert(_panel[PANEL_EDIT_STATUS]);
    
-   _statictext[TEXT_EDIT_STATUS_1] = glui->add_statictext_to_panel(
+   _statictext[TEXT_EDIT_STATUS_1] = new GLUI_StaticText(
       _panel[PANEL_EDIT_STATUS],
       "STATUS");
    assert(_statictext[TEXT_EDIT_STATUS_1]);
    _statictext[TEXT_EDIT_STATUS_1]->set_w(125);
    //_statictext[TEXT_EDIT_STATUS_1]->set_alignment(GLUI_ALIGN_CENTER);
 
-   _statictext[TEXT_EDIT_STATUS_2] = glui->add_statictext_to_panel(
+   _statictext[TEXT_EDIT_STATUS_2] = new GLUI_StaticText(
       _panel[PANEL_EDIT_STATUS],
       "STATUS");
    assert(_statictext[TEXT_EDIT_STATUS_2]);
    _statictext[TEXT_EDIT_STATUS_2]->set_w(125);
    //_statictext[TEXT_EDIT_STATUS_2]->set_alignment(GLUI_ALIGN_CENTER);
 
-   _panel[PANEL_EDIT_CYCLE] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_CYCLE] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Cycle Select");
    assert(_panel[PANEL_EDIT_CYCLE]);
 
-   _button[BUT_EDIT_CYCLE_LINE_TYPES] = glui->add_button_to_panel(
+   _button[BUT_EDIT_CYCLE_LINE_TYPES] = new GLUI_Button(
       _panel[PANEL_EDIT_CYCLE],
       "Line Types",
       id+BUT_EDIT_CYCLE_LINE_TYPES,
@@ -738,9 +738,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_CYCLE_LINE_TYPES]);
    _button[BUT_EDIT_CYCLE_LINE_TYPES]->set_w(125);
 
-   glui->add_separator_to_panel(_panel[PANEL_EDIT_CYCLE]);
+   new GLUI_Separator(_panel[PANEL_EDIT_CYCLE]);
 
-   _button[BUT_EDIT_CYCLE_DECAL_GROUPS] = glui->add_button_to_panel(
+   _button[BUT_EDIT_CYCLE_DECAL_GROUPS] = new GLUI_Button(
       _panel[PANEL_EDIT_CYCLE],
       "Decal Marks",
       id+BUT_EDIT_CYCLE_DECAL_GROUPS,
@@ -748,9 +748,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_CYCLE_DECAL_GROUPS]);
    _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->set_w(125);
 
-   glui->add_separator_to_panel(_panel[PANEL_EDIT_CYCLE]);
+   new GLUI_Separator(_panel[PANEL_EDIT_CYCLE]);
 
-   _button[BUT_EDIT_CYCLE_CREASE_PATHS] = glui->add_button_to_panel(
+   _button[BUT_EDIT_CYCLE_CREASE_PATHS] = new GLUI_Button(
       _panel[PANEL_EDIT_CYCLE],
       "Crease Paths",
       id+BUT_EDIT_CYCLE_CREASE_PATHS,
@@ -758,7 +758,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_CYCLE_CREASE_PATHS]);
    _button[BUT_EDIT_CYCLE_CREASE_PATHS]->set_w(125);
 
-   _button[BUT_EDIT_CYCLE_CREASE_STROKES] = glui->add_button_to_panel(
+   _button[BUT_EDIT_CYCLE_CREASE_STROKES] = new GLUI_Button(
       _panel[PANEL_EDIT_CYCLE],
       "Crease Strokes",
       id+BUT_EDIT_CYCLE_CREASE_STROKES,
@@ -766,14 +766,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_CYCLE_CREASE_STROKES]);
    _button[BUT_EDIT_CYCLE_CREASE_STROKES]->set_w(125);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_EDIT],false);
+   new GLUI_Column(_rollout[ROLLOUT_EDIT], false);
 
-   _panel[PANEL_EDIT_OFFSETS] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_OFFSETS] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Offsets");
    assert(_panel[PANEL_EDIT_OFFSETS]);
 
-   _button[BUT_EDIT_OFFSET_EDIT] = glui->add_button_to_panel(
+   _button[BUT_EDIT_OFFSET_EDIT] = new GLUI_Button(
       _panel[PANEL_EDIT_OFFSETS],
       "Edit Selected",
       id+BUT_EDIT_OFFSET_EDIT,
@@ -781,7 +781,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_OFFSET_EDIT]);
    _button[BUT_EDIT_OFFSET_EDIT]->set_w(110);
 
-   _button[BUT_EDIT_OFFSET_CLEAR] = glui->add_button_to_panel(
+   _button[BUT_EDIT_OFFSET_CLEAR] = new GLUI_Button(
       _panel[PANEL_EDIT_OFFSETS],
       "Clear Selected",
       id+BUT_EDIT_OFFSET_CLEAR,
@@ -789,9 +789,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_OFFSET_CLEAR]);
    _button[BUT_EDIT_OFFSET_CLEAR]->set_w(110);
 
-   glui->add_separator_to_panel(_panel[PANEL_EDIT_OFFSETS]);
+   new GLUI_Separator(_panel[PANEL_EDIT_OFFSETS]);
 
-   _button[BUT_EDIT_OFFSET_UNDO] = glui->add_button_to_panel(
+   _button[BUT_EDIT_OFFSET_UNDO] = new GLUI_Button(
       _panel[PANEL_EDIT_OFFSETS],
       "Undo Sketch",
       id+BUT_EDIT_OFFSET_UNDO,
@@ -799,7 +799,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_OFFSET_UNDO]);
    _button[BUT_EDIT_OFFSET_UNDO]->set_w(110);
 
-   _button[BUT_EDIT_OFFSET_APPLY] = glui->add_button_to_panel(
+   _button[BUT_EDIT_OFFSET_APPLY] = new GLUI_Button(
       _panel[PANEL_EDIT_OFFSETS],
       "Apply Sketch",
       id+BUT_EDIT_OFFSET_APPLY,
@@ -807,14 +807,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_OFFSET_APPLY]);
    _button[BUT_EDIT_OFFSET_APPLY]->set_w(110);
 
-   glui->add_separator_to_panel(_rollout[ROLLOUT_EDIT]);   
+   new GLUI_Separator(_rollout[ROLLOUT_EDIT]);
 
-   _panel[PANEL_EDIT_STYLE] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_STYLE] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Style");
    assert(_panel[PANEL_EDIT_STYLE]);
 
-   _button[BUT_EDIT_STYLE_APPLY] = glui->add_button_to_panel(
+   _button[BUT_EDIT_STYLE_APPLY] = new GLUI_Button(
       _panel[PANEL_EDIT_STYLE],
       "Apply Current",
       id+BUT_EDIT_STYLE_APPLY,
@@ -822,7 +822,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_STYLE_APPLY]);
    _button[BUT_EDIT_STYLE_APPLY]->set_w(110);
 
-   _button[BUT_EDIT_STYLE_GET] = glui->add_button_to_panel(
+   _button[BUT_EDIT_STYLE_GET] = new GLUI_Button(
       _panel[PANEL_EDIT_STYLE],
       "Get Selected",
       id+BUT_EDIT_STYLE_GET,
@@ -830,14 +830,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_STYLE_GET]);
    _button[BUT_EDIT_STYLE_GET]->set_w(110);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_EDIT],false);
+   new GLUI_Column(_rollout[ROLLOUT_EDIT], false);
 
-   _panel[PANEL_EDIT_PRESSURE] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_PRESSURE] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Pressure");
    assert(_panel[PANEL_EDIT_PRESSURE]);
 
-   _checkbox[CHECK_EDIT_PRESSURE_WIDTH] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_EDIT_PRESSURE_WIDTH] = new GLUI_Checkbox(
       _panel[PANEL_EDIT_PRESSURE],
       "Vary Width",
       NULL,
@@ -845,7 +845,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_EDIT_PRESSURE_WIDTH]);
    
-   _checkbox[CHECK_EDIT_PRESSURE_ALPHA] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_EDIT_PRESSURE_ALPHA] = new GLUI_Checkbox(
       _panel[PANEL_EDIT_PRESSURE],
       "Vary Alpha",
       NULL,
@@ -853,37 +853,37 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       checkbox_cb);
    assert(_checkbox[CHECK_EDIT_PRESSURE_ALPHA]);
 
-   glui->add_separator_to_panel(_rollout[ROLLOUT_EDIT]);   
+   new GLUI_Separator(_rollout[ROLLOUT_EDIT]);
 
-   _panel[PANEL_EDIT_OVERSKETCH] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_OVERSKETCH] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Baseline");
    assert(_panel[PANEL_EDIT_OVERSKETCH]);
 
-   _radgroup[RADGROUP_EDIT_OVERSKETCH] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_EDIT_OVERSKETCH] = new GLUI_RadioGroup(
       _panel[PANEL_EDIT_OVERSKETCH],
       NULL,
       id+RADGROUP_EDIT_OVERSKETCH, radiogroup_cb);
    assert(_radgroup[RADGROUP_EDIT_OVERSKETCH]);
 
-   _radbutton[RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_EDIT_OVERSKETCH],
       "Virtual");
    assert(_radbutton[RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE]);
 
-   _radbutton[RADBUT_EDIT_OVERSKETCH_SELECTED_BASELINE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_EDIT_OVERSKETCH_SELECTED_BASELINE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_EDIT_OVERSKETCH],
       "Selected");
    assert(_radbutton[RADBUT_EDIT_OVERSKETCH_SELECTED_BASELINE]);
 
-   glui->add_separator_to_panel(_rollout[ROLLOUT_EDIT]);   
+   new GLUI_Separator(_rollout[ROLLOUT_EDIT]);
 
-   _panel[PANEL_EDIT_STROKES] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_STROKES] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Strokes");
    assert(_panel[PANEL_EDIT_STROKES]);
 
-   _button[BUT_EDIT_STROKE_ADD] = glui->add_button_to_panel(
+   _button[BUT_EDIT_STROKE_ADD] = new GLUI_Button(
       _panel[PANEL_EDIT_STROKES],
       "Add New",
       id+BUT_EDIT_STROKE_ADD,
@@ -891,7 +891,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_STROKE_ADD]);
    _button[BUT_EDIT_STROKE_ADD]->set_w(90);
 
-   _button[BUT_EDIT_STROKE_DEL] = glui->add_button_to_panel(
+   _button[BUT_EDIT_STROKE_DEL] = new GLUI_Button(
       _panel[PANEL_EDIT_STROKES],
       "Delete",
       id+BUT_EDIT_STROKE_DEL,
@@ -899,14 +899,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_STROKE_DEL]);
    _button[BUT_EDIT_STROKE_DEL]->set_w(90);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_EDIT],false);
+   new GLUI_Column(_rollout[ROLLOUT_EDIT], false);
 
-   _panel[PANEL_EDIT_SYNTHESIS] = glui->add_panel_to_panel(
+   _panel[PANEL_EDIT_SYNTHESIS] = new GLUI_Panel(
       _rollout[ROLLOUT_EDIT],
       "Synthesis");
    assert(_panel[PANEL_EDIT_SYNTHESIS]);
 
-   _button[BUT_EDIT_SYNTH_RUBBER] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_RUBBER] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Rubberstamp",
       id+BUT_EDIT_SYNTH_RUBBER,
@@ -914,7 +914,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_SYNTH_RUBBER]);
    _button[BUT_EDIT_SYNTH_RUBBER]->set_w(110);
 
-   _button[BUT_EDIT_SYNTH_SYNTHESIZE] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_SYNTHESIZE] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Synthesize",
       id+BUT_EDIT_SYNTH_SYNTHESIZE,
@@ -922,16 +922,16 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_SYNTH_SYNTHESIZE]);
    _button[BUT_EDIT_SYNTH_SYNTHESIZE]->set_w(110);
 
-   glui->add_separator_to_panel(_panel[PANEL_EDIT_SYNTHESIS]);
+   new GLUI_Separator(_panel[PANEL_EDIT_SYNTHESIS]);
 
-   _statictext[TEXT_EDIT_SYNTH_COUNT] = glui->add_statictext_to_panel(
+   _statictext[TEXT_EDIT_SYNTH_COUNT] = new GLUI_StaticText(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Protos: X");
    assert(_statictext[TEXT_EDIT_SYNTH_COUNT]);
    _statictext[TEXT_EDIT_SYNTH_COUNT]->set_w(5);
    _statictext[TEXT_EDIT_SYNTH_COUNT]->set_alignment(GLUI_ALIGN_CENTER);
 
-   _button[BUT_EDIT_SYNTH_EX_ADD] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_EX_ADD] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Add Proto",
       id+BUT_EDIT_SYNTH_EX_ADD,
@@ -939,7 +939,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_SYNTH_EX_ADD]);
    _button[BUT_EDIT_SYNTH_EX_ADD]->set_w(110);
 
-   _button[BUT_EDIT_SYNTH_EX_DEL] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_EX_DEL] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Clear Last",
       id+BUT_EDIT_SYNTH_EX_DEL,
@@ -947,7 +947,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    assert(_button[BUT_EDIT_SYNTH_EX_DEL]);
    _button[BUT_EDIT_SYNTH_EX_DEL]->set_w(110);
 
-   _button[BUT_EDIT_SYNTH_EX_CLEAR] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_EX_CLEAR] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Clear All",
       id+BUT_EDIT_SYNTH_EX_CLEAR,
@@ -956,9 +956,9 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _button[BUT_EDIT_SYNTH_EX_CLEAR]->set_w(110);
 
 
-   glui->add_separator_to_panel(_panel[PANEL_EDIT_SYNTHESIS]);
+   new GLUI_Separator(_panel[PANEL_EDIT_SYNTHESIS]);
 
-   _button[BUT_EDIT_SYNTH_ALL_CLEAR] = glui->add_button_to_panel(
+   _button[BUT_EDIT_SYNTH_ALL_CLEAR] = new GLUI_Button(
       _panel[PANEL_EDIT_SYNTHESIS],
       "Clear Creases",
       id+BUT_EDIT_SYNTH_ALL_CLEAR,

@@ -592,28 +592,28 @@ CurvatureUI::build()
    // General Controls:
    
    sliders[SLIDER_SC_THRESH]
-      = glui->add_slider("Suggestive Contour Threshold",
+      = new GLUI_Slider(glui, "Suggestive Contour Threshold",
+         SLIDER_SC_THRESH, &CurvatureUI::slider_cb,
          GLUI_SLIDER_FLOAT, 0.0f, 0.1f,
-         &(CurvatureUISingleton::Instance()._sc_thresh),
-         SLIDER_SC_THRESH, &CurvatureUI::slider_cb);
+         &(CurvatureUISingleton::Instance()._sc_thresh));
    
    // Line Drawing gTexture Controls:
    
    rollouts[ROLLOUT_LINE_DRAWING]
-      = glui->add_rollout("Line Drawing Controls", true);
+      = new GLUI_Rollout(glui, "Line Drawing Controls", true);
    
    checkboxes[CHECKBOX_DRAW_CONTOURS]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_LINE_DRAWING],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_LINE_DRAWING],
          "Draw Contours",
          &(CurvatureUISingleton::Instance()._line_drawing_draw_contours),
          CHECKBOX_DRAW_CONTOURS, &CurvatureUI::checkbox_cb);
    checkboxes[CHECKBOX_DRAW_SUGCONTOURS]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_LINE_DRAWING],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_LINE_DRAWING],
          "Draw Suggestive Contours",
          &(CurvatureUISingleton::Instance()._line_drawing_draw_sugcontours),
          CHECKBOX_DRAW_SUGCONTOURS, &CurvatureUI::checkbox_cb);
    checkboxes[CHECKBOX_DRAW_COLOR]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_LINE_DRAWING],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_LINE_DRAWING],
          "Draw in Color",
          &(CurvatureUISingleton::Instance()._line_drawing_draw_color),
          CHECKBOX_DRAW_COLOR, &CurvatureUI::checkbox_cb);
@@ -621,81 +621,81 @@ CurvatureUI::build()
    // Curvature gTexture Controls:
    
    rollouts[ROLLOUT_CURVATURE_VIS]
-      = glui->add_rollout("Curvature Controls", true);
+      = new GLUI_Rollout(glui, "Curvature Controls", true);
    
    checkboxes[CHECKBOX_DRAW_GAUSSIAN_CURVATURE]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_CURVATURE_VIS],
          "Draw Gaussian Curvature",
          &(CurvatureUISingleton::Instance()._curvature_draw_gaussian_curv),
          CHECKBOX_DRAW_GAUSSIAN_CURVATURE, &CurvatureUI::checkbox_cb);
    rollouts[ROLLOUT_CURVATURE_GAUSSIAN_FILTER]
-      = glui->add_rollout_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Rollout(rollouts[ROLLOUT_CURVATURE_VIS],
          "Gaussian Curvature Filter", true);
    radiogroups[RADIOGROUP_GAUSSIAN_FILTER]
-      = glui->add_radiogroup_to_panel(rollouts[ROLLOUT_CURVATURE_GAUSSIAN_FILTER],
+      = new GLUI_RadioGroup(rollouts[ROLLOUT_CURVATURE_GAUSSIAN_FILTER],
          &(CurvatureUISingleton::Instance()._curvature_gaussian_filter),
          RADIOGROUP_GAUSSIAN_FILTER, &CurvatureUI::radiogroup_cb);
    radiobuttons[RADIOBUTTON_GAUSSIAN_FILTER_NONE]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
          "None");
    radiobuttons[RADIOBUTTON_GAUSSIAN_FILTER_GAUSSIAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
          "By Derivative of Gaussian Curvature");
    radiobuttons[RADIOBUTTON_GAUSSIAN_FILTER_MEAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
          "By Derivative of Mean Curvature");
    radiobuttons[RADIOBUTTON_GAUSSIAN_FILTER_RADIAL]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_GAUSSIAN_FILTER],
          "By Derivative of Radial Curvature");
    
    checkboxes[CHECKBOX_DRAW_MEAN_CURVATURE]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_CURVATURE_VIS],
          "Draw Mean Curvature",
          &(CurvatureUISingleton::Instance()._curvature_draw_mean_curv),
          CHECKBOX_DRAW_MEAN_CURVATURE, &CurvatureUI::checkbox_cb);
    rollouts[ROLLOUT_CURVATURE_MEAN_FILTER]
-      = glui->add_rollout_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Rollout(rollouts[ROLLOUT_CURVATURE_VIS],
          "Mean Curvature Filter", true);
    radiogroups[RADIOGROUP_MEAN_FILTER]
-      = glui->add_radiogroup_to_panel(rollouts[ROLLOUT_CURVATURE_MEAN_FILTER],
+      = new GLUI_RadioGroup(rollouts[ROLLOUT_CURVATURE_MEAN_FILTER],
          &(CurvatureUISingleton::Instance()._curvature_mean_filter),
          RADIOGROUP_MEAN_FILTER, &CurvatureUI::radiogroup_cb);
    radiobuttons[RADIOBUTTON_MEAN_FILTER_NONE]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_MEAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_MEAN_FILTER],
          "None");
    radiobuttons[RADIOBUTTON_MEAN_FILTER_GAUSSIAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_MEAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_MEAN_FILTER],
          "By Derivative of Gaussian Curvature");
    radiobuttons[RADIOBUTTON_MEAN_FILTER_MEAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_MEAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_MEAN_FILTER],
          "By Derivative of Mean Curvature");
    radiobuttons[RADIOBUTTON_MEAN_FILTER_RADIAL]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_MEAN_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_MEAN_FILTER],
          "By Derivative of Radial Curvature");
    
    checkboxes[CHECKBOX_DRAW_RADIAL_CURVATURE]
-      = glui->add_checkbox_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Checkbox(rollouts[ROLLOUT_CURVATURE_VIS],
          "Draw Radial Curvature",
          &(CurvatureUISingleton::Instance()._curvature_draw_radial_curv),
          CHECKBOX_DRAW_RADIAL_CURVATURE, &CurvatureUI::checkbox_cb);
    rollouts[ROLLOUT_CURVATURE_RADIAL_FILTER]
-      = glui->add_rollout_to_panel(rollouts[ROLLOUT_CURVATURE_VIS],
+      = new GLUI_Rollout(rollouts[ROLLOUT_CURVATURE_VIS],
          "Radial Curvature Filter", true);
    radiogroups[RADIOGROUP_RADIAL_FILTER]
-      = glui->add_radiogroup_to_panel(rollouts[ROLLOUT_CURVATURE_RADIAL_FILTER],
+      = new GLUI_RadioGroup(rollouts[ROLLOUT_CURVATURE_RADIAL_FILTER],
          &(CurvatureUISingleton::Instance()._curvature_radial_filter),
          RADIOGROUP_RADIAL_FILTER, &CurvatureUI::radiogroup_cb);
    radiobuttons[RADIOBUTTON_RADIAL_FILTER_NONE]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_RADIAL_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_RADIAL_FILTER],
          "None");
    radiobuttons[RADIOBUTTON_RADIAL_FILTER_GAUSSIAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_RADIAL_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_RADIAL_FILTER],
          "By Derivative of Gaussian Curvature");
    radiobuttons[RADIOBUTTON_RADIAL_FILTER_MEAN]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_RADIAL_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_RADIAL_FILTER],
          "By Derivative of Mean Curvature");
    radiobuttons[RADIOBUTTON_RADIAL_FILTER_RADIAL]
-      = glui->add_radiobutton_to_group(radiogroups[RADIOGROUP_RADIAL_FILTER],
+      = new GLUI_RadioButton(radiogroups[RADIOGROUP_RADIAL_FILTER],
          "By Derivative of Radial Curvature");
    
 }

@@ -785,17 +785,17 @@ SilUI::build()
    assert(_buffer_filenames.num() == 0);
 
    //Top panel
-   _panel[PANEL_TOP] = _glui->add_panel("Selection");
+   _panel[PANEL_TOP] = new GLUI_Panel(_glui, "Selection");
    assert(_panel[PANEL_TOP]);
 
    //Mesh Panel
-   _panel[PANEL_MESH] = _glui->add_panel_to_panel(
+   _panel[PANEL_MESH] = new GLUI_Panel(
       _panel[PANEL_TOP],
       "Mesh");
    assert(_panel[PANEL_MESH]);
 
    //Mesh selector
-   _listbox[LIST_MESH] = _glui->add_listbox_to_panel(
+   _listbox[LIST_MESH] = new GLUI_Listbox(
       _panel[PANEL_MESH], 
       "", NULL,
       id+LIST_MESH, listbox_cb);
@@ -804,25 +804,25 @@ SilUI::build()
    _listbox[LIST_MESH]->add_item(0, "----");
    _listbox[LIST_MESH]->set_int_val(0);
    
-   _glui->add_column_to_panel(_panel[PANEL_TOP],false);
+   new GLUI_Column(_panel[PANEL_TOP], false);
 
    //Patch Panel
-   _panel[PANEL_PATCH] = _glui->add_panel_to_panel(
+   _panel[PANEL_PATCH] = new GLUI_Panel(
       _panel[PANEL_TOP],
       "Patch");
    assert(_panel[PANEL_PATCH]);
 
    //Patch text
-   _text[TEXT_PATCH] = _glui->add_statictext_to_panel(
+   _text[TEXT_PATCH] = new GLUI_StaticText(
       _panel[PANEL_PATCH],
       "XX of YY");
    assert(_text[TEXT_PATCH]);
    _text[TEXT_PATCH]->set_w(_text[TEXT_PATCH]->string_width("XX of YY"));
 
-   _glui->add_column_to_panel(_panel[PANEL_PATCH],false);
+   new GLUI_Column(_panel[PANEL_PATCH], false);
 
    //Patch
-   _button[BUT_PATCH_NEXT] = _glui->add_button_to_panel(
+   _button[BUT_PATCH_NEXT] = new GLUI_Button(
       _panel[PANEL_PATCH],
       "Next",
       id+BUT_PATCH_NEXT,
@@ -830,29 +830,29 @@ SilUI::build()
    assert(_button[BUT_PATCH_NEXT]);
    _button[BUT_PATCH_NEXT]->set_w(50);
 
-   _glui->add_column_to_panel(_panel[PANEL_TOP],false);
+   new GLUI_Column(_panel[PANEL_TOP], false);
 
    //Rate
-   _slider[SLIDE_RATE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_RATE] = new GLUI_Slider(
       _panel[PANEL_TOP], 
       "Rate", 
+      id+SLIDE_RATE, slider_cb,
       GLUI_SLIDER_INT, 
       1, 100,
-      NULL,
-      id+SLIDE_RATE, slider_cb);
+      NULL);
    assert(_slider[SLIDE_RATE]);
    _slider[SLIDE_RATE]->set_num_graduations(100);
 
-   _glui->add_column_to_panel(_panel[PANEL_TOP],false);
+   new GLUI_Column(_panel[PANEL_TOP], false);
 
    //Refresh Panel
-   _panel[PANEL_REFRESH] = _glui->add_panel_to_panel(
+   _panel[PANEL_REFRESH] = new GLUI_Panel(
       _panel[PANEL_TOP],
       "Hack");
    assert(_panel[PANEL_REFRESH]);
 
    //Refresh
-   _button[BUT_REFRESH] = _glui->add_button_to_panel(
+   _button[BUT_REFRESH] = new GLUI_Button(
       _panel[PANEL_REFRESH],
       "Refresh",
       id+BUT_REFRESH,
@@ -861,11 +861,11 @@ SilUI::build()
    _button[BUT_REFRESH]->set_w(70);
 
    //Buffer rollout
-   _rollout[ROLLOUT_BUFFER] = _glui->add_rollout("Data Buffer",true);
+   _rollout[ROLLOUT_BUFFER] = new GLUI_Rollout(_glui, "Data Buffer", true);
    assert(_rollout[ROLLOUT_BUFFER]);
 
    //Grab button
-   _button[BUT_BUFFER_GRAB] = _glui->add_button_to_panel(
+   _button[BUT_BUFFER_GRAB] = new GLUI_Button(
       _rollout[ROLLOUT_BUFFER],
       "Grab",
       id+BUT_BUFFER_GRAB,
@@ -875,7 +875,7 @@ SilUI::build()
    _button[BUT_BUFFER_GRAB]->set_w(BUFFER_BUTTON_W);
 
    //Save button
-   _button[BUT_BUFFER_SAVE] = _glui->add_button_to_panel(
+   _button[BUT_BUFFER_SAVE] = new GLUI_Button(
       _rollout[ROLLOUT_BUFFER],
       "Save",
       id+BUT_BUFFER_SAVE,
@@ -884,10 +884,10 @@ SilUI::build()
    _button[BUT_BUFFER_SAVE]->disable();
    _button[BUT_BUFFER_SAVE]->set_w(BUFFER_BUTTON_W);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_BUFFER],false);
+   new GLUI_Column(_rollout[ROLLOUT_BUFFER], false);
 
    //Buffer save list
-   _listbox[LIST_BUFFER] = _glui->add_listbox_to_panel(
+   _listbox[LIST_BUFFER] = new GLUI_Listbox(
       _rollout[ROLLOUT_BUFFER],
       "", NULL,
       id+LIST_BUFFER, listbox_cb);
@@ -899,7 +899,7 @@ SilUI::build()
    fill_buffer_listbox(_listbox[LIST_BUFFER], _buffer_filenames, Config::JOT_ROOT() + BUFFER_DIRECTORY);
 
    //Buffer name editor
-   _edittext[EDITTEXT_BUFFER_NAME] = _glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_BUFFER_NAME] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+EDITTEXT_BUFFER_NAME, edittext_cb);
@@ -907,10 +907,10 @@ SilUI::build()
    _edittext[EDITTEXT_BUFFER_NAME]->disable();
    _edittext[EDITTEXT_BUFFER_NAME]->set_w(BUFFER_NAME_W);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_BUFFER],false);
+   new GLUI_Column(_rollout[ROLLOUT_BUFFER], false);
 
    //Buffer misc text 1
-   _edittext[EDITTEXT_BUFFER_MISC1] = _glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_BUFFER_MISC1] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+EDITTEXT_BUFFER_MISC1, edittext_cb);
@@ -919,7 +919,7 @@ SilUI::build()
    _edittext[EDITTEXT_BUFFER_MISC1]->set_w(10);
 
    //Buffer misc text 2
-   _edittext[EDITTEXT_BUFFER_MISC2] = _glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_BUFFER_MISC2] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+EDITTEXT_BUFFER_MISC2, edittext_cb);
@@ -928,11 +928,11 @@ SilUI::build()
    _edittext[EDITTEXT_BUFFER_MISC2]->set_w(10);
 
    //Options rollout
-   _rollout[ROLLOUT_OPTIONS] = _glui->add_rollout("Options",true);
+   _rollout[ROLLOUT_OPTIONS] = new GLUI_Rollout(_glui, "Options", true);
    assert(_rollout[ROLLOUT_OPTIONS]);
 
    //Stroke tracking/path track
-   _checkbox[CHECK_TRACK_STROKES] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TRACK_STROKES] = new GLUI_Checkbox(
       _rollout[ROLLOUT_OPTIONS],
       "Track Strokes",
       NULL,
@@ -942,7 +942,7 @@ SilUI::build()
    _checkbox[CHECK_TRACK_STROKES]->set_int_val(DEFAULT_TRACK_STROKES);
 
    //Stroke zoom
-   _checkbox[CHECK_ZOOM_STROKES] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ZOOM_STROKES] = new GLUI_Checkbox(
       _rollout[ROLLOUT_OPTIONS],
       "Zoom Strokes",
       &_zoom_strokes,
@@ -952,7 +952,7 @@ SilUI::build()
    _checkbox[CHECK_ZOOM_STROKES]->set_int_val(DEFAULT_ZOOM_STROKES);
 
    //Always update
-   _checkbox[CHECK_ALWAYS_UPDATE] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ALWAYS_UPDATE] = new GLUI_Checkbox(
       _rollout[ROLLOUT_OPTIONS],
       "Always Update",
       &_always_update,
@@ -962,7 +962,7 @@ SilUI::build()
    _checkbox[CHECK_ALWAYS_UPDATE]->set_int_val((Config::get_var_bool("ALWAYS_UPDATE",false))?(1):(0));
 
    //Always update
-   _checkbox[CHECK_SIGMA_ONE] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_SIGMA_ONE] = new GLUI_Checkbox(
       _rollout[ROLLOUT_OPTIONS],
       "Sigma=1",
       &_sigma_one,
@@ -971,174 +971,174 @@ SilUI::build()
    assert(_checkbox[CHECK_SIGMA_ONE]);
    _checkbox[CHECK_SIGMA_ONE]->set_int_val((Config::get_var_bool("SIGMA_ONE",false))?(1):(0));
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
  
    //Fit-type radio buttons
-   _radgroup[RADGROUP_FIT] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_FIT] = new GLUI_RadioGroup(
       _rollout[ROLLOUT_OPTIONS],
       &_fit_type,
       id+RADGROUP_FIT, radiogroup_cb);
    assert(_radgroup[RADGROUP_FIT]);
 
-   _radbutton[RADBUT_FIT_SIGMA] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_FIT_SIGMA] = new GLUI_RadioButton(
       _radgroup[RADGROUP_FIT],
       "Sigma");
    assert(_radbutton[RADBUT_FIT_SIGMA]);
 
-   _radbutton[RADBUT_FIT_PHASE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_FIT_PHASE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_FIT],
       "Phase");
    assert(_radbutton[RADBUT_FIT_PHASE]);
 
-   _radbutton[RADBUT_FIT_INTERPOLATE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_FIT_INTERPOLATE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_FIT],
       "Interp");
    assert(_radbutton[RADBUT_FIT_INTERPOLATE]);
 
-   _radbutton[RADBUT_FIT_OPTIMIZE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_FIT_OPTIMIZE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_FIT],
       "Optim");
    assert(_radbutton[RADBUT_FIT_PHASE]);
 
    //_radgroup[RADGROUP_FIT]->set_int_val(RADBUT_FIT_OPTIMIZE);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
 
 
    //Cover-type radio buttons
-   _radgroup[RADGROUP_COVER] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COVER] = new GLUI_RadioGroup(
       _rollout[ROLLOUT_OPTIONS],
       &_cover_type,
       id+RADGROUP_COVER, radiogroup_cb);
    assert(_radgroup[RADGROUP_COVER]);
 
-   _radbutton[RADBUT_COVER_MAJORITY] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COVER_MAJORITY] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COVER],
       "Maj");
    assert(_radbutton[RADBUT_COVER_MAJORITY]);
 
-   _radbutton[RADBUT_COVER_ONE_TO_ONE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COVER_ONE_TO_ONE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COVER],
       "1to1");
    assert(_radbutton[RADBUT_COVER_ONE_TO_ONE]);
 
-   _radbutton[RADBUT_COVER_HYBRID] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COVER_HYBRID] = new GLUI_RadioButton(
       _radgroup[RADGROUP_COVER],
       "Hyb");
    assert(_radbutton[RADBUT_COVER_HYBRID]);
 
    //_radgroup[RADGROUP_COVER]->set_int_val(RADBUT_COVER_HYBRID - RADBUT_COVER_MAJORITY);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
 
 
    //Pix fit
-   _slider[SLIDE_FIT_PIX] = _glui->add_slider_to_panel(
+   _slider[SLIDE_FIT_PIX] = new GLUI_Slider(
       _rollout[ROLLOUT_OPTIONS], 
       "Pix", 
+      id+SLIDE_FIT_PIX, slider_cb,
       GLUI_SLIDER_FLOAT, 
       6, 200,
-      &_fit_pix,
-      id+SLIDE_FIT_PIX, slider_cb);
+      &_fit_pix);
    assert(_slider[SLIDE_FIT_PIX]);
    _slider[SLIDE_FIT_PIX]->set_num_graduations(195);
 
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
    //Energy weights
-   _slider[SLIDE_WEIGHT_FIT] = _glui->add_slider_to_panel(
+   _slider[SLIDE_WEIGHT_FIT] = new GLUI_Slider(
       _rollout[ROLLOUT_OPTIONS], 
       "Wf", 
+      id+SLIDE_WEIGHT_FIT, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      &_weight_fit,
-      id+SLIDE_WEIGHT_FIT, slider_cb);
+      &_weight_fit);
    assert(_slider[SLIDE_WEIGHT_FIT]);
    _slider[SLIDE_WEIGHT_FIT]->set_num_graduations(201);
 
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
-   _slider[SLIDE_WEIGHT_SCALE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_WEIGHT_SCALE] = new GLUI_Slider(
       _rollout[ROLLOUT_OPTIONS], 
       "Ws", 
+      id+SLIDE_WEIGHT_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      &_weight_scale,
-      id+SLIDE_WEIGHT_SCALE, slider_cb);
+      &_weight_scale);
    assert(_slider[SLIDE_WEIGHT_SCALE]);
    _slider[SLIDE_WEIGHT_SCALE]->set_num_graduations(201);
 
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
-   _slider[SLIDE_WEIGHT_DISTORT] = _glui->add_slider_to_panel(
+   _slider[SLIDE_WEIGHT_DISTORT] = new GLUI_Slider(
       _rollout[ROLLOUT_OPTIONS], 
       "Wd", 
+      id+SLIDE_WEIGHT_DISTORT, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      &_weight_distort,
-      id+SLIDE_WEIGHT_DISTORT, slider_cb);
+      &_weight_distort);
    assert(_slider[SLIDE_WEIGHT_DISTORT]);
    _slider[SLIDE_WEIGHT_DISTORT]->set_num_graduations(201);
 
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_OPTIONS],false);
+   new GLUI_Column(_rollout[ROLLOUT_OPTIONS], false);
 
-   _slider[SLIDE_WEIGHT_HEAL] = _glui->add_slider_to_panel(
+   _slider[SLIDE_WEIGHT_HEAL] = new GLUI_Slider(
       _rollout[ROLLOUT_OPTIONS], 
       "Wh", 
+      id+SLIDE_WEIGHT_HEAL, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      &_weight_heal,
-      id+SLIDE_WEIGHT_HEAL, slider_cb);
+      &_weight_heal);
    assert(_slider[SLIDE_WEIGHT_HEAL]);
    _slider[SLIDE_WEIGHT_HEAL]->set_num_graduations(201);
 
 
 
    //Path rollout
-   _rollout[ROLLOUT_PATH] = _glui->add_rollout("Path",true);
+   _rollout[ROLLOUT_PATH] = new GLUI_Rollout(_glui, "Path", true);
    assert(_rollout[ROLLOUT_PATH]);
 
    //Path info panel
-   _panel[PANEL_PATH_INFO] = _glui->add_panel_to_panel(
+   _panel[PANEL_PATH_INFO] = new GLUI_Panel(
       _rollout[ROLLOUT_PATH],
       "");
    assert(_panel[PANEL_PATH_INFO]);
 
-   _text[TEXT_PATH] = _glui->add_statictext_to_panel(
+   _text[TEXT_PATH] = new GLUI_StaticText(
       _panel[PANEL_PATH_INFO],
       "Howdy");
    assert(_text[TEXT_PATH]);
 
    //Path panel
-   _panel[PANEL_PATH] = _glui->add_panel_to_panel(
+   _panel[PANEL_PATH] = new GLUI_Panel(
       _rollout[ROLLOUT_PATH],
       "Path Selection");
    assert(_panel[PANEL_PATH]);
 
    //Path buttons
-   _button[BUT_PATH_PREV] = _glui->add_button_to_panel(
+   _button[BUT_PATH_PREV] = new GLUI_Button(
       _panel[PANEL_PATH],
       "Prev",
       id+BUT_PATH_PREV,
       button_cb);
    assert(_button[BUT_PATH_PREV]);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
-   _button[BUT_PATH_NEXT] = _glui->add_button_to_panel(
+   _button[BUT_PATH_NEXT] = new GLUI_Button(
       _panel[PANEL_PATH],
       "Next",
       id+BUT_PATH_NEXT,
       button_cb);
    assert(_button[BUT_PATH_NEXT]);
 
-   _graph[GRAPH_PATH] = _glui->add_graph_to_panel(
+   _graph[GRAPH_PATH] = new GLUI_Graph(
       _rollout[ROLLOUT_PATH],
       "Word",
       id+GRAPH_PATH,
@@ -1146,45 +1146,45 @@ SilUI::build()
    assert(_graph[GRAPH_PATH]);
 
    //Seg rollout
-   _rollout[ROLLOUT_SEG] = _glui->add_rollout("Seg",true);
+   _rollout[ROLLOUT_SEG] = new GLUI_Rollout(_glui, "Seg", true);
    assert(_rollout[ROLLOUT_SEG]);
 
    //Seg info panel
-   _panel[PANEL_SEG_INFO] = _glui->add_panel_to_panel(
+   _panel[PANEL_SEG_INFO] = new GLUI_Panel(
       _rollout[ROLLOUT_SEG],
       "");
    assert(_panel[PANEL_SEG_INFO]);
 
-   _text[TEXT_SEG] = _glui->add_statictext_to_panel(
+   _text[TEXT_SEG] = new GLUI_StaticText(
       _panel[PANEL_SEG_INFO],
       "Howdy");
    assert(_text[TEXT_SEG]);
 
 
    //Seg panel
-   _panel[PANEL_SEG] = _glui->add_panel_to_panel(
+   _panel[PANEL_SEG] = new GLUI_Panel(
       _rollout[ROLLOUT_SEG],
       "Segment Selection");
    assert(_panel[PANEL_SEG]);
 
    //Seg buttons
-   _button[BUT_SEG_PREV] = _glui->add_button_to_panel(
+   _button[BUT_SEG_PREV] = new GLUI_Button(
       _panel[PANEL_SEG],
       "Prev",
       id+BUT_SEG_PREV,
       button_cb);
    assert(_button[BUT_SEG_PREV]);
 
-   _glui->add_column_to_panel(_panel[PANEL_SEG],false);
+   new GLUI_Column(_panel[PANEL_SEG], false);
 
-   _button[BUT_SEG_NEXT] = _glui->add_button_to_panel(
+   _button[BUT_SEG_NEXT] = new GLUI_Button(
       _panel[PANEL_SEG],
       "Next",
       id+BUT_SEG_NEXT,
       button_cb);
    assert(_button[BUT_SEG_NEXT]);
 
-   _graph[GRAPH_SEG] = _glui->add_graph_to_panel(
+   _graph[GRAPH_SEG] = new GLUI_Graph(
       _rollout[ROLLOUT_SEG],
       "Pimp",
       id+GRAPH_SEG,
@@ -1192,37 +1192,37 @@ SilUI::build()
    assert(_graph[GRAPH_SEG]);
 
    //Vote rollout
-   _rollout[ROLLOUT_VOTE] = _glui->add_rollout("Vote",true);
+   _rollout[ROLLOUT_VOTE] = new GLUI_Rollout(_glui, "Vote", true);
    assert(_rollout[ROLLOUT_VOTE]);
 
    //Vote info panel
-   _panel[PANEL_VOTE_INFO] = _glui->add_panel_to_panel(
+   _panel[PANEL_VOTE_INFO] = new GLUI_Panel(
       _rollout[ROLLOUT_VOTE],
       "");
    assert(_panel[PANEL_VOTE_INFO]);
 
-   _text[TEXT_VOTE] = _glui->add_statictext_to_panel(
+   _text[TEXT_VOTE] = new GLUI_StaticText(
       _panel[PANEL_VOTE_INFO],
       "Howdy");
    assert(_text[TEXT_VOTE]);
 
    //Vote panel
-   _panel[PANEL_VOTE] = _glui->add_panel_to_panel(
+   _panel[PANEL_VOTE] = new GLUI_Panel(
       _rollout[ROLLOUT_VOTE],
       "Vote Selection");
    assert(_panel[PANEL_VOTE]);
 
    //Vote buttons
-   _button[BUT_VOTE_PREV] = _glui->add_button_to_panel(
+   _button[BUT_VOTE_PREV] = new GLUI_Button(
       _panel[PANEL_VOTE],
       "Prev",
       id+BUT_VOTE_PREV,
       button_cb);
    assert(_button[BUT_VOTE_PREV]);
 
-   _glui->add_column_to_panel(_panel[PANEL_VOTE],false);
+   new GLUI_Column(_panel[PANEL_VOTE], false);
 
-   _button[BUT_VOTE_NEXT] = _glui->add_button_to_panel(
+   _button[BUT_VOTE_NEXT] = new GLUI_Button(
       _panel[PANEL_VOTE],
       "Next",
       id+BUT_VOTE_NEXT,
@@ -1230,28 +1230,28 @@ SilUI::build()
    assert(_button[BUT_VOTE_NEXT]);
 
    //Vote data panel
-   _panel[PANEL_VOTE_DATA] = _glui->add_panel_to_panel(
+   _panel[PANEL_VOTE_DATA] = new GLUI_Panel(
       _rollout[ROLLOUT_VOTE],
       "Marzipan");
    assert(_panel[PANEL_VOTE_DATA]);
 
    //Vote data text lines
-   _text[TEXT_VOTE_1] = _glui->add_statictext_to_panel(
+   _text[TEXT_VOTE_1] = new GLUI_StaticText(
       _panel[PANEL_VOTE_DATA],
       "");
    assert(_text[TEXT_VOTE_1]);
 
-   _text[TEXT_VOTE_2] = _glui->add_statictext_to_panel(
+   _text[TEXT_VOTE_2] = new GLUI_StaticText(
       _panel[PANEL_VOTE_DATA],
       "");
    assert(_text[TEXT_VOTE_2]);
 
-   _text[TEXT_VOTE_3] = _glui->add_statictext_to_panel(
+   _text[TEXT_VOTE_3] = new GLUI_StaticText(
       _panel[PANEL_VOTE_DATA],
       "");
    assert(_text[TEXT_VOTE_3]);
 
-   _text[TEXT_VOTE_4] = _glui->add_statictext_to_panel(
+   _text[TEXT_VOTE_4] = new GLUI_StaticText(
       _panel[PANEL_VOTE_DATA],
       "");
    assert(_text[TEXT_VOTE_4]);

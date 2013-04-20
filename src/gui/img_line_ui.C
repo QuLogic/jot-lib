@@ -109,271 +109,281 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    int id = _id << ID_SHIFT;
 
    _rollout[ROLLOUT_MAIN] 
-      = (base) ? glui->add_rollout_to_panel(base, "Image Line UI",open)
-	 : glui->add_rollout("Image Line UI",open);
+      = (base) ? new GLUI_Rollout(base, "Image Line UI", open)
+	 : new GLUI_Rollout(glui, "Image Line UI", open);
 
-   _panel[PANEL_MAIN] = glui->add_panel_to_panel(_rollout[ROLLOUT_MAIN], "");
+   _panel[PANEL_MAIN] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "");
 
    _texture_selection_ui->build(glui, _panel[PANEL_MAIN], true);
 
-   _rollout[ROLLOUT_LINE2] = glui->add_rollout_to_panel(_panel[PANEL_MAIN], "Line Parameters");
+   _rollout[ROLLOUT_LINE2] = new GLUI_Rollout(_panel[PANEL_MAIN], "Line Parameters");
 
-   _panel[PANEL_CONFIDENCE] = glui->add_panel_to_panel(_rollout[ROLLOUT_LINE2], "Confidence Tapering");
+   _panel[PANEL_CONFIDENCE] = new GLUI_Panel(_rollout[ROLLOUT_LINE2], "Confidence Tapering");
 
-   _radgroup[RADGROUP_CONFIDENCE] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_CONFIDENCE] = new GLUI_RadioGroup(
 				       _panel[PANEL_CONFIDENCE],
 				       NULL,
 				       id+RADGROUP_CONFIDENCE, radiogroup_cb);
 
-   _radbutton[RADBUT_CONFIDENCE_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CONFIDENCE_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_CONFIDENCE],
 					  "None");
-   _radbutton[RADBUT_CONFIDENCE_NORMAL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CONFIDENCE_NORMAL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_CONFIDENCE],
 					  "Normal");
-   _radbutton[RADBUT_CONFIDENCE_DEBUG] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CONFIDENCE_DEBUG] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_CONFIDENCE],
 					  "Debug");
 
-   _panel[PANEL_SILHOUETTE] = glui->add_panel_to_panel(_rollout[ROLLOUT_LINE2], "Silhouette Tapering");
+   _panel[PANEL_SILHOUETTE] = new GLUI_Panel(_rollout[ROLLOUT_LINE2], "Silhouette Tapering");
 
-   _radgroup[RADGROUP_SILHOUETTE] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_SILHOUETTE] = new GLUI_RadioGroup(
 				       _panel[PANEL_SILHOUETTE],
 				       NULL,
 				       id+RADGROUP_SILHOUETTE, radiogroup_cb);
 
-   _radbutton[RADBUT_SILHOUETTE_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_SILHOUETTE_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SILHOUETTE],
 					  "None");
-   _radbutton[RADBUT_SILHOUETTE_TAPERING] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_SILHOUETTE_TAPERING] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SILHOUETTE],
 					  "Tapering");
 
-   _checkbox[CHECK_DRAW_SILHOUETTE] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_DRAW_SILHOUETTE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Draw Silhouettes",
                                 NULL,
                                 CHECK_DRAW_SILHOUETTE,
                                 checkbox_cb);
 
-   _checkbox[CHECK_TAPERING_MODE] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TAPERING_MODE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Tapering",
                                 NULL,
                                 CHECK_TAPERING_MODE,
                                 checkbox_cb);
 
-   _checkbox[CHECK_TONE_EFFECT] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TONE_EFFECT] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Alpha with Tone",
                                 NULL,
                                 CHECK_TONE_EFFECT,
                                 checkbox_cb);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_LINE2],true);
+   new GLUI_Column(_rollout[ROLLOUT_LINE2], true);
 
-   _slider[SLIDE_CURV_THRESHOLD0] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Curvature Threshold0", GLUI_SLIDER_FLOAT, 
-      0.000, 0.03, NULL, id+SLIDE_CURV_THRESHOLD0, slider_cb);
+   _slider[SLIDE_CURV_THRESHOLD0] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Curvature Threshold0",
+      id+SLIDE_CURV_THRESHOLD0, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.000, 0.03, NULL);
    _slider[SLIDE_CURV_THRESHOLD0]->set_num_graduations(100);
    _slider[SLIDE_CURV_THRESHOLD0]->set_w(200);
 
-   _slider[SLIDE_CURV_THRESHOLD1] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Curvature Threshold1", GLUI_SLIDER_FLOAT, 
-      0.000, 0.03, NULL, id+SLIDE_CURV_THRESHOLD1, slider_cb);
+   _slider[SLIDE_CURV_THRESHOLD1] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Curvature Threshold1",
+      id+SLIDE_CURV_THRESHOLD1, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.000, 0.03, NULL);
    _slider[SLIDE_CURV_THRESHOLD1]->set_num_graduations(100);
    _slider[SLIDE_CURV_THRESHOLD1]->set_w(200);
 
-   _slider[SLIDE_LIGHT_CONTROL] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Light color control", GLUI_SLIDER_FLOAT, 
-      0.5, 2.50, NULL, id+SLIDE_LIGHT_CONTROL, slider_cb);
+   _slider[SLIDE_LIGHT_CONTROL] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Light color control",
+      id+SLIDE_LIGHT_CONTROL, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.5, 2.50, NULL);
    _slider[SLIDE_LIGHT_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_LIGHT_CONTROL]->set_w(200);
 
-   _slider[SLIDE_HIGHLIGHT_CONTROL] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Highlight control", GLUI_SLIDER_FLOAT, 
-      0.5, 2.50, NULL, id+SLIDE_HIGHLIGHT_CONTROL, slider_cb);
+   _slider[SLIDE_HIGHLIGHT_CONTROL] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Highlight control",
+      id+SLIDE_HIGHLIGHT_CONTROL, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.5, 2.50, NULL);
    _slider[SLIDE_HIGHLIGHT_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_HIGHLIGHT_CONTROL]->set_w(200);
 
-   _slider[SLIDE_LINE_WIDTH] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Line Width", GLUI_SLIDER_FLOAT, 
-      1.0, 10.0, NULL, id+SLIDE_LINE_WIDTH, slider_cb);
+   _slider[SLIDE_LINE_WIDTH] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Line Width",
+      id+SLIDE_LINE_WIDTH, slider_cb,
+      GLUI_SLIDER_FLOAT, 1.0, 10.0, NULL);
    _slider[SLIDE_LINE_WIDTH]->set_num_graduations(100);
    _slider[SLIDE_LINE_WIDTH]->set_w(200);
 
-   _slider[SLIDE_ALPHA_OFFSET] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Alpha Offset", GLUI_SLIDER_FLOAT, 
-      0.0, 1.0, NULL, id+SLIDE_ALPHA_OFFSET, slider_cb);
+   _slider[SLIDE_ALPHA_OFFSET] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Alpha Offset",
+      id+SLIDE_ALPHA_OFFSET, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.0, 1.0, NULL);
    _slider[SLIDE_ALPHA_OFFSET]->set_num_graduations(100);
    _slider[SLIDE_ALPHA_OFFSET]->set_w(200);
 
-   _slider[SLIDE_BLUR_SIZE] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Blur Size", GLUI_SLIDER_FLOAT, 
-      0, 2.0, NULL, id+SLIDE_BLUR_SIZE, slider_cb);
+   _slider[SLIDE_BLUR_SIZE] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Blur Size",
+      id+SLIDE_BLUR_SIZE, slider_cb,
+      GLUI_SLIDER_FLOAT, 0, 2.0, NULL);
    _slider[SLIDE_BLUR_SIZE]->set_num_graduations(100);
    _slider[SLIDE_BLUR_SIZE]->set_w(200);
 
-   _slider[SLIDE_MOVING_FACTOR] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Moving Factor", GLUI_SLIDER_FLOAT, 
-      0.0, 1.0, NULL, id+SLIDE_MOVING_FACTOR, slider_cb);
+   _slider[SLIDE_MOVING_FACTOR] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Moving Factor",
+      id+SLIDE_MOVING_FACTOR, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.0, 1.0, NULL);
    _slider[SLIDE_MOVING_FACTOR]->set_num_graduations(100);
    _slider[SLIDE_MOVING_FACTOR]->set_w(200);
 
-   _slider[SLIDE_SHININESS] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Shininess", GLUI_SLIDER_FLOAT, 
-      0.0, 100.0, NULL, id+SLIDE_SHININESS, slider_cb);
+   _slider[SLIDE_SHININESS] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Shininess",
+      id+SLIDE_SHININESS, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.0, 100.0, NULL);
    _slider[SLIDE_SHININESS]->set_num_graduations(100);
    _slider[SLIDE_SHININESS]->set_w(200);
 
-   _slider[SLIDE_HT_WIDTH_CONTROL] = glui->add_slider_to_panel(
-      _rollout[ROLLOUT_LINE2], "Highlight width control", GLUI_SLIDER_FLOAT, 
-      0.0, 2.0, NULL, id+SLIDE_HT_WIDTH_CONTROL, slider_cb);
+   _slider[SLIDE_HT_WIDTH_CONTROL] = new GLUI_Slider(
+      _rollout[ROLLOUT_LINE2], "Highlight width control",
+      id+SLIDE_HT_WIDTH_CONTROL, slider_cb,
+      GLUI_SLIDER_FLOAT, 0.0, 2.0, NULL);
    _slider[SLIDE_HT_WIDTH_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_HT_WIDTH_CONTROL]->set_w(200);
 
-   _rollout[ROLLOUT_REF_IMG] = glui->add_rollout_to_panel(_panel[PANEL_MAIN], "Show Reference Image", false);
+   _rollout[ROLLOUT_REF_IMG] = new GLUI_Rollout(_panel[PANEL_MAIN], "Show Reference Image", false);
 
-   _radgroup[RADGROUP_REF_IMG] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_REF_IMG] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_REF_IMG],
 				       NULL,
 				       id+RADGROUP_REF_IMG, radiogroup_cb);
 
-   _radbutton[RADBUT_REF_IMG_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REF_IMG_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_REF_IMG],
 					  "None");
 
-   _radbutton[RADBUT_REF_IMG_TONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REF_IMG_TONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_REF_IMG],
 					  "Tone Image");
-   _radbutton[RADBUT_REF_IMG_BLUR] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REF_IMG_BLUR] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_REF_IMG],
 					  "Blurred Image");
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_REF_IMG], true);
+   new GLUI_Column(_rollout[ROLLOUT_REF_IMG], true);
 
-   _radgroup[RADGROUP_SHOW_CHANNEL] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_SHOW_CHANNEL] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_REF_IMG],
 				       NULL,
 				       id+RADGROUP_SHOW_CHANNEL, radiogroup_cb);
 
-   _radbutton[RADBUT_CHANNEL_ALL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CHANNEL_ALL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SHOW_CHANNEL],
 					  "All");
 
-   _radbutton[RADBUT_CHANNEL_RED] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CHANNEL_RED] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SHOW_CHANNEL],
 					  "Red");
-   _radbutton[RADBUT_CHANNEL_GREEN] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CHANNEL_GREEN] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SHOW_CHANNEL],
 					  "Green");
-   _radbutton[RADBUT_CHANNEL_LUMI] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_CHANNEL_LUMI] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_SHOW_CHANNEL],
 					  "Luminance");
 
-   _rollout[ROLLOUT_DEBUG_SHADER] = glui->add_rollout_to_panel(_panel[PANEL_MAIN], "Debug Shader", false);
+   _rollout[ROLLOUT_DEBUG_SHADER] = new GLUI_Rollout(_panel[PANEL_MAIN], "Debug Shader", false);
 
-   _radgroup[RADGROUP_DEBUG_SHADER] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_DEBUG_SHADER] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_DEBUG_SHADER],
 				       NULL,
 				       id+RADGROUP_DEBUG_SHADER, radiogroup_cb);
 
-   _radbutton[RADBUT_DEBUG_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "None");
 
-   _radbutton[RADBUT_DEBUG_SIGN] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_SIGN] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "Sign");
-   _radbutton[RADBUT_DEBUG_MOVE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_MOVE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "Move");
-   _radbutton[RADBUT_DEBUG_CURV] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_CURV] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "Curvature");
-   _radbutton[RADBUT_DEBUG_DIST] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_DIST] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "Distance");
-   _radbutton[RADBUT_DEBUG_ANGLE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DEBUG_ANGLE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_DEBUG_SHADER],
 					  "Angle");
 
 
-   glui->add_column_to_panel(_panel[PANEL_MAIN],true);
+   new GLUI_Column(_panel[PANEL_MAIN], true);
 
    _tone_shader_ui->build(glui, _panel[PANEL_MAIN], true);
 
    _detail_ctrl_ui->build(glui, _rollout[ROLLOUT_MAIN], false);
 
-    _rollout[ROLLOUT_LINE] = glui->add_rollout_to_panel( _rollout[ROLLOUT_MAIN], "Line mode",false);
-   _radgroup[RADGROUP_LINE] = glui->add_radiogroup_to_panel(
+    _rollout[ROLLOUT_LINE] = new GLUI_Rollout( _rollout[ROLLOUT_MAIN], "Line mode",false);
+   _radgroup[RADGROUP_LINE] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_LINE],
 				       NULL,
 				       id+RADGROUP_LINE, radiogroup_cb);
 
-   _radbutton[RADBUT_LINE_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "None");
 
-   _radbutton[RADBUT_LINE_ALL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_ALL] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "All");
 
-   _radbutton[RADBUT_LINE_DK] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_DK] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Only Dark");
 
-   _radbutton[RADBUT_LINE_LT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_LT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Only Light");
 
-   _radbutton[RADBUT_LINE_HT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_HT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Only Highlight");
 
-   _radbutton[RADBUT_LINE_DK_LT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_DK_LT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Dark + Light");
 
-   _radbutton[RADBUT_LINE_DK_HT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_DK_HT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Dark + Hightlight");
 
-   _radbutton[RADBUT_LINE_LT_HT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LINE_LT_HT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_LINE],
 					  "Light + Hightlight");
 
 
    _basecoat_ui->build(glui, _rollout[ROLLOUT_MAIN], false);
 
-   _rollout[ROLLOUT_COLOR_SELECTION] = glui->add_rollout_to_panel( _rollout[ROLLOUT_MAIN], "Color Selection",false);
+   _rollout[ROLLOUT_COLOR_SELECTION] = new GLUI_Rollout( _rollout[ROLLOUT_MAIN], "Color Selection",false);
 
-   _radgroup[RADGROUP_COLOR] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COLOR] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_COLOR_SELECTION],
 				       NULL,
 				       id+RADGROUP_COLOR, radiogroup_cb);
 
-   _radbutton[RADBUT_COLOR_BASE0] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_BASE0] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Basecoat0");
 
-   _radbutton[RADBUT_COLOR_BASE1] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_BASE1] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Basecoat1");
 
-   _radbutton[RADBUT_COLOR_DARK] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_DARK] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Dark");
 
-   _radbutton[RADBUT_COLOR_LIGHT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_LIGHT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Light");
 
-   _radbutton[RADBUT_COLOR_HIGHLIGHT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_HIGHLIGHT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Highlight");
 
-   _radbutton[RADBUT_COLOR_BACKGROUND] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_COLOR_BACKGROUND] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_COLOR],
 					  "Background");
 

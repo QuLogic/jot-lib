@@ -61,83 +61,83 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    int id = _id << ID_SHIFT;
 
    _rollout[ROLLOUT_MAIN] 
-      = (base) ? glui->add_rollout_to_panel(base, "Basecoat UI",open)
-	 : glui->add_rollout("Basecoat UI",open);
+      = (base) ? new GLUI_Rollout(base, "Basecoat UI", open)
+	 : new GLUI_Rollout(glui, "Basecoat UI", open);
 
-   _radgroup[RADGROUP_BASECOAT] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_BASECOAT] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_MAIN],
 				       NULL,
 				       id+RADGROUP_BASECOAT, radiogroup_cb);
 
-   _radbutton[RADBUT_BASECOAT_NONE] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASECOAT_NONE] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_BASECOAT],
 					  "None");
 
-   _radbutton[RADBUT_BASECOAT_CONSTANT] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASECOAT_CONSTANT] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_BASECOAT],
 					  "Constant");
 
-   _radbutton[RADBUT_BASECOAT_TOON] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASECOAT_TOON] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_BASECOAT],
 					  "Toon");
 
-   _radbutton[RADBUT_BASECOAT_SMOOTHSTEP] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASECOAT_SMOOTHSTEP] = new GLUI_RadioButton(
 					  _radgroup[RADGROUP_BASECOAT],
 					  "Smoothstep");
 
-   _checkbox[CHECK_LIGHT_SEPARATE] = glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT_SEPARATE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_MAIN],
                                 "Light Seperation",
                                 NULL,
                                 CHECK_LIGHT_SEPARATE,
                                 checkbox_cb);
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
 
    //Sliders
-   _slider[SLIDE_REMAP_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_REMAP_A] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Remap smoothstep A", 
+      id+SLIDE_REMAP_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_REMAP_A, slider_cb);
+      NULL);
    _slider[SLIDE_REMAP_A]->set_num_graduations(100);
    _slider[SLIDE_REMAP_A]->set_w(200);
 
-   _slider[SLIDE_REMAP_B] = _glui->add_slider_to_panel(
+   _slider[SLIDE_REMAP_B] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Remap smoothstep B", 
+      id+SLIDE_REMAP_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_REMAP_B, slider_cb);
+      NULL);
    _slider[SLIDE_REMAP_B]->set_num_graduations(100);
    _slider[SLIDE_REMAP_B]->set_w(200);
 
-   _slider[SLIDE_COLOR_OFFSET] = _glui->add_slider_to_panel(
+   _slider[SLIDE_COLOR_OFFSET] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Offset", 
+      id+SLIDE_COLOR_OFFSET, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_COLOR_OFFSET, slider_cb);
+      NULL);
    _slider[SLIDE_COLOR_OFFSET]->set_num_graduations(100);
    _slider[SLIDE_COLOR_OFFSET]->set_w(200);
 
-   _slider[SLIDE_COLOR_STEEPNESS] = _glui->add_slider_to_panel(
+   _slider[SLIDE_COLOR_STEEPNESS] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Steepness", 
+      id+SLIDE_COLOR_STEEPNESS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_COLOR_STEEPNESS, slider_cb);
+      NULL);
    _slider[SLIDE_COLOR_STEEPNESS]->set_num_graduations(100);
    _slider[SLIDE_COLOR_STEEPNESS]->set_w(200);
 
    //toon texture selection list 
 
-   _listbox[LIST_TEXTURE] = _glui->add_listbox_to_panel(
+   _listbox[LIST_TEXTURE] = new GLUI_Listbox(
                                _rollout[ROLLOUT_MAIN],
                                "Toon Map",
                                0,

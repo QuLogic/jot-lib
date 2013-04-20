@@ -73,30 +73,30 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _glui = glui; 
    int id = _id << ID_SHIFT;
 
-    _rollout[ROLLOUT_HATCHING] = (base) ? glui->add_rollout_to_panel(base, "Hatching UI",open)
-                                    : glui->add_rollout("Hatching UI",open);
+    _rollout[ROLLOUT_HATCHING] = (base) ? new GLUI_Rollout(base, "Hatching UI", open)
+                                    : new GLUI_Rollout(glui, "Hatching UI", open);
    
     
-   _panel[PANEL_MAIN] = glui->add_panel_to_panel(_rollout[ROLLOUT_HATCHING], "");
+   _panel[PANEL_MAIN] = new GLUI_Panel(_rollout[ROLLOUT_HATCHING], "");
    
   
    _texture_selection_ui->build(glui, _panel[PANEL_MAIN], true);
    
-   glui->add_column_to_panel(_panel[PANEL_MAIN],true);
+   new GLUI_Column(_panel[PANEL_MAIN], true);
 
    _presets_ui->build(glui,_panel[PANEL_MAIN], true); 
 
    // Proparties   
-   _panel[PANEL_PROPERTIES] = glui->add_panel_to_panel(_rollout[ROLLOUT_HATCHING], "");
+   _panel[PANEL_PROPERTIES] = new GLUI_Panel(_rollout[ROLLOUT_HATCHING], "");
 
-   _listbox[LIST_PATTERN] = glui->add_listbox_to_panel(
+   _listbox[LIST_PATTERN] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
       "Pattern", NULL, 
       id+LIST_PATTERN, listbox_cb);
    
    fill_directory_listbox(_listbox[LIST_PATTERN],_pattern_filenames, Config::JOT_ROOT() + "/nprdata/hatching_textures/", ".png", false);
                            
-    _listbox[LIST_PAPER] = glui->add_listbox_to_panel(
+    _listbox[LIST_PAPER] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
       "Paper", NULL, 
       id+LIST_PAPER, listbox_cb);
@@ -104,89 +104,89 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    fill_directory_listbox(_listbox[LIST_PAPER],_paper_filenames, Config::JOT_ROOT() + "/nprdata/paper_textures/", ".png", false);
 
    
-    _checkbox[CHECK_ENABLE]=glui->add_checkbox_to_panel(
+    _checkbox[CHECK_ENABLE]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Enable",
                               NULL,
                               id+CHECK_ENABLE,
                               checkbox_cb);
-   _checkbox[CHECK_HIGHLIGHT]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_HIGHLIGHT]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Highlight",
                               NULL,
                               id+CHECK_HIGHLIGHT,
                               checkbox_cb);
 
-   _slider[SLIDER_ANGLE] = glui->add_slider_to_panel(
+   _slider[SLIDER_ANGLE] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Angle", 
+      id+SLIDER_ANGLE, slider_cb,
       GLUI_SLIDER_INT, 
       0, 360, 
-      NULL,
-      id+SLIDER_ANGLE, slider_cb);
+      NULL);
    _slider[SLIDER_ANGLE]->set_w(150);
    _slider[SLIDER_ANGLE]->set_num_graduations(360);
 
-   _slider[SLIDER_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDER_SCALE] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Scale", 
+      id+SLIDER_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0,
       100.0, 
-      NULL,
-      id+SLIDER_SCALE, slider_cb);
+      NULL);
    _slider[SLIDER_SCALE]->set_w(150);
    _slider[SLIDER_SCALE]->set_num_graduations(200);
 
-   _slider[SLIDER_PAPER_CONTRAST] = glui->add_slider_to_panel(
+   _slider[SLIDER_PAPER_CONTRAST] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Paper Contrast", 
+      id+SLIDER_PAPER_CONTRAST, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0,
       5.0, 
-      NULL,
-      id+SLIDER_PAPER_CONTRAST, slider_cb);
+      NULL);
    _slider[SLIDER_PAPER_CONTRAST]->set_w(150);
    _slider[SLIDER_PAPER_CONTRAST]->set_num_graduations(100);
 
-   _slider[SLIDER_PAPER_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDER_PAPER_SCALE] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Paper Scale", 
+      id+SLIDER_PAPER_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0,
       100.0, 
-      NULL,
-      id+SLIDER_PAPER_SCALE, slider_cb);
+      NULL);
    _slider[SLIDER_PAPER_SCALE]->set_w(150);
    _slider[SLIDER_PAPER_SCALE]->set_num_graduations(100);
 
-   _slider[SLIDER_TONE_PUSH] = glui->add_slider_to_panel(
+   _slider[SLIDER_TONE_PUSH] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Tone Push", 
+      id+SLIDER_TONE_PUSH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       -1.0,
       1.0, 
-      NULL,
-      id+SLIDER_TONE_PUSH, slider_cb);
+      NULL);
    _slider[SLIDER_TONE_PUSH]->set_w(150);
    _slider[SLIDER_TONE_PUSH]->set_num_graduations(100);
    
    //Color Choose
-   _panel[PANEL_COLOR_SWITCH] = glui->add_panel_to_panel(_panel[PANEL_PROPERTIES], "Color");
+   _panel[PANEL_COLOR_SWITCH] = new GLUI_Panel(_panel[PANEL_PROPERTIES], "Color");
     
-   _radgroup[RADGROUP_COLOR_SEL] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COLOR_SEL] = new GLUI_RadioGroup(
                                      _panel[PANEL_COLOR_SWITCH],
                                      NULL,
                                      id+RADGROUP_COLOR_SEL, radiogroup_cb);
    
-   _radbutton[RADBUT_STROKE_COL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_STROKE_COL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Stroke");
      
-   _radbutton[RADBUT_BASE_COL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASE_COL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Base Color");
-   _radbutton[RADBUT_BACKGROUND] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BACKGROUND] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Background");
    
 
-   glui->add_column_to_panel(_panel[PANEL_PROPERTIES],true);
+   new GLUI_Column(_panel[PANEL_PROPERTIES], true);
    
    _tone_shader_ui->build(glui,_panel[PANEL_PROPERTIES], true);
 

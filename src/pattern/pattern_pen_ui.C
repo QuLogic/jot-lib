@@ -173,27 +173,27 @@ PatternPenUI::build() {
 
 
    // Panel containing pen buttons
-   _panel[PANEL_PEN] = _glui->add_panel("");
+   _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
    assert(_panel[PANEL_PEN]);
 
    //Prev pen
-   _button[BUT_PREV_PEN] = _glui->add_button_to_panel(
+   _button[BUT_PREV_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Previous Mode", 
       id+BUT_PREV_PEN, button_cb);
    assert(_button[BUT_PREV_PEN]);
 
-   _glui->add_column_to_panel(_panel[PANEL_PEN],false);
+   new GLUI_Column(_panel[PANEL_PEN], false);
 
    //Prev pen
-   _button[BUT_NEXT_PEN] = _glui->add_button_to_panel(
+   _button[BUT_NEXT_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Next Mode", 
       id+BUT_NEXT_PEN, button_cb);
    assert(_button[BUT_NEXT_PEN]);
 
-   _panel[PANEL_MODE] = _glui->add_panel("");
+   _panel[PANEL_MODE] = new GLUI_Panel(_glui, "");
 
     // stroke pattern modes
-   _listbox[LIST_MODE]= _glui->add_listbox_to_panel(_panel[PANEL_MODE],"Mode", NULL,
+   _listbox[LIST_MODE]= new GLUI_Listbox(_panel[PANEL_MODE], "Mode", NULL,
 					  id+LIST_MODE, listbox_cb);
    _listbox[LIST_MODE]->add_item(0, "Analysis");
    _listbox[LIST_MODE]->add_item(1, "Synthesis");
@@ -201,186 +201,186 @@ PatternPenUI::build() {
    _listbox[LIST_MODE]->add_item(3, "Proxy");
    _listbox[LIST_MODE]->add_item(4, "Ellipses");
 
-    _glui->add_column_to_panel(_panel[PANEL_MODE],false);
+   new GLUI_Column(_panel[PANEL_MODE], false);
 
-   _listbox[LIST_STROKE_PRESET]= _glui->add_listbox_to_panel(_panel[PANEL_MODE],"Preset", NULL, id+LIST_STROKE_PRESET, listbox_cb);  
+   _listbox[LIST_STROKE_PRESET] = new GLUI_Listbox(_panel[PANEL_MODE], "Preset", NULL, id+LIST_STROKE_PRESET, listbox_cb);
    fill_preset_listbox(_listbox[LIST_STROKE_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
    preset_stroke();
 
   
 
    // stroke mode
-   _rollout[ROLLOUT_ANALYSIS] =  _glui->add_rollout("Analysis",true);
+   _rollout[ROLLOUT_ANALYSIS] = new GLUI_Rollout(_glui, "Analysis", true);
    
-   _panel[PANEL_STROKES] = _glui->add_panel_to_panel(_rollout[ROLLOUT_ANALYSIS], "");
+   _panel[PANEL_STROKES] = new GLUI_Panel(_rollout[ROLLOUT_ANALYSIS], "");
    
-   _slider[SLIDE_EPS] = _glui->add_slider_to_panel(_panel[PANEL_STROKES], "Epsilon", 
-						   GLUI_SLIDER_FLOAT, 0, 20, NULL, 
-						   id+SLIDE_EPS, slider_cb);
+   _slider[SLIDE_EPS] = new GLUI_Slider(_panel[PANEL_STROKES], "Epsilon",
+                                        id+SLIDE_EPS, slider_cb,
+                                        GLUI_SLIDER_FLOAT, 0, 20, NULL);
    _slider[SLIDE_EPS]->set_num_graduations(101);
    _slider[SLIDE_EPS]->set_float_val(0.0f);
-   _button[BUT_POP] = _glui->add_button_to_panel(_panel[PANEL_STROKES], "Pop Stroke", 
-						 id+BUT_POP, button_cb);
-   _button[BUT_CLEAR] = _glui->add_button_to_panel(_panel[PANEL_STROKES], "Clear Strokes", 
-						   id+BUT_CLEAR, button_cb);
+   _button[BUT_POP] = new GLUI_Button(_panel[PANEL_STROKES], "Pop Stroke",
+                                      id+BUT_POP, button_cb);
+   _button[BUT_CLEAR] = new GLUI_Button(_panel[PANEL_STROKES], "Clear Strokes",
+                                        id+BUT_CLEAR, button_cb);
 
   
-   _glui->add_column_to_panel(_panel[PANEL_STROKES],false);
+   new GLUI_Column(_panel[PANEL_STROKES], false);
 
 
-   _listbox[LIST_TYPE]= _glui->add_listbox_to_panel(_panel[PANEL_STROKES],
-						     "Type", NULL,
-						     id+LIST_TYPE, listbox_cb);  
+   _listbox[LIST_TYPE]= new GLUI_Listbox(_panel[PANEL_STROKES],
+                                         "Type", NULL,
+                                         id+LIST_TYPE, listbox_cb);
    _listbox[LIST_TYPE]->add_item(0, "Hatching");
    _listbox[LIST_TYPE]->add_item(1, "Stippling");
    _listbox[LIST_TYPE]->add_item(2, "Free");
    _listbox[LIST_TYPE]->set_int_val(2);
 
-   _listbox[LIST_PARAM]= _glui->add_listbox_to_panel(_panel[PANEL_STROKES],
-						     "Param.", NULL,
-						     id+LIST_PARAM, listbox_cb);  
+   _listbox[LIST_PARAM]= new GLUI_Listbox(_panel[PANEL_STROKES],
+                                          "Param.", NULL,
+                                          id+LIST_PARAM, listbox_cb);
    _listbox[LIST_PARAM]->add_item(0, "Axis");
    _listbox[LIST_PARAM]->add_item(1, "Cartesian");
    _listbox[LIST_PARAM]->add_item(2, "Angular");
 
-   _checkbox[CHECK_ANAL_STYLE] = _glui->add_checkbox_to_panel(_panel[PANEL_STROKES],
-							      "Analyze style", NULL,
-							      id+CHECK_ANAL_STYLE, checkbox_cb);  
+   _checkbox[CHECK_ANAL_STYLE] = new GLUI_Checkbox(_panel[PANEL_STROKES],
+                                                   "Analyze style", NULL,
+                                                   id+CHECK_ANAL_STYLE, checkbox_cb);
    _checkbox[CHECK_ANAL_STYLE]->set_int_val(1);
 
-   _slider[SLIDE_STYLE] = _glui->add_slider_to_panel(_panel[PANEL_STROKES], "Style adjust.", 
-						   GLUI_SLIDER_FLOAT, 0, 1, NULL, 
-						   id+SLIDE_STYLE, slider_cb);
+   _slider[SLIDE_STYLE] = new GLUI_Slider(_panel[PANEL_STROKES], "Style adjust.",
+                                          id+SLIDE_STYLE, slider_cb,
+                                          GLUI_SLIDER_FLOAT, 0, 1, NULL);
    _slider[SLIDE_STYLE]->set_num_graduations(101);
    _slider[SLIDE_STYLE]->set_float_val(1.0f);
 
-   _button[BUT_NEW_GROUP] = _glui->add_button_to_panel(_panel[PANEL_STROKES], "New Group", 
-						       id+BUT_NEW_GROUP, button_cb);
+   _button[BUT_NEW_GROUP] = new GLUI_Button(_panel[PANEL_STROKES], "New Group",
+                                            id+BUT_NEW_GROUP, button_cb);
    
-   _checkbox[CHECK_STRUCT] = _glui->add_checkbox_to_panel(_panel[PANEL_STROKES],
-							  "Display structure", NULL,
-							  id+CHECK_STRUCT, checkbox_cb);  
-   _checkbox[CHECK_FRAME] = _glui->add_checkbox_to_panel(_panel[PANEL_STROKES],
-							 "Display ref frame", NULL,
-							 id+CHECK_FRAME, checkbox_cb);  
+   _checkbox[CHECK_STRUCT] = new GLUI_Checkbox(_panel[PANEL_STROKES],
+                                               "Display structure", NULL,
+                                               id+CHECK_STRUCT, checkbox_cb);
+   _checkbox[CHECK_FRAME] = new GLUI_Checkbox(_panel[PANEL_STROKES],
+                                              "Display ref frame", NULL,
+                                              id+CHECK_FRAME, checkbox_cb);
    _checkbox[CHECK_FRAME]->set_int_val(1);
    
 
    // synthesis mode
-   _rollout[ROLLOUT_SYNTH] =  _glui->add_rollout("Synthesis",false);
-   _listbox[LIST_CELL]= _glui->add_listbox_to_panel(_rollout[ROLLOUT_SYNTH],
-						    "Cell", NULL, id+LIST_CELL, listbox_cb);  
+   _rollout[ROLLOUT_SYNTH] =  new GLUI_Rollout(_glui, "Synthesis", false);
+   _listbox[LIST_CELL]= new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
+                                         "Cell", NULL, id+LIST_CELL, listbox_cb);
    _listbox[LIST_CELL]->add_item(0, "Box");
    _listbox[LIST_CELL]->add_item(1, "Rect");
    _listbox[LIST_CELL]->add_item(2, "Path");
    _listbox[LIST_CELL]->add_item(3, "Carriers");
 
-   _panel[PANEL_IMAGE] = _glui->add_panel_to_panel(_rollout[ROLLOUT_SYNTH], "Back Image");
+   _panel[PANEL_IMAGE] = new GLUI_Panel(_rollout[ROLLOUT_SYNTH], "Back Image");
    assert(_panel[PANEL_IMAGE]);
-   _checkbox[CHECK_IMAGE_PRESSURE] = _glui->add_checkbox_to_panel(_panel[PANEL_IMAGE],
-							  "Use Image Luminasity", NULL,
-							  id+CHECK_IMAGE_PRESSURE, checkbox_cb); 
+   _checkbox[CHECK_IMAGE_PRESSURE] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
+                                                       "Use Image Luminasity", NULL,
+                                                       id+CHECK_IMAGE_PRESSURE, checkbox_cb);
 
-   _checkbox[CHECK_IMAGE_ALPHA] = _glui->add_checkbox_to_panel(_panel[PANEL_IMAGE],
-							  "Modify Alpha", NULL,
-							  id+CHECK_IMAGE_ALPHA, checkbox_cb); 
+   _checkbox[CHECK_IMAGE_ALPHA] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
+                                                    "Modify Alpha", NULL,
+                                                    id+CHECK_IMAGE_ALPHA, checkbox_cb);
    _checkbox[CHECK_IMAGE_ALPHA]->set_int_val(_pen->get_gesture_drawer_a()); 
 
-   _checkbox[CHECK_IMAGE_WIDTH] = _glui->add_checkbox_to_panel(_panel[PANEL_IMAGE],
-							  "Modify Width", NULL,
-							  id+CHECK_IMAGE_WIDTH, checkbox_cb);
+   _checkbox[CHECK_IMAGE_WIDTH] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
+                                                    "Modify Width", NULL,
+                                                    id+CHECK_IMAGE_WIDTH, checkbox_cb);
    _checkbox[CHECK_IMAGE_WIDTH]->set_int_val(_pen->get_gesture_drawer_w()); 
      
-   _checkbox[CHECK_IMAGE_COLOR] = _glui->add_checkbox_to_panel(_panel[PANEL_IMAGE],
-							  "Use Color", NULL,
-							  id+CHECK_IMAGE_COLOR, checkbox_cb);  
+   _checkbox[CHECK_IMAGE_COLOR] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
+                                                    "Use Color", NULL,
+                                                    id+CHECK_IMAGE_COLOR, checkbox_cb);
 
 
-   _checkbox[CHECK_SHOW_BBOX] = _glui->add_checkbox_to_panel(_rollout[ROLLOUT_SYNTH],
-							  "Show cell", NULL,
-							  id+CHECK_SHOW_BBOX, checkbox_cb); 
+   _checkbox[CHECK_SHOW_BBOX] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
+                                                  "Show cell", NULL,
+                                                  id+CHECK_SHOW_BBOX, checkbox_cb);
     _checkbox[CHECK_SHOW_BBOX]->set_int_val(1);
 
-    _checkbox[CHECK_SHOW_ICON] = _glui->add_checkbox_to_panel(_rollout[ROLLOUT_SYNTH],
-							  "Show example", NULL,
-							  id+CHECK_SHOW_ICON, checkbox_cb);  
+    _checkbox[CHECK_SHOW_ICON] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
+                                                   "Show example", NULL,
+                                                   id+CHECK_SHOW_ICON, checkbox_cb);
     _checkbox[CHECK_SHOW_ICON]->set_int_val(1);
 
 
-    _panel[PANEL_COLOR] = _glui->add_panel_to_panel(_rollout[ROLLOUT_SYNTH], "Image Color Adjust");
+    _panel[PANEL_COLOR] = new GLUI_Panel(_rollout[ROLLOUT_SYNTH], "Image Color Adjust");
 
-   	_slider[SLIDE_COLOR_H] = _glui->add_slider_to_panel(_panel[PANEL_COLOR], "H Adjust", 
-						   GLUI_SLIDER_FLOAT, -1, 1, NULL, 
-						   id+SLIDE_COLOR_H, slider_cb);
+    _slider[SLIDE_COLOR_H] = new GLUI_Slider(_panel[PANEL_COLOR], "H Adjust",
+                                             id+SLIDE_COLOR_H, slider_cb,
+                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
     _slider[SLIDE_COLOR_H]->set_num_graduations(21);
     _slider[SLIDE_COLOR_H]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_H]->set_w(120);
 
-	_slider[SLIDE_COLOR_S] = _glui->add_slider_to_panel(_panel[PANEL_COLOR], "S Adjust", 
-						   GLUI_SLIDER_FLOAT, -1, 1, NULL, 
-						   id+SLIDE_COLOR_S, slider_cb);
+    _slider[SLIDE_COLOR_S] = new GLUI_Slider(_panel[PANEL_COLOR], "S Adjust",
+                                             id+SLIDE_COLOR_S, slider_cb,
+                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
     _slider[SLIDE_COLOR_S]->set_num_graduations(21);
     _slider[SLIDE_COLOR_S]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_S]->set_w(120);
 
-	_slider[SLIDE_COLOR_V] = _glui->add_slider_to_panel(_panel[PANEL_COLOR], "V Adjust", 
-						   GLUI_SLIDER_FLOAT, -1, 1, NULL, 
-						   id+SLIDE_COLOR_V, slider_cb);
+    _slider[SLIDE_COLOR_V] = new GLUI_Slider(_panel[PANEL_COLOR], "V Adjust",
+                                             id+SLIDE_COLOR_V, slider_cb,
+                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
     _slider[SLIDE_COLOR_V]->set_num_graduations(21);
     _slider[SLIDE_COLOR_V]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_V]->set_w(120);
 
-	_listbox[LIST_LUMIN_FUNC]= _glui->add_listbox_to_panel(_panel[PANEL_COLOR],
-						   "Lum Func", NULL, id+LIST_LUMIN_FUNC, listbox_cb);  
+    _listbox[LIST_LUMIN_FUNC] = new GLUI_Listbox(_panel[PANEL_COLOR],
+                                                 "Lum Func", NULL, id+LIST_LUMIN_FUNC, listbox_cb);
     _listbox[LIST_LUMIN_FUNC]->add_item(0, "Shadow");
     _listbox[LIST_LUMIN_FUNC]->add_item(1, "Highlight");
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_SYNTH],false);
+   new GLUI_Column(_rollout[ROLLOUT_SYNTH], false);
 
-   _listbox[LIST_SYNTH]= _glui->add_listbox_to_panel(_rollout[ROLLOUT_SYNTH],
-						   "Mode", NULL, id+LIST_SYNTH, listbox_cb);  
+   _listbox[LIST_SYNTH] = new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
+                                           "Mode", NULL, id+LIST_SYNTH, listbox_cb);
    _listbox[LIST_SYNTH]->add_item(0, "synth_mimic");
    _listbox[LIST_SYNTH]->add_item(1, "synth_Efros");
    _listbox[LIST_SYNTH]->add_item(2, "synth_sample");
    _listbox[LIST_SYNTH]->add_item(3, "synth_copy");
    _listbox[LIST_SYNTH]->add_item(4, "synth_clone");
 
-   _listbox[LIST_DIST]= _glui->add_listbox_to_panel(_rollout[ROLLOUT_SYNTH],
-						    "Distribution", NULL, id+LIST_DIST, listbox_cb);  
+   _listbox[LIST_DIST] = new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
+                                          "Distribution", NULL, id+LIST_DIST, listbox_cb);
    _listbox[LIST_DIST]->add_item(0, "Lloyd");
    _listbox[LIST_DIST]->add_item(1, "Stratified");
 
-   _slider[SLIDE_RING] = _glui->add_slider_to_panel(_rollout[ROLLOUT_SYNTH], "#Ring", 
-						    GLUI_SLIDER_INT, 1, 5, NULL, 
-						    id+SLIDE_RING, slider_cb);
+   _slider[SLIDE_RING] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "#Ring",
+                                         id+SLIDE_RING, slider_cb,
+                                         GLUI_SLIDER_INT, 1, 5, NULL);
 
-   _button[BUT_POP_SYNTH] = _glui->add_button_to_panel(_rollout[ROLLOUT_SYNTH], "Pop Cell", 
-						 id+BUT_POP_SYNTH, button_cb);
-   _button[BUT_CLEAR_SYNTH] = _glui->add_button_to_panel(_rollout[ROLLOUT_SYNTH], "Clear All", 
-						   id+BUT_CLEAR_SYNTH, button_cb);
+   _button[BUT_POP_SYNTH] = new GLUI_Button(_rollout[ROLLOUT_SYNTH], "Pop Cell",
+                                            id+BUT_POP_SYNTH, button_cb);
+   _button[BUT_CLEAR_SYNTH] = new GLUI_Button(_rollout[ROLLOUT_SYNTH], "Clear All",
+                                              id+BUT_CLEAR_SYNTH, button_cb);
 
    
-   _checkbox[CHECK_STRETCH] = _glui->add_checkbox_to_panel(_rollout[ROLLOUT_SYNTH],
-							  "Element Stretching", NULL,
-							  id+CHECK_STRETCH, checkbox_cb);  
+   _checkbox[CHECK_STRETCH] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
+                                                "Element Stretching", NULL,
+                                                id+CHECK_STRETCH, checkbox_cb);
   
 
-   _slider[SLIDE_CORRECT] = _glui->add_slider_to_panel(_rollout[ROLLOUT_SYNTH], "Perceptual correction", 
-						       GLUI_SLIDER_FLOAT, 0, 1, NULL, 
-						       id+SLIDE_CORRECT, slider_cb);
+   _slider[SLIDE_CORRECT] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "Perceptual correction",
+                                            id+SLIDE_CORRECT, slider_cb,
+                                            GLUI_SLIDER_FLOAT, 0, 1, NULL);
    _slider[SLIDE_CORRECT]->set_num_graduations(200);
    _slider[SLIDE_CORRECT]->set_float_val(1.0f);
    _slider[SLIDE_CORRECT]->set_w(150);
 
-   _slider[SLIDE_GLOBAL_SCALE] = _glui->add_slider_to_panel(_rollout[ROLLOUT_SYNTH], "Global Scale", 
-						   GLUI_SLIDER_FLOAT, 0, 2, NULL, 
-						   id+SLIDE_GLOBAL_SCALE, slider_cb);
+   _slider[SLIDE_GLOBAL_SCALE] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "Global Scale",
+                                                 id+SLIDE_GLOBAL_SCALE, slider_cb,
+                                                 GLUI_SLIDER_FLOAT, 0, 2, NULL);
    _slider[SLIDE_GLOBAL_SCALE]->set_num_graduations(21);
    _slider[SLIDE_GLOBAL_SCALE]->set_float_val(1.0f);
    _slider[SLIDE_GLOBAL_SCALE]->set_w(150);
 
 
-   _button[BUT_RESYNTH] = _glui->add_button_to_panel(
+   _button[BUT_RESYNTH] = new GLUI_Button(
       _rollout[ROLLOUT_SYNTH], "Resynthesize", 
       id+BUT_RESYNTH, button_cb);
    assert(_button[BUT_RESYNTH]);
@@ -393,17 +393,17 @@ PatternPenUI::build() {
 
       
    // Path mode
-   _rollout[ROLLOUT_PATH] =  _glui->add_rollout("Path",false);
+   _rollout[ROLLOUT_PATH] = new GLUI_Rollout(_glui, "Path", false);
    _rollout[ROLLOUT_PATH]->disable();
 
       
    // Proxy mode
-   _rollout[ROLLOUT_PROXY] =  _glui->add_rollout("Proxy",false);
+   _rollout[ROLLOUT_PROXY] = new GLUI_Rollout(_glui, "Proxy", false);
    _rollout[ROLLOUT_PROXY]->disable();
 
       
    // Ellipses mode
-   _rollout[ROLLOUT_ELLIPSE] =  _glui->add_rollout("Ellipses",false);
+   _rollout[ROLLOUT_ELLIPSE] =  new GLUI_Rollout(_glui, "Ellipses", false);
    _rollout[ROLLOUT_ELLIPSE]->disable();
 
  
@@ -869,40 +869,40 @@ PatternPenUI::build()
    for (i=0; i<RADGROUP_NUM; i++) _radgroup.add(0);
    for (i=0; i<RADBUT_NUM; i++)   _radbutton.add(0);
       
-      _button[BUT_VIEW_MODE] =   _glui->add_button("View Mode", id+BUT_VIEW_MODE, button_cb);
+      _button[BUT_VIEW_MODE] =   new GLUI_Button(_glui, "View Mode", id+BUT_VIEW_MODE, button_cb);
    
    
-      _listbox[LIST_BASE_COLOR]= _glui->add_listbox(
+      _listbox[LIST_BASE_COLOR]= new GLUI_Listbox(_glui,
                                  "Base Color", NULL,
                                  id+LIST_BASE_COLOR, listbox_cb);                             
       fill_color_listbox(_listbox[LIST_BASE_COLOR]);   
    
    // Layer Panel
-   _panel[PANEL_LAYERS] =     _glui->add_panel("Layers");
-   _listbox[LIST_LAYER] =    _glui->add_listbox_to_panel(_panel[PANEL_LAYERS],
+   _panel[PANEL_LAYERS] =     new GLUI_Panel(_glui, "Layers");
+   _listbox[LIST_LAYER] =    new GLUI_Listbox(_panel[PANEL_LAYERS],
                               "", NULL,
                               id+LIST_LAYER, listbox_cb);
    
   
-   _button[BUT_ADD_GRID_LAYER] =  _glui->add_button_to_panel(
+   _button[BUT_ADD_GRID_LAYER] =  new GLUI_Button(
                               _panel[PANEL_LAYERS], 
                               "Add with Grid", 
                               id+BUT_ADD_GRID_LAYER, 
                               button_cb);
-   _glui->add_column_to_panel(_panel[PANEL_LAYERS],false);
+   new GLUI_Column(_panel[PANEL_LAYERS], false);
    
-   _checkbox[CHECK_LAYER_VIS]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LAYER_VIS]=new GLUI_Checkbox(
                               _panel[PANEL_LAYERS],
                               "Visible",
                               NULL,
                               id+CHECK_LAYER_VIS,
                               checkbox_cb);                             
-   _button[BUT_ADD_BLANK_LAYER] = _glui->add_button_to_panel(
+   _button[BUT_ADD_BLANK_LAYER] = new GLUI_Button(
                               _panel[PANEL_LAYERS], 
                               "Add New Empty", 
                               id+BUT_ADD_BLANK_LAYER, 
                               button_cb);                   
-   _button[BUT_DELETE_LAYER]=_glui->add_button_to_panel(
+   _button[BUT_DELETE_LAYER]=new GLUI_Button(
                              _panel[PANEL_LAYERS], 
                              "Delete", 
                              id+BUT_DELETE_LAYER, 
@@ -911,16 +911,16 @@ PatternPenUI::build()
                                                  
 
     // LOD Panal
-   _rollout[ROLLOUT_PAINT_LOD] =  _glui->add_rollout("LOD",false);
+   _rollout[ROLLOUT_PAINT_LOD] =  new GLUI_Rollout(_glui, "LOD", false);
    //_rollout[ROLLOUT_PAINT_LOD]->set_w(_panel[PANEL_PAINT]->get_w());
-   _checkbox[CHECK_LOD_ON]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LOD_ON]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LOD],
                               "On",
                               NULL,
                               id+CHECK_LOD_ON,
-                              checkbox_cb);  
-   _glui->add_column_to_panel(_rollout[ROLLOUT_PAINT_LOD],false);                                
-   _checkbox[CHECK_LOD_WIDTH]=_glui->add_checkbox_to_panel(
+                              checkbox_cb);
+   new GLUI_Column(_rollout[ROLLOUT_PAINT_LOD], false);
+   _checkbox[CHECK_LOD_WIDTH]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LOD],
                               "Width",
                               NULL,
@@ -928,20 +928,20 @@ PatternPenUI::build()
                               checkbox_cb); 
    _checkbox[CHECK_LOD_WIDTH]->disable();
 
-   _checkbox[CHECK_LOD_ALPHA]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LOD_ALPHA]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LOD],
                               "Alpha",
                               NULL,
                               id+CHECK_LOD_ALPHA,
                               checkbox_cb);   
-   _slider[SLIDE_LOD_HI] = _glui->add_slider_to_panel(
+   _slider[SLIDE_LOD_HI] = new GLUI_Slider(
                            _rollout[ROLLOUT_PAINT_LOD], 
                            "LOD Hi", 
                            GLUI_SLIDER_FLOAT, 
                            0, 3, NULL, id+SLIDE_LOD_HI, slider_cb);   
    _slider[SLIDE_LOD_HI]->set_num_graduations(20);
    _slider[SLIDE_LOD_HI]->set_w(150);
-   _slider[SLIDE_LOD_LO] = _glui->add_slider_to_panel(
+   _slider[SLIDE_LOD_LO] = new GLUI_Slider(
                            _rollout[ROLLOUT_PAINT_LOD], 
                            "LOD Lo", 
                            GLUI_SLIDER_FLOAT, 
@@ -950,90 +950,90 @@ PatternPenUI::build()
    _slider[SLIDE_LOD_LO]->set_w(150);
    
    // Lighting Panel
-   _rollout[ROLLOUT_PAINT_LIGHT] =  _glui->add_rollout("Light",false);
+   _rollout[ROLLOUT_PAINT_LIGHT] =  new GLUI_Rollout(glui, "Light", false);
    //_rollout[ROLLOUT_PAINT_LIGHT]->set_w(_panel[PANEL_PAINT]->get_w());
-   _checkbox[CHECK_LIGHT_ON]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT_ON]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LIGHT],
                               "On",
                               NULL,
                               id+CHECK_LIGHT_ON,
                               checkbox_cb);
-   _glui->add_separator_to_panel( _rollout[ROLLOUT_PAINT_LIGHT]);    
+   new GLUI_Separator(_rollout[ROLLOUT_PAINT_LIGHT]);
   
                               
-   _radgroup[RADGROUP_LIGHT] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_LIGHT] = new GLUI_RadioGroup(
                                 _rollout[ROLLOUT_PAINT_LIGHT],
                                 NULL,
                                 id+RADGROUP_LIGHT, radiogroup_cb);
                             
    
-   _radbutton[RADBUT_LIGHT0] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT0] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT],
                                "L0");
    _radbutton[RADBUT_LIGHT0]->set_w(5);
-   _radbutton[RADBUT_LIGHT1] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT1] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT],
                                "L1");
    _radbutton[RADBUT_LIGHT1]->set_w(5);
-   _radbutton[RADBUT_LIGHT2] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT2] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT],
                                "L2");
    _radbutton[RADBUT_LIGHT2]->set_w(5);
-   _radbutton[RADBUT_LIGHT3] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_LIGHT3] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT],
                                "L3");
-   _glui->add_separator_to_panel( _rollout[ROLLOUT_PAINT_LIGHT]);                             
+   new GLUI_Separator(_rollout[ROLLOUT_PAINT_LIGHT]);
    
    
-   _radgroup[RADGROUP_LIGHT_TYPE] = _glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_LIGHT_TYPE] = new GLUI_RadioGroup(
                                 _rollout[ROLLOUT_PAINT_LIGHT],
                                 NULL,
                                 id+RADGROUP_LIGHT, radiogroup_cb);
-   _radbutton[RADBUT_DIFF] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DIFF] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT_TYPE],
                                "Diff");
    _radbutton[RADBUT_DIFF]->set_w(5);
-   _radbutton[RADBUT_DIFF] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_DIFF] = new GLUI_RadioButton(
                                _radgroup[RADGROUP_LIGHT_TYPE],
                                "Spec");
    _radbutton[RADBUT_DIFF]->set_w(5);
    
-    _glui->add_separator_to_panel( _rollout[ROLLOUT_PAINT_LIGHT]);                             
+    new GLUI_Separator(_rollout[ROLLOUT_PAINT_LIGHT]);
    
   
-   _checkbox[CHECK_LIGHT_WIDTH]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT_WIDTH]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LIGHT],
                               "Width",
                               NULL,
                               id+CHECK_LIGHT_WIDTH,
                               checkbox_cb);   
-   _checkbox[CHECK_LIGHT_ALPHA]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT_ALPHA]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LIGHT],
                               "Alpha",
                               NULL,
                               id+CHECK_LIGHT_ALPHA,
                               checkbox_cb);                  
    
-   _glui->add_column_to_panel(_rollout[ROLLOUT_PAINT_LIGHT],true);                                 
+   new GLUI_Column(_rollout[ROLLOUT_PAINT_LIGHT], true);
                 
-   _checkbox[CHECK_LIGHT_CAM_FRAME]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LIGHT_CAM_FRAME]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PAINT_LIGHT],
                               "Cam Frame",
                               NULL,
                               id+CHECK_LIGHT_CAM_FRAME,
                               checkbox_cb);                                 
-   _rotation[ROT_LIGHT] = _glui->add_rotation_to_panel(
+   _rotation[ROT_LIGHT] = new GLUI_Rotation(
                         _rollout[ROLLOUT_PAINT_LIGHT],
                        "Light",
                        NULL,
                        id+ROT_LIGHT, rotation_cb);                
                        
-   _slider[SLIDE_LIGHT_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_LIGHT_A] = new GLUI_Slider(
                            _rollout[ROLLOUT_PAINT_LIGHT], 
                            "A", 
                            GLUI_SLIDER_FLOAT, 
                            -1.0, 1.0, NULL, id+SLIDE_LIGHT_A, slider_cb);
-   _slider[SLIDE_LIGHT_B] = _glui->add_slider_to_panel(
+   _slider[SLIDE_LIGHT_B] = new GLUI_Slider(
                            _rollout[ROLLOUT_PAINT_LIGHT], 
                            "B", 
                            GLUI_SLIDER_FLOAT, 
@@ -1046,64 +1046,64 @@ PatternPenUI::build()
    _slider[SLIDE_LIGHT_A]->set_float_val(0.3);
    _slider[SLIDE_LIGHT_B]->set_float_val(0.7);
    // Grid Panal
-   _rollout[ROLLOUT_GRID] =  _glui->add_rollout("Grid",true);
+   _rollout[ROLLOUT_GRID] =  new GLUI_Rollout(_glui, "Grid", true);
      
-   _panel[PANEL_GRID]     =  _glui->add_panel_to_panel(_rollout[ROLLOUT_GRID],"");
+   _panel[PANEL_GRID]     =  new GLUI_Panel(_rollout[ROLLOUT_GRID],"");
    
-   _button[BUT_SELECT_REF_MODE] = _glui->add_button_to_panel(
+   _button[BUT_SELECT_REF_MODE] = new GLUI_Button(
                             _panel[PANEL_GRID], 
                             "Select Ref. Cells", 
                             id+BUT_SELECT_REF_MODE, 
                             button_cb);   
-   _button[BUT_GRID_MODE] =  _glui->add_button_to_panel(
+   _button[BUT_GRID_MODE] =  new GLUI_Button(
                              _panel[PANEL_GRID],
                              "Grid Mode", id+BUT_GRID_MODE, button_cb);
-   _button[BUT_TAGGLE_UNMARKED] = _glui->add_button_to_panel(
+   _button[BUT_TAGGLE_UNMARKED] = new GLUI_Button(
                              _panel[PANEL_GRID], 
                              "Show Unmarked", id+BUT_TAGGLE_UNMARKED, button_cb); 
-   _glui->add_column_to_panel(_panel[PANEL_GRID],false);                          
-   _button[BUT_GRID_SYNTH] = _glui->add_button_to_panel(
+   new GLUI_Column(_panel[PANEL_GRID], false);
+   _button[BUT_GRID_SYNTH] = new GLUI_Button(
                              _panel[PANEL_GRID], 
                              "Strict Synth Grid", id+BUT_GRID_SYNTH, button_cb);
-   _button[BUT_GRID_SYNTH2] = _glui->add_button_to_panel(
+   _button[BUT_GRID_SYNTH2] = new GLUI_Button(
                              _panel[PANEL_GRID], 
                              "Stupid Synth Grid", id+BUT_GRID_SYNTH2, button_cb);
                                 
-   _checkbox[CHECK_GRID_SYNTH]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_GRID_SYNTH]=new GLUI_Checkbox(
                               _panel[PANEL_GRID],
                               "Automatic",
                               NULL,
                               id+CHECK_GRID_SYNTH,
                               checkbox_cb);     
    //Stroke Panel   
-   _rollout[ROLLOUT_PAINT] =  _glui->add_rollout("Paint",true);
+   _rollout[ROLLOUT_PAINT] =  new GLUI_Rollout(_glui, "Paint", true);
    //_rollout[ROLLOUT_PAINT]->set_w(_rollout[ROLLOUT_GRID]->get_w());
    
-   _button[BUT_PAINT_MODE] = _glui->add_button_to_panel(_rollout[ROLLOUT_PAINT],"Paint Mode", id+BUT_PAINT_MODE, button_cb);
-   _panel[PANEL_PAINT] = _glui->add_panel_to_panel(_rollout[ROLLOUT_PAINT],"");
+   _button[BUT_PAINT_MODE] = new GLUI_Button(_rollout[ROLLOUT_PAINT],"Paint Mode", id+BUT_PAINT_MODE, button_cb);
+   _panel[PANEL_PAINT] = new GLUI_Panel(_rollout[ROLLOUT_PAINT], "");
    
    
-   _listbox[LIST_STROKE_PRESET] = _glui->add_listbox_to_panel(
+   _listbox[LIST_STROKE_PRESET] = new GLUI_Listbox(
                                   _panel[PANEL_PAINT],
                                   "Type ", NULL,
                                   id+LIST_STROKE_PRESET, listbox_cb);
    fill_preset_listbox(_listbox[LIST_STROKE_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
    preset_stroke();
    
-   _listbox[LIST_STROKE_COLOR] = _glui->add_listbox_to_panel(
+   _listbox[LIST_STROKE_COLOR] = new GLUI_Listbox(
                             _panel[PANEL_PAINT],
                             "Color ", NULL,
                             id+LIST_STROKE_COLOR, listbox_cb);
      
-   fill_color_listbox(_listbox[LIST_STROKE_COLOR]);  
-   _glui->add_column_to_panel(_panel[PANEL_PAINT],false);   
-   _checkbox[CHECK_PAINT_WIDTH]=_glui->add_checkbox_to_panel(
+   fill_color_listbox(_listbox[LIST_STROKE_COLOR]);
+   new GLUI_Column(_panel[PANEL_PAINT], false);
+   _checkbox[CHECK_PAINT_WIDTH]=new GLUI_Checkbox(
                               _panel[PANEL_PAINT],
                               "Width",
                               NULL,
                               id+CHECK_PAINT_WIDTH,
                               checkbox_cb);   
-   _checkbox[CHECK_PAINT_ALPHA]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_PAINT_ALPHA]=new GLUI_Checkbox(
                               _panel[PANEL_PAINT],
                               "Alpha",
                               NULL,
@@ -1111,19 +1111,19 @@ PatternPenUI::build()
                               checkbox_cb);                                   
   
    // Synthesis Panel
-   _rollout[ROLLOUT_SYNTHESIZE] =  _glui->add_rollout("Pattern Synthesis",true);  
-   _button[BUT_SYNTHESIS_MODE] = _glui->add_button_to_panel(
+   _rollout[ROLLOUT_SYNTHESIZE] =  new GLUI_Rollout(_glui, "Pattern Synthesis", true);
+   _button[BUT_SYNTHESIS_MODE] = new GLUI_Button(
                                  _rollout[ROLLOUT_SYNTHESIZE], 
                                  "Randomized", 
                                  id+BUT_SYNTHESIS_MODE, button_cb);
-   _checkbox[CHECK_VARIATION]=_glui->add_checkbox_to_panel(
+   _checkbox[CHECK_VARIATION]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SYNTHESIZE],
                               "Variation",
                               NULL,
                               id+CHECK_VARIATION,
                               checkbox_cb);     
-   _glui->add_column_to_panel(_rollout[ROLLOUT_SYNTHESIZE],false); 
-   _button[BUT_SYNTHESIS2_MODE] = _glui->add_button_to_panel(
+   new GLUI_Column(_rollout[ROLLOUT_SYNTHESIZE], false);
+   _button[BUT_SYNTHESIS2_MODE] = new GLUI_Button(
                                   _rollout[ROLLOUT_SYNTHESIZE], 
                                   "Regular", 
                                   id+BUT_SYNTHESIS2_MODE, button_cb);

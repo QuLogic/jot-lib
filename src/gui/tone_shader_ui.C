@@ -59,16 +59,16 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    int id = _id << ID_SHIFT;
 
    //Lighting
-   _rollout[ROLLOUT_MAIN] = (base) ? glui->add_rollout_to_panel(base, "Tone Shader UI",open)
-                                    : glui->add_rollout("Tone Shader UI",open);
+   _rollout[ROLLOUT_MAIN] = (base) ? new GLUI_Rollout(base, "Tone Shader UI", open)
+                                    : new GLUI_Rollout(glui, "Tone Shader UI", open);
    
-   _checkbox[CHECK_ENABLED] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ENABLED] = new GLUI_Checkbox(
       _rollout[ROLLOUT_MAIN],
       "Enabled",
       NULL,
       id+CHECK_ENABLED,
       checkbox_cb);
-   _checkbox[CHECK_REMAP_NL] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECK_REMAP_NL] = new GLUI_Checkbox(
       _rollout[ROLLOUT_MAIN],
       "Remap NL",
       NULL,
@@ -76,85 +76,85 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       checkbox_cb);
 
    
-   _panel[PANEL_GROUPS] = _glui->add_panel_to_panel(_rollout[ROLLOUT_MAIN], "");
+   _panel[PANEL_GROUPS] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "");
    // Remap Radio Group
-   _panel[PANEL_REMAP] = _glui->add_panel_to_panel(_panel[PANEL_GROUPS], "Remap");
-   _radgroup[RADGROUP_REMAP] = _glui->add_radiogroup_to_panel(
+   _panel[PANEL_REMAP] = new GLUI_Panel(_panel[PANEL_GROUPS], "Remap");
+   _radgroup[RADGROUP_REMAP] = new GLUI_RadioGroup(
        _panel[PANEL_REMAP],
       NULL,
       id+RADGROUP_REMAP, radiogroup_cb);
-   _radbutton[RADBUT_REMAP_NONE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REMAP_NONE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_REMAP],
       "None");
-   _radbutton[RADBUT_REMAP_TOON] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REMAP_TOON] = new GLUI_RadioButton(
       _radgroup[RADGROUP_REMAP],
       "Toon");
-   _radbutton[RADBUT_REMAP_SMOTHSTEP] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_REMAP_SMOTHSTEP] = new GLUI_RadioButton(
       _radgroup[RADGROUP_REMAP],
       "Smoothstep");
 
-   _glui->add_column_to_panel(_panel[PANEL_GROUPS],false);
+   new GLUI_Column(_panel[PANEL_GROUPS], false);
    
    // backlight radio group
-     _panel[PANEL_BACKLIGHT] = _glui->add_panel_to_panel(_panel[PANEL_GROUPS], "Backlight");
-    _radgroup[RADGROUP_BACKLIGHT] = _glui->add_radiogroup_to_panel(
+   _panel[PANEL_BACKLIGHT] = new GLUI_Panel(_panel[PANEL_GROUPS], "Backlight");
+   _radgroup[RADGROUP_BACKLIGHT] = new GLUI_RadioGroup(
        _panel[PANEL_BACKLIGHT],
       NULL,
       id+RADGROUP_BACKLIGHT, radiogroup_cb);
-   _radbutton[RADBUT_BACKLIGHT_NONE] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BACKLIGHT_NONE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_BACKLIGHT],
       "None");
-   _radbutton[RADBUT_BACKLIGHT_DARK] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BACKLIGHT_DARK] = new GLUI_RadioButton(
       _radgroup[RADGROUP_BACKLIGHT],
       "Dark");
-   _radbutton[RADBUT_BACKLIGHT_LIGHT] = _glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BACKLIGHT_LIGHT] = new GLUI_RadioButton(
       _radgroup[RADGROUP_BACKLIGHT],
       "Light");
 
    //Sliders
-   _slider[SLIDE_REMAP_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_REMAP_A] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Remap smoothstep A", 
+      id+SLIDE_REMAP_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_REMAP_A, slider_cb);
+      NULL);
    _slider[SLIDE_REMAP_A]->set_num_graduations(100);
    _slider[SLIDE_REMAP_A]->set_w(200);
 
-   _slider[SLIDE_REMAP_B] = _glui->add_slider_to_panel(
+   _slider[SLIDE_REMAP_B] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Remap smoothstep B", 
+      id+SLIDE_REMAP_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_REMAP_B, slider_cb);
+      NULL);
    _slider[SLIDE_REMAP_B]->set_num_graduations(100);
    _slider[SLIDE_REMAP_B]->set_w(200);
 
-   _slider[SLIDE_BACKLIGHT_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_BACKLIGHT_A] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Backligh smoothstep A", 
+      id+SLIDE_BACKLIGHT_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_BACKLIGHT_A, slider_cb);
+      NULL);
    _slider[SLIDE_BACKLIGHT_A]->set_num_graduations(100);
    _slider[SLIDE_BACKLIGHT_A]->set_w(200);
-   _slider[SLIDE_BACKLIGHT_B] = _glui->add_slider_to_panel(
+   _slider[SLIDE_BACKLIGHT_B] = new GLUI_Slider(
       _rollout[ROLLOUT_MAIN], 
       "Backligh smoothstep B", 
+      id+SLIDE_BACKLIGHT_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_BACKLIGHT_B, slider_cb);
+      NULL);
    _slider[SLIDE_BACKLIGHT_B]->set_num_graduations(100);
    _slider[SLIDE_BACKLIGHT_B]->set_w(200);
 
 
    //toon texture selection list 
 
-   _listbox[LIST_TEXTURE] = _glui->add_listbox_to_panel(
+   _listbox[LIST_TEXTURE] = new GLUI_Listbox(
                                _rollout[ROLLOUT_MAIN],
                                "Toon Map",
                                0,

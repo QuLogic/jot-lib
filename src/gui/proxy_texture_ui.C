@@ -67,40 +67,40 @@ ProxyTextureUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _glui = glui; 
 //   int id = _id << ID_SHIFT;
 
-   _rollout[ROLLOUT_MAIN] = (base) ? glui->add_rollout_to_panel(base, "Proxy Pattern",open)
-                                    : glui->add_rollout("Proxy Pattern UI",open);
+   _rollout[ROLLOUT_MAIN] = (base) ? new GLUI_Rollout(base, "Proxy Pattern", open)
+                                    : new GLUI_Rollout(glui, "Proxy Pattern UI", open);
 
    _texture_selection_ui->build(glui, _rollout[ROLLOUT_MAIN], true);
    
 
   
    
-   glui->add_column_to_panel(_rollout[ROLLOUT_MAIN],true);
+   new GLUI_Column(_rollout[ROLLOUT_MAIN], true);
   
-   _listbox[LIST_BASECOAT]= glui->add_listbox_to_panel(
+   _listbox[LIST_BASECOAT]= new GLUI_Listbox(
                               _rollout[ROLLOUT_MAIN], 
                               "Basecoat", NULL,
                               LIST_BASECOAT, listbox_cb);                             
    fill_basecoat_listbox(_listbox[LIST_BASECOAT]);   
 
-   _rollout[ROLLOUT_SAMPLES] =  glui->add_rollout_to_panel(_rollout[ROLLOUT_MAIN], "Misc", false);
+   _rollout[ROLLOUT_SAMPLES] =  new GLUI_Rollout(_rollout[ROLLOUT_MAIN], "Misc", false);
     
 
-   _checkbox[CHECK_SHOW_SAMPLES]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_SHOW_SAMPLES]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Samples",
                               NULL,
                               CHECK_SHOW_SAMPLES,
                               checkbox_cb);    
 
-    _checkbox[CHECK_SHOW_SAMPLES_OLD]=glui->add_checkbox_to_panel(
+    _checkbox[CHECK_SHOW_SAMPLES_OLD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Samples Old",
                               NULL,
                               CHECK_SHOW_SAMPLES_OLD,
                               checkbox_cb);    
 
-   _checkbox[CHECK_SHOW_PROXY_MESH]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_SHOW_PROXY_MESH]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Proxy Mesh",
                               NULL,

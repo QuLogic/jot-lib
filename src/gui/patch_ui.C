@@ -67,8 +67,8 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    int id = _id << ID_SHIFT;
 
   
-   _rollout[ROLLOUT_PATCH] = (base) ? glui->add_rollout_to_panel(base, "Patch UI",open)
-                                    : glui->add_rollout("Patch UI",open);
+   _rollout[ROLLOUT_PATCH] = (base) ? new GLUI_Rollout(base, "Patch UI", open)
+                                    : new GLUI_Rollout(glui, "Patch UI", open);
   
     _ref_image_ui->build(glui, _rollout[ROLLOUT_PATCH],false);
    
@@ -76,13 +76,13 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _patch_selection_ui->build(glui, _rollout[ROLLOUT_PATCH], true);
   
 
-   _checkbox[CHECK_SHOW_BLEND]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_SHOW_BLEND]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Show Blend Patches",
                               NULL,
                               id+CHECK_SHOW_BLEND,
                               checkbox_cb);
-   _spinner[SPINNER_N_RING] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_N_RING] = new GLUI_Spinner(
                              _rollout[ROLLOUT_PATCH],
                              "N-Rings",
                              GLUI_SPINNER_INT,
@@ -91,71 +91,71 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _spinner[SPINNER_N_RING]->set_w(20);
    _spinner[SPINNER_N_RING]->set_int_limits(0,2);
 
-    _slider[SLIDE_REMAP_POWER] = _glui->add_slider_to_panel(
+    _slider[SLIDE_REMAP_POWER] = new GLUI_Slider(
       _rollout[ROLLOUT_PATCH], 
       "Remap Power", 
+      id+SLIDE_REMAP_POWER, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0, 6.0,
-      NULL,
-      id+SLIDE_REMAP_POWER, slider_cb);
+      NULL);
    _slider[SLIDE_REMAP_POWER]->set_num_graduations(100);
    _slider[SLIDE_REMAP_POWER]->set_w(200);
 
   
 
 
-   glui->add_column_to_panel(_rollout[ROLLOUT_PATCH],true);
+   new GLUI_Column(_rollout[ROLLOUT_PATCH],true);
 
-    _listbox[LIST_TEX_SEL] = glui->add_listbox_to_panel(
+    _listbox[LIST_TEX_SEL] = new GLUI_Listbox(
                               _rollout[ROLLOUT_PATCH], 
                               "Texture", NULL,
                               id+LIST_TEX_SEL, listbox_cb);
     
     
-    _checkbox[CHECK_HALO] = glui->add_checkbox_to_panel(_rollout[ROLLOUT_PATCH],
+    _checkbox[CHECK_HALO] = new GLUI_Checkbox(_rollout[ROLLOUT_PATCH],
                                                          "Draw Halo",
                                                          0,
                                                          id+CHECK_HALO,
                                                          checkbox_cb);
 
-   _checkbox[CHECK_TRACKING]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TRACKING]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Tracking",
                               NULL,
                               id+CHECK_TRACKING,
                               checkbox_cb);   
-   _checkbox[CHECK_LOD]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LOD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "LOD",
                               NULL,
                               CHECK_LOD,
                               checkbox_cb);
-   _checkbox[CHECK_ROTATION]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ROTATION]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Rotate",
                               NULL,
                               id+CHECK_ROTATION,
                               checkbox_cb);
 
-   _checkbox[CHECK_TIMED_LOD]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_TIMED_LOD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Timed LOD Transitions",
                               NULL,
                               id+CHECK_TIMED_LOD,
                               checkbox_cb);
-   _checkbox[CHECK_USE_DIRECTION]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_USE_DIRECTION]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Direction Vector",
                               NULL,
                               id+CHECK_USE_DIRECTION,
                               checkbox_cb);
-   _checkbox[CHECK_USE_WEIGHTED_LS]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_USE_WEIGHTED_LS]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Weighted LS",
                               NULL,
                               id+CHECK_USE_WEIGHTED_LS,
                               checkbox_cb);
-   _checkbox[CHECK_USE_VIS_TEST]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_USE_VIS_TEST]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Visibility Test",
                               NULL,
@@ -163,10 +163,10 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                               checkbox_cb);
    
    
-   _panel[PANEL_SPS] = glui->add_panel_to_panel(
+   _panel[PANEL_SPS] = new GLUI_Panel(
                                _rollout[ROLLOUT_PATCH],
                                "Stratified Point Sampling");
-   _spinner[SPINNER_SPS_HIGHT] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_SPS_HIGHT] = new GLUI_Spinner(
                              _panel[PANEL_SPS],
                              "Hight",
                              GLUI_SPINNER_INT,
@@ -175,7 +175,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _spinner[SPINNER_SPS_HIGHT]->set_w(20);
    _spinner[SPINNER_SPS_HIGHT]->set_int_limits(0,10);
 
-   _spinner[SPINNER_SPS_MIN_DIST] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_SPS_MIN_DIST] = new GLUI_Spinner(
                              _panel[PANEL_SPS],
                              "Min Dist",
                              GLUI_SPINNER_FLOAT,
@@ -184,7 +184,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _spinner[SPINNER_SPS_MIN_DIST]->set_w(20);
    _spinner[SPINNER_SPS_MIN_DIST]->set_float_limits(0.0,1.0);
 
-   _spinner[SPINNER_SPS_REG] = glui->add_spinner_to_panel(
+   _spinner[SPINNER_SPS_REG] = new GLUI_Spinner(
                              _panel[PANEL_SPS],
                              "Regularity",
                              GLUI_SPINNER_FLOAT,
@@ -193,36 +193,36 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _spinner[SPINNER_SPS_REG]->set_w(20);
    _spinner[SPINNER_SPS_REG]->set_float_limits(0.0,50.0);
 
-   _button[BUT_SPS_APPLY] = glui->add_button_to_panel(
+   _button[BUT_SPS_APPLY] = new GLUI_Button(
          _panel[PANEL_SPS],  "Re-genarate", 
          id+BUT_SPS_APPLY, button_cb);
 
-   _checkbox[CHECK_OCCLUDER]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_OCCLUDER]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Occluder",
                               NULL,
                               id+CHECK_OCCLUDER,
                               checkbox_cb);
 
-   _checkbox[CHECK_RECIEVER]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_RECIEVER]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Reciever",
                               NULL,
                               id+CHECK_RECIEVER,
                               checkbox_cb);
 
-   _slider[SLIDE_SHADOW_SCALE]=glui->add_slider_to_panel(_rollout[ROLLOUT_PATCH],
-                                                          "Shadow Scale",GLUI_SLIDER_FLOAT,0.0,1.5,0,
-                                                          id+SLIDE_SHADOW_SCALE,slider_cb);
+   _slider[SLIDE_SHADOW_SCALE]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Scale",
+                                               id+SLIDE_SHADOW_SCALE,slider_cb,
+                                               GLUI_SLIDER_FLOAT,0.0,1.5,0);
 
 
-   _slider[SLIDE_SHADOW_SOFT]=glui->add_slider_to_panel(_rollout[ROLLOUT_PATCH],
-                                                          "Shadow Softness",GLUI_SLIDER_FLOAT,0.01,1.0,0,
-                                                          id+SLIDE_SHADOW_SOFT,slider_cb);
+   _slider[SLIDE_SHADOW_SOFT]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Softness",
+                                              id+SLIDE_SHADOW_SOFT,slider_cb,
+                                              GLUI_SLIDER_FLOAT,0.01,1.0,0);
 
-   _slider[SLIDE_SHADOW_OFFSET]=glui->add_slider_to_panel(_rollout[ROLLOUT_PATCH],
-                                                          "Shadow Y Offset",GLUI_SLIDER_FLOAT,-1.0,1.0,0,
-                                                          id+SLIDE_SHADOW_OFFSET,slider_cb);
+   _slider[SLIDE_SHADOW_OFFSET]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Y Offset",
+                                                id+SLIDE_SHADOW_OFFSET,slider_cb,
+                                                GLUI_SLIDER_FLOAT,-1.0,1.0,0);
 
 
 

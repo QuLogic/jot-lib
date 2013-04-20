@@ -132,7 +132,7 @@ GLUIMoveMenu::create_menu()
          _item_ids += item_id;
 
          // create the button
-         _glui->add_button(label, item_id, GLUIMoveMenu::btn_callback);
+         new GLUI_Button(_glui, label, item_id, GLUIMoveMenu::btn_callback);
       }
    }
    _menu_created = true;

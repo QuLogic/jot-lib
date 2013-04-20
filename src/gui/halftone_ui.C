@@ -67,23 +67,23 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _glui = glui; 
    int id = _id << ID_SHIFT;
 
-    _rollout[ROLLOUT_MAIN] = (base) ? glui->add_rollout_to_panel(base, "Halftone UI",open)
-                                    : glui->add_rollout("Halftone UI",open);
+    _rollout[ROLLOUT_MAIN] = (base) ? new GLUI_Rollout(base, "Halftone UI", open)
+                                    : new GLUI_Rollout(glui, "Halftone UI", open);
    
     
-   _panel[PANEL_MAIN] = glui->add_panel_to_panel(_rollout[ROLLOUT_MAIN], "");
+   _panel[PANEL_MAIN] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "");
    
   
    _texture_selection_ui->build(glui, _panel[PANEL_MAIN], true);
    
-   glui->add_column_to_panel(_panel[PANEL_MAIN],true);
+   new GLUI_Column(_panel[PANEL_MAIN], true);
 
    _presets_ui->build(glui,_panel[PANEL_MAIN], true); 
 
    // Proparties   
-   _panel[PANEL_PROPERTIES] = glui->add_panel_to_panel(_rollout[ROLLOUT_MAIN], "");
+   _panel[PANEL_PROPERTIES] = new GLUI_Panel(_rollout[ROLLOUT_MAIN], "");
 
-   _listbox[LIST_PATTERN] = glui->add_listbox_to_panel(
+   _listbox[LIST_PATTERN] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
       "Pattern", NULL, 
       id+LIST_PATTERN, listbox_cb);
@@ -92,13 +92,13 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                            
    
    
-    _checkbox[CHECK_ENABLE]=glui->add_checkbox_to_panel(
+    _checkbox[CHECK_ENABLE]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Enable",
                               NULL,
                               id+CHECK_ENABLE,
                               checkbox_cb);
-   _checkbox[CHECK_HIGHLIGHT]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_HIGHLIGHT]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Highlight",
                               NULL,
@@ -106,64 +106,64 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                               checkbox_cb);
 
   
-   _slider[SLIDER_SCALE] = glui->add_slider_to_panel(
+   _slider[SLIDER_SCALE] = new GLUI_Slider(
       _panel[PANEL_PROPERTIES], "Scale", 
+      id+SLIDER_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0f/8,
       8.0,
-      NULL,
-      id+SLIDER_SCALE, slider_cb);
+      NULL);
    _slider[SLIDER_SCALE]->set_w(150);
    _slider[SLIDER_SCALE]->set_num_graduations(200);
 
-   _button[BUT_PROCEDURAL] = glui->add_button_to_panel(
+   _button[BUT_PROCEDURAL] = new GLUI_Button(
                              _panel[PANEL_PROPERTIES],  "Procedural", 
                             id+BUT_PROCEDURAL, button_cb);
 
    
-   _radgroup[RADGROUP_TC_ON_OFF] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_TC_ON_OFF] = new GLUI_RadioGroup(
                                      _panel[PANEL_PROPERTIES],
                                      NULL,
                                      id+RADGROUP_TC_ON_OFF, radiogroup_cb); 
-   _radbutton[RADBUT_TC_OFF] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TC_OFF] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_ON_OFF],
                                    "Tone Correction OFF");
-   _radbutton[RADBUT_TC_ON] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TC_ON] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_ON_OFF],
                                    "Tone Correction ON");
 
-   _radgroup[RADGROUP_TC_MODE] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_TC_MODE] = new GLUI_RadioGroup(
                                      _panel[PANEL_PROPERTIES],
                                      NULL,
                                      id+RADGROUP_TC_MODE, radiogroup_cb); 
-   _radbutton[RADBUT_TC_FULL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TC_FULL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_MODE],
                                    "Full tone correction");
-   _radbutton[RADBUT_TC_TRANS] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_TC_TRANS] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_MODE],
                                    "Transition correction only");
      
    //Color Choose
-   _panel[PANEL_COLOR_SWITCH] = glui->add_panel_to_panel(_panel[PANEL_PROPERTIES], "Color");
+   _panel[PANEL_COLOR_SWITCH] = new GLUI_Panel(_panel[PANEL_PROPERTIES], "Color");
     
-   _radgroup[RADGROUP_COLOR_SEL] = glui->add_radiogroup_to_panel(
+   _radgroup[RADGROUP_COLOR_SEL] = new GLUI_RadioGroup(
                                      _panel[PANEL_COLOR_SWITCH],
                                      NULL,
                                      id+RADGROUP_COLOR_SEL, radiogroup_cb);
    
-   _radbutton[RADBUT_STROKE_COL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_STROKE_COL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Stroke");
      
-   _radbutton[RADBUT_BASE_COL] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BASE_COL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Base Color");
-   _radbutton[RADBUT_BACKGROUND] = glui->add_radiobutton_to_group(
+   _radbutton[RADBUT_BACKGROUND] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR_SEL],
                                    "Background");
    
 
-   glui->add_column_to_panel(_panel[PANEL_PROPERTIES],true);
+   new GLUI_Column(_panel[PANEL_PROPERTIES], true);
    
    _tone_shader_ui->build(glui,_panel[PANEL_PROPERTIES], true);
 

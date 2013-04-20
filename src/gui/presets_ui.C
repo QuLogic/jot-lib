@@ -56,13 +56,13 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _glui = glui; 
    int id = _id << ID_SHIFT;
       
-   _panel[PANEL_PRESET] = (base) ? glui->add_panel_to_panel(base,"Presets")
-                                 : glui->add_panel("Presets");
+   _panel[PANEL_PRESET] = (base) ? new GLUI_Panel(base, "Presets")
+                                 : new GLUI_Panel(glui, "Presets");
 
    assert(_panel[PANEL_PRESET]);           
 
    //Preset list
-   _listbox[LIST_PRESET] = glui->add_listbox_to_panel(
+   _listbox[LIST_PRESET] = new GLUI_Listbox(
       _panel[PANEL_PRESET], 
       "", NULL, 
       id+LIST_PRESET, listbox_cb);
@@ -70,10 +70,10 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _listbox[LIST_PRESET]->set_w(MY_WIDTH);   
    fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + _directory, _extension, false, true, "-=NEW=-");
 
-   glui->add_separator_to_panel(_panel[PANEL_PRESET]);
+   new GLUI_Separator(_panel[PANEL_PRESET]);
 
    //New preset name box
-   _edittext[EDITTEXT_SAVE] = glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_SAVE] = new GLUI_EditText(
       _panel[PANEL_PRESET], "", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+LIST_PRESET, edittext_cb);
@@ -82,10 +82,10 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _edittext[EDITTEXT_SAVE]->disable();
    _edittext[EDITTEXT_SAVE]->set_w(MY_WIDTH);
 
-   glui->add_separator_to_panel(_panel[PANEL_PRESET]);
+   new GLUI_Separator(_panel[PANEL_PRESET]);
 
    //Preset save button
-   _button[BUT_SAVE] = glui->add_button_to_panel(
+   _button[BUT_SAVE] = new GLUI_Button(
       _panel[PANEL_PRESET], "Save", 
       id+BUT_SAVE, button_cb);
    assert(_button[BUT_SAVE]);

@@ -654,33 +654,33 @@ StrokeUI::build()
    assert(_preset_filenames.num() == 0);
 
    // Panel containing pen buttons
-   _panel[PANEL_PEN] = _glui->add_panel("");
+   _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
    assert(_panel[PANEL_PEN]);
 
    //Prev pen
-   _button[BUT_PREV_PEN] = _glui->add_button_to_panel(
+   _button[BUT_PREV_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Previous Mode", 
       id+BUT_PREV_PEN, button_cb);
    assert(_button[BUT_PREV_PEN]);
 
-   _glui->add_column_to_panel(_panel[PANEL_PEN],false);
+   new GLUI_Column(_panel[PANEL_PEN], false);
 
    //Prev pen
-   _button[BUT_NEXT_PEN] = _glui->add_button_to_panel(
+   _button[BUT_NEXT_PEN] = new GLUI_Button(
       _panel[PANEL_PEN], "Next Mode", 
       id+BUT_NEXT_PEN, button_cb);
    assert(_button[BUT_NEXT_PEN]);
 
    // Panel containing preset controls and preview
-   _panel[PANEL_STROKE] = _glui->add_panel("Stroke Editor");
+   _panel[PANEL_STROKE] = new GLUI_Panel(_glui, "Stroke Editor");
    assert(_panel[PANEL_STROKE]);
 
    //Sub-panel containing presets controls
-   _panel[PANEL_PRESET] = _glui->add_panel_to_panel(_panel[PANEL_STROKE],"Presets");
+   _panel[PANEL_PRESET] = new GLUI_Panel(_panel[PANEL_STROKE], "Presets");
    assert(_panel[PANEL_PRESET]);           
 
    //Preset list
-   _listbox[LIST_PRESET] = _glui->add_listbox_to_panel(
+   _listbox[LIST_PRESET] = new GLUI_Listbox(
       _panel[PANEL_PRESET], 
       "", NULL, 
       id+LIST_PRESET, listbox_cb);
@@ -689,10 +689,10 @@ StrokeUI::build()
    _listbox[LIST_PRESET]->add_item(0, "-=NEW=-");
    fill_preset_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
 
-   _glui->add_separator_to_panel(_panel[PANEL_PRESET]);
+   new GLUI_Separator(_panel[PANEL_PRESET]);
 
    //New preset name box
-   _edittext[EDITTEXT_SAVE] = _glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_SAVE] = new GLUI_EditText(
       _panel[PANEL_PRESET], "", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+LIST_PRESET, edittext_cb);
@@ -701,33 +701,33 @@ StrokeUI::build()
    _edittext[EDITTEXT_SAVE]->disable();
    _edittext[EDITTEXT_SAVE]->set_w(STROKE_PREVIEW_W);
 
-   _glui->add_separator_to_panel(_panel[PANEL_PRESET]);
+   new GLUI_Separator(_panel[PANEL_PRESET]);
 
    //Preset save button
-   _button[BUT_SAVE] = _glui->add_button_to_panel(
+   _button[BUT_SAVE] = new GLUI_Button(
       _panel[PANEL_PRESET], "Save", 
       id+BUT_SAVE, button_cb);
    assert(_button[BUT_SAVE]);
    _button[BUT_SAVE]->set_w(STROKE_PREVIEW_W-6);
 
    //Preset save button
-   _button[BUT_DEBUG] = _glui->add_button_to_panel(
+   _button[BUT_DEBUG] = new GLUI_Button(
       _panel[PANEL_PRESET], "Debug", 
       id+BUT_DEBUG, button_cb);
    assert(_button[BUT_DEBUG]);
    _button[BUT_DEBUG]->set_w(STROKE_PREVIEW_W-6);
 
-   _glui->add_column_to_panel(_panel[PANEL_STROKE],false);
+   new GLUI_Column(_panel[PANEL_STROKE], false);
 
    // Preview/test bitmap
-   _bitmapbox[BITMAPBOX_PREVIEW] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_STROKE],"Preview", 
+   _bitmapbox[BITMAPBOX_PREVIEW] = new GLUI_BitmapBox(
+      _panel[PANEL_STROKE], "Preview",
       id+BITMAPBOX_PREVIEW, bitmapbox_cb);
    assert(_bitmapbox[BITMAPBOX_PREVIEW]);
    _bitmapbox[BITMAPBOX_PREVIEW]->set_img_size(STROKE_PREVIEW_W,STROKE_PREVIEW_H);
 
    // Rollout containing color/texture
-   _rollout[ROLLOUT_COLORTEXTURE] = _glui->add_rollout("Stroke Color/Texture",true);
+   _rollout[ROLLOUT_COLORTEXTURE] = new GLUI_Rollout(_glui, "Stroke Color/Texture", true);
    assert(_rollout[ROLLOUT_COLORTEXTURE]);
 
 
@@ -743,47 +743,47 @@ StrokeUI::build()
    // ROW: A,    Foo2,    Foo
 
    // COL1
-   _slider[SLIDE_H] = _glui->add_slider_to_panel(
+   _slider[SLIDE_H] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Hue", 
+      id+SLIDE_H, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_H, slider_cb);
+      NULL);
    assert(_slider[SLIDE_H]);
    _slider[SLIDE_H]->set_num_graduations(201);
 
-   _slider[SLIDE_S] = _glui->add_slider_to_panel(
+   _slider[SLIDE_S] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Saturation", 
+      id+SLIDE_S, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_S, slider_cb);
+      NULL);
    assert(_slider[SLIDE_S]);
    _slider[SLIDE_S]->set_num_graduations(201);
 
-   _slider[SLIDE_V] = _glui->add_slider_to_panel(
+   _slider[SLIDE_V] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Value", 
+      id+SLIDE_V, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_V, slider_cb);
+      NULL);
    assert(_slider[SLIDE_V]);
    _slider[SLIDE_V]->set_num_graduations(201);
 
-   _slider[SLIDE_A] = _glui->add_slider_to_panel(
+   _slider[SLIDE_A] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Alpha", 
+      id+SLIDE_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      &(_params.alpha_()),
-      id+SLIDE_A, slider_cb);
+      &(_params.alpha_()));
    assert(_slider[SLIDE_A]);
    _slider[SLIDE_A]->set_num_graduations(201);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_COLORTEXTURE],false);
+   new GLUI_Column(_rollout[ROLLOUT_COLORTEXTURE], false);
 
    // COL2
-   _panel[PANEL_TEXTURE] = _glui->add_panel_to_panel(_rollout[ROLLOUT_COLORTEXTURE],"Texture");
-   _listbox[LIST_TEXTURE] = _glui->add_listbox_to_panel(
+   _panel[PANEL_TEXTURE] = new GLUI_Panel(_rollout[ROLLOUT_COLORTEXTURE], "Texture");
+   _listbox[LIST_TEXTURE] = new GLUI_Listbox(
       _panel[PANEL_TEXTURE], 
       "", NULL,
       id+LIST_TEXTURE, listbox_cb);
@@ -792,39 +792,39 @@ StrokeUI::build()
    _listbox[LIST_TEXTURE]->add_item(0, "----");
    fill_texture_listbox(_listbox[LIST_TEXTURE], _texture_filenames, Config::JOT_ROOT() + TEXTURE_DIRECTORY);
 
-   _slider[SLIDE_ANGLE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_ANGLE] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Period", 
+      id+SLIDE_ANGLE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 2048.0,
-      &(_params.angle_()),
-      id+SLIDE_ANGLE, slider_cb);
+      &(_params.angle_()));
    assert(_slider[SLIDE_ANGLE]);
    _slider[SLIDE_ANGLE]->set_num_graduations(2049);
 
-   _slider[SLIDE_PHASE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_PHASE] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Phase", 
+      id+SLIDE_PHASE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      &(_params.offset_phase_()),
-      id+SLIDE_PHASE, slider_cb);
+      &(_params.offset_phase_()));
    assert(_slider[SLIDE_PHASE]);
    _slider[SLIDE_PHASE]->set_num_graduations(1001);
 
-   _slider[SLIDE_FOO2] = _glui->add_slider_to_panel(
+   _slider[SLIDE_FOO2] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Foo2", 
+      id+SLIDE_FOO2, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 10,
-      NULL,
-      id+SLIDE_FOO2, slider_cb);
+      NULL);
    assert(_slider[SLIDE_FOO2]);
    _slider[SLIDE_FOO2]->set_num_graduations(100);
    _slider[SLIDE_FOO2]->disable();
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_COLORTEXTURE],false);
+   new GLUI_Column(_rollout[ROLLOUT_COLORTEXTURE], false);
 
    // COL3
-   _panel[PANEL_PAPER] = _glui->add_panel_to_panel(_rollout[ROLLOUT_COLORTEXTURE],"Paper");
-   _listbox[LIST_PAPER] = _glui->add_listbox_to_panel(
+   _panel[PANEL_PAPER] = new GLUI_Panel(_rollout[ROLLOUT_COLORTEXTURE], "Paper");
+   _listbox[LIST_PAPER] = new GLUI_Listbox(
       _panel[PANEL_PAPER], 
       "", NULL,
       id+LIST_PAPER, listbox_cb);
@@ -833,36 +833,36 @@ StrokeUI::build()
    _listbox[LIST_PAPER]->add_item(0, "----");
    fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() + PAPER_DIRECTORY);
 
-   _slider[SLIDE_CONTRAST] = _glui->add_slider_to_panel(
+   _slider[SLIDE_CONTRAST] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Contrast", 
+      id+SLIDE_CONTRAST, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      &(_params.contrast_()),
-      id+SLIDE_CONTRAST, slider_cb); 
+      &(_params.contrast_()));
    assert(_slider[SLIDE_CONTRAST]);
    _slider[SLIDE_CONTRAST]->set_num_graduations(201);
 
-   _slider[SLIDE_BRIGHTNESS] = _glui->add_slider_to_panel(
+   _slider[SLIDE_BRIGHTNESS] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Brightness", 
+      id+SLIDE_BRIGHTNESS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      &(_params.brightness_()),
-      id+SLIDE_BRIGHTNESS, slider_cb);
+      &(_params.brightness_()));
    assert(_slider[SLIDE_BRIGHTNESS]);
    _slider[SLIDE_BRIGHTNESS]->set_num_graduations(201);
 
-   _slider[SLIDE_FOO] = _glui->add_slider_to_panel(
+   _slider[SLIDE_FOO] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Foo", 
+      id+SLIDE_FOO, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL,
-      id+SLIDE_FOO, slider_cb);
+      NULL);
    assert(_slider[SLIDE_FOO]);
    _slider[SLIDE_FOO]->set_num_graduations(101);
    _slider[SLIDE_FOO]->disable();
 
    // Rollout containing Shape/Appearance 
-   _rollout[ROLLOUT_SHAPE] = _glui->add_rollout("Stroke Shape/Appearance",true);
+   _rollout[ROLLOUT_SHAPE] = new GLUI_Rollout(_glui, "Stroke Shape/Appearance", true);
    assert(_rollout[ROLLOUT_SHAPE]);
 
    //      COL1   COL2      COL3
@@ -874,63 +874,63 @@ StrokeUI::build()
 
    // COL1
 
-   _slider[SLIDE_WIDTH] = _glui->add_slider_to_panel(
+   _slider[SLIDE_WIDTH] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "Width", 
+      id+SLIDE_WIDTH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1, 80,
-      &(_params.width_()),
-      id+SLIDE_WIDTH, slider_cb);
+      &(_params.width_()));
    assert(_slider[SLIDE_WIDTH]);
    _slider[SLIDE_WIDTH]->set_num_graduations(159);
 
-   _slider[SLIDE_HALO] = _glui->add_slider_to_panel(
+   _slider[SLIDE_HALO] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "Halo", 
+      id+SLIDE_HALO, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 20,
-      &(_params.halo_()),
-      id+SLIDE_HALO, slider_cb);
+      &(_params.halo_()));
    assert(_slider[SLIDE_HALO]);
    _slider[SLIDE_HALO]->set_num_graduations(41);
    _slider[SLIDE_HALO]->disable();
-   _glui->add_column_to_panel(_rollout[ROLLOUT_SHAPE],false);
+   new GLUI_Column(_rollout[ROLLOUT_SHAPE], false);
 
    // COL2
-   _slider[SLIDE_TAPER] = _glui->add_slider_to_panel(
+   _slider[SLIDE_TAPER] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "Taper", 
+      id+SLIDE_TAPER, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 200, 
-      &(_params.taper_()),
-      id+SLIDE_TAPER, slider_cb);
+      &(_params.taper_()));
    assert(_slider[SLIDE_TAPER]);
    _slider[SLIDE_TAPER]->set_num_graduations(201);
 
-   _slider[SLIDE_ALPHA_FADE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_ALPHA_FADE] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "Fade", 
+      id+SLIDE_ALPHA_FADE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 200,
-      &(_params.fade_()),
-      id+SLIDE_ALPHA_FADE, slider_cb);
+      &(_params.fade_()));
    assert(_slider[SLIDE_ALPHA_FADE]);
    _slider[SLIDE_ALPHA_FADE]->set_num_graduations(201);
 
-   _glui->add_column_to_panel(_rollout[ROLLOUT_SHAPE],false);
+   new GLUI_Column(_rollout[ROLLOUT_SHAPE], false);
 
    // COL3
-   _slider[SLIDE_FLARE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_FLARE] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "Flare", 
+      id+SLIDE_FLARE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1, 
-      &(_params.flare_()),
-      id+SLIDE_FLARE, slider_cb);
+      &(_params.flare_()));
    assert(_slider[SLIDE_FLARE]);
    _slider[SLIDE_FLARE]->set_num_graduations(101);
 
-   _slider[SLIDE_AFLARE] = _glui->add_slider_to_panel(
+   _slider[SLIDE_AFLARE] = new GLUI_Slider(
       _rollout[ROLLOUT_SHAPE], "AFlare", 
+      id+SLIDE_AFLARE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1, 
-      &(_params.aflare_()),
-      id+SLIDE_AFLARE, slider_cb);
+      &(_params.aflare_()));
    assert(_slider[SLIDE_AFLARE]);
    _slider[SLIDE_AFLARE]->set_num_graduations(101);
 
@@ -962,8 +962,8 @@ StrokeUI::build()
       set_preview_size();
 
    // Add the Plugin Rollout
-   _rollout[ROLLOUT_PLUGIN] = _glui->add_rollout( 
-      **(str_ptr(_client->plugin_name()) + " Plug-in Controls") ,true);
+   _rollout[ROLLOUT_PLUGIN] = new GLUI_Rollout(_glui,
+      **(str_ptr(_client->plugin_name()) + " Plug-in Controls"), true);
    assert(_rollout[ROLLOUT_PLUGIN]);
    // Tell the client to draw in
    _client->build(_glui, _rollout[ROLLOUT_PLUGIN], _rollout[ROLLOUT_SHAPE]->get_w());

@@ -63,17 +63,17 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _glui = glui; 
    int id = _id << ID_SHIFT;
       
-   _panel[PANEL_MAIN] = (base) ? glui->add_panel_to_panel(base,"Layer Selection")
-                                 : glui->add_panel("Layer Selection");
+   _panel[PANEL_MAIN] = (base) ? new GLUI_Panel(base, "Layer Selection")
+                                 : new GLUI_Panel(glui, "Layer Selection");
 
    
-   _listbox[LIST_PATCH] = glui->add_listbox_to_panel(
+   _listbox[LIST_PATCH] = new GLUI_Listbox(
                               _panel[PANEL_MAIN], 
                               "Patch", NULL,
                               id+LIST_PATCH, listbox_cb);
    
    if(_has_layers){
-       _spinner[SPINNER_LAYER] = glui->add_spinner_to_panel(
+       _spinner[SPINNER_LAYER] = new GLUI_Spinner(
                               _panel[PANEL_MAIN],
                              "Layer",
                              GLUI_SPINNER_INT,
@@ -81,7 +81,7 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              id+SPINNER_LAYER, spinner_cb);
        _spinner[SPINNER_LAYER]->set_int_limits(0,MAX_LAYERS-1);
 
-       _spinner[SPINNER_CHANNEL] = glui->add_spinner_to_panel(
+       _spinner[SPINNER_CHANNEL] = new GLUI_Spinner(
                               _panel[PANEL_MAIN],
                              "Channel",
                              GLUI_SPINNER_INT,
@@ -91,15 +91,15 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    }
  
-   glui->add_column_to_panel(_panel[PANEL_MAIN],true);
-   _checkbox[CHECK_WHOLE_MESH]=glui->add_checkbox_to_panel(
+   new GLUI_Column(_panel[PANEL_MAIN], true);
+   _checkbox[CHECK_WHOLE_MESH]=new GLUI_Checkbox(
                               _panel[PANEL_MAIN],
                               "Whole Mesh",
                               &_whole_mesh,
                               id+CHECK_WHOLE_MESH,
                               checkbox_cb);
 
-   _checkbox[CHECK_ALL_MESHES]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_ALL_MESHES]=new GLUI_Checkbox(
                               _panel[PANEL_MAIN],
                               "All Meshes",
                               &_all_meshes,
@@ -109,21 +109,21 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
 
    if(_has_layers){
-      _checkbox[CHECK_ALL_LAYERS]=glui->add_checkbox_to_panel(
+      _checkbox[CHECK_ALL_LAYERS]=new GLUI_Checkbox(
                               _panel[PANEL_MAIN],
                               "All Layers",
                               &_all_layers,
                               id+CHECK_ALL_LAYERS,
                               checkbox_cb);
    }
-   _checkbox[CHECK_LAST_OPERATION]=glui->add_checkbox_to_panel(
+   _checkbox[CHECK_LAST_OPERATION]=new GLUI_Checkbox(
                               _panel[PANEL_MAIN],
                               "Last Operation",
                               &_last_operation,
                               id+CHECK_LAST_OPERATION,
                               checkbox_cb);
 
-   _button[BUT_APPLY_CHANGES] = glui->add_button_to_panel(
+   _button[BUT_APPLY_CHANGES] = new GLUI_Button(
          _panel[PANEL_MAIN],  "Apply", 
          id+BUT_APPLY_CHANGES, button_cb);
 

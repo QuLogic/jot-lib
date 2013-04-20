@@ -413,14 +413,14 @@ GLUIAlertBox::build_glui()
    
    if ((_icon != NO_ICON) || _text.num())
    {
-      _panel[PANEL_TEXT] = _glui->add_panel("",GLUI_PANEL_RAISED);
+      _panel[PANEL_TEXT] = new GLUI_Panel(_glui, "", GLUI_PANEL_RAISED);
       assert(_panel[PANEL_TEXT]);           
 
       if (_icon != NO_ICON)
       {
-         _bitmapbox[BITMAPBOX_ICON] = _glui->add_bitmapbox_to_panel(
-            _panel[PANEL_TEXT],"", 
-            id+BITMAPBOX_ICON, bitmapbox_cbs,false);
+         _bitmapbox[BITMAPBOX_ICON] = new GLUI_BitmapBox(
+            _panel[PANEL_TEXT], "",
+            id+BITMAPBOX_ICON, bitmapbox_cbs, false);
          assert(_bitmapbox[BITMAPBOX_ICON]);
       
          _bitmapbox[BITMAPBOX_ICON]->set_border(0);
@@ -429,11 +429,11 @@ GLUIAlertBox::build_glui()
          _bitmapbox[BITMAPBOX_ICON]->copy_img(_icons[_icon]._data,_icons[_icon]._width,_icons[_icon]._height,3);
       }
 
-      _glui->add_column_to_panel(_panel[PANEL_TEXT],false);   
+      new GLUI_Column(_panel[PANEL_TEXT], false);
 
       for (i=0; i<max(1,_text.num()); i++)
       {
-         _statictext[i] = _glui->add_statictext_to_panel(
+         _statictext[i] = new GLUI_StaticText(
             _panel[PANEL_TEXT], (char*)
             ((!_text.num())?(" "):(**_text[i])));
          assert(_statictext[i]);
@@ -441,15 +441,15 @@ GLUIAlertBox::build_glui()
          _statictext[i]->set_h(16);
       }
 
-      _glui->add_column_to_panel(_panel[PANEL_TEXT],false);   
+      new GLUI_Column(_panel[PANEL_TEXT], false);
    }
 
-   _panel[PANEL_BUTTONS] = _glui->add_panel("",GLUI_PANEL_NONE);
+   _panel[PANEL_BUTTONS] = new GLUI_Panel(_glui, "", GLUI_PANEL_NONE);
    assert(_panel[PANEL_BUTTONS]);           
 
    for (i=0; i<_buttons.num(); i++)
    {
-      _button[i] = _glui->add_button_to_panel(
+      _button[i] = new GLUI_Button(
          _panel[PANEL_BUTTONS], **_buttons[i], 
          id+i, button_cbs);
       assert(_button[i]);
@@ -457,7 +457,7 @@ GLUIAlertBox::build_glui()
       _button[i]->set_w(75);
 
       if (i != _buttons.num()-1) 
-         _glui->add_column_to_panel(_panel[PANEL_BUTTONS],false);   
+         new GLUI_Column(_panel[PANEL_BUTTONS], false);
    }
    
    _panel[PANEL_BUTTONS]->set_alignment(GLUI_ALIGN_RIGHT);
@@ -713,14 +713,14 @@ GLUIFileSelect::build_glui()
 
    //Controls
 
-   _panel[PANEL_PATH] = _glui->add_panel("",GLUI_PANEL_RAISED/*,GLUI_PANEL_NONE*/);
+   _panel[PANEL_PATH] = new GLUI_Panel(_glui, "", GLUI_PANEL_RAISED /*,GLUI_PANEL_NONE*/);
    assert(_panel[PANEL_PATH]);           
 
    if (_icon != NO_ICON)
    {
-      _bitmapbox[BITMAPBOX_ICON] = _glui->add_bitmapbox_to_panel(
-         _panel[PANEL_PATH],"", 
-         id+BITMAPBOX_ICON, bitmapbox_cbs,false);
+      _bitmapbox[BITMAPBOX_ICON] = new GLUI_BitmapBox(
+         _panel[PANEL_PATH], "",
+         id+BITMAPBOX_ICON, bitmapbox_cbs, false);
       assert(_bitmapbox[BITMAPBOX_ICON]);
    
       _bitmapbox[BITMAPBOX_ICON]->set_border(0);
@@ -729,16 +729,16 @@ GLUIFileSelect::build_glui()
       _bitmapbox[BITMAPBOX_ICON]->copy_img(_icons[_icon]._data,_icons[_icon]._width,_icons[_icon]._height,3);
    }
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_PATH] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_PATH] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_PATH]);
 
    //Path
-   _listbox[LIST_PATH] = _glui->add_listbox_to_panel(
+   _listbox[LIST_PATH] = new GLUI_Listbox(
       _panel[PANEL_PATH], 
       "Path ", NULL,
       id+LIST_PATH, listbox_cbs);
@@ -746,28 +746,28 @@ GLUIFileSelect::build_glui()
    _listbox[LIST_PATH]->set_w(GLUI_FILE_SELECT_PATH_WIDTH);
    _listbox[LIST_PATH]->set_alignment(GLUI_ALIGN_RIGHT);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
 /*
    //Margin Spacer
-   _statictext[STATICTEXT_SPACER_PATH_MARGIN1] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_PATH_MARGIN1] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_PATH_MARGIN1]);
    _statictext[STATICTEXT_SPACER_PATH_MARGIN1]->set_w(0); 
    _statictext[STATICTEXT_SPACER_PATH_MARGIN1]->set_h(0); 
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 */
    //Spacer
-   _statictext[STATICTEXT_SPACER_UP] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_UP] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_UP]);
 
    //Up
-   _bitmapbox[BITMAPBOX_UP] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_PATH],"", 
+   _bitmapbox[BITMAPBOX_UP] = new GLUI_BitmapBox(
+      _panel[PANEL_PATH], "",
       id+BITMAPBOX_UP, bitmapbox_cbs);
    assert(_bitmapbox[BITMAPBOX_UP]);
 
@@ -777,18 +777,18 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_UP]->set_img_size(_bitmaps[BITMAP_UP]._width,_bitmaps[BITMAP_UP]._height);
    _bitmapbox[BITMAPBOX_UP]->copy_img(_bitmaps[BITMAP_UP]._data,_bitmaps[BITMAP_UP]._width,_bitmaps[BITMAP_UP]._height,3);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_DOT] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_DOT] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_DOT]);
 
    //Dot
 
-   _bitmapbox[BITMAPBOX_DOT] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_PATH],"", 
+   _bitmapbox[BITMAPBOX_DOT] = new GLUI_BitmapBox(
+      _panel[PANEL_PATH], "",
       id+BITMAPBOX_DOT, bitmapbox_cbs);
    assert(_bitmapbox[BITMAPBOX_DOT]);
 
@@ -798,18 +798,18 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_DOT]->set_img_size(_bitmaps[BITMAP_DOT]._width,_bitmaps[BITMAP_DOT]._height);
    _bitmapbox[BITMAPBOX_DOT]->copy_img(_bitmaps[BITMAP_DOT]._data,_bitmaps[BITMAP_DOT]._width,_bitmaps[BITMAP_DOT]._height,3);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_PLUS] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_PLUS] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_PLUS]);
 
    //Plus
 
-   _bitmapbox[BITMAPBOX_PLUS] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_PATH],"", 
+   _bitmapbox[BITMAPBOX_PLUS] = new GLUI_BitmapBox(
+      _panel[PANEL_PATH], "",
       id+BITMAPBOX_PLUS, bitmapbox_cbs);
    assert(_bitmapbox[BITMAPBOX_PLUS]);
 
@@ -819,18 +819,18 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_PLUS]->set_img_size(_bitmaps[BITMAP_PLUS]._width,_bitmaps[BITMAP_PLUS]._height);
    _bitmapbox[BITMAPBOX_PLUS]->copy_img(_bitmaps[BITMAP_PLUS]._data,_bitmaps[BITMAP_PLUS]._width,_bitmaps[BITMAP_PLUS]._height,3);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_R] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_R] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_R]);
 
    //R
 
-   _bitmapbox[BITMAPBOX_R] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_PATH],"", 
+   _bitmapbox[BITMAPBOX_R] = new GLUI_BitmapBox(
+      _panel[PANEL_PATH], "",
       id+BITMAPBOX_R, bitmapbox_cbs);
    assert(_bitmapbox[BITMAPBOX_R]);
 
@@ -840,18 +840,18 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_R]->set_img_size(_bitmaps[BITMAP_R]._width,_bitmaps[BITMAP_R]._height);
    _bitmapbox[BITMAPBOX_R]->copy_img(_bitmaps[BITMAP_R]._data,_bitmaps[BITMAP_R]._width,_bitmaps[BITMAP_R]._height,3);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_X] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_X] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_X]);
 
    //X
 
-   _bitmapbox[BITMAPBOX_X] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_PATH],"", 
+   _bitmapbox[BITMAPBOX_X] = new GLUI_BitmapBox(
+      _panel[PANEL_PATH], "",
       id+BITMAPBOX_X, bitmapbox_cbs);
    assert(_bitmapbox[BITMAPBOX_X]);
 
@@ -861,10 +861,10 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_X]->set_img_size(_bitmaps[BITMAP_X]._width,_bitmaps[BITMAP_X]._height);
    _bitmapbox[BITMAPBOX_X]->copy_img(_bitmaps[BITMAP_X]._data,_bitmaps[BITMAP_X]._width,_bitmaps[BITMAP_X]._height,3);
 
-   _glui->add_column_to_panel(_panel[PANEL_PATH],false);   
+   new GLUI_Column(_panel[PANEL_PATH], false);
 
    //Margin Spacer
-   _statictext[STATICTEXT_SPACER_PATH_MARGIN2] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_PATH_MARGIN2] = new GLUI_StaticText(
       _panel[PANEL_PATH],
       "");
    assert(_statictext[STATICTEXT_SPACER_PATH_MARGIN2]);
@@ -874,14 +874,14 @@ GLUIFileSelect::build_glui()
 
    //Files
 
-   _panel[PANEL_FILES] = _glui->add_panel("",GLUI_PANEL_NONE/*,GLUI_PANEL_RAISED*/);
+   _panel[PANEL_FILES] = new GLUI_Panel(_glui, "", GLUI_PANEL_NONE /*,GLUI_PANEL_RAISED*/);
    assert(_panel[PANEL_FILES]);           
 
    //Types
 
    //Spacer
 
-   _button[BUT_HEADING_TYPE] = _glui->add_button_to_panel(
+   _button[BUT_HEADING_TYPE] = new GLUI_Button(
       _panel[PANEL_FILES],
       "",
       id+BUT_HEADING_TYPE, button_cbs);
@@ -891,7 +891,7 @@ GLUIFileSelect::build_glui()
    //_button[BUT_HEADING_TYPE]->set_w(GLUI_FILE_SELECT_NAME_WIDTH);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_FILES_TYPE] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_FILES_TYPE] = new GLUI_StaticText(
       _panel[PANEL_FILES],
       "");
    assert(_statictext[STATICTEXT_SPACER_FILES_TYPE]);
@@ -900,8 +900,8 @@ GLUIFileSelect::build_glui()
    
    for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
    {
-      _bitmapbox[BITMAPBOX_NUM + i] = _glui->add_bitmapbox_to_panel(
-         _panel[PANEL_FILES],"", 
+      _bitmapbox[BITMAPBOX_NUM + i] = new GLUI_BitmapBox(
+         _panel[PANEL_FILES], "",
          id+BITMAPBOX_NUM + i, bitmapbox_cbs, false);
       assert(_bitmapbox[BITMAPBOX_NUM + i]);
    
@@ -914,9 +914,9 @@ GLUIFileSelect::build_glui()
 
    //Names
 
-   _glui->add_column_to_panel(_panel[PANEL_FILES],false);      
+   new GLUI_Column(_panel[PANEL_FILES], false);
 
-   _button[BUT_HEADING_NAME] = _glui->add_button_to_panel(
+   _button[BUT_HEADING_NAME] = new GLUI_Button(
       _panel[PANEL_FILES],
       "Name",
       id+BUT_HEADING_NAME, button_cbs);
@@ -925,7 +925,7 @@ GLUIFileSelect::build_glui()
    _button[BUT_HEADING_NAME]->set_w(GLUI_FILE_SELECT_NAME_WIDTH-1);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_FILES_NAME] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_FILES_NAME] = new GLUI_StaticText(
       _panel[PANEL_FILES],
       "");
    assert(_statictext[STATICTEXT_SPACER_FILES_NAME]);
@@ -933,7 +933,7 @@ GLUIFileSelect::build_glui()
 
    for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
    {
-      _activetext[ACTIVETEXT_NUM + i] = _glui->add_activetext_to_panel(
+      _activetext[ACTIVETEXT_NUM + i] = new GLUI_ActiveText(
          _panel[PANEL_FILES],
          **(str_ptr("Filename #") + str_ptr(i)),
          id+ACTIVETEXT_NUM + i, activetext_cbs);
@@ -944,9 +944,9 @@ GLUIFileSelect::build_glui()
 
    //Sizes
 
-   _glui->add_column_to_panel(_panel[PANEL_FILES],false);      
+   new GLUI_Column(_panel[PANEL_FILES], false);
 
-   _button[BUT_HEADING_SIZE] = _glui->add_button_to_panel(
+   _button[BUT_HEADING_SIZE] = new GLUI_Button(
       _panel[PANEL_FILES],
       "Size",
       id+BUT_HEADING_SIZE, button_cbs);
@@ -955,7 +955,7 @@ GLUIFileSelect::build_glui()
    _button[BUT_HEADING_SIZE]->set_w(GLUI_FILE_SELECT_SIZE_WIDTH);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_FILES_SIZE] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_FILES_SIZE] = new GLUI_StaticText(
       _panel[PANEL_FILES],
       "");
    assert(_statictext[STATICTEXT_SPACER_FILES_SIZE]);
@@ -963,7 +963,7 @@ GLUIFileSelect::build_glui()
 
    for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
    {
-      _statictext[STATICTEXT_NUM + 2*i] = _glui->add_statictext_to_panel(
+      _statictext[STATICTEXT_NUM + 2*i] = new GLUI_StaticText(
          _panel[PANEL_FILES],
          " X.XXX KB");
       assert(_statictext[STATICTEXT_NUM + 2*i]);
@@ -975,9 +975,9 @@ GLUIFileSelect::build_glui()
 
    //Dates
    
-   _glui->add_column_to_panel(_panel[PANEL_FILES],false);      
+   new GLUI_Column(_panel[PANEL_FILES], false);
    
-   _button[BUT_HEADING_DATE] = _glui->add_button_to_panel(
+   _button[BUT_HEADING_DATE] = new GLUI_Button(
       _panel[PANEL_FILES],
       "Date",
       id+BUT_HEADING_DATE, button_cbs);
@@ -986,7 +986,7 @@ GLUIFileSelect::build_glui()
    _button[BUT_HEADING_DATE]->set_w(GLUI_FILE_SELECT_DATE_WIDTH);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_FILES_DATE] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_FILES_DATE] = new GLUI_StaticText(
       _panel[PANEL_FILES],
       "");
    assert(_statictext[STATICTEXT_SPACER_FILES_DATE]);
@@ -994,7 +994,7 @@ GLUIFileSelect::build_glui()
 
    for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
    {
-      _statictext[STATICTEXT_NUM + 2*i + 1] = _glui->add_statictext_to_panel(
+      _statictext[STATICTEXT_NUM + 2*i + 1] = new GLUI_StaticText(
          _panel[PANEL_FILES],
          " DD/MM/YY HH:MM");
       assert(_statictext[STATICTEXT_NUM + 2*i + 1]);
@@ -1006,10 +1006,10 @@ GLUIFileSelect::build_glui()
 
    //Scrolling
 
-   _glui->add_column_to_panel(_panel[PANEL_FILES],false);      
+   new GLUI_Column(_panel[PANEL_FILES], false);
 
    //Spacer
-   _button[BUT_HEADING_SCROLL] = _glui->add_button_to_panel(
+   _button[BUT_HEADING_SCROLL] = new GLUI_Button(
       _panel[PANEL_FILES],
       "",
       id+BUT_HEADING_SCROLL, button_cbs);
@@ -1019,14 +1019,14 @@ GLUIFileSelect::build_glui()
    //_button[BUT_HEADING_TYPE]->set_w(GLUI_FILE_SELECT_NAME_WIDTH);
 
    //Spacer
-   _statictext[STATICTEXT_SPACER_FILES_SCROLL] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_FILES_SCROLL] = new GLUI_StaticText(
       _panel[PANEL_FILES],
       "");
    assert(_statictext[STATICTEXT_SPACER_FILES_SCROLL]);
    _statictext[STATICTEXT_SPACER_FILES_SCROLL]->set_w(0); 
 
-   _bitmapbox[BITMAPBOX_UP_FILE] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_FILES],"", 
+   _bitmapbox[BITMAPBOX_UP_FILE] = new GLUI_BitmapBox(
+      _panel[PANEL_FILES], "",
       id+BITMAPBOX_UP_FILE, bitmapbox_cbs,true);
    assert(_bitmapbox[BITMAPBOX_UP_FILE]);
 
@@ -1038,9 +1038,9 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_UP_FILE]->copy_img(_bitmaps[BITMAP_UPARROW]._data,_bitmaps[BITMAP_UPARROW]._width,_bitmaps[BITMAP_UPARROW]._height,3);
 
 
-   _bitmapbox[BITMAPBOX_SCROLL_FILE] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_FILES],"", 
-      id+BITMAPBOX_SCROLL_FILE, bitmapbox_cbs,true);
+   _bitmapbox[BITMAPBOX_SCROLL_FILE] = new GLUI_BitmapBox(
+      _panel[PANEL_FILES], "",
+      id+BITMAPBOX_SCROLL_FILE, bitmapbox_cbs, true);
    assert(_bitmapbox[BITMAPBOX_SCROLL_FILE]);
 
    _bitmapbox[BITMAPBOX_SCROLL_FILE]->set_border(0);
@@ -1050,9 +1050,9 @@ GLUIFileSelect::build_glui()
    _bitmapbox[BITMAPBOX_SCROLL_FILE]->set_img_size(_bitmaps[BITMAP_SCROLL]._width,_bitmaps[BITMAP_SCROLL]._height);
    _bitmapbox[BITMAPBOX_SCROLL_FILE]->copy_img(_bitmaps[BITMAP_SCROLL]._data,_bitmaps[BITMAP_SCROLL]._width,_bitmaps[BITMAP_SCROLL]._height,3);
 
-   _bitmapbox[BITMAPBOX_DOWN_FILE] = _glui->add_bitmapbox_to_panel(
-      _panel[PANEL_FILES],"", 
-      id+BITMAPBOX_DOWN_FILE, bitmapbox_cbs,true);
+   _bitmapbox[BITMAPBOX_DOWN_FILE] = new GLUI_BitmapBox(
+      _panel[PANEL_FILES], "",
+      id+BITMAPBOX_DOWN_FILE, bitmapbox_cbs, true);
    assert(_bitmapbox[BITMAPBOX_DOWN_FILE]);
 
    _bitmapbox[BITMAPBOX_DOWN_FILE]->set_border(0);
@@ -1074,12 +1074,12 @@ GLUIFileSelect::build_glui()
 
    //Actions
    
-   _panel[PANEL_ACTION] = _glui->add_panel("",GLUI_PANEL_RAISED);
+   _panel[PANEL_ACTION] = new GLUI_Panel(_glui, "", GLUI_PANEL_RAISED);
    assert(_panel[PANEL_ACTION]);           
 
-   _glui->add_column_to_panel(_panel[PANEL_ACTION],false);   
+   new GLUI_Column(_panel[PANEL_ACTION], false);
 
-   _edittext[EDITTEXT_FILE] = _glui->add_edittext_to_panel(
+   _edittext[EDITTEXT_FILE] = new GLUI_EditText(
       _panel[PANEL_ACTION], "Filename ", 
       GLUI_EDITTEXT_TEXT, NULL, 
       id+EDITTEXT_FILE, edittext_cbs);
@@ -1087,7 +1087,7 @@ GLUIFileSelect::build_glui()
    _edittext[EDITTEXT_FILE]->set_alignment(GLUI_ALIGN_RIGHT);
    //_edittext[EDITTEXT_FILE]->set_w(GLUI_FILE_SELECT_FILTER_WIDTH);
 
-   _listbox[LIST_FILTER] = _glui->add_listbox_to_panel(
+   _listbox[LIST_FILTER] = new GLUI_Listbox(
       _panel[PANEL_ACTION], 
       "Filter Mask ", NULL,
       id+LIST_FILTER, listbox_cbs);
@@ -1095,9 +1095,9 @@ GLUIFileSelect::build_glui()
    _listbox[LIST_FILTER]->set_alignment(GLUI_ALIGN_RIGHT);
    _listbox[LIST_FILTER]->set_w(GLUI_FILE_SELECT_FILTER_WIDTH);
 
-   _glui->add_column_to_panel(_panel[PANEL_ACTION],false);   
+   new GLUI_Column(_panel[PANEL_ACTION], false);
 
-   _statictext[STATICTEXT_LABEL_DOT] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_LABEL_DOT] = new GLUI_StaticText(
       _panel[PANEL_ACTION],
       "Dot");
    assert(_statictext[STATICTEXT_LABEL_DOT]);
@@ -1105,7 +1105,7 @@ GLUIFileSelect::build_glui()
    _statictext[STATICTEXT_LABEL_DOT]->set_w(_statictext[STATICTEXT_LABEL_DOT]->get_w()+3); 
    _statictext[STATICTEXT_LABEL_DOT]->set_alignment(GLUI_ALIGN_LEFT);
 
-   _checkbox[CHECKBOX_DOT] = _glui->add_checkbox_to_panel(
+   _checkbox[CHECKBOX_DOT] = new GLUI_Checkbox(
       _panel[PANEL_ACTION], "", NULL,
       id+CHECKBOX_DOT, checkbox_cbs);
    assert(_checkbox[CHECKBOX_DOT]);
@@ -1118,34 +1118,34 @@ GLUIFileSelect::build_glui()
                                  (_edittext[EDITTEXT_FILE]->string_width(_listbox[LIST_FILTER]->get_name()) - 
                                           _edittext[EDITTEXT_FILE]->string_width(_edittext[EDITTEXT_FILE]->get_name())));
 /*   
-   _glui->add_column_to_panel(_panel[PANEL_ACTION],false);   
+   new GLUI_Column(_panel[PANEL_ACTION], false);
    
    //Margin spacer
-   _statictext[STATICTEXT_SPACER_ACTION_MARGIN1] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_ACTION_MARGIN1] = new GLUI_StaticText(
       _panel[PANEL_ACTION],
       "");
    assert(_statictext[STATICTEXT_SPACER_ACTION_MARGIN1]);
    _statictext[STATICTEXT_SPACER_ACTION_MARGIN1]->set_w(0); 
    _statictext[STATICTEXT_SPACER_ACTION_MARGIN1]->set_h(0); 
 */
-   _glui->add_column_to_panel(_panel[PANEL_ACTION],false);      
+   new GLUI_Column(_panel[PANEL_ACTION], false);
    
-   _button[BUT_ACTION] = _glui->add_button_to_panel(
+   _button[BUT_ACTION] = new GLUI_Button(
       _panel[PANEL_ACTION], **_action, 
       id+BUT_ACTION, button_cbs);
    assert(_button[BUT_ACTION]);
    _button[BUT_ACTION]->set_w(GLUI_FILE_SELECT_ACTION_WIDTH);
 
-   _button[BUT_CANCEL] = _glui->add_button_to_panel(
+   _button[BUT_CANCEL] = new GLUI_Button(
       _panel[PANEL_ACTION], "Cancel", 
       id+BUT_CANCEL, button_cbs);
    assert(_button[BUT_CANCEL]);
    _button[BUT_CANCEL]->set_w(GLUI_FILE_SELECT_ACTION_WIDTH);
 /*
-   _glui->add_column_to_panel(_panel[PANEL_ACTION],false);  
+   new GLUI_Column(_panel[PANEL_ACTION], false);
 
    //Margin spacer
-   _statictext[STATICTEXT_SPACER_ACTION_MARGIN2] = _glui->add_statictext_to_panel(
+   _statictext[STATICTEXT_SPACER_ACTION_MARGIN2] = new GLUI_StaticText(
       _panel[PANEL_ACTION],
       "");
    assert(_statictext[STATICTEXT_SPACER_ACTION_MARGIN2]);
