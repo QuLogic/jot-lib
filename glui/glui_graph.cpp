@@ -144,13 +144,8 @@ int    GLUI_Graph::special_handler( int key,int mods )
 
 void    GLUI_Graph::draw( int x, int y )
 {
-  int orig;
 
-  if ( !glui )
-    return;
-
-	orig = set_to_glut_window();
-
+  GLUI_DRAWINGSENTINAL_IDIOM;
 
 	draw_emboss_box(	0,
 							w,
@@ -175,8 +170,6 @@ void    GLUI_Graph::draw( int x, int y )
 					GLUI_GRAPH_NAME_TOP_BORDER);
 
 	draw_active_area();
-
-	restore_window(orig);
 
 	draw_active_box(	GLUI_GRAPH_NAME_INDENT,
 							GLUI_GRAPH_NAME_INDENT +
@@ -229,19 +222,13 @@ void   GLUI_Graph::update_size( void )
 
 void    GLUI_Graph::draw_translated_active_area( int front )
 {
-	int orig,state;
 	int win_h;
 	int win_w;
 
-	if ( !glui )
-		return;
-
-	orig = set_to_glut_window();
+	GLUI_DRAWINGSENTINAL_IDIOM;
 
 	win_h = glutGet(GLUT_WINDOW_HEIGHT);
 	win_w = glutGet(GLUT_WINDOW_WIDTH);
-
-	if (front) state = glui->set_current_draw_buffer();
 
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();
@@ -257,9 +244,6 @@ void    GLUI_Graph::draw_translated_active_area( int front )
 	glMatrixMode( GL_MODELVIEW );
 	glPopMatrix();
 
-	if (front) glui->restore_draw_buffer(state);
-
-	restore_window(orig);
 }
 
 /****************************** GLUI_Graph::draw_active_area() **********/

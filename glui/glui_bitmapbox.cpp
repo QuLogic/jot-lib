@@ -296,12 +296,7 @@ int    GLUI_BitmapBox::special_handler( int key,int mods )
 
 void    GLUI_BitmapBox::draw( int x, int y )
 {
-  int orig;
-
-  if ( !glui )
-    return;
-
-	orig = set_to_glut_window();
+   GLUI_DRAWINGSENTINAL_IDIOM;
 
    if (border && (margin>=2))
    {
@@ -344,8 +339,6 @@ void    GLUI_BitmapBox::draw( int x, int y )
    }
 
 	draw_active_area();
-
-	restore_window(orig);
 
    if (border && (margin >= 2))
    {
@@ -459,19 +452,13 @@ void    GLUI_BitmapBox::draw_translated_active_area( int front )
 {
    float x,y;
 
-	int orig,state;
 	int win_h;
 	int win_w;
 
-	if ( !glui )
-		return;
-
-	orig = set_to_glut_window();
+	GLUI_DRAWINGSENTINAL_IDIOM;
 
 	win_h = glutGet(GLUT_WINDOW_HEIGHT);
 	win_w = glutGet(GLUT_WINDOW_WIDTH);
-
-	if (front) state = glui->set_current_draw_buffer();
 
 	glMatrixMode( GL_MODELVIEW );
 	glPushMatrix();
@@ -494,10 +481,6 @@ void    GLUI_BitmapBox::draw_translated_active_area( int front )
 
 	glMatrixMode( GL_MODELVIEW );
 	glPopMatrix();
-
-	if (front) glui->restore_draw_buffer(state);
-
-	restore_window(orig);
 }
 
 /****************************** GLUI_BitmapBox::draw_active_area() **********/

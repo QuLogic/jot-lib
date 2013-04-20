@@ -1,5 +1,6 @@
 #include "glui/glui_jot.H"
 #include "glui_internal.h"
+#include "glui_internal_control.h"
 
 /****************************** GLUI_ActiveText::mouse_down_handler() **********/
 
@@ -80,21 +81,12 @@ int    GLUI_ActiveText::key_handler( unsigned char key,int modifiers )
 
 void    GLUI_ActiveText::draw_translated_active_area( )
 {
-   int state, orig;
-
-   if ( NOT can_draw() ) return;
-
-   orig  = set_to_glut_window();
-   state = glui->set_current_draw_buffer();
+   GLUI_DRAWINGSENTINAL_IDIOM;
 
    glPushMatrix();
       translate_to_origin();
       draw_active_area();
    glPopMatrix();
-
-   glui->restore_draw_buffer(state);
-   restore_window(orig);
-
 }
 
 /****************************** GLUI_ActiveText::draw_active_area() **********/
@@ -133,7 +125,7 @@ void    GLUI_ActiveText::draw_active_area( void )
 
 void    GLUI_ActiveText::draw( int x, int y )
 {
-  if ( NOT can_draw() ) return;
+  GLUI_DRAWINGSENTINAL_IDIOM;
 
   draw_active_area();
 

@@ -276,13 +276,7 @@ void    GLUI_Slider::update_val( int x, int y )
 
 void    GLUI_Slider::draw( int x, int y )
 {
-   int orig;
-
-   if ( NOT glui )
-      return;
-
-   orig = set_to_glut_window();
-
+   GLUI_DRAWINGSENTINAL_IDIOM;
 
    draw_emboss_box(        0,
                            w,
@@ -307,8 +301,6 @@ void    GLUI_Slider::draw( int x, int y )
                    GLUI_SLIDER_NAME_TOP_BORDER);
 
    draw_active_area();
-
-   restore_window(orig);
 
    draw_active_box(        GLUI_SLIDER_NAME_INDENT,
                            GLUI_SLIDER_NAME_INDENT +
@@ -361,13 +353,10 @@ void   GLUI_Slider::update_size( void )
 
 void    GLUI_Slider::draw_translated_active_area( void )
 {
-   int orig;
    int win_h , win_w;
 
-   if ( NOT glui )
-      return;
+   GLUI_DRAWINGSENTINAL_IDIOM;
 
-   orig = set_to_glut_window();
    win_h = glutGet( GLUT_WINDOW_HEIGHT );
    win_w = glutGet(GLUT_WINDOW_WIDTH);
 
@@ -384,8 +373,6 @@ void    GLUI_Slider::draw_translated_active_area( void )
 
    glMatrixMode( GL_MODELVIEW );
    glPopMatrix();
-
-   restore_window(orig);
 }
 
 /****************************** GLUI_Mouse_Interaction::draw_active_area() **********/
