@@ -541,9 +541,9 @@ void    GLUI_BitmapBox::draw_active_area( void )
 
          for (int i=0; i<(image_w+image_h); i++)
          {
-            foo[3*i  ] = glui->bkgd_color.r;
-            foo[3*i+1] = glui->bkgd_color.g;
-            foo[3*i+2] = glui->bkgd_color.b;
+            foo[3*i  ] = glui->bkgd_color[0];
+            foo[3*i+1] = glui->bkgd_color[1];
+            foo[3*i+2] = glui->bkgd_color[2];
 
          }
 
@@ -609,9 +609,9 @@ void    GLUI_BitmapBox::copy_img(unsigned char *i_data,int i_w, int i_h, int i_b
             }
             else
             {
-               image_disabled[i  ] = glui->bkgd_color.r;
-               image_disabled[i+1] = glui->bkgd_color.g;
-               image_disabled[i+2] = glui->bkgd_color.b;
+               image_disabled[i  ] = glui->bkgd_color[0];
+               image_disabled[i+1] = glui->bkgd_color[1];
+               image_disabled[i+2] = glui->bkgd_color[2];
             }
          }
       }

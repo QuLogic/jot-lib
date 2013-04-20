@@ -557,13 +557,13 @@ void   GLUI_Slider::draw_slider( void )
          x_pos = (int) (min_x + wid_x*((val-min_val)/(max_val-min_val)));
    }
 
-   draw_knob(x_pos,0,0,0,0,glui->bkgd_color.r, glui->bkgd_color.g, glui->bkgd_color.b);
+   draw_knob(x_pos,0,0,0,0,glui->bkgd_color[0], glui->bkgd_color[1], glui->bkgd_color[2]);
    draw_knob(x_pos,1,0,1,0, GLUI_SLIDER_KNOB_BLACK, GLUI_SLIDER_KNOB_BLACK, GLUI_SLIDER_KNOB_BLACK);
    draw_knob(x_pos,0,1,0,1, GLUI_SLIDER_KNOB_WHITE, GLUI_SLIDER_KNOB_WHITE, GLUI_SLIDER_KNOB_WHITE);
    if (pressed)
       draw_knob(x_pos,1,1,1,1, GLUI_SLIDER_KNOB_GREY, GLUI_SLIDER_KNOB_GREY, GLUI_SLIDER_KNOB_GREY);
    else
-      draw_knob(x_pos,1,1,1,1,glui->bkgd_color.r, glui->bkgd_color.g, glui->bkgd_color.b);
+      draw_knob(x_pos,1,1,1,1,glui->bkgd_color[0], glui->bkgd_color[1], glui->bkgd_color[2]);
    draw_knob(x_pos,2,1,2,1, GLUI_SLIDER_KNOB_D_GREY, GLUI_SLIDER_KNOB_D_GREY, GLUI_SLIDER_KNOB_D_GREY);
    if (pressed)
       draw_knob(x_pos,2,2,2,2, GLUI_SLIDER_KNOB_L_GREY, GLUI_SLIDER_KNOB_L_GREY, GLUI_SLIDER_KNOB_L_GREY);

@@ -104,11 +104,11 @@ void    GLUI_ActiveText::draw_active_area( void )
 
   if (currently_highlighted)
   {
-     glColor3ub( glui->bkgd_color.r+25, glui->bkgd_color.g+25, glui->bkgd_color.b+25 );
+     glColor3ub( glui->bkgd_color[0]+25, glui->bkgd_color[1]+25, glui->bkgd_color[2]+25 );
   }
   else
   {
-     glColor3ub( glui->bkgd_color.r, glui->bkgd_color.g, glui->bkgd_color.b );
+     glColor3ub( glui->bkgd_color[0], glui->bkgd_color[1], glui->bkgd_color[2] );
   }
 
   glBegin( GL_QUADS );
