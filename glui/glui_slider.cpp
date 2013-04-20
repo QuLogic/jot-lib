@@ -605,6 +605,18 @@ GLUI_Slider::draw_knob(
 
 }
 
+/*********************************** GLUI_Slider::set_float_val() **********/
+
+// virtual
+void   GLUI_Slider::set_float_val( float new_float )
+{
+   CLAMP(new_float, float_low, float_high);
+   float_val = new_float;
+   output_live(true);
+   if (can_draw())
+      draw_translated_active_area();
+}
+
 /********************************* GLUI_Slider::set_float_limits() *********/
 
 void GLUI_Slider::set_float_limits( float low, float high)
@@ -627,6 +639,18 @@ void GLUI_Slider::set_float_limits( float low, float high)
    int_high    = (int) float_high;
 }
 
+
+/*********************************** GLUI_Slider::set_int_val() ************/
+
+// virtual
+void   GLUI_Slider::set_int_val( int new_int )
+{
+   CLAMP(new_int, int_low, int_high);
+   int_val =   new_int;
+   output_live(true);
+   if (can_draw())
+      draw_translated_active_area();
+}
 
 /*********************************** GLUI_Slider::set_int_limits() *********/
 
@@ -662,21 +686,44 @@ void   GLUI_Slider::set_num_graduations( int g )
 
 /************** GLUI_Slider::GLUI_Slider() ********************/
 
-GLUI_Slider::GLUI_Slider( void )
+GLUI_Slider::GLUI_Slider(GLUI_Node *parent, const char *name,
+                         int id, GLUI_CB cb,
+                         int the_data_type,
+                         float limit_lo,
+                         float limit_hi,
+                         void *data)
 {
-   glui_format_str( name, "Slider: %p", this );
+   common_init();
+   user_id = id;
+   callback = cb;
+   set_name( name );
+   data_type = the_data_type;
+   ptr_val = data;
 
-   w            = GLUI_SLIDER_WIDTH;
-   h            = GLUI_SLIDER_HEIGHT;
-   can_activate = true;
-   live_type    = GLUI_LIVE_NONE;
-   alignment    = GLUI_ALIGN_CENTER;
-   int_low      = GLUI_SLIDER_LO;
-   int_high     = GLUI_SLIDER_HI;
-   float_low    = GLUI_SLIDER_LO;
-   float_high   = GLUI_SLIDER_HI;
+   if ( data_type == GLUI_SLIDER_INT ) {
+      set_int_limits((int)limit_lo, (int)limit_hi);
+      if ( data == NULL ) {
+         set_int_val(int_low);
+         live_type = GLUI_LIVE_NONE;
+      } else
+         live_type = GLUI_LIVE_INT;
 
-   pressed      = false;
+   } else if ( data_type == GLUI_SLIDER_FLOAT ) {
+      set_float_limits(limit_lo, limit_hi);
+      if ( data == NULL ) {
+         set_float_val(float_low);
+         live_type = GLUI_LIVE_NONE;
+      } else
+         live_type = GLUI_LIVE_FLOAT;
+   }
 
-   graduations  = 0;
+   parent->add_control( this );
+
+   init_live();
+
+   //In case the live var was out of range,
+   //(and got clamped) we update the live
+   //var to the internal value
+   output_live(false);
 }
+

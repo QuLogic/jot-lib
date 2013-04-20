@@ -551,6 +551,62 @@ void    GLUI_BitmapBox::draw_active_area( void )
 
 }
 
+/****************************** GLUI_BitmapBox::get_event() **********/
+
+int    GLUI_BitmapBox::get_event( void )
+{
+   return event;
+}
+
+/****************************** GLUI_BitmapBox::get_event_key() **********/
+
+int    GLUI_BitmapBox::get_event_key( void )
+{
+   return event_key;
+}
+
+/****************************** GLUI_BitmapBox::get_event_mod() **********/
+
+int    GLUI_BitmapBox::get_event_mod( void )
+{
+   return event_mod;
+}
+
+/****************************** GLUI_BitmapBox::get_event_in() **********/
+
+int    GLUI_BitmapBox::get_event_in( void )
+{
+   return event_in;
+}
+
+/****************************** GLUI_BitmapBox::get_event_x() **********/
+
+int    GLUI_BitmapBox::get_event_x( void )
+{
+   return event_x;
+}
+
+/****************************** GLUI_BitmapBox::get_event_y() **********/
+
+int    GLUI_BitmapBox::get_event_y( void )
+{
+   return event_y;
+}
+
+/****************************** GLUI_BitmapBox::get_image_w() **********/
+
+int    GLUI_BitmapBox::get_image_w( void )
+{
+   return image_w;
+}
+
+/****************************** GLUI_BitmapBox::get_image_h() **********/
+
+int    GLUI_BitmapBox::get_image_h( void )
+{
+   return image_h;
+}
+
 /****************************** GLUI_BitmapBox::copy_img() **********/
 
 void    GLUI_BitmapBox::copy_img(unsigned char *i_data,int i_w, int i_h, int i_bpp)
@@ -647,6 +703,53 @@ void    GLUI_BitmapBox::set_img_size( int i_w, int i_h )
 
 }
 
+/****************************** GLUI_BitmapBox::get_border() **********/
+
+int     GLUI_BitmapBox::get_border( void )
+{
+   return border;
+}
+
+/****************************** GLUI_BitmapBox::set_border() **********/
+
+void    GLUI_BitmapBox::set_border( int b )
+{
+   border = b;
+   update_size();
+   if ( glui )
+      glui->refresh();
+}
+
+/****************************** GLUI_BitmapBox::get_margin() **********/
+
+int     GLUI_BitmapBox::get_margin( void )
+{
+   return margin;
+}
+
+/****************************** GLUI_BitmapBox::set_margin() **********/
+
+void    GLUI_BitmapBox::set_margin( int m )
+{
+   margin = m;
+   update_size();
+   if ( glui )
+      glui->refresh();
+}
+
+/****************************** GLUI_BitmapBox::get_depressable() **********/
+
+int     GLUI_BitmapBox::get_depressable( void )
+{
+   return depressable;
+}
+
+/****************************** GLUI_BitmapBox::set_depressable() **********/
+
+void    GLUI_BitmapBox::set_depressable( int d )
+{
+   depressable = d;
+}
 
 /****************************** GLUI_BitmapBox::execute_callback() **********/
 
@@ -666,35 +769,16 @@ void    GLUI_BitmapBox::execute_callback( void )
 
 /************** GLUI_BitmapBox::GLUI_BitmapBox() ********************/
 
-GLUI_BitmapBox::GLUI_BitmapBox( void )
+GLUI_BitmapBox::GLUI_BitmapBox(GLUI_Node *parent, const char *name,
+                               int id, GLUI_CB cb, bool active)
 {
-	glui_format_str( name, "BitmapBox: %p", this );
+   common_init();
+   user_id = id;
+   callback = cb;
+   set_name( name );
+   can_activate = active;
 
-	w								= GLUI_BITMAPBOX_WIDTH;
-	h								= GLUI_BITMAPBOX_HEIGHT;
-	can_activate				= true;
-	live_type					= GLUI_LIVE_NONE;
-	alignment					= GLUI_ALIGN_CENTER;
-
-	currently_pressed			= false;
-   currently_inside        = false;
-
-	event							= GLUI_BITMAPBOX_EVENT_NONE;
-	event_key					= -1;
-	event_mod					= -1;
-   event_in		   			= -1;
-	event_x						= -1;
-	event_y						= -1;
-
-	image							= NULL;
-   image_disabled          = NULL;
-	image_w						= 0;
-	image_h						= 0;
-
-   border                  = 1;
-   margin                  = 2;
-
-   depressable             = false;
+   parent->add_control( this );
 }
 
 /************** GLUI_BitmapBox::GLUI_~BitmapBox() ********************/

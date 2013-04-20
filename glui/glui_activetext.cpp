@@ -175,7 +175,38 @@ void    GLUI_ActiveText::set_text( const char *text )
 }
 
 
+/************************************** GLUI_ActiveText::get_highlighted() **********/
 
+int  GLUI_ActiveText::get_highlighted()
+{
+   return currently_highlighted;
+}
+
+/************************************** GLUI_ActiveText::set_highlighted() **********/
+
+void GLUI_ActiveText::set_highlighted(int h)
+{
+   int oh;
+   oh = currently_highlighted;
+   currently_highlighted = h;
+   if (h != oh)
+      draw_translated_active_area();
+}
+
+
+/************************************** GLUI_ActiveText::GLUI_ActiveText() **********/
+
+GLUI_ActiveText::GLUI_ActiveText(GLUI_Node *parent, const char *name,
+                                 int id, GLUI_CB cb)
+{
+   common_init();
+   user_id     = id;
+   callback    = cb;
+   set_name( name );
+   currently_inside = false;
+
+   parent->add_control( this );
+}
 
 /*
 void    GLUI_ActiveText::draw( int x, int y )

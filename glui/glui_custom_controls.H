@@ -72,48 +72,6 @@ class GLUI_ActiveText;
 #define GLUI_COLORBUTTON_G          0
 #define GLUI_COLORBUTTON_B          1
 
-#if 0
-class GLUI_Main {
-  friend class GLUI_Slider;
-  friend class GLUI_BitmapBox;
-  friend class GLUI_Graph;
-}
-
-class GLUI {
-  GLUI_Slider *add_slider(
-     const char *name,
-     int data_type=GLUI_SLIDER_INT,
-     float limit_lo = GLUI_SLIDER_LO,
-     float limit_hi = GLUI_SLIDER_HI,
-     void *data=NULL,
-     int id=-1,
-     GLUI_Update_CB callback=NULL
-     );
-
-  GLUI_Slider *add_slider_to_panel( GLUI_Panel *panel, const char *name,
-					int data_type=GLUI_SLIDER_INT,
-					float limit_lo = GLUI_SLIDER_LO, float limit_hi = GLUI_SLIDER_HI,
-					void *data=NULL,
-					int id=-1, GLUI_Update_CB callback=NULL);
-
-  GLUI_BitmapBox *add_bitmapbox( const char *name,
-					int id=-1, GLUI_Update_CB callback=NULL, bool active=true);
-  GLUI_BitmapBox *add_bitmapbox_to_panel( GLUI_Panel *panel, const char *name,
-					int id=-1, GLUI_Update_CB callback=NULL, bool active=true);
-
-  GLUI_Graph *add_graph( const char *name,
-					int id=-1, GLUI_Update_CB callback=NULL);
-  GLUI_Graph *add_graph_to_panel( GLUI_Panel *panel, const char *name,
-					int id=-1, GLUI_Update_CB callback=NULL);
-
-  GLUI_ActiveText  *add_activetext( const char *name, int id=-1,
-			    GLUI_Update_CB callback=NULL);
-  GLUI_ActiveText  *add_activetext_to_panel( GLUI_Panel *panel, const char *name,
-				     int id=-1, GLUI_Update_CB callback=NULL );
-
-}
-#endif
-
 /************************************************************/
 /*                                                          */
 /*                   Slider class                           */
@@ -141,15 +99,11 @@ public:
   void draw_val( void );
   void draw_slider( void );
   void draw_knob( int x, int off_l, int off_r, int off_t, int off_b,
-							unsigned char r, unsigned char g, unsigned char b );
+                  unsigned char r, unsigned char g, unsigned char b );
   void update_val(int x, int y);
 
-  virtual void   set_int_val( int new_int )
-  { CLAMP(new_int,   int_low,   int_high);   int_val =   new_int;
-   output_live(true); if (can_draw()) draw_translated_active_area();};
-  virtual void   set_float_val( float new_float )
-  { CLAMP(new_float, float_low, float_high); float_val = new_float;
-   output_live(true); if (can_draw()) draw_translated_active_area();};
+  virtual void   set_int_val( int new_int );
+  virtual void   set_float_val( float new_float );
 
   void set_float_limits( float low,float high);
   void set_int_limits( int low, int high);
@@ -159,7 +113,32 @@ public:
 
   /*  int mouse_over( int state, int x, int y ); */
 
-  GLUI_Slider(void);
+  GLUI_Slider(GLUI_Node *parent, const char *name,
+              int id=-1, GLUI_CB callback=GLUI_CB(),
+              int data_type=GLUI_SLIDER_INT,
+              float limit_lo=GLUI_SLIDER_LO,
+              float limit_hi=GLUI_SLIDER_HI,
+              void *data=NULL);
+  GLUI_Slider(void) { common_init(); }
+
+protected:
+  void common_init(void) {
+      glui_format_str( name, "Slider: %p", this );
+
+      w            = GLUI_SLIDER_WIDTH;
+      h            = GLUI_SLIDER_HEIGHT;
+      can_activate = true;
+      live_type    = GLUI_LIVE_NONE;
+      alignment    = GLUI_ALIGN_CENTER;
+      int_low      = GLUI_SLIDER_LO;
+      int_high     = GLUI_SLIDER_HI;
+      float_low    = GLUI_SLIDER_LO;
+      float_high   = GLUI_SLIDER_HI;
+
+      pressed      = false;
+
+      graduations  = 0;
+  }
 };
 
 
@@ -187,29 +166,27 @@ public:
 
   void set_text( const char *text );
 
-  int  get_highlighted()      { return currently_highlighted; }
-  void set_highlighted(int h)
-  {
-     int oh;
-     oh = currently_highlighted;
-     currently_highlighted = h;
-     if (h!=oh) draw_translated_active_area();
-  }
+  int  get_highlighted();
+  void set_highlighted(int h);
 
   void update_size( void );
   int check_fit(const char *s);
 
-  GLUI_ActiveText( void ) {
-    glui_format_str( name, "ActiveText: %p", this );
-    h            = GLUI_ACTIVETEXT_SIZE;
-    w            = 100;
-    alignment    = GLUI_ALIGN_LEFT;
-    can_activate = true;
-    currently_pressed = false;
-    currently_inside  = false;
-    currently_highlighted = false;
-  }
+  GLUI_ActiveText(GLUI_Node *parent, const char *name,
+                  int id=-1, GLUI_CB callback=GLUI_CB());
+  GLUI_ActiveText( void ) { common_init(); }
 
+protected:
+  void common_init(void) {
+      glui_format_str( name, "ActiveText: %p", this );
+      h            = GLUI_ACTIVETEXT_SIZE;
+      w            = 100;
+      alignment    = GLUI_ALIGN_LEFT;
+      can_activate = true;
+      currently_pressed = false;
+      currently_inside  = false;
+      currently_highlighted = false;
+  }
 };
 
 /************************************************************/
@@ -240,27 +217,27 @@ public:
   int		event_x;
   int		event_y;
 
-  int		get_event( void )			{ return event; }
-  int		get_event_key( void )		{ return event_key; }
-  int		get_event_mod( void )		{ return event_mod; }
-  int		get_event_in( void )		{ return event_in; }
-  int		get_event_x( void )		{ return event_x; }
-  int		get_event_y( void )		{ return event_y; }
+  int		get_event( void );
+  int		get_event_key( void );
+  int		get_event_mod( void );
+  int		get_event_in( void );
+  int		get_event_x( void );
+  int		get_event_y( void );
 
-  int		get_image_w( void )		{ return image_w; }
-  int		get_image_h( void )		{ return image_h; }
+  int		get_image_w( void );
+  int		get_image_h( void );
 
   void	copy_img(unsigned char *data,int w, int h, int bpp);
   void	set_img_size(int w, int h);
 
-  int		get_border( void )		{ return border; }
-  void	set_border( int b )		{ border = b; update_size(); if ( glui ) glui->refresh();}
+  int		get_border( void );
+  void	set_border( int b );
 
-  int		get_margin( void )		{ return margin; }
-  void	set_margin( int m )		{ margin = m; update_size(); if ( glui ) glui->refresh();}
+  int		get_margin( void );
+  void	set_margin( int m );
 
-  int		get_depressable( void )	   { return depressable;   }
-  void	set_depressable( int d )	{ depressable = d;      }
+  int		get_depressable( void );
+  void	set_depressable( int d );
 
   int		general_mouse_down_handler( int but, int local_x, int local_y );
   int		general_mouse_up_handler( int but,  int local_x, int local_y, int inside );
@@ -280,8 +257,41 @@ public:
 
   void	execute_callback( void );
 
-  GLUI_BitmapBox(void);
+  GLUI_BitmapBox(GLUI_Node *parent, const char *name,
+                 int id=-1, GLUI_CB callback=GLUI_CB(), bool active=true);
+  GLUI_BitmapBox(void) { common_init(); }
   virtual ~GLUI_BitmapBox(void);
+
+protected:
+  void common_init(void) {
+      glui_format_str( name, "BitmapBox: %p", this );
+
+      w                  = GLUI_BITMAPBOX_WIDTH;
+      h                  = GLUI_BITMAPBOX_HEIGHT;
+      can_activate       = true;
+      live_type          = GLUI_LIVE_NONE;
+      alignment          = GLUI_ALIGN_CENTER;
+
+      currently_pressed  = false;
+      currently_inside   = false;
+
+      event              = GLUI_BITMAPBOX_EVENT_NONE;
+      event_key          = -1;
+      event_mod          = -1;
+      event_in           = -1;
+      event_x            = -1;
+      event_y            = -1;
+
+      image              = NULL;
+      image_disabled     = NULL;
+      image_w            = 0;
+      image_h            = 0;
+
+      border             = 1;
+      margin             = 2;
+
+      depressable        = false;
+  }
 };
 
 /************************************************************/
@@ -301,56 +311,18 @@ class GLUI_GraphSeries
    double *    data_x;
    double *    data_y;
 
-   GLUI_GraphSeries(void)
-   {
-      name[0]     = 0;
-      type        = GLUI_GRAPH_SERIES_DOT;
-      size        = 1.5;
-      color[0]    = 0.0; color[1] = 0.0; color[2] = 0.0; color[3] = 1.0;
-      data_num    = 0;
-      data_x      = NULL;      data_y      = NULL;
-   }
+   GLUI_GraphSeries(void);
 
-   ~GLUI_GraphSeries(void)  {  clear_data();  }
+   ~GLUI_GraphSeries(void);
 
-   void  clear_data(void)
-   {
-      if (data_num != 0)
-      {
-         delete[] data_x; delete[] data_y;
-         data_num = 0; data_x = NULL; data_y = NULL;
-      }
-   }
+   void  clear_data(void);
 
-   void  set_name(const char *n)
-   {
-      int i = 0;
-      for ( ; i<GLUI_GRAPH_SERIES_NAME_LENGTH-1; i++)
-         if (n[i] != 0)
-            name[i] = n[i];
-         else
-            break;
-      name[i] = 0;
-   }
+   void  set_name(const char *n);
 
-   void  set_color(const double *c) { for (int i=0; i<4; i++) color[i]=c[i]; }
+   void  set_color(const double *c);
 
-   void  set_data (int n, const double *x, const double *y)
-   {
-      if (n > 0)
-      {
-         if (data_num != n)
-         {
-                  clear_data(); data_num = n;
-                  data_x = new double[n]; data_y = new double[n];
-                  assert(data_y); assert(data_x);
-         }
-         for (int i=0; i<data_num; i++) { data_x[i] = x[i]; data_y[i] = y[i]; }
-      }
-   }
+   void  set_data (int n, const double *x, const double *y);
 };
-
-#define VALID_I(A)   { assert((A)>=0); assert((A)<graph_data_num); }
 
 class GLUI_Graph : public GLUI_Control
 {
@@ -378,32 +350,27 @@ public:
    int   event_x;
    int   event_y;
 
-   int   get_event( void )          { return event; }
-   int   get_event_key( void )      { return event_key; }
-   int   get_event_mod( void )      { return event_mod; }
-   int   get_event_x( void )        { return event_x; }
-   int   get_event_y( void )        { return event_y; }
-
-
+   int   get_event( void );
+   int   get_event_key( void );
+   int   get_event_mod( void );
+   int   get_event_x( void );
+   int   get_event_y( void );
 
    void  set_graph_size(int w, int h);
 
-   int   get_graph_w( void )        { return graph_w; }
-   int   get_graph_h( void )        { return graph_h; }
+   int   get_graph_w( void );
+   int   get_graph_h( void );
 
-
-
-   int            get_num_series( void )  { return graph_data_num; }
+   int            get_num_series( void );
    void           set_num_series(int n);
 
-
-   int            get_series_num (int i)  { VALID_I(i); return graph_data[i].data_num; }
-   const char *   get_series_name(int i)  { VALID_I(i); return graph_data[i].name; }
-   int            get_series_type(int i)  { VALID_I(i); return graph_data[i].type; }
-   double         get_series_size(int i)  { VALID_I(i); return graph_data[i].size; }
-   const double * get_series_color(int i) { VALID_I(i); return graph_data[i].color; }
-   const double * get_series_data_x(int i){ VALID_I(i); return graph_data[i].data_x; }
-   const double * get_series_data_y(int i){ VALID_I(i); return graph_data[i].data_y; }
+   int            get_series_num (int i);
+   const char *   get_series_name(int i);
+   int            get_series_type(int i);
+   double         get_series_size(int i);
+   const double * get_series_color(int i);
+   const double * get_series_data_x(int i);
+   const double * get_series_data_y(int i);
 
    void           set_series_name(int i, const char *n);
    void           set_series_type(int i, int t);
@@ -411,19 +378,18 @@ public:
    void           set_series_color(int i, const double *c);
    void           set_series_data(int i, int n, const double *x, const double *y);
 
-   void           set_background(const double *c) { for (int i=0; i<4; i++) background[i]=c[i]; }
-   const double * get_background() { return background; }
+   void           set_background(const double *c);
+   const double * get_background();
 
    void           set_min_x(bool autom, double m=0.0);
    void           set_min_y(bool autom, double m=0.0);
    void           set_max_x(bool autom, double m=0.0);
    void           set_max_y(bool autom, double m=0.0);
 
-   double         get_min_x()    { return min_x; }
-   double         get_min_y()    { return min_y; }
-   double         get_max_x()    { return max_x; }
-   double         get_max_y()    { return max_y; }
-
+   double         get_min_x();
+   double         get_min_y();
+   double         get_max_x();
+   double         get_max_y();
 
    void  clear_series( void );
 
@@ -442,9 +408,45 @@ public:
 
    void  redraw();
 
-   GLUI_Graph(void);
+   GLUI_Graph(GLUI_Node *parent, const char *name,
+              int id=-1, GLUI_CB callback=GLUI_CB());
+   GLUI_Graph(void) { common_init(); }
    virtual ~GLUI_Graph(void);
 
+protected:
+  void common_init(void) {
+      glui_format_str( name, "Graph: %p", this );
+
+      w              = GLUI_GRAPH_WIDTH;
+      h              = GLUI_GRAPH_HEIGHT;
+      can_activate   = true;
+      live_type      = GLUI_LIVE_NONE;
+      alignment      = GLUI_ALIGN_CENTER;
+
+      pressed        = false;
+
+      event          = GLUI_GRAPH_EVENT_NONE;
+      event_key      = -1;
+      event_mod      = -1;
+      event_x        = -1;
+      event_y        = -1;
+
+      graph_data     = NULL;
+      graph_data_num = 0;
+
+      graph_w        = GLUI_GRAPH_WIDTH;
+      graph_h        = GLUI_GRAPH_HEIGHT;
+
+      min_x          = 0.0;
+      min_y          = 0.0;
+      max_x          = 1.0;
+      max_y          = 1.0;
+
+      background[0]  = 0.8;
+      background[1]  = 0.8;
+      background[2]  = 0.8;
+      background[3]  = 1.0;
+  }
 };
 
 #endif // GLUI_CUSTOM_CONTROLS_H

@@ -36,6 +36,75 @@
 #define GLUI_GRAPH_IMG_RIGHT_BORDER				2
 
 
+#define VALID_I(A)   { assert((A)>=0); assert((A)<graph_data_num); }
+
+/********************** GLUI_GraphSeries::GLUI_GraphSeries() ******/
+
+GLUI_GraphSeries::GLUI_GraphSeries(void)
+{
+   name[0]     = 0;
+   type        = GLUI_GRAPH_SERIES_DOT;
+   size        = 1.5;
+   color[0]    = 0.0; color[1] = 0.0; color[2] = 0.0; color[3] = 1.0;
+   data_num    = 0;
+   data_x      = NULL;      data_y      = NULL;
+}
+
+/********************** GLUI_GraphSeries::~GLUI_GraphSeries() ******/
+
+GLUI_GraphSeries::~GLUI_GraphSeries(void)
+{
+   clear_data();
+}
+
+/********************** GLUI_GraphSeries::clear_data() ******/
+
+void  GLUI_GraphSeries::clear_data(void)
+{
+   if (data_num != 0)
+   {
+      delete[] data_x; delete[] data_y;
+      data_num = 0; data_x = NULL; data_y = NULL;
+   }
+}
+
+/********************** GLUI_GraphSeries::set_name() ******/
+
+void  GLUI_GraphSeries::set_name(const char *n)
+{
+   int i = 0;
+   for ( ; i<GLUI_GRAPH_SERIES_NAME_LENGTH-1; i++)
+      if (n[i] != 0)
+         name[i] = n[i];
+      else
+         break;
+   name[i] = 0;
+}
+
+/********************** GLUI_GraphSeries::set_color() ******/
+
+void  GLUI_GraphSeries::set_color(const double *c)
+{
+   for (int i=0; i<4; i++)
+      color[i]=c[i];
+}
+
+/********************** GLUI_GraphSeries::set_data() ******/
+
+void  GLUI_GraphSeries::set_data (int n, const double *x, const double *y)
+{
+   if (n > 0)
+   {
+      if (data_num != n)
+      {
+               clear_data(); data_num = n;
+               data_x = new double[n]; data_y = new double[n];
+               assert(data_y); assert(data_x);
+      }
+      for (int i=0; i<data_num; i++) { data_x[i] = x[i]; data_y[i] = y[i]; }
+   }
+}
+
 /********************** GLUI_Graph::mouse_down_handler() ******/
 
 int    GLUI_Graph::mouse_down_handler( int local_x, int local_y )
@@ -382,6 +451,13 @@ void    GLUI_Graph::set_graph_size( int g_w, int g_h )
 
 }
 
+/****************************** GLUI_Graph::get_num_series() **********/
+
+int     GLUI_Graph::get_num_series( void )
+{
+   return graph_data_num;
+}
+
 /****************************** GLUI_Graph::set_num_series() **********/
 
 void    GLUI_Graph::set_num_series(int n)
@@ -465,39 +541,15 @@ void    GLUI_Graph::execute_callback( void )
 
 /************** GLUI_Graph::GLUI_Graph() ********************/
 
-GLUI_Graph::GLUI_Graph( void )
+GLUI_Graph::GLUI_Graph(GLUI_Node *parent, const char *name,
+                       int id, GLUI_CB cb)
 {
-	glui_format_str( name, "Graph: %p", this );
+   common_init();
+   user_id = id;
+   callback = cb;
+   set_name( name );
 
-	w								= GLUI_GRAPH_WIDTH;
-	h								= GLUI_GRAPH_HEIGHT;
-	can_activate				= true;
-	live_type					= GLUI_LIVE_NONE;
-	alignment					= GLUI_ALIGN_CENTER;
-
-	pressed						= false;
-
-	event							= GLUI_GRAPH_EVENT_NONE;
-	event_key					= -1;
-	event_mod					= -1;
-	event_x						= -1;
-	event_y						= -1;
-
-	graph_data					= NULL;
-   graph_data_num          = 0;
-
-	graph_w						= GLUI_GRAPH_WIDTH;
-	graph_h						= GLUI_GRAPH_HEIGHT;
-
-   min_x                   = 0.0;
-   min_y                   = 0.0;
-   max_x                   = 1.0;
-   max_y                   = 1.0;
-
-   background[0]           = 0.8;
-   background[1]           = 0.8;
-   background[2]           = 0.8;
-   background[3]           = 1.0;
+   parent->add_control( this );
 }
 
 /************** GLUI_Graph::~GLUI_Graph() ********************/
@@ -545,6 +597,13 @@ GLUI_Graph::set_min_x( bool autom, double val)
    }
 }
 
+/************** GLUI_Graph::get_min_x() ********************/
+double
+GLUI_Graph::get_min_x()
+{
+   return min_x;
+}
+
 /************** GLUI_Graph::set_min_y() ********************/
 void
 GLUI_Graph::set_min_y( bool autom, double val)
@@ -580,6 +639,13 @@ GLUI_Graph::set_min_y( bool autom, double val)
       }
       min_y = min_y - ((maxy - min_y)?(maxy - min_y):(min_y)) * (val);
    }
+}
+
+/************** GLUI_Graph::get_min_y() ********************/
+double
+GLUI_Graph::get_min_y()
+{
+   return min_y;
 }
 
 /************** GLUI_Graph::set_max_x() ********************/
@@ -619,6 +685,13 @@ GLUI_Graph::set_max_x( bool autom, double val)
    }
 }
 
+/************** GLUI_Graph::get_max_x() ********************/
+double
+GLUI_Graph::get_max_x()
+{
+   return max_x;
+}
+
 /************** GLUI_Graph::set_max_y() ********************/
 void
 GLUI_Graph::set_max_y( bool autom, double val)
@@ -654,5 +727,132 @@ GLUI_Graph::set_max_y( bool autom, double val)
       }
       max_y = max_y + ((max_y - miny)?(max_y - miny):(max_y)) * (val);
    }
+}
+
+/************** GLUI_Graph::get_max_y() ********************/
+double
+GLUI_Graph::get_max_y()
+{
+   return max_y;
+}
+
+/****************************** GLUI_Graph::get_event() **********/
+
+int   GLUI_Graph::get_event( void )
+{
+   return event;
+}
+
+/****************************** GLUI_Graph::get_event_key() **********/
+
+int   GLUI_Graph::get_event_key( void )
+{
+   return event_key;
+}
+
+/****************************** GLUI_Graph::get_event_mod() **********/
+
+int   GLUI_Graph::get_event_mod( void )
+{
+   return event_mod;
+}
+
+/****************************** GLUI_Graph::get_event_x() **********/
+
+int   GLUI_Graph::get_event_x( void )
+{
+   return event_x;
+}
+
+/****************************** GLUI_Graph::get_event_y() **********/
+
+int   GLUI_Graph::get_event_y( void )
+{
+   return event_y;
+}
+
+/****************************** GLUI_Graph::get_graph_w() **********/
+
+int   GLUI_Graph::get_graph_w( void )
+{
+   return graph_w;
+}
+
+/****************************** GLUI_Graph::get_graph_h() **********/
+
+int   GLUI_Graph::get_graph_h( void )
+{
+   return graph_h;
+}
+
+/****************************** GLUI_Graph::get_series_num() **********/
+
+int    GLUI_Graph::get_series_num (int i)
+{
+   VALID_I(i);
+   return graph_data[i].data_num;
+}
+
+/****************************** GLUI_Graph::get_series_name() **********/
+
+const char *GLUI_Graph::get_series_name(int i)
+{
+   VALID_I(i);
+   return graph_data[i].name;
+}
+
+/****************************** GLUI_Graph::get_series_type() **********/
+
+int     GLUI_Graph::get_series_type(int i)
+{
+   VALID_I(i);
+   return graph_data[i].type;
+}
+
+/****************************** GLUI_Graph::get_series_size() **********/
+
+double  GLUI_Graph::get_series_size(int i)
+{
+   VALID_I(i);
+   return graph_data[i].size;
+}
+
+/****************************** GLUI_Graph::get_series_color() **********/
+
+const double *GLUI_Graph::get_series_color(int i)
+{
+   VALID_I(i);
+   return graph_data[i].color;
+}
+
+/****************************** GLUI_Graph::get_series_data_x() **********/
+
+const double *GLUI_Graph::get_series_data_x(int i)
+{
+   VALID_I(i);
+   return graph_data[i].data_x;
+}
+
+/****************************** GLUI_Graph::get_series_data_y() **********/
+
+const double *GLUI_Graph::get_series_data_y(int i)
+{
+   VALID_I(i);
+   return graph_data[i].data_y;
+}
+
+/****************************** GLUI_Graph::set_background() **********/
+
+void    GLUI_Graph::set_background(const double *c)
+{
+   for (int i=0; i<4; i++)
+      background[i]=c[i];
+}
+
+/****************************** GLUI_Graph::get_background() **********/
+
+const double *GLUI_Graph::get_background()
+{
+   return background;
 }
 
