@@ -1555,7 +1555,7 @@ SilUI::update_path()
          }
          _text[TEXT_PATH]->set_text(**text);   
 
-         if (strcmp(_graph[GRAPH_PATH]->name,"Parameter Votes vs. Arc-length") != 0)
+         if (_graph[GRAPH_PATH]->name != "Parameter Votes vs. Arc-length")
          {
             _graph[GRAPH_PATH]->set_name("Parameter Votes vs. Arc-length");
             _graph[GRAPH_PATH]->set_background(bkg_color);
@@ -1624,7 +1624,7 @@ SilUI::update_seg()
             }
             _text[TEXT_SEG]->set_text(**text);   
 
-            if (strcmp(_graph[GRAPH_SEG]->name,"Parameter Votes vs. Arc-length") != 0)
+            if (_graph[GRAPH_SEG]->name != "Parameter Votes vs. Arc-length")
             {
                _graph[GRAPH_SEG]->set_name("Parameter Votes vs. Arc-length");
                _graph[GRAPH_SEG]->set_background(bkg_color);
@@ -1638,7 +1638,7 @@ SilUI::update_seg()
          {
             assert(_strokePathIndex == -1);
 
-            if (strcmp(_graph[GRAPH_SEG]->name,"N/A") != 0) _graph[GRAPH_SEG]->set_name("N/A");
+            if (_graph[GRAPH_SEG]->name != "N/A") _graph[GRAPH_SEG]->set_name("N/A");
             _text[TEXT_SEG]->set_text("No path selected.");
             _button[BUT_SEG_NEXT]->disable();
             _button[BUT_SEG_PREV]->disable();
@@ -1710,7 +1710,7 @@ SilUI::update_vote()
                   text = str_ptr("Showing NONE of ") + str_ptr(g.num()) + " Votes";
                }
 
-               if (strcmp(_panel[PANEL_VOTE_DATA]->name,"Vote Information") != 0)
+               if (_panel[PANEL_VOTE_DATA]->name != "Vote Information")
                   _panel[PANEL_VOTE_DATA]->set_name("Vote Information");
 
                _button[BUT_VOTE_NEXT]->enable();
@@ -1720,7 +1720,7 @@ SilUI::update_vote()
             {
                assert(_voteIndex == -1);
 
-               if (strcmp(_panel[PANEL_VOTE_DATA]->name,"N/A") != 0)
+               if (_panel[PANEL_VOTE_DATA]->name != "N/A")
                   _panel[PANEL_VOTE_DATA]->set_name("N/A");
 
                text = str_ptr("No stroke selected");
@@ -1734,7 +1734,7 @@ SilUI::update_vote()
             assert(_voteIndex == -1);
             assert(_strokePathIndex == -1);
 
-            if (strcmp(_panel[PANEL_VOTE_DATA]->name,"N/A") != 0)
+            if (_panel[PANEL_VOTE_DATA]->name != "N/A")
                _panel[PANEL_VOTE_DATA]->set_name("N/A");
 
             text = str_ptr("No path and stroke selected");
@@ -3141,7 +3141,7 @@ SilUI::fps_display()
       stamp = _view->stamp();
    }
 
-   if (!(strcmp(_graph[GRAPH_PATH]->name,"Frames per Second")==0))
+   if (_graph[GRAPH_PATH]->name != "Frames per Second")
    {
       //Graph not configures for this output, lets do that...
 

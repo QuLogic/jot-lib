@@ -341,8 +341,7 @@ ToneShaderUI::apply_changes_to_texture(operation_id_t op, ToneShader* tex, int l
       tex->_layer[layer]._s1 = _slider[SLIDE_BACKLIGHT_B]->get_float_val();  
    } 
    if((op==OP_ALL) || (op==OP_TEXTURE)){
-      char* s = _listbox[LIST_TEXTURE]->curr_text.string;
-      str_ptr name(s);
+      str_ptr name = _listbox[LIST_TEXTURE]->curr_text.c_str();
       tex->set_tex(GtexUtil::toon_1D_name(name));  
    } 
    

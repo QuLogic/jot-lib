@@ -157,7 +157,7 @@ PresetsUI::preset_selected()
    //}
    if(val != 0)
    {
-      str_ptr filename = (char*)_listbox[LIST_PRESET]->curr_text;
+      str_ptr filename = _listbox[LIST_PRESET]->curr_text.c_str();
       _filename = (Config::JOT_ROOT() + _directory + filename);
       _parent->child_callback(this, PRESET_SELECTED);
     //  if(!_parent->child_callback(this, PRESET_SELECTED))
@@ -181,7 +181,7 @@ PresetsUI::preset_save_button()
    }
    else
    {
-      str_ptr filename = (char*)_listbox[LIST_PRESET]->curr_text;
+      str_ptr filename = _listbox[LIST_PRESET]->curr_text.c_str();
       _filename = (Config::JOT_ROOT() + _directory + filename);//_preset_filenames[val-1]);
       _parent->child_callback(this, PRESET_SAVE);
       _edittext[EDITTEXT_SAVE]->disable();

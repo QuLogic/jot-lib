@@ -334,10 +334,9 @@ PatchUI::apply_changes_to_patch(operation_id_t op, Patch* p)
       p->set_use_timed_lod_transitions((val==1));
    }
    if((op==OP_ALL) || (op==OP_TEX_CHANGED)){
-      char* s = _listbox[LIST_TEX_SEL]->curr_text.string;
-      str_ptr name(s);
+      str_ptr name = _listbox[LIST_TEX_SEL]->curr_text.c_str();
       if(name != "Other..."){
-         p->set_texture(str_ptr(s));
+         p->set_texture(name);
          GTexture* cur_texture = p->cur_tex();
          if(cur_texture)
             cur_texture->set_patch(p);   

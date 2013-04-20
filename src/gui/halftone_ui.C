@@ -518,7 +518,7 @@ HalftoneUI::apply_changes_to_texture(operation_id_t op, Halftone_TX* tex, int la
        else 
        {
          if(tex->get_layer(layer)->_mode){
-          str_ptr pattern = (char*)_listbox[LIST_PATTERN]->curr_text;
+          str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str();
           tex->set_texture_pattern(layer, pattern);
          }
        }

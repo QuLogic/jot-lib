@@ -551,16 +551,16 @@ PainterlyUI::apply_changes_to_texture(operation_id_t op, Painterly* tex, int lay
    }
    if((op==OP_ALL) || (op==OP_PATTERN_TEXTURE)){
       if(tex->get_layer(layer)->_mode){
-       str_ptr pattern = str_ptr((char*)_listbox[LIST_PATTERN]->curr_text); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
-       str_ptr paper   = str_ptr((char*)_listbox[LIST_PAPER]->curr_text);//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
+       str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str(); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
+       str_ptr paper   = _listbox[LIST_PAPER]->curr_text.c_str();//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
        // cerr << " ----------- " << pattern << " ---------- " <<  paper << endl;
        tex->init_layer(layer, pattern, paper);
       }
    }
    if((op==OP_ALL) || (op==OP_PAPER_TEXTURE)){
       if(tex->get_layer(layer)->_mode){ 
-       str_ptr pattern = str_ptr((char*)_listbox[LIST_PATTERN]->curr_text); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
-       str_ptr paper   = str_ptr((char*)_listbox[LIST_PAPER]->curr_text);//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
+       str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str(); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
+       str_ptr paper   = _listbox[LIST_PAPER]->curr_text.c_str();//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
        //cerr << " ----------- " << pattern << " ---------- " <<  paper << endl;
        tex->init_layer(layer, pattern, paper);
       }
