@@ -175,6 +175,43 @@ int GLUI::init( const char *text, long flags, int x, int y, int parent_window )
   return true;
 }
 
+/************************************************ GLUI::rename() **********/
+
+bool GLUI::rename( const char *text )
+{
+  int old_glut_window;
+
+  window_name = text;
+
+  if ( (flags & GLUI_SUBWINDOW) != GLUI_SUBWINDOW ) {
+    old_glut_window = glutGetWindow();
+    glutSetWindow( glut_window_id );
+    glutSetWindowTitle( window_name.c_str() );
+    glutSetWindow( old_glut_window );
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+/************************************************ GLUI::reposition() **********/
+
+bool GLUI::reposition( int x, int y )
+{
+  int old_glut_window;
+
+  if ( (flags & GLUI_SUBWINDOW) != GLUI_SUBWINDOW ) {
+    old_glut_window = glutGetWindow();
+    glutSetWindow( glut_window_id );
+    glutPositionWindow( x, y );
+    glutSetWindow( old_glut_window );
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 
 /**************************** GLUI_Main::create_standalone_window() ********/
 

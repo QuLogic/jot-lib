@@ -1601,6 +1601,8 @@ public:
     /***** Constructors and desctructors *****/
 
     int init( const char *name, long flags, int x, int y, int parent_window );
+    bool rename( const char *name );
+    bool reposition( int x, int y );
 protected:
     virtual int add_control( GLUI_Node *parent, GLUI_Control *control ) {
         return GLUI_Main::add_control( parent, control );
