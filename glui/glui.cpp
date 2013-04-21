@@ -807,6 +807,60 @@ void    GLUI_Main::mouse(int button, int state, int x, int y)
       mouse_button_down = false;
   }
 
+  else if ( button == GLUT_MIDDLE_BUTTON ) {
+    control = find_control( x, y );
+
+    if ( (state == GLUT_UP) AND middle_button_down ) {
+      if (middle_button_control != NULL) {
+        callthrough = middle_button_control->general_mouse_up_handler(GLUI_MOUSE_MIDDLE, x, y, control==middle_button_control);
+        middle_button_control = NULL;
+      }
+    }
+    else if ( (state == GLUT_DOWN) AND NOT middle_button_down ) {
+      if ( control /* AND control->enabled */ ) {
+        middle_button_control = control;
+        callthrough = middle_button_control->general_mouse_down_handler(GLUI_MOUSE_MIDDLE, x, y);
+        /* fall through to registered default handler */
+        if ( callthrough && default_middle_handler ) {
+          middle_button_control = default_middle_handler;
+          callthrough = middle_button_control->general_mouse_down_handler(GLUI_MOUSE_MIDDLE, x, y);
+        }
+      }
+    }
+
+    if ( state == GLUT_DOWN )
+      middle_button_down = true;
+    else if ( state == GLUT_UP )
+      middle_button_down = false;
+  }
+
+  else if ( button == GLUT_RIGHT_BUTTON ) {
+    control = find_control( x, y );
+
+    if ( (state == GLUT_UP) AND right_button_down ) {
+      if (right_button_control != NULL) {
+        callthrough = right_button_control->general_mouse_up_handler(GLUI_MOUSE_RIGHT, x, y, control==right_button_control);
+        right_button_control = NULL;
+      }
+    }
+    else if ( (state == GLUT_DOWN) AND NOT right_button_down ) {
+      if ( control /* AND control->enabled */ ) {
+        right_button_control = control;
+        callthrough = right_button_control->general_mouse_down_handler(GLUI_MOUSE_RIGHT, x, y);
+        /* fall through to registered default handler */
+        if ( callthrough && default_right_handler ) {
+          right_button_control = default_right_handler;
+          callthrough = right_button_control->general_mouse_down_handler(GLUI_MOUSE_RIGHT, x, y);
+        }
+      }
+    }
+
+    if ( state == GLUT_DOWN )
+      right_button_down = true;
+    else if ( state == GLUT_UP )
+      right_button_down = false;
+  }
+
   /**
     NO CALLTHROUGH NEEDED FOR MOUSE EVENTS
     if ( callthrough AND glut_mouse_CB )
@@ -1115,9 +1169,15 @@ void         GLUI_Main::restore_draw_buffer( int buffer_state )
 GLUI_Main::GLUI_Main( void )
 {
   mouse_button_down       = false;
+  middle_button_down      = false;
+  right_button_down       = false;
   w                       = 0;
   h                       = 0;
   active_control          = NULL;
+  middle_button_control   = NULL;
+  right_button_control    = NULL;
+  default_middle_handler  = NULL;
+  default_right_handler   = NULL;
   mouse_over_control      = NULL;
   main_gfx_window_id      = -1;
   glut_window_id          = -1;

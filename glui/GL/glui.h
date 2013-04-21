@@ -270,6 +270,11 @@ class GLUI_List;
 
 class Arcball;
 
+/*** Button Event Enums ***/
+#define  GLUI_MOUSE_LEFT      1
+#define  GLUI_MOUSE_MIDDLE    2
+#define  GLUI_MOUSE_RIGHT     3
+
 /*** Flags for GLUI class constructor ***/
 #define  GLUI_SUBWINDOW          ((long)(1<<1))
 #define  GLUI_SUBWINDOW_TOP      ((long)(1<<2))
@@ -648,10 +653,16 @@ protected:
     /*** Variables ***/
     int           main_gfx_window_id;
     int           mouse_button_down;
+    int           middle_button_down;
+    int           right_button_down;
     int           glut_window_id;
     int           top_level_glut_window_id;
     GLUI_Control *active_control;
     GLUI_Control *mouse_over_control;
+    GLUI_Control *middle_button_control;
+    GLUI_Control *right_button_control;
+    GLUI_Control *default_middle_handler;
+    GLUI_Control *default_right_handler;
     GLUI_Panel   *main_panel;
     enum buffer_mode_t {
       buffer_front=1, ///< Draw updated controls directly to screen.
@@ -753,6 +764,9 @@ public:
     int          get_cursor( void );
     int          get_w() { return w; }
     int          get_h() { return h; }
+    void         set_default_middle_handler( GLUI_Control *c ) { default_middle_handler = c; }
+    void         set_default_right_handler( GLUI_Control *c ) { default_right_handler = c; }
+
 };
 
 /************************************************************/
@@ -840,6 +854,10 @@ public:
     virtual void   get_float_array_val( float *array_ptr );
     virtual int    get_id( void ) const { return user_id; }
     virtual void   set_id( int id ) { user_id=id; }
+
+    virtual int    general_mouse_down_handler( int but, int local_x, int local_y ) { return false; }
+    virtual int    general_mouse_up_handler( int but,  int local_x, int local_y, int inside ) { return false; }
+    virtual int    general_mouse_held_down_handler( int but,  int local_x, int local_y, int inside ) { return false; }
 
     virtual int mouse_down_handler( int local_x, int local_y )                 { return false; }
     virtual int mouse_up_handler( int local_x, int local_y, bool inside )       { return false; }
