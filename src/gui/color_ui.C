@@ -409,7 +409,8 @@ ColorUI::button_cb(int id)
           WORLD::message("Click PALLET to overwite with current color, To CANCEL click THIS button again");
       }else{
          _ui[id >> ID_SHIFT]->_set_palette_mode = false;
-         _ui[id >> ID_SHIFT]->_button[BUT_CURRENT]->draw_unpressed();
+         if (_ui[id >> ID_SHIFT]->_button[BUT_CURRENT]->can_draw())
+            _ui[id >> ID_SHIFT]->_button[BUT_CURRENT]->translate_and_draw_front();
       }
       
       break;
