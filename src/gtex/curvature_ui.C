@@ -33,7 +33,7 @@ using namespace std;
 #include <GL/glew.h>
 
 #include "geom/winsys.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 
 #include "gtex/line_drawing.H"
 #include "gtex/curvature_texture.H"

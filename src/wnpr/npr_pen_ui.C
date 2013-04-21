@@ -31,7 +31,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 // #include "draw/draw.H"
 #include "base_jotapp/base_jotapp.H"
 #include "npr_pen.H"
@@ -967,7 +967,7 @@ NPRPenUI::set_layer_name(
    {
       test = str_ptr(i) + ":Norm:" + name;
 
-      if (_listbox[LIST_LAYER]->check_item_fit(**test))
+      if (jot_check_glui_fit(_listbox[LIST_LAYER], **test))
          ((NPRSolidTexture*)t)->set_layer_name(name);
    
       return true;
@@ -976,7 +976,7 @@ NPRPenUI::set_layer_name(
    {
       test = str_ptr(i) + ":Toon:" + name;
 
-      if (_listbox[LIST_LAYER]->check_item_fit(**test))
+      if (jot_check_glui_fit(_listbox[LIST_LAYER], **test))
          ((XToonTexture*)t)->set_layer_name(name);
       return true;
    }
@@ -984,7 +984,7 @@ NPRPenUI::set_layer_name(
    {
       test = str_ptr(i) + ":XToon:" + name;
 
-      if (_listbox[LIST_LAYER]->check_item_fit(**test))
+      if (jot_check_glui_fit(_listbox[LIST_LAYER], **test))
          ((GLSLXToonShader*)t)->set_layer_name(name);
       return true;
    }
@@ -2051,7 +2051,7 @@ NPRPenUI::rename_layer()
       }
 
       fix = false;
-      while (!_listbox[LIST_LAYER]->check_item_fit(
+      while (!jot_check_glui_fit(_listbox[LIST_LAYER],
                            **try_layer_name(k-1,newtext)) && strlen(newtext)>0)
       {
          fix = true;

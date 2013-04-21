@@ -22,7 +22,7 @@
 #include "disp/view.H"
 #include "geom/winsys.H"
 #include <GL/glew.h>
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/support.H"
 #include "base_ui.H"
 

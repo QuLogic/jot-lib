@@ -16,7 +16,10 @@
 
 *****************************************************************************/
 
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
+#include "glui_internal.h"
+#include "glui_internal_control.h"
+#include <cassert>
 
 #define GLUI_GRAPH_FONT_HEIGHT					9
 #define GLUI_GRAPH_FONT_DROP						3

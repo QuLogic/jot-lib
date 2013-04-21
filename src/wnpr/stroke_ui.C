@@ -60,7 +60,7 @@
 #include "base_jotapp/base_jotapp.H"
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/config.H"
 
 #include "stroke_ui.H"
@@ -1110,7 +1110,7 @@ StrokeUI::fill_preset_listbox(
          strcpy(basename,**in_files[i]);
          basename[len-4] = 0;
 
-         if ( listbox->check_item_fit(basename) == 1)
+         if ( jot_check_glui_fit(listbox, basename) )
          {
             save_files += full_path + in_files[i];
             listbox->add_item(save_files.num(), basename);
@@ -1399,7 +1399,7 @@ StrokeUI::preset_save_text()
       }
 
    fix = false;
-   while (!_listbox[LIST_PRESET]->check_item_fit(newtext) && strlen(newtext)>0)
+   while (!jot_check_glui_fit(_listbox[LIST_PRESET], newtext) && strlen(newtext)>0)
       {
          fix = true;
          newtext[strlen(newtext)-1]=0;

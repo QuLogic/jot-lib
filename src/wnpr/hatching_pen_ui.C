@@ -41,7 +41,7 @@
 #include <GL/glew.h>
 
 #include "geom/winsys.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 
 #include "wnpr/hatching_pen.H"
 #include "wnpr/hatching_pen_ui.H"

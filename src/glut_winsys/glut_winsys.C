@@ -26,7 +26,7 @@
 #include "tty_glut.H"
 #include "mouse.H" 
 #include "kbd.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "glui_menu.H"
 #include "glui_dialogs.H"
 

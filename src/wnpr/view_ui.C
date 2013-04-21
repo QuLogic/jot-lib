@@ -33,7 +33,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "gtex/paper_effect.H"
 #include "std/config.H"
 

@@ -33,7 +33,7 @@
 #include <GL/glew.h>
 
 #include "geom/winsys.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "base_jotapp/base_jotapp.H"
 #include "stroke/base_stroke.H"
 
@@ -771,7 +771,7 @@ PatternPenUI::fill_preset_listbox(
          strcpy(basename,**in_files[i]);
          basename[len-4] = 0;
 
-         if ( listbox->check_item_fit(basename) == 1)
+         if ( jot_check_glui_fit(listbox, basename) )
          {
             save_files += full_path + in_files[i];
             listbox->add_item(save_files.num(), basename);

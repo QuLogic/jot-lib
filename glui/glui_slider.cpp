@@ -16,7 +16,8 @@
 
 *****************************************************************************/
 
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
+#include "glui_internal_control.h"
 #include "arcball.h"
 #include "algebra3.h"
 

@@ -30,7 +30,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "wnpr/line_pen.H"
 #include "wnpr/line_pen_ui.H"
 #include "tess/tex_body.H"

@@ -21,7 +21,7 @@
 #include "glut_winsys.H" 
 #include "glui_dialogs.H" 
 #include "tty_glut.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/file.H"
 #include "widgets/alert_box_icon_exclaim.H"
 #include "widgets/alert_box_icon_question.H"
@@ -2904,13 +2904,13 @@ GLUIFileSelect::update_pathlist()
       //Add this placeholder for final selection
       //to avoid flickering...
       foo = _current_path->_name; 
-      bar=foo;j=foo.len();while(!_listbox[LIST_PATH]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+      bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
       _listbox[LIST_PATH]->add_item(-2, **bar);  
 
       //Master root 
       _listbox[LIST_PATH]->add_item(-1,         "--File Systems----------------");
       foo = dir->_name; 
-      bar=foo;j=foo.len();while(!_listbox[LIST_PATH]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+      bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
       _listbox[LIST_PATH]->add_item(dirs.num(), **bar);  
 
       assert(dir->_contents.num() > 0); //At least holds JOT_ROOT and drives (WIN32) or root directoy (Unix)
@@ -2924,7 +2924,7 @@ GLUIFileSelect::update_pathlist()
          while ( (i < dir->_contents.num()) && (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DRIVE))
          {
             foo = dir->_contents[i]->_name; 
-            bar=foo;j=foo.len();while(!_listbox[LIST_PATH]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
             _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, **bar);
             i++;
          }
@@ -2938,7 +2938,7 @@ GLUIFileSelect::update_pathlist()
          {
             assert(dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY);
             foo = dir->_contents[i]->_name; 
-            bar=foo;j=foo.len();while(!_listbox[LIST_PATH]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
             _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, **bar);
             i++;
          }
@@ -2954,7 +2954,7 @@ GLUIFileSelect::update_pathlist()
          for (i=dirs.num()-1; i>=0 ; i--)
          {
             foo = dirs[i]->_name; 
-            bar=foo;j=foo.len();while(!_listbox[LIST_PATH]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
             _listbox[LIST_PATH]->add_item(i, **bar);
          }
       }
@@ -3192,7 +3192,7 @@ GLUIFileSelect::update_listing()
             _activetext[ACTIVETEXT_NUM + i]->set_name(" ");
             _activetext[ACTIVETEXT_NUM + i]->set_w(GLUI_FILE_SELECT_NAME_WIDTH);
             foo = e->_name; 
-            bar=foo;j=foo.len();while(!_activetext[ACTIVETEXT_NUM + i]->check_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_activetext[ACTIVETEXT_NUM + i], **bar)) bar=shorten_string(--j,foo);
             _activetext[ACTIVETEXT_NUM + i]->set_text(**bar);
             _activetext[ACTIVETEXT_NUM + i]->set_highlighted(i == _current_selection);
 
@@ -3208,7 +3208,7 @@ GLUIFileSelect::update_listing()
             _statictext[STATICTEXT_NUM + 2*i]->set_name(" ");
             _statictext[STATICTEXT_NUM + 2*i]->set_w(GLUI_FILE_SELECT_SIZE_WIDTH);
             foo = chr_buf; 
-            bar=foo;j=foo.len();while(!_statictext[STATICTEXT_NUM + 2*i]->check_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i], **bar)) bar=shorten_string(--j,foo);
             _statictext[STATICTEXT_NUM + 2*i]->set_text(**bar);         
 
             //XXX - Truncate...
@@ -3224,7 +3224,7 @@ GLUIFileSelect::update_listing()
             _statictext[STATICTEXT_NUM + 2*i + 1]->set_name(" ");
             _statictext[STATICTEXT_NUM + 2*i + 1]->set_w(GLUI_FILE_SELECT_DATE_WIDTH);      
             foo = chr_buf; 
-            bar=foo;j=foo.len();while(!_statictext[STATICTEXT_NUM + 2*i + 1]->check_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i + 1], **bar)) bar=shorten_string(--j,foo);
             _statictext[STATICTEXT_NUM + 2*i + 1]->set_text(**bar);
          }
          else
@@ -3541,13 +3541,13 @@ GLUIFileSelect::update_actions()
 
          //Add this placeholder for final selection to avoid flickering...
          foo = _filters[_filter]; 
-         bar=foo;j=foo.len();while(!_listbox[LIST_FILTER]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+         bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_FILTER], **bar)) bar=shorten_string(--j,foo);
          _listbox[LIST_FILTER]->add_item(-1, **bar);
 
          for (i=0; i < _filters.num(); i++) 
          {
             foo = _filters[i]; 
-            bar=foo;j=foo.len();while(!_listbox[LIST_FILTER]->check_item_fit(**bar)) bar=shorten_string(--j,foo);
+            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_FILTER], **bar)) bar=shorten_string(--j,foo);
             _listbox[LIST_FILTER]->add_item(i, **bar);
          }
 

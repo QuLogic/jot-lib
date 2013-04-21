@@ -22,7 +22,7 @@
 #include "std/stop_watch.H"
 #include "gtex/ref_image.H"
 #include "gtex/halo_ref_image.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 
 #include "painterly.H"
 

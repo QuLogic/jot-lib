@@ -20,7 +20,7 @@
  *****************************************************************/
 #include "gtex/ref_image.H"
 #include "gtex/halo_ref_image.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "mesh/mi.H"
 #include "std/stop_watch.H"
 

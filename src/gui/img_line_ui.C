@@ -20,7 +20,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/config.H"
 
 #include "img_line_ui.H"

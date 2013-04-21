@@ -16,7 +16,9 @@
 
 *****************************************************************************/
 
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
+#include "glui_internal_control.h"
+#include <cassert>
 
 #define GLUI_BITMAPBOX_FONT_HEIGHT					9
 #define GLUI_BITMAPBOX_FONT_DROP						3

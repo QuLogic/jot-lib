@@ -1,4 +1,4 @@
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "glui_internal.h"
 
 /****************************** GLUI_ActiveText::mouse_down_handler() **********/

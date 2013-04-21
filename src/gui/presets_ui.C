@@ -24,7 +24,7 @@
 
 #include "geom/winsys.H"
 #include "geom/world.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/config.H"
 
 #include "presets_ui.H"
@@ -247,7 +247,7 @@ PresetsUI::preset_save_text()
       }
 
    fix = false;
-   while (!_listbox[LIST_PRESET]->check_item_fit(newtext) && strlen(newtext)>0)
+   while (!jot_check_glui_fit(_listbox[LIST_PRESET], newtext) && strlen(newtext)>0)
       {
          fix = true;
          newtext[strlen(newtext)-1]=0;

@@ -19,7 +19,7 @@
 #include "std/support.H"
 #include "disp/view.H"
 #include "geom/winsys.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 
 #include "file_listbox.H"
 

@@ -36,7 +36,7 @@
 #include "geom/winsys.H"
 #include "geom/world.H"
 #include "tess/tex_body.H"
-#include <GL/glui.h>
+#include "glui/glui_jot.H"
 #include "std/stop_watch.H"
 #include "npr/npr_texture.H"
 #include "std/config.H"
@@ -1934,7 +1934,7 @@ SilUI::fill_buffer_listbox(
          strcpy(basename,**in_files[i]);
          basename[len-4] = 0;
 
-         if ( listbox->check_item_fit(basename) == 1)
+         if ( jot_check_glui_fit(listbox, basename) )
          {
             save_files += full_path + in_files[i];
             listbox->add_item(save_files.num(), basename);
@@ -2010,7 +2010,7 @@ SilUI::buffer_name_text()
    }
 
    fix = false;
-   while (!_listbox[LIST_BUFFER]->check_item_fit(newtext) && strlen(newtext)>0)
+   while (!jot_check_glui_fit(_listbox[LIST_BUFFER], newtext) && strlen(newtext)>0)
    {
       fix = true;
       newtext[strlen(newtext)-1]=0;
