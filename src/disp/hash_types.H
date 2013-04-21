@@ -23,7 +23,7 @@
 
 class   HASHobs;
 class   hashdist;
-typedef ARRAYptrs<HASHobs *> HASHobs_list;
+typedef ARRAY<HASHobs *> HASHobs_list;
 class HASHobs {
    static HASHobs_list  *_hash_obs_list;
    HASHobs_list *hash_list()     { if (!_hash_obs_list) 

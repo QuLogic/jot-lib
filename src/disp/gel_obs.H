@@ -50,7 +50,7 @@ class GELdistobs {
 #define CEXISTobs_list const EXISTobs_list
 #define CEXISTobs      const EXISTobs
 class   EXISTobs;
-typedef ARRAYptrs<EXISTobs*> EXISTobs_list;
+typedef ARRAY<EXISTobs*> EXISTobs_list;
 //--------------------------------------------
 // EXISTobs -
 //   An object that can be notified when some
@@ -79,7 +79,7 @@ class EXISTobs {
 #define CDISPobs_list const DISPobs_list
 #define CDISPobs      const DISPobs
 class DISPobs;
-typedef ARRAYptrs<DISPobs*> DISPobs_list;
+typedef ARRAY<DISPobs*> DISPobs_list;
 //--------------------------------------------
 // DISPobs -
 //   An object that can be notified when some
@@ -114,7 +114,7 @@ class DISPobs {
 #define CDUPobs_list const DUPobs_list
 #define CDUPobs      const DUPobs
 class   DUPobs;
-typedef ARRAYptrs<DUPobs*> DUPobs_list;
+typedef ARRAY<DUPobs*> DUPobs_list;
 //--------------------------------------------
 // DUPobs -
 //   An object that can be notified when some
@@ -141,7 +141,7 @@ class DUPobs {
 #define CGRABobs_list const GRABobs_list
 #define CGRABobs      const GRABobs
 class GRABobs;
-typedef ARRAYptrs<GRABobs*> GRABobs_list;
+typedef ARRAY<GRABobs*> GRABobs_list;
 //--------------------------------------------
 // GRABobs -
 //   An object that can be notified when some
@@ -169,7 +169,7 @@ class GRABobs {
 #define CSAVEobs_list const SAVEobs_list
 #define CSAVEobs      const SAVEobs
 class SAVEobs;
-typedef ARRAYptrs<SAVEobs*> SAVEobs_list;
+typedef ARRAY<SAVEobs*> SAVEobs_list;
 //--------------------------------------------
 // SAVEobs -
 //   An object that can be notified when some
@@ -213,7 +213,7 @@ class SAVEobs {
 #define CLOADobs_list const LOADobs_list
 #define CLOADobs      const LOADobs
 class LOADobs;
-typedef ARRAYptrs<LOADobs*> LOADobs_list;
+typedef ARRAY<LOADobs*> LOADobs_list;
 //--------------------------------------------
 // LOADobs -
 //   An object that can be notified when some

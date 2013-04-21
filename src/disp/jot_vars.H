@@ -30,7 +30,7 @@
 // DATA_ITEM methods such as format or decode.
 //
 class JOTvar_obs;
-typedef ARRAYptrs<JOTvar_obs *> JOTvar_obs_list;
+typedef ARRAY<JOTvar_obs *> JOTvar_obs_list;
 class JOTvar_obs {
    static JOTvar_obs_list  *_jot_var_obs_list;
    JOTvar_obs_list *jot_var_obs_list(){ if (!_jot_var_obs_list) 

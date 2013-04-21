@@ -537,10 +537,6 @@ operator +(CARRAY<T>& a, CARRAY<S>& b)
    return ret += b;
 }
 
-// XXX - hack for backward compatibility -- should just remove
-// occurrences of ARRAYptrs:
-#define ARRAYptrs ARRAY
-
 //----------------------------------------------
 //
 //  LIST:

@@ -428,7 +428,7 @@ class DEVmod_desc {
      int             operator == (CDEVmod_desc &d) const
 	       { return d._mod==_mod && d._ice==_ice && d._ind==_ind; }
 };
-typedef ARRAYptrs<DEVmod_desc> DEVmod_desc_list;
+typedef ARRAY<DEVmod_desc> DEVmod_desc_list;
 
 
 //------------------------------------------------------

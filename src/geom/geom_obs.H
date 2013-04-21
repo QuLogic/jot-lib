@@ -80,7 +80,7 @@ class XFORMobs {
 #define CCOLORobs_list const COLORobs_list
 #define CCOLORobs      const COLORobs
 class COLORobs;
-typedef ARRAYptrs<COLORobs*> COLORobs_list;
+typedef ARRAY<COLORobs*> COLORobs_list;
 //--------------------------------------------
 // COLORobs -
 //   An object that can be notified when some
@@ -109,7 +109,7 @@ class COLORobs {
 #define CTRANSPobs_list const TRANSPobs_list
 #define CTRANSPobs      const TRANSPobs
 class TRANSPobs;
-typedef ARRAYptrs<TRANSPobs*> TRANSPobs_list;
+typedef ARRAY<TRANSPobs*> TRANSPobs_list;
 //--------------------------------------------
 // TRANSPobs -
 //   An object that can be notified when some
@@ -132,7 +132,7 @@ class TRANSPobs {
 #define CTEXTUREobs_list const TEXTUREobs_list
 #define CTEXTUREobs      const TEXTUREobs
 class TEXTUREobs;
-typedef ARRAYptrs<TEXTUREobs*> TEXTUREobs_list;
+typedef ARRAY<TEXTUREobs*> TEXTUREobs_list;
 //--------------------------------------------
 // TEXTUREobs -
 //   An object that can be notified when some
@@ -158,7 +158,7 @@ class TEXTUREobs {
 #define CCSGobs_list const CSGobs_list
 #define CCSGobs      const CSGobs
 class CSGobs;
-typedef ARRAYptrs<CSGobs*> CSGobs_list;
+typedef ARRAY<CSGobs*> CSGobs_list;
 //--------------------------------------------
 // CSGobs -
 //   An object that can be notified when some
@@ -181,7 +181,7 @@ class CSGobs {
 #define CGEOMobs_list const GEOMobs_list
 #define CGEOMobs      const GEOMobs
 class GEOMobs;
-typedef ARRAYptrs<GEOMobs*> GEOMobs_list;
+typedef ARRAY<GEOMobs*> GEOMobs_list;
 //--------------------------------------------
 // GEOMobs -
 //   An object that can be notified when some

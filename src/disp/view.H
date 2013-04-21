@@ -63,7 +63,7 @@ MAKE_PTR_SUBC(VIEW, SCHEDULER);
 class VIEWobs {
 
  public:
-   typedef ARRAYptrs<VIEWobs *> view_list;
+   typedef ARRAY<VIEWobs *> view_list;
  protected:
    static view_list *_view_obs;
    static view_list *viewobs_list() { return _view_obs ? _view_obs: 
@@ -94,7 +94,7 @@ class VIEWlist : public LIST<VIEWptr> {
 // the first time
 //
 class ThreadObs;
-typedef ARRAYptrs<ThreadObs*> Threadobs_list;
+typedef ARRAY<ThreadObs*> Threadobs_list;
 class ThreadObs {
  protected:
    static Threadobs_list *_all_thread;
