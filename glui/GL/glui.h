@@ -1041,6 +1041,8 @@ protected:
 */
 class GLUIAPI GLUI_Checkbox : public GLUI_Control
 {
+private:
+    bool show_name;
 public:
     int  orig_value;
     bool currently_inside;
@@ -1058,6 +1060,7 @@ public:
     void draw_active_area( void );
     void draw_empty_box( void );
     void set_int_val( int new_val );
+    void set_show_name( bool s ) { show_name = s; set_w(w); }
 
 /**
  Create a new checkbox object.
@@ -1082,6 +1085,7 @@ protected:
         text_x_offset  = 18;
         can_activate   = true;
         live_type      = GLUI_LIVE_INT;   /* This control has an 'int' live var */
+        show_name      = true;
     }
 };
 

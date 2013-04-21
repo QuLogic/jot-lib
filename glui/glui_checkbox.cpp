@@ -131,7 +131,8 @@ void    GLUI_Checkbox::draw( int x, int y )
 
   draw_active_area();
 
-  draw_name( text_x_offset, 10);
+  if ( show_name )
+    draw_name( text_x_offset, 10 );
 }
 
 /**************************** GLUI_Checkbox::draw_active_area() **************/
@@ -140,6 +141,8 @@ void    GLUI_Checkbox::draw_active_area( void )
 {
   GLUI_DRAWINGSENTINAL_IDIOM
   int text_width, left, right;
+
+  if ( !show_name )  return;
 
   text_width = _glutBitmapWidthString( glui->font, name.c_str() );
   left       = text_x_offset-3;
@@ -173,8 +176,8 @@ void   GLUI_Checkbox::update_size( void )
 
   text_size = _glutBitmapWidthString( glui->font, name.c_str() );
 
-  /*  if ( w < text_x_offset + text_size + 6 )              */
-  w = text_x_offset + text_size + 6 ;
+  if ( w < text_x_offset + ((show_name)?(text_size + 6):(-5)) )
+      w = text_x_offset + ((show_name)?(text_size + 6):(-5));
 }
 
 
