@@ -221,6 +221,7 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
   /*  has_selection = (sel_start != sel_end);              */
 
   if ( key == CTRL('m') ) {           /* RETURN */
+    event_key = CTRL('m');
     /*    glui->deactivate_current_control();              */
     deactivate();  /** Force callbacks, etc **/
     activate(GLUI_ACTIVATE_TAB);     /** Reselect all text **/
@@ -228,6 +229,7 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
     return true;
   }
   else if ( key  == CTRL('[')) {         /* ESCAPE */
+    event_key = CTRL('[');
     glui->deactivate_current_control();
     return true;
   }
@@ -451,6 +453,8 @@ void    GLUI_EditText::activate( int how )
     dump( stdout, "-> ACTIVATE" );
 
   active = true;
+
+  event_key = -1;
 
   if ( how == GLUI_ACTIVATE_MOUSE )
     return;  /* Don't select everything if activated with mouse */

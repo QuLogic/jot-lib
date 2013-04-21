@@ -1621,6 +1621,8 @@ protected:
 
 class GLUIAPI GLUI_EditText : public GLUI_Control
 {
+private:
+    int                 event_key;
 public:
     int                 has_limits;
     int                 data_type;
@@ -1672,6 +1674,7 @@ public:
     void set_text( const char *text );
     void set_text( const GLUI_String &s) { set_text(s.c_str()); }
     const char *get_text()               { return text.c_str(); }
+    int  get_event_key( void ) { int ret = event_key; event_key=-1; return ret; };
 
     void dump( FILE *out, const char *text );
 
