@@ -486,7 +486,7 @@ GLUIAlertBox::build_glui()
    if (_default >= 0)
    {
       assert(_default < _button.num());
-      _glui->activate_control(_button[_default],GLUI_ACTIVATE_DEFAULT);
+      _glui->activate_control(_button[_default],GLUI_ACTIVATE_TAB);
    }
 }
 
@@ -1222,7 +1222,7 @@ GLUIFileSelect::build_glui()
    // small middle button drag events...
    _glui->set_default_middle_handler(_bitmapbox[BITMAPBOX_SCROLL_FILE]);
 
-   _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_DEFAULT);
+   _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_TAB);
 
 }
 
@@ -2147,7 +2147,7 @@ GLUIFileSelect::do_scrollbar(int e, int x, int y, int i, int k, int m)
                //with a fixed file slot active...
                if (_activetext[ACTIVETEXT_NUM + i]->active)
                {
-                  _glui->disactivate_current_control();
+                  _glui->deactivate_current_control();
                   _glui->activate_control(_bitmapbox[BITMAPBOX_SCROLL_FILE], GLUI_ACTIVATE_MOUSE);
                }
             }
@@ -3448,7 +3448,7 @@ GLUIFileSelect::update_actions()
                                     (_edittext[EDITTEXT_FILE]->string_width(_listbox[LIST_FILTER]->get_name()) - 
                                              _edittext[EDITTEXT_FILE]->string_width(_edittext[EDITTEXT_FILE]->get_name())));
       _edittext[EDITTEXT_FILE]->enable();
-      _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_DEFAULT);
+      _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_TAB);
 
       _button[BUT_ACTION]->set_name("RENAME");
       _button[BUT_ACTION]->enable();
@@ -3475,7 +3475,7 @@ GLUIFileSelect::update_actions()
 
       _button[BUT_CANCEL]->set_name("Cancel");
       _button[BUT_CANCEL]->enable();
-      _glui->activate_control(_button[BUT_CANCEL],GLUI_ACTIVATE_DEFAULT);
+      _glui->activate_control(_button[BUT_CANCEL],GLUI_ACTIVATE_TAB);
    }
    else if (_current_mode == MODE_ADD) 
    {
@@ -3490,7 +3490,7 @@ GLUIFileSelect::update_actions()
                                     (_edittext[EDITTEXT_FILE]->string_width(_listbox[LIST_FILTER]->get_name()) - 
                                              _edittext[EDITTEXT_FILE]->string_width(_edittext[EDITTEXT_FILE]->get_name())));
       _edittext[EDITTEXT_FILE]->enable();
-      _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_DEFAULT);
+      _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_TAB);
 
       _button[BUT_ACTION]->set_name("CREATE");
       _button[BUT_ACTION]->enable();
@@ -3700,7 +3700,7 @@ GLUIFileSelect::button_cb(int id)
             else if (text.contains(bad_chars))
             {
                _edittext[EDITTEXT_FILE]->set_text("BadFilename");
-               _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_DEFAULT);
+               _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_TAB);
                do_refresh();
             }
             else
