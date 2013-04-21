@@ -84,7 +84,10 @@ void    GLUI_StaticText::draw_text( void )
     return;
 
   erase_text();
-  draw_name( 0, 9 );
+  if ( right_justify )
+    draw_name( w - string_width( name ), 9 );
+  else
+    draw_name( 0, 9 );
 }
 
 

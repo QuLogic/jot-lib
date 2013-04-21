@@ -1997,7 +1997,10 @@ protected:
 
 class GLUIAPI GLUI_StaticText : public GLUI_Control
 {
+private:
+    bool right_justify;
 public:
+    void set_right_justify( bool r ) { right_justify = r; }
     void set_text( const char *text );
     void draw( int x, int y );
     void draw_text( void );
@@ -2012,6 +2015,7 @@ protected:
         h       = GLUI_STATICTEXT_SIZE;
         name    = "";
         can_activate  = false;
+        right_justify = false;
     }
 };
 
