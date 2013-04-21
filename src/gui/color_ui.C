@@ -251,8 +251,7 @@ ColorUI::save_preset()
    
    ARRAY<COLOR> c;
    for (int i=0; i<BUT_NUM; ++i){
-      float col[3];
-      _button[i]->get_color(col[0], col[1], col[2]);      
+      float *col = _button[i]->glui->bkgd_color_f;
       c.add(COLOR(col[0], col[1], col[2]));
    }
    fout << c;
@@ -302,12 +301,18 @@ ColorUI::set_current_color(float a, float b, float c, bool rgb_input, bool updat
    _edittext[EDITTEXT_G]->set_float_val(int(tmp[1]*mult));
    _edittext[EDITTEXT_B]->set_float_val(int(tmp[2]*mult));
 
-   float col[3];
-   if(update_last){
-      _button[BUT_CURRENT]->get_color(col[0], col[1], col[2]);
-      _button[BUT_LAST]->set_color(col[0], col[1], col[2]); 
+   GLUI *current = _button[BUT_CURRENT]->glui;
+   if (update_last) {
+      GLUI *last = _button[BUT_LAST]->glui;
+      for (int i=0; i < 3; i++) {
+	 last->bkgd_color[i] = current->bkgd_color[i];
+	 last->bkgd_color_f[i] = current->bkgd_color_f[i];
+      }
    }
-   _button[BUT_CURRENT]->set_color(_color[0], _color[1], _color[2]);
+   for (int i=0; i < 3; i++) {
+      current->bkgd_color_f[i] = _color[i];
+      current->bkgd_color[i] = (unsigned char)(_color[i] * 255.0);
+   }
 }
 
 
@@ -368,10 +373,17 @@ ColorUI::apply_color(CARRAY<COLOR>& colors)
 
    for(int i=0; i < BUT_NUM; ++i)
    {
-      if(i < colors.num())
-         _button[i]->set_color(colors[i][0], colors[i][1], colors[i][2]);
-      else
-         _button[i]->set_color(0.0, 0.0, 0.0);
+      if (i < colors.num()) {
+         for (int j=0; j < 3; j++) {
+            _button[i]->glui->bkgd_color_f[j] = colors[i][j];
+            _button[i]->glui->bkgd_color[j] = (unsigned char)(colors[i][j] * 255.0);
+         }
+      } else {
+         for (int j=0; j < 3; j++) {
+            _button[i]->glui->bkgd_color[j] = 0;
+            _button[i]->glui->bkgd_color_f[j] = 0.0;
+         }
+      }
    }
   
 }
@@ -380,12 +392,12 @@ ColorUI::apply_color(CARRAY<COLOR>& colors)
 void
 ColorUI::button_cb(int id)
 {
-   float c[3];
+   float *c;
    switch(id&ID_MASK)
    {
    case BUT_LAST:     
-      _ui[id >> ID_SHIFT]->_button[BUT_LAST]->get_color(c[0], c[1], c[2]);
-      _ui[id >> ID_SHIFT]->set_current_color(c[0],c[1], c[2], true, true);
+      c = _ui[id >> ID_SHIFT]->_button[BUT_LAST]->glui->bkgd_color_f;
+      _ui[id >> ID_SHIFT]->set_current_color(c[0], c[1], c[2], true, true);
       _ui[id >> ID_SHIFT]->_parent->child_callback(_ui[id >> ID_SHIFT], 0);
      
       break;
@@ -414,13 +426,17 @@ ColorUI::button_cb(int id)
    case PRESET10:
    case PRESET11:
 
-      if(_ui[id >> ID_SHIFT]->_set_palette_mode){
-         _ui[id >> ID_SHIFT]->_button[BUT_CURRENT]->get_color(c[0], c[1], c[2]);
-         _ui[id >> ID_SHIFT]->_button[id&ID_MASK]->set_color(c[0], c[1], c[2]);
+      if (_ui[id >> ID_SHIFT]->_set_palette_mode) {
+         GLUI *current = _ui[id >> ID_SHIFT]->_button[BUT_CURRENT]->glui;
+         GLUI *mask = _ui[id >> ID_SHIFT]->_button[id&ID_MASK]->glui;
+         for (int i=0; i < 3; i++) {
+            mask->bkgd_color[i] = current->bkgd_color[i];
+            mask->bkgd_color_f[i] = current->bkgd_color_f[i];
+         }
          _ui[id >> ID_SHIFT]->_set_palette_mode = false;
-      }else{
-         _ui[id >> ID_SHIFT]->_button[id&ID_MASK]->get_color(c[0], c[1], c[2]);
-         _ui[id >> ID_SHIFT]->set_current_color(c[0],c[1], c[2], true, true);
+      } else {
+         c = _ui[id >> ID_SHIFT]->_button[id&ID_MASK]->glui->bkgd_color_f;
+         _ui[id >> ID_SHIFT]->set_current_color(c[0], c[1], c[2], true, true);
          _ui[id >> ID_SHIFT]->_parent->child_callback(_ui[id >> ID_SHIFT], 0);
       }
       break;
