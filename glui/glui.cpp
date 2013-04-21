@@ -1973,6 +1973,34 @@ void    GLUI_Main::refresh( void )
 }
 
 
+/****************************** GLUI_Main::set_cursor() ****************/
+
+void    GLUI_Main::set_cursor( int c )
+{
+  int orig;
+
+  if ( glut_window_id > 0 ) {
+     orig = glutGetWindow();
+     glutSetWindow( glut_window_id );
+     glutSetCursor( c );
+     glutSetWindow( orig );
+  }
+}
+
+/****************************** GLUI_Main::get_cursor() ****************/
+int    GLUI_Main::get_cursor( void )
+{
+  int orig, c = -1;
+
+  if ( glut_window_id > 0 ) {
+     orig = glutGetWindow();
+     glutSetWindow( glut_window_id );
+     c = glutGet( GLUT_WINDOW_CURSOR );
+     glutSetWindow( orig );
+  }
+
+  return c;
+}
 
 /***************** GLUI_Master_Object::get_main_gfx_viewport() ***********/
 

@@ -749,6 +749,8 @@ public:
     void         set_ortho_projection();
     void         set_viewport();
     int          get_glut_window_id( void ) { return glut_window_id; } /* JVK */
+    void         set_cursor( int c );
+    int          get_cursor( void );
     int          get_w() { return w; }
     int          get_h() { return h; }
 };
