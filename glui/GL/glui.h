@@ -749,6 +749,8 @@ public:
     void         set_ortho_projection();
     void         set_viewport();
     int          get_glut_window_id( void ) { return glut_window_id; } /* JVK */
+    int          get_w() { return w; }
+    int          get_h() { return h; }
 };
 
 /************************************************************/
@@ -825,6 +827,7 @@ public:
 public:
     /*** Get/Set values ***/
     virtual void   set_name( const char *string );
+    GLUI_String    get_name( void ) { return name; }
     virtual void   set_int_val( int new_int )         { int_val = new_int; output_live(true); }
     virtual void   set_float_val( float new_float )   { float_val = new_float; output_live(true); }
     virtual void   set_ptr_val( void *new_ptr )       { ptr_val = new_ptr; output_live(true); }
@@ -902,6 +905,8 @@ public:
 
     void         set_w( int new_w );
     void         set_h( int new_w );
+    int          get_w( void ) { return w; }
+    int          get_h( void ) { return h; }
     void         set_alignment( int new_align );
     void         sync_live( int recurse, int draw );  /* Reads live variable */
     void         init_live( void );
