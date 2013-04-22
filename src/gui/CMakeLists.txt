@@ -18,6 +18,18 @@ SET(GUI_FILES
 
 ADD_LIBRARY(gui ${GUI_FILES})
 
+TARGET_LINK_LIBRARIES(gui
+	disp
+	geom
+	gtex
+	mesh
+	net
+	npr
+	std
+	glui
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
+
 IF(REF_IMG_32_BIT)
 SET_PROPERTY(
 	SOURCE ${GUI_FILES}

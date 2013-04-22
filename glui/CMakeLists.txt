@@ -40,3 +40,7 @@ ADD_LIBRARY(glui
 	glui_slider.cpp
 )
 
+TARGET_LINK_LIBRARIES(glui
+	${GLUT_LIBRARIES}
+	${OPENGL_LIBRARIES})
+

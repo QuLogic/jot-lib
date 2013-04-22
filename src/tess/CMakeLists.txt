@@ -21,3 +21,15 @@ ADD_LIBRARY(tess
 	tess_cmd.C
 	action.C)
 
+TARGET_LINK_LIBRARIES(tess
+	disp
+	geom
+	gtex
+	map3d
+	mesh
+	mlib
+	net
+	npr
+	std
+	${OPENGL_LIBRARIES})
+

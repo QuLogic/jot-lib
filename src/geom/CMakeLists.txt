@@ -19,6 +19,21 @@ SET(GEOM_FILES
 
 ADD_LIBRARY(geom ${GEOM_FILES})
 
+TARGET_LINK_LIBRARIES(geom
+	dev
+	disp
+	dlhandler
+	geom
+	gtex
+	mlib
+	net
+	widgets
+	std
+	glui
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES}
+	${PNG_LIBRARIES})
+
 SET_PROPERTY(
 	SOURCE ${GEOM_FILES}
 	APPEND

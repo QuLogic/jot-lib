@@ -8,3 +8,9 @@ ADD_LIBRARY(net
 	jotappconfig.C
 	io_manager.C)
 
+TARGET_LINK_LIBRARIES(net
+	disp
+	dev
+	mlib
+	std)
+

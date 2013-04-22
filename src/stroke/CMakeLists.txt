@@ -12,3 +12,15 @@ ADD_LIBRARY(stroke
 	outline_stroke.C
 	gesture_stroke_drawer.C)
 
+TARGET_LINK_LIBRARIES(stroke
+	disp
+	geom
+	gtex
+	mesh
+	mlib
+	net
+	npr
+	std
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
+

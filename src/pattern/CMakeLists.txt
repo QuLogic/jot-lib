@@ -24,6 +24,23 @@ SET(PATTERN_FILES
 
 ADD_LIBRARY(pattern ${PATTERN_FILES})
 
+TARGET_LINK_LIBRARIES(pattern
+	base_jotapp
+	disp
+	geom
+	gest
+	gtex
+	manip
+	mesh
+	mlib
+	npr
+	tess
+	triangle
+	std
+	glui
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
+
 SET_PROPERTY(
 	SOURCE ${PATTERN_FILES}
 	APPEND

@@ -9,19 +9,41 @@ ENDIF(WIN32)
 #
 ADD_EXECUTABLE(jot jot.C ${JOTRC})
 TARGET_LINK_LIBRARIES(jot
-	base_jotapp ffs tess manip widgets npr pattern stroke disp
-	geom wnpr gest map3d mlib sps proxy_pattern gtex triangle
-	mesh net std dlhandler dev gui glut_winsys glui glew)
-TARGET_LINK_LIBRARIES(jot ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${PNG_LIBRARIES})
+	base_jotapp
+	dev
+	disp
+	ffs
+	geom
+	gest
+	gtex
+	gui
+	manip
+	mesh
+	mlib
+	npr
+	pattern
+	proxy_pattern
+	tess
+	widgets
+	wnpr
+	std)
 
 #
 # Program 2 - smview
 #
 ADD_EXECUTABLE(smview smview.C ${JOTRC})
 TARGET_LINK_LIBRARIES(smview
-	base_jotapp manip widgets disp geom gest mlib sps gtex
-	npr gtex mesh net std dlhandler dev glut_winsys glui glew)
-TARGET_LINK_LIBRARIES(smview ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLEW_LIBRARIES} ${PNG_LIBRARIES})
+	base_jotapp
+	disp
+	geom
+	gtex
+	manip
+	mesh
+	mlib
+	widgets
+	std
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
 
 INSTALL(TARGETS jot smview DESTINATION bin)
 

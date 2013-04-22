@@ -11,3 +11,13 @@ ADD_LIBRARY(gest
 	easel_manager.C
 	patch_pen.C)
 
+TARGET_LINK_LIBRARIES(gest
+	disp
+	geom
+	gtex
+	manip
+	mesh
+	mlib
+	net
+	std)
+

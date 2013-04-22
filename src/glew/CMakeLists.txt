@@ -2,3 +2,7 @@
 ADD_LIBRARY(glew
 	glew_singleton.C)
 
+TARGET_LINK_LIBRARIES(glew
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
+

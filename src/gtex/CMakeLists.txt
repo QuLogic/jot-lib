@@ -54,6 +54,19 @@ SET(GTEX_FILES
 
 ADD_LIBRARY(gtex ${GTEX_FILES})
 
+TARGET_LINK_LIBRARIES(gtex
+	disp
+	dlhandler
+	geom
+	glew
+	mesh
+	mlib
+	npr
+	std
+	glui
+	${OPENGL_LIBRARY}
+	${GLEW_LIBARY})
+
 IF(REF_IMG_32_BIT)
 SET_PROPERTY(
 	SOURCE ${GTEX_FILES}

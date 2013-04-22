@@ -19,3 +19,17 @@ ADD_LIBRARY(ffs
 	trace.C
 	xform_pen.C)
 
+TARGET_LINK_LIBRARIES(ffs
+	disp
+	geom
+	gest
+	gtex
+	manip
+	map3d
+	mesh
+	mlib
+	npr
+	tess
+	widgets
+	std)
+

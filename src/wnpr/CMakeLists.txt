@@ -13,3 +13,18 @@ ADD_LIBRARY(wnpr
 	stroke_ui.C
 	view_ui.C)
 
+TARGET_LINK_LIBRARIES(wnpr
+	base_jotapp
+	disp
+	geom
+	gest
+	gtex
+	mesh
+	npr
+	stroke
+	tess
+	std
+	glui
+	${OPENGL_LIBRARIES}
+	${GLEW_LIBRARIES})
+

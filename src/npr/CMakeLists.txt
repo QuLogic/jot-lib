@@ -27,3 +27,18 @@ ADD_LIBRARY(npr
 	simple_img_line_shader.C
 	image_plate.C)
 
+TARGET_LINK_LIBRARIES(npr
+	base_jotapp
+	disp
+	geom
+	gtex
+	manip
+	mesh
+	mlib
+	net
+	pattern
+	proxy_pattern
+	stroke
+	wnpr
+	${OPENGL_LIBRARIES})
+

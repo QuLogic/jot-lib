@@ -7,3 +7,13 @@ ADD_LIBRARY(manip
 	mmenu.C
 	key_menu.C)
 
+TARGET_LINK_LIBRARIES(manip
+	base_jotapp
+	disp
+	geom
+	gtex
+	mesh
+	widgets
+	dev
+	std)
+

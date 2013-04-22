@@ -13,3 +13,10 @@ ADD_LIBRARY(disp
 	gel_set.C
 	paper_effect_base.C)
 
+TARGET_LINK_LIBRARIES(disp
+	disp
+	geom
+	mlib
+	net
+	std)
+

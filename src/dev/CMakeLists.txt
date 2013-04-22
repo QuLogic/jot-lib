@@ -5,3 +5,7 @@ ADD_LIBRARY(dev
 	tty.C
 	tablet.C)
 
+TARGET_LINK_LIBRARIES(dev
+	mlib
+	std)
+

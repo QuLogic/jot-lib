@@ -5,3 +5,9 @@ ADD_LIBRARY(map3d
 	map2d3d.C
 	bnode.C)
 
+TARGET_LINK_LIBRARIES(map3d
+	geom
+	mlib
+	net
+	std)
+
