@@ -18,6 +18,7 @@
 #ifndef BASEJOTAPP_H
 #define BASEJOTAPP_H
 
+#include <vector>
 #include "std/config.H"
 #include "disp/view.H"
 #include "geom/winsys.H"
@@ -108,7 +109,7 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    }
 
    BaseJOTapp(int argc, char **argv);
-   BaseJOTapp(Cstr_ptr &name);
+   BaseJOTapp(const string &name);
 
    virtual ~BaseJOTapp() {
       if (FD_MANAGER::mgr())
@@ -145,9 +146,9 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    void toggle_menu();
 
    //(de)activate on screen camera button
-   static void activate_button(Cstr_ptr &file);
-   static void update_button(Cstr_ptr &file);
-   static void toggle_button(Cstr_ptr &file);
+   static void activate_button(const string &file);
+   static void update_button(const string &file);
+   static void toggle_button(const string &file);
    static void deactivate_button();
 
 
@@ -265,9 +266,9 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    //@}
 
    static BaseJOTapp*      _instance;
-   static ARRAY<WINDOW*>   _windows;
+   static vector<WINDOW*>  _windows;
 
-   str_ptr                 _prog_name;  // from original argv[0]
+   string                  _prog_name;  // from original argv[0]
    char**                  _argv;
    int                     _argc;
    int                     _wins_to_map;
@@ -278,7 +279,7 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    PenManager*             _pen_manager;
    KeyMenu*                _key_menu;
    WORLDptr                _world;
-   ARRAY<ICON2D *>         _buttons; // Array of camera buttons
+   vector<ICON2D *>        _buttons; // Array of camera buttons
    private:
 
    int cam_num; //determines which camera is being used

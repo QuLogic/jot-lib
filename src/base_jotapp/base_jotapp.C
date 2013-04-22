@@ -55,7 +55,7 @@ using namespace mlib;
 // BaseJOTapp Static Variables Initialization
 //////////////////////////////////////////////////////
 
-ARRAY<BaseJOTapp::WINDOW *>   BaseJOTapp::_windows  = 0;
+vector<BaseJOTapp::WINDOW *>  BaseJOTapp::_windows;
 BaseJOTapp*                   BaseJOTapp::_instance = 0;
 
 //////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ BaseJOTapp::BaseJOTapp(int argc, char** argv) :
 /////////////////////////////////////
 // Constructor
 /////////////////////////////////////
-BaseJOTapp::BaseJOTapp(Cstr_ptr& name) :
+BaseJOTapp::BaseJOTapp(const string& name) :
    _prog_name(name),
    _argv(0),
    _argc(0),
@@ -112,6 +112,8 @@ BaseJOTapp::clean_on_exit()
 void
 BaseJOTapp::init()
 {
+   vector<WINDOW *>::iterator it;
+
    // initialize random number generator:
    srand48((long)the_time());
 
@@ -119,10 +121,11 @@ BaseJOTapp::init()
 
    init_world();                        // Create world
 
-   for (int i=0;i<_windows.num(); i++) {
-      init_view(*_windows[i]);          // Create views,add mapped handler
-      init_camera(_windows[i]->_view);
-      init_buttons(_windows[i]->_view); // Create on-screen controls
+   for (it = _windows.begin(); it != _windows.end(); ++it) {
+      WINDOW *win = *it;
+      init_view(*win);          // Create views,add mapped handler
+      init_camera(win->_view);
+      init_buttons(win->_view); // Create on-screen controls
    }
    VIEW::push(&*_windows[0]->_view);    // VIEW #0 is the default view
 
@@ -130,10 +133,11 @@ BaseJOTapp::init()
 
    load_scene();                        // Load world, setup networking
 
-   for (int j=0; j<_windows.num(); j++) {
-      init_win_cb(*_windows[j]);
-      init_dev_cb(*_windows[j]);
-      init_interact_cb(*_windows[j]);   // Add Interaction stuff
+   for (it = _windows.begin(); it != _windows.end(); ++it) {
+      WINDOW *win = *it;
+      init_win_cb(*win);
+      init_dev_cb(*win);
+      init_interact_cb(*win);   // Add Interaction stuff
    }
 
    init_fsa();                          // activate all interactor FSAs
@@ -156,7 +160,7 @@ BaseJOTapp::init()
 void
 BaseJOTapp::init_top()
 {
-   _windows += new_window(WINSYS::create(_argc, _argv));
+   _windows.push_back(new_window(WINSYS::create(_argc, _argv)));
 
    _wins_to_map = 1;
    
@@ -167,7 +171,7 @@ BaseJOTapp::init_top()
  
    for (int i = 1; i < num_wins; i++) 
       {
-         _windows += new_window(_windows[0]->_win->copy());
+         _windows.push_back(new_window(_windows[0]->_win->copy()));
       }
    _wins_to_map = num_wins;
 }
@@ -259,150 +263,154 @@ BaseJOTapp::init_buttons(CVIEWptr &view)
    //Cam Switch Button
    //////////////////////////
    //set to "cam 0" since its used in cam1 and cam2
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("eye_button", "nprdata/icons/eye", 0, false, PIXEL(0,0))
       );
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Cam Orbit Button
    //////////////////////////
    //set to cam 2, and initially not displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("orbit", "nprdata/icons/orbit", 2, true, PIXEL(0,32))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Cam Breathe Button
    //////////////////////////
    //set to cam 2 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("breathe", "nprdata/icons/breathe", 2, true, PIXEL(0,64))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Cam Cruise Button
    //////////////////////////
    //set to cam 2 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("cruise", "nprdata/icons/control", 2, true, PIXEL(0,96))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Cam Grow Button
    //////////////////////////
    //set to cam 2 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("grow", "nprdata/icons/grow", 2, true, PIXEL(0,128))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Gravity Buttons
    //////////////////////////
    //set to cam 2 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("gravity", "nprdata/icons/gravity1", 2, false, PIXEL(0,160))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
-   _buttons[0]->add_skin("nprdata/icons/gravity2");
-   _buttons[0]->add_skin("nprdata/icons/gravity3");
+   _buttons.back()->add_skin("nprdata/icons/gravity2");
+   _buttons.back()->add_skin("nprdata/icons/gravity3");
 
    //////////////////////////
    //Edit Scale Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("scale", "nprdata/icons/scale", 3, true, PIXEL(0,32))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
    
    //////////////////////////
    //Edit Rotate Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("rotateX", "nprdata/icons/rotatex", 3, true, PIXEL(0,64))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Edit RotateY Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("rotateY", "nprdata/icons/rotatey", 3, true, PIXEL(0,96))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Edit RotateZ Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("rotateZ", "nprdata/icons/rotatez", 3, true, PIXEL(0,128))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Edit ScaleX Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("scalex", "nprdata/icons/scalex", 3, true, PIXEL(0,160))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Edit ScaleY Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("scaley", "nprdata/icons/scaley", 3, true, PIXEL(0,192))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    //////////////////////////
    //Edit Scale Button
    //////////////////////////
    //set to cam 3 so not initally displayed
-   _buttons.push(
+   _buttons.push_back(
       new ICON2D("scalez", "nprdata/icons/scalez", 3, true, PIXEL(0,224))
       );
-   _buttons[0]->toggle_suppress_draw();
-   NETWORK.set(_buttons[0], 0);
-   WORLD::create(_buttons[0], false);
+   _buttons.back()->toggle_suppress_draw();
+   NETWORK.set(_buttons.back(), 0);
+   WORLD::create(_buttons.back(), false);
 
    // make them initially hidden:
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++)
-      BaseJOTapp::instance()->_buttons[i]->toggle_hidden();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      but->toggle_hidden();
+   }
 }
 
 
@@ -471,9 +479,13 @@ BaseJOTapp::load_scene()
    //   (1) the camera was not specified in file, and
    //   (2) at least one 3D object is outside the view frustum.
 
-   for (int i=0; i<_windows.num(); i++)
-      if (_windows[i]->_view->cam()->data()->loaded_from_file())
+   for (vector<WINDOW *>::iterator it = _windows.begin();
+        it != _windows.end(); ++it)
+   {
+      WINDOW *win = *it;
+      if (win->_view->cam()->data()->loaded_from_file())
          return;
+   }
 
    for (int j=0; j<DRAWN.num(); j++) {
       GEOM* geom = GEOM::upcast(DRAWN[j]);
@@ -606,11 +618,14 @@ BaseJOTapp::load_jot_file(Cstr_ptr &file)
 // activate_button()
 /////////////////////////////////////
 void 
-BaseJOTapp::activate_button(Cstr_ptr &file)
+BaseJOTapp::activate_button(const string &file)
 {
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++) {
-      if(BaseJOTapp::instance()->_buttons[i]->name() == file)
-         BaseJOTapp::instance()->_buttons[i]->activate();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      if (string(**but->name()) == file)
+         but->activate();
    }
 }
 
@@ -618,11 +633,14 @@ BaseJOTapp::activate_button(Cstr_ptr &file)
 // update_button()
 /////////////////////////////////////
 void 
-BaseJOTapp::update_button(Cstr_ptr &file)
+BaseJOTapp::update_button(const string &file)
 {
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++) {
-      if(BaseJOTapp::instance()->_buttons[i]->name() == file)
-         BaseJOTapp::instance()->_buttons[i]->update_skin();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      if (string(**but->name()) == file)
+         but->update_skin();
    }
 }
 
@@ -632,19 +650,26 @@ BaseJOTapp::update_button(Cstr_ptr &file)
 void 
 BaseJOTapp::deactivate_button()
 {
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++)
-      BaseJOTapp::instance()->_buttons[i]->deactivate();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      but->deactivate();
+   }
 }
 
 /////////////////////////////////////
 // toggle_button()
 /////////////////////////////////////
 void 
-BaseJOTapp::toggle_button(Cstr_ptr &file)
+BaseJOTapp::toggle_button(const string &file)
 {
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++) {
-      if(BaseJOTapp::instance()->_buttons[i]->name() == file)
-         BaseJOTapp::instance()->_buttons[i]->toggle_active();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      if (string(**but->name()) == file)
+         but->toggle_active();
    }
 }
 
@@ -835,8 +860,11 @@ BaseJOTapp::init_kbd_nav(WINDOW &win)
 void
 BaseJOTapp::init_fsa()
 {
-   for (int i = 0; i < _windows.num(); i++) {
-      VIEWint_list::add(_windows[i]->_view, &_windows[i]->_start);
+   for (vector<WINDOW *>::iterator it = _windows.begin();
+        it != _windows.end(); ++it)
+   {
+      WINDOW *win = *it;
+      VIEWint_list::add(win->_view, &win->_start);
    }
 }
 
@@ -847,15 +875,18 @@ void
 BaseJOTapp::Run()
 {
 
-   if (_windows.num() == 0) {
+   if (_windows.empty()) {
       cerr << "BaseJOTapp::Run" << endl;
    }
 
-   for (int i=0; i<_windows.num(); i++)  {
-      _windows[i]->_win->mouse()->add_handler(
-         VIEWint_list::get(_windows[i]->_view)
+   for (vector<WINDOW *>::iterator it = _windows.begin();
+        it != _windows.end(); ++it)
+   {
+      WINDOW *win = *it;
+      win->_win->mouse()->add_handler(
+         VIEWint_list::get(win->_view)
          );
-      _windows[i]->_win->display();
+      win->_win->display();
    }
 
    FD_MANAGER::mgr()->loop();
@@ -1024,11 +1055,14 @@ BaseJOTapp::cam_switch(const Event&, State *&)
       camNum=2;
    }
 
-   for (int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++) {
-      if (camNum-1==0)lastCam=3; else lastCam=camNum-1;
-      if (BaseJOTapp::instance()->_buttons[i]->cam_num() == camNum ||
-          BaseJOTapp::instance()->_buttons[i]->cam_num() == lastCam )
-         BaseJOTapp::instance()->_buttons[i]->toggle_suppress_draw();
+   /* NOTE: The STL vector is reversed compared to the previous code's ARRAY class. */
+   for (vector<ICON2D *>::reverse_iterator it = BaseJOTapp::instance()->_buttons.rbegin();
+        it != BaseJOTapp::instance()->_buttons.rend(); ++it)
+   {
+      ICON2D *but = *it;
+      if (camNum-1==0) lastCam=3; else lastCam=camNum-1;
+      if (but->cam_num() == camNum || but->cam_num() == lastCam)
+         but->toggle_suppress_draw();
    }
 
    if (Config::get_var_bool("DEBUG_CAM_FSA",false)) {
@@ -1048,8 +1082,12 @@ BaseJOTapp::cam_switch(const Event&, State *&)
 int
 BaseJOTapp::button_toggle(const Event&, State *&)
 {
-   for(int i = 0; i < BaseJOTapp::instance()->_buttons.num(); i++)
-      BaseJOTapp::instance()->_buttons[i]->toggle_hidden();
+   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
+        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   {
+      ICON2D *but = *it;
+      but->toggle_hidden();
+   }
 
    return 0;
 }

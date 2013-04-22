@@ -337,18 +337,18 @@ class JOTapp : public BaseJOTapp {
 void
 JOTapp::init_scene()
 {
-   int i;
+   vector<WINDOW *>::iterator it;
 
    //Add fps and keyboard navigator
    BaseJOTapp::init_scene();
 
    // Set rendering style to smooth shading unless an environment
    // variable gives a different default:
-   for (i=0; i<_windows.num(); i++) {
-      _windows[i]->_view->set_rendering(
+   for (it = _windows.begin(); it != _windows.end(); ++it) {
+      WINDOW *win = *it;
+      win->_view->set_rendering(
          Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE));
    }
-
 }
 
 /////////////////////////////////////
@@ -700,11 +700,13 @@ JOTapp::init_cam_manip(WINDOW &win)
 void
 JOTapp::init_fsa()
 {
+   vector<WINDOW *>::iterator it;
    BaseJOTapp::init_fsa();
 
-   for (int i = 0; i < _windows.num(); i++) {
-      WINDOWjot *winjot = (WINDOWjot *) _windows[i];
-      VIEWint_list::add(_windows[i]->_view, &winjot->_otherstart);
+   for (it = _windows.begin(); it != _windows.end(); ++it) {
+      WINDOW *win = *it;
+      WINDOWjot *winjot = (WINDOWjot *) win;
+      VIEWint_list::add(win->_view, &winjot->_otherstart);
    }
 }
 
