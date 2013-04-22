@@ -30,6 +30,7 @@
 ////////////////////////////////////////////
 
 #include <cctype>      // isspace()
+#include <fstream>
 
 #include "geom/gl_view.H"
 #include "gtex/paper_effect.H"

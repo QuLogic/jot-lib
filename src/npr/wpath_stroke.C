@@ -23,6 +23,8 @@
 #include "npr/npr_view.H"
 #include "wpath_stroke.H"
 
+#include <fstream>
+
 using namespace mlib;
 
 extern "C" void HACK_mouse_right_button_up();

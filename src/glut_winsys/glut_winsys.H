@@ -20,7 +20,6 @@
 #define GLUT_WINSYS_H_IS_INCLUDED
 
 #include "std/support.H"
-#include "std/iostream.H"
 #include "geom/winsys.H"
 
 #include <GL/glut.h>

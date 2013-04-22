@@ -20,7 +20,7 @@
 
 #include <cassert>
 
-#include "std/iostream.H"
+#include <iostream>
 
 #include "platform.H"
 #include "thread_mutex.H"

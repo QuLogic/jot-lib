@@ -19,6 +19,7 @@
  * glsl_shader.C
  *
  *****************************************************************/
+#include <fstream>
 #include "gtex/gl_extensions.H"
 #include "gtex/util.H"
 #include "geom/gl_util.H"

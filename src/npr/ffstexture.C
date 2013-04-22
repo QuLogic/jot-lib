@@ -22,6 +22,8 @@
 #include "ffstexture.H"
 #include "ffs_control_frame.H"
 
+#include <fstream>
+
 str_ptr FFSTexture::location = "nprdata/ffs_style/ffs_texture.ffs";
 
 FFSTexture::FFSTexture(Patch* patch) :

@@ -16,6 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
+#include <fstream>
 #include "std/config.H"
 
 #include "std/stop_watch.H"

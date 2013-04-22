@@ -21,6 +21,7 @@
 
 #include "std/support.H"
 #include <GL/glew.h>
+#include <fstream>
 
 #include "geom/winsys.H"
 #include "geom/world.H"

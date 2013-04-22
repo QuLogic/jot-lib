@@ -18,6 +18,7 @@
 /**********************************************************************
  * bcurve.C:
  **********************************************************************/
+#include <fstream>
 #include "disp/colors.H"                // Color::grey7 etc.
 #include "geom/gl_view.H"               // for GL_VIEW::init_line_smooth()
 #include "geom/world.H"

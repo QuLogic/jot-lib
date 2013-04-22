@@ -17,7 +17,7 @@
  *****************************************************************/
 #include "std/config.H"
 #include "std/file.H"
-#include "std/fstream.H"
+#include <fstream>
 #include "data_item.H"
 
 /**********************************************************************

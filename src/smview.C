@@ -17,7 +17,6 @@
  *****************************************************************/
 #include <GL/glew.h>
 
-#include "std/fstream.H"
 #include "disp/animator.H"
 #include "disp/recorder.H"
 #include "geom/distrib.H"

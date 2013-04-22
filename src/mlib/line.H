@@ -259,10 +259,6 @@ namespace mlib {
 
 } // namespace mlib
 
-//YYY - Using new iostream wrapper
-#include "std/iostream.H"
-//#include <iostream.h>
-
 namespace mlib {
 
 //! \brief Stream insertion operator for Line class.

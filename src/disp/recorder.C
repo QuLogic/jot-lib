@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
+#include <fstream>
 #include "disp/recorder.H"
 
 static str_ptr recorder_image_path = Config::get_var_str("RECORDER_IMAGE_PATH","imagedir/");

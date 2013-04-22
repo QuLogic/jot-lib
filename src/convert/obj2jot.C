@@ -96,6 +96,7 @@
  * 
  * map_Kd string                Texture map_Kd (filename)
  ********************************************************************************/
+#include <fstream>
 #include <string>
 #include <sstream>
 #include <limits>

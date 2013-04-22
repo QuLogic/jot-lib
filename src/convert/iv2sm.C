@@ -37,7 +37,8 @@
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoSphere.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <fstream>
 
 #include "std/support.H"
 #include "std/stop_watch.H"
@@ -57,7 +58,6 @@ int correct = 0;
 int separate_files = 0;
 int obj_num = 0;
 
-#include <std/iostream.H>
 class Triangle {
     private:
        int _verts[3];

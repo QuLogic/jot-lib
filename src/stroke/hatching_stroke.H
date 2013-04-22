@@ -31,7 +31,6 @@
 #include "geom/texture.H"
 #include "std/support.H"
 #include "std/ref.H"
-#include "std/fstream.H"
 
 #include "base_stroke.H"
 

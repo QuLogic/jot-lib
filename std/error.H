@@ -19,7 +19,6 @@
 #define ERROR_H_IS_INCLUDED
 
 #include "platform.H"
-#include "iostream.H"
 
 
 // Warning Level

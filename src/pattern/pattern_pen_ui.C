@@ -37,6 +37,7 @@
 #include "base_jotapp/base_jotapp.H"
 #include "stroke/base_stroke.H"
 
+#include <fstream>
 #include <map>
 
 #include "pattern_pen.H"

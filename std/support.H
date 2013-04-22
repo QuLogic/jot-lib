@@ -23,9 +23,6 @@
 #include "ref.H"
 #include "hash.H"
 
-//YYY - Using new iostream wrapper
-#include "std/iostream.H"
-
 #define REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr; class FOO
 #define FD_REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr
 #define CSTR const STR

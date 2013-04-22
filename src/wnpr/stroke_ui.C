@@ -62,6 +62,7 @@
 #include "geom/world.H"
 #include "glui/glui_jot.H"
 #include "std/config.H"
+#include <fstream>
 
 #include "stroke_ui.H"
 

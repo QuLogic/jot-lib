@@ -26,7 +26,6 @@
  *      output mesh.
  *
  **********************************************************************/
-#include "std/fstream.H"
 #include "mesh/lmesh.H"
 #include "std/config.H"
 

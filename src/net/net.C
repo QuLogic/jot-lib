@@ -36,7 +36,7 @@
 #include <cctype>
 #include <cerrno>
 
-#include "std/fstream.H"
+#include <fstream>
 
 #ifdef WIN32
 #define signal(x,y)

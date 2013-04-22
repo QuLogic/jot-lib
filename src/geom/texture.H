@@ -21,7 +21,6 @@
 #ifndef __TEXTURE_H
 #define __TEXTURE_H
 
-#include "std/fstream.H"
 #include "std/ref.H"
 #include "std/support.H"
 #include "mlib/points.H"

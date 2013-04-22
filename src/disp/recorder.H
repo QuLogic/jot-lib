@@ -22,7 +22,6 @@
 #include "disp/cam.H"
 #include "disp/view.H"
 #include "std/stop_watch.H"
-#include "std/fstream.H"
 
 class RecorderUIBase;
 

@@ -25,7 +25,6 @@
 
 #include "disp/colors.H"
 #include "disp/rgba.H"
-#include "std/fstream.H"
 #include "std/support.H"
 #include "mlib/points.H"
 #include "mlib/point2i.H"
