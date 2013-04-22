@@ -143,9 +143,10 @@ TestSPSapp::load_scene()
          Bvert_list list;
          Bface_list fs;
          ARRAY<Wvec> bcs;
+         double spacing;
          //generate_samples(BMESH::upcast(geom->body()), 1.0, fs, bcs);
          //generate_samples(BMESH::upcast(geom->body()), fs, bcs, HEIGHT, MIN_DIST);
-         _nodes += sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs);
+         _nodes += sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing);
          for (int i = 0; i < fs.num(); i++) {
             Wpt pt;
             fs[i]->bc2pos(bcs[i], pt);
