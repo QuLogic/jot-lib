@@ -51,24 +51,13 @@
 DEVice_2d *DEVice_2d::last = 0;
 ARRAY<DEVpoll *> DEVpoll::_pollable;
 
-// Hack to make sure BOOTH symbols are linked in
-inline Wpt      RET_Wpt(CBOOTHpt &p)   { return Wpt     (p[0], p[1], p[2]); }
-inline Wvec     RET_Wvec(CBOOTHvec &v) { return Wvec    (v[0], v[1], v[2]); }
-inline BOOTHpt  RET_BOOTHpt(CWpt &p)   { return BOOTHpt (p[0], p[1], p[2]); }
-inline BOOTHvec RET_BOOTHvec(CWvec &v) { return BOOTHvec(v[0], v[1], v[2]); }
-Wpt     (*BOOTHpttoWpt)(CBOOTHpt &)    = RET_Wpt;
-Wvec    (*BOOTHvectoWvec)(CBOOTHvec &) = RET_Wvec;
-BOOTHpt (*WpttoBOOTHpt)(CWpt &)        = RET_BOOTHpt;
-BOOTHvec(*WvectoBOOTHvec)(CWvec &)     = RET_BOOTHvec;
-
-// #include "/u/lsh/space/piggy/debug.H"
 void outputMesh(ostream &os);
 
 int correct = 0;
 int separate_files = 0;
 int obj_num = 0;
 
-#include <iostream.h>
+#include <std/iostream.H>
 class Triangle {
     private:
        int _verts[3];
@@ -181,7 +170,7 @@ add_state_coords(SoCallbackAction *cb)
    }
 
    // Add texture coords if any
-   if (num_coords = cb->getNumTextureCoordinates()) {
+   if ((num_coords = cb->getNumTextureCoordinates()) != 0) {
 
       // cerr << "adding texture coords" << endl;
       if (!texcoords.empty()) {

@@ -16,11 +16,11 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * iv2sm.C:
+ * sm2iv.C:
  **********************************************************************/
-#include "mi.H"
-#include "patch.H"
-#include "stripcb.H"
+#include "mesh/mi.H"
+#include "mesh/patch.H"
+#include "mesh/stripcb.H"
 
 char header[] =
 "#Inventor V2.1 ascii\n"
@@ -192,4 +192,4 @@ main(int argc, char *argv[])
    return 0;
 }
 
-/* end of file subdivide.C */
+/* end of file sm2iv.C */

@@ -26,6 +26,8 @@ libraries:
  * GLUT
  * GLEW
  * libpng
+ * Coin3D (optional; used by iv2sm for conversions. Another implementation ofi
+           Open Inventor may also work.)
 
 How to build
 ------------
