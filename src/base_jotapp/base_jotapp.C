@@ -104,10 +104,6 @@ BaseJOTapp::clean_on_exit()
 {
    if (Config::get_var_bool("DEBUG_CLEAN_ON_EXIT",false))
       cerr << "BaseJOTapp::clean_on_exit" << endl;
-
-   while (!_events.empty()) {
-      delete _events.pop();
-   }
 }
 
 /////////////////////////////////////

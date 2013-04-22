@@ -278,7 +278,6 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    PenManager*             _pen_manager;
    KeyMenu*                _key_menu;
    WORLDptr                _world;
-   ARRAY<FD_EVENT *>       _events; // Events to be destructed
    ARRAY<ICON2D *>         _buttons; // Array of camera buttons
    private:
 
