@@ -661,8 +661,8 @@ SWEEP_DISK::stroke_cb(CGESTUREptr& g, DrawState*&)
    // Stroke can't cross either line segment, because then the
    // surface would be self-intersecting
    its_bad = pts_in_range(profile_pixels, 1, profile_pixels.num()-1).intersects_seg(A);
-   its_bad = its_bad || !cone_top &&
-      pts_in_range(profile_pixels, 0, profile_pixels.num()-2).intersects_seg(B);
+   its_bad = its_bad || (!cone_top &&
+      pts_in_range(profile_pixels, 0, profile_pixels.num()-2).intersects_seg(B));
    if (its_bad) {
       WORLD::message("Please - no self-intersecting surfaces");
       return 1;
