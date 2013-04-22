@@ -37,6 +37,6 @@ PaperUI::init_listbox()
    // We disply just the file name ("paper.png"), but save the location
    // relative to JOT_ROOT ("/nprdata/paper_textures/paper.png") to be passed to
    // PaperEffect
-   str_ptr sub_dir("/nprdata/paper_textures/");
-   fill_listbox(_listbox, _files, JOT_ROOT + sub_dir, sub_dir,".png");
+   string sub_dir("/nprdata/paper_textures/");
+   fill_listbox(_listbox, _files, string(**JOT_ROOT) + sub_dir, sub_dir, ".png");
 }

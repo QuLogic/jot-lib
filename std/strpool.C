@@ -18,6 +18,9 @@
 #include "support.H"
 
 #include <cctype>
+#include <vector>
+#include <string>
+#include <algorithm>
 
 #ifndef WIN32
 #include <dirent.h>
@@ -36,35 +39,26 @@ Cstr_ptr str_ptr::null(str_ptr::null_str());
 // A string pool is just a hash table
 HASH *STR::strpool = 0;
 
-extern "C"
-int
-compare_words(const void *a, const void *b)
-{
-   str_ptr m1 = *((str_ptr *)a);
-   str_ptr m2 = *((str_ptr *)b);
-   return strcmp(**m1, **m2);
-}
-
 //
 // Gets a list of files in a certain directory
 //
-str_list dir_list(Cstr_ptr &path)
+vector<string> dir_list(const string &path)
 {
-   str_list list;
+   vector<string> list;
 #ifdef WIN32
    WIN32_FIND_DATA file;
    HANDLE hFile;
    
-   Cstr_ptr dot(".");
-   Cstr_ptr dotdot("..");
-   str_ptr current = path+"*";
+   const string dot(".");
+   const string dotdot("..");
+   string current = path+"*";
    
-   if ((hFile = FindFirstFile(**current, &file)) != INVALID_HANDLE_VALUE) 
+   if ((hFile = FindFirstFile(current.c_str(), &file)) != INVALID_HANDLE_VALUE)
    {
-      while (1) 
+      while (true)
       {
-	      str_ptr fname(file.cFileName);
-	      if ((fname != dot) && (fname != dotdot)) list += fname;
+         string fname(file.cFileName);
+         if ((fname != dot) && (fname != dotdot)) list.push_back(fname);
          if (!FindNextFile(hFile, &file)) break;
       }
       FindClose(hFile);
@@ -72,27 +66,27 @@ str_list dir_list(Cstr_ptr &path)
 #else
    DIR *dir = 0;
    struct dirent *direntry;
-   if (!!path && (dir =opendir(**path))) 
+   if (!path.empty() && (dir = opendir(path.c_str())))
    {
-      static Cstr_ptr dot(".");
-      static Cstr_ptr dotdot("..");
+      const string dot(".");
+      const string dotdot("..");
       struct stat statbuf;
-      while ((direntry= readdir(dir))) 
+      while ((direntry = readdir(dir)))
       {
-           str_ptr file(direntry->d_name);
-	         if (file != dot && file != dotdot) 
+         string file(direntry->d_name);
+         if (file != dot && file != dotdot)
+         {
+            string path_to_file = path + "/" + file;
+            if (!stat(path_to_file.c_str(), &statbuf) && (statbuf.st_mode & S_IFMT) == S_IFREG)
             {
-              str_ptr path_to_file = path + "/" + file;
-              if (!stat(**path_to_file, &statbuf) && (statbuf.st_mode & S_IFMT) == S_IFREG) 
-              {
-                 list += file;
-              }
-           }
+               list.push_back(file);
+            }
+         }
       }
       closedir(dir);
    }
 #endif
-   list.sort(compare_words);
+   std::sort(list.begin(), list.end());
    return list;
 }
 

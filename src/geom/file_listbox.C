@@ -81,21 +81,21 @@ void
 FileListbox::fill_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path,
-   Cstr_ptr     &save_path,
+   const string &full_path,
+   const string &save_path,
    const char   *extension
    )
 {
    int j = 0;
-   str_list in_files = dir_list(full_path);
-   for (int i = 0; i < in_files.num(); i++) 
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++)
    {
-      int len = in_files[i].len();
+      string::size_type len = in_files[i].length();
       if ( (extension) && (len>3) && 
-            (strcmp(&(**in_files[i])[len-4],extension) == 0))
+            (in_files[i].substr(len-4) == extension))
       {
-         save_files += save_path + in_files[i];
-         listbox->add_item(j++, **in_files[i]);
+         save_files += str_ptr((save_path + in_files[i]).c_str());
+         listbox->add_item(j++, in_files[i].c_str());
       }
    }
 }

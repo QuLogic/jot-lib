@@ -688,7 +688,7 @@ StrokeUI::build()
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(STROKE_PREVIEW_W);
    _listbox[LIST_PRESET]->add_item(0, "-=NEW=-");
-   fill_preset_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
+   fill_preset_listbox(_listbox[LIST_PRESET], _preset_filenames, string(**Config::JOT_ROOT()) + PRESET_DIRECTORY);
 
    new GLUI_Separator(_panel[PANEL_PRESET]);
 
@@ -791,7 +791,7 @@ StrokeUI::build()
    assert(_listbox[LIST_TEXTURE]);
    _listbox[LIST_TEXTURE]->set_w(STROKE_PARAMS_MIN_W);
    _listbox[LIST_TEXTURE]->add_item(0, "----");
-   fill_texture_listbox(_listbox[LIST_TEXTURE], _texture_filenames, Config::JOT_ROOT() + TEXTURE_DIRECTORY);
+   fill_texture_listbox(_listbox[LIST_TEXTURE], _texture_filenames, string(**Config::JOT_ROOT()) + TEXTURE_DIRECTORY);
 
    _slider[SLIDE_ANGLE] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Period", 
@@ -832,7 +832,7 @@ StrokeUI::build()
    assert(_listbox[LIST_PAPER]);
    _listbox[LIST_PAPER]->set_w(STROKE_PARAMS_MIN_W);
    _listbox[LIST_PAPER]->add_item(0, "----");
-   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() + PAPER_DIRECTORY);
+   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, string(**Config::JOT_ROOT()) + PAPER_DIRECTORY);
 
    _slider[SLIDE_CONTRAST] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Contrast", 
@@ -1027,19 +1027,19 @@ void
 StrokeUI::fill_texture_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
    )
 {
    int j=0;
-   str_list in_files = dir_list(full_path);
-   for (int i = 0; i < in_files.num(); i++) 
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++)
    {
-      int len = in_files[i].len();
+      string::size_type len = in_files[i].length();
       if ( (len>3) && 
-            (strcmp(&(**in_files[i])[len-4],".png") == 0))
+            (in_files[i].substr(len-4) == ".png"))
       {
-         save_files += full_path + in_files[i];
-         listbox->add_item(1+j++, **in_files[i]);
+         save_files += str_ptr((full_path + in_files[i]).c_str());
+         listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
 }
@@ -1057,19 +1057,19 @@ void
 StrokeUI::fill_paper_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
    )
 {
    int j=0;
-   str_list in_files = dir_list(full_path);
-   for (int i = 0; i < in_files.num(); i++) 
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++)
    {
-      int len = in_files[i].len();
+      string::size_type len = in_files[i].length();
       if ( (len>3) && 
-            (strcmp(&(**in_files[i])[len-4],".png") == 0))
+            (in_files[i].substr(len-4) == ".png"))
       {
-         save_files += full_path + in_files[i];
-         listbox->add_item(1+j++, **in_files[i]);
+         save_files += str_ptr((full_path + in_files[i]).c_str());
+         listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
 }
@@ -1087,7 +1087,7 @@ void
 StrokeUI::fill_preset_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
    )
 {
    int i;
@@ -1100,31 +1100,27 @@ StrokeUI::fill_preset_listbox(
    }
    save_files.clear();
 
-   str_list in_files = dir_list(full_path);
-   for (i = 0; i < in_files.num(); i++) {
-      int len = in_files[i].len();
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+      string::size_type len = in_files[i].length();
 
-      if ( (len>3) && (strcmp(&(**in_files[i])[len-4],".pre") == 0))
+      if ( (len>3) && (in_files[i].substr(len-4) == ".pre"))
       {
-         char *basename = new char[len+1];       
-         assert(basename);
-         strcpy(basename,**in_files[i]);
-         basename[len-4] = 0;
+         string basename = in_files[i].substr(0, len-4);
 
-         if ( jot_check_glui_fit(listbox, basename) )
+         if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files += full_path + in_files[i];
-            listbox->add_item(save_files.num(), basename);
+            save_files += str_ptr((full_path + in_files[i]).c_str());
+            listbox->add_item(save_files.num(), basename.c_str());
          }
          else
          {
-            err_mesg(ERR_LEV_WARN, "StrokeUI::fill_preset_listbox - Discarding preset file (name too long for listbox): %s", basename);         
+            err_mesg(ERR_LEV_WARN, "StrokeUI::fill_preset_listbox - Discarding preset file (name too long for listbox): %s", basename.c_str());
          }
-         delete [] basename;
       }
       else if (in_files[i] != "CVS")
       {
-         err_mesg(ERR_LEV_WARN, "StrokeUI::fill_preset_listbox - Discarding preset file (bad name): %s", **in_files[i]);         
+         err_mesg(ERR_LEV_WARN, "StrokeUI::fill_preset_listbox - Discarding preset file (bad name): %s", in_files[i].c_str());
       }
    }
 }

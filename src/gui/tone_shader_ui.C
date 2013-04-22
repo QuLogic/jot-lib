@@ -161,7 +161,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                                id+LIST_TEXTURE,
                                listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_TEXTURE],_texture_filenames, Config::JOT_ROOT() + "/nprdata/toon_textures_1D/", ".png", false);
+   fill_directory_listbox(_listbox[LIST_TEXTURE], _texture_filenames, string(**Config::JOT_ROOT()) + "/nprdata/toon_textures_1D/", ".png", false);
    
    _listbox[LIST_TEXTURE]->curr_text = "clear-black.png" ;
   

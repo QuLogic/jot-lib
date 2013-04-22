@@ -229,11 +229,11 @@ NPRPenUI::build()
    assert(_checkbox.num()==0);     for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
    assert(_edittext.num()==0);     for (i=0; i<EDIT_NUM; i++)     _edittext.add(0);
 
-   assert(_toon_filenames.num() == 0);
-   assert(_other_filenames.num() == 0);
+   assert(_toon_filenames.size() == 0);
+   assert(_other_filenames.size() == 0);
 
-   _toon_filenames = dir_list(Config::JOT_ROOT()+TOON_DIRECTORY);
-   _other_filenames = dir_list(Config::JOT_ROOT()+OTHER_DIRECTORY);
+   _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
+   _other_filenames = dir_list(string(**Config::JOT_ROOT()) + OTHER_DIRECTORY);
 
    // Panel containing pen buttons
    _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
@@ -1024,10 +1024,10 @@ NPRPenUI::fill_layer_listbox()
 void
 NPRPenUI::fill_tex_listbox(
    GLUI_Listbox *listbox,
-   Cstr_list     &files
+   const vector<string> &files
    )
 {
-   int m = 1 + max(_toon_filenames.num(), _other_filenames.num());
+   int m = 1 + max(_toon_filenames.size(), _other_filenames.size());
 
    
    int j;
@@ -1035,14 +1035,13 @@ NPRPenUI::fill_tex_listbox(
       _listbox[LIST_TEX]->delete_item(j);
 
    listbox->add_item(0, "----");
-   for (int i = 0; i < files.num(); i++) 
+   for (vector<string>::size_type i = 0; i < files.size(); i++)
    {
-      int len = files[i].len();
+      string::size_type len = files[i].length();
       if ( (len>3) && 
-            (strcmp(&(**files[i])[len-4],".png") == 0))
+            (files[i].substr(len-4) == ".png"))
       {
-
-         listbox->add_item(1+i, **files[i]);
+         listbox->add_item(1+i, files[i].c_str());
       }
    }
 }
@@ -1123,7 +1122,7 @@ NPRPenUI::update_gtex()
       _listbox[LIST_TEX]->disable();
       _button[BUT_REFRESH]->disable();
       
-      fill_tex_listbox(_listbox[LIST_TEX],str_list());
+      fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
    }
    else
    {
@@ -1242,20 +1241,18 @@ NPRPenUI::update_gtex()
          _slider[SLIDE_V]->set_float_val(hsv[2]);
          _slider[SLIDE_A]->set_float_val(solid->get_alpha());
 
-         fill_tex_listbox(_listbox[LIST_TEX],_other_filenames);
+         fill_tex_listbox(_listbox[LIST_TEX], _other_filenames);
 
          if (solid->get_tex_name().contains(OTHER_DIRECTORY))
          {
-            str_ptr name = solid->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(OTHER_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
+            string name = string(**solid->get_tex_name());
+            string str = name.substr(str_ptr(OTHER_DIRECTORY).len());
 
-            i = _other_filenames.get_index(str);
-            if (i==BAD_IND)
+            vector<string>::iterator it = std::find(_other_filenames.begin(), _other_filenames.end(), str);
+            if (it == _other_filenames.end())
                _listbox[LIST_TEX]->set_int_val(0);
             else
-               _listbox[LIST_TEX]->set_int_val(i+1);
+               _listbox[LIST_TEX]->set_int_val((it-_other_filenames.begin())+1);
          }
          else
             _listbox[LIST_TEX]->set_int_val(0);
@@ -1355,16 +1352,14 @@ NPRPenUI::update_gtex()
 
          if (toon->get_tex_name().contains(TOON_DIRECTORY))
          {
-            str_ptr name = toon->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(TOON_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
+            string name = string(**toon->get_tex_name());
+            string str = name.substr(str_ptr(TOON_DIRECTORY).len());
 
-            i = _toon_filenames.get_index(str);
-            if (i==BAD_IND)
+            vector<string>::iterator it = std::find(_toon_filenames.begin(), _toon_filenames.end(), str);
+            if (it == _toon_filenames.end())
                _listbox[LIST_TEX]->set_int_val(0);
             else
-               _listbox[LIST_TEX]->set_int_val(i+1);
+               _listbox[LIST_TEX]->set_int_val((it-_toon_filenames.begin())+1);
 
          }
          else
@@ -1474,23 +1469,21 @@ NPRPenUI::update_gtex()
 
          if (xtoon->get_tex_name().contains(TOON_DIRECTORY))
          {
-            str_ptr name = xtoon->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(TOON_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
-            i = _toon_filenames.get_index(str);
-            if (i==BAD_IND)
-			   {
+            string name = string(**xtoon->get_tex_name());
+            string str = name.substr(str_ptr(TOON_DIRECTORY).len());
+            vector<string>::iterator it = std::find(_toon_filenames.begin(), _toon_filenames.end(), str);
+            if (it == _toon_filenames.end())
+            {
                _listbox[LIST_TEX]->set_int_val(0);
-			   }
+            }
             else
-               _listbox[LIST_TEX]->set_int_val(i+1);
+               _listbox[LIST_TEX]->set_int_val((it-_toon_filenames.begin())+1);
          }
          else
-		 {
+         {
             _listbox[LIST_TEX]->set_int_val(0);
-		 }
-	  }
+         }
+      }
 
       else
       {
@@ -1712,8 +1705,8 @@ NPRPenUI::apply_gtex()
             solid->set_tex_name(NULL_STR);
          else
          {
-            if (solid->get_tex_name() != (str_ptr(OTHER_DIRECTORY)+_other_filenames[i-1]))
-               solid->set_tex_name(str_ptr(OTHER_DIRECTORY) + _other_filenames[i-1]);
+            if (solid->get_tex_name() != str_ptr((OTHER_DIRECTORY+_other_filenames[i-1]).c_str()))
+               solid->set_tex_name(str_ptr((OTHER_DIRECTORY + _other_filenames[i-1]).c_str()));
          }
 
 	  }
@@ -1777,15 +1770,15 @@ NPRPenUI::apply_gtex()
             toon->set_tex_name(NULL_STR);
          else
          {
-            if (toon->get_tex_name() != ( str_ptr(TOON_DIRECTORY) + _toon_filenames[i-1]))
-               toon->set_tex_name(str_ptr(TOON_DIRECTORY) + _toon_filenames[i-1]);
+            if (toon->get_tex_name() != str_ptr((TOON_DIRECTORY + _toon_filenames[i-1]).c_str()))
+               toon->set_tex_name(str_ptr((TOON_DIRECTORY + _toon_filenames[i-1]).c_str()));
          }
 
-	  }
-	  //GLSL version of xtoon shader
-	  else if(GLSLXToonShader::isa(t)) //robcm
-	  {
-      GLSLXToonShader *xtoon = (GLSLXToonShader*)t;
+      }
+      //GLSL version of xtoon shader
+      else if(GLSLXToonShader::isa(t)) //robcm
+      {
+         GLSLXToonShader *xtoon = (GLSLXToonShader*)t;
 
 	     //robcm - disabling paper for now
 	     xtoon->set_use_paper(false);//_checkbox[CHECK_PAPER]->get_int_val());
@@ -1850,10 +1843,10 @@ NPRPenUI::apply_gtex()
             xtoon->set_tex_name(NULL_STR);
          else
          {
-            if (xtoon->get_tex_name() != ( str_ptr(TOON_DIRECTORY) + _toon_filenames[i-1]))
-               xtoon->set_tex_name(str_ptr(TOON_DIRECTORY) + _toon_filenames[i-1]);
+            if (xtoon->get_tex_name() != str_ptr((TOON_DIRECTORY + _toon_filenames[i-1]).c_str()))
+               xtoon->set_tex_name(str_ptr((TOON_DIRECTORY + _toon_filenames[i-1]).c_str()));
          }
-	  }
+      }
 
    }   
 }
@@ -1866,7 +1859,7 @@ NPRPenUI::apply_gtex()
 void
 NPRPenUI::refresh_tex()
 {
-   int i;
+   vector<string>::iterator it;
    NPRTexture *npr = _pen->curr_npr_tex();
 
    if (!npr)
@@ -1885,27 +1878,25 @@ NPRPenUI::refresh_tex()
          NPRSolidTexture *solid = (NPRSolidTexture*)t;
 
          // Refill the listbox
-         fill_tex_listbox(_listbox[LIST_TEX],str_list());
-         _other_filenames = dir_list(Config::JOT_ROOT()+OTHER_DIRECTORY);
-         fill_tex_listbox(_listbox[LIST_TEX],_other_filenames);
+         fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
+         _other_filenames = dir_list(string(**Config::JOT_ROOT()) + OTHER_DIRECTORY);
+         fill_tex_listbox(_listbox[LIST_TEX], _other_filenames);
 
          if (solid->get_tex_name().contains(OTHER_DIRECTORY))
          {
-            str_ptr name = solid->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(OTHER_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
+            string name = string(**solid->get_tex_name());
+            string str = name.substr(str_ptr(OTHER_DIRECTORY).len());
 
-            i = _other_filenames.get_index(str);
-            if (i==BAD_IND)
+            it = std::find(_other_filenames.begin(), _other_filenames.end(), str);
+            if (it == _other_filenames.end())
             {
                _listbox[LIST_TEX]->set_int_val(0);
                solid->set_tex_name(NULL_STR);
             }
             else
             {
-               _listbox[LIST_TEX]->set_int_val(i+1);
-               solid->set_tex_name(name);
+               _listbox[LIST_TEX]->set_int_val((it-_other_filenames.begin())+1);
+               solid->set_tex_name(str_ptr(name.c_str()));
             }
 
          }
@@ -1921,27 +1912,25 @@ NPRPenUI::refresh_tex()
          XToonTexture *toon = (XToonTexture*)t;
 
          // Refill the listbox
-         fill_tex_listbox(_listbox[LIST_TEX],str_list());
-         _toon_filenames = dir_list(Config::JOT_ROOT()+TOON_DIRECTORY);
-         fill_tex_listbox(_listbox[LIST_TEX],_toon_filenames);
+         fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
+         _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
+         fill_tex_listbox(_listbox[LIST_TEX], _toon_filenames);
 
          if (toon->get_tex_name().contains(TOON_DIRECTORY))
          {
-            str_ptr name = toon->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(TOON_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
+            string name = string(**toon->get_tex_name());
+            string str = name.substr(str_ptr(TOON_DIRECTORY).len());
 
-            i = _toon_filenames.get_index(str);
-            if (i==BAD_IND)
+            it = std::find(_toon_filenames.begin(), _toon_filenames.end(), str);
+            if (it == _toon_filenames.end())
             {
                _listbox[LIST_TEX]->set_int_val(0);
                toon->set_tex_name(NULL_STR);
             }
             else
             {
-               _listbox[LIST_TEX]->set_int_val(i+1);
-               toon->set_tex_name(name);
+               _listbox[LIST_TEX]->set_int_val((it-_toon_filenames.begin())+1);
+               toon->set_tex_name(str_ptr(name.c_str()));
             }
 
          }
@@ -1958,27 +1947,25 @@ NPRPenUI::refresh_tex()
          GLSLXToonShader *xtoon = (GLSLXToonShader*)t;
 
          // Refill the listbox
-         fill_tex_listbox(_listbox[LIST_TEX],str_list());
-         _toon_filenames = dir_list(Config::JOT_ROOT()+TOON_DIRECTORY);
-         fill_tex_listbox(_listbox[LIST_TEX],_toon_filenames);
+         fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
+         _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
+         fill_tex_listbox(_listbox[LIST_TEX], _toon_filenames);
 
          if (xtoon->get_tex_name().contains(TOON_DIRECTORY))
          {
-            str_ptr name = xtoon->get_tex_name();
-            str_ptr str;
-            for (i=str_ptr(TOON_DIRECTORY).len(); i<(int)name.len(); i++)
-               str = str + str_ptr(name[i]);
+            string name = string(**xtoon->get_tex_name());
+            string str = name.substr(str_ptr(TOON_DIRECTORY).len());
 
-            i = _toon_filenames.get_index(str);
-            if (i==BAD_IND)
+            it = std::find(_toon_filenames.begin(), _toon_filenames.end(), str);
+            if (it == _toon_filenames.end())
             {
                _listbox[LIST_TEX]->set_int_val(0);
                xtoon->set_tex_name(NULL_STR);
             }
             else
             {
-               _listbox[LIST_TEX]->set_int_val(i+1);
-               xtoon->set_tex_name(name);
+               _listbox[LIST_TEX]->set_int_val((it-_toon_filenames.begin())+1);
+               xtoon->set_tex_name(str_ptr(name.c_str()));
             }
 
          }
@@ -1988,7 +1975,7 @@ NPRPenUI::refresh_tex()
             xtoon->set_tex_name(NULL_STR);
          }
 
-	  }
+      }
    }
 }
 

@@ -180,8 +180,8 @@ protected:
   //void     add_grid_layer();
   //void     del_layer();
   void     fill_preset_listbox( GLUI_Listbox *listbox,
-								str_list     &save_files,
-								Cstr_ptr     &full_path);
+                                str_list     &save_files,
+                                const string &full_path);
   bool     load_preset(const char *f);
   void     preset_stroke();
 

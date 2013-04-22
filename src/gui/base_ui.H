@@ -97,9 +97,9 @@ class BaseUI
    void fill_listbox(GLUI_Listbox* listbox, Cstr_list& list);  
    void fill_directory_listbox(GLUI_Listbox* listbox,
                                str_list     &save_files,
-                               Cstr_ptr     &full_path,
-                               Cstr_ptr     &extension,
-                               bool         hide_extention=false,
+                               const string &full_path,
+                               const string &extension,
+                               bool         hide_extension=false,
                                bool         put_default=false,
                                str_ptr      default_text="-default-");   
    /******** MEMBERS VARS ********/    

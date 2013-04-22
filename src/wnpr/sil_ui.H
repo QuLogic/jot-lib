@@ -353,7 +353,7 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
    /******** Convenience Methods ********/
 
    bool     valid_gel(CGELptr g);
-   void     fill_buffer_listbox(GLUI_Listbox *, str_list &, Cstr_ptr &);
+   void     fill_buffer_listbox(GLUI_Listbox *, str_list &, const string &);
 
    /******** STATIC CALLBACK METHODS ********/
    static void button_cb(int id);

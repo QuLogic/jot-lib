@@ -19,6 +19,8 @@
 #define SUPPORT_H
 
 #include "platform.H"
+#include <string>
+#include <vector>
 #include "error.H"
 #include "ref.H"
 #include "hash.H"
@@ -582,7 +584,7 @@ operator>> (istream &is, ARRAY<T> &array)
 }
 
 str_list tokenize(Cstr_ptr &str, char delim=' ');
-str_list dir_list(Cstr_ptr &directory);
+vector<string> dir_list(const string &directory);
 
 // None of jot's code checks if select() was interrupted by a
 // signal (for example, SIGALRM used by IBM's MPI

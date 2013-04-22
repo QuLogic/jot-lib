@@ -68,7 +68,7 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+LIST_PRESET, listbox_cb);
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(MY_WIDTH);   
-   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + _directory, _extension, false, true, "-=NEW=-");
+   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, string(**(Config::JOT_ROOT() + _directory)), string(**_extension), false, true, "-=NEW=-");
 
    new GLUI_Separator(_panel[PANEL_PRESET]);
 

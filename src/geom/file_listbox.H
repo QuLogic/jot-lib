@@ -57,7 +57,7 @@ class FileListbox {
    // be four characters long, and include the dot!  Files lacking
    // this extension are ignored.
    static void fill_listbox(GLUI_Listbox *listbox, str_list &files,
-                            Cstr_ptr &full_path, Cstr_ptr &save_path,
+                            const string &full_path, const string &save_path,
                             const char *extension=0);
 
  protected:

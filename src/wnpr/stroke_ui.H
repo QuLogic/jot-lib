@@ -330,9 +330,9 @@ class StrokeUI : public PaperEffectObs {
    /******** Convenience Methods ********/
 
    mlib::NDCZpt                  xy_to_ndcz(int x, int y);
-   void                    fill_texture_listbox(GLUI_Listbox *lb, str_list &save_files, Cstr_ptr &full_path);
-   void                    fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, Cstr_ptr &full_path);
-   void                    fill_preset_listbox(GLUI_Listbox *lb, str_list &save_files, Cstr_ptr &full_path);
+   void                    fill_texture_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
+   void                    fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
+   void                    fill_preset_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
 
    /******** EVENT HANDLERS ********/
 

@@ -897,7 +897,7 @@ SilUI::build()
    _listbox[LIST_BUFFER]->set_w(BUFFER_NAME_W);
    _listbox[LIST_BUFFER]->add_item(0, "-=<NEW>=-");
    _listbox[LIST_BUFFER]->set_int_val(0);
-   fill_buffer_listbox(_listbox[LIST_BUFFER], _buffer_filenames, Config::JOT_ROOT() + BUFFER_DIRECTORY);
+   fill_buffer_listbox(_listbox[LIST_BUFFER], _buffer_filenames, string(**Config::JOT_ROOT()) + BUFFER_DIRECTORY);
 
    //Buffer name editor
    _edittext[EDITTEXT_BUFFER_NAME] = new GLUI_EditText(
@@ -1911,7 +1911,7 @@ void
 SilUI::fill_buffer_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
    )
 {
    int i;
@@ -1924,31 +1924,27 @@ SilUI::fill_buffer_listbox(
    }
    save_files.clear();
 
-   str_list in_files = dir_list(full_path);
-   for (i = 0; i < in_files.num(); i++) {
-      int len = in_files[i].len();
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+      string::size_type len = in_files[i].length();
 
-      if ( (len>3) && (strcmp(&(**in_files[i])[len-4],".sil") == 0))
+      if ( (len>3) && (in_files[i].substr(len-4) == ".sil"))
       {
-         char *basename = new char[len+1];       
-         assert(basename);
-         strcpy(basename,**in_files[i]);
-         basename[len-4] = 0;
+         string basename = in_files[i].substr(0, len-4);
 
-         if ( jot_check_glui_fit(listbox, basename) )
+         if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files += full_path + in_files[i];
-            listbox->add_item(save_files.num(), basename);
+            save_files += str_ptr((full_path + in_files[i]).c_str());
+            listbox->add_item(save_files.num(), basename.c_str());
          }
          else
          {
             cerr << "SilUI::fill_buffer_listbox - Discarding file (name too long for listbox): " << basename << "\n";
          }
-         delete basename;
       }
       else
       {
-         cerr << "SilUI::fill_buffer_listbox - Discarding file (bad name): " << **in_files[i] << "\n";
+         cerr << "SilUI::fill_buffer_listbox - Discarding file (bad name): " << in_files[i] << "\n";
       }
    }
 }

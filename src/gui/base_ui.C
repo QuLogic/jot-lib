@@ -136,8 +136,8 @@ BaseUI::fill_listbox(GLUI_Listbox* listbox, Cstr_list& list)
 void 
 BaseUI::fill_directory_listbox(GLUI_Listbox* listbox,
                                str_list     &save_files,
-                               Cstr_ptr     &full_path,
-                               Cstr_ptr     &extension,
+                               const string &full_path,
+                               const string &extension,
                                bool         hide_extension,
                                bool         put_default,
                                Cstr_ptr     default_text)
@@ -167,27 +167,25 @@ BaseUI::fill_directory_listbox(GLUI_Listbox* listbox,
    }
 
    
-   int extention_lenght = extension.len();
-   str_list in_files = dir_list(full_path);
-   for (i = 0; i < in_files.num(); i++) {
-      int len = in_files[i].len();
+   string::size_type extension_length = extension.length();
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+      string::size_type len = in_files[i].length();
 
-      if ((len>3)  && (strcmp(&(**in_files[i])[len-extention_lenght],**extension) == 0))
+      if ((len>3) && (in_files[i].substr(len-extension_length) == extension))
       {
+         string basename;
+         if (hide_extension)
+            basename = in_files[i].substr(0, len-extension_length);
+         else
+            basename = in_files[i];
 
-         char *basename = new char[len+1];       
-         assert(basename);
-         strcpy(basename,**in_files[i]);
-         basename[(hide_extension) ? len-extention_lenght : len] = 0;
-
-         save_files += in_files[i];
-         listbox->add_item(current_count++, basename);
-        
-         delete [] basename;
+         save_files += str_ptr(in_files[i].c_str());
+         listbox->add_item(current_count++, basename.c_str());
       }
       else if (in_files[i] != "CVS")
       {
-         err_msg("BaseUI::fill_directory_listbox - Discarding preset file (bad name): %s", **in_files[i]);         
+         err_msg("BaseUI::fill_directory_listbox - Discarding preset file (bad name): %s", in_files[i].c_str());
       }
    }
 }

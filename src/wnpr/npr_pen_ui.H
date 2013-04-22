@@ -191,8 +191,8 @@ class NPRPenUI {
    mlib::Wpt                           _center;
    mlib::Wvec                          _light;
 
-   str_list                      _other_filenames;
-   str_list                      _toon_filenames;
+   vector<string>                _other_filenames;
+   vector<string>                _toon_filenames;
 
    ARRAY<GLUI_Listbox*>          _listbox;
    ARRAY<GLUI_Button*>           _button;
@@ -256,7 +256,7 @@ class NPRPenUI {
 
    /******** Convenience Methods ********/
 
-   void     fill_tex_listbox(GLUI_Listbox *lb, Cstr_list &save_files);
+   void     fill_tex_listbox(GLUI_Listbox *lb, const vector<string> &save_files);
    void     fill_layer_listbox();
    str_ptr  get_layer_name(int);
    str_ptr  try_layer_name(int,str_ptr);

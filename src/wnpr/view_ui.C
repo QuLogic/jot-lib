@@ -629,7 +629,7 @@ ViewUI::build()
                               id+LIST_BKGTEX, listbox_cb);
    assert(_listbox[LIST_BKGTEX]);
    _listbox[LIST_BKGTEX]->add_item(0, "----");
-   fill_bkgtex_listbox(_listbox[LIST_BKGTEX], _bkgtex_filenames, Config::JOT_ROOT() + BKGTEX_DIRECTORY);
+   fill_bkgtex_listbox(_listbox[LIST_BKGTEX], _bkgtex_filenames, string(**Config::JOT_ROOT()) + BKGTEX_DIRECTORY);
 
    //Color
    _slider[SLIDE_BH] = new GLUI_Slider(
@@ -696,7 +696,7 @@ ViewUI::build()
                              id+LIST_PAPER, listbox_cb);
    assert(_listbox[LIST_PAPER]);
    _listbox[LIST_PAPER]->add_item(0, "----");
-   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() );
+   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, string(**Config::JOT_ROOT()));
 
    _slider[SLIDE_BRIG] = new GLUI_Slider(
                             _rollout[ROLLOUT_PAPER],
@@ -1079,17 +1079,17 @@ void
 ViewUI::fill_bkgtex_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
 )
 {
    int j=0;
-   str_list in_files = dir_list(full_path);
-   for (int i = 0; i < in_files.num(); i++) {
-      int len = in_files[i].len();
+   vector<string> in_files = dir_list(full_path);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+      string::size_type len = in_files[i].length();
       if ( (len>3) &&
-           (strcmp(&(**in_files[i])[len-4],".png") == 0)) {
-         save_files += full_path + in_files[i];
-         listbox->add_item(1+j++, **in_files[i]);
+           (in_files[i].substr(len-4) == ".png")) {
+         save_files += str_ptr((full_path + in_files[i]).c_str());
+         listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
 }
@@ -1107,17 +1107,17 @@ void
 ViewUI::fill_paper_listbox(
    GLUI_Listbox *listbox,
    str_list     &save_files,
-   Cstr_ptr     &full_path
+   const string &full_path
 )
 {
    int j=0;
-   str_list in_files = dir_list(full_path + PAPER_DIRECTORY);
-   for (int i = 0; i < in_files.num(); i++) {
-      int len = in_files[i].len();
+   vector<string> in_files = dir_list(full_path + PAPER_DIRECTORY);
+   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+      string::size_type len = in_files[i].length();
       if ( (len>3) &&
-           (strcmp(&(**in_files[i])[len-4],".png") == 0)) {
-         save_files += str_ptr(PAPER_DIRECTORY) + in_files[i];
-         listbox->add_item(1+j++, **in_files[i]);
+           (in_files[i].substr(len-4) == ".png")) {
+         save_files += str_ptr((PAPER_DIRECTORY + in_files[i]).c_str());
+         listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
 }

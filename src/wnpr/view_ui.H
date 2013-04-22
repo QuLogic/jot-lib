@@ -239,8 +239,8 @@ class ViewUI {
 
    /******** Convenience Methods ********/
 
-   void     fill_bkgtex_listbox(GLUI_Listbox *lb, str_list &save_files, Cstr_ptr &full_path);
-   void     fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, Cstr_ptr &full_path);
+   void     fill_bkgtex_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
+   void     fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
    void     fill_anti_listbox(GLUI_Listbox *lb);
 
    /******** STATIC CALLBACK METHODS ********/
