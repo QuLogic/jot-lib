@@ -546,6 +546,8 @@ public:
     GLUI          *create_glui( const char *name, long flags=0, int x=-1, int y=-1 );
     GLUI          *create_glui_subwindow( int parent_window, long flags=0 );
     GLUI          *find_glui_by_window_id( int window_id );
+    void           block_gluis_by_gfx_window_id( int window_id );
+    void           unblock_gluis_by_gfx_window_id( int window_id );
     void           get_viewport_area( int *x, int *y, int *w, int *h );
     void           auto_set_viewport();
     void           close_all();
@@ -675,6 +677,7 @@ protected:
     bool          closing;
     int           parent_window;
     int           glui_id;
+    bool          blocked;
 
     /********** Misc functions *************/
 
@@ -764,6 +767,8 @@ public:
     int          get_cursor( void );
     int          get_w() { return w; }
     int          get_h() { return h; }
+    bool         get_blocked() { return blocked; }
+    void         set_blocked(bool b) { blocked = b; }
     void         set_default_middle_handler( GLUI_Control *c ) { default_middle_handler = c; }
     void         set_default_right_handler( GLUI_Control *c ) { default_right_handler = c; }
 

@@ -341,7 +341,7 @@ void glui_keyboard_func(unsigned char key, int x, int y)
   else {   /***  Nope, event was in a standalone GLUI window  **/
     glui = GLUI_Master.find_glui_by_window_id( glutGetWindow() );
 
-    if ( glui ) {
+    if ( glui AND NOT glui->get_blocked() ) {
       glui->keyboard(key,x,y);
 	  finish_drawing();
     }
@@ -381,7 +381,7 @@ void glui_special_func(int key, int x, int y)
   {
     glui = GLUI_Master.find_glui_by_window_id(glutGetWindow());
 
-    if ( glui )
+    if ( glui AND NOT glui->get_blocked() )
     {
       glui->special(key,x,y);
       finish_drawing();
@@ -410,7 +410,7 @@ void glui_mouse_func(int button, int state, int x, int y)
   }
   else {               /**  Nope - event was in a GLUI standalone window  **/
     glui = GLUI_Master.find_glui_by_window_id( glutGetWindow() );
-    if ( glui ) {
+    if ( glui AND NOT glui->get_blocked() ) {
       glui->passive_motion( 0,0 );
       glui->mouse( button, state, x, y );
 	  finish_drawing();
@@ -427,7 +427,7 @@ void glui_motion_func(int x, int y)
 
   glui = GLUI_Master.find_glui_by_window_id( glutGetWindow() );
 
-  if ( glui ) {
+  if ( glui AND NOT glui->get_blocked() ) {
     glui->motion(x,y);
 	finish_drawing();
   }
@@ -443,7 +443,7 @@ void glui_passive_motion_func(int x, int y)
 
   glui = GLUI_Master.find_glui_by_window_id( glutGetWindow() );
 
-  if ( glui ) {
+  if ( glui AND NOT glui->get_blocked() ) {
     glui->passive_motion(x,y);
 	finish_drawing();
   }
@@ -458,7 +458,7 @@ void glui_entry_func(int state)
 
   glui = GLUI_Master.find_glui_by_window_id( glutGetWindow() );
 
-  if ( glui ) {
+  if ( glui AND NOT glui->get_blocked() ) {
     glui->entry(state);
   }
 }
@@ -574,6 +574,48 @@ GLUI  *GLUI_Master_Object::find_glui_by_window_id( int window_id )
     node = node->next();
   }
   return NULL;
+}
+
+/********************** GLUI_Master_Object::block_gluis_by_gfx_window_id() ********/
+
+void GLUI_Master_Object::block_gluis_by_gfx_window_id( int window_id )
+{
+  GLUI_Node *node;
+
+  node = gluis.first_child();
+
+  while ( node ) {
+    if (window_id == -1) {
+      ((GLUI*)node)->set_blocked(true);
+      ((GLUI*)node)->refresh();
+    }
+    else if ( ((GLUI*)node)->main_gfx_window_id == window_id ) {
+      ((GLUI*)node)->set_blocked(true);
+      ((GLUI*)node)->refresh();
+    }
+    node = node->next();
+  }
+}
+
+/********************** GLUI_Master_Object::unblock_gluis_by_gfx_window_id() ********/
+
+void GLUI_Master_Object::unblock_gluis_by_gfx_window_id( int window_id )
+{
+  GLUI_Node *node;
+
+  node = gluis.first_child();
+
+  while ( node ) {
+    if (window_id == -1) {
+      ((GLUI*)node)->set_blocked(false);
+      ((GLUI*)node)->refresh();
+    }
+    else if ( ((GLUI*)node)->main_gfx_window_id == window_id ) {
+      ((GLUI*)node)->set_blocked(false);
+      ((GLUI*)node)->refresh();
+    }
+    node = node->next();
+  }
 }
 
 
@@ -1223,6 +1265,7 @@ GLUI_Main::GLUI_Main( void )
   parent_window           = -1;
   glui_id                 = GLUI_Master.glui_id_counter;
   GLUI_Master.glui_id_counter++;
+  blocked                 = false;
 
   font                    = GLUT_BITMAP_HELVETICA_12;
   curr_cursor             = GLUT_CURSOR_LEFT_ARROW;

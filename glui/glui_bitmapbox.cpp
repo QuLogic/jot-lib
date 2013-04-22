@@ -530,7 +530,7 @@ void    GLUI_BitmapBox::draw_active_area( void )
          glRasterPos2f( x, y );
       }
 
-		if (enabled && (!glui || !glui->get_blocked()))
+      if (enabled AND (!glui OR !glui->get_blocked()))
          glDrawPixels( image_w, image_h, GL_RGB, GL_UNSIGNED_BYTE, image );
       else
          glDrawPixels( image_w, image_h, GL_RGB, GL_UNSIGNED_BYTE, image_disabled );
