@@ -177,7 +177,7 @@ int GLUI::init( const char *text, long flags, int x, int y, int parent_window )
 
 /************************************************ GLUI::rename() **********/
 
-bool GLUI::rename( const char *text )
+bool GLUI::rename( GLUI_String &text )
 {
   int old_glut_window;
 
