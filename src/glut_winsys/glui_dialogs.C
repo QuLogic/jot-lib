@@ -640,7 +640,7 @@ GLUIFileSelect::display(bool blocking, file_cb_t cb, void *vp, int idx)
 // undisplay()
 //////////////////////////////////////////////////////
 bool
-GLUIFileSelect::undisplay(int button, str_ptr path, str_ptr file)
+GLUIFileSelect::undisplay(int button, string path, string file)
 { 
    assert(is_displaying());
    
@@ -657,7 +657,7 @@ GLUIFileSelect::undisplay(int button, str_ptr path, str_ptr file)
 
    if (button == OK_ACTION)
    {
-      _current_recent_paths.add_uniquely(_path);
+      _current_recent_paths.add_uniquely(str_ptr(_path.c_str()));
       while(_current_recent_paths.num() > GLUI_FILE_SELECT_NUM_RECENT) 
       {
          _current_recent_paths.pull_index(0);
@@ -1236,197 +1236,32 @@ GLUIFileSelect::unbuild_glui()
    GLUIPopUp::unbuild_glui();
 }
 
-/*
-//////////////////////////////////////////////////////
-// rename_()
-//////////////////////////////////////////////////////
-bool     
-GLUIFileSelect::rename_(Cstr_ptr &old_name, Cstr_ptr &new_name)
-{   
-   int ret;
-
-#ifdef WIN32
-   ret = rename(**old_name, **new_name);
-#else
-   //XXX - Untested
-   ret = rename(**old_name, **new_name);
-#endif
-   
-   if (ret != 0)
-   {
-      cerr << "GLUIFileSelect::rename_() - ERROR!! Couldn't rename: '" << old_name << "' to: '" << new_name << "'\n";
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-//////////////////////////////////////////////////////
-// remove_()
-//////////////////////////////////////////////////////
-bool     
-GLUIFileSelect::remove_(Cstr_ptr &file)
-{   
-   int ret;
-
-#ifdef WIN32
-   ret = remove(**file);
-#else
-   //XXX - Untested
-   ret = remove(**file);
-#endif
-   
-   if (ret != 0)
-   {
-      cerr << "GLUIFileSelect::remove_() - ERROR!! Couldn't remove: '" << file << "'\n";
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-//////////////////////////////////////////////////////
-// rmdir_()
-//////////////////////////////////////////////////////
-bool     
-GLUIFileSelect::rmdir_(Cstr_ptr &dir)
-{   
-   int ret;
-
-#ifdef WIN32
-   ret = _rmdir(**dir);
-#else
-   //XXX - Untested
-   ret = rmdir(**dir);
-#endif
-   
-   if (ret != 0)
-   {
-      cerr << "GLUIFileSelect::rmdir_() - ERROR!! Couldn't rmdir: '" << dir << "'\n";
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-//////////////////////////////////////////////////////
-// mkdir_()
-//////////////////////////////////////////////////////
-bool     
-GLUIFileSelect::mkdir_(Cstr_ptr &dir)
-{   
-   int ret;
-
-#ifdef WIN32
-   ret = _mkdir(**dir);
-#else
-   //XXX - Untested
-   ret = mkdir(**dir, S_IRUSR  | S_IWUSR  | S_IXUSR |
-                      S_IRGRP  |            S_IXGRP |
-                      S_IROTH  |            S_IXOTH );
-// ret = mkdir(**dir, S_IRUSR  | S_IWUSR  | S_IXUSR |
-//                    S_IRGRP  | S_IWGRP  | S_IXGRP |
-//                    S_IROTH  | S_IWOTH  | S_IXOTH );
-
-#endif
-   
-   if (ret != 0)
-   {
-      cerr << "GLUIFileSelect::mkdir_() - ERROR!! Couldn't mkdir: '" << dir << "'\n";
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-//////////////////////////////////////////////////////
-// chdir_()
-//////////////////////////////////////////////////////
-bool     
-GLUIFileSelect::chdir_(Cstr_ptr &new_dir)
-{   
-   int ret;
-
-#ifdef WIN32
-   ret = _chdir(**new_dir);
-#else
-   ret = chdir(**new_dir);
-#endif
-   
-   if (ret != 0)
-   {
-      cerr << "GLUIFileSelect::chdir_() - ERROR!! Couldn't CHDIR to: '" << new_dir << "'\n";
-      return false;
-   }
-   else
-   {
-      return true;
-   }
-}
-
-#define CWD_BUF 1024
-//////////////////////////////////////////////////////
-// getcwd_()
-//////////////////////////////////////////////////////
-str_ptr
-GLUIFileSelect::getcwd_()
-{
-   char *ret, cwd[CWD_BUF];
-
-#ifdef WIN32
-   ret = _getcwd(cwd,CWD_BUF);
-#else
-   ret = getcwd(cwd,CWD_BUF);
-#endif
-   
-   if (!ret)
-   {
-      cerr << "GLUIFileSelect::getcwd_() - ERROR!! Couldn't retreive CWD!\n";
-      return NULL_STR;
-   }
-   else
-   {
-      return cwd;
-   }
-}
-*/
 //////////////////////////////////////////////////////
 // readdir_()
 //////////////////////////////////////////////////////
-str_list 
-GLUIFileSelect::readdir_(Cstr_ptr &path, Cstr_ptr &filter)
+vector<string>
+GLUIFileSelect::readdir_(const string &path, const string &filter)
 {
-   str_list list;
-   static Cstr_ptr dot("."), dotdot("..");
+   vector<string> list;
+   const string dot("."), dotdot("..");
    bool hide_leading_dot = _checkbox[CHECKBOX_DOT]->get_int_val() == 0;
 #ifdef WIN32
    WIN32_FIND_DATA file;
    HANDLE hFile;
    
-   assert(filter != NULL_STR);
+   assert(filter != "");
    
    //General filter only applies to files, and not directories... so use '*' filter
-   if ((hFile = FindFirstFile(**(path + "/" + "*"), &file)) != INVALID_HANDLE_VALUE) 
-   {
-      while (1) 
-      {
-	      str_ptr fname(file.cFileName); assert(int(fname.len())>0);
+   if ((hFile = FindFirstFile((path + "/" + "*").c_str(), &file)) != INVALID_HANDLE_VALUE) {
+      while (true) {
+         string fname(file.cFileName); assert(fname.length()>0);
 	      
-         if (file.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-         {
+         if (file.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             //However the leading '.' filter checkbox still applies!
             if ( (( hide_leading_dot) && (fname[0] != '.'))  ||
                  ((!hide_leading_dot) && (fname!=dot)&&(fname!=dotdot))  )
             {
-               list += fname;
+               list.push_back(fname);
             }
 
          }
@@ -1436,18 +1271,14 @@ GLUIFileSelect::readdir_(Cstr_ptr &path, Cstr_ptr &filter)
    }
 
    //General filter applies to files
-   if ((hFile = FindFirstFile(**(path + "/" + filter), &file)) != INVALID_HANDLE_VALUE) 
-   {
-      while (1) 
-      {
-	      str_ptr fname(file.cFileName); assert(int(fname.len())>0);
+   if ((hFile = FindFirstFile((path + "/" + filter).c_str(), &file)) != INVALID_HANDLE_VALUE) {
+      while (true) {
+         string fname(file.cFileName); assert(fname.length()>0);
 
-         if (!(file.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
-         {
+         if (!(file.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
             //However the leading '.' filter checkbox also applies!
-            if (!(hide_leading_dot && fname[0]=='.'))
-            {
-               list += fname;
+            if (!(hide_leading_dot && fname[0] == '.')) {
+               list.push_back(fname);
             }
          }
          if (!FindNextFile(hFile, &file)) break;
@@ -1458,31 +1289,25 @@ GLUIFileSelect::readdir_(Cstr_ptr &path, Cstr_ptr &filter)
    DIR *dir = 0;
    struct dirent *direntry;
 
-   if ((dir = opendir(**path))!=NULL)
-   {
+   if ((dir = opendir(path.c_str())) != NULL) {
       struct stat statbuf;
-      while ((direntry = readdir(dir))!=NULL)
-      {
-         str_ptr file(direntry->d_name), full_path = path + "/" + file;
+      while ((direntry = readdir(dir)) != NULL) {
+         string file(direntry->d_name), full_path = path + "/" + file;
          
-         if (!stat(**full_path, &statbuf))
-         {
+         if (!stat(full_path.c_str(), &statbuf)) {
             //General filter only applies to files, not directories...
-            if ((statbuf.st_mode&S_IFMT)==S_IFDIR) 
-            {
+            if ((statbuf.st_mode&S_IFMT) == S_IFDIR) {
                //But the '.' filter checkbox still applies
                if ( ( hide_leading_dot && file[0]!='.')             ||
                     (!hide_leading_dot && file!=dot && file!=dotdot)  )
                {
-                  list += file;
+                  list.push_back(file);
                }
             } 
-            else if (((statbuf.st_mode&S_IFMT)!=S_IFDIR) && !fnmatch(**filter, **file, FNM_PATHNAME & FNM_PERIOD)) 
-            {
+            else if (((statbuf.st_mode&S_IFMT) != S_IFDIR) && !fnmatch(filter.c_str(), file.c_str(), FNM_PATHNAME & FNM_PERIOD)) {
                //However the leading '.' filter checkbox also applies!
-               if (!(hide_leading_dot && file[0]=='.'))
-               {
-                  list += file;
+               if (!(hide_leading_dot && file[0]=='.')) {
+                  list.push_back(file);
                }
             }
          }
@@ -1497,11 +1322,11 @@ GLUIFileSelect::readdir_(Cstr_ptr &path, Cstr_ptr &filter)
 // stat_()
 //////////////////////////////////////////////////////
 bool
-GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
+GLUIFileSelect::stat_(const string &cpath, DIR_ENTRYptr &ret)
 {
-   assert(cpath != NULL_STR);
+   assert(cpath != "");
 
-   str_ptr path = cpath;
+   string path = cpath;
 
    ret->clear();
 
@@ -1512,11 +1337,11 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
    char   buf_drv[_MAX_DRIVE], buf_dir[_MAX_DIR];
    char buf_fname[_MAX_FNAME], buf_ext[_MAX_EXT];
 
-   _splitpath(**path, buf_drv, buf_dir, buf_fname, buf_ext);
+   _splitpath(path.c_str(), buf_drv, buf_dir, buf_fname, buf_ext);
 
-   str_ptr s_drv(buf_drv); 
-   str_ptr s_dir(buf_dir); 
-   str_ptr s_fname(buf_fname);
+   string s_drv(buf_drv);
+   string s_dir(buf_dir);
+   string s_fname(buf_fname);
 
    //Roll fname and extension together and make sure
    //it's non-null only for real file/folder names (not dot)
@@ -1525,11 +1350,11 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
    //If fname points to a directory via a '.', then drop the
    if (s_fname == ".")
    {
-      s_fname = NULL_STR;
+      s_fname = "";
    }
 
    //Full paths must start with a drive
-   if (s_drv == NULL_STR)
+   if (s_drv == "")
    {
       cerr << "GLUIFileSelect::stat_() - Not a full path with drive prefix: '" << path << "'\n";
       return false;
@@ -1541,15 +1366,14 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
       return false;
    }
    //No file or directory indicates a drive's root dir
-   else if ( ((s_dir == "/")  ||  (s_dir == "\\") || (s_dir == NULL_STR)) && 
-             (s_fname == NULL_STR) )
+   else if ( ((s_dir == "/")  ||  (s_dir == "\\") || (s_dir == "")) && (s_fname == "") )
    {
       //Clean up path...
       path = s_drv + "\\";
 
-      str_ptr drive_type_name;
+      string drive_type_name;
       ULARGE_INTEGER total_space, free_space;
-      uint drive_type = GetDriveType(**path);
+      uint drive_type = GetDriveType(path.c_str());
 
       switch (drive_type)
       {
@@ -1570,8 +1394,8 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
       //Ignores error if media not present to avoid the pop-up prompt to insert disc...
       unsigned int old_mode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS); 
       //XXX - Floppy seek is so slow, it really chokes... Forget it.
-      if ((drive_type != DRIVE_REMOVABLE) && (GetDiskFreeSpaceEx(**path,&free_space,&total_space,NULL)))
-//      if (GetDiskFreeSpaceEx(**path,&free_space,&total_space,NULL))
+      if ((drive_type != DRIVE_REMOVABLE) && (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, NULL)))
+//      if (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, NULL))
       {
          ret->_size = (LONGLONG)(total_space.QuadPart-free_space.QuadPart);
       }
@@ -1586,21 +1410,21 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
       //s_drv looks like "X:"
       //s_dir looks like "/some/folders/with/trailing/slash/"
       //s_fname looks like "name.extension" (could be a folder or file)
-      if (s_fname == NULL_STR)
+      if (s_fname == "")
       {
          //We're not just a drive, so s_dir must
          //contain folder(s) and we'll just lop off the trailing slash
          //so path points to the foldername...
          
          //XXX - use strcpy instead...
-         if ( (s_dir[(int)s_dir.len()-1] != '/') && (s_dir[(int)s_dir.len()-1] != '\\') )
+         if ( (s_dir[s_dir.length()-1] != '/') && (s_dir[s_dir.length()-1] != '\\') )
             
          {
             cerr << "GLUIFileSelect::stat_() - Error. Something is malformed about path. Trailing slash expected: '" << path << "'\n";
             return false;
          }
 
-         path = s_drv; for (int i=0; i< (int)s_dir.len()-1; i++) path = path + str_ptr(s_dir[i]);
+         path = s_drv + s_dir.substr(0, s_dir.length()-1);
       }
       else
       {
@@ -1608,7 +1432,7 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
       }
 
 
-      if (_stat(**path, &buf) != 0)
+      if (_stat(path, &buf) != 0)
       {
          cerr << "GLUIFileSelect::stat_() - Failed to get information on target: '" << path << "'\n";
          return false;
@@ -1643,7 +1467,7 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
       return false;
    }
    //Path must point to a literal entity
-   if (path[(int)path.len()-1] == '.')
+   if (path[path.length()-1] == '.')
    {
       cerr << "GLUIFileSelect::stat_() - Relative paths with .'s not allowed: '" << path << "'\n";
       return false;
@@ -1651,9 +1475,8 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
    else
    {
       //Treat root directory like a win32 'drive'
-      if ((int)path.len() == 1)
+      if (path.length() == 1)
       {
-
          assert(path == "/");
 
          if (stat("/.", &buf) != 0)
@@ -1682,17 +1505,14 @@ GLUIFileSelect::stat_(Cstr_ptr &cpath, DIR_ENTRYptr &ret)
          //Fix up paths with trailing slashes because
          //they don't end with a file/folder name, 
          //otherwise _stat will fail out...
-         if (path[(int)path.len()-1] == '/')
+         if (path[path.length()-1] == '/')
          {
             //We'll just lop off the trailing slash
             //so path points to the foldername...
-            //XXX - use strcpy instead...
-            str_ptr new_path;
-            for (int i=0; i< (int)path.len()-1; i++) new_path = new_path + str_ptr(path[i]);
-            path = new_path;
+            path = path.substr(0, path.length()-1);
          }
 
-         if (stat(**path, &buf) != 0)
+         if (stat(path.c_str(), &buf) != 0)
          {
             cerr << "GLUIFileSelect::stat_() - Failed to get information on target: '" << path << "'\n";
             return false;
@@ -1740,25 +1560,23 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 
    dir->_contents.clear();
 
-   if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
-   {
+   if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT) {
       assert(_filter < _filters.num());
       //readdir wants a path pointing to a dir...
       //_full_path already has trailing slashes removed
       //for directories, but not for 'drives' i.e. root directories...
       //so add the . back in that case....
-      str_list entries = readdir_(dir->_full_path + 
-                                    ((dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?("."):(NULL_STR)),
-                                          _filters[_filter]);
+      vector<string> entries = readdir_(dir->_full_path +
+                                           (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?".":""),
+                                        string(**_filters[_filter]));
 
-      for (i=0; i<entries.num(); i++)
-      {  
+      for (vector<string>::size_type j=0; j<entries.size(); j++) {
          // Careful about assembling paths, /'s and filenames
          // Don't need trailing slashes for root direntories a.k.a. 'drives'...
          DIR_ENTRYptr e = generate_dir_entry(
             dir->_full_path + 
-               ((dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?(NULL_STR):("/")) + 
-                  entries[i], entries[i]);
+               (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") + entries[j],
+            entries[j]);
 
          if (  (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
                (e->_type == DIR_ENTRY::DIR_ENTRY_FILE) )
@@ -1785,11 +1603,9 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 
       assert(drives != 0);
 
-      for (i=0; i < 26; i++)
-      {
-         if (drives & 1<<i)
-         {
-            str_ptr drv((char)('A'+i));
+      for (i=0; i < 26; i++) {
+         if (drives & 1<<i) {
+            string drv((char)('A'+i));
             e = generate_dir_entry(drv + ":\\", drv + ": ");
             assert((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
             dir->_contents += e;
@@ -1804,28 +1620,23 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 
       //Verify this path... 
       //Save the CWD before mucking about...
-      str_ptr old_cwd = getcwd_(), jotroot_cwd;
+      string old_cwd = getcwd_(), jotroot_cwd;
 
-      if (chdir_(Config::JOT_ROOT()))
-      {
-         if ((jotroot_cwd = getcwd_()) != NULL_STR)
-         {
-            e = generate_dir_entry(jotroot_cwd, NULL_STR);
-            if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY))
-            {
+      if (chdir_(string(**Config::JOT_ROOT()))) {
+         if ((jotroot_cwd = getcwd_()) != "") {
+            e = generate_dir_entry(jotroot_cwd, "");
+            if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
                dir->_contents += e;
             }
          }
       }
-      if (old_cwd != NULL_STR) chdir_(old_cwd);
+      if (old_cwd != "") chdir_(old_cwd);
 
       //These paths have been 'tested' by chdiring to them,
       //and reading back the getcwd... They're 'safe'
-      for (i=0; i<_current_recent_paths.num(); i++)
-      {
-         e = generate_dir_entry(_current_recent_paths[i], NULL_STR);
-         if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY))
-         {
+      for (i=0; i<_current_recent_paths.num(); i++) {
+         e = generate_dir_entry(string(**_current_recent_paths[i]), "");
+         if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
             dir->_contents += e;
          }
       }
@@ -1842,14 +1653,14 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 static int sort_name(const void* va, const void* vb)
 #ifdef WIN32
 //Case-sensitive string comparison...
-//{ return strcmp(      **(*((DIR_ENTRYptr *)va))->_name, **(*((DIR_ENTRYptr *)vb))->_name);   }
+//{ return strcmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
 //Case-INsensitive version...
-{ return _stricmp(      **(*((DIR_ENTRYptr *)va))->_name, **(*((DIR_ENTRYptr *)vb))->_name);   }
+{ return _stricmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
 #else
 //Case-sensitive string comparison...
-//{ return strcmp(      **(*((DIR_ENTRYptr *)va))->_name, **(*((DIR_ENTRYptr *)vb))->_name);   }
+//{ return strcmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
 //Case-INsensitive version...
-{ return strcasecmp(      **(*((DIR_ENTRYptr *)va))->_name, **(*((DIR_ENTRYptr *)vb))->_name);   }
+{ return strcasecmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
 #endif
 
 static int sort_type(const void* va, const void* vb)
@@ -2242,11 +2053,11 @@ GLUIFileSelect::do_delete_mode()
 
    if (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)
    {
-      _edittext[EDITTEXT_FILE]->set_text(**(str_ptr("Delete directory ") + e->_full_path + " ?"));
+      _edittext[EDITTEXT_FILE]->set_text(("Delete directory " + e->_full_path + " ?").c_str());
    }
    else
    {
-      _edittext[EDITTEXT_FILE]->set_text(**(str_ptr("Delete file ") + e->_full_path + " ?"));
+      _edittext[EDITTEXT_FILE]->set_text(("Delete file " + e->_full_path + " ?").c_str());
    }
    
 
@@ -2269,7 +2080,7 @@ GLUIFileSelect::do_rename_mode()
 
    _current_mode_saved_file = _edittext[EDITTEXT_FILE]->get_text();
 
-   _edittext[EDITTEXT_FILE]->set_text(**e->_name);
+   _edittext[EDITTEXT_FILE]->set_text(e->_name.c_str());
 
    _current_mode = MODE_RENAME;
 
@@ -2306,14 +2117,14 @@ GLUIFileSelect::do_delete_action()
 
    if (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)
    {
-      if (!rmdir_(**e->_full_path))
+      if (!rmdir_(e->_full_path))
       {
          cerr << "GLUIFileSelect::do_delete_action() - **FAILED**\n";
       }
    }
    else if (e->_type == DIR_ENTRY::DIR_ENTRY_FILE)
    {
-      if (!remove_(**e->_full_path))
+      if (!remove_(e->_full_path))
       {
          cerr << "GLUIFileSelect::do_delete_action() - **FAILED**\n";
       }
@@ -2340,12 +2151,12 @@ GLUIFileSelect::do_rename_action()
 
    DIR_ENTRYptr e = get_selected_entry();   assert(e != NULL);
 
-   str_ptr new_name = _current_path->_full_path + 
-                           ((_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?(NULL_STR):("/")) + 
-                              _edittext[EDITTEXT_FILE]->get_text();
+   string new_name = _current_path->_full_path +
+                          (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") +
+                             _edittext[EDITTEXT_FILE]->get_text();
 
 
-   if (!rename_(e->_full_path , new_name))
+   if (!rename_(e->_full_path, new_name))
    {
       cerr << "GLUIFileSelect::do_rename_action() - **FAILED**\n";
    }
@@ -2366,8 +2177,8 @@ GLUIFileSelect::do_add_action()
 {
    assert(_current_path != NULL);
 
-   str_ptr new_folder = _current_path->_full_path + 
-                           ((_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?(NULL_STR):("/")) + 
+   string new_folder = _current_path->_full_path +
+                           (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") +
                               _edittext[EDITTEXT_FILE]->get_text();
 
    if (!mkdir_(new_folder))
@@ -2519,7 +2330,7 @@ GLUIFileSelect::do_entry_select(int ind)
       else if (e->_type == DIR_ENTRY::DIR_ENTRY_FILE)
       {
          _current_selection_time = the_time();         
-         _edittext[EDITTEXT_FILE]->set_text(**e->_name);
+         _edittext[EDITTEXT_FILE]->set_text(e->_name.c_str());
          update();
       }
       else
@@ -2547,7 +2358,7 @@ GLUIFileSelect::do_entry_select(int ind)
       else if (e->_type == DIR_ENTRY::DIR_ENTRY_FILE)
       {
          _current_selection_time = the_time();         
-         _edittext[EDITTEXT_FILE]->set_text(**e->_name);
+         _edittext[EDITTEXT_FILE]->set_text(e->_name.c_str());
          update();
       }
       else
@@ -2590,25 +2401,25 @@ GLUIFileSelect::do_entry_select(int ind)
          {
             //double clicked a file -- see if the file name matches
             //the current name in the edittext box first...
-            if (e->_name == str_ptr(_edittext[EDITTEXT_FILE]->get_text()))
+            if (e->_name == _edittext[EDITTEXT_FILE]->get_text())
             {
                undisplay(OK_ACTION, 
                   _current_path->_full_path +
-                     ((_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?(NULL_STR):("/")), 
-                        _edittext[EDITTEXT_FILE]->get_text());
+                     (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/"),
+                  _edittext[EDITTEXT_FILE]->get_text());
             }
             //if not, just set the edittext to the clicked file's name
             else
             {
                _current_selection_time = new_time;
-               _edittext[EDITTEXT_FILE]->set_text(**e->_name);
+               _edittext[EDITTEXT_FILE]->set_text(e->_name.c_str());
                update();
             }
          }
          else
          {
             _current_selection_time = new_time;
-            _edittext[EDITTEXT_FILE]->set_text(**e->_name);
+            _edittext[EDITTEXT_FILE]->set_text(e->_name.c_str());
             update();
          }
       }
@@ -2668,14 +2479,14 @@ GLUIFileSelect::do_sort_toggle(int button)
 // generate_dir_entry()
 //////////////////////////////////////////////////////
 DIR_ENTRYptr
-GLUIFileSelect::generate_dir_entry(Cstr_ptr &full_path, Cstr_ptr &name)
+GLUIFileSelect::generate_dir_entry(const string &full_path, const string &name)
 {
    DIR_ENTRYptr ret = new DIR_ENTRY;
 
-   if (full_path == NULL_STR)
+   if (full_path == "")
    {
       ret->_type = DIR_ENTRY::DIR_ENTRY_ROOT;
-      ret->_full_path = NULL_STR;
+      ret->_full_path = "";
    }
    else
    {
@@ -2689,7 +2500,7 @@ GLUIFileSelect::generate_dir_entry(Cstr_ptr &full_path, Cstr_ptr &name)
    {
       //Assign the given name and append with
       //any existing name...
-      if (name != NULL_STR)
+      if (name != "")
       {
          ret->_name = name + ret->_name;
       }
@@ -2713,7 +2524,7 @@ GLUIFileSelect::init()
 
    ret = do_directory_change(_path);  assert(ret);
 
-   _edittext[EDITTEXT_FILE]->set_text(**_file);
+   _edittext[EDITTEXT_FILE]->set_text(_file.c_str());
 
    //Maintain persistent setting
    //_current_sort = SORT_NAME_UP;
@@ -2727,7 +2538,7 @@ GLUIFileSelect::init()
 // do_directory_change()
 //////////////////////////////////////////////////////
 bool
-GLUIFileSelect::do_directory_change(Cstr_ptr &dir)
+GLUIFileSelect::do_directory_change(const string &dir)
 {
    bool ret;
  
@@ -2769,7 +2580,7 @@ GLUIFileSelect::do_directory_change(Cstr_ptr &dir)
 // generate_dir_tree()
 //////////////////////////////////////////////////////
 DIR_ENTRYptr
-GLUIFileSelect::generate_dir_tree(Cstr_ptr &new_path)
+GLUIFileSelect::generate_dir_tree(const string &new_path)
 {
    bool foo;
 
@@ -2777,41 +2588,41 @@ GLUIFileSelect::generate_dir_tree(Cstr_ptr &new_path)
    DIR_ENTRYptr cur_entry, ret_entry;
 
    //Save the CWD before mucking about...
-   str_ptr old_cwd = getcwd_();
+   string old_cwd = getcwd_();
 
-   if (old_cwd == NULL_STR)
+   if (old_cwd == "")
    {
       cerr << "GLUIFileSelect::generate_dir_tree() - ERROR!! Couldn't retreive old CWD!\n";
    }
 
-   if (new_path == NULL_STR)
+   if (new_path == "")
    {
-      ret_entry = generate_dir_entry(NULL_STR, "Entire File System");
+      ret_entry = generate_dir_entry("", "Entire File System");
       foo = generate_dir_contents(ret_entry); assert(foo);
    }
    else if (chdir_(new_path))
    {
-      str_ptr tmp_cwd, cur_cwd;
+      string tmp_cwd, cur_cwd;
 
-      cur_cwd   = getcwd_();                                assert(cur_cwd != NULL_STR);
-      ret_entry = generate_dir_entry(cur_cwd, NULL_STR);    assert(ret_entry != NULL); 
+      cur_cwd   = getcwd_();                          assert(cur_cwd != "");
+      ret_entry = generate_dir_entry(cur_cwd, "");    assert(ret_entry != NULL);
       cur_entry = ret_entry;
 
       while (1)
       {
          foo = chdir_("..");   assert(foo);
-         tmp_cwd = getcwd_();  assert(tmp_cwd != NULL_STR);
+         tmp_cwd = getcwd_();  assert(tmp_cwd != "");
 
          if (tmp_cwd == cur_cwd) break;
 
-         cur_entry->_parent = generate_dir_entry(tmp_cwd, NULL_STR); assert(cur_entry->_parent != NULL);
+         cur_entry->_parent = generate_dir_entry(tmp_cwd, ""); assert(cur_entry->_parent != NULL);
 
          cur_entry = cur_entry->_parent;
          cur_cwd = tmp_cwd;
       }
 
       //Create ROOT entry
-      cur_entry->_parent = generate_dir_entry(NULL_STR, "Entire File System");
+      cur_entry->_parent = generate_dir_entry("", "Entire File System");
       cur_entry = cur_entry->_parent;
 
       //Get listing
@@ -2827,7 +2638,7 @@ GLUIFileSelect::generate_dir_tree(Cstr_ptr &new_path)
    }
 
 
-   if (old_cwd != NULL_STR)
+   if (old_cwd != "")
    {
       if (!chdir_(old_cwd))
       {
@@ -2868,9 +2679,10 @@ GLUIFileSelect::update_paths()
 void     
 GLUIFileSelect::update_pathlist()
 {
-   str_ptr foo,bar;
+   string foo,bar;
 
-   int i,j;
+   int i;
+   string::size_type j;
 
    if ( (_current_mode == MODE_RENAME) ||
         (_current_mode == MODE_DELETE) ||
@@ -2904,14 +2716,14 @@ GLUIFileSelect::update_pathlist()
       //Add this placeholder for final selection
       //to avoid flickering...
       foo = _current_path->_name; 
-      bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
-      _listbox[LIST_PATH]->add_item(-2, **bar);  
+      bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
+      _listbox[LIST_PATH]->add_item(-2, bar.c_str());
 
       //Master root 
       _listbox[LIST_PATH]->add_item(-1,         "--File Systems----------------");
       foo = dir->_name; 
-      bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
-      _listbox[LIST_PATH]->add_item(dirs.num(), **bar);  
+      bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
+      _listbox[LIST_PATH]->add_item(dirs.num(), bar.c_str());
 
       assert(dir->_contents.num() > 0); //At least holds JOT_ROOT and drives (WIN32) or root directoy (Unix)
 
@@ -2924,8 +2736,8 @@ GLUIFileSelect::update_pathlist()
          while ( (i < dir->_contents.num()) && (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DRIVE))
          {
             foo = dir->_contents[i]->_name; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
-            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, **bar);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
+            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, bar.c_str());
             i++;
          }
       }
@@ -2938,8 +2750,8 @@ GLUIFileSelect::update_pathlist()
          {
             assert(dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY);
             foo = dir->_contents[i]->_name; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
-            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, **bar);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
+            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, bar.c_str());
             i++;
          }
       }
@@ -2954,8 +2766,8 @@ GLUIFileSelect::update_pathlist()
          for (i=dirs.num()-1; i>=0 ; i--)
          {
             foo = dirs[i]->_name; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_PATH], **bar)) bar=shorten_string(--j,foo);
-            _listbox[LIST_PATH]->add_item(i, **bar);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
+            _listbox[LIST_PATH]->add_item(i, bar.c_str());
          }
       }
       
@@ -3110,28 +2922,22 @@ GLUIFileSelect::update_headings()
 //////////////////////////////////////////////////////
 // shorten_string()
 //////////////////////////////////////////////////////
-str_ptr
-GLUIFileSelect::shorten_string(int new_len, Cstr_ptr &string)
+string
+GLUIFileSelect::shorten_string(string::size_type new_len, const string &str)
 {
-   str_ptr ret;
+   string ret;
 
-   int len = string.len();
+   string::size_type len = str.length();
 
-   assert( (new_len >= 0) && (new_len < len) );
+   assert( new_len < len );
 
    //Return only new_len characters from string, chop
-   //extra from the middle, and replace with elipses...
+   //extra from the middle, and replace with ellipses...
 
-   int starting_len   = new_len/2;
-   int finishing_len  = new_len - starting_len;
+   string::size_type starting_len   = new_len/2;
+   string::size_type finishing_len  = new_len - starting_len;
 
-   char *starting  = new char[starting_len+1]; assert(starting);
-   
-   strncpy(starting,**string,starting_len); starting[starting_len] = 0;
-
-   ret = str_ptr(starting) + "..." + &(**string)[len-finishing_len];
-
-   delete[] starting;
+   ret = str.substr(0, starting_len) + "..." + str.substr(len-finishing_len);
 
    return ret;
 }
@@ -3143,7 +2949,8 @@ GLUIFileSelect::shorten_string(int new_len, Cstr_ptr &string)
 void     
 GLUIFileSelect::update_listing()
 {
-   int i,j;
+   int i;
+   string::size_type j;
 
    if ( (_current_mode == MODE_RENAME) ||
         (_current_mode == MODE_DELETE) ||
@@ -3171,7 +2978,7 @@ GLUIFileSelect::update_listing()
          {
             int         ret;
             char        chr_buf[CHR_BUF_SIZE];
-            str_ptr     foo, bar;
+            string      foo, bar;
             IconBitmap  *bm;
             DIR_ENTRYptr e = _current_path->_contents[_current_scroll+i]; assert(e != NULL);
 
@@ -3192,8 +2999,8 @@ GLUIFileSelect::update_listing()
             _activetext[ACTIVETEXT_NUM + i]->set_name(" ");
             _activetext[ACTIVETEXT_NUM + i]->set_w(GLUI_FILE_SELECT_NAME_WIDTH);
             foo = e->_name; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_activetext[ACTIVETEXT_NUM + i], **bar)) bar=shorten_string(--j,foo);
-            _activetext[ACTIVETEXT_NUM + i]->set_text(**bar);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_activetext[ACTIVETEXT_NUM + i], bar.c_str())) bar=shorten_string(--j,foo);
+            _activetext[ACTIVETEXT_NUM + i]->set_text(bar.c_str());
             _activetext[ACTIVETEXT_NUM + i]->set_highlighted(i == _current_selection);
 
             //XXX - Truncate...
@@ -3208,8 +3015,8 @@ GLUIFileSelect::update_listing()
             _statictext[STATICTEXT_NUM + 2*i]->set_name(" ");
             _statictext[STATICTEXT_NUM + 2*i]->set_w(GLUI_FILE_SELECT_SIZE_WIDTH);
             foo = chr_buf; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i], **bar)) bar=shorten_string(--j,foo);
-            _statictext[STATICTEXT_NUM + 2*i]->set_text(**bar);         
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i], bar.c_str())) bar=shorten_string(--j,foo);
+            _statictext[STATICTEXT_NUM + 2*i]->set_text(bar.c_str());
 
             //XXX - Truncate...
             if (e->_date > 0)
@@ -3224,8 +3031,8 @@ GLUIFileSelect::update_listing()
             _statictext[STATICTEXT_NUM + 2*i + 1]->set_name(" ");
             _statictext[STATICTEXT_NUM + 2*i + 1]->set_w(GLUI_FILE_SELECT_DATE_WIDTH);      
             foo = chr_buf; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i + 1], **bar)) bar=shorten_string(--j,foo);
-            _statictext[STATICTEXT_NUM + 2*i + 1]->set_text(**bar);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_statictext[STATICTEXT_NUM + 2*i + 1], bar.c_str())) bar=shorten_string(--j,foo);
+            _statictext[STATICTEXT_NUM + 2*i + 1]->set_text(bar.c_str());
          }
          else
          {
@@ -3433,7 +3240,8 @@ GLUIFileSelect::compute_scroll_geometry(int h, int &pix_below, int &pix_showing,
 void     
 GLUIFileSelect::update_actions()
 {
-   int i,j;
+   int i;
+   string::size_type j;
 
    if (_current_mode == MODE_RENAME)
    {
@@ -3526,7 +3334,7 @@ GLUIFileSelect::update_actions()
       }
       else
       {
-         str_ptr foo, bar;
+         string foo, bar;
 
          assert(_filter < _filters.num());
 
@@ -3540,15 +3348,15 @@ GLUIFileSelect::update_actions()
          for (i=0; _listbox[LIST_FILTER]->delete_item(i); i++) {}
 
          //Add this placeholder for final selection to avoid flickering...
-         foo = _filters[_filter]; 
-         bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_FILTER], **bar)) bar=shorten_string(--j,foo);
-         _listbox[LIST_FILTER]->add_item(-1, **bar);
+         foo = string(**_filters[_filter]);
+         bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_FILTER], bar.c_str())) bar=shorten_string(--j,foo);
+         _listbox[LIST_FILTER]->add_item(-1, bar.c_str());
 
          for (i=0; i < _filters.num(); i++) 
          {
-            foo = _filters[i]; 
-            bar=foo;j=foo.len();while(!jot_check_glui_fit(_listbox[LIST_FILTER], **bar)) bar=shorten_string(--j,foo);
-            _listbox[LIST_FILTER]->add_item(i, **bar);
+            foo = string(**_filters[i]);
+            bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_FILTER], bar.c_str())) bar=shorten_string(--j,foo);
+            _listbox[LIST_FILTER]->add_item(i, bar.c_str());
          }
 
          _listbox[LIST_FILTER]->set_int_val(_filter);
@@ -3709,10 +3517,10 @@ GLUIFileSelect::button_cb(int id)
                //The file root doesn't count!
                if (_current_path->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
                {
-                  undisplay(OK_ACTION, 
+                  undisplay(OK_ACTION,
                         _current_path->_full_path +
-                           ((_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)?(NULL_STR):("/")),
-                              _edittext[EDITTEXT_FILE]->get_text());
+                           (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/"),
+                        _edittext[EDITTEXT_FILE]->get_text());
                }
                else
                {

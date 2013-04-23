@@ -117,11 +117,11 @@ void TRACE::load_dia(){
 // note... may need to change ptr to get_instance in the case that
 // it's possible to delete the current instance while a dialog is up.
 void 
-TRACE::file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
+TRACE::file_cbs(void *ptr, int idx, int action, string path, string file)
 {
    if(idx == FILE_LOAD_TRACE_CB && (action == FileSelect::OK_ACTION)){
       TRACE* t = (TRACE*)ptr;
-      t->_filename = path+file;
+      t->_filename = str_ptr((path+file).c_str());
 
       t->_texture = new TEXTUREgl(((TRACE*)ptr)->_filename);
       if(!(t->is_valid = t->_texture->load_texture())){

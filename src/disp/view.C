@@ -322,19 +322,19 @@ VIEW::get_view_data_file (TAGformat &d)
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded string: '%s'.", **str);
       _data_file = str;
 
-      str_ptr fname = IOManager::load_prefix() + str + ".view";
+      string fname = IOManager::load_prefix() + string(**str) + ".view";
 
-      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Opening: '%s'...", **fname);
+      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Opening: '%s'...", fname.c_str());
 
       fstream fin;
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1300)) /*VS 6.0*/
-      fin.open(**(fname),ios::in | ios::nocreate);
+      fin.open(fname.c_str(), ios::in | ios::nocreate);
 #else
-      fin.open(**(fname),ios::in);
+      fin.open(fname.c_str(), ios::in);
 #endif
       if (!fin) 
       {
-         err_msg("VIEW::get_view_data_file() - Could not open: '%s'!!", **fname);
+         err_msg("VIEW::get_view_data_file() - Could not open: '%s'!!", fname.c_str());
          //but leave the _data_file as is so future
          //serialization could create it
       }
@@ -379,13 +379,13 @@ VIEW::put_view_data_file (TAGformat &d) const
    //to the given tag stream
    else
    {
-      str_ptr fname = IOManager::save_prefix() + _data_file + ".view";
+      string fname = IOManager::save_prefix() + string(**_data_file) + ".view";
       fstream fout;
-      fout.open(**fname,ios::out);
+      fout.open(fname.c_str(), ios::out);
       //If this fails, then dump the null string
       if (!fout) 
       {
-         err_msg("VIEW::put_view_data_file -  Could not open: '%s', so changing to using no external npr file...!", **fname);   
+         err_msg("VIEW::put_view_data_file -  Could not open: '%s', so changing to using no external npr file...!", fname.c_str());
 
          //and actually change view's policy so the
          //view tags serialize into the main stream

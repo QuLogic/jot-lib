@@ -20,11 +20,11 @@
 
 #include "support.H" 
 
-bool     rename_(Cstr_ptr &, Cstr_ptr &);
-bool     remove_(Cstr_ptr &);
-bool     rmdir_(Cstr_ptr &);
-bool     mkdir_(Cstr_ptr &);
-bool     chdir_(Cstr_ptr &);
-str_ptr  getcwd_();
+bool     rename_(const string &, const string &);
+bool     remove_(const string &);
+bool     rmdir_(const string &);
+bool     mkdir_(const string &);
+bool     chdir_(const string &);
+string   getcwd_();
 
 #endif //FILE_H_IN_DA_HAUS

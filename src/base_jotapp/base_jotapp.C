@@ -505,7 +505,7 @@ strip_ext(const string& base)
 }
 
 bool
-BaseJOTapp::create_mesh(BMESH* mesh, Cstr_ptr &file) const
+BaseJOTapp::create_mesh(BMESH* mesh, const string &file) const
 {
    // Put the mesh in GEOM and add it to the scene:
 
@@ -520,9 +520,11 @@ BaseJOTapp::create_mesh(BMESH* mesh, Cstr_ptr &file) const
 #ifdef WIN32
       // XXX - how to get basename on WIN32??
       // A: #include <libgen.h>
-      mesh->set_unique_name(strip_ext(**file));
+      mesh->set_unique_name(strip_ext(file));
 #else
-      mesh->set_unique_name(strip_ext(basename(**file)));
+      char tmp[file.length()+1];
+      strcpy(tmp, file.c_str());
+      mesh->set_unique_name(strip_ext(basename(tmp)));
 #endif
    }
 
@@ -539,15 +541,15 @@ BaseJOTapp::new_mesh() const
 }
 
 GEOM* 
-BaseJOTapp::new_geom(BMESH* mesh, Cstr_ptr& name) const
+BaseJOTapp::new_geom(BMESH* mesh, const string& name) const
 {
    // Default method for creating GEOM or derived type to hold a mesh:
 
-   return new GEOM(name, mesh);
+   return new GEOM(str_ptr(name.c_str()), mesh);
 }
 
 bool
-BaseJOTapp::load_sm_file(Cstr_ptr &file)
+BaseJOTapp::load_sm_file(const string &file)
 {
    // read an .sm file
 
@@ -555,19 +557,19 @@ BaseJOTapp::load_sm_file(Cstr_ptr &file)
    if (!mesh)
       return false;
 
-   mesh->read_file(**file);
+   mesh->read_file(file.c_str());
    return create_mesh(mesh, file);
 }
 
 bool
-BaseJOTapp::load_png_file(Cstr_ptr &file)
+BaseJOTapp::load_png_file(const string &file)
 {
 /*   LMESHptr m = new LMESH;
    m->Sphere();
    m->set_render_style("Flat Shading");
    return create_mesh(m, "sphere");*/
 
-   ImagePlateptr im = new ImagePlate(file);
+   ImagePlateptr im = new ImagePlate(str_ptr(file.c_str()));
 
    WORLD::create(im);
 
@@ -575,11 +577,11 @@ BaseJOTapp::load_png_file(Cstr_ptr &file)
 }
 
 bool
-BaseJOTapp::load_obj_file(Cstr_ptr &file)
+BaseJOTapp::load_obj_file(const string &file)
 {
    // read an .obj file
 
-   ifstream obj_stream(**file);
+   ifstream obj_stream(file.c_str());
    if (!obj_stream.is_open()) {
       cerr << "BaseJOTapp::load_obj_file: error: couldn't open .obj file"
            << endl;
@@ -603,11 +605,11 @@ BaseJOTapp::load_obj_file(Cstr_ptr &file)
 // load_jot_file()
 /////////////////////////////////////
 bool
-BaseJOTapp::load_jot_file(Cstr_ptr &file) 
+BaseJOTapp::load_jot_file(const string &file)
 {
    LOADobs::load_status_t status;
 
-   NetStream s(file, NetStream::ascii_r);
+   NetStream s(str_ptr(file.c_str()), NetStream::ascii_r);
 
    LOADobs::notify_load_obs(s, status, true, true);
 

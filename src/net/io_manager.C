@@ -61,12 +61,12 @@ IOManager::get_basename (TAGformat &d)
 
    if (str == "NULL_STR") 
    {
-      _basename = NULL_STR;
+      _basename = "";
       err_mesg(ERR_LEV_SPAM, "IOManager::get_basename() - Loaded NULL string.");
    }
    else
    {
-      _basename = str;
+      _basename = string(**str);
       err_mesg(ERR_LEV_SPAM, "IOManager::get_basename() - Loaded string: '%s'", **str);
    }
    
@@ -81,15 +81,15 @@ IOManager::put_basename (TAGformat &d) const
    assert(state_() == STATE_SCENE_SAVE);
 
    d.id();
-   if (_basename == NULL_STR)
+   if (_basename == "")
    {
       err_mesg(ERR_LEV_SPAM, "IOManager::put_basename() - Wrote NULL string.");
       *d << str_ptr("NULL_STR");
    }
    else
    {
-      *d << _basename;
-      err_mesg(ERR_LEV_SPAM, "IOManager::put_basename() - Wrote string: '%s'", **_basename);
+      *d << _basename.c_str();
+      err_mesg(ERR_LEV_SPAM, "IOManager::put_basename() - Wrote string: '%s'", _basename.c_str());
    }
    d.end_id();
 }
@@ -99,10 +99,10 @@ IOManager::put_basename (TAGformat &d) const
 /////////////////////////////////////
 
 IOManager::IOManager() : 
-   _basename(NULL_STR),
-   _cached_cwd_plus_basename(NULL_STR),
-   _old_cwd(NULL_STR),
-   _old_basename(NULL_STR)
+   _basename(""),
+   _cached_cwd_plus_basename(""),
+   _old_cwd(""),
+   _old_basename("")
 {  
    assert(!_instance); 
 
@@ -144,8 +144,8 @@ IOManager::notify_preload(
 {
 
    bool ret;
-   str_ptr path,file,ext;
-   str_ptr cpath,cfile,cext;
+   string path,file,ext;
+   string cpath,cfile,cext;
 
    //Actually, this never happens, nevertheless...
    if (!from_file) 
@@ -210,13 +210,13 @@ IOManager::notify_preload(
 
       //Blank the basename, since old-style files won't have a new name to load...
       //This will be prefixed to all attempts at loading external data files...
-      _basename = NULL_STR;
+      _basename = "";
 
       //Blank out the last successful saved or loaded "cwd+basename prefix"
-      _cached_cwd_plus_basename = NULL_STR;
+      _cached_cwd_plus_basename = "";
       
       //Save the old cwd in case of failure
-      if ((_old_cwd = getcwd_()) == NULL_STR)
+      if ((_old_cwd = getcwd_()) == "")
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't save current working directory. Aborting...");
@@ -225,7 +225,7 @@ IOManager::notify_preload(
       //Now, set new cwd...
       //Stream name should be the filename for file streams.
       //Extract path, file and extension... Abort on failure...
-      else if (!split_filename(s.name(),path,file,ext))
+      else if (!split_filename(string(**s.name()),path,file,ext))
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't derive a path from stream target: '%s'. Aborting...", 
@@ -237,7 +237,7 @@ IOManager::notify_preload(
          //Actually change to the new cwd (Guaranteed to succeed by split_filename)
          ret = chdir_(path); assert(ret);
          err_mesg(ERR_LEV_SPAM, 
-            "IOManager::notify_preload() - Set new current working directory: '%s'.", **path);
+            "IOManager::notify_preload() - Set new current working directory: '%s'.", path.c_str());
       }
    }
    else //STATE_PARTIAL_LOAD
@@ -252,10 +252,10 @@ IOManager::notify_preload(
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't derive a path from cached path prefix: '%s'. Aborting...",
-               **_cached_cwd_plus_basename);
+               _cached_cwd_plus_basename.c_str());
          load_status = LOADobs::LOAD_ERROR_CWD;
       }
-      else if (!split_filename(s.name(),path,file,ext))
+      else if (!split_filename(string(**s.name()), path, file, ext))
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't derive a path from stream target: '%s'. Aborting...",
@@ -271,7 +271,7 @@ IOManager::notify_preload(
       else
       {
          err_mesg(ERR_LEV_SPAM, 
-            "IOManager::notify_preload() - Maintaining cached working directory: '%s'.", **path);
+            "IOManager::notify_preload() - Maintaining cached working directory: '%s'.", path.c_str());
       }
    }
 }
@@ -288,7 +288,7 @@ IOManager::notify_postload(
    bool           full_scene
    )
 {
-   str_ptr path;
+   string path;
 
    //Actually, this never happens, nevertheless...
    if (!from_file) 
@@ -314,7 +314,7 @@ IOManager::notify_postload(
          //Set the _cached_cwd_plus_basename so updates can
          //use this to prefix external file references...
 
-         if ((path = getcwd_()) == NULL_STR)
+         if ((path = getcwd_()) == "")
          {
             err_msg(
                "IOManager::notify_postload() - *WARNING* Couldn't cache current working directory. Aborting...");
@@ -322,7 +322,7 @@ IOManager::notify_postload(
          }
          else
          {
-            _cached_cwd_plus_basename = path + "/" + _basename + ((_basename!=NULL_STR)?("--"):(NULL_STR));
+            _cached_cwd_plus_basename = path + "/" + _basename + (_basename!=""?"--":"");
             
             //err_msg(
             //   "IOManager::notify_postload() - ...completed 'entire scene' load. [Source: '%s']", **s.name());
@@ -330,7 +330,7 @@ IOManager::notify_postload(
                "IOManager::notify_postload() - ...completed 'entire scene' load.");
             err_mesg(ERR_LEV_INFO, 
                "IOManager::notify_postload() - Caching this file load/save prefix: '%s'",
-                  **_cached_cwd_plus_basename);
+                  _cached_cwd_plus_basename.c_str());
          }
       }
       else //STATE_PARTIAL_LOAD
@@ -354,25 +354,25 @@ IOManager::notify_postload(
       {
          //New scene failed to loaded...
 
-         _basename = NULL_STR;
-         _cached_cwd_plus_basename = NULL_STR;
+         _basename = "";
+         _cached_cwd_plus_basename = "";
 
          err_msg(
             "IOManager::notify_postload() - ...failed 'entire scene' load. [Source: '%s']", **s.name());
 
-         if (_old_cwd != NULL_STR)
+         if (_old_cwd != "")
          {
             if (chdir_(_old_cwd))
             {
                err_mesg(ERR_LEV_INFO, 
                   "IOManager::notify_postload() - Restored old current working directory: '%s'", 
-                     **_old_cwd);
+                     _old_cwd.c_str());
             }
             else
             {
                err_msg(
                   "IOManager::notify_postload() - *Warning* Failed restoring old current working directory: '%s'",
-                     **_old_cwd);
+                     _old_cwd.c_str());
                //XXX - Set this?!
                load_status = LOADobs::LOAD_ERROR_CWD;
             }
@@ -410,7 +410,7 @@ IOManager::notify_presave(
    )
 {
    bool ret;
-   str_ptr path,file,ext;
+   string path,file,ext;
 
    //Actually, this never happens, nevertheless...
    if (!to_file) 
@@ -475,7 +475,7 @@ IOManager::notify_presave(
 
       //Save old cwd and basename in case of save failure...
       _old_basename = _basename;
-      if ((_old_cwd = getcwd_()) == NULL_STR)
+      if ((_old_cwd = getcwd_()) == "")
       {
          err_msg(
             "IOManager::notify_presave() - *WARNING* Couldn't save current working directory. Aborting...");
@@ -488,7 +488,7 @@ IOManager::notify_presave(
 
          //Stream name should be the filename for file streams.
          //Extract path, file and extension... Abort on failure...
-         if (!split_filename(s.name(),path,file,ext))
+         if (!split_filename(string(**s.name()), path, file, ext))
          {
             err_msg(
                "IOManager::notify_presave() - *WARNING* Couldn't derive valid path from target: '%s'. Aborting...", 
@@ -500,12 +500,12 @@ IOManager::notify_presave(
             //Actually change to the new cwd (Guaranteed to succeed by split_filename)
             _basename = file;
             err_mesg(ERR_LEV_INFO, 
-               "IOManager::notify_presave() - Set new current basename file prefix: '%s'.", **file);
+               "IOManager::notify_presave() - Set new current basename file prefix: '%s'.", file.c_str());
             
             ret = chdir_(path); assert(ret);
 
             err_mesg(ERR_LEV_INFO, 
-              "IOManager::notify_presave() - Set new current working directory: '%s'.", **path);
+              "IOManager::notify_presave() - Set new current working directory: '%s'.", path.c_str());
          }
       }
    }
@@ -517,7 +517,7 @@ IOManager::notify_presave(
       //the currently occuring full save There should, therefore, be not path
       //component to the filename... Check this!
 
-      if (!split_filename(s.name(),path,file,ext))
+      if (!split_filename(string(**s.name()), path, file, ext))
       {
          err_msg(
             "IOManager::notify_presave() - *WARNING* Couldn't derive valid path from target: '%s'. Aborting...", 
@@ -533,7 +533,7 @@ IOManager::notify_presave(
       else
       {
          err_mesg(ERR_LEV_INFO, 
-           "IOManager::notify_presave() - Maintaing working directory: '%s'.", **path);
+           "IOManager::notify_presave() - Maintaing working directory: '%s'.", path.c_str());
       }
 
    }
@@ -551,7 +551,7 @@ IOManager::notify_postsave(
    )
 {
  
-   str_ptr path;
+   string path;
 
    //Actually, this never happens, nevertheless...
    if (!to_file) 
@@ -577,7 +577,7 @@ IOManager::notify_postsave(
          //Set the _cached_cwd_plus_basename so scene updates can load
          //using this to prefix in all external file references...
 
-         if ((path = getcwd_()) == NULL_STR)
+         if ((path = getcwd_()) == "")
          {
             err_msg(
                "IOManager::notify_postsave() - *WARNING* Couldn't cache current working directory. Aborting...");
@@ -585,14 +585,14 @@ IOManager::notify_postsave(
          }
          else
          {
-            _cached_cwd_plus_basename = path + "/" + _basename + ((_basename!=NULL_STR)?("--"):(NULL_STR));
+            _cached_cwd_plus_basename = path + "/" + _basename + (_basename!=""?"--":"");
             //err_msg(
             //   "IOManager::notify_postsave() - ...completed 'entire scene' save. [Dest: '%s']", **s.name());
             err_mesg(ERR_LEV_INFO, 
                "IOManager::notify_postsave() - ...completed 'entire scene' save.");
             err_mesg(ERR_LEV_INFO, 
                "IOManager::notify_postsave() - Caching this file load/save prefix: '%s'",
-                  **_cached_cwd_plus_basename);
+                  _cached_cwd_plus_basename.c_str());
          }
       }
       else //STATE_PARTIAL_SAVE
@@ -629,19 +629,19 @@ IOManager::notify_postsave(
             "IOManager::notify_postsave() - ...failed 'entire scene' save. [Dest: '%s']", **s.name());
 
          //Restore old cwd
-         if (_old_cwd != NULL_STR)
+         if (_old_cwd != "")
          {
             if (chdir_(_old_cwd))
             {
                err_mesg(ERR_LEV_INFO, 
                   "IOManager::notify_postsave() - Restoring old current working directory: '%s'",
-                     **_old_cwd);
+                     _old_cwd.c_str());
             }
             else
             {
                err_msg(
                   "IOManager::notify_postsave() - *Warning* Failed restoring old current working directory: '%s'",
-                     **_old_cwd);
+                     _old_cwd.c_str());
                 //XXX - Set this?!
                save_status = SAVEobs::SAVE_ERROR_CWD;
             }
@@ -672,10 +672,10 @@ IOManager::notify_postsave(
 /////////////////////////////////////
 // load_prefix_()
 /////////////////////////////////////
-str_ptr
+string
 IOManager::load_prefix_()
 {
-   str_ptr ret;
+   string ret;
 
    switch(state_())
    {
@@ -704,10 +704,10 @@ IOManager::load_prefix_()
 /////////////////////////////////////
 // save_prefix_()
 /////////////////////////////////////
-str_ptr
+string
 IOManager::save_prefix_()
 {
-   str_ptr ret;
+   string ret;
 
    switch(state_())
    {
@@ -733,13 +733,13 @@ IOManager::save_prefix_()
 /////////////////////////////////////
 // cwd_()
 /////////////////////////////////////
-str_ptr
+string
 IOManager::cwd_()
 {
-   str_ptr ret;
+   string ret;
 
    ret = getcwd_();
-   if (ret != NULL_STR) ret = ret + "/";
+   if (ret != "") ret = ret + "/";
 
    //XXX - If root directory, will end up with double slashes.
    //      Usually harmless, but should fix...
@@ -750,13 +750,13 @@ IOManager::cwd_()
 /////////////////////////////////////
 // current_prefix_() 
 /////////////////////////////////////
-str_ptr
+string
 IOManager::current_prefix_()
 {
-   str_ptr ret;
+   string ret;
 
    ret = cwd_();
-   if (_basename != NULL_STR) ret = ret + _basename + "--";
+   if (_basename != "") ret = ret + _basename + "--";
 
    return ret;
 }
@@ -764,7 +764,7 @@ IOManager::current_prefix_()
 /////////////////////////////////////
 // cached_prefix_()
 /////////////////////////////////////
-str_ptr
+string
 IOManager::cached_prefix_()
 {
    return _cached_cwd_plus_basename;
@@ -775,10 +775,10 @@ IOManager::cached_prefix_()
 /////////////////////////////////////
 bool      
 IOManager::split_filename(
-   Cstr_ptr &fullpath, 
-   str_ptr  &path, 
-   str_ptr  &file,
-   str_ptr  &ext)
+   const string &fullpath,
+   string   &path,
+   string   &file,
+   string   &ext)
 {
    bool result;
 
@@ -795,15 +795,15 @@ IOManager::split_filename(
    //Returns false on failure and path, file, ext undefined
 
    //Save this before mucking about...
-   str_ptr old_cwd = getcwd_();     
-   if (old_cwd == NULL_STR) 
+   string old_cwd = getcwd_();
+   if (old_cwd == "")
    {
-      err_mesg(ERR_LEV_SPAM, 
+      err_mesg(ERR_LEV_SPAM,
          "IOManager::split_filename() - *WARNING* Couldn't save old current working directory!!");
    }
 
-   //Grab char version of the fullpath str_ptr
-   const char *c_fullpath = **fullpath;
+   //Grab char version of the fullpath string
+   const char *c_fullpath = fullpath.c_str();
 
    //Make room for the 3 strings
    char *c_path = new char[strlen(c_fullpath)+2]; assert(c_path);
@@ -841,7 +841,7 @@ IOManager::split_filename(
    //strrchr(const char*, const char*) returns a const char* 
    //and is no longer possible to cast into char *
   
-	const char *c_fullpath_slash = max( strrchr(c_fullpath,'/'), strrchr(c_fullpath,'\\') );
+   const char *c_fullpath_slash = max( strrchr(c_fullpath,'/'), strrchr(c_fullpath,'\\') );
 
    //If found, copy everthying after the slash
    if (c_fullpath_slash)
@@ -880,13 +880,13 @@ IOManager::split_filename(
    //
    //Now turn the given path into an absolute, verified path...
 
-   if (chdir_(c_path) && ((path = getcwd_()) != NULL_STR) )
+   if (chdir_(c_path) && ((path = getcwd_()) != "") )
    {
       //Success!
 
       //Copy the file and extension into return vars...
-      file = str_ptr(c_file);
-      ext  = str_ptr(c_ext);
+      file = string(c_file);
+      ext  = string(c_ext);
 
       result = true;
    }
@@ -897,7 +897,7 @@ IOManager::split_filename(
       result = false;
    }
 
-   if ((old_cwd == NULL_STR) || !chdir_(old_cwd) )
+   if ((old_cwd == "") || !chdir_(old_cwd) )
    {
       err_mesg(ERR_LEV_SPAM, 
          "IOManager::split_filename() - *WARNING* Couldn't restore old current working directory!!");

@@ -255,10 +255,10 @@ class JOTapp : public BaseJOTapp {
    static int save_cb(const Event&, State *&);
    static int load_cb(const Event&, State *&);
    static int load_image_cb(const Event&, State *&);
-   static void file_cbs(void *ptr, int i, int action, str_ptr path, str_ptr file);
-   static void do_save(str_ptr fullpath);
-   static void do_load(str_ptr fullpath);
-   static void do_load_image(str_ptr fullpath);
+   static void file_cbs(void *ptr, int i, int action, string path, string file);
+   static void do_save(string fullpath);
+   static void do_load(string fullpath);
+   static void do_load_image(string fullpath);
    static void alert_cbs(void *ptr, void *dptr, int idx, int but_idx);
    static int clear_cb(const Event&, State *&);
 
@@ -1383,8 +1383,7 @@ JOTapp::save_cb(const Event&, State *&)
    sel->set_path(".");
    sel->set_filter("*.jot");
 
-   str_ptr fname = ((IOManager::basename() != NULL_STR) ?
-                    (IOManager::basename()) : (str_ptr("out"))) + ".jot";
+   string fname = (IOManager::basename() != "" ? IOManager::basename() : string("out")) + ".jot";
 
    sel->set_file(fname);
 
@@ -1440,15 +1439,15 @@ JOTapp::load_cb(const Event&, State *&)
 }
 
 void
-JOTapp::file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
+JOTapp::file_cbs(void *ptr, int idx, int action, string path, string file)
 {
-   str_ptr fullpath = path + file;
+   string fullpath = path + file;
    //Dispatch the appropriate fileselect callback...
    switch (idx) {
     case FILE_SAVE_JOT_CB:
       if (action == FileSelect::OK_ACTION) {
          FILE* foo = 0;
-         bool exists = !!(foo=fopen(**(fullpath),"r"));
+         bool exists = !!(foo=fopen(fullpath.c_str(),"r"));
          if (exists) {
             fclose(foo);
             AlertBox *box = VIEW::peek()->win()->alert_box();
@@ -1456,21 +1455,21 @@ JOTapp::file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
             box->set_title("Warning");
             box->set_icon(AlertBox::EXCLAMATION_ICON);
             box->add_text("Destination exists:");
-            box->add_text(fullpath);
+            box->add_text(fullpath.c_str());
             box->add_text("Overwrite?");
             box->add_button("Yes");
             box->add_button("No");
             box->add_button("Cancel");
             box->set_default(0);
 
-            // Can't send the fullpath str_ptr in a void * because
+            // Can't send the fullpath string in a void * because
             // then it vanishes when this function end, but before
             // the alert box generates a callback (with the void *
             // passed along for use). We'll alloc a string instead,
             // and free it in the callback...
-            char *fp = new char[(int)fullpath.len()+1];
+            char *fp = new char[fullpath.length()+1];
             assert(fp);
-            strcpy(fp,**fullpath);
+            strcpy(fp, fullpath.c_str());
 
             if (box->display(true, alert_cbs, ptr, fp,
                              ALERT_SAVE_JOT_OVERWRITE_CB))
@@ -1498,13 +1497,13 @@ JOTapp::file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
 }
 
 void
-JOTapp::do_save(str_ptr fullpath)
+JOTapp::do_save(string fullpath)
 {
    SAVEobs::save_status_t status;
 
    cerr << "\ndo_save() - Saving...\n";
 
-   NetStream s(fullpath, NetStream::ascii_w);
+   NetStream s(str_ptr(fullpath.c_str()), NetStream::ascii_w);
 
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
@@ -1514,18 +1513,18 @@ JOTapp::do_save(str_ptr fullpath)
    if (status == SAVEobs::SAVE_ERROR_NONE) {
       cerr << "do_save() - ...done.\n";
 
-      WORLD::message(str_ptr("Saved '") + fullpath + "'");
+      WORLD::message(str_ptr(("Saved '" + fullpath + "'").c_str()));
    } else {
       cerr << "do_save() - ...aborted!!!" << endl;
 
-      WORLD::message(str_ptr("Problem saving '") + fullpath + "'");
+      WORLD::message(str_ptr(("Problem saving '" + fullpath + "'").c_str()));
 
       AlertBox *box = VIEW::peek()->win()->alert_box();
 
       box->set_title("Warning");
       box->set_icon(AlertBox::WARNING_ICON);
       box->add_text("Problem saving scene to file:");
-      box->add_text(fullpath);
+      box->add_text(fullpath.c_str());
       box->add_button("OK");
       box->set_default(0);
 
@@ -1551,15 +1550,14 @@ JOTapp::do_save(str_ptr fullpath)
 
 }
 
-inline str_ptr
-get_extension(Cstr_ptr& str)
+inline string
+get_extension(const string& str)
 {
-   string s(**str);
-   return s.substr(s.rfind('.')+1).c_str();
+   return str.substr(str.rfind('.')+1);
 }
 
 void
-JOTapp::do_load_image(str_ptr fullpath)
+JOTapp::do_load_image(string fullpath)
 {
    assert(instance());
 
@@ -1567,13 +1565,13 @@ JOTapp::do_load_image(str_ptr fullpath)
 }
 
 void
-JOTapp::do_load(str_ptr fullpath)
+JOTapp::do_load(string fullpath)
 {
    LOADobs::load_status_t status;
 
-   NetStream s(fullpath, NetStream::ascii_r);
+   NetStream s(str_ptr(fullpath.c_str()), NetStream::ascii_r);
 
-   str_ptr ext = get_extension(fullpath);
+   string ext = get_extension(fullpath);
    assert(instance());
 
    // prepare alert box to report errors (if any):
@@ -1581,7 +1579,7 @@ JOTapp::do_load(str_ptr fullpath)
    box->set_title("Warning");
    box->set_icon(AlertBox::WARNING_ICON);
    box->add_text("Problem loading scene from file:");
-   box->add_text(fullpath);
+   box->add_text(fullpath.c_str());
    box->add_button("OK");
    box->set_default(0);
 
@@ -1613,7 +1611,7 @@ JOTapp::do_load(str_ptr fullpath)
 
       if (status == LOADobs::LOAD_ERROR_NONE) {
 
-         WORLD::message(str_ptr("Loaded '") + fullpath + "'");
+         WORLD::message(str_ptr(("Loaded '" + fullpath + "'").c_str()));
 
       } else {
          // replace entire scene with one loaded from file.
@@ -1626,7 +1624,7 @@ JOTapp::do_load(str_ptr fullpath)
               << fullpath
               << endl;
 
-         WORLD::message(str_ptr("Problem loading '") + fullpath + "'");
+         WORLD::message(str_ptr(("Problem loading '" + fullpath + "'").c_str()));
 
          switch (status) {
           case LOADobs::LOAD_ERROR_STREAM:

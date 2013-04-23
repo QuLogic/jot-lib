@@ -21,15 +21,15 @@
 //////////////////////////////////////////////////////
 // rename_()
 //////////////////////////////////////////////////////
-bool rename_(Cstr_ptr &old_name, Cstr_ptr &new_name)
+bool rename_(const string &old_name, const string &new_name)
 {   
    int ret;
 
 #ifdef WIN32
-   ret = rename(**old_name, **new_name);
+   ret = rename(old_name.c_str(), new_name.c_str());
 #else
    //XXX - Untested
-   ret = rename(**old_name, **new_name);
+   ret = rename(old_name.c_str(), new_name.c_str());
 #endif
    
    if (ret != 0)
@@ -46,15 +46,15 @@ bool rename_(Cstr_ptr &old_name, Cstr_ptr &new_name)
 //////////////////////////////////////////////////////
 // remove_()
 //////////////////////////////////////////////////////
-bool remove_(Cstr_ptr &file)
+bool remove_(const string &file)
 {   
    int ret;
 
 #ifdef WIN32
-   ret = remove(**file);
+   ret = remove(file.c_str());
 #else
    //XXX - Untested
-   ret = remove(**file);
+   ret = remove(file.c_str());
 #endif
    
    if (ret != 0)
@@ -71,15 +71,15 @@ bool remove_(Cstr_ptr &file)
 //////////////////////////////////////////////////////
 // rmdir_()
 //////////////////////////////////////////////////////
-bool rmdir_(Cstr_ptr &dir)
+bool rmdir_(const string &dir)
 {   
    int ret;
 
 #ifdef WIN32
-   ret = _rmdir(**dir);
+   ret = _rmdir(dir.c_str());
 #else
    //XXX - Untested
-   ret = rmdir(**dir);
+   ret = rmdir(dir.c_str());
 #endif
    
    if (ret != 0)
@@ -96,17 +96,17 @@ bool rmdir_(Cstr_ptr &dir)
 //////////////////////////////////////////////////////
 // mkdir_()
 //////////////////////////////////////////////////////
-bool mkdir_(Cstr_ptr &dir)
+bool mkdir_(const string &dir)
 {   
    int ret;
 
 #ifdef WIN32
-   ret = _mkdir(**dir);
+   ret = _mkdir(dir.c_str());
 #else
    //XXX - Untested
-   ret = mkdir(**dir, S_IRUSR  | S_IWUSR  | S_IXUSR |
-                      S_IRGRP/*| S_IWGRP*/| S_IXGRP |
-                      S_IROTH/*| S_IWOTH*/| S_IXOTH );
+   ret = mkdir(dir.c_str(), S_IRUSR  | S_IWUSR  | S_IXUSR |
+                            S_IRGRP/*| S_IWGRP*/| S_IXGRP |
+                            S_IROTH/*| S_IWOTH*/| S_IXOTH );
 #endif
    
    if (ret != 0)
@@ -123,15 +123,15 @@ bool mkdir_(Cstr_ptr &dir)
 //////////////////////////////////////////////////////
 // chdir_()
 //////////////////////////////////////////////////////
-bool chdir_(Cstr_ptr &new_dir)
+bool chdir_(const string &new_dir)
 {   
    int ret;
 
 #ifdef WIN32
-   ret = _chdir(**new_dir);
+   ret = _chdir(new_dir.c_str());
 #else
    //XXX - Untested
-   ret = chdir(**new_dir);
+   ret = chdir(new_dir.c_str());
 #endif
    
    if (ret != 0)
@@ -149,7 +149,7 @@ bool chdir_(Cstr_ptr &new_dir)
 //////////////////////////////////////////////////////
 // getcwd_()
 //////////////////////////////////////////////////////
-str_ptr
+string
 getcwd_()
 {
    char *ret, cwd[CWD_BUF];
@@ -163,8 +163,8 @@ getcwd_()
    
    if (!ret)
    {
-      cerr << "getcwd_() - ERROR!! Couldn't retreive CWD!\n";
-      return NULL_STR;
+      cerr << "getcwd_() - ERROR!! Couldn't retrieve CWD!\n";
+      return "";
    }
    else
    {

@@ -220,20 +220,20 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
 
  public:
    // load different file types: .jot, .sm, .obj:
-   virtual bool load_jot_file(Cstr_ptr &file);
-   virtual bool load_sm_file (Cstr_ptr &file);
-   virtual bool load_obj_file(Cstr_ptr &file);
-   virtual bool load_png_file(Cstr_ptr &file);
+   virtual bool load_jot_file(const string &file);
+   virtual bool load_sm_file (const string &file);
+   virtual bool load_obj_file(const string &file);
+   virtual bool load_png_file(const string &file);
  protected:
 
    // Default method for creating a new BMESH or derived type:
    virtual BMESH* new_mesh() const;
 
    // Default method for creating GEOM or derived type to hold a mesh:
-   virtual GEOM* new_geom(BMESH* mesh, Cstr_ptr& name) const;
+   virtual GEOM* new_geom(BMESH* mesh, const string& name) const;
 
    // Put the mesh in GEOM and add it to the scene:
-   bool create_mesh(BMESH* mesh, Cstr_ptr &file) const;
+   bool create_mesh(BMESH* mesh, const string &file) const;
 
    // Add Interaction stuff
    virtual void init_win_cb(WINDOW &win);

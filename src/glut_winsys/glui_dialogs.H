@@ -255,8 +255,8 @@ class DIR_ENTRY : public REFcounter {
    DIR_ENTRYptr      _parent;
    DIR_ENTRYlist     _contents;
 
-   str_ptr           _name;
-   str_ptr           _full_path;
+   string            _name;
+   string            _full_path;
 
    double            _size;  
    time_t            _date;
@@ -272,8 +272,8 @@ class DIR_ENTRY : public REFcounter {
    {
       _parent = NULL;
       _contents.clear();
-      _name = NULL_STR;
-      _full_path = NULL_STR;
+      _name = "";
+      _full_path = "";
       _size = -1.0;
       _date = 0;
       _type = DIR_ENTRY_UNKNOWN;
@@ -454,10 +454,10 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
    void              update_listing();
    void              update_scroll();
 
-   str_ptr           shorten_string(int, Cstr_ptr &);
+   string            shorten_string(string::size_type, const string &);
 
-   DIR_ENTRYptr      generate_dir_tree(Cstr_ptr &);
-   DIR_ENTRYptr      generate_dir_entry(Cstr_ptr &full_path,Cstr_ptr &name);
+   DIR_ENTRYptr      generate_dir_tree(const string &);
+   DIR_ENTRYptr      generate_dir_entry(const string &full_path, const string &name);
    bool              generate_dir_contents(DIR_ENTRYptr &);
 
    void              sort_dir_contents(DIR_ENTRYptr &, sort_t);
@@ -465,7 +465,7 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
    DIR_ENTRYptr      get_selected_entry();
    void              set_selected_entry(DIR_ENTRYptr);
 
-   bool              do_directory_change(Cstr_ptr &);
+   bool              do_directory_change(const string &);
    void              do_entry_select(int);
    void              do_sort_toggle(int);
    void              do_scrollbar(int,int,int,int,int,int);
@@ -484,16 +484,8 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
    void              do_cancel_action();
 
    void              compute_scroll_geometry(int, int &, int &, int &, int &, int &, int &);
-/*
-   str_ptr           getcwd_();
-   bool              chdir_(Cstr_ptr &);
-   bool              mkdir_(Cstr_ptr &);
-   bool              rmdir_(Cstr_ptr &);
-   bool              remove_(Cstr_ptr &);
-   bool              rename_(Cstr_ptr &, Cstr_ptr &);
-*/
-   str_list          readdir_(Cstr_ptr &, Cstr_ptr &);
-   bool              stat_(Cstr_ptr &, DIR_ENTRYptr &);
+   vector<string>    readdir_(const string &, const string &);
+   bool              stat_(const string &, DIR_ENTRYptr &);
 
 
    /******** FileSelect METHODS ********/
@@ -502,7 +494,7 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
    virtual bool      display(bool blocking, file_cb_t cb, void *vp, int idx);
 
  protected:   
-   virtual bool      undisplay(int button, str_ptr path, str_ptr file);
+   virtual bool      undisplay(int button, string path, string file);
 
    /******** PopUp METHODS ********/
  protected:      

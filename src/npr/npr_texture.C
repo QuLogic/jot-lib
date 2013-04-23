@@ -832,22 +832,22 @@ NPRTexture::get_npr_data_file (TAGformat &d)
 
       _data_file = str;
 
-      str_ptr fname = IOManager::load_prefix() + str + ".npr";
+      string fname = IOManager::load_prefix() + string(**str) + ".npr";
 
-      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Opening: '%s'...", **fname);
+      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Opening: '%s'...", fname.c_str());
 
       fstream fin;
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1300)) /*VS 6.0*/
 
-      fin.open(**(fname),ios::in | ios::nocreate);
+      fin.open(fname.c_str(), ios::in | ios::nocreate);
 #else
 
-      fin.open(**(fname),ios::in);
+      fin.open(fname.c_str(), ios::in);
 #endif
 
 
       if (!fin) {
-         err_mesg(ERR_LEV_ERROR, "NPRTexture::get_npr_data_file() - Could not open: '%s'...", **fname);
+         err_mesg(ERR_LEV_ERROR, "NPRTexture::get_npr_data_file() - Could not open: '%s'...", fname.c_str());
          //but leave the _data_file as is so future
          //serialization could create it
       } else {
@@ -886,12 +886,12 @@ NPRTexture::put_npr_data_file (TAGformat &d) const
    //tags to the external file, and dump the filename
    //to the given tag stream
    else {
-      str_ptr fname = IOManager::save_prefix() + _data_file + ".npr";
+      string fname = IOManager::save_prefix() + string(**_data_file) + ".npr";
       fstream fout;
-      fout.open(**fname,ios::out);
+      fout.open(fname.c_str(), ios::out);
       //If this fails, then dump the null string
       if (!fout) {
-         err_mesg(ERR_LEV_ERROR, "NPRTexture::put_npr_data_file -  Could not open: '%s', so changing to using no external npr file...!", **fname);
+         err_mesg(ERR_LEV_ERROR, "NPRTexture::put_npr_data_file -  Could not open: '%s', so changing to using no external npr file...!", fname.c_str());
 
          //and actually change tex's policy so the
          //tags serialize into the main stream

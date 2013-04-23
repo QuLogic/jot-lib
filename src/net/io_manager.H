@@ -49,12 +49,12 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 
    static void    add_state(state_t s) { instance()->_state.add(s); }
    static state_t state()           { return instance()->state_(); }
-   static str_ptr basename()        { return instance()->basename_(); }
-   static str_ptr cwd()             { return instance()->cwd_(); }
-   static str_ptr cached_prefix()   { return instance()->cached_prefix_(); }
-   static str_ptr current_prefix()  { return instance()->current_prefix_(); }
-   static str_ptr load_prefix()     { return instance()->load_prefix_(); }
-   static str_ptr save_prefix()     { return instance()->save_prefix_(); }
+   static string  basename()        { return instance()->basename_(); }
+   static string  cwd()             { return instance()->cwd_(); }
+   static string  cached_prefix()   { return instance()->cached_prefix_(); }
+   static string  current_prefix()  { return instance()->current_prefix_(); }
+   static string  load_prefix()     { return instance()->load_prefix_(); }
+   static string  save_prefix()     { return instance()->save_prefix_(); }
 
    /******** LOADobs METHODS ********/
    virtual void notify_preload (NetStream &, load_status_t &, bool, bool); 
@@ -73,32 +73,32 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
    /******** MEMBER VARIABLES ********/
    ARRAY<state_t>       _state;
 
-   str_ptr              _basename;
-   str_ptr              _cached_cwd_plus_basename;
+   string               _basename;
+   string               _cached_cwd_plus_basename;
 
-   str_ptr              _old_cwd;
-   str_ptr              _old_basename;
+   string               _old_cwd;
+   string               _old_basename;
 
    /******** STATIC MEMBER VARIABLES ********/
    static TAGlist*      _io_tags;
    static IOManager*    _instance;
 
    /******** INTERNAL MEMBER METHODS ********/
-   bool split_filename(Cstr_ptr &, str_ptr &, str_ptr &, str_ptr &);
+   bool split_filename(const string &, string &, string &, string &);
 
    /******** MEMBER METHODS FOR STATIC ACCESSORS********/
 
    state_t state_() const { assert(_state.num()>0); return _state.last(); }
    
-   str_ptr basename_() { return _basename; }
+   string  basename_() { return _basename; }
    
-   str_ptr cwd_();
+   string  cwd_();
 
-   str_ptr cached_prefix_();
-   str_ptr current_prefix_();
+   string  cached_prefix_();
+   string  current_prefix_();
 
-   str_ptr load_prefix_();
-   str_ptr save_prefix_();
+   string  load_prefix_();
+   string  save_prefix_();
 
    /******** I/O Methods ********/
    virtual void get_basename(TAGformat &d);

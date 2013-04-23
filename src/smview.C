@@ -82,10 +82,10 @@ void do_clear();
 int save_cb(const Event&, State *&);
 int load_cb(const Event&, State *&);
 
-void file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file);
+void file_cbs(void *ptr, int idx, int action, string path, string file);
 
-void do_save(str_ptr fullpath);
-void do_load(str_ptr fullpath);
+void do_save(string fullpath);
+void do_load(string fullpath);
 
 int animation_keys(const Event &e, State *&s);
 
@@ -771,7 +771,7 @@ save_cb(const Event&, State *&)
    sel->set_path(".");
    sel->set_filter("*.jot");
 
-   str_ptr fname = ((IOManager::basename() != NULL_STR) ? (IOManager::basename()) : (str_ptr("out"))) + ".jot";
+   string fname = (IOManager::basename() != "" ? IOManager::basename() : string("out")) + ".jot";
 
    sel->set_file(fname);
    
@@ -808,16 +808,16 @@ load_cb(const Event&, State *&)
 }
 
 void 
-file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
+file_cbs(void *ptr, int idx, int action, string path, string file)
 {
-   str_ptr fullpath = path + file;
+   string fullpath = path + file;
    //Dispatch the appropriate fileselect callback...
    switch(idx)
    {
       case FILE_SAVE_JOT_CB:
          if (action == FileSelect::OK_ACTION)
          {
-            bool exists; FILE *foo; exists=!!(foo=fopen(**(fullpath),"r"));if(exists)fclose(foo); 
+            bool exists; FILE *foo; exists=!!(foo=fopen(fullpath.c_str(),"r"));if(exists)fclose(foo);
 
             if (!exists)
             {
@@ -830,20 +830,20 @@ file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
                box->set_title("Warning");
                box->set_icon(AlertBox::EXCLAMATION_ICON);
                box->add_text("Destination exists:");
-               box->add_text(fullpath);
+               box->add_text(fullpath.c_str());
                box->add_text("Overwrite?"); 
                box->add_button("Yes");
                box->add_button("No");
                box->add_button("Cancel");
                box->set_default(0);
                
-               //Can't send the fullpath str_ptr in a void * because
+               //Can't send the fullpath string in a void * because
                //the it vanishes when this function end, but before
                //the alert box generates a callback (with the void *
                //passed along for use). We'll alloc a string instead,
                //and free it in the callback...
 
-               char *fp = new char[(int)fullpath.len()+1]; assert(fp); strcpy(fp,**fullpath); 
+               char *fp = new char[fullpath.length()+1]; assert(fp); strcpy(fp, fullpath.c_str());
 
                if (box->display(true, alert_cbs, ptr, fp, ALERT_SAVE_JOT_OVERWRITE_CB))
                   cerr << "clear_cb() - AlertBox displayed.\n";
@@ -864,13 +864,13 @@ file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file)
 }
 
 void 
-do_save(str_ptr fullpath)
+do_save(string fullpath)
 {
    SAVEobs::save_status_t status;
 
    cerr << "\ndo_save() - Saving...\n";
 
-   NetStream s(fullpath, NetStream::ascii_w); 
+   NetStream s(str_ptr(fullpath.c_str()), NetStream::ascii_w);
 
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
@@ -881,20 +881,20 @@ do_save(str_ptr fullpath)
    {
       cerr << "do_save() - ...done.\n";
 
-      WORLD::message(str_ptr("Saved '") + fullpath + "'");
+      WORLD::message(str_ptr(("Saved '" + fullpath + "'").c_str()));
    }
    else
    {
       cerr << "do_save() - ...aborted!!!" << endl;
       
-      WORLD::message(str_ptr("Problem saving '") + fullpath + "'");
+      WORLD::message(str_ptr(("Problem saving '" + fullpath + "'").c_str()));
 
       AlertBox *box = VIEW::peek()->win()->alert_box();
 
       box->set_title("Warning");
       box->set_icon(AlertBox::WARNING_ICON);
       box->add_text("Problem saving scene to file:");
-      box->add_text(fullpath);
+      box->add_text(fullpath.c_str());
       box->add_button("OK");
       box->set_default(0);
 
@@ -922,13 +922,13 @@ do_save(str_ptr fullpath)
 }
 
 void 
-do_load(str_ptr fullpath)
+do_load(string fullpath)
 {
    LOADobs::load_status_t status;
 
    cerr << "\ndo_load() - Loading...\n";
 
-   NetStream s(fullpath, NetStream::ascii_r);
+   NetStream s(str_ptr(fullpath.c_str()), NetStream::ascii_r);
 
    // Clear the scene first, then hope nothing goes wrong in
    // loading cuz if it does we should then unclear the
@@ -943,7 +943,7 @@ do_load(str_ptr fullpath)
    if (status == LOADobs::LOAD_ERROR_NONE) {
       cerr << "do_load() - ...done.\n";
 
-      WORLD::message(str_ptr("Loaded '") + fullpath + "'");
+      WORLD::message(str_ptr(("Loaded '" + fullpath + "'").c_str()));
 
    } else {
       // XXX  - should unclear the scene to restore current state
@@ -951,14 +951,14 @@ do_load(str_ptr fullpath)
 
       cerr << "do_load() - ...aborted!!!" << endl;
       
-      WORLD::message(str_ptr("Problem loading '") + fullpath + "'");
+      WORLD::message(str_ptr(("Problem loading '" + fullpath + "'").c_str()));
 
       AlertBox *box = VIEW::peek()->win()->alert_box();
 
       box->set_title("Warning");
       box->set_icon(AlertBox::WARNING_ICON);
       box->add_text("Problem loading scene from file:");
-      box->add_text(fullpath);
+      box->add_text(fullpath.c_str());
       box->add_button("OK");
       box->set_default(0);
 

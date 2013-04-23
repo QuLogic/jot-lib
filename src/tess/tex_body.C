@@ -785,14 +785,14 @@ TEXBODY::get_mesh_data_file(TAGformat &d)
          err_msg("TEXBODY::get_mesh_data_file - Found NULL_STR");
    } else {
       _mesh_file = filename;
-      str_ptr fname = IOManager::load_prefix() + _mesh_file;
+      string fname = IOManager::load_prefix() + string(**_mesh_file);
       if (debug_io) {
          cerr << "TEXBODY::get_mesh_data_file: file: "
               << filename
               << ", path: "
               << fname << endl;
       }
-      cur->read_file(**fname);
+      cur->read_file(fname.c_str());
    }
 }
 
@@ -818,14 +818,14 @@ TEXBODY::put_mesh_data_file(TAGformat &d) const
       *d << _mesh_file;
       d.end_id();
 
-      str_ptr fname = IOManager::save_prefix() + _mesh_file;
+      string fname = IOManager::save_prefix() + string(**_mesh_file);
 
       err_msg("TEXBODY::put_mesh_data_file - Exporting mesh data to '%s'...",
-               **fname);
+               fname.c_str());
 
       BMESHptr cur = cur_rep();
-      if (!(cur && cur->write_file(**fname))) {
-         err_msg("TEXBODY::put_mesh_data_file - Export FAILED to '%s'!!!", **fname);
+      if (!(cur && cur->write_file(fname.c_str()))) {
+         err_msg("TEXBODY::put_mesh_data_file - Export FAILED to '%s'!!!", fname.c_str());
       }
    }
 }
@@ -898,9 +898,9 @@ TEXBODY::get_mesh_data_update_file(TAGformat &d)
 
    *d >> _mesh_update_file;
 
-   str_ptr fname = IOManager::load_prefix() + _mesh_update_file;
+   string fname = IOManager::load_prefix() + string(**_mesh_update_file);
 
-   cur->read_file(**fname);
+   cur->read_file(fname.c_str());
 }
 
 void
@@ -920,13 +920,13 @@ TEXBODY::put_mesh_data_update_file(TAGformat &d) const
       *d << _mesh_update_file;
       d.end_id();
 
-      str_ptr fname = IOManager::save_prefix() + _mesh_update_file;
+      string fname = IOManager::save_prefix() + string(**_mesh_update_file);
 
-      err_msg("TEXBODY::put_mesh_data_update_file() - Exporting mesh data to '%s'...", **fname);
+      err_msg("TEXBODY::put_mesh_data_update_file() - Exporting mesh data to '%s'...", fname.c_str());
 
       BMESHptr cur = cur_rep();
-      if (!(cur && cur->write_file(**fname))) {
-         err_msg("TEXBODY::put_mesh_data_update_file - Export FAILED to '%s'!!!", **fname);
+      if (!(cur && cur->write_file(fname.c_str()))) {
+         err_msg("TEXBODY::put_mesh_data_update_file - Export FAILED to '%s'!!!", fname.c_str());
       }
    }
 

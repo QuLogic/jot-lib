@@ -46,7 +46,7 @@ class FileSelect
 
  public :    
    /******** DATA TYPES ********/
-   typedef void (*file_cb_t) (void *,int,int,str_ptr,str_ptr);
+   typedef void (*file_cb_t) (void *,int,int,string,string);
 
  protected:
    /******** STATIC MEMBER VARIABLES ********/
@@ -60,14 +60,14 @@ class FileSelect
    str_ptr     _title;
    str_ptr     _action;
    icon_t      _icon;
-   str_ptr     _path;
-   str_ptr     _file;
+   string      _path;
+   string      _file;
    int         _filter;
    str_list    _filters;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
  public  :
-   FileSelect() : _title(""), _action("OK"), _icon(NO_ICON), _path(Config::JOT_ROOT()), _file("")
+   FileSelect() : _title(""), _action("OK"), _icon(NO_ICON), _path(string(**Config::JOT_ROOT())), _file("")
    { 
       _filter = 0;
       _filters += "*";
@@ -79,15 +79,15 @@ class FileSelect
    virtual bool      set_title(Cstr_ptr &s)  { if (is_displaying()) return false; _title = s;   return true; }
    virtual bool      set_action(Cstr_ptr &s) { if (is_displaying()) return false; _action = s;  return true; }
    virtual bool      set_icon(icon_t i)      { if (is_displaying()) return false; _icon = i;    return true; }
-   virtual bool      set_path(Cstr_ptr &s)   { if (is_displaying()) return false; _path = s;    return true; }
-   virtual bool      set_file(Cstr_ptr &s)   { if (is_displaying()) return false; _file = s;    return true; }
+   virtual bool      set_path(const string &s){ if (is_displaying()) return false; _path = s;    return true; }
+   virtual bool      set_file(const string &s){ if (is_displaying()) return false; _file = s;    return true; }
    virtual bool      set_filter(Cstr_ptr &s) { if (is_displaying()) return false; add_filter(s); _filter = _filters.get_index(s); return true; }
    virtual bool      add_filter(Cstr_ptr &s) { if (is_displaying()) return false; _filters.add_uniquely(s);    return true; }
    
    virtual bool      clear_title()           { if (is_displaying()) return false; _title = "";                       return true; }
    virtual bool      clear_action()          { if (is_displaying()) return false; _action = "OK";                    return true; }
    virtual bool      clear_icon()            { if (is_displaying()) return false; _icon = NO_ICON;                   return true; }
-   virtual bool      clear_path()            { if (is_displaying()) return false; _path = Config::JOT_ROOT();        return true; }
+   virtual bool      clear_path()            { if (is_displaying()) return false; _path = string(**Config::JOT_ROOT());return true; }
    virtual bool      clear_file()            { if (is_displaying()) return false; _file = "";                        return true; }
    virtual bool      clear_filter()          { if (is_displaying()) return false; set_filter("*");                   return true; }
    virtual bool      clear_filters()         { if (is_displaying()) return false; _filters.clear(); set_filter("*"); return true; }
@@ -95,8 +95,8 @@ class FileSelect
    virtual str_ptr   get_title()             { return _title;              }
    virtual str_ptr   get_action()            { return _action;             }
    virtual icon_t    get_icon()              { return _icon;               }
-   virtual str_ptr   get_path()              { return _path;               }
-   virtual str_ptr   get_file()              { return _file;               }
+   virtual string    get_path()              { return _path;               }
+   virtual string    get_file()              { return _file;               }
    virtual str_ptr   get_filter()            { return _filters[_filter];   }
    virtual str_list  get_filters()           { return _filters;            }
 
@@ -105,7 +105,7 @@ class FileSelect
    virtual bool      is_displaying() = 0;
    virtual bool      display(bool blocking, file_cb_t cb, void *vp, int idx) = 0;
  protected:
-   virtual bool      undisplay(int button, str_ptr path, str_ptr file) = 0;
+   virtual bool      undisplay(int button, string path, string file) = 0;
 
 };
 

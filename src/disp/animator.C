@@ -249,16 +249,15 @@ Animator::step(int inc)
 double
 Animator::pre_draw_CB()
 {   
-  
    char bname[1024];
 
    //Now make sure the desired frame's loaded
    if (_cur_frame >= 0 && _cur_frame <= _end_frame && _last_loaded != _cur_frame) {
       sprintf(bname, "%s[%05d].jot", **_name, _cur_frame);
-      str_ptr fname = IOManager::cwd() + bname; 
+      string fname = IOManager::cwd() + bname;
       LOADobs::load_status_t status;
       cerr <<  "loading in " << fname << endl;
-      NetStream s(fname, NetStream::ascii_r);      
+      NetStream s(str_ptr(fname.c_str()), NetStream::ascii_r);
       LOADobs::notify_load_obs(s, status, true, false);
 
       _last_loaded = _cur_frame;
@@ -334,8 +333,6 @@ Animator::format(STDdstream &d)  const
            << endl
            << "Each frame will be loaded and resaved..." << endl;
 
-      str_ptr bname, lname, sname;
-
       char buf[6];
 
       LOADobs::load_status_t lstatus;
@@ -344,17 +341,17 @@ Animator::format(STDdstream &d)  const
       for (int i = _end_frame; i >= _start_frame; i--) {
          sprintf(buf, "%05d", i);
 
-         str_ptr bname = _name + "[" + buf + "].jot";
+         string bname = string(**_name) + "[" + buf + "].jot";
 
-         str_ptr lname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
-         str_ptr sname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
+         string lname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
+         string sname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
 
-         err_msg("Animator::format() - Saving frame: '%s'...", **sname);
+         err_msg("Animator::format() - Saving frame: '%s'...", sname.c_str());
 
          //Keep scope issolated so load stream closes before saving
          //just in case we're overwriting...
          {
-            NetStream l(lname, NetStream::ascii_r);
+            NetStream l(str_ptr(lname.c_str()), NetStream::ascii_r);
             LOADobs::notify_load_obs(l, lstatus, true, false);
 
             if (lstatus != LOADobs::LOAD_ERROR_NONE) {
@@ -365,7 +362,7 @@ Animator::format(STDdstream &d)  const
          }
 
          {
-            NetStream s(sname, NetStream::ascii_w);
+            NetStream s(str_ptr(sname.c_str()), NetStream::ascii_w);
             SAVEobs::notify_save_obs(s, sstatus, true, false);
 
             if (sstatus != SAVEobs::SAVE_ERROR_NONE) {

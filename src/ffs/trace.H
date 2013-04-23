@@ -148,7 +148,7 @@ class TRACE : public DrawWidget {
 
   // Open loading dialog
   void load_dia();
-  static void file_cbs(void *ptr, int idx, int action, str_ptr path, str_ptr file);
+  static void file_cbs(void *ptr, int idx, int action, string path, string file);
 
 	bool is_valid;
 };

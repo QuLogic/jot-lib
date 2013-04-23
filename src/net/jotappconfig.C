@@ -741,9 +741,9 @@ main_config(bool init)
       if (!getenv("JOT_ROOT")) {
          err_msg("main_config: JOT_ROOT environment variable NOT found...");
          err_msg("main_config: Will use current working directory instead...");
-         str_ptr cwd = getcwd_();
-         if (cwd != NULL_STR) {
-            putenv(**(str_ptr("JOT_ROOT=") + cwd));
+         string cwd = getcwd_();
+         if (cwd != "") {
+            setenv("JOT_ROOT", cwd.c_str(), 1);
          } else {
             err_msg("main_config: failed retrieving current working directory!");
             exit(0);
