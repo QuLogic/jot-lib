@@ -325,7 +325,7 @@ GLUIAlertBox::display(bool blocking, alert_cb_t cb, void *vp, void *vpd, int idx
       return false;
    }
 
-   if (_buttons.num() == 0)
+   if (_buttons.empty())
    {
       cerr << "GLUIAlertBox::display - *ERROR* No buttons defined!\n";
       return false;
@@ -401,17 +401,19 @@ GLUIAlertBox::build_glui()
    GLUIPopUp::build_glui();
 
    int i;
+   vector<string>::size_type j;
 
    int id = _id << ID_SHIFT;
 
-   _glui->rename(**_title);
+   _glui->rename(_title);
 
    assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)          _panel.add(0);
    assert(_bitmapbox.num()==0);    for (i=0; i<BITMAPBOX_NUM; i++)      _bitmapbox.add(0);
-   assert(_button.num()==0);       for (i=0; i<_buttons.num(); i++)     _button.add(0);
-   assert(_statictext.num()==0);   for (i=0; i<max(1,_text.num()); i++) _statictext.add(0);
+   assert(_button.num()==0);       for (j=0; j<_buttons.size(); j++)    _button.add(0);
+   assert(_statictext.num()==0);
+      _statictext.add(0);          for (j=1; j<_text.size(); j++)       _statictext.add(0);
    
-   if ((_icon != NO_ICON) || _text.num())
+   if ((_icon != NO_ICON) || !_text.empty())
    {
       _panel[PANEL_TEXT] = new GLUI_Panel(_glui, "", GLUI_PANEL_RAISED);
       assert(_panel[PANEL_TEXT]);           
@@ -431,14 +433,19 @@ GLUIAlertBox::build_glui()
 
       new GLUI_Column(_panel[PANEL_TEXT], false);
 
-      for (i=0; i<max(1,_text.num()); i++)
-      {
-         _statictext[i] = new GLUI_StaticText(
-            _panel[PANEL_TEXT], (char*)
-            ((!_text.num())?(" "):(**_text[i])));
-         assert(_statictext[i]);
-         _statictext[i]->set_alignment(GLUI_ALIGN_LEFT);
-         _statictext[i]->set_h(16);
+      if (_text.empty()) {
+         _statictext[0] = new GLUI_StaticText(_panel[PANEL_TEXT], " ");
+         assert(_statictext[0]);
+         _statictext[0]->set_alignment(GLUI_ALIGN_LEFT);
+         _statictext[0]->set_h(16);
+
+      } else {
+         for (j=0; j<_text.size(); j++) {
+            _statictext[j] = new GLUI_StaticText(_panel[PANEL_TEXT], _text[j].c_str());
+            assert(_statictext[j]);
+            _statictext[j]->set_alignment(GLUI_ALIGN_LEFT);
+            _statictext[j]->set_h(16);
+         }
       }
 
       new GLUI_Column(_panel[PANEL_TEXT], false);
@@ -447,16 +454,16 @@ GLUIAlertBox::build_glui()
    _panel[PANEL_BUTTONS] = new GLUI_Panel(_glui, "", GLUI_PANEL_NONE);
    assert(_panel[PANEL_BUTTONS]);           
 
-   for (i=0; i<_buttons.num(); i++)
+   for (j=0; j<_buttons.size(); j++)
    {
-      _button[i] = new GLUI_Button(
-         _panel[PANEL_BUTTONS], **_buttons[i], 
-         id+i, button_cbs);
-      assert(_button[i]);
+      _button[j] = new GLUI_Button(
+         _panel[PANEL_BUTTONS], _buttons[j].c_str(),
+         id+j, button_cbs);
+      assert(_button[j]);
       
-      _button[i]->set_w(75);
+      _button[j]->set_w(75);
 
-      if (i != _buttons.num()-1) 
+      if (j != _buttons.size()-1)
          new GLUI_Column(_panel[PANEL_BUTTONS], false);
    }
    
@@ -700,7 +707,7 @@ GLUIFileSelect::build_glui()
 
    int id = _id << ID_SHIFT;
 
-   _glui->rename(**_title);
+   _glui->rename(_title);
 
    assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)       _panel.add(0);
    assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)         _button.add(0);
@@ -1131,7 +1138,7 @@ GLUIFileSelect::build_glui()
    new GLUI_Column(_panel[PANEL_ACTION], false);
    
    _button[BUT_ACTION] = new GLUI_Button(
-      _panel[PANEL_ACTION], **_action, 
+      _panel[PANEL_ACTION], _action.c_str(),
       id+BUT_ACTION, button_cbs);
    assert(_button[BUT_ACTION]);
    _button[BUT_ACTION]->set_w(GLUI_FILE_SELECT_ACTION_WIDTH);
@@ -1561,14 +1568,14 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
    dir->_contents.clear();
 
    if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT) {
-      assert(_filter < _filters.num());
+      assert(_filter < _filters.size());
       //readdir wants a path pointing to a dir...
       //_full_path already has trailing slashes removed
       //for directories, but not for 'drives' i.e. root directories...
       //so add the . back in that case....
       vector<string> entries = readdir_(dir->_full_path +
                                            (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?".":""),
-                                        string(**_filters[_filter]));
+                                        get_filter());
 
       for (vector<string>::size_type j=0; j<entries.size(); j++) {
          // Careful about assembling paths, /'s and filenames
@@ -3242,6 +3249,7 @@ GLUIFileSelect::update_actions()
 {
    int i;
    string::size_type j;
+   vector<string>::size_type k;
 
    if (_current_mode == MODE_RENAME)
    {
@@ -3321,7 +3329,7 @@ GLUIFileSelect::update_actions()
          _checkbox[CHECKBOX_DOT]->disable();
 
          _button[BUT_ACTION]->disable();
-         _button[BUT_ACTION]->set_name(**_action);
+         _button[BUT_ACTION]->set_name(_action.c_str());
 
          _button[BUT_CANCEL]->enable();
          _button[BUT_CANCEL]->set_name("Cancel");
@@ -3336,7 +3344,7 @@ GLUIFileSelect::update_actions()
       {
          string foo, bar;
 
-         assert(_filter < _filters.num());
+         assert(_filter < _filters.size());
 
          _listbox[LIST_FILTER]->enable();
          _listbox[LIST_FILTER]->set_w(GLUI_FILE_SELECT_FILTER_WIDTH);
@@ -3348,15 +3356,14 @@ GLUIFileSelect::update_actions()
          for (i=0; _listbox[LIST_FILTER]->delete_item(i); i++) {}
 
          //Add this placeholder for final selection to avoid flickering...
-         foo = string(**_filters[_filter]);
+         foo = get_filter();
          bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_FILTER], bar.c_str())) bar=shorten_string(--j,foo);
          _listbox[LIST_FILTER]->add_item(-1, bar.c_str());
 
-         for (i=0; i < _filters.num(); i++) 
-         {
-            foo = string(**_filters[i]);
+         for (k=0; k < _filters.size(); k++) {
+            foo = _filters[k];
             bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_FILTER], bar.c_str())) bar=shorten_string(--j,foo);
-            _listbox[LIST_FILTER]->add_item(i, bar.c_str());
+            _listbox[LIST_FILTER]->add_item(k, bar.c_str());
          }
 
          _listbox[LIST_FILTER]->set_int_val(_filter);
@@ -3365,7 +3372,7 @@ GLUIFileSelect::update_actions()
          _listbox[LIST_FILTER]->delete_item(-1);
 
          _button[BUT_ACTION]->enable();
-         _button[BUT_ACTION]->set_name(**_action);
+         _button[BUT_ACTION]->set_name(_action.c_str());
 
          _button[BUT_CANCEL]->enable();
          _button[BUT_CANCEL]->set_name("Cancel");
@@ -3405,8 +3412,7 @@ GLUIFileSelect::listbox_cb(int id)
    switch(id)
    {
       case LIST_FILTER:
-         if (_filter != _listbox[LIST_FILTER]->get_int_val())
-         {
+         if ((int)_filter != _listbox[LIST_FILTER]->get_int_val()) {
             _filter = _listbox[LIST_FILTER]->get_int_val();
             do_refresh();
          }
@@ -3475,8 +3481,8 @@ GLUIFileSelect::button_cb(int id)
    {
       assert(_current_path != NULL);
 
-      str_ptr text;
-      str_list filter_chars, bad_chars;
+      string text;
+      string filter_chars, bad_chars;
       
       filter_chars += "*";
       filter_chars += "?";
@@ -3495,17 +3501,16 @@ GLUIFileSelect::button_cb(int id)
       switch(id)
       {
          case BUT_ACTION:
-            //If the filename contains a filter character, we must be tryin
-            //to change filters... go fot it.
+            //If the filename contains a filter character, we must be trying
+            //to change filters... go for it.
             text = _edittext[EDITTEXT_FILE]->get_text();
-            if (text.contains(filter_chars))
+            if (text.find_first_of(filter_chars) != string::npos)
             {
-               _filters.add_uniquely(text);
-               _filter = _filters.get_index(text);
+               set_filter(text);
                _edittext[EDITTEXT_FILE]->set_text("");
                do_refresh();
             }
-            else if (text.contains(bad_chars))
+            else if (text.find_first_of(bad_chars) != string::npos)
             {
                _edittext[EDITTEXT_FILE]->set_text("BadFilename");
                _glui->activate_control(_edittext[EDITTEXT_FILE],GLUI_ACTIVATE_TAB);

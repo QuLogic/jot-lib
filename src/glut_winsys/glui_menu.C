@@ -18,9 +18,9 @@
 #include "glui_menu.H" 
 #include "glui/glui_jot.H"
 
-ARRAY<MenuItem *> GLUIMoveMenu::_menu_items(10);
+vector<MenuItem *> GLUIMoveMenu::_menu_items(10);
 
-GLUIMoveMenu::GLUIMoveMenu(Cstr_ptr &name, int main_window_id) :
+GLUIMoveMenu::GLUIMoveMenu(const string &name, int main_window_id) :
    MoveMenu(name),
    _glui(0),
    _menu_created(false),
@@ -106,7 +106,7 @@ GLUIMoveMenu::create_menu()
 //   int root_h = glutGet(GLUT_WINDOW_HEIGHT);
    
    // create the glui window
-   _glui = GLUI_Master.create_glui(*(*_name), 0, root_x + root_w + 10, root_y);
+   _glui = GLUI_Master.create_glui(_name.c_str(), 0, root_x + root_w + 10, root_y);
    assert(_glui);
    
    // tell glui which is the main window
@@ -122,9 +122,9 @@ GLUIMoveMenu::create_menu()
          items[i]->menu(this);
          const char *label = 0;
          // Make default label if one doesn't exist
-         if (!items[i]->label()) {
-            label ="----";
-         } else label = **items[i]->label();
+         if (items[i]->label().empty()) {
+            label = "----";
+         } else label = items[i]->label().c_str();
 
          // set the menu item in the global list used for callbacks
          int item_id = map_menu_item(items[i]);
@@ -144,7 +144,7 @@ void
 GLUIMoveMenu::btn_callback(int id)
 {
    using mlib::XYpt;
-   assert(_menu_items.valid_index(id));
+   assert(0 <= id && id < (int)_menu_items.size());
    assert(_menu_items[id]);
    XYpt dummy;
    _menu_items[id]->exec(dummy);
@@ -163,7 +163,7 @@ GLUIMoveMenu::map_menu_item(MenuItem *item)
    assert(item);
 
    // See if there's an empty slot in the menu item array.
-   for (int i=0; i<_menu_items.num(); i++) {
+   for (vector<MenuItem *>::size_type i=0; i<_menu_items.size(); i++) {
       if (_menu_items[i] == 0) {    // found an empty slot
          cerr << "map_menu_item(), empty slot " << i << endl;
          _menu_items[i] = item; // store item 
@@ -172,10 +172,10 @@ GLUIMoveMenu::map_menu_item(MenuItem *item)
    }
 
    // we found no empty slot, so append the item to the array
-   _menu_items += item;
+   _menu_items.push_back(item);
 
    // return its index
-   int ret_id = _menu_items.num()-1;
+   int ret_id = _menu_items.size()-1;
 
    return ret_id;
 }
@@ -186,6 +186,7 @@ GLUIMoveMenu::map_menu_item(MenuItem *item)
 void
 GLUIMoveMenu::unmap_menu_item(int item_index)
 {
-   assert(_menu_items.valid_index(item_index));
+   assert(0 <= item_index && item_index < (int)_menu_items.size());
    _menu_items[item_index] = 0;
 }
+

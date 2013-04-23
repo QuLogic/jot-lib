@@ -28,7 +28,7 @@ extern str_ptr JOT_ROOT;           // Accessed elsewhere
 void
 PaperUI::button_press_cb()
 {
-   PaperEffect::set_paper_tex(_files[_selected]);
+   PaperEffect::set_paper_tex(str_ptr(_files[_selected].c_str()));
 }
 
 void

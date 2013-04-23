@@ -133,8 +133,8 @@ GLUT_WINSYS::setup(CVIEWptr &v)
       );
    
    // Create the windows (it becomes 'current')
-   _name = str_ptr(Config::get_var_str("JOT_WINDOW_NAME", "Jot", true).c_str());
-   _id = glutCreateWindow(**_name);
+   _name = Config::get_var_str("JOT_WINDOW_NAME", "Jot", true);
+   _id = glutCreateWindow(_name.c_str());
 
    if (debug) {
       cerr << "GLUT_WINSYS::setup: got window ID: "
@@ -455,7 +455,7 @@ GLUT_WINSYS::alert_box()
 // menu()
 /////////////////////////////////////
 MoveMenu*
-GLUT_WINSYS::menu(Cstr_ptr &name)
+GLUT_WINSYS::menu(const string &name)
 {
    assert(_id != -1);  // menu() shouldn't be called before setup()
    return new GLUIMoveMenu(name, _id);
@@ -480,7 +480,7 @@ GLUT_WINSYS::set_focus()
       cerr << "GLUT_WINSYS::set_focus" << endl;
 
 #ifdef WIN32
-   HWND hwnd = FindWindow("GLUT", **_name);
+   HWND hwnd = FindWindow("GLUT", _name.c_str());
    if(hwnd != NULL) {
       //SetFocus(hwnd);
       SetActiveWindow(hwnd);

@@ -52,14 +52,14 @@ class GLUT_WINSYS : public WINSYS {
    /******** MEMBER VARIABLES ********/
    
    int               _id;            
-   str_ptr           _name;
+   string            _name;
    int               _width;         
    int               _height;        
    int               _init_x;        
    int               _init_y;        
    bool              _map_pending;   
    bool              _show_special_cursor;
-   mlib::XYpt              _cursor_pt;  
+   mlib::XYpt        _cursor_pt;
    GLUT_MOUSE*       _mouse;         
    DEVhandler*       _curpush;       
    GLUIFileSelect*   _file_select;
@@ -102,7 +102,7 @@ public:
    virtual WINSYS*      copy()                     { return new GLUT_WINSYS(*this); }
    virtual Mouse*       mouse();
    virtual DEVhandler*  curspush();
-   virtual MoveMenu*    menu(Cstr_ptr & name);
+   virtual MoveMenu*    menu(const string & name);
    virtual FileSelect*  file_select();
    virtual AlertBox*    alert_box();
    virtual void         stereo(VIEW::stereo_mode)  { cerr << "GLUT_WINSYS::stereo() - *DUMMY*\n"; }

@@ -99,7 +99,7 @@ class WINSYS: public DEVmod_gen {
       // Accessors for window specific mouse, menu, cursor push, and file
       // selection objects
       virtual Mouse*       mouse() = 0;
-      virtual MoveMenu*    menu(Cstr_ptr &name) = 0;
+      virtual MoveMenu*    menu(const string &name) = 0;
       virtual DEVhandler*  curspush() = 0;
       virtual FileSelect*  file_select() = 0;
       virtual AlertBox*    alert_box() = 0;

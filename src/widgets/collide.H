@@ -52,13 +52,10 @@ class Collide : public BaseCollide {
    }
 
 
-//static ARRAY<OctreeNode*>* _spsTree;
-   //static ARRAY<OctreeNode*>* get_sps() {return _spsTree; }
    static mlib::CWvec get_move(mlib::CWpt& p, mlib::CWvec& v); 
    bool set_land(GEOMptr g) {_land = g;
 							_update_scene();
 							return true;} 
-  //static ARRAY<OctreeNode*>* get_scene() {return &_RootNodes;}
   
    static void set_size(double); 
 
@@ -69,14 +66,9 @@ class Collide : public BaseCollide {
    double intersectSphere(mlib::CWpt& rO, mlib::CWvec& rV, mlib::CWpt& sO, double sR);
 
  protected:
-
-	
-	//static ARRAY<OctreeNode*>* _spsTree;
-
-
    stop_watch   _clock;
    Bface_list   _hitFaces;                              //list of potential colliders
-   ARRAY<Wvec>	_smplPoints;							//list of sample points
+   vector<Wvec>	_smplPoints;							//list of sample points
    GEOMptr		_land;
    BMESHptr             _BSphere;                               //bounding sphere around the camera
    BMESHptr     _DestSphere;                    //bounding sphere around the destination point

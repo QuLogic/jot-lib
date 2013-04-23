@@ -26,9 +26,9 @@
 ARRAY<FileListbox*> FileListbox::_file_list_boxes;
 
 FileListbox::FileListbox(
-   Cstr_ptr &label,
-   Cstr_ptr &listbox_name,
-   Cstr_ptr &button_name
+   const string &label,
+   const string &listbox_name,
+   const string &button_name
    ) : _glui(0), _listbox(0), _selected(0), _shown(false)
 {
   _file_list_boxes += this;
@@ -37,25 +37,25 @@ FileListbox::FileListbox(
 
 void
 FileListbox::init(
-   Cstr_ptr &label,
-   Cstr_ptr &listbox_name,
-   Cstr_ptr &button_name
+   const string &label,
+   const string &listbox_name,
+   const string &button_name
    )
 {
    // Get the glut main window ID from the winsys
    int main_win_id = VIEW::peek()->win()->id();
 
    // Create the glui widget that will contain the pen controls
-   _glui = GLUI_Master.create_glui(**listbox_name, 0);
+   _glui = GLUI_Master.create_glui(listbox_name.c_str(), 0);
    _glui->set_main_gfx_window(main_win_id);
 
    // Create label
-   new GLUI_StaticText(_glui, **label);
+   new GLUI_StaticText(_glui, label.c_str());
    // Followed by a separator
    new GLUI_Separator(_glui);
 
    // Create the texture list box
-   _listbox = new GLUI_Listbox(_glui, **listbox_name,
+   _listbox = new GLUI_Listbox(_glui, listbox_name.c_str(),
                                NULL, // not using live var
                                _file_list_boxes.num()-1,
                                FileListbox::listbox_cb
@@ -67,7 +67,7 @@ FileListbox::init(
    new GLUI_Separator(_glui);
 
    // Add a button for setting the attributes to the stroke
-   new GLUI_Button(_glui, **button_name, _file_list_boxes.num()-1,
+   new GLUI_Button(_glui, button_name.c_str(), _file_list_boxes.num()-1,
                    FileListbox::set_cb);
 
    // Add a button for setting the attributes to the stroke
@@ -79,11 +79,11 @@ FileListbox::init(
 
 void
 FileListbox::fill_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path,
-   const string &save_path,
-   const char   *extension
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path,
+   const string   &save_path,
+   const char     *extension
    )
 {
    int j = 0;
@@ -94,7 +94,7 @@ FileListbox::fill_listbox(
       if ( (extension) && (len>3) && 
             (in_files[i].substr(len-4) == extension))
       {
-         save_files += str_ptr((save_path + in_files[i]).c_str());
+         save_files.push_back(save_path + in_files[i]);
          listbox->add_item(j++, in_files[i].c_str());
       }
    }

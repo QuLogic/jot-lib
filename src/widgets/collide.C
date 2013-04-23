@@ -57,11 +57,11 @@ Collide::_get_move(CWpt& s, CWvec& vel)
 		return velocity+(_size * .1 * log(force.length()) * force);
 		}
 
-   ARRAY<Wvec> norms;
-   ARRAY<double> weights;
+   vector<Wvec> norms(_hitFaces.num(), Wvec(0,0,0));
+   vector<double> weights(_hitFaces.num(), 0.0);
    double totalWeight = 0;
 
-	//spring forces
+   //spring forces
 
    //weight all near by nodes
    for (int i = 0; i < _hitFaces.num(); i++) {
@@ -75,14 +75,14 @@ Collide::_get_move(CWpt& s, CWvec& vel)
       double dist = n*v;
 
       //calculate the weight of given point
-      weights.add(pow(e,sqr(dist)));
-      totalWeight+=weights[i];
+      weights[i] = pow(e, sqr(dist));
+      totalWeight += weights[i];
 
       //calculate normal
-      if (dist <= _size)       //if its closer than it should be
-         norms += speed * (_size - dist) * n;
-      else                            //if its further than should be             
-         norms += speed * (_size - dist) * -n;
+      if (dist <= _size)       //if it's closer than it should be
+         norms[i] = speed * (_size - dist) * n;
+      else                     //if it's further than it should be
+         norms[i] = speed * (_size - dist) * -n;
    }
 
    //calculate combination of all weighted norms
@@ -90,25 +90,11 @@ Collide::_get_move(CWpt& s, CWvec& vel)
    for (int i = 0; i < _hitFaces.num(); i++)
       force += (weights[i]/totalWeight) * norms[i];
 
-	//smooth forces so its not jerky
-	double a = .1;
+   //smooth forces so its not jerky
+   double a = .1;
    _prevForce = force;
-	force = ((1 - a) * (force - _prevForce)) +_pV;
+   force = ((1 - a) * (force - _prevForce)) +_pV;
    _pV = force;
-
-/*   
-   for (int i = 0; i < _hitFaces.num(); i++)
-		{
-		Wpt p;
-		_hitFaces[i]->bc2pos(_smplPoints[i],p);
-		Wvec n = _hitFaces[i]->bc2norm(_smplPoints[i]);
-
-		Wvec v  = ((source + (velocity + force)) - p).projected(n);
-		double dist = n*v;
-		if(dist < _size)
-			velocity = velocity + (n *(_size - dist));
-		}
-	*/
 
    return _land->xform() * (velocity + force);
 }
@@ -184,7 +170,7 @@ Collide::buildCollisionList(OctreeNode* node)
    //if the node has no children(its a leaf), add its triangles
    if (node->get_leaf()) {
       _hitFaces += node->get_face();
-      _smplPoints.add(node->get_point());
+      _smplPoints.push_back(node->get_point());
    } else { //else, check its children
       OctreeNode** children =  node->get_children();
       for (int i = 0; i<8; i++)

@@ -830,7 +830,7 @@ file_cbs(void *ptr, int idx, int action, string path, string file)
                box->set_title("Warning");
                box->set_icon(AlertBox::EXCLAMATION_ICON);
                box->add_text("Destination exists:");
-               box->add_text(fullpath.c_str());
+               box->add_text(fullpath);
                box->add_text("Overwrite?"); 
                box->add_button("Yes");
                box->add_button("No");
@@ -894,7 +894,7 @@ do_save(string fullpath)
       box->set_title("Warning");
       box->set_icon(AlertBox::WARNING_ICON);
       box->add_text("Problem saving scene to file:");
-      box->add_text(fullpath.c_str());
+      box->add_text(fullpath);
       box->add_button("OK");
       box->set_default(0);
 
@@ -958,7 +958,7 @@ do_load(string fullpath)
       box->set_title("Warning");
       box->set_icon(AlertBox::WARNING_ICON);
       box->add_text("Problem loading scene from file:");
-      box->add_text(fullpath.c_str());
+      box->add_text(fullpath);
       box->add_button("OK");
       box->set_default(0);
 

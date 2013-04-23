@@ -50,14 +50,14 @@ class AlertBox
  protected:
    /******** MEMBER VARIABLES ********/
      
-   str_ptr     _title;
+   string         _title;
 
-   str_list    _text;
-   str_list    _buttons;
+   vector<string> _text;
+   vector<string> _buttons;
 
-   int         _default;
+   int            _default;
 
-   icon_t      _icon;
+   icon_t         _icon;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
  public:
@@ -66,11 +66,11 @@ class AlertBox
    
    /******** MEMBER METHODS ********/
 
-   virtual bool      set_title(Cstr_ptr &s)  { if (is_displaying()) return false; _title = s;      return true; }
-   virtual bool      set_icon(icon_t i)      { if (is_displaying()) return false; _icon = i;       return true; }
-   virtual bool      set_default(int d)      { if (is_displaying()) return false; _default = d;    return true; }
-   virtual bool      add_button(Cstr_ptr &s) { if (is_displaying()) return false; _buttons.add(s); return true; }
-   virtual bool      add_text(Cstr_ptr &s)   { if (is_displaying()) return false; _text.add(s);    return true; }
+   virtual bool      set_title(const string &s)  { if (is_displaying()) return false; _title = s;            return true; }
+   virtual bool      set_icon(icon_t i)          { if (is_displaying()) return false; _icon = i;             return true; }
+   virtual bool      set_default(int d)          { if (is_displaying()) return false; _default = d;          return true; }
+   virtual bool      add_button(const string &s) { if (is_displaying()) return false; _buttons.push_back(s); return true; }
+   virtual bool      add_text(const string &s)   { if (is_displaying()) return false; _text.push_back(s);    return true; }
    
    virtual bool      clear_title()           { if (is_displaying()) return false; _title = "";        return true; }
    virtual bool      clear_icon()            { if (is_displaying()) return false; _icon = NO_ICON;    return true; }
@@ -78,11 +78,11 @@ class AlertBox
    virtual bool      clear_buttons()         { if (is_displaying()) return false; _buttons.clear();   return true; } 
    virtual bool      clear_text()            { if (is_displaying()) return false; _text.clear();      return true; }
 
-   virtual str_ptr   get_title()             { return _title;     }
-   virtual icon_t    get_icon()              { return _icon;      }
-   virtual int       get_default()           { return _default;   }
-   virtual str_list  get_buttons()           { return _buttons;   }
-   virtual str_list  get_text()              { return _text;      }
+   virtual string         get_title()        { return _title;     }
+   virtual icon_t         get_icon()         { return _icon;      }
+   virtual int            get_default()      { return _default;   }
+   virtual vector<string> get_buttons()      { return _buttons;   }
+   virtual vector<string> get_text()         { return _text;      }
 
    /******** PURE VIRTUAL METHODS ********/
  public:

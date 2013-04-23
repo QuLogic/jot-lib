@@ -25,17 +25,17 @@ class MoveMenu;
 class MenuItem {
   public :
      MenuItem() : _menu(0) {}
-     MenuItem(Cstr_ptr &label) : _label(label) { }
+     MenuItem(const string &label) : _label(label) { }
      virtual ~MenuItem() {}
 
      virtual void exec(mlib::CXYpt &) {}
-     Cstr_ptr &label() const { return _label; }
+     const string &label() const { return _label; }
 
      void            menu(MoveMenu *menu) {_menu = menu;}
      const MoveMenu *menu()        const  {return _menu;}
 
   protected:
-     str_ptr   _label;
+     string    _label;
      MoveMenu *_menu;
 };
 
@@ -44,7 +44,7 @@ typedef ARRAY<MenuItem *> MenuList;
 class MoveMenu
 {
   public  :
-     MoveMenu(Cstr_ptr &name) : _is_shown(0), _name(name) {}
+     MoveMenu(const string &name) : _is_shown(0), _name(name) {}
      virtual ~MoveMenu() {}
 
      virtual void move(const mlib::XYpt &loc) {_loc = loc;}
@@ -59,6 +59,6 @@ class MoveMenu
      int      _is_shown;
      MenuList _item_list;
      mlib::XYpt  _loc;
-     str_ptr  _name;
+     string   _name;
 };
 #endif

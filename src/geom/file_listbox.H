@@ -36,7 +36,7 @@ class FileListbox {
    GLUI_Listbox*      _listbox;
    int                _selected;
    bool               _shown;
-   str_list           _files;
+   vector<string>     _files;
 
    static ARRAY<FileListbox *> _file_list_boxes;
 
@@ -45,7 +45,7 @@ class FileListbox {
 
  public:
    //******** MANAGERS ********
-   FileListbox(Cstr_ptr &label, Cstr_ptr &listbox_name, Cstr_ptr &button_name);
+   FileListbox(const string &label, const string &listbox_name, const string &button_name);
 
    virtual ~FileListbox() {}
 
@@ -56,13 +56,13 @@ class FileListbox {
    // If extention is provided, it should be like ".png".  It must
    // be four characters long, and include the dot!  Files lacking
    // this extension are ignored.
-   static void fill_listbox(GLUI_Listbox *listbox, str_list &files,
+   static void fill_listbox(GLUI_Listbox *listbox, vector<string> &files,
                             const string &full_path, const string &save_path,
                             const char *extension=0);
 
  protected:
 
-   void init(Cstr_ptr &label, Cstr_ptr &listbox_name, Cstr_ptr &button_name);
+   void init(const string &label, const string &listbox_name, const string &button_name);
 };
 
 #endif // _FILE_LISTBOX_H_IS_INCLUDED_

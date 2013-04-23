@@ -24,7 +24,7 @@
 class GLUI;
 class GLUIMoveMenu : public MoveMenu {
   public:
-   GLUIMoveMenu(Cstr_ptr &name, int main_window_id);
+   GLUIMoveMenu(const string &name, int main_window_id);
 
    // XXX -- move local should reposition the glui window.
    virtual void move_local(const mlib::XYpt &loc) {_loc = loc;}
@@ -40,7 +40,7 @@ class GLUIMoveMenu : public MoveMenu {
 
    // Global list of menu items contained by any currently instantiated
    // menu.  Used for making callbacks to menu items.
-   static ARRAY<MenuItem *> _menu_items;
+   static vector<MenuItem *> _menu_items;
 
    int map_menu_item(MenuItem *item);
    void unmap_menu_item(int item_index);
