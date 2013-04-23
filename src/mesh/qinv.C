@@ -67,7 +67,7 @@ main(int argc, char *argv[])
 {
    // if -l flag is used, output limit locations
    bool do_limit = false;
-   if (argc == 2 && str_ptr("-l") == argv[1]) {
+   if (argc == 2 && string("-l") == argv[1]) {
       do_limit = true;
    } else if (argc != 1) {
       err_msg("Usage: %s < mesh.sm > mesh-qinv.sm", argv[0]);

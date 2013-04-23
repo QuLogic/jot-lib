@@ -34,7 +34,7 @@ main(int argc, char *argv[])
 {
    // See note above about -c option:
    bool do_components = false;
-   if (argc == 2 && str_ptr(argv[1]) == str_ptr("-c")) {
+   if (argc == 2 && string(argv[1]) == string("-c")) {
       do_components = true;
    } else if (argc != 1) {
       err_msg("Usage: %s [ -c ] < input.sm > output.sm", argv[0]);

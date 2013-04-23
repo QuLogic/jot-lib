@@ -105,7 +105,7 @@ main(int argc, char *argv[])
 {
    bool do_gauss_seidel = 0;
 
-   if (argc == 2 && str_ptr(argv[1]) == str_ptr("-g"))
+   if (argc == 2 && string(argv[1]) == string("-g"))
       do_gauss_seidel = 1;
    else if(argc != 1)
    {
