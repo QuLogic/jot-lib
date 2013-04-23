@@ -56,10 +56,10 @@ GLint  MLToneShader::_show_channel_loc  = -1;
 MLToneShader::MLToneShader(Patch* p) :
    ToneShader(p), _show_channel(0)
 {
-   set_tex(Config::get_var_str(
+   set_tex(str_ptr(Config::get_var_str(
               "MULTI_LIGHTS_TONE_FILENAME",
               GtexUtil::toon_name("clear-black.png")
-              ));
+              ).c_str()));
 
    set_draw_sils(Config::get_var_bool("BASECOAT_IMG_DRAW_SILS",false));
 }

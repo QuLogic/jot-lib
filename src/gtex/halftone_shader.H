@@ -92,8 +92,8 @@ class HalftoneShader : public GLSLShader {
    // ******** VIRTUAL METHODS ********
 
    // Return the names of the halftone GLSL shader programs:
-   virtual str_ptr vp_filename() { return vp_name("halftone"); }
-   virtual str_ptr fp_filename() { return fp_name("halftone"); }
+   virtual string vp_filename() { return vp_name("halftone"); }
+   virtual string fp_filename() { return fp_name("halftone"); }
 };
 
 #endif // HALFTONE_SHADER_IS_INCLUDED

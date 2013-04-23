@@ -133,16 +133,16 @@ FlatShadeTexture::draw(CVIEWptr& v)
       }
 
       // decide what image file to use to show the uv-coords:
-      str_ptr debug_uv_tex_name =
+      string debug_uv_tex_name =
          Config::get_var_str("DEBUG_UV_TEX_MAP", "checkerboard.png",true);
-      static str_ptr pre_path = Config::JOT_ROOT() + "nprdata/other_textures/";
-      str_ptr path = pre_path + debug_uv_tex_name;
+      string pre_path = Config::JOT_ROOT() + "nprdata/other_textures/";
+      string path = pre_path + debug_uv_tex_name;
 
       // we only try a given pathname once. but if it fails
       // and they reset DEBUG_UV_TEX_MAP while running the
       // program we can pick up the change and try again.
-      if (path != _debug_tex_path) {
-         _debug_tex_path = path;
+      if (path != **_debug_tex_path) {
+         _debug_tex_path = str_ptr(path.c_str());
          TEXTUREglptr tex = new TEXTUREgl(_debug_tex_path);
          bool do_mipmap = Config::get_var_bool("DEBUG_TEX_USE_MIPMAP",false);
          tex->set_mipmap(do_mipmap);
@@ -150,7 +150,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
          _debug_uv_in_dl = false;
 
          if (debug) {
-            cerr << "Loading debug uv texture " << **path << " ..." << endl;
+            cerr << "Loading debug uv texture " << path << " ..." << endl;
          }
 
          if (!_debug_uv_tex->load_texture()) {
@@ -159,7 +159,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
                  << endl
                  << "Set environment variable DEBUG_UV_TEX_MAP "
                  << "to an image file in "
-                 << **pre_path
+                 << pre_path
                  << " and try again."
                  << endl;
             _debug_uv_tex = 0;

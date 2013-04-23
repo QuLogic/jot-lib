@@ -39,9 +39,9 @@ GLSLHaloShader::GLSLHaloShader(Patch* p) :
    GLSLToonShader(p)
 {
 
-   set_tex(GtexUtil::toon_name(
+   set_tex(str_ptr(GtexUtil::toon_name(
       Config::get_var_str("GLSL_HALO_FILENAME","halo_white.png")
-      ));
+      ).c_str()));
 }
 
 GLSLHaloShader* 

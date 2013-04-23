@@ -155,8 +155,8 @@ class Halftone_TX : public GLSLShader_Layer_Base {
    virtual void activate_textures();
 
    // shader source file names:
-   virtual str_ptr vp_filename() { return vp_name("haftone_tx"); }
-   virtual str_ptr fp_filename() { return fp_name("haftone_tx"); }
+   virtual string vp_filename() { return vp_name("haftone_tx"); }
+   virtual string fp_filename() { return fp_name("haftone_tx"); }
 
    //******** GTexture VIRTUAL METHODS ********
    virtual void request_ref_imgs();

@@ -74,9 +74,9 @@ class GLSLNormalShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the toon MSLD shader programs:
-   virtual str_ptr vp_filename() { return vp_name("normal"); }
+   virtual string vp_filename() { return vp_name("normal"); }
 
-   virtual str_ptr fp_filename() { return fp_name("normal"); }
+   virtual string fp_filename() { return fp_name("normal"); }
 
 };
 

@@ -38,7 +38,7 @@ class ICON2D : public GEOM {
    ICON2D() {}
    //constructor: passes in the name of the button, the texture name
    //the camera number, toggle bool, and the lower left corner pixel location
-   ICON2D(Cstr_ptr &n, Cstr_ptr &filename, int num, bool tog, const PIXEL &p);
+   ICON2D(const string &n, const string &filename, int num, bool tog, const PIXEL &p);
 
    DEFINE_RTTI_METHODS3("ICON2D", ICON2D*, GEOM, CDATA_ITEM *);
 

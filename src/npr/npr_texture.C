@@ -1718,7 +1718,7 @@ NPRTexture::get_view_texture (TAGformat &d)
       v->set_bkg_file(NULL_STR);
    } else {
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_texture() - Loaded string: '%s'", **str);
-      v->set_bkg_file(Config::JOT_ROOT()+str);
+      v->set_bkg_file(str_ptr(Config::JOT_ROOT().c_str())+str);
    }
 
 }
@@ -1743,14 +1743,11 @@ NPRTexture::put_view_texture (TAGformat &d) const
       } else {
          //Here we strip off JOT_ROOT
 
-         str_ptr tex = v->get_bkg_file();
-         str_ptr str;
-         int i;
-         for (i=Config::JOT_ROOT().len(); i<(int)tex.len(); i++)
-            str = str + str_ptr(tex[i]);
-         *d << **str;
+         string tex = string(**v->get_bkg_file());
+         string str = tex.substr(Config::JOT_ROOT().length());
+         *d << str.c_str();
          *d << " ";
-         err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_texture() - Wrote string: '%s'", **str);
+         err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_texture() - Wrote string: '%s'", str.c_str());
       }
       d.end_id();
    }

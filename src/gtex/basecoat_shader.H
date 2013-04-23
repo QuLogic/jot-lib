@@ -118,8 +118,8 @@ class BasecoatShader : public ToneShader {
 
    //******** VIRTUAL METHODS ********
 
-   virtual str_ptr vp_filename() { return vp_name("basecoat"); }
-   virtual str_ptr fp_filename() { return fp_name("basecoat"); }
+   virtual string vp_filename() { return vp_name("basecoat"); }
+   virtual string fp_filename() { return fp_name("basecoat"); }
 };
 
 #endif // BASECOAT_SHADER_H_

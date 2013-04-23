@@ -40,7 +40,7 @@ APPEAR::get_texture(TAGformat &d)
    if (texture_name && texture_name != str_ptr("NO_TEXTURE")) {
       // XXX - taken from CLI::get_file_relative
       if ((**texture_name)[0] != '/' && (*texture_name)[0] != '.')
-         texture_name = Config::JOT_ROOT() + str_ptr("/") + texture_name;
+         texture_name = str_ptr(Config::JOT_ROOT().c_str()) + "/" + texture_name;
       _texture = new TEXTUREgl(texture_name);
    }
 }
@@ -58,9 +58,9 @@ APPEAR::put_texture(TAGformat &d) const
       // If texture name begins with JOT_ROOT, strip it off
       // XXX - does not work if filename is below JOT_ROOT but the path to
       // the file does not start with JOT_ROOT
-      if (strstr(**texture_name, **Config::JOT_ROOT()) == **texture_name) {
+      if (strstr(**texture_name, Config::JOT_ROOT().c_str()) == **texture_name) {
          cerr << texture_name << endl;
-         char *name =  **texture_name + Config::JOT_ROOT().len() + 1;
+         char *name =  **texture_name + Config::JOT_ROOT().length() + 1;
          // Strip extra slashes ("/")
          while (name && *name == '/' && *name != '\0') name++;
          texture_name = str_ptr(name);

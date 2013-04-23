@@ -25,7 +25,7 @@
 
 using namespace mlib;
 
-#define OVERDRAW_STROKE_TEXTURE  Config::JOT_ROOT() + "nprdata/system_textures/overdraw.png"
+#define OVERDRAW_STROKE_TEXTURE  (Config::JOT_ROOT() + "nprdata/system_textures/overdraw.png")
 #define OVERDRAW_STROKE_WIDTH    20.0f
 #define OVERDRAW_STROKE_ALPHA    0.9f
 #define OVERDRAW_STROKE_FLARE    0.0f
@@ -629,7 +629,7 @@ BaseStroke::put_texture_file(TAGformat &d) const
       }
    else
       {
-         if (!_tex_file.contains(Config::JOT_ROOT()))
+         if (!_tex_file.contains(Config::JOT_ROOT().c_str()))
             {
                //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote NULL string.");
                *d << "NULL_STR";
@@ -638,13 +638,10 @@ BaseStroke::put_texture_file(TAGformat &d) const
          else
             {
                //Here we strip off JOT_ROOT
-               str_ptr str;
-               int i;
-               for (i=Config::JOT_ROOT().len(); i<(int)_tex_file.len(); i++)
-                  str = str + str_ptr(_tex_file[i]);
-               *d << **str;
+               string str = string(**_tex_file).substr(Config::JOT_ROOT().length());
+               *d << str.c_str();
                *d << " ";
-               //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote string: '%s'.", **str);
+               //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote string: '%s'.", str.c_str());
             }
       }
    d.end_id();
@@ -672,7 +669,7 @@ BaseStroke::get_texture_file(TAGformat &d)
    else
       {
       //Here we prepend JOT_ROOT
-      tex = Config::JOT_ROOT() + str;
+      tex = str_ptr(Config::JOT_ROOT().c_str()) + str;
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_texture_file() - Loaded string: '%s'.", **str);
       }
    set_texture(tex);
@@ -699,7 +696,7 @@ BaseStroke::put_paper_file(TAGformat &d) const
    }
    else
    {
-      if (!_paper_file.contains(Config::JOT_ROOT()))
+      if (!_paper_file.contains(str_ptr(Config::JOT_ROOT().c_str())))
       {
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_paper_file() - Wrote NULL string.");
          *d << "NULL_STR";
@@ -708,21 +705,16 @@ BaseStroke::put_paper_file(TAGformat &d) const
       else
       {
          //Here we strip off JOT_ROOT
-         str_ptr str;
-/*
-         int i;
-         for (i=Config::JOT_ROOT().len(); i<(int)_paper_file.len(); i++)
-            str = str + str_ptr(_paper_file[i]);
-*/
+         string str;
          //JOT_ROOT should be prefix
-         assert(strstr(**_paper_file,**Config::JOT_ROOT()) == **_paper_file );
+         assert(strstr(**_paper_file,Config::JOT_ROOT().c_str()) == **_paper_file );
 
          //Now strip it off...
-         str = &((**_paper_file)[Config::JOT_ROOT().len()]);
+         str = string(**_paper_file).substr(Config::JOT_ROOT().length());
          
-         *d << **str;
+         *d << str.c_str();
          *d << " ";
-         //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_paper_file() - Wrote string: '%s'.", **str);
+         //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_paper_file() - Wrote string: '%s'.", str.c_str());
       }
    }
    d.end_id();
@@ -750,7 +742,7 @@ BaseStroke::get_paper_file(TAGformat &d)
    else
       {
          //Here we prepend JOT_ROOT
-         paper = Config::JOT_ROOT() + str;
+         paper = str_ptr(Config::JOT_ROOT().c_str()) + str;
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_paper_file() - Loaded string: '%s'.", **paper);
       }
    set_paper(paper);
@@ -825,8 +817,8 @@ BaseStroke::set_texture(str_ptr tf)
       int i = 0;
       while (stroke_remap_fnames[i][0] != NULL)
       {
-         _stroke_texture_remap_orig_names->add(Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][0]);
-         _stroke_texture_remap_new_names->add(Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][1]);
+         _stroke_texture_remap_orig_names->add(str_ptr(Config::JOT_ROOT().c_str()) + stroke_remap_base + stroke_remap_fnames[i][0]);
+         _stroke_texture_remap_new_names->add(str_ptr(Config::JOT_ROOT().c_str()) + stroke_remap_base + stroke_remap_fnames[i][1]);
          i++;
       }
    }
@@ -1565,7 +1557,7 @@ BaseStroke::init_overdraw()
 
    _overdraw_stroke = new BaseStroke(); assert(_overdraw_stroke);
 
-   _overdraw_stroke->set_texture(OVERDRAW_STROKE_TEXTURE);
+   _overdraw_stroke->set_texture(OVERDRAW_STROKE_TEXTURE.c_str());
    _overdraw_stroke->set_width(  OVERDRAW_STROKE_WIDTH);
    _overdraw_stroke->set_alpha(  OVERDRAW_STROKE_ALPHA);
    _overdraw_stroke->set_flare(  OVERDRAW_STROKE_FLARE);

@@ -1772,14 +1772,14 @@ XToonTexture::update_tex(void)
             //...and change to looking up the remapped name            
             if (ii != BAD_IND)
             {
-               str_ptr old_tf = tf;
+               string old_tf = string(**tf);
                tf = (*_toon_texture_remap_new_names)[ii];
 
                ind = _toon_texture_names->get_index(tf);
 
                err_mesg(ERR_LEV_SPAM, 
                   "XToonTexture::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
             }
          }
 
@@ -1802,7 +1802,7 @@ XToonTexture::update_tex(void)
       {
          err_mesg(ERR_LEV_SPAM, "XToonTexture::set_texture() - Not in cache...");
       
-         Image i(**(Config::JOT_ROOT()+tf));
+         Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
          //Can't load the texture?
          if (i.empty())
@@ -1818,14 +1818,14 @@ XToonTexture::update_tex(void)
                _toon_texture_names->add(tf);
                _toon_texture_ptrs->add(NULL);
 
-               str_ptr old_tf = tf;
+               string old_tf = string(**tf);
                tf = (*_toon_texture_remap_new_names)[ii];
 
                err_mesg(ERR_LEV_ERROR, 
                   "XToonTexture::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
 
-               i.load_file(**(Config::JOT_ROOT()+tf));
+               i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
             }
          }
 
@@ -1844,7 +1844,7 @@ XToonTexture::update_tex(void)
             _toon_texture_ptrs->add(t);
 
             err_mesg(ERR_LEV_INFO, "XToonTexture::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-               i.width(), i.height(), i.bpp(), **(Config::JOT_ROOT()+tf));;
+               i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
             _tex = t;
             _tex_name = tf;
@@ -1852,7 +1852,7 @@ XToonTexture::update_tex(void)
          //Otherwise insert a failed NULL
 	      else
 	      {
-            err_mesg(ERR_LEV_ERROR, "XToonTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", **(Config::JOT_ROOT()+tf));
+            err_mesg(ERR_LEV_ERROR, "XToonTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
          
             _toon_texture_names->add(tf);
             _toon_texture_ptrs->add(NULL);
@@ -1896,7 +1896,7 @@ XToonTexture::update_tex(void)
          else
          {
             err_mesg(ERR_LEV_INFO, "XToonTexture::update_tex() - *****ERROR***** Previous caching failure: '%s'",
-                          **(Config::JOT_ROOT() + _tex_name));
+                          (Config::JOT_ROOT() + string(**_tex_name)).c_str());
             _tex = NULL;
             _tex_name = NULL_STR;
          }
@@ -1905,7 +1905,7 @@ XToonTexture::update_tex(void)
       {
          err_mesg(ERR_LEV_SPAM, "XToonTexture::update_tex() - Not in cache...");
       
-         Image i(Config::JOT_ROOT() + _tex_name);
+         Image i((Config::JOT_ROOT() + string(**_tex_name)).c_str());
          if (!i.empty())
 	      {
 		      TEXTUREglptr t = new TEXTUREgl("");

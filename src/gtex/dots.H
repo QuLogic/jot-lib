@@ -98,10 +98,10 @@ class DotsShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // use the same vertex program as hatching shader:
-   virtual str_ptr vp_filename() { return vp_name("halftone-dots"); }
+   virtual string vp_filename() { return vp_name("halftone-dots"); }
 
    // GLSL fragment shader name
-   virtual str_ptr fp_filename() { return fp_name("halftone-dots"); }
+   virtual string fp_filename() { return fp_name("halftone-dots"); }
 };
 
 #endif // DOTS_H_IS_INCLUDED

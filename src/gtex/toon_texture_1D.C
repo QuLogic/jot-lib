@@ -681,14 +681,14 @@ ToonTexture_1D::update_tex(void)
                      //...and change to looking up the remapped name            
                      if (ii != BAD_IND)
                         {
-                           str_ptr old_tf = tf;
+                           string old_tf = string(**tf);
                            tf = (*_toon_texture_remap_new_names)[ii];
 
                            ind = _toon_texture_names->get_index(tf);
 
                            err_mesg(ERR_LEV_SPAM, 
                                     "ToonTexture_1D::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                                    **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                                    (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
                         }
                   }
 
@@ -711,7 +711,7 @@ ToonTexture_1D::update_tex(void)
             {
                err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Not in cache...");
       
-               Image i(Config::JOT_ROOT()+tf);
+               Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
                //Can't load the texture?
                if (i.empty())
@@ -727,14 +727,14 @@ ToonTexture_1D::update_tex(void)
                            _toon_texture_names->add(tf);
                            _toon_texture_ptrs->add(NULL);
 
-                           str_ptr old_tf = tf;
+                           string old_tf = string(**tf);
                            tf = (*_toon_texture_remap_new_names)[ii];
 
                            err_mesg(ERR_LEV_ERROR, 
                                     "ToonTexture_1D::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                                    **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                                    (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
 
-                           i.load_file(**(Config::JOT_ROOT()+tf));
+                           i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
                         }
                   }
 
@@ -753,7 +753,7 @@ ToonTexture_1D::update_tex(void)
                      _toon_texture_ptrs->add(t);
 
                      err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-                              i.width(), i.height(), i.bpp(), **(Config::JOT_ROOT()+tf));;
+                              i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
                      _tex = t;
                      _tex_name = tf;
@@ -761,7 +761,7 @@ ToonTexture_1D::update_tex(void)
                //Otherwise insert a failed NULL
                else
                   {
-                     err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", **(Config::JOT_ROOT()+tf));
+                     err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
          
                      _toon_texture_names->add(tf);
                      _toon_texture_ptrs->add(NULL);

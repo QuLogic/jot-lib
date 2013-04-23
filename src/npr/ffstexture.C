@@ -74,7 +74,7 @@ FFSTexture::get_ffs_data_file ()
    str_ptr str;
    // Get the style file    
    
-   str = Config::JOT_ROOT() + location;    
+   str = str_ptr(Config::JOT_ROOT().c_str()) + location;
 
    _data_file = str;   
 

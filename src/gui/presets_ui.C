@@ -68,7 +68,7 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+LIST_PRESET, listbox_cb);
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(MY_WIDTH);   
-   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, string(**(Config::JOT_ROOT() + _directory)), string(**_extension), false, true, "-=NEW=-");
+   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + string(**_directory), string(**_extension), false, true, "-=NEW=-");
 
    new GLUI_Separator(_panel[PANEL_PRESET]);
 
@@ -157,8 +157,8 @@ PresetsUI::preset_selected()
    //}
    if(val != 0)
    {
-      str_ptr filename = _listbox[LIST_PRESET]->curr_text.c_str();
-      _filename = (Config::JOT_ROOT() + _directory + filename);
+      string filename = _listbox[LIST_PRESET]->curr_text;
+      _filename = str_ptr((Config::JOT_ROOT() + string(**_directory) + filename).c_str());
       _parent->child_callback(this, PRESET_SELECTED);
     //  if(!_parent->child_callback(this, PRESET_SELECTED))
     //     return;
@@ -181,8 +181,8 @@ PresetsUI::preset_save_button()
    }
    else
    {
-      str_ptr filename = _listbox[LIST_PRESET]->curr_text.c_str();
-      _filename = (Config::JOT_ROOT() + _directory + filename);//_preset_filenames[val-1]);
+      string filename = _listbox[LIST_PRESET]->curr_text;
+      _filename = str_ptr((Config::JOT_ROOT() + string(**_directory) + filename).c_str());//_preset_filenames[val-1]);
       _parent->child_callback(this, PRESET_SAVE);
       _edittext[EDITTEXT_SAVE]->disable();
       //   return;
@@ -262,7 +262,7 @@ PresetsUI::preset_save_text()
       }
 
   
-   _filename = (Config::JOT_ROOT() + _directory + newtext + _extension);
+   _filename = str_ptr(Config::JOT_ROOT().c_str()) + _directory + newtext + _extension;
    if(_parent->child_callback(this, PRESET_SAVE_NEW)){
       _preset_filenames += (str_ptr(newtext) + _extension);
       

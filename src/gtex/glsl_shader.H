@@ -72,11 +72,11 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    GLfloat get_sil_alpha()      const   { return _sil_alpha; }
 
    //******** UTILITY FUNCTIONS ********
-   str_ptr shader_path() const { return Config::JOT_ROOT() + "nprdata/glsl/"; }
+   string shader_path() const { return Config::JOT_ROOT() + "nprdata/glsl/"; }
 
    // Given the base name of the shader, add the full path and extension:
-   str_ptr vp_name(Cstr_ptr& name) const { return shader_path() + name + ".vp"; }
-   str_ptr fp_name(Cstr_ptr& name) const { return shader_path() + name + ".fp"; }
+   string vp_name(const string& name) const { return shader_path() + name + ".vp"; }
+   string fp_name(const string& name) const { return shader_path() + name + ".fp"; }
 
    // Wrapper for glGetUniformLocation, with error reporting:
    bool get_uniform_loc(Cstr_ptr& name, GLint& loc);
@@ -203,7 +203,7 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
 
    // For the usual case that there is only 1 file, subclasses
    // can override the following:
-   virtual str_ptr vp_filename() {
+   virtual string vp_filename() {
       // Base class uses jot/nprdata/glsl/simple.vp by default, but
       // that can be changed using environment variable GLSL_SHADER_VP_NAME
       return Config::get_var_str(
@@ -211,7 +211,7 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
 	 Config::JOT_ROOT() + "/nprdata/glsl/simple.vp"
 	 );
    }
-   virtual str_ptr fp_filename() {
+   virtual string fp_filename() {
       // Base class uses jot/nprdata/glsl/simple.fp by default, but
       // "that can be changed using environment variable GLSL_SHADER_FP_NAME
       return Config::get_var_str(
@@ -227,12 +227,12 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    // versions, above.
    virtual str_list vp_filenames() {
       str_list ret;
-      ret += vp_filename(); // override this method for single name case
+      ret += str_ptr(vp_filename().c_str()); // override this method for single name case
       return ret;
    }
    virtual str_list fp_filenames() {
       str_list ret;
-      ret += fp_filename(); // override this method for single name case
+      ret += str_ptr(fp_filename().c_str()); // override this method for single name case
       return ret;
    }
 };
@@ -275,8 +275,8 @@ class GLSLLightingShader : public GLSLShader {
 
    //******** VIRTUAL METHODS ********
 
-   virtual str_ptr vp_filename() { return vp_name("lighting"); }
-   virtual str_ptr fp_filename() { return fp_name("lighting"); }
+   virtual string vp_filename() { return vp_name("lighting"); }
+   virtual string fp_filename() { return fp_name("lighting"); }
 };
 
 #endif // GLSL_SHADER_H_IS_INCLUDED

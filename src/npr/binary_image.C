@@ -37,9 +37,9 @@ BinaryImageShader* BinaryImageShader::_instance(0);
 BinaryImageShader::BinaryImageShader(Patch* p) : GLSLShader(p), 
 	_binary_threshold(0.8)
 {
-   set_tex(GtexUtil::toon_name(
+   set_tex(str_ptr(GtexUtil::toon_name(
       Config::get_var_str("BINARY_IMAGE_FILENAME","warm_spec2_512_2d.png")
-      ));
+      ).c_str()));
 }
 
 BinaryImageShader* 

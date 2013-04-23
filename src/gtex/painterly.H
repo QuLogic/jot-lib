@@ -121,8 +121,8 @@ class Painterly : public GLSLShader_Layer_Base {
    virtual void draw_triangles();
    virtual void draw_sils();
 
-   virtual str_ptr vp_filename() { return vp_name("painterly"); }
-   virtual str_ptr fp_filename() { return fp_name("painterly"); }
+   virtual string vp_filename() { return vp_name("painterly"); }
+   virtual string fp_filename() { return fp_name("painterly"); }
   
    //******** GTexture VIRTUAL METHODS ********
    virtual void request_ref_imgs();

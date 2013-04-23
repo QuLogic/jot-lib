@@ -161,7 +161,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                                id+LIST_TEXTURE,
                                listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_TEXTURE], _texture_filenames, string(**Config::JOT_ROOT()) + "/nprdata/toon_textures_1D/", ".png", false);
+   fill_directory_listbox(_listbox[LIST_TEXTURE], _texture_filenames, Config::JOT_ROOT() + "/nprdata/toon_textures_1D/", ".png", false);
    
    _listbox[LIST_TEXTURE]->curr_text = "clear-black.png" ;
   
@@ -341,8 +341,8 @@ ToneShaderUI::apply_changes_to_texture(operation_id_t op, ToneShader* tex, int l
       tex->_layer[layer]._s1 = _slider[SLIDE_BACKLIGHT_B]->get_float_val();  
    } 
    if((op==OP_ALL) || (op==OP_TEXTURE)){
-      str_ptr name = _listbox[LIST_TEXTURE]->curr_text.c_str();
-      tex->set_tex(GtexUtil::toon_1D_name(name));  
+      string name = _listbox[LIST_TEXTURE]->curr_text;
+      tex->set_tex(str_ptr(GtexUtil::toon_1D_name(name).c_str()));
    } 
    
    if(_parent)

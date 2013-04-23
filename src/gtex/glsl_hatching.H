@@ -126,10 +126,10 @@ class GLSLHatching : public GLSLPaperShader {
    //******** VIRTUAL METHODS ********
 
    // GLSL vertex shader name
-   virtual str_ptr vp_filename() { return vp_name("hatching"); }
+   virtual string vp_filename() { return vp_name("hatching"); }
 
    // GLSL fragment shader name
-   virtual str_ptr fp_filename() { return fp_name("hatching"); }
+   virtual string fp_filename() { return fp_name("hatching"); }
 };
 
 #endif // GLSL_HATCHING_H_IS_INCLUDED

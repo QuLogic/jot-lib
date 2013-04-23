@@ -194,8 +194,8 @@ class GLSLXToonShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the xtoon GLSL shader programs:
-   virtual str_ptr vp_filename() { return vp_name("xtoon"); }
-   virtual str_ptr fp_filename() { return fp_name("xtoon"); }
+   virtual string vp_filename() { return vp_name("xtoon"); }
+   virtual string fp_filename() { return fp_name("xtoon"); }
 };
 
 #endif // GLSL_XTOON_H_IS_INCLUDED

@@ -232,8 +232,8 @@ NPRPenUI::build()
    assert(_toon_filenames.size() == 0);
    assert(_other_filenames.size() == 0);
 
-   _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
-   _other_filenames = dir_list(string(**Config::JOT_ROOT()) + OTHER_DIRECTORY);
+   _toon_filenames = dir_list(Config::JOT_ROOT() + TOON_DIRECTORY);
+   _other_filenames = dir_list(Config::JOT_ROOT() + OTHER_DIRECTORY);
 
    // Panel containing pen buttons
    _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
@@ -1879,7 +1879,7 @@ NPRPenUI::refresh_tex()
 
          // Refill the listbox
          fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
-         _other_filenames = dir_list(string(**Config::JOT_ROOT()) + OTHER_DIRECTORY);
+         _other_filenames = dir_list(Config::JOT_ROOT() + OTHER_DIRECTORY);
          fill_tex_listbox(_listbox[LIST_TEX], _other_filenames);
 
          if (solid->get_tex_name().contains(OTHER_DIRECTORY))
@@ -1913,7 +1913,7 @@ NPRPenUI::refresh_tex()
 
          // Refill the listbox
          fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
-         _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
+         _toon_filenames = dir_list(Config::JOT_ROOT() + TOON_DIRECTORY);
          fill_tex_listbox(_listbox[LIST_TEX], _toon_filenames);
 
          if (toon->get_tex_name().contains(TOON_DIRECTORY))
@@ -1948,7 +1948,7 @@ NPRPenUI::refresh_tex()
 
          // Refill the listbox
          fill_tex_listbox(_listbox[LIST_TEX], vector<string>());
-         _toon_filenames = dir_list(string(**Config::JOT_ROOT()) + TOON_DIRECTORY);
+         _toon_filenames = dir_list(Config::JOT_ROOT() + TOON_DIRECTORY);
          fill_tex_listbox(_listbox[LIST_TEX], _toon_filenames);
 
          if (xtoon->get_tex_name().contains(TOON_DIRECTORY))

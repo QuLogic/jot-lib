@@ -130,9 +130,9 @@ class BlurShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the shader programs:
-   virtual str_ptr vp_filename() { return vp_name("blur"); }
+   virtual string vp_filename() { return vp_name("blur"); }
 
-   virtual str_ptr fp_filename() { return fp_name("blur"); }
+   virtual string fp_filename() { return fp_name("blur"); }
 };
 
 #endif // RIDGE_H_IS_INCLUDED

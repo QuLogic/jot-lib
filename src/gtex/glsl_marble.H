@@ -72,15 +72,15 @@ protected:
    //******** VIRTUAL METHODS ********
 
    // Return the names of the toon GLSL shader programs:
-   virtual str_ptr vp_filename() { return vp_name("marble"); }
+   virtual string vp_filename() { return vp_name("marble"); }
 
    // XXX - temporary, until we can figure out how to not use the
    //       fragment shader:
-   virtual str_ptr fp_filename() { return fp_name("marble"); }
+   virtual string fp_filename() { return fp_name("marble"); }
 
    // we're not using any fragment shader:
    // XXX - we have to figure out how to not use the fragment shader
-   //   virtual str_list fp_filenames() { return str_list(); }
+   //   virtual vector<string> fp_filenames() { return vector<string>(); }
 };
 
 #endif // GLSL_MARBLE_H_IS_INCLUDED

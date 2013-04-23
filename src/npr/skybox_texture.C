@@ -50,7 +50,7 @@ class StripTexCoordsCB : public GLStripCB {
 /*****************************************************************
  * Utilities
  *****************************************************************/
-inline str_ptr
+inline string
 gradient_filename()
 {
    return Config::JOT_ROOT() +
@@ -75,7 +75,7 @@ init_params(TEXTUREglptr& tex)
 Skybox_Texture::Skybox_Texture(Patch* patch) :
    BasicTexture(patch, new StripTexCoordsCB)
 {
-   set_tex(new TEXTUREgl(gradient_filename()));
+   set_tex(new TEXTUREgl(str_ptr(gradient_filename().c_str())));
    assert(_tex);
    if (!_tex->load_image()) {
       cerr << " Skybox_Texture : load_image failed on "

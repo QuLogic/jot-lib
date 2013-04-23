@@ -100,7 +100,7 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
                                             0,id+LISTBOX_SKY,
                                             listbox_cb);
 
-    fill_directory_listbox(_listbox[LISTBOX_SKY], _sky_filenames, string(**Config::JOT_ROOT()) + "/nprdata/sky_textures/", ".png", false);
+    fill_directory_listbox(_listbox[LISTBOX_SKY], _sky_filenames, Config::JOT_ROOT() + "/nprdata/sky_textures/", ".png", false);
 
 
    _checkbox[CHECKBOX_SKY] = new GLUI_Checkbox(_rollout[ROLLOUT_MAIN],
@@ -170,9 +170,9 @@ RefImageUI::listbox_cb(int id)
   {
      Skybox_Texture* tex = get_tex<Skybox_Texture>(SKY_BOX::lookup()->get_patch());
      assert(tex);
-     str_ptr file =  Config::JOT_ROOT() + "/nprdata/sky_textures/" + _ui[0]->_sky_filenames[_ui[0]->_listbox[LISTBOX_SKY]->get_int_val()];
+     string file = Config::JOT_ROOT() + "/nprdata/sky_textures/" + **_ui[0]->_sky_filenames[_ui[0]->_listbox[LISTBOX_SKY]->get_int_val()];
      cout << "Loading : " << file << endl;
-     tex->load_texture( file );
+     tex->load_texture( str_ptr(file.c_str()) );
   }
 }
 

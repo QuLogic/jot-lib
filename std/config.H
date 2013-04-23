@@ -19,6 +19,7 @@
 #define CONFIGCLASS_H
 
 #include "support.H"
+#include <set>
 
 /**********************************************************************
  * Config
@@ -44,50 +45,51 @@ class Config {
    static bool       _replace;
    static bool       _loaded;
 
-   static str_list*  _no_warn;
+   static set<string> *_no_warn;
    
  public:   
    /******** STATIC MEMBER METHODS ********/
 
-   static bool       get_var_bool(Cstr_ptr& var, bool      def=false,     bool store=false);
-   static int        get_var_int (Cstr_ptr& var, int       def=0,         bool store=false);
-   static str_ptr    get_var_str (Cstr_ptr& var, Cstr_ptr& def=NULL_STR,  bool store=false);
-   static double     get_var_dbl (Cstr_ptr& var, double    def=0.0,       bool store=false);
+   static bool       get_var_bool(const string& var, bool          def=false, bool store=false);
+   static int        get_var_int (const string& var, int           def=0,     bool store=false);
+   static string     get_var_str (const string& var, const string& def="",    bool store=false);
+   static double     get_var_dbl (const string& var, double        def=0.0,   bool store=false);
 
-   static void       set_var_bool(Cstr_ptr& var, bool       val);
-   static void       set_var_int (Cstr_ptr& var, int        val);
-   static void       set_var_str (Cstr_ptr& var, Cstr_ptr&  val);
-   static void       set_var_dbl (Cstr_ptr& var, double     val);
+   static void       set_var_bool(const string& var, bool          val);
+   static void       set_var_int (const string& var, int           val);
+   static void       set_var_str (const string& var, const string& val);
+   static void       set_var_dbl (const string& var, double        val);
 
-   static bool       save_config(Cstr_ptr &f) 
+   static bool       save_config(const string &f)
    { 
       return ((_instance)?(_instance->save(f)):(false)); 
    }
-   static bool       load_config(Cstr_ptr &f,bool rep=true);
+   static bool       load_config(const string &f, bool rep=true);
 
-   static Cstr_ptr&  JOT_ROOT()           { assert(_instance); return _instance->_jot_root;  }
+   static const string& JOT_ROOT()        { assert(_instance); return _instance->_jot_root;  }
  
-   static void       no_warn(Cstr_ptr &s) { if (!_no_warn) _no_warn = new str_list; (*_no_warn) += s; }
+   static void       no_warn(const string &s) { if (_no_warn == 0) _no_warn = new set<string>; _no_warn->insert(s); }
 
  protected:
-   static bool       get_var_is_set(Cstr_ptr& var);
+   static bool       get_var_is_set(const string& var);
  
  protected:
    /******** MEMBER VARIABLES ********/
-   str_ptr           _jot_root;
+   string            _jot_root;
  
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   Config(Cstr_ptr& j); 
+   Config(const string& j);
    virtual ~Config();
 
  protected:
    /******** MEMBER METHODS ********/
 
-   virtual bool      load(Cstr_ptr &) { return false;  }
-   virtual bool      save(Cstr_ptr &) { return false;  }
+   virtual bool      load(const string &) { return false;  }
+   virtual bool      save(const string &) { return false;  }
 
 };
 
 #endif
+

@@ -95,14 +95,14 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       "Pattern", NULL, 
       id+LIST_PATTERN, listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, string(**Config::JOT_ROOT()) + "/nprdata/hatching_textures/", ".png", false);
+   fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, Config::JOT_ROOT() + "/nprdata/hatching_textures/", ".png", false);
                            
     _listbox[LIST_PAPER] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
       "Paper", NULL, 
       id+LIST_PAPER, listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_PAPER], _paper_filenames, string(**Config::JOT_ROOT()) + "/nprdata/paper_textures/", ".png", false);
+   fill_directory_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() + "/nprdata/paper_textures/", ".png", false);
 
    
     _checkbox[CHECK_ENABLE]=new GLUI_Checkbox(

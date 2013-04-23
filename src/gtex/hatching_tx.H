@@ -118,8 +118,8 @@ class HatchingTX : public GLSLShader_Layer_Base {
    virtual void draw_triangles();
 
    // shader source file names:
-   virtual str_ptr vp_filename() { return vp_name("hatching_tx"); }
-   virtual str_ptr fp_filename() { return fp_name("hatching_tx"); }  
+   virtual string vp_filename() { return vp_name("hatching_tx"); }
+   virtual string fp_filename() { return fp_name("hatching_tx"); }
 
    //******** GTexture VIRTUAL METHODS ********
    virtual void request_ref_imgs();

@@ -897,7 +897,7 @@ SilUI::build()
    _listbox[LIST_BUFFER]->set_w(BUFFER_NAME_W);
    _listbox[LIST_BUFFER]->add_item(0, "-=<NEW>=-");
    _listbox[LIST_BUFFER]->set_int_val(0);
-   fill_buffer_listbox(_listbox[LIST_BUFFER], _buffer_filenames, string(**Config::JOT_ROOT()) + BUFFER_DIRECTORY);
+   fill_buffer_listbox(_listbox[LIST_BUFFER], _buffer_filenames, Config::JOT_ROOT() + BUFFER_DIRECTORY);
 
    //Buffer name editor
    _edittext[EDITTEXT_BUFFER_NAME] = new GLUI_EditText(
@@ -2021,9 +2021,9 @@ SilUI::buffer_name_text()
       return;
    }
 
-   if (buffer_save(**(Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil")))
+   if (buffer_save((Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil").c_str()))
    {
-      _buffer_filenames += (Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil");
+      _buffer_filenames += str_ptr((Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil").c_str());
       _listbox[LIST_BUFFER]->add_item(_buffer_filenames.num(), newtext);
       _listbox[LIST_BUFFER]->set_int_val(_buffer_filenames.num());
    }

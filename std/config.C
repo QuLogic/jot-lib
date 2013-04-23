@@ -27,11 +27,11 @@
 // Config Static Variables Initialization
 //////////////////////////////////////////////////////
 
-int        ConfigInit::count     = 0;
-Config*        Config::_instance = NULL;
-bool           Config::_replace  = true;
-bool           Config::_loaded   = false;
-str_list*      Config::_no_warn  = NULL;
+int          ConfigInit::count = 0;
+Config*      Config::_instance = NULL;
+bool         Config::_replace  = true;
+bool         Config::_loaded   = false;
+set<string> *Config::_no_warn  = NULL;
 
 //////////////////////////////////////////////////////
 // Config Methods
@@ -40,7 +40,7 @@ str_list*      Config::_no_warn  = NULL;
 /////////////////////////////////////
 // Constructor
 /////////////////////////////////////
-Config::Config(Cstr_ptr& j) : _jot_root(j) 
+Config::Config(const string& j) : _jot_root(j)
 { 
    assert(!_instance);  
    err_mesg(ERR_LEV_SPAM, "Config::Config() - Init...");
@@ -58,7 +58,7 @@ Config::~Config()
 
 
 bool
-Config::load_config(Cstr_ptr &f, bool rep) 
+Config::load_config(const string &f, bool rep)
 { 
    bool old_rep = _replace;
    _replace = rep;
@@ -73,24 +73,28 @@ Config::load_config(Cstr_ptr &f, bool rep)
 // get_var_is_set()
 /////////////////////////////////////
 bool
-Config::get_var_is_set(Cstr_ptr& var) 
+Config::get_var_is_set(const string& var)
 {
-   return getenv(**var) ? true : false;
+   return getenv(var.c_str()) ? true : false;
 }
 
 /////////////////////////////////////
 // set_var_int()
 /////////////////////////////////////
 void
-Config::set_var_int(Cstr_ptr& var, int int_val) 
+Config::set_var_int(const string& var, int int_val)
 {
    if (_replace || !get_var_is_set(var))
    {
-      putenv(**(var + "=" + str_ptr(int_val)));
+      char tmp[64];
+      sprintf(tmp, "%d", int_val);
+      setenv(var.c_str(), tmp, 1);
    }
    else
    {
-      err_mesg(ERR_LEV_WARN, "Config::set_var_int() - ***Variable '%s' is already set. Ignoring new value...***", **var);
+      err_mesg(ERR_LEV_WARN,
+               "Config::set_var_int() - ***Variable '%s' is already set. Ignoring new value...***",
+               var.c_str());
    }
 }
 
@@ -98,15 +102,19 @@ Config::set_var_int(Cstr_ptr& var, int int_val)
 // set_var_dbl()
 /////////////////////////////////////
 void
-Config::set_var_dbl(Cstr_ptr& var, double dbl_val) 
+Config::set_var_dbl(const string& var, double dbl_val)
 {
    if (_replace || !get_var_is_set(var))
    {
-      putenv(**(var + "=" + str_ptr(dbl_val)));
+      char tmp[64];
+      sprintf(tmp, "%g", dbl_val);
+      setenv(var.c_str(), tmp, 1);
    }
    else
    {
-      err_mesg(ERR_LEV_WARN, "Config::set_var_dbl() - ***Variable '%s' is already set. Ignoring new value...***", **var);
+      err_mesg(ERR_LEV_WARN,
+               "Config::set_var_dbl() - ***Variable '%s' is already set. Ignoring new value...***",
+               var.c_str());
    }
 }
  
@@ -114,15 +122,17 @@ Config::set_var_dbl(Cstr_ptr& var, double dbl_val)
 // set_var_str()
 /////////////////////////////////////
 void
-Config::set_var_str(Cstr_ptr& var, Cstr_ptr& str_val) 
+Config::set_var_str(const string& var, const string& str_val)
 {
    if (_replace || !get_var_is_set(var))
    {
-      putenv(**(var + "=" + str_val));
+      setenv(var.c_str(), str_val.c_str(), 1);
    }
    else
    {
-      err_mesg(ERR_LEV_WARN, "Config::set_var_str() - ***Variable '%s' is already set. Ignoring new value...***", **var);
+      err_mesg(ERR_LEV_WARN,
+               "Config::set_var_str() - ***Variable '%s' is already set. Ignoring new value...***",
+               var.c_str());
    }
 }
 
@@ -130,40 +140,47 @@ Config::set_var_str(Cstr_ptr& var, Cstr_ptr& str_val)
 // set_var_bool()
 /////////////////////////////////////
 void
-Config::set_var_bool(Cstr_ptr& var, bool bool_val) 
+Config::set_var_bool(const string& var, bool bool_val)
 {
    if (_replace || !get_var_is_set(var))
    {
-      putenv(**(var + "=" + ((bool_val)?("true"):("false"))));
+      setenv(var.c_str(), bool_val?"true":"false", 1);
    }
    else
    {
-      err_mesg(ERR_LEV_WARN, "Config::set_var_bool() - ***Variable '%s' is already set. Ignoring new value...***", **var);
+      err_mesg(ERR_LEV_WARN,
+               "Config::set_var_bool() - ***Variable '%s' is already set. Ignoring new value...***",
+               var.c_str());
    }
-
 }
 
 /////////////////////////////////////
 // get_var_int()
 /////////////////////////////////////
 int
-Config::get_var_int(Cstr_ptr& var, int def_int_val, bool store) 
+Config::get_var_int(const string& var, int def_int_val, bool store)
 {
    if (!_instance)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_int() - ***WARNING*** Variable [%s] accessed without an existing _instance!!", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_int() - ***WARNING*** Variable [%s] accessed without an existing _instance!!",
+                    var.c_str());
    if (!_loaded)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_int() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_int() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.",
+                    var.c_str());
 
    int int_val;
 
    if (!get_var_is_set(var))
    {
       int_val = def_int_val;
-      if (store) set_var_int(var,def_int_val);
+      if (store) set_var_int(var, def_int_val);
    }
    else
    {
-      int_val = atoi(getenv(**var));
+      int_val = atoi(getenv(var.c_str()));
    }
 
    return int_val;   
@@ -173,24 +190,30 @@ Config::get_var_int(Cstr_ptr& var, int def_int_val, bool store)
 // get_var_dbl()
 /////////////////////////////////////
 double
-Config::get_var_dbl(Cstr_ptr& var, double def_dbl_val, bool store) 
+Config::get_var_dbl(const string& var, double def_dbl_val, bool store)
 {
 
    if (!_instance)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_dbl() - ***WARNING*** Variable [%s] accessed without an existing _instance!!", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_dbl() - ***WARNING*** Variable [%s] accessed without an existing _instance!!",
+                    var.c_str());
    if (!_loaded)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_dbl() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_dbl() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.",
+                    var.c_str());
    
    double dbl_val;
 
    if (!get_var_is_set(var))
    {
       dbl_val = def_dbl_val;
-      if (store) set_var_dbl(var,def_dbl_val);
+      if (store) set_var_dbl(var, def_dbl_val);
    }
    else
    {
-      dbl_val = atof(getenv(**var));
+      dbl_val = atof(getenv(var.c_str()));
    }
 
    return dbl_val;   
@@ -200,24 +223,30 @@ Config::get_var_dbl(Cstr_ptr& var, double def_dbl_val, bool store)
 /////////////////////////////////////
 // get_var_str()
 /////////////////////////////////////
-str_ptr
-Config::get_var_str(Cstr_ptr& var, Cstr_ptr& def_str_val, bool store) 
+string
+Config::get_var_str(const string& var, const string& def_str_val, bool store)
 {
    if (!_instance)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_str() - ***WARNING*** Variable [%s] accessed without an existing _instance!!", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_str() - ***WARNING*** Variable [%s] accessed without an existing _instance!!",
+                    var.c_str());
    if (!_loaded)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_str() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_str() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.",
+                    var.c_str());
 
-   str_ptr str_val;
+   string str_val;
 
    if (!get_var_is_set(var))
    {
       str_val = def_str_val;
-      if (store) set_var_str(var,def_str_val);
+      if (store) set_var_str(var, def_str_val);
    }
    else
    {
-      str_val = str_ptr(getenv(**var));
+      str_val = string(getenv(var.c_str()));
    }
 
    return str_val;   
@@ -227,23 +256,29 @@ Config::get_var_str(Cstr_ptr& var, Cstr_ptr& def_str_val, bool store)
 // get_var_bool()
 /////////////////////////////////////
 bool
-Config::get_var_bool(Cstr_ptr& var, bool def_bool_val, bool store) 
+Config::get_var_bool(const string& var, bool def_bool_val, bool store)
 {
    if (!_instance)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_bool() - ***WARNING*** Variable [%s] accessed without an existing _instance!!", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_bool() - ***WARNING*** Variable [%s] accessed without an existing _instance!!",
+                    var.c_str());
    if (!_loaded)
-      err_mesg_cond(!_no_warn->contains(var), ERR_LEV_WARN, "Config::get_var_bool() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.", **var);
+      err_mesg_cond(_no_warn->find(var) == _no_warn->end(),
+                    ERR_LEV_WARN,
+                    "Config::get_var_bool() - ***WARNING*** Variable [%s] accessed before a Config::load() was completed.",
+                    var.c_str());
    
    bool bool_val;
 
    if (!get_var_is_set(var))
    {
       bool_val = def_bool_val;
-      if (store) set_var_bool(var,def_bool_val);
+      if (store) set_var_bool(var, def_bool_val);
    }
    else
    {
-      str_ptr foo = str_ptr(getenv(**var));
+      string foo = string(getenv(var.c_str()));
 
       if (foo == "true")
       {
@@ -255,9 +290,11 @@ Config::get_var_bool(Cstr_ptr& var, bool def_bool_val, bool store)
       }
       else
       {
-         err_mesg(ERR_LEV_WARN, "Config::get_var_bool - ERROR! Boolean environment variable '%s' should be either 'true' or 'false'. Changing to 'false'.", **var);
+         err_mesg(ERR_LEV_WARN,
+                  "Config::get_var_bool - ERROR! Boolean environment variable '%s' should be either 'true' or 'false'. Changing to 'false'.",
+                  var.c_str());
          bool_val = false;
-         set_var_bool(var,bool_val);
+         set_var_bool(var, bool_val);
       }
    }
 

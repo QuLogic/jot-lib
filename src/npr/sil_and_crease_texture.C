@@ -373,7 +373,7 @@ SilAndCreaseTexture::SilAndCreaseTexture(Patch* patch)
       s->set_width(line_widths[i]);
       s->set_alpha(line_alphas[i]);
 
-      s->set_texture(Config::JOT_ROOT() + LINE_TEXTURE);
+      s->set_texture(str_ptr((Config::JOT_ROOT() + LINE_TEXTURE).c_str()));
       s->set_taper(LINE_TAPER);
       s->set_flare(LINE_FLARE);
       s->set_fade(LINE_FADE);

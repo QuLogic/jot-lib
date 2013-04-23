@@ -51,7 +51,7 @@ class BaseJOTappConfig : public DATA_ITEM, public Config
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   BaseJOTappConfig(Cstr_ptr &j) : Config(j) { assert(_instance == this); }
+   BaseJOTappConfig(const string &j) : Config(j) { assert(_instance == this); }
 
    virtual ~BaseJOTappConfig()   { }
 
@@ -60,13 +60,13 @@ class BaseJOTappConfig : public DATA_ITEM, public Config
 
    /******** Config METHODS ********/
 
-   virtual bool         save(Cstr_ptr &);
-   virtual bool         load(Cstr_ptr &);
+   virtual bool         save(const string &);
+   virtual bool         load(const string &);
 
    /******** DATA_ITEM METHODS ********/
  public:
    DEFINE_RTTI_METHODS_BASE("BaseJOTappConfig", CDATA_ITEM *);
-   virtual DATA_ITEM*   dup() const  { return new BaseJOTappConfig(NULL_STR); }
+   virtual DATA_ITEM*   dup() const  { return new BaseJOTappConfig(""); }
    virtual CTAGlist&    tags() const;
 
  protected:
@@ -123,12 +123,12 @@ BaseJOTappConfig::tags() const
 // save()
 /////////////////////////////////////
 bool
-BaseJOTappConfig::save(Cstr_ptr &filename)
+BaseJOTappConfig::save(const string &filename)
 {
    assert(_instance);
 
    fstream fout;
-   fout.open(**filename,ios::out);
+   fout.open(filename.c_str(), ios::out);
 
    if (!fout) {
       cerr << "BaseJOTappConfig::save() - ERROR! Could not open file '" << filename << "'\n";
@@ -148,10 +148,10 @@ BaseJOTappConfig::save(Cstr_ptr &filename)
 // load()
 /////////////////////////////////////
 bool
-BaseJOTappConfig::load(Cstr_ptr &filename)
+BaseJOTappConfig::load(const string &filename)
 {
    assert(_instance);
-   if (!filename) {
+   if (filename == "") {
       cerr << "BaseJOTappConfig::load: error: filename is NULL" << endl;
       return false;
    }
@@ -159,9 +159,9 @@ BaseJOTappConfig::load(Cstr_ptr &filename)
    fstream fin;
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1300)) /*VS 6.0*/
 
-   fin.open(**filename, ios::in | ios::nocreate);
+   fin.open(filename.c_str(), ios::in | ios::nocreate);
 #else
-   fin.open(**filename, ios::in);
+   fin.open(filename.c_str(), ios::in);
 #endif
 
    if (!fin) {
@@ -196,14 +196,14 @@ BaseJOTappConfig::get_string_var(TAGformat &d)
 {
    //cerr << "BaseJOTappConfig::get_string_var() [" << d.name() << "]\n";
 
-   str_ptr str_val = (*d).get_string_with_spaces();
+   string str_val = string(**(*d).get_string_with_spaces());
 
    //cerr << "BaseJOTappConfig::get_string_var() [" << d.name() << "] - Loaded string: '"  << str_val << "'\n";
 
    if (str_val == "NULL_STR")
-      str_val = NULL_STR;
+      str_val = "";
 
-   set_var_str(d.name(),str_val);
+   set_var_str(string(**d.name()), str_val);
 
 }
 
@@ -215,18 +215,18 @@ BaseJOTappConfig::put_string_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_string_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(d.name())) {
-      str_ptr str_val;
+   if (get_var_is_set(string(**d.name()))) {
+      string str_val;
 
-      str_val = get_var_str(d.name());
+      str_val = get_var_str(string(**d.name()));
 
-      if (str_val == NULL_STR)
+      if (str_val == "")
          str_val = "NULL_STR";
 
       cerr << "BaseJOTappConfig::put_string_var() [" << d.name() << "] - Writing string '" << str_val << "'\n";
 
       d.id();
-      *d << str_val << " ";
+      *d << str_val.c_str() << " ";
       d.end_id();
    } else {
       cerr << "BaseJOTappConfig::put_string_var() [" << d.name() << "] - Not set...\n";
@@ -242,7 +242,7 @@ BaseJOTappConfig::get_old_var(TAGformat &d)
 {
    //cerr << "BaseJOTappConfig::get_old_var() [" << d.name() << "]\n";
 
-   str_ptr str_val = (*d).get_string_with_spaces();
+   string str_val = string(**(*d).get_string_with_spaces());
 
    cerr << "BaseJOTappConfig::get_old_var() [" << d.name() << "] - **Deprecated Variable** Loaded string: '"  << str_val << "'\n";
 
@@ -272,7 +272,7 @@ BaseJOTappConfig::get_integer_var(TAGformat &d)
 
    //cerr << "BaseJOTappConfig::get_integer_var() [" << d.name() << "] - Loaded integer: '"  << int_val << "'\n";
 
-   set_var_int(d.name(),int_val);
+   set_var_int(string(**d.name()), int_val);
 
 }
 
@@ -284,10 +284,10 @@ BaseJOTappConfig::put_integer_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_integer_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(d.name())) {
+   if (get_var_is_set(string(**d.name()))) {
       int int_val;
 
-      int_val = get_var_int(d.name());
+      int_val = get_var_int(string(**d.name()));
 
       cerr << "BaseJOTappConfig::put_integer_var() [" << d.name() << "] - Writing integer '" << int_val << "'\n";
 
@@ -314,8 +314,7 @@ BaseJOTappConfig::get_double_var(TAGformat &d)
 
    //cerr << "BaseJOTappConfig::get_double_var() [" << d.name() << "] - Loaded double: '"  << dbl_val << "'\n";
 
-   set_var_dbl(d.name(),dbl_val);
-
+   set_var_dbl(string(**d.name()), dbl_val);
 }
 
 /////////////////////////////////////
@@ -326,10 +325,10 @@ BaseJOTappConfig::put_double_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_double_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(d.name())) {
+   if (get_var_is_set(string(**d.name()))) {
       double dbl_val;
 
-      dbl_val = get_var_dbl(d.name());
+      dbl_val = get_var_dbl(string(**d.name()));
 
       cerr << "BaseJOTappConfig::put_double_var() [" << d.name() << "] - Writing double '" << dbl_val << "'\n";
 
@@ -366,8 +365,7 @@ BaseJOTappConfig::get_bool_var(TAGformat &d)
       cerr << "BaseJOTappConfig::get_bool_var() [" << d.name() << "] - ERROR!! Loaded bool: '"  << foo << "', but should be 'true' or 'false'. Assuming 'false'...\n";
    }
 
-   set_var_bool(d.name(),bool_val);
-
+   set_var_bool(string(**d.name()), bool_val);
 }
 
 /////////////////////////////////////
@@ -378,19 +376,19 @@ BaseJOTappConfig::put_bool_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_bool_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(d.name())) {
+   if (get_var_is_set(string(**d.name()))) {
 
       bool bool_val;
-      bool_val = get_var_bool(d.name());
+      bool_val = get_var_bool(string(**d.name()));
 
-      str_ptr foo;
-      foo = ((bool_val)?("true"):("false"));
+      string foo;
+      foo = bool_val?"true":"false";
 
       cerr << "BaseJOTappConfig::put_bool_var() ["
            << d.name() << "] - Writing bool '" << foo << "'\n";
 
       d.id();
-      *d << foo << " ";
+      *d << foo.c_str() << " ";
       d.end_id();
    } else {
       cerr << "BaseJOTappConfig::put_bool_var() ["
@@ -417,7 +415,7 @@ class JOTappConfig : public BaseJOTappConfig
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   JOTappConfig(Cstr_ptr& j) : BaseJOTappConfig(j) { assert(_instance == this);  }
+   JOTappConfig(const string& j) : BaseJOTappConfig(j) { assert(_instance == this);  }
 
    virtual ~JOTappConfig() { }
 
@@ -427,7 +425,7 @@ class JOTappConfig : public BaseJOTappConfig
    /******** DATA_ITEM METHODS ********/
  public:
    DEFINE_RTTI_METHODS2("JOTappConfig", BaseJOTappConfig, CDATA_ITEM *);
-   virtual DATA_ITEM*   dup() const  { return new JOTappConfig(NULL_STR); }
+   virtual DATA_ITEM*   dup() const  { return new JOTappConfig(""); }
    virtual CTAGlist&    tags() const;
 
 };
@@ -753,14 +751,14 @@ main_config(bool init)
       // Setup config class, and JOT_ROOT global variable...
 
 
-	  config = new JOTappConfig(str_ptr(getenv("JOT_ROOT")) + str_ptr("/"));
+      config = new JOTappConfig(string(getenv("JOT_ROOT")) + "/");
       assert(config);
 
       if (!(Config::load_config(Config::JOT_ROOT() + "jot.cfg") ||
             Config::load_config(Config::JOT_ROOT() + "jot-default.cfg"))) {
          err_msg("main_config: *FAILED* config load from %s or %s",
-                 **(Config::JOT_ROOT() + "jot.cfg"),
-                 **(Config::JOT_ROOT() + "jot-default.cfg"));
+                 (Config::JOT_ROOT() + "jot.cfg").c_str(),
+                 (Config::JOT_ROOT() + "jot-default.cfg").c_str());
       }
    } else {
       err_mesg(ERR_LEV_SPAM, "main_config: Cleanup...");

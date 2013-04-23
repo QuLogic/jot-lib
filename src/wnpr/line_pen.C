@@ -108,7 +108,7 @@ LinePen::LinePen(
 
    BaseStroke *s = _baseline_gel->stroke();
 
-   s->set_texture(Config::JOT_ROOT() + BASELINE_STROKE_TEXTURE);
+   s->set_texture((Config::JOT_ROOT() + BASELINE_STROKE_TEXTURE).c_str());
    s->set_width(  BASELINE_STROKE_WIDTH);
    s->set_alpha(  BASELINE_STROKE_ALPHA);
    s->set_flare(  BASELINE_STROKE_FLARE);

@@ -35,10 +35,10 @@ GLSLToonShader* GLSLToonShader::_instance(0);
 
 GLSLToonShader::GLSLToonShader(Patch* p) : GLSLShader(p)
 {
-   set_tex(Config::get_var_str(
+   set_tex(str_ptr(Config::get_var_str(
               "GLSL_TOON_FILENAME",
               GtexUtil::toon_name("clear-black.png")
-              ));
+              ).c_str()));
 }
 
 GLSLToonShader* 

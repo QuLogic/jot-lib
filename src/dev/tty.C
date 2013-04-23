@@ -920,10 +920,10 @@ TTYfd::TTYfd(
    }
    else 
    {
-      str_ptr name_var = Config::get_var_str(name,NULL_STR,false);
-      if (name_var != NULL_STR)
+      string name_var = Config::get_var_str(name, "", false);
+      if (name_var != "")
       {
-         strcpy(_dev, **name_var);
+         strcpy(_dev, name_var.c_str());
       }
       else 
       {

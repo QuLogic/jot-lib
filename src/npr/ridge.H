@@ -126,9 +126,9 @@ class RidgeShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the shader programs:
-   virtual str_ptr vp_filename() { return vp_name("ridge"); }
+   virtual string vp_filename() { return vp_name("ridge"); }
 
-   virtual str_ptr fp_filename() { return fp_name("ridge"); }
+   virtual string fp_filename() { return fp_name("ridge"); }
 
 };
 

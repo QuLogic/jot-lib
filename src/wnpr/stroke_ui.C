@@ -53,7 +53,7 @@
 #define STROKEUI_DEFAULT_ANGLE           0.0f
 #define STROKEUI_DEFAULT_CONTRAST        0.5f
 #define STROKEUI_DEFAULT_BRIGHTNESS      0.5f
-#define STROKEUI_DEFAULT_TEX_FILE        Config::JOT_ROOT() + "nprdata/stroke_textures/1D--dark-8.png"
+#define STROKEUI_DEFAULT_TEX_FILE        (Config::JOT_ROOT() + "nprdata/stroke_textures/1D--dark-8.png")
 #define STROKEUI_DEFAULT_PAPER_FILE      NULL_STR
 
 #include "gtex/gl_extensions.H"
@@ -149,7 +149,7 @@ StrokeUI::StrokeUI(VIEWptr v) :
    _params.set_angle(STROKEUI_DEFAULT_ANGLE);
    _params.set_contrast(STROKEUI_DEFAULT_CONTRAST);
    _params.set_brightness(STROKEUI_DEFAULT_BRIGHTNESS);
-   _params.set_texture (STROKEUI_DEFAULT_TEX_FILE);
+   _params.set_texture(str_ptr(STROKEUI_DEFAULT_TEX_FILE.c_str()));
    _params.set_paper(STROKEUI_DEFAULT_PAPER_FILE);
 
    // Defer init() until the first build()
@@ -688,7 +688,7 @@ StrokeUI::build()
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(STROKE_PREVIEW_W);
    _listbox[LIST_PRESET]->add_item(0, "-=NEW=-");
-   fill_preset_listbox(_listbox[LIST_PRESET], _preset_filenames, string(**Config::JOT_ROOT()) + PRESET_DIRECTORY);
+   fill_preset_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
 
    new GLUI_Separator(_panel[PANEL_PRESET]);
 
@@ -791,7 +791,7 @@ StrokeUI::build()
    assert(_listbox[LIST_TEXTURE]);
    _listbox[LIST_TEXTURE]->set_w(STROKE_PARAMS_MIN_W);
    _listbox[LIST_TEXTURE]->add_item(0, "----");
-   fill_texture_listbox(_listbox[LIST_TEXTURE], _texture_filenames, string(**Config::JOT_ROOT()) + TEXTURE_DIRECTORY);
+   fill_texture_listbox(_listbox[LIST_TEXTURE], _texture_filenames, Config::JOT_ROOT() + TEXTURE_DIRECTORY);
 
    _slider[SLIDE_ANGLE] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Period", 
@@ -832,7 +832,7 @@ StrokeUI::build()
    assert(_listbox[LIST_PAPER]);
    _listbox[LIST_PAPER]->set_w(STROKE_PARAMS_MIN_W);
    _listbox[LIST_PAPER]->add_item(0, "----");
-   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, string(**Config::JOT_ROOT()) + PAPER_DIRECTORY);
+   fill_paper_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() + PAPER_DIRECTORY);
 
    _slider[SLIDE_CONTRAST] = new GLUI_Slider(
       _rollout[ROLLOUT_COLORTEXTURE], "Contrast", 
@@ -1410,9 +1410,9 @@ StrokeUI::preset_save_text()
          return;
       }
 
-   if (save_preset(**(Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre")))
+   if (save_preset((Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre").c_str()))
       {
-         _preset_filenames += (Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre");
+         _preset_filenames += str_ptr((Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre").c_str());
          _listbox[LIST_PRESET]->add_item(_preset_filenames.num(), newtext);
          _listbox[LIST_PRESET]->set_int_val(_preset_filenames.num());
       }

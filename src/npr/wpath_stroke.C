@@ -138,7 +138,7 @@ WpathStroke::WpathStroke(CLMESHptr& mesh) :
       s->set_width(8.0);
       s->set_alpha(1.0);
 
-      s->set_texture(Config::JOT_ROOT() + LINE_TEXTURE);
+      s->set_texture(str_ptr((Config::JOT_ROOT() + LINE_TEXTURE).c_str()));
       s->set_taper(LINE_TAPER);
       s->set_flare(LINE_FLARE);
       s->set_fade(LINE_FADE);
@@ -266,7 +266,7 @@ void
 WpathStroke::get_style(str_ptr path)
 {
    str_ptr str;
-   str = Config::JOT_ROOT() + path;
+   str = str_ptr(Config::JOT_ROOT().c_str()) + path;
    fstream fin;
    fin.open(**(str),ios::in);
    if (!fin){

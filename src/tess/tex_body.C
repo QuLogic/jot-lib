@@ -1144,7 +1144,7 @@ toon_tex()
    static TEXTUREglptr ret;
    if (!ret) {
       ret = new TEXTUREgl(
-         GtexUtil::toon_name(Config::get_var_str("HALO_TEX","halo_white2.png"))
+         str_ptr(GtexUtil::toon_name(Config::get_var_str("HALO_TEX","halo_white2.png")).c_str())
          );
       ret->set_wrap_s(GL_CLAMP_TO_EDGE);
       ret->set_wrap_t(GL_CLAMP_TO_EDGE);

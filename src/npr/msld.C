@@ -29,7 +29,7 @@ inline GTexture*
 get_tone_shader(Patch* p)
 {
    BinaryImageShader* ret = new BinaryImageShader(p);
-   ret->set_tex(Config::JOT_ROOT() + "nprdata/toon_textures/warm_spec2_512_2d.png");
+   ret->set_tex(str_ptr((Config::JOT_ROOT() + "nprdata/toon_textures/warm_spec2_512_2d.png").c_str()));
 
    return ret;
 }

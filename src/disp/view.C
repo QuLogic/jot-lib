@@ -731,7 +731,7 @@ VIEW::get_view_texture (TAGformat &d)
    else
    {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_texture() - Loaded string: '%s'", **str);
-      set_bkg_file(Config::JOT_ROOT() + str);
+      set_bkg_file(str_ptr(Config::JOT_ROOT().c_str()) + str);
    }
    
 }
@@ -758,14 +758,11 @@ VIEW::put_view_texture (TAGformat &d) const
    else
    {
       //Here we strip off JOT_ROOT
-      str_ptr tex = get_bkg_file();
-      str_ptr str;
-      int i;
-      for (i=Config::JOT_ROOT().len(); i<(int)tex.len(); i++)
-         str = str + str_ptr(tex[i]);
-      *d << **str;
+      string tex = string(**get_bkg_file());
+      string str = tex.substr(Config::JOT_ROOT().length());
+      *d << str.c_str();
       *d << " ";
-      err_mesg(ERR_LEV_SPAM, "VIEW::put_view_texture() - Wrote string: '%s'", **str);
+      err_mesg(ERR_LEV_SPAM, "VIEW::put_view_texture() - Wrote string: '%s'", str.c_str());
    }
    d.end_id();
    
@@ -1278,7 +1275,7 @@ VIEW::VIEW(
    init_jitter();
 
    _stereo      = VIEWimpl::NONE;
-   _render_type = Config::get_var_str("JOT_RENDER_STYLE",RSMOOTH_SHADE);
+   _render_type = str_ptr(Config::get_var_str("JOT_RENDER_STYLE", string(**RSMOOTH_SHADE)).c_str());
    _name        = s;
    _tris        = 0;
 

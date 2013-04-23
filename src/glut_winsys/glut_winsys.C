@@ -133,7 +133,7 @@ GLUT_WINSYS::setup(CVIEWptr &v)
       );
    
    // Create the windows (it becomes 'current')
-   _name = Config::get_var_str("JOT_WINDOW_NAME", "Jot",true);
+   _name = str_ptr(Config::get_var_str("JOT_WINDOW_NAME", "Jot", true).c_str());
    _id = glutCreateWindow(**_name);
 
    if (debug) {

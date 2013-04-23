@@ -126,11 +126,11 @@ SKY_BOX::test_perlin(CVIEWptr &v)
 {
    //test
    if (!perlin_tex) {
-      perlin_tex = new TEXTUREgl(
+      perlin_tex = new TEXTUREgl(str_ptr((
          Config::JOT_ROOT() +
          "nprdata/other_textures/" +
          "perlin_tex_RGB.png"
-         );
+         ).c_str()));
       perlin_tex->load_texture();
    }
    assert(perlin_tex);

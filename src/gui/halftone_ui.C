@@ -89,7 +89,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       "Pattern", NULL, 
       id+LIST_PATTERN, listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, string(**Config::JOT_ROOT()) + "/nprdata/haftone_textures/", ".png", false, true);
+   fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, Config::JOT_ROOT() + "/nprdata/haftone_textures/", ".png", false, true);
                            
    
    

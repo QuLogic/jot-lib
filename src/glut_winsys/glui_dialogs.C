@@ -1622,7 +1622,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
       //Save the CWD before mucking about...
       string old_cwd = getcwd_(), jotroot_cwd;
 
-      if (chdir_(string(**Config::JOT_ROOT()))) {
+      if (chdir_(Config::JOT_ROOT())) {
          if ((jotroot_cwd = getcwd_()) != "") {
             e = generate_dir_entry(jotroot_cwd, "");
             if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {

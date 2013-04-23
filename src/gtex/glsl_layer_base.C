@@ -323,10 +323,10 @@ GLSLShader_Layer_Base::set_texture_pattern(
 
    GLint tex_stage = get_free_tex_stage();
 
-   str_ptr pre_path = Config::JOT_ROOT() + dir;
-   str_ptr path = pre_path + file_name;
+   string pre_path = Config::JOT_ROOT() + string(**dir);
+   string path = pre_path + string(**file_name);
    _patterns[tex_stage] =
-      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      new TEXTUREgl(str_ptr(path.c_str()), GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _patterns[tex_stage]->set_save_img(true);
 
    if (!_patterns[tex_stage]->load_image()) {

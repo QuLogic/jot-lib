@@ -346,8 +346,8 @@ JOTapp::init_scene()
    // variable gives a different default:
    for (it = _windows.begin(); it != _windows.end(); ++it) {
       WINDOW *win = *it;
-      win->_view->set_rendering(
-         Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE));
+      win->_view->set_rendering(str_ptr(
+         Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE).c_str()));
    }
 }
 
@@ -363,16 +363,16 @@ JOTapp::init_dev_cb(WINDOW &base_window)
    // the serial port via the built-in tablet driver code (in jot).
    // Only use the following code if window system is NOT running
    // its own tablet driver.
-   if (Config::get_var_str("USE_TABLET",NULL_STR,true) != NULL_STR) {
-      str_ptr tab_type = Config::get_var_str("USE_TABLET",NULL_STR,true);
+   if (Config::get_var_str("USE_TABLET", "", true) != "") {
+      string tab_type = Config::get_var_str("USE_TABLET", "", true);
 
       _tablet = new TabletMultimode(
          FD_MANAGER::mgr(),
-         tab_type==str_ptr("CROSS")  ? TabletDesc::CROSS        :
-         tab_type==str_ptr("LCD")    ? TabletDesc::LCD          :
-         tab_type==str_ptr("LARGE")  ? TabletDesc::MULTI_MODE   :
-         tab_type==str_ptr("TINY")   ? TabletDesc::TINY         :
-         tab_type==str_ptr("INTUOS") ? TabletDesc::INTUOS       :
+         tab_type=="CROSS"  ? TabletDesc::CROSS        :
+         tab_type=="LCD"    ? TabletDesc::LCD          :
+         tab_type=="LARGE"  ? TabletDesc::MULTI_MODE   :
+         tab_type=="TINY"   ? TabletDesc::TINY         :
+         tab_type=="INTUOS" ? TabletDesc::INTUOS       :
          TabletDesc::SMALL);
       _tablet->activate();
       _tab_map = new ButtonMapper(&_tablet->stylus(),&_tablet->stylus_buttons());
@@ -668,7 +668,7 @@ JOTapp::init_cam_manip(WINDOW &win)
 
    // Again, only use the following code if window system is
    // NOT running its own tablet driver.
-   if (Config::get_var_str("USE_TABLET",NULL_STR) != NULL_STR) {
+   if (Config::get_var_str("USE_TABLET", "") != "") {
       down = _tab_map->b4d();
       move = _tab_map->mov();
       up   = _tab_map->b4u();
@@ -2194,11 +2194,11 @@ save_config(const Event &e, State *&)
    ret = Config::save_config(Config::JOT_ROOT() + "jot.cfg");
 
    if (ret)
-      WORLD::message(str_ptr("Wrote config to ") +
-                     Config::JOT_ROOT() + "jot.cfg");
+      WORLD::message(str_ptr(("Wrote config to " +
+                     Config::JOT_ROOT() + "jot.cfg").c_str()));
    else
-      WORLD::message(str_ptr("FAILED!! Writing config to ") +
-                     Config::JOT_ROOT() + "jot.cfg");
+      WORLD::message(str_ptr(("FAILED!! Writing config to " +
+                     Config::JOT_ROOT() + "jot.cfg").c_str()));
 
    return 1;
 }

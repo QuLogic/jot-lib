@@ -245,7 +245,7 @@ inline GTexture*
 get_toon_shader(Patch* p)
 {
    GLSLToonShader* ret = new GLSLToonShader(p);
-   ret->set_tex(Config::JOT_ROOT() + "nprdata/toon_textures/clear-black.png");
+   ret->set_tex(str_ptr((Config::JOT_ROOT() + "nprdata/toon_textures/clear-black.png").c_str()));
    return ret;
 }
 

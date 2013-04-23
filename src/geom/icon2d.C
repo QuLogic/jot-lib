@@ -43,17 +43,17 @@ ICON2D::recompute_xform()
    else _pt2d = XYpt(xform().origin()[0], xform().origin()[1]);
 }
 
-ICON2D::ICON2D(Cstr_ptr &n,
-               Cstr_ptr &filename,
+ICON2D::ICON2D(const string &n,
+               const string &filename,
                int num,
                bool tog,
                const mlib::PIXEL &p) :
-   GEOM(n),
+   GEOM(str_ptr(n.c_str())),
    _is2d(0),
    _center(0),
    _can_intersect(1),
    _show_boxes(0),
-   _filename(Config::JOT_ROOT() + filename),
+   _filename(str_ptr((Config::JOT_ROOT() + filename).c_str())),
    _cam(num),
    _suppress_draw(false),
    _active(false),
@@ -91,7 +91,7 @@ ICON2D::ICON2D(Cstr_ptr &n,
       }
    }
    //icon location
-   _name = n;
+   _name = str_ptr(n.c_str());
    _toggle = tog;
    _pix = p;
    _currentTex = 0;

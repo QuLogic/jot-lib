@@ -173,9 +173,9 @@ GLSLXToonShader::set_tex(Cstr_ptr& filename)
 {
    // Set the name of the texture to use
    if (_tex) {
-      _tex->set_texture(Config::JOT_ROOT() + filename);
+      _tex->set_texture(str_ptr(Config::JOT_ROOT().c_str()) + filename);
    } else {
-      _tex = new TEXTUREgl(Config::JOT_ROOT()+ filename);
+      _tex = new TEXTUREgl(str_ptr(Config::JOT_ROOT().c_str()) + filename);
       assert(_tex);
       _tex->set_wrap_s(GL_CLAMP_TO_EDGE);
       _tex->set_wrap_t(GL_CLAMP_TO_EDGE);

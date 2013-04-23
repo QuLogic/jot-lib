@@ -98,9 +98,9 @@ class MSLDShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the toon MSLD shader programs:
-   virtual str_ptr vp_filename() { return vp_name("msld"); }
+   virtual string vp_filename() { return vp_name("msld"); }
 
-   virtual str_ptr fp_filename() { return fp_name("msld"); }
+   virtual string fp_filename() { return fp_name("msld"); }
 
 };
 

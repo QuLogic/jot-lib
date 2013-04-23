@@ -1284,14 +1284,14 @@ NPRSolidTexture::update_tex(void)
             //...and change to looking up the remapped name            
             if (ii != BAD_IND)
             {
-               str_ptr old_tf = tf;
+               string old_tf = string(**tf);
                tf = (*_solid_texture_remap_new_names)[ii];
 
                ind = _solid_texture_names->get_index(tf);
 
                err_mesg(ERR_LEV_SPAM, 
                   "NPRSolidTexture::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
             }
          }
 
@@ -1314,7 +1314,7 @@ NPRSolidTexture::update_tex(void)
       {
          err_mesg(ERR_LEV_SPAM, "NPRSolidTexture::set_texture() - Not in cache...");
       
-         Image i(**(Config::JOT_ROOT()+tf));
+         Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
          //Can't load the texture?
          if (i.empty())
@@ -1330,14 +1330,14 @@ NPRSolidTexture::update_tex(void)
                _solid_texture_names->add(tf);
                _solid_texture_ptrs->add(NULL);
 
-               str_ptr old_tf = tf;
+               string old_tf = string(**tf);
                tf = (*_solid_texture_remap_new_names)[ii];
 
                err_mesg(ERR_LEV_ERROR, 
                   "NPRSolidTexture::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     **(Config::JOT_ROOT()+old_tf), **(Config::JOT_ROOT()+tf) );
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
 
-               i.load_file(**(Config::JOT_ROOT()+tf));
+               i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
             }
          }
 
@@ -1354,7 +1354,7 @@ NPRSolidTexture::update_tex(void)
             _solid_texture_ptrs->add(t);
 
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-               i.width(), i.height(), i.bpp(), **(Config::JOT_ROOT()+tf));;
+               i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
             _tex = t;
             _tex_name = tf;
@@ -1362,7 +1362,7 @@ NPRSolidTexture::update_tex(void)
          //Otherwise insert a failed NULL
 	      else
 	      {
-            err_mesg(ERR_LEV_ERROR, "NPRSolidTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", **(Config::JOT_ROOT()+tf));
+            err_mesg(ERR_LEV_ERROR, "NPRSolidTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
          
             _solid_texture_names->add(tf);
             _solid_texture_ptrs->add(NULL);
@@ -1410,7 +1410,7 @@ NPRSolidTexture::update_tex(void)
          else
          {
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::update_tex() - *****ERROR***** Previous caching failure: '%s'",
-                          **(Config::JOT_ROOT() + _tex_name));
+                          (Config::JOT_ROOT() + string(**_tex_name)).c_str());
 
 
             _tex = NULL;
@@ -1421,7 +1421,7 @@ NPRSolidTexture::update_tex(void)
       {
          err_mesg(ERR_LEV_SPAM, "NPRSolidTexture::update_tex() - Not in cache...");
       
-         Image i(Config::JOT_ROOT() + _tex_name);
+         Image i((Config::JOT_ROOT() + string(**_tex_name)).c_str());
          if (!i.empty())
 	      {
 		      TEXTUREglptr t = new TEXTUREgl("");
@@ -1433,7 +1433,7 @@ NPRSolidTexture::update_tex(void)
             _solid_texture_ptrs->add(t);
 
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::update_tex() - Cached: (WIDTH=%d HEIGHT=%d BPP=%u) %s", 
-                           i.width(), i.height(), i.bpp(), **(Config::JOT_ROOT() + _tex_name));
+                           i.width(), i.height(), i.bpp(), (Config::JOT_ROOT() + string(**_tex_name)).c_str());
 
             _tex = t;
             //_tex_name = _tex_name;
@@ -1441,7 +1441,7 @@ NPRSolidTexture::update_tex(void)
 	      else
 	      {
             err_mesg(ERR_LEV_ERROR, "NPRSolidTexture::update_tex() - *****ERROR***** Failed loading to cache: '%s'",
-                          **(Config::JOT_ROOT() + _tex_name));
+                          (Config::JOT_ROOT() + string(**_tex_name)).c_str());
 
             _solid_texture_names->add(_tex_name);
             _solid_texture_ptrs->add(NULL);

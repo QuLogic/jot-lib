@@ -26,14 +26,14 @@ static bool debug = Config::get_var_bool("DEBUG_GLSL_MARBLE", false);
 /**********************************************************************
 * Utilities
 **********************************************************************/
-inline str_ptr 
+inline string
 tex_path()
 {
    return Config::JOT_ROOT() + "nprdata/toon_textures/"; 
 }
 
-inline str_ptr
-toon_name(Cstr_ptr& name)
+inline string
+toon_name(const string& name)
 {
    return tex_path() + name;
 }
@@ -46,9 +46,9 @@ toon_name(Cstr_ptr& name)
 GLSLMarbleShader::GLSLMarbleShader(Patch* p) :
 GLSLShader(p, new VertNormStripCB)
 {
-   set_tex(toon_name(
+   set_tex(str_ptr(toon_name(
       Config::get_var_str("GLSL_TOON_FILENAME","clear-black.png")
-      )); 
+      ).c_str()));
    
    _perlin=0;
    _perlin_generator= Perlin::get_instance();

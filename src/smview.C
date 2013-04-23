@@ -220,8 +220,8 @@ SMVIEWapp::init_scene()
    // variable gives a different default:
    for (it = _windows.begin(); it != _windows.end(); ++it) {
       WINDOW *win = *it;
-      win->_view->set_rendering(
-         Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE));
+      win->_view->set_rendering(str_ptr(
+         Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE).c_str()));
    }
 }
 
@@ -1395,9 +1395,9 @@ save_config(const Event &e, State *&)
    ret = Config::save_config(Config::JOT_ROOT() + "jot.cfg");
 
    if (ret)
-      WORLD::message(str_ptr("Wrote config to ") + Config::JOT_ROOT() + "jot.cfg");
+      WORLD::message(str_ptr(("Wrote config to " + Config::JOT_ROOT() + "jot.cfg").c_str()));
    else
-      WORLD::message(str_ptr("FAILED!! Writing config to ") + Config::JOT_ROOT() + "jot.cfg");
+      WORLD::message(str_ptr(("FAILED!! Writing config to " + Config::JOT_ROOT() + "jot.cfg").c_str()));
 
    return 1;
 }

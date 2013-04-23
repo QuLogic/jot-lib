@@ -178,10 +178,10 @@ ToneShader::ToneShader(Patch* p) :
    _ratio_scale(0.5),
    _global_edge_len(-1.0)
 {
-   set_tex(Config::get_var_str(
+   set_tex(str_ptr(Config::get_var_str(
               "TONE_SHADER_FILENAME",
               GtexUtil::toon_name("clear-black.png")
-              ));
+              ).c_str()));
 
    set_layer(0, 1, 0, 1, 1, 0, 1, 0.5, 1.0);
    set_layer(1, 1, 0, 1, 0, 0, 1, 0.5, 1.0);

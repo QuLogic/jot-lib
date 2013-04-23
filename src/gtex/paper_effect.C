@@ -1309,8 +1309,8 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
       int i = 0;
       while (paper_remap_fnames[i][0] != NULL)
       {
-         _paper_texture_remap_orig_names->add(Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][0]);
-         _paper_texture_remap_new_names->add(Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][1]);
+         _paper_texture_remap_orig_names->add(str_ptr(Config::JOT_ROOT().c_str()) + paper_remap_base + paper_remap_fnames[i][0]);
+         _paper_texture_remap_new_names->add(str_ptr(Config::JOT_ROOT().c_str()) + paper_remap_base + paper_remap_fnames[i][1]);
          i++;
       }
    }
@@ -1475,7 +1475,7 @@ PaperEffect::check_new_paper()
 {
    //XXX - Since mipmapping is NOT on, these textures must have 2^n dimensions? (REALLY?)
 
-   str_ptr new_paper_filename = (_paper_tex)?(Config::JOT_ROOT() + _paper_tex):(NULL_STR);
+   str_ptr new_paper_filename = (_paper_tex)?(str_ptr(Config::JOT_ROOT().c_str()) + _paper_tex):(NULL_STR);
 
    if (new_paper_filename != _paper_filename)        
    {
@@ -1491,10 +1491,10 @@ PaperEffect::check_new_paper()
       else
       {
          //JOT_ROOT should be at start of this filename...
-         assert(strstr(**_paper_filename,**Config::JOT_ROOT()) == **_paper_filename );
+         assert(strstr(**_paper_filename,Config::JOT_ROOT().c_str()) == **_paper_filename );
 
          //Now strip it off...
-         _paper_tex = &((**_paper_filename)[Config::JOT_ROOT().len()]);
+         _paper_tex = &((**_paper_filename)[Config::JOT_ROOT().length()]);
       }
 
 

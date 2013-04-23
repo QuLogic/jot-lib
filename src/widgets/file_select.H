@@ -67,7 +67,7 @@ class FileSelect
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
  public  :
-   FileSelect() : _title(""), _action("OK"), _icon(NO_ICON), _path(string(**Config::JOT_ROOT())), _file("")
+   FileSelect() : _title(""), _action("OK"), _icon(NO_ICON), _path(Config::JOT_ROOT()), _file("")
    { 
       _filter = 0;
       _filters += "*";
@@ -87,7 +87,7 @@ class FileSelect
    virtual bool      clear_title()           { if (is_displaying()) return false; _title = "";                       return true; }
    virtual bool      clear_action()          { if (is_displaying()) return false; _action = "OK";                    return true; }
    virtual bool      clear_icon()            { if (is_displaying()) return false; _icon = NO_ICON;                   return true; }
-   virtual bool      clear_path()            { if (is_displaying()) return false; _path = string(**Config::JOT_ROOT());return true; }
+   virtual bool      clear_path()            { if (is_displaying()) return false; _path = Config::JOT_ROOT();        return true; }
    virtual bool      clear_file()            { if (is_displaying()) return false; _file = "";                        return true; }
    virtual bool      clear_filter()          { if (is_displaying()) return false; set_filter("*");                   return true; }
    virtual bool      clear_filters()         { if (is_displaying()) return false; _filters.clear(); set_filter("*"); return true; }

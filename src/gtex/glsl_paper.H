@@ -109,11 +109,11 @@ class GLSLPaperShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the toon GLSL shader programs:
-   virtual str_ptr vp_filename() { return vp_name("paper"); }
+   virtual string vp_filename() { return vp_name("paper"); }
 
    // XXX - temporary, until we can figure out how to not use the
    //       fragment shader:
-   virtual str_ptr fp_filename() { return fp_name("paper"); }
+   virtual string fp_filename() { return fp_name("paper"); }
 };
 
 #endif // GLSL_PAPER_H_IS_INCLUDED

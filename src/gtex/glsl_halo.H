@@ -80,11 +80,11 @@ class GLSLHaloShader : public GLSLToonShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the toon GLSL shader programs:
-   virtual str_ptr vp_filename() { return vp_name("halo2"); }
+   virtual string vp_filename() { return vp_name("halo2"); }
 
    // XXX - temporary, until we can figure out how to not use the
    //       fragment shader:
-   virtual str_ptr fp_filename() { return fp_name("halo2"); }
+   virtual string fp_filename() { return fp_name("halo2"); }
 
 };
 

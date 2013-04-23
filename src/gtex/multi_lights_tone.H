@@ -102,8 +102,8 @@ class MLToneShader : public ToneShader {
 
    //******** VIRTUAL METHODS ********
 
-   virtual str_ptr vp_filename() { return vp_name("multi_lights_tone"); }
-   virtual str_ptr fp_filename() { return fp_name("multi_lights_tone"); }
+   virtual string vp_filename() { return vp_name("multi_lights_tone"); }
+   virtual string fp_filename() { return fp_name("multi_lights_tone"); }
 };
 
 #endif // MULTILIGHTSTONE_H

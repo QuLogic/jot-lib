@@ -133,17 +133,19 @@ namespace Color {
    //******** UTILITIES ********
 
    // Convert a color to a string, e.g. "0.25 0.7 0.15":
-   inline str_ptr color_to_str(CCOLOR& col) {
-      return str_ptr(col[0]) + " " + col[1] + " " + col[2];
+   inline string color_to_str(CCOLOR& col) {
+      char tmp[192];
+      sprintf(tmp, "%g %g %g", col[0], col[1], col[2]);
+      return string(tmp);
    }
 
    // Given a Config variable name and a default COLOR value,
    // return the corresponding COLOR if the variable is defined,
    // otherwise return the default value:
-   inline CCOLOR get_var_color(Cstr_ptr& var_name, CCOLOR& default_val) {
-      str_ptr col_str = Config::get_var_str(var_name, color_to_str(default_val));
+   inline CCOLOR get_var_color(const string& var_name, CCOLOR& default_val) {
+      string col_str = Config::get_var_str(var_name, color_to_str(default_val));
       double r, g, b;
-      sscanf(**col_str, "%lf%lf%lf", &r, &g, &b);
+      sscanf(col_str.c_str(), "%lf%lf%lf", &r, &g, &b);
       return COLOR(r,g,b);
    }
 

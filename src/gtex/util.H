@@ -102,15 +102,15 @@ namespace GtexUtil {
       return t * t * (3 - 2*t);
    }
 
-   inline str_ptr toon_path() {
+   inline string toon_path() {
       return Config::JOT_ROOT() + "nprdata/toon_textures/"; 
    }
-   inline str_ptr toon_name(Cstr_ptr& name) { return toon_path() + name; }
+   inline string toon_name(const string& name) { return toon_path() + name; }
 
-   inline str_ptr toon_1D_path() {
+   inline string toon_1D_path() {
       return Config::JOT_ROOT() + "nprdata/toon_textures_1D/"; 
    }
-   inline str_ptr toon_1D_name(Cstr_ptr& name) { return toon_1D_path() + name; }
+   inline string toon_1D_name(const string& name) { return toon_1D_path() + name; }
 
    // sent material properties to OpenGL
    inline void 

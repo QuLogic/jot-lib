@@ -144,7 +144,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                                id+LIST_TEXTURE,
                                listbox_cb);
    
-   fill_directory_listbox(_listbox[LIST_TEXTURE], _texture_filenames, string(**Config::JOT_ROOT()) + "/nprdata/toon_textures_1D/", ".png", false);
+   fill_directory_listbox(_listbox[LIST_TEXTURE], _texture_filenames, Config::JOT_ROOT() + "/nprdata/toon_textures_1D/", ".png", false);
    
    _listbox[LIST_TEXTURE]->curr_text = "clear-black.png" ;
   
@@ -264,7 +264,7 @@ BasecoatUI::apply_changes_to_texture(operation_id_t op, ImageLineShader* tex, in
       tex->get_basecoat_shader()->set_color_steepness(_slider[SLIDE_COLOR_STEEPNESS]->get_float_val());  
    }
    if((op==OP_ALL) || (op==OP_TEXTURE)){
-      tex->get_basecoat_shader()->set_tex(GtexUtil::toon_1D_name( _texture_filenames[_listbox[LIST_TEXTURE]->get_int_val()]));  
+      tex->get_basecoat_shader()->set_tex(str_ptr(GtexUtil::toon_1D_name(string(**_texture_filenames[_listbox[LIST_TEXTURE]->get_int_val()])).c_str()));
    } 
    
    if(_parent)

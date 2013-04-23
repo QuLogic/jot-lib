@@ -112,9 +112,9 @@ class HaloBlurShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the shader programs:
-   virtual str_ptr vp_filename() { return vp_name("halo_blur"); }
+   virtual string vp_filename() { return vp_name("halo_blur"); }
 
-   virtual str_ptr fp_filename() { return fp_name("halo_blur"); }
+   virtual string fp_filename() { return fp_name("halo_blur"); }
 
 };
 

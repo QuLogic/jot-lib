@@ -27,7 +27,7 @@ static bool debug = Config::get_var_bool("DEBUG_GLSL_PAPER", false);
 /*****************************************************************
  * Utilities
  *****************************************************************/
-inline str_ptr
+inline string
 paper_tex_name()
 {
    return (
@@ -37,7 +37,7 @@ paper_tex_name()
       );
 }
 
-inline str_ptr
+inline string
 stroke_tex_name()
 {
    return (
@@ -79,8 +79,8 @@ bool             GLSLPaperShader::_do_texture(false);
  **********************************************************************/
 GLSLPaperShader::GLSLPaperShader(Patch* p) : GLSLShader(p)
 {
-   set_paper(paper_tex_name());
-   set_tex  (stroke_tex_name());
+   set_paper(str_ptr(paper_tex_name().c_str()));
+   set_tex  (str_ptr(stroke_tex_name().c_str()));
 }
 
 GLSLPaperShader* 

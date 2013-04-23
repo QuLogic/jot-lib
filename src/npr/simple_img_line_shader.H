@@ -141,8 +141,8 @@ class SimpleImageLineShader : public GLSLShader {
    //******** VIRTUAL METHODS ********
 
    // Return the names of the shader programs:
-   virtual str_ptr vp_filename() { return vp_name("simple_img_line"); }
-   virtual str_ptr fp_filename() { return fp_name("simple_img_line"); }
+   virtual string vp_filename() { return vp_name("simple_img_line"); }
+   virtual string fp_filename() { return fp_name("simple_img_line"); }
 };
 
 #endif // IMG_LINE_SHADER_H_IS_INCLUDED

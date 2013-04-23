@@ -117,7 +117,7 @@ FFSControlFrameTexture::draw_level(CVIEWptr& v, int k)
    GL_COL(_color, s/3); 
 
     //paper
-   //str_ptr tf = Config::JOT_ROOT() + "nprdata/paper_textures/simon.png";
+   //str_ptr tf = str_ptr((Config::JOT_ROOT() + "nprdata/paper_textures/simon.png").c_str());
    //str_ptr ret_tf;
    //TEXTUREptr paper;
 

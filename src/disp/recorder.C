@@ -18,7 +18,7 @@
 #include <fstream>
 #include "disp/recorder.H"
 
-static str_ptr recorder_image_path = Config::get_var_str("RECORDER_IMAGE_PATH","imagedir/");
+static string recorder_image_path = Config::get_var_str("RECORDER_IMAGE_PATH","imagedir/");
 
 int 
 CameraPath::write_stream( iostream& os ) { 
@@ -526,9 +526,9 @@ Recorder::post_draw_CB()
       sprintf (num, "%06d", _path_pos); //1 million frames
 
       //mkdir("imagedir");
-      str_ptr base_dir = recorder_image_path;
-      str_ptr filename = base_dir + _cur_path->get_name() +
-         str_ptr("_") + str_ptr( num ) + str_ptr (".png");
+      string base_dir = recorder_image_path;
+      string filename = base_dir + string(**_cur_path->get_name()) +
+         "_" + num + ".png";
       cerr << "writing " << filename << "\n";
       int w,h; VIEW_SIZE (w,h);
       Image output (w,h,3);
@@ -544,7 +544,7 @@ Recorder::post_draw_CB()
          impl->end_buf_read();
       }
 
-      if ( !output.write_png(**filename)) {cerr << "error writing file!"; } 
+      if ( !output.write_png(filename.c_str())) {cerr << "error writing file!"; }
   
    }
 }

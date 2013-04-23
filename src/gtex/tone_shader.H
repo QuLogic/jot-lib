@@ -311,8 +311,8 @@ class ToneShader : public GLSLShader {
 
    //******** VIRTUAL METHODS ********
 
-   virtual str_ptr vp_filename() { return vp_name("tone"); }
-   virtual str_ptr fp_filename() { return fp_name("tone"); }
+   virtual string vp_filename() { return vp_name("tone"); }
+   virtual string fp_filename() { return fp_name("tone"); }
 };
 
 #endif // TONE_SHADER_H_IS_INCLUDED

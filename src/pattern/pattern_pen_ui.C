@@ -205,7 +205,7 @@ PatternPenUI::build() {
    new GLUI_Column(_panel[PANEL_MODE], false);
 
    _listbox[LIST_STROKE_PRESET] = new GLUI_Listbox(_panel[PANEL_MODE], "Preset", NULL, id+LIST_STROKE_PRESET, listbox_cb);
-   fill_preset_listbox(_listbox[LIST_STROKE_PRESET], _preset_filenames, string(**Config::JOT_ROOT()) + PRESET_DIRECTORY);
+   fill_preset_listbox(_listbox[LIST_STROKE_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
    preset_stroke();
 
   
