@@ -1509,7 +1509,7 @@ QuadCell::make_groups()
 void 
 QuadCell::populate_list(std::vector<Stroke_List*>& list, int type, QuadCell *cell)
 {
-   str_ptr group_name;
+   string group_name;
    if(type == 0)
        group_name = "Structured_Hatching";
     else if(type == 1)  

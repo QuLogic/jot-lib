@@ -186,7 +186,7 @@ operator>>(STDdstream& ds, Action_list& al)
    while (ds.check()) {
       Action* a = Action::upcast(DATA_ITEM::Decode(ds, false));
       if (a) {
-         err_adv(debug, "Action_list::decode:  read %s", **a->class_name());
+         err_adv(debug, "Action_list::decode:  read %s", a->class_name().c_str());
          al.add(a);
       } else {
          err_adv(debug, "Action_list::decode: error reading action");

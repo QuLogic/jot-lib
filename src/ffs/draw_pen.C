@@ -99,7 +99,7 @@ connectivity_edit()
    // When the global rendering style is ControlLineTexture,
    // editing of mesh connectivity is considered to be enabled.
    
-   return (VIEW::peek()->rendering() == ControlLineTexture::static_name());
+   return (VIEW::peek()->rendering() == str_ptr(ControlLineTexture::static_name().c_str()));
 }
 /*****************************************************************
  * WidgetGuard:
@@ -1079,11 +1079,11 @@ DrawPen::dot_cb(CGESTUREptr& gest, DrawState*&)
    bool debug = Config::get_var_bool("DEBUG_UV_INTERSECT",false);
    if (0) {
       if (bsurf)
-         err_adv(debug, "surface: %s", **bsurf->class_name());
+         err_adv(debug, "surface: %s", bsurf->class_name().c_str());
       if (bsurf && f) {
          UVsurface* uvsurf = UVsurface::upcast(bsurf);
          err_adv(debug, "uvsurf: %p, map: %s",
-                 uvsurf, uvsurf ? **uvsurf->map()->class_name() : "null");
+                 uvsurf, uvsurf ? uvsurf->map()->class_name().c_str() : "null");
          if (!(uvsurf && uvsurf->map())) {
             return 0;
          }
@@ -1848,7 +1848,7 @@ DrawPen::create_curve(GESTUREptr gest)
       // "panel" surface:
       Bsurface* surf = PanelAction::create(contour, cmd);
       if (surf) {
-         WORLD::message(str_ptr("built ") + surf->class_name());
+         WORLD::message(str_ptr(("built " + surf->class_name()).c_str()));
       }
    }
    FLOOR::realign(mesh, cmd);
@@ -1940,7 +1940,7 @@ DrawPen::activate(State *start)
 
    // Change to control line texture
    if (_view)
-      _view->set_rendering(ControlLineTexture::static_name());
+      _view->set_rendering(str_ptr(ControlLineTexture::static_name().c_str()));
 
    // Turn on floor
    FLOOR::show();

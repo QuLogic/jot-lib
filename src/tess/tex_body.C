@@ -723,7 +723,7 @@ void
 TEXBODY::get_script(TAGformat &d)
 {
    // read past the Script class name:
-   str_ptr n;
+   string n;
    *d >> n;
    assert(n == Script::static_name());
 
@@ -941,7 +941,7 @@ TEXBODY::get_mesh_data_update(TAGformat &d)
       add(cur = new LMESH);
    assert(cur);
 
-   str_ptr name;
+   string name;
    *d >> name;
    if (name != LMESH::static_name()) {
       cerr << "TEXBODY::get_mesh_data_update: is not an LMESH" << endl;

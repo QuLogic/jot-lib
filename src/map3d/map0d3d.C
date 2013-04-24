@@ -35,7 +35,7 @@ Map::transform(CWtransf&, CMOD& m)
    static bool debug = Config::get_var_bool("DEBUG_BNODE_XFORM");
 
    err_adv(debug, "%s::transform: mod %d, incoming mod: %d",
-           **class_name(), _mod.val(), m.val());
+           class_name().c_str(), _mod.val(), m.val());
 
    if (!can_transform())
       cerr << class_name() << "::transform: not implemented" << endl;

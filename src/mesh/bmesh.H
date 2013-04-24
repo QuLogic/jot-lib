@@ -192,7 +192,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    }
 
    /// Does a Patch with a current GTexture named name already exist in this mesh?
-   int tex_already_exists(Cstr_ptr &name) const;
+   int tex_already_exists(const string &name) const;
    /// Do the vertices have colors?
    bool has_vert_colors() const { return (nverts()>0 && bv(0)->has_color()); }
 
@@ -588,7 +588,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    //******** NameLookup METHODS ********
 
-   virtual str_ptr class_id() { return class_name(); }
+   virtual string class_id() { return class_name(); }
 
    //******** RefImageClient METHODS: ********
    virtual void request_ref_imgs();

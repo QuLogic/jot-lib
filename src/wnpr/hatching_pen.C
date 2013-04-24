@@ -127,7 +127,7 @@ HatchingPen::activate(State *s)
 
    //Change to patch's desired textures
    if (_view)
-     _view->set_rendering(GTexture::static_name());       
+     _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
 
    if(_ui)
       _ui->update();
@@ -485,7 +485,7 @@ HatchingPen::generate_stroke(CGESTUREptr& gest)
    }
 
    Patch* p = get_ctrl_patch(f);       assert(p);
-   p->set_texture(NPRTexture::static_name());
+   p->set_texture(str_ptr(NPRTexture::static_name().c_str()));
    GTexture* cur_texture = p->cur_tex();
    if(!cur_texture->is_of_type(NPRTexture::static_name())) return 0;
    NPRTexture* npr_texture = (NPRTexture*)cur_texture;

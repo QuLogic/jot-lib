@@ -44,7 +44,7 @@ class HASHobs {
 class hashdist : public DATA_ITEM, public GELdistobs,
                  public EXISTobs,   public DUPobs {
    protected:
-      str_ptr   _str;  // name of the hash variable
+      string    _str;  // name of the hash variable
       const int _dist; // whether this hash variable should be distributed
       HASH      _dhash;// hash table of objects that have non-default value
       const int _dup;  // ... should be copied on object duplication
@@ -62,7 +62,7 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                                               }
    public:
       virtual        ~hashdist()   { }
-                      hashdist(Cstr_ptr &str, int dist, int dup=1):_str(str),
+                      hashdist(Cstr_ptr &str, int dist, int dup=1):_str(**str),
                                        _dist(dist), _dhash(16), _dup(dup) {
                          if (_dist)   // if hash is distributed, we watch
                             distrib_obs(); // when any GEL is distributed
@@ -89,7 +89,7 @@ class hashdist : public DATA_ITEM, public GELdistobs,
       virtual void     notify_dup  (CGELptr &old,CGELptr &newg) = 0;
       virtual void     put_var(TAGformat &d,  CGELptr &g) const=0;
       virtual void     notify_distrib(STDdstream &ds,CGELptr&g) {
-                               TAGformat d(&ds,class_name(),1); put_var(d,g);}
+                               TAGformat d(&ds,str_ptr(class_name().c_str()),1); put_var(d,g);}
 };
 
 template <class T>
@@ -165,7 +165,7 @@ class hashenum : public hashdist {
    //                                         return b; }
    virtual T    str_to_enum(Cstr_ptr &s) const { return (T)atoi(**s); }
    virtual void put_var(TAGformat &d, CGELptr &gel) const {
-                                        if (class_name() && find(gel)) {
+                                        if (!class_name().empty() && find(gel)) {
                                            d.id() << gel->name() << " " << get(gel);
                                            d.end_id(); } 
                                        }

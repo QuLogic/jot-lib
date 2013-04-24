@@ -226,7 +226,7 @@ bool
 ProxyTextureUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if(sender->class_name() == PatchSelectionUI::static_name()){
+   if (sender->class_name() == PatchSelectionUI::static_name()) {
       switch(event)
       {
       case PatchSelectionUI::SELECT_FILL_PATCHES:

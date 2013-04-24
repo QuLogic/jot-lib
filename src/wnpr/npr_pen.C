@@ -106,7 +106,7 @@ NPRPen::activate(State *s)
 
    //Change to patch's desired textures
    if (_view)
-     _view->set_rendering(GTexture::static_name());       
+     _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
 }
 
 /////////////////////////////////////
@@ -153,7 +153,7 @@ NPRPen::tap_cb(CGESTUREptr& gest, DrawState*&)
 
    // Set the selected face's patch to using NPRTexture
    // It might already be doing this, but who cares!
-   p->set_texture(NPRTexture::static_name());
+   p->set_texture(str_ptr(NPRTexture::static_name().c_str()));
 
    GTexture* cur_texture = p->cur_tex();
    if(!cur_texture->is_of_type(NPRTexture::static_name()))

@@ -3595,10 +3595,10 @@ LuboPathList::get_path(TAGformat &d)
    cerr << "LuboPathList::get_path()\n";
 
    //Grab the class name... should be BaseStrokeOffset
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != LuboPath::static_name())) {
+   if (str != LuboPath::static_name()) {
       // XXX - should throw away stuff from unknown obj
       cerr << "LuboPathList::get_path() - Not LuboPath: '" << str << "'" << endl;
       return;
@@ -4037,10 +4037,10 @@ LuboPath::get_vote(TAGformat &d)
    //   cerr << "LuboPath::get_vote()\n";
 
    //Grab the class name... should be LuboVote
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != LuboVote::static_name())) {
+   if (str != LuboVote::static_name()) {
       // XXX - should throw away stuff from unknown obj
       cerr << "LuboPath::get_vote() - Not LuboVote: '" << str << "'" << endl;
       return;
@@ -4078,10 +4078,10 @@ LuboPath::get_group(TAGformat &d)
    cerr << "LuboPath::get_group()\n";
 
    //Grab the class name... should be VoteGroup
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != VoteGroup::static_name())) {
+   if (str != VoteGroup::static_name()) {
       // XXX - should throw away stuff from unknown obj
       cerr << "LuboPath::get_group() - Not VoteGroup: '" << str << "'" << endl;
       return;
@@ -4791,10 +4791,10 @@ VoteGroup::get_vote(TAGformat &d)
 
 
    //Grab the class name... should be LuboVote
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != LuboVote::static_name())) {
+   if (str != LuboVote::static_name()) {
       // XXX - should throw away stuff from unknown obj
       cerr << "VoteGroup::get_vote() - Not LuboVote: '" << str << "'" << endl;
       return;

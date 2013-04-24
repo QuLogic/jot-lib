@@ -112,7 +112,7 @@ HaloBlurShader::draw(CVIEWptr& v)
 {
    if (!_input_tex) return 0;
    
-   GL_VIEW::print_gl_errors(class_name() + "::draw: start");
+   GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: start");
 
    // Ensure program is loaded:
    if (!init())
@@ -129,12 +129,12 @@ HaloBlurShader::draw(CVIEWptr& v)
    init_textures();
 
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: init textures");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: init textures");
 
    // call glPushAttrib() and set desired state 
    set_gl_state(GL_TRANSFORM_BIT);
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: push attrib");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: push attrib");
 
    //SPECIAL SETUP FOR FILTER TEXTURE
 
@@ -163,12 +163,12 @@ HaloBlurShader::draw(CVIEWptr& v)
    // activate textures, if any:
    activate_textures(); // GL_ENABLE_BIT
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: activate textures");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: activate textures");
 
    // activate program:
    activate_program();
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: activate program");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: activate program");
 
    // query variable locations and store the results:
    get_variable_locs();
@@ -177,7 +177,7 @@ HaloBlurShader::draw(CVIEWptr& v)
    // send values to uniform variables:
    set_uniform_variables();
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: set uniform variables");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: set uniform variables");
 
           //SEPARABLE FILTER 2-PASS 
    
@@ -227,7 +227,7 @@ HaloBlurShader::draw(CVIEWptr& v)
  
 
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: draw triangles");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: draw triangles");
 
    //RESTORE PROPER PROJECTION
 
@@ -244,11 +244,11 @@ HaloBlurShader::draw(CVIEWptr& v)
    restore_gl_state();
 
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: pop attrib");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: pop attrib");
 
    deactivate_program();
 
-   GL_VIEW::print_gl_errors(class_name() + "::draw: end");
+   GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: end");
 
    return 0;
 }

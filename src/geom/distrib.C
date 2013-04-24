@@ -589,7 +589,7 @@ DISTRIB::interpret(
             if (di) 
             {
                err_adv((print_errs>0), 
-                  "DISTRIB::interpret: Decoded: '%s'", **di->class_name());
+                  "DISTRIB::interpret: Decoded: '%s'", di->class_name().c_str());
                if (di->class_name() == JOTdone().class_name())  break;
             }
             //XXX - Try something new -- bail on failure and return failure code...
@@ -1079,7 +1079,7 @@ DISTRIB::notify_exist(
 
    if (f)  {
       if (NETWORK.get(g)) {
-         DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
+         DATA_ITEM::add_decoder(string(**g->name()), (DATA_ITEM *)&*g, 0);
          if (!(GEOM::isa(g) && NO_SAVE.get(g)))
             *this << NETcontext<< JOTsend_geom(g) << JOTcreate(g) << JOTdone();
       }

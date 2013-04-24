@@ -75,7 +75,7 @@ class BODY : public REFcounter,
                                       CMVEC2        &/*shear*/)
         {return 0;}
      static  BODY   *_factory;
-     static  str_ptr _base_name;
+     static  string  _base_name;
      static  TAGlist _body_tags;
    public:
 	     BODY() : _tris(0) {}
@@ -155,7 +155,7 @@ class BODY : public REFcounter,
                 
 
 
-     static str_ptr base_name() {return _base_name;}
+     static string base_name() {return _base_name;}
 
      virtual DATA_ITEM  *dup()                 const = 0;
 

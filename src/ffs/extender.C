@@ -53,7 +53,7 @@ static bool debug = Config::get_var_bool("DEBUG_EXTENDER",false);
 inline bool 
 is_stylized() 
 {
-   return VIEW::peek()->rendering() == FFSTexture::static_name(); 
+   return VIEW::peek()->rendering() == str_ptr(FFSTexture::static_name().c_str());
 }
 
 inline BMESHptr

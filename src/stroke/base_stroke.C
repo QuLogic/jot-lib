@@ -156,14 +156,14 @@ BaseStrokeOffsetLIST::get_offset(TAGformat &d)
    //err_mesg(ERR_LEV_SPAM, "BaseStrokeOffsetLIST::get_offset()");
 
    //Grab the class name... should be BaseStrokeOffset
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != BaseStrokeOffset::static_name())) {
+   if (str != BaseStrokeOffset::static_name()) {
       // XXX - should throw away stuff from unknown obj
       err_mesg(ERR_LEV_ERROR, 
          "BaseStrokeOffsetLIST::get_offset() - Error!! 'Not BaseStrokeOffset': '%s'...",
-           **str);
+           str.c_str());
       return;
    }
 
@@ -221,15 +221,14 @@ BaseStrokeOffsetLIST::get_all_offsets(TAGformat &d)
 STDdstream  &operator>>(STDdstream &ds, BaseStrokeOffset &o)
 {
    //Grab the class name... should be BaseStrokeOffset
-   str_ptr str;
+   string str;
    ds >> str;      
 
-   if ((str != BaseStrokeOffset::static_name())) 
-   {
+   if (str != BaseStrokeOffset::static_name()) {
       // XXX - should throw away stuff from unknown obj
       err_mesg(ERR_LEV_ERROR, 
          "BaseStrokeOffset::operator>>() - Error!! Not 'BaseStrokeOffset': '%s'...",
-           **str);
+         str.c_str());
    }
    else
    {
@@ -774,13 +773,12 @@ BaseStroke::get_offsets(TAGformat &d)
    //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_offsets()");
 
    //Grab the class name... should be BaseStrokeOffset
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
-   if ((str != BaseStrokeOffsetLIST::static_name())) 
-   {
+   if (str != BaseStrokeOffsetLIST::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "BaseStroke::get_offsets() - Not BaseStrokeOffsetLIST: '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "BaseStroke::get_offsets() - Not BaseStrokeOffsetLIST: '%s'!!", str.c_str());
       return;
    }
 

@@ -26,18 +26,18 @@ using mlib::Wvec;
 HASH *DATA_ITEM::_hash = 0;
 DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, Cstr_ptr&, DATA_ITEM*) = 0;
 
-const str_ptr NAME_INT    ("int");
-const str_ptr NAME_DOUBLE ("double");
-const str_ptr NAME_VEC3D  ("vec3d");
-const str_ptr NAME_COLOR  ("color");
-const str_ptr NAME_POINT3D("point3d");
-const str_ptr NAME_STR_PTR("str_ptr");
+const string NAME_INT    ("int");
+const string NAME_DOUBLE ("double");
+const string NAME_VEC3D  ("vec3d");
+const string NAME_COLOR  ("color");
+const string NAME_POINT3D("point3d");
+const string NAME_STRING ("string");
 
 static int im=DATA_ITEM::add_decoder(NAME(0),     new TDI<int>(0), 1);
 static int dm=DATA_ITEM::add_decoder(NAME(0.0),   new TDI<double>(0), 1);
 static int vm=DATA_ITEM::add_decoder(NAME(Wvec()),new TDI<Wvec>(Wvec(0,1,0)), 1);
 static int pm=DATA_ITEM::add_decoder(NAME(Wpt()), new TDI<Wpt>(Wpt()), 1);
-static int sm=DATA_ITEM::add_decoder(NAME(str_ptr()),new TDI<str_ptr>(str_ptr()), 1);
+static int sm=DATA_ITEM::add_decoder(NAME(string()),new TDI<string>(string()), 1);
 
 // for some odd reason, we can't inline this on the Suns because
 // it generates link errors when we create subclasses of DATA_ITEM...
@@ -56,14 +56,14 @@ DATA_ITEM::~DATA_ITEM()
 
 int
 DATA_ITEM::add_decoder(
-   Cstr_ptr   &name, 
-   DATA_ITEM  *di,
-   int         copy
+   const string &name,
+   DATA_ITEM    *di,
+   int           copy
    )
 {
    if (!_hash) 
       _hash = new HASH(128);
-   _hash->add(**name, (void *) di);
+   _hash->add(name.c_str(), (void *) di);
    if (copy != -1)
       di->_copy = copy;
    return 1;
@@ -85,7 +85,7 @@ DATA_ITEM::Decode(
 
    DATA_ITEM* di = lookup(str);
    if (di) {
-      if (di->class_name() != str) {
+      if (di->class_name() != string(**str)) {
          // DATA_ITEM only decodes classes
          // app may be able to decode objects
          // if app can't, then it's an error
@@ -161,7 +161,7 @@ class COMMENT : public TAG {
 STDdstream &
 DATA_ITEM::decode(STDdstream &ds)
 {
-   TAGformat d(&ds, class_name(), 1);
+   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
    static COMMENT comment;
    
    d.read_id();                                 // read the start delimiter
@@ -210,7 +210,7 @@ DATA_ITEM::decode(STDdstream &ds)
 STDdstream  &
 DATA_ITEM::format(STDdstream &ds) const 
 {
-   TAGformat d(&ds, class_name(), 1);
+   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
 
    if (Config::get_var_bool("DEBUG_DATA_ITEM",false))
       cerr << "Formatting " << class_name() << endl;

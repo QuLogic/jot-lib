@@ -132,7 +132,7 @@ Skybox_Texture::draw(CVIEWptr& v)
 
          // the display list is built; now execute it
          BasicTexture::draw(v);
-         GL_VIEW::print_gl_errors(class_name() + "::Draw_gradient");
+         GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::Draw_gradient");
       }
    }
 

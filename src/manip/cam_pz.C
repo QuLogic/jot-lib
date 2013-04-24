@@ -62,7 +62,7 @@ class CAMwidget_anchor : public GEOM {
 
       // Regardless of current rendering mode,
       // always use Gouraud shading:
-      mesh->set_render_style(SmoothShadeTexture::static_name());
+      mesh->set_render_style(str_ptr(SmoothShadeTexture::static_name().c_str()));
 
       // Color the Patch blue:
       mesh->patch(0)->set_color(COLOR(0.1, 0.1, 0.9));

@@ -46,7 +46,7 @@ using namespace tess;
 inline bool 
 is_stylized() 
 {
-   return VIEW::peek()->rendering() == FFSTexture::static_name() ||
+   return VIEW::peek()->rendering() == str_ptr(FFSTexture::static_name().c_str()) ||
       VIEW::peek()->rendering() == "FFSTexture2"; 
 }
 
@@ -1562,7 +1562,7 @@ Bcurve::rem_edge_meme(EdgeMeme* e)
       delete e;
       err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
               "%s::rem_edge_meme: %d left at level %d",
-              **class_name(),
+              class_name().c_str(),
               _ememes.num(),
               bbase_level()
          );

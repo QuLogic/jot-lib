@@ -41,7 +41,7 @@ using namespace mlib;
 using namespace std;
 
 //******** STATICS ********
-str_ptr BODY::_base_name = BMESH::static_name();
+string BODY::_base_name = BMESH::static_name();
 TAGlist BODY::_body_tags;
 
 // This makes sure that BMESH is used to create BODY's -
@@ -868,7 +868,7 @@ BMESH::size() const
 void
 BMESH::print() const
 {
-   err_msg("%s: ", **class_name());
+   err_msg("%s: ", class_name().c_str());
    err_msg("\tverts: %6d", _verts.num());
    err_msg("\tedges: %6d", _edges.num());
    err_msg("\tfaces: %6d", _faces.num());
@@ -1675,17 +1675,17 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
       STDdstream stream(&in);
 
       // Check the class name:
-      str_ptr class_name;
+      string class_name;
       stream >> class_name;
 
       // If we don't yet have a mesh, or the mesh we have is the wrong
       // type, then get one of the right type:
       if (!(ret && ret->is_of_type(class_name))) {
-         DATA_ITEM* di = DATA_ITEM::lookup(class_name);
+         DATA_ITEM* di = DATA_ITEM::lookup(str_ptr(class_name.c_str()));
          if (!di) {
             err_msg(
                "BMESH::read_jot_stream() - Error: Supposed mesh class '#%s' not found.",
-               **class_name);
+               class_name.c_str());
             return 0;
          }
 
@@ -1694,7 +1694,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
          if (!ret) {
             err_msg(
                "BMESH::read_jot_stream() - Error: Class '#%s' is not a BMESH subclass.",
-               **class_name);
+               class_name.c_str());
             return 0;
          }
       }
@@ -4591,7 +4591,7 @@ BMESH::kill_component(Bvert *start_vert)
 // Does a Patch with a current GTexture named name already exist in this
 // mesh?
 int
-BMESH::tex_already_exists(Cstr_ptr &name) const
+BMESH::tex_already_exists(const string &name) const
 {
    int exists = 0;
    if (patches().num()) {

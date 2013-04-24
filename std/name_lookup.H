@@ -109,7 +109,7 @@ class NameLookup {
    // the compiler won't let it be called here in the base class,
    // so we're falling back on using a virtual method to return
    // the name.
-   virtual str_ptr class_id() = 0;
+   virtual string class_id() = 0;
 
    //******** UTILITIES ********
 

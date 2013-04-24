@@ -195,7 +195,7 @@ LinePen::activate(State *s)
    _gest_int->set_drawer(_gesture_drawer);   
 
    //Change to patch's desired textures
-   if (_view) _view->set_rendering(GTexture::static_name());       
+   if (_view) _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
 }
 
 /////////////////////////////////////
@@ -416,7 +416,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
       if (!t || !(t->class_name() == NPRTexture::static_name()))
       {
          //Set the selected face's patch to using NPRTexture
-         p->set_texture(NPRTexture::static_name());
+         p->set_texture(str_ptr(NPRTexture::static_name().c_str()));
 
          t = p->cur_tex();  assert(t && (t->class_name() == NPRTexture::static_name()));
       }         

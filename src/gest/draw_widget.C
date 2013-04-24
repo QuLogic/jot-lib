@@ -33,7 +33,7 @@ DrawWidgetptr DrawWidget::_active;
 DrawWidget*   DrawWidget::null = 0;
 
 DrawWidget::DrawWidget(double dur) :
-   GEOM(static_name()),
+   GEOM(str_ptr(static_name().c_str())),
    _fsa(&_draw_start),
    _timer(dur)
 {

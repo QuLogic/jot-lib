@@ -409,7 +409,7 @@ Bsurface::rem_edge_meme(EdgeMeme* e)
       delete e;
       err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
          "%s::rem_edge_meme: %d left at level %d",
-         **class_name(),
+         class_name().c_str(),
          _ememes.num(),
          bbase_level()
          );
@@ -428,7 +428,7 @@ Bsurface::rem_face_meme(FaceMeme* f)
       delete f;
       err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
          "%s::rem_face_meme: %d left at level %d",
-         **class_name(),
+         class_name().c_str(),
          _fmemes.num(),
          bbase_level()
          );

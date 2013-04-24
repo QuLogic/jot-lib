@@ -347,7 +347,7 @@ JOTapp::init_scene()
    for (it = _windows.begin(); it != _windows.end(); ++it) {
       WINDOW *win = *it;
       win->_view->set_rendering(str_ptr(
-         Config::get_var_str("JOT_RENDER_STYLE", **RSMOOTH_SHADE).c_str()));
+         Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE).c_str()));
    }
 }
 
@@ -786,7 +786,7 @@ next_texture(const Event&, State *&)
 
    if (patch) {
       patch->next_texture();
-      WORLD::message(patch->cur_tex()->class_name());
+      WORLD::message(str_ptr(patch->cur_tex()->class_name().c_str()));
    }
 
    return 0;
@@ -2092,7 +2092,7 @@ toggle_sil_frame(const Event&, State *&)
    if (!mesh)
       return 0;
 
-   mesh->toggle_render_style(SilFrameTexture::static_name());
+   mesh->toggle_render_style(str_ptr(SilFrameTexture::static_name().c_str()));
 
    return 0;
 }
@@ -2387,7 +2387,7 @@ split_mesh(const Event &e, State *&)
 
       for (int i=0; i<new_meshes.num(); i++)
          WORLD::create(new TEXBODY(new_meshes[i],
-                                   WORLD::unique_name(BMESH::static_name())));
+                                   WORLD::unique_name(str_ptr(BMESH::static_name().c_str()))));
 
    } else WORLD::message("Missed mesh");
    return 0;

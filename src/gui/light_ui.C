@@ -300,7 +300,7 @@ bool
 LightUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if(sender->class_name() == PresetsUI::static_name()){
+   if (sender->class_name() == PresetsUI::static_name()) {
       switch(event)
       {
       case PresetsUI::PRESET_SELECTED:
@@ -332,13 +332,12 @@ LightUI::load_preset()
       err_msg("ColorUI::load_preset() - Error! Could not open file: '%s'", f);
       return false;
    }
-   str_ptr str;
+   string str;
 
    STDdstream s(&fin);
    s >> str;
-   if (str != VIEW::static_name()) 
-   {
-      err_msg("VIEW::get_view_data_file() - Not 'VIEW': '%s'!!", **str);
+   if (str != VIEW::static_name()) {
+      err_msg("VIEW::get_view_data_file() - Not 'VIEW': '%s'!!", str.c_str());
    } else {
       //_in_data_file = true;
       _view->decode(s);

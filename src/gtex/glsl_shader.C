@@ -357,10 +357,10 @@ GLSLShader::init()
       fp = GL_FRAGMENT_SHADER;
    }
 
-   if (load_shaders(class_name(), vp_filenames(), shaders, vp) &&
-       load_shaders(class_name(), fp_filenames(), shaders, fp) &&
+   if (load_shaders(str_ptr(class_name().c_str()), vp_filenames(), shaders, vp) &&
+       load_shaders(str_ptr(class_name().c_str()), fp_filenames(), shaders, fp) &&
        attach_shaders(shaders, program()) && bind_attributes(program()) &&
-       link_program(class_name(), program())) {
+       link_program(str_ptr(class_name().c_str()), program())) {
 
  
       // report success if debugging:
@@ -498,7 +498,7 @@ GLSLShader::restore_gl_state() const
 int
 GLSLShader::draw(CVIEWptr& v)
 {
-   GL_VIEW::print_gl_errors(class_name() + "::draw: start");
+   GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: start");
 
    // Ensure program is loaded:
    if (!init())
@@ -514,22 +514,22 @@ GLSLShader::draw(CVIEWptr& v)
    //    before requesting resources from OpenGL.
    init_textures();
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: init textures");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: init textures");
 
    // call glPushAttrib() and set desired state 
    set_gl_state();
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: push attrib");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: push attrib");
 
    // activate textures, if any:
    activate_textures(); // GL_ENABLE_BIT
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: activate textures");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: activate textures");
 
    // activate program:
    activate_program();
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: activate program");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: activate program");
 
    // query variable locations and store the results:
    get_variable_locs();
@@ -537,7 +537,7 @@ GLSLShader::draw(CVIEWptr& v)
    // send values to uniform variables:
    set_uniform_variables();
    if (debug) {
-      GL_VIEW::print_gl_errors(class_name() + "::draw: set uniform variables");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: set uniform variables");
    }
 
    // now draw the triangles using a display list.
@@ -560,7 +560,7 @@ GLSLShader::draw(CVIEWptr& v)
    }
 
    if (debug)
-      GL_VIEW::print_gl_errors(class_name() + "::draw: draw triangles");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: draw triangles");
 
    // XXX - under construction:
    // optionally draw silhouettes
@@ -571,13 +571,13 @@ GLSLShader::draw(CVIEWptr& v)
    restore_gl_state();
 
    if (debug) {
-      GL_VIEW::print_gl_errors(class_name() + "::draw: pop attrib");
+      GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: pop attrib");
    }
 
    deactivate_program();
 
 
-   GL_VIEW::print_gl_errors(class_name() + "::draw: end");
+   GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: end");
 
    return _patch->num_faces();
 }
@@ -589,7 +589,7 @@ GLSLShader::draw_sils()
       GL_COL(_sil_color, _sil_alpha); // GL_CURRENT_BIT
       _patch->cur_sils().draw(_cb);
       if (debug) {
-         GL_VIEW::print_gl_errors(class_name() + "::draw: draw sils");
+         GL_VIEW::print_gl_errors(str_ptr(class_name().c_str()) + "::draw: draw sils");
       }
  }
 } 

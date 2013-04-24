@@ -269,7 +269,7 @@ class UVdata : public SimplexData {
 
    // The unique ID used to lookup UVdata:
    static uintptr_t key() {
-      uintptr_t ret = (uintptr_t)**static_name();
+      uintptr_t ret = (uintptr_t)static_name().c_str();
       return ret;
    }
 

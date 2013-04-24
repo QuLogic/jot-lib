@@ -108,9 +108,9 @@ class str_ptr : public REFptr<STR> {
 };
 
 #ifdef JOT_AVOID_STATIC_LOCAL_INLINE_VAR
-#define RET_STAT_STR(s)  return str_ptr(s)
+#define RET_STAT_STR(s)  return string(s)
 #else
-#define RET_STAT_STR(s)  static str_ptr st(s); return st
+#define RET_STAT_STR(s)  static string st(s); return st
 #endif
 
 // useful string constants:

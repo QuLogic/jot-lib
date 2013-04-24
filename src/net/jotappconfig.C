@@ -172,7 +172,7 @@ BaseJOTappConfig::load(const string &filename)
 
    STDdstream stream(&fin);
 
-   str_ptr class_name;
+   string class_name;
    stream >> class_name;
 
    if (class_name != ((BaseJOTappConfig*)_instance)->class_name()) {

@@ -1477,12 +1477,11 @@ StrokeUI::load_preset(const char *f)
    }
 
    STDdstream d(&fin);
-   str_ptr str;
+   string str;
 
-   d >> str;       
+   d >> str;
 
-   if ((str == BaseStroke::static_name())) 
-   {
+   if (str == BaseStroke::static_name()) {
       //In case we're testing offsets, let
       //trash the old ones
       _params.set_offsets(NULL);
@@ -1490,7 +1489,7 @@ StrokeUI::load_preset(const char *f)
    }
    else
    {
-      err_msg("StrokeUI::load_preset() - Error! Not BaseStroke: '%s'", **str);
+      err_msg("StrokeUI::load_preset() - Error! Not BaseStroke: '%s'", str.c_str());
    }
    fin.close();
 

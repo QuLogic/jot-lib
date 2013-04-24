@@ -219,7 +219,7 @@ GL_VIEW::clear_draw_buffer()
       glDrawBuffer(GL_FRONT);
 
    // Set background color for clear
-   if (_view->rendering() == RCOLOR_ID) {
+   if (_view->rendering() == str_ptr(RCOLOR_ID.c_str())) {
       glClearColor(0, 0, 0, 0);
    } else {
       COLOR bkg(_view->color());
@@ -386,7 +386,7 @@ GL_VIEW::draw_objects(
    } else {
       glDisable(GL_CLIP_PLANE0);
 
-      if (_view->rendering() == RWIRE_FRAME) glDisable(GL_CULL_FACE);
+      if (_view->rendering() == str_ptr(RWIRE_FRAME.c_str())) glDisable(GL_CULL_FACE);
       else                                   glEnable (GL_CULL_FACE);
    }
 

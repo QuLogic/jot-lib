@@ -147,7 +147,7 @@ NPRview::set_view(CVIEWptr &v)
       v->add_rend_type(ToneShader::static_name());
    }
    if (Config::get_var_bool("ENABLE_GLSL_HALO_SHADER",false)) {
-	   v->add_rend_type(GLSLHaloShader::static_name());
+      v->add_rend_type(GLSLHaloShader::static_name());
    }
    if (Config::get_var_bool("ENABLE_IMG_LINE_TEXTURE",false)) {
       v->add_rend_type(ImgLineTexture::static_name());

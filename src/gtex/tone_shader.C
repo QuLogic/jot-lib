@@ -512,10 +512,10 @@ ToneShader::get_layer (TAGformat &d)
    int i;
    *d >> i;
    
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != tone_layer_t::static_name())) 
+   if (str != tone_layer_t::static_name())
       return;
    
    _layer[i].decode(*d);

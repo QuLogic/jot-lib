@@ -32,18 +32,18 @@ TAGlist *CLASS_NAME::_##CLASS_NAME##tags = 0; \
 static int CLASS_NAME##st=DECODER_ADD(CLASS_NAME);
 
 class COLOR;
-extern Cstr_ptr  NAME_INT;
-extern Cstr_ptr  NAME_DOUBLE;
-extern Cstr_ptr  NAME_COLOR;
-extern Cstr_ptr  NAME_VEC3D;
-extern Cstr_ptr  NAME_POINT3D;
-extern Cstr_ptr  NAME_STR_PTR;
-inline STAT_STR_RET NAME(const str_ptr    &)  { return NAME_STR_PTR;}
+extern const string NAME_INT;
+extern const string NAME_DOUBLE;
+extern const string NAME_COLOR;
+extern const string NAME_VEC3D;
+extern const string NAME_POINT3D;
+extern const string NAME_STRING;
+inline STAT_STR_RET NAME(const string     &)  { return NAME_STRING; }
 inline STAT_STR_RET NAME(const int        &)  { return NAME_INT;    }
 inline STAT_STR_RET NAME(const double     &)  { return NAME_DOUBLE; }
 inline STAT_STR_RET NAME(const mlib::Wvec &)  { return NAME_VEC3D;  }
 inline STAT_STR_RET NAME(const mlib::Wpt  &)  { return NAME_POINT3D;}
-inline STAT_STR_RET NAME(const COLOR      &)  { return NAME_COLOR;}
+inline STAT_STR_RET NAME(const COLOR      &)  { return NAME_COLOR;  }
 template <class T>
 inline STAT_STR_RET NAME(const T &x)       { return x.class_name(); }
 
@@ -227,10 +227,10 @@ class DATA_ITEM {
  virtual STAT_STR_RET class_name ()          const = 0;
  virtual DATA_ITEM   *dup        ()          const = 0; 
  static  STAT_STR_RET static_name();
- virtual int          is_of_type(Cstr_ptr &t)const { return IS(t); }
+ virtual int          is_of_type(const string &t)const { return IS(t); }
 
      /* -------- Class functions -------- */
- static  int         add_decoder(Cstr_ptr   &d, DATA_ITEM *di, int copy= -1);
+ static  int         add_decoder(const string &d, DATA_ITEM *di, int copy= -1);
  static  void        set_default_decoder(DATA_ITEM *(*d)(STDdstream&, Cstr_ptr&,
                                                          DATA_ITEM *))
                                                  { _decode_unknown = d; }
@@ -281,9 +281,9 @@ class TDI : public DATA_ITEM {
  * ----------------------------------------------------------- */
 class FUNC_ITEM : public DATA_ITEM {
  public:
-   FUNC_ITEM(Cstr_ptr &n): _name(n) { 
+   FUNC_ITEM(Cstr_ptr &n): _name(**n) {
       if (!lookup(n)) 
-         add_decoder(n,this);
+         add_decoder(_name,this);
       _tags += new TAG_meth<FUNC_ITEM>(
          str_ptr(), &FUNC_ITEM::put, &FUNC_ITEM::get, 1
          );
@@ -296,7 +296,7 @@ class FUNC_ITEM : public DATA_ITEM {
    virtual STAT_STR_RET class_name()      const { return _name; }
 
  protected:
-   str_ptr _name; // class name
+   string  _name; // class name
    TAGlist _tags;
 };
 

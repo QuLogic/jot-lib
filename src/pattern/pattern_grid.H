@@ -245,7 +245,7 @@ protected:
     double _mask_val;
 
     static uintptr_t key() {
-      uintptr_t ret = (uintptr_t)**static_name();
+      uintptr_t ret = (uintptr_t)static_name().c_str();
       return ret;
     }
 

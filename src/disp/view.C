@@ -83,15 +83,15 @@ bool multithread = Config::get_var_bool("JOT_MULTITHREAD",false,true);
 //
 // Standard rendering modes
 //
-Cstr_ptr RSMOOTH_SHADE   ("Smooth Shading");
-Cstr_ptr RFLAT_SHADE     ("Flat Shading");
-Cstr_ptr RHIDDEN_LINE    ("Hidden Line");
-Cstr_ptr RWIRE_FRAME     ("Wireframe");
-Cstr_ptr RNORMALS        ("Normals");
-Cstr_ptr RCOLOR_ID       ("Color ID");
-Cstr_ptr RSHOW_TRI_STRIPS("Show tri-strips");
-Cstr_ptr RKEY_LINE       ("Key Line");
-Cstr_ptr RSIL_FRAME      ("Sil Frame");
+const string RSMOOTH_SHADE   ("Smooth Shading");
+const string RFLAT_SHADE     ("Flat Shading");
+const string RHIDDEN_LINE    ("Hidden Line");
+const string RWIRE_FRAME     ("Wireframe");
+const string RNORMALS        ("Normals");
+const string RCOLOR_ID       ("Color ID");
+const string RSHOW_TRI_STRIPS("Show tri-strips");
+const string RKEY_LINE       ("Key Line");
+const string RSIL_FRAME      ("Sil Frame");
 
 //
 // List of rendering types
@@ -312,17 +312,17 @@ VIEW::get_view_data_file (TAGformat &d)
    // Sanity check...
    assert(!_in_data_file);
 
-   str_ptr str;
+   string str;
    *d >> str;      
 
    if (str == "NULL_STR") {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded NULL string.");
       _data_file = NULL_STR;
    } else {
-      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded string: '%s'.", **str);
-      _data_file = str;
+      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded string: '%s'.", str.c_str());
+      _data_file = str_ptr(str.c_str());
 
-      string fname = IOManager::load_prefix() + string(**str) + ".view";
+      string fname = IOManager::load_prefix() + str + ".view";
 
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Opening: '%s'...", fname.c_str());
 
@@ -343,12 +343,9 @@ VIEW::get_view_data_file (TAGformat &d)
          STDdstream s(&fin);
          s >> str;
 
-         if (str != VIEW::static_name()) 
-         {
-            err_msg("VIEW::get_view_data_file() - Not 'VIEW': '%s'!!", **str);
-         }
-         else
-         {
+         if (str != VIEW::static_name()) {
+            err_msg("VIEW::get_view_data_file() - Not 'VIEW': '%s'!!", str.c_str());
+         } else {
             _in_data_file = true;
             decode(s);
             _in_data_file = false;
@@ -425,15 +422,13 @@ VIEW::get_view_animator(TAGformat &d)
    //Sanity check...
    assert(!_in_data_file);
 
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
-   if (str != Animator::static_name()) 
-   {
-      err_msg("VIEW::get_view_animator() - 'Not Animator': '%s'!!", **str);
-   }
-   else
-   {
+   if (str != Animator::static_name()) {
+      err_msg("VIEW::get_view_animator() - 'Not Animator': '%s'!!", str.c_str());
+
+   } else {
       assert(_animator);
 
       _animator->decode(*d);
@@ -1275,7 +1270,7 @@ VIEW::VIEW(
    init_jitter();
 
    _stereo      = VIEWimpl::NONE;
-   _render_type = str_ptr(Config::get_var_str("JOT_RENDER_STYLE", string(**RSMOOTH_SHADE)).c_str());
+   _render_type = str_ptr(Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE).c_str());
    _name        = s;
    _tris        = 0;
 
@@ -1637,7 +1632,7 @@ VIEW::intersect(
    ) const
 {
    for (int i = 0; i < _drawn.num(); i++)
-      if (_drawn[i]->class_name() == cn && 
+      if (_drawn[i]->class_name() == string(**cn) &&
           (PICKABLE.get(_drawn[i]) || (filter & H_UNPICKABLE)))
          _drawn[i]->intersect(r, Identity);
 
@@ -1666,7 +1661,7 @@ VIEW::nearest(
    ) const
 {
    for (int i = 0; i < _drawn.num(); i++)
-      if (_drawn[i]->class_name() == cn &&
+      if (_drawn[i]->class_name() == string(**cn) &&
           (PICKABLE.get(_drawn[i]) || (filter & H_UNPICKABLE)))
          _drawn[i]->nearest(r, Identity);
 

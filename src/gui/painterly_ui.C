@@ -228,7 +228,7 @@ PainterlyUI::update_non_lives()
    if(!layer)
       return;
 
-    if(_parent->class_name() == ProxyPenUI::static_name() )
+   if (_parent->class_name() == ProxyPenUI::static_name())
       ((ProxyPenUI*)_parent)->get_light_ui()->set_current_light(layer->_channel);
 
    _texture_selection_ui->set_channel_num(layer->_channel);
@@ -399,7 +399,7 @@ bool
 PainterlyUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if(sender->class_name() == PatchSelectionUI::static_name()){
+   if (sender->class_name() == PatchSelectionUI::static_name()) {
       switch(event)
       {
       case PatchSelectionUI::SELECT_FILL_PATCHES:
@@ -428,10 +428,10 @@ PainterlyUI::child_callback(BaseUI* sender, int event)
          break;
       } 
    }    
-   if(sender->class_name() == ColorUI::static_name()){
+   if (sender->class_name() == ColorUI::static_name()) {
       apply_changes_to_texture(OP_COLOR, _current_painterly, _texture_selection_ui->get_layer_num());
    }
-   if(sender->class_name() == PresetsUI::static_name()){
+   if (sender->class_name() == PresetsUI::static_name()) {
       switch(event)
       {
       case PresetsUI::PRESET_SELECTED:
@@ -447,7 +447,7 @@ PainterlyUI::child_callback(BaseUI* sender, int event)
          break;   
       } 
    }     
-   if(sender->class_name() == ToneShaderUI::static_name()){
+   if (sender->class_name() == ToneShaderUI::static_name()) {
        _last_op = OP_TONE_SHADER;
    }     
    
@@ -601,13 +601,12 @@ PainterlyUI::load_preset()
       err_msg("PainterlyUI::load_preset() - Error! Could not open file: '%s'", f);
       return false;
    }
-   str_ptr str;
+   string str;
 
    STDdstream s(&fin);
    s >> str;
-   if (str != Painterly::static_name()) 
-   {
-      err_msg("PainterlyUI::load_preset() - Not 'Painterly': '%s'!!", **str);
+   if (str != Painterly::static_name()) {
+      err_msg("PainterlyUI::load_preset() - Not 'Painterly': '%s'!!", str.c_str());
    } else {
       if(!_current_painterly){
          err_msg("PainterlyUI::load_preset() - Error! there is no painterly presets to populate");

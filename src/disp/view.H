@@ -43,18 +43,18 @@ class FRAME_TIME_OBSERVER_list: public ARRAY<FRAME_TIME_OBSERVER*> {
    void frame_time_changed() const;
 };
 
-extern Cstr_ptr RSMOOTH_SHADE;
-extern Cstr_ptr RFLAT_SHADE;
-extern Cstr_ptr RSPEC_SHADE;
-extern Cstr_ptr RHIDDEN_LINE;
-extern Cstr_ptr RWIRE_FRAME;
-extern Cstr_ptr RNORMALS;
-extern Cstr_ptr RNORMALS_ONLY;
-extern Cstr_ptr RCOLOR_ID;
-extern Cstr_ptr RSHOW_TRI_STRIPS;
-extern Cstr_ptr RKEY_LINE;
-extern Cstr_ptr RSIL_FRAME;
-extern Cstr_ptr SKYBOX_GRADIENT;
+extern const string RSMOOTH_SHADE;
+extern const string RFLAT_SHADE;
+extern const string RSPEC_SHADE;
+extern const string RHIDDEN_LINE;
+extern const string RWIRE_FRAME;
+extern const string RNORMALS;
+extern const string RNORMALS_ONLY;
+extern const string RCOLOR_ID;
+extern const string RSHOW_TRI_STRIPS;
+extern const string RKEY_LINE;
+extern const string RSIL_FRAME;
+extern const string SKYBOX_GRADIENT;
 
 MAKE_PTR_SUBC(VIEW, SCHEDULER);
 //
@@ -665,7 +665,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    static unsigned int  stamp()                    { return _stamp; }
 
-   static void          add_rend_type(Cstr_ptr &r) { _rend_types += r; }
+   static void          add_rend_type(const string &r) { _rend_types += str_ptr(r.c_str()); }
    static Cstr_list&    rend_list()                { return _rend_types; }
    static void          set_rend_list(Cstr_list& l){ _rend_types = l; }
 

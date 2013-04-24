@@ -99,7 +99,7 @@ HatchingCollection::get_hatching_group(TAGformat &d)
    int type_id;
    *d >> type_id;
 
-   str_ptr str;
+   string str;
    *d >> str;      
 
    HatchingGroup *hg = add_group(type_id);
@@ -110,12 +110,12 @@ HatchingCollection::get_hatching_group(TAGformat &d)
       return;
    }
 
-   if ((str != hg->class_name())) 
+   if (str != hg->class_name())
    {
       // XXX - should throw away stuff from unknown obj?
       err_mesg(ERR_LEV_ERROR, 
          "HatchingCollection::get_hatching_group() - Not valid class name: '%s' for given id #: '%d' which is a '%s'!", 
-         **str, type_id, **hg->class_name()); 
+         str.c_str(), type_id, hg->class_name().c_str());
       delete_group(hg);
       return;
    }

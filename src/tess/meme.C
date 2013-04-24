@@ -89,7 +89,7 @@ Meme::get_demoted()
    assert(_owner);
 
    static bool debug = Config::get_var_bool("DEBUG_MEME_DEMOTION",false);
-   err_adv(debug, "%s::get_demoted", **class_name());
+   err_adv(debug, "%s::get_demoted", class_name().c_str());
 
    if (_id == (uintptr_t)_owner) {
       // Already been demoted
@@ -560,7 +560,7 @@ VertMeme::notify_simplex_deleted()
    assert(bbase() != NULL);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
-           **class_name(), **class_name(), bbase()->bbase_level());
+           class_name().c_str(), class_name().c_str(), bbase()->bbase_level());
    bbase()->rem_vert_meme(this);
 }
 
@@ -887,7 +887,7 @@ EdgeMeme::notify_simplex_deleted()
    assert(bbase() != NULL);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
-           **class_name(), **class_name(), bbase()->bbase_level());
+           class_name().c_str(), class_name().c_str(), bbase()->bbase_level());
    bbase()->rem_edge_meme(this);
 }
 
@@ -1027,7 +1027,7 @@ EdgeMeme::gen_subdiv_memes() const
       static bool warned = false;
       if (!warned) {
          err_adv(debug, "EdgeMeme::gen_subdiv_memes: no child bbase of %s",
-                 **bbase()->class_name());
+                 bbase()->class_name().c_str());
          err_adv(debug, "  (suppressing further warnings)");
          warned = 1;
       }
@@ -1121,7 +1121,7 @@ FaceMeme::notify_simplex_deleted()
    assert(bbase() != NULL);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
-           **class_name(), **class_name(), bbase()->bbase_level());
+           class_name().c_str(), class_name().c_str(), bbase()->bbase_level());
    bbase()->rem_face_meme(this);
 }
 
@@ -1156,7 +1156,7 @@ FaceMeme::gen_subdiv_memes() const
 
 
 int
-VertMemeList::meme_count(Cstr_ptr& class_name)
+VertMemeList::meme_count(const string& class_name)
 {
    int ret = 0;
    for (int i=0; i<_num; i++)

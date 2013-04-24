@@ -125,13 +125,12 @@ HatchingGroupFixed::get_hatch(TAGformat &d)
 {
    err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::get_hatch() - ****** OLD FILE FORMAT - DUMPING ******"); 
 
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingHatchFixed::static_name())) 
-   {
+   if (str != HatchingHatchFixed::static_name()) {
       // XXX - should throw away stuff from unknown obj
-	   err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_hatch() - Not 'HatchingHatchFixed': '%s'!!", **str); 
+	   err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_hatch() - Not 'HatchingHatchFixed': '%s'!!", str.c_str());
 		return;
    }
 
@@ -176,13 +175,13 @@ HatchingGroupFixed::get_level(TAGformat &d)
    assert(_level.num() > 0);
 
    //Grab the class name... should be HatchingLevelBase
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingLevelBase::static_name())) {
+   if (str != HatchingLevelBase::static_name()) {
       // XXX - should throw away stuff from unknown obj
 
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_level() - 'Not HatchingLevelBase': '%s'!!", **str); 
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_level() - 'Not HatchingLevelBase': '%s'!!", str.c_str());
       return;
    }
 
@@ -298,14 +297,13 @@ HatchingGroupFixed::get_backbone(TAGformat &d)
    assert(_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT);
 
    //Grab the class name... should be HatchingBackboneFixed
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingBackboneFixed::static_name())) 
-   {
+   if (str != HatchingBackboneFixed::static_name()) {
       // XXX - should throw away stuff from unknown obj
 
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_backbone() - Not 'HatchingBackboneFixed': '%s'!!", **str); 
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed::get_backbone() - Not 'HatchingBackboneFixed': '%s'!!", str.c_str());
    }
 
    _backbone = new HatchingBackboneFixed(_patch);

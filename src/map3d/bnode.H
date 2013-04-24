@@ -233,8 +233,8 @@ class Bnode : public DATA_ITEM {
    // types also print their level in the subdivision hierarchy.
    virtual str_ptr identifier() const {
       if (_name == NULL_STR)
-         return class_name() + "_" + str_ptr(_num);
-      return class_name() + "_" + _name + "_" + str_ptr(_num);
+         return str_ptr(class_name().c_str()) + "_" + str_ptr(_num);
+      return str_ptr(class_name().c_str()) + "_" + _name + "_" + str_ptr(_num);
    }
 
    // Print the list of immediate inputs and outputs:

@@ -586,7 +586,7 @@ NPRTexture::read_gtexture(
       *wherecr = 0;
    }
 
-   Cstr_ptr &name_str = name;
+   const string &name_str = name;
 
    // we only support reading the _stroke_texture sub-texture
    assert(_stroke_tex->class_name() == name_str);
@@ -795,7 +795,7 @@ NPRTexture::tags() const
 STDdstream  &
 NPRTexture::old_format(STDdstream &ds) const
 {
-   TAGformat d(&ds, class_name(), 1);
+   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::old_format()");
 
@@ -821,18 +821,18 @@ NPRTexture::get_npr_data_file (TAGformat &d)
    //Sanity check...
    assert(!_in_data_file);
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    if (str == "NULL_STR") {
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Loaded NULL string.");
       _data_file = NULL_STR;
    } else {
-      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Loaded string: '%s'.", **str);
+      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Loaded string: '%s'.", str.c_str());
 
-      _data_file = str;
+      _data_file = str_ptr(str.c_str());
 
-      string fname = IOManager::load_prefix() + string(**str) + ".npr";
+      string fname = IOManager::load_prefix() + str + ".npr";
 
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Opening: '%s'...", fname.c_str());
 
@@ -855,7 +855,7 @@ NPRTexture::get_npr_data_file (TAGformat &d)
          s >> str;
 
          if (str != NPRTexture::static_name()) {
-            err_mesg(ERR_LEV_ERROR, "NPRTexture::get_npr_data_file() - Not NPRTexture: '%s'...", **str);
+            err_mesg(ERR_LEV_ERROR, "NPRTexture::get_npr_data_file() - Not NPRTexture: '%s'...", str.c_str());
          } else {
             _in_data_file = true;
             decode(s);
@@ -957,12 +957,12 @@ NPRTexture::get_collection(TAGformat &d)
    assert(_hatching_collection);
 
    //Grab the class name... should be HatchingCollection
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != HatchingCollection::static_name())) {
+   if (str != HatchingCollection::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_collection() - Not 'HatchingCollection': '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_collection() - Not 'HatchingCollection': '%s'!!", str.c_str());
 
       return;
    }
@@ -1041,12 +1041,12 @@ NPRTexture::get_feature_stroke_texture(TAGformat &d)
    assert(_stroke_tex);
 
    //Grab the class name... should be FeatureStrokeTexture
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != FeatureStrokeTexture::static_name())) {
+   if (str != FeatureStrokeTexture::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_feature_stroke_texture() - Not FeatureStrokeTexture: '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_feature_stroke_texture() - Not FeatureStrokeTexture: '%s'!!", str.c_str());
       return;
    }
 
@@ -1105,12 +1105,12 @@ NPRTexture::get_bkg_texture(TAGformat &d)
    // Grab this thing, and strip out the info
    // if its the 'current' basecoat
 
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != NPRBkgTexture::static_name())) {
+   if (str != NPRBkgTexture::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_bkg_texture() - Not NPRBkgTexture: '%s'!!",**str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_bkg_texture() - Not NPRBkgTexture: '%s'!!", str.c_str());
       return;
    }
 
@@ -1145,13 +1145,13 @@ NPRTexture::get_solid_texture(TAGformat &d)
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_solid_texture() - ***NOTE: Loading OLD format file!***");
 
 
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != NPRSolidTexture::static_name())) {
+   if (str != NPRSolidTexture::static_name()) {
       // XXX - should throw away stuff from unknown obj
 
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_solid_texture() - Not NPRSolidTexture: '%s'!!",**str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_solid_texture() - Not NPRSolidTexture: '%s'!!", str.c_str());
       return;
    }
 
@@ -1190,13 +1190,13 @@ NPRTexture::get_toon_texture(TAGformat &d)
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_toon_texture() - ***NOTE: Loading OLD format file!***");
 
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != XToonTexture::static_name())) {
+   if (str != XToonTexture::static_name()) {
       // XXX - should throw away stuff from unknown obj
 
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_toon_texture() - Not XToonTexture: '%s'!!",**str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_toon_texture() - Not XToonTexture: '%s'!!", str.c_str());
       return;
    }
 
@@ -1239,13 +1239,13 @@ NPRTexture::get_xtoon_texture(TAGformat &d)
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_xtoon_texture() - ***NOTE: Loading OLD format file!***");
 
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != GLSLXToonShader::static_name())) {
+   if (str != GLSLXToonShader::static_name()) {
       // XXX - should throw away stuff from unknown obj
 
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_xtoon_texture() - Not GLSLXToonTexture: '%s'!!",**str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_xtoon_texture() - Not GLSLXToonTexture: '%s'!!", str.c_str());
       return;
    }
 
@@ -1505,24 +1505,24 @@ NPRTexture::get_basecoat(TAGformat &d)
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::get_basecoat()");
 
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str == NPRSolidTexture::static_name())) {
+   if (str == NPRSolidTexture::static_name()) {
       NPRSolidTexture *t = new NPRSolidTexture(_patch);
       t->decode(*d);
       insert_basecoat(get_basecoat_num(),t);
-   } else if ((str == XToonTexture::static_name())) {
+   } else if (str == XToonTexture::static_name()) {
       XToonTexture *t = new XToonTexture(_patch);
       t->decode(*d);
       insert_basecoat(get_basecoat_num(),t);
-   } else if ((str == GLSLXToonShader::static_name())) {
+   } else if (str == GLSLXToonShader::static_name()) {
       GLSLXToonShader *t = new GLSLXToonShader(_patch);
       t->decode(*d);
       insert_basecoat(get_basecoat_num(),t);
    } else {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_basecoat() - Not NPR[Toon|Solid]Texture: '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "NPRTexture::get_basecoat() - Not NPR[Toon|Solid]Texture: '%s'!!", str.c_str());
       return;
    }
 

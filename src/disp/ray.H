@@ -86,7 +86,7 @@ class RAYhit {
 
    static  STAT_STR_RET static_name()      { RET_STAT_STR("RAYhit"); }
    virtual STAT_STR_RET class_name () const{ return static_name(); }
-   virtual int          is_of_type(Cstr_ptr &t)const { return IS(t); }
+   virtual int          is_of_type(const string &t)const { return IS(t); }
    static  int          isa       (CRAYhit &r)       { return ISA((&r)); }
 
    void      clear       (void);

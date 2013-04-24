@@ -97,7 +97,7 @@ class InflateVertData : public SimplexData {
 
    // The unique ID used to lookup InflateVertData:
    static uintptr_t key() {
-      static uintptr_t ret = (uintptr_t)**static_name();
+      static uintptr_t ret = (uintptr_t)static_name().c_str();
       return ret;
    }
 

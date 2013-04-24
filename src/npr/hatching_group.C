@@ -112,13 +112,12 @@ HatchingGroupParams::get_base_stroke(TAGformat &d)
    err_mesg(ERR_LEV_SPAM, "HatchingGroup::get_base_stroke()"); 
 
    //Grab the class name... should be HatchingStroke
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
-   if ((str != BaseStroke::static_name())) 
-   {
+   if (str != BaseStroke::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupParams::get_base_stroke() - Not 'BaseStroke': '%s'!", **str); 
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupParams::get_base_stroke() - Not 'BaseStroke': '%s'!", str.c_str());
       return;
    }
 
@@ -180,12 +179,12 @@ HatchingGroup::get_hatching_group_params(TAGformat &d)
    err_mesg(ERR_LEV_SPAM, "HatchingGroup::get_hatching_group_params()"); 
 
    //Grab the class name... should be HatchingCollection
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingGroupParams::static_name())) {
+   if (str != HatchingGroupParams::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupParams::get_hatching_group_params() - Not 'HatchingGroupParams': '%s'!", **str); 
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupParams::get_hatching_group_params() - Not 'HatchingGroupParams': '%s'!", str.c_str());
       return;
    }
 

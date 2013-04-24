@@ -358,10 +358,10 @@ Painterly::get_layer(TAGformat &d)
    int i;
    *d >> i;
    
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != layer_paint_t::static_name())) {
+   if (str != layer_paint_t::static_name()) {
       cerr << class_name()
            << "::get_layer: error: unexpected layer type: "
            << str

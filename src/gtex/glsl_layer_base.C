@@ -442,10 +442,10 @@ GLSLShader_Layer_Base::put_layer(TAGformat &d) const
 void 
 GLSLShader_Layer_Base::get_tone_shader(TAGformat &d)
 {
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != ToneShader::static_name())) {
+   if (str != ToneShader::static_name()) {
       cerr << class_name()
            << "::get_tone_shader: error: unexpected shader name: "
            << str
@@ -468,10 +468,10 @@ GLSLShader_Layer_Base::put_tone_shader(TAGformat &d) const
 void 
 GLSLShader_Layer_Base::get_base_shader(TAGformat &d)
 {
-   str_ptr str;
+   string str;
    *d >> str;
 
-   if ((str != SolidColorTexture::static_name())) {
+   if (str != SolidColorTexture::static_name()) {
       cerr << class_name()
            << "::get_base_shader: error: unexpected shader name: "
            << str

@@ -113,12 +113,12 @@ FeatureStrokeTexture::get_decal_pool(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "FeatureStrokeTexture::get_decal_pool()");
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    if (_decal_strokes.class_name() != str) {
       err_mesg(ERR_LEV_WARN, "FeatureStrokeTexture::get_decal_pool() - WARNING! Class name '%s' not a '%s'!!",
-               **str, **_decal_strokes.class_name() );
+               str.c_str(), _decal_strokes.class_name().c_str() );
    }
 
    // XXX - Hackery!
@@ -166,12 +166,12 @@ FeatureStrokeTexture::get_sil_and_crease_texture(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "FeatureStrokeTexture::get_sil_and_crease_texture()");
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    if (_sil_and_crease_tex->class_name() != str) {
       err_mesg(ERR_LEV_ERROR, "FeatureStrokeTexture::get_sil_and_crease_texture() - Class name '%s' not a '%s'!!!!",
-               **str, **_sil_and_crease_tex->class_name());
+               str.c_str(), _sil_and_crease_tex->class_name().c_str());
       return;
    }
 
@@ -471,7 +471,7 @@ FeatureStrokeTexture::read_gtexture(
    all_tex += _sil_and_crease_tex;
 
    GTexture *tex = 0;
-   Cstr_ptr &name_str = name;
+   const string &name_str = name;
    for (int i = 0; !tex && i< all_tex.num(); i++) {
       if (all_tex[i]->class_name() == name_str) {
          tex = all_tex[i];

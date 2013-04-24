@@ -368,14 +368,14 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    void      next_texture();
    
    //! \brief Returns an existing texture of the given type, or nil.
-   GTexture* find_tex(Cstr_ptr& tex_name) const;
+   GTexture* find_tex(const string& tex_name) const;
    
    //! \brief Same as find_tex() but makes a new GTexture if needed.
-   GTexture* get_tex(Cstr_ptr& tex_name);
+   GTexture* get_tex(const string& tex_name);
    
    //! \brief Returns an index for a texture.
    int get_tex_index(Cstr_ptr& tex_name) {
-      return _textures.get_index(get_tex(tex_name));
+      return _textures.get_index(get_tex(string(**tex_name)));
    }
    
    //! \brief Return "current" GTexture, based on the mesh's render style

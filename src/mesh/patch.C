@@ -568,12 +568,12 @@ Patch::next_texture()
  *
  */
 GTexture* 
-Patch::find_tex(Cstr_ptr& tex_name) const
+Patch::find_tex(const string& tex_name) const
 {
 
    //Hack so that both textures point to the same class
-   str_ptr temp_tex_name;
-   if(tex_name == "FFSTexture2")
+   string temp_tex_name;
+   if (tex_name == "FFSTexture2")
        temp_tex_name = "FFSTexture";
    else
        temp_tex_name = tex_name;
@@ -591,7 +591,7 @@ Patch::find_tex(Cstr_ptr& tex_name) const
  *
  */
 GTexture*
-Patch::get_tex(Cstr_ptr& tex_name)
+Patch::get_tex(const string& tex_name)
 {
 
    // first try to find one
@@ -600,7 +600,7 @@ Patch::get_tex(Cstr_ptr& tex_name)
       return tex;
 
    // if not found, instantiate it.
-   tex = (GTexture*)DATA_ITEM::lookup(tex_name);
+   tex = (GTexture*)DATA_ITEM::lookup(str_ptr(tex_name.c_str()));
    if (!tex)
       return 0;        // can't look it up
 
@@ -628,10 +628,10 @@ Patch::cur_tex(CVIEWptr& v)
 {
 
    // What name are we going for?
-   str_ptr tex_name =
-      (_mesh->render_style() == str_ptr::null_str()) ?
+   string tex_name = string(**
+      (_mesh->render_style() == str_ptr::null_str() ?
       v->rendering() :
-      _mesh->render_style();
+      _mesh->render_style()));
 
    if (tex_name == GTexture::static_name()) {
       GTexture* tex = cur_tex();
@@ -1114,7 +1114,7 @@ Patch::put_textures(TAGformat &d) const
    for (int t = 0; t < _textures.num(); t++) 
    {
       err_mesg(ERR_LEV_SPAM, "Patch::put_textures() - Writing texture #%d '%s'", 
-         t, **_textures[t]->class_name());
+         t, _textures[t]->class_name().c_str());
       d.id();
       _textures[t]->format(*d);
       d.end_id();

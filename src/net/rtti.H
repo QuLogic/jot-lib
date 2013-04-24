@@ -32,28 +32,28 @@
    (IS(N) || PAR1::is_of_type(N) || PAR2::is_of_type(N))
 
 #ifdef JOT_AVOID_STATIC_LOCAL_INLINE_VAR
-#define STAT_STR_RET str_ptr
+#define STAT_STR_RET string
 #else
-#define STAT_STR_RET Cstr_ptr &
+#define STAT_STR_RET const string &
 #endif
 
 //
 // For base class definitions:
 //
 #define DEFINE_RTTI_METHODS_BASE(CLASS_NAME, BASECLASS_PTR) \
-   static  STAT_STR_RET static_name()         { RET_STAT_STR(CLASS_NAME); } \
-   virtual STAT_STR_RET class_name () const   { return static_name(); } \
-   virtual int  is_of_type(Cstr_ptr &n)const  { return n == static_name(); } \
-   static  int  isa       (BASECLASS_PTR o)   { return ISA (o); }
+   static  STAT_STR_RET static_name()           { RET_STAT_STR(CLASS_NAME); } \
+   virtual STAT_STR_RET class_name () const     { return static_name(); } \
+   virtual int  is_of_type(const string&n)const { return n == static_name(); } \
+   static  int  isa       (BASECLASS_PTR o)     { return ISA (o); }
 
 //
 // For derived class definitions:
 //
 #define DEFINE_RTTI_METHODS2(CLASS_NAME, CLASS_PAR, BASECLASS_PTR) \
-   static  STAT_STR_RET static_name()         { RET_STAT_STR(CLASS_NAME);} \
-   virtual STAT_STR_RET class_name () const   { return static_name(); } \
-   virtual int  is_of_type(Cstr_ptr &n)const  { return ISOF(n,CLASS_PAR);} \
-   static  int  isa       (BASECLASS_PTR o)   { return ISA (o); }
+   static  STAT_STR_RET static_name()            { RET_STAT_STR(CLASS_NAME);} \
+   virtual STAT_STR_RET class_name () const      { return static_name(); } \
+   virtual int  is_of_type(const string &n)const { return ISOF(n,CLASS_PAR);} \
+   static  int  isa       (BASECLASS_PTR o)      { return ISA (o); }
 
 #define DEFINE_RTTI_METHODS(CLASS_NAME, CLASS_PAR, BASECLASS_PTR) \
         DEFINE_RTTI_METHODS2(CLASS_NAME, CLASS_PAR, BASECLASS_PTR &)

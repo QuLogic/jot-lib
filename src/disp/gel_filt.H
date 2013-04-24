@@ -74,7 +74,7 @@ class GELFILTclass_name : public GELFILT {
    void add(Cstr_ptr &cn)            { _cn.add(cn); }
 
    //******** VIRTUAL METHOD ********
-   virtual bool  accept(CGELptr &g) { return _cn.contains(g->class_name()); }
+   virtual bool  accept(CGELptr &g) { return _cn.contains(str_ptr(g->class_name().c_str())); }
 
  protected:
    str_list _cn;        // acceptable class names
@@ -93,7 +93,7 @@ class GELFILTclass_desc : public GELFILTclass_name {
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) {
       for (int i=0; i<_cn.num(); i++)
-         if (g->is_of_type(_cn[i]))
+         if (g->is_of_type(string(**_cn[i])))
             return 1;
       return 0;
    }

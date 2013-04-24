@@ -205,7 +205,7 @@ HalftoneUI::update_non_lives()
    if(!layer)
       return;
 
-   if(_parent->class_name() == ProxyPenUI::static_name() )
+   if (_parent->class_name() == ProxyPenUI::static_name())
       ((ProxyPenUI*)_parent)->get_light_ui()->set_current_light(layer->_channel);
 
    _texture_selection_ui->set_channel_num(layer->_channel);
@@ -352,7 +352,7 @@ bool
 HalftoneUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if(sender->class_name() == PatchSelectionUI::static_name()){
+   if (sender->class_name() == PatchSelectionUI::static_name()) {
       switch(event)
       {
       case PatchSelectionUI::SELECT_FILL_PATCHES:
@@ -381,10 +381,10 @@ HalftoneUI::child_callback(BaseUI* sender, int event)
          break;
       } 
    }    
-   if(sender->class_name() == ColorUI::static_name()){
+   if (sender->class_name() == ColorUI::static_name()) {
       apply_changes_to_texture(OP_COLOR, _current_halftone, _texture_selection_ui->get_layer_num());
    }
-   if(sender->class_name() == PresetsUI::static_name()){
+   if (sender->class_name() == PresetsUI::static_name()) {
       switch(event)
       {
       case PresetsUI::PRESET_SELECTED:
@@ -400,7 +400,7 @@ HalftoneUI::child_callback(BaseUI* sender, int event)
          break;   
       } 
    }     
-   if(sender->class_name() == ToneShaderUI::static_name()){
+   if (sender->class_name() == ToneShaderUI::static_name()) {
        _last_op = OP_TONE_SHADER;
    }     
    
@@ -555,13 +555,12 @@ HalftoneUI::load_preset()
       err_msg("HalftoneUI::load_preset() - Error! Could not open file: '%s'", f);
       return false;
    }
-   str_ptr str;
+   string str;
 
    STDdstream s(&fin);
    s >> str;
-   if (str != Halftone_TX::static_name()) 
-   {
-      err_msg("HalftoneUI::load_preset() - Not 'Halftone_TX': '%s'!!", **str);
+   if (str != Halftone_TX::static_name()) {
+      err_msg("HalftoneUI::load_preset() - Not 'Halftone_TX': '%s'!!", str.c_str());
    } else {
       if(!_current_halftone){
          err_msg("HalftoneUI::load_preset() - Error! there is no halftone to populate");

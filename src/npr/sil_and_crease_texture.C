@@ -233,7 +233,7 @@ SilAndCreaseTexture::get_sil_pool(TAGformat &d)
 {
    //   cerr << "SilAndCreaseTexture::get_sil_pool()\n";
 
-   str_ptr pool_name, class_name;
+   string pool_name, class_name;
    int pool_index;
 
    *d >> pool_index;

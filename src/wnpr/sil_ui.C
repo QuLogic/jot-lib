@@ -163,10 +163,10 @@ SilUI::get_paths(TAGformat &d)
    LuboPathList&  plb = zb->paths();
 
    //Grab the class name... should be LuboPathList
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != LuboPathList::static_name())) {
+   if (str != LuboPathList::static_name()) {
       // XXX - should throw away stuff from unknown obj
       cerr << "SilUI::get_paths() - Not LuboPathList: '" << str << "'" << endl; return; }
 
@@ -2090,12 +2090,11 @@ SilUI::buffer_load(const char *f)
    }
 
    STDdstream d(&fin);
-   str_ptr str;
+   string str;
 
-   d >> str;       
+   d >> str;
 
-   if ((str == SilUI::static_name())) 
-   {
+   if (str == SilUI::static_name()) {
       decode(d);
    }
    else
@@ -2402,8 +2401,7 @@ SilUI::valid_gel(CGELptr g)
       {
          CPatch_list &pl = b->patches();
 
-         for (int i=0; i<pl.num(); i++)
-         {
+         for (int i=0; i<pl.num(); i++) {
             NPRTexture *t = (NPRTexture *)pl[i]->find_tex(NPRTexture::static_name());
             if (t) return true;
          }

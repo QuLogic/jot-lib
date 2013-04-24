@@ -488,7 +488,7 @@ bool
 ImageLineUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if(sender->class_name() == PatchSelectionUI::static_name()){
+   if (sender->class_name() == PatchSelectionUI::static_name()) {
       switch(event)
       {
 	 case PatchSelectionUI::SELECT_FILL_PATCHES:
@@ -509,11 +509,11 @@ ImageLineUI::child_callback(BaseUI* sender, int event)
 	    break;
       } 
    }    
-   if(sender->class_name() == ToneShaderUI::static_name()){
+   if (sender->class_name() == ToneShaderUI::static_name()) {
       _last_op = OP_TONE_SHADER;
    }     
 
-   if(sender->class_name() == ColorUI::static_name()){
+   if (sender->class_name() == ColorUI::static_name()) {
       apply_changes_to_texture(OP_COLOR, _current_tex, _texture_selection_ui->get_layer_num());
    }
 

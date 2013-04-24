@@ -1573,12 +1573,12 @@ HatchingHatchBase::get_offsetlist(TAGformat &d)
 {
 
    //Grab the class name... should be BaseStrokeOffset
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != BaseStrokeOffsetLIST::static_name())) {
+   if (str != BaseStrokeOffsetLIST::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingHatchBase::get_offsets() - Not BaseStrokeOffsetLIST: '%s'!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingHatchBase::get_offsets() - Not BaseStrokeOffsetLIST: '%s'!", str.c_str());
       return;
    }
 

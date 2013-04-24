@@ -196,7 +196,7 @@ EdgeStroke::clear_simplex_data()
       for ( int j=0; j<faces.num(); j++) {
          assert(faces[j]);
          SimplexData* d = faces[j]
-            ->find_data(EdgeStroke::static_name());
+            ->find_data(str_ptr(EdgeStroke::static_name().c_str()));
          if(d) {
             faces[j]->rem_simplex_data(d);
          }
@@ -322,7 +322,7 @@ EdgeStroke::set_edge_strip(EdgeStrip* strip)
       for ( int j=0; j<faces.num(); j++) {
          SimplexData* d = 
             faces[j]
-            ->find_data(EdgeStroke::static_name());
+            ->find_data(str_ptr(EdgeStroke::static_name().c_str()));
          if (!d) {
             new EdgeStroke::FaceData(this, faces[j]);
          }
@@ -343,7 +343,7 @@ class EdgeStrokeSimplexFilter : public SimplexFilter {
       if (!is_face(s)) return false;
 
       SimplexData* d = ((Bface*)s)
-            ->find_data(EdgeStroke::static_name());
+            ->find_data(str_ptr(EdgeStroke::static_name().c_str()));
       
       if (d) return true;
 

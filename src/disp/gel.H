@@ -98,7 +98,7 @@ class SCHEDULER: public FRAMEobs {
 
    static  STAT_STR_RET static_name() {RET_STAT_STR("SCHEDULER");} 
    virtual STAT_STR_RET class_name ()          const{ return static_name(); }
-   virtual int          is_of_type (Cstr_ptr &n)const{ return IS (n);}
+   virtual int          is_of_type (const string &n)const{ return IS (n);}
    static  int          isa        (CSCHEDULERptr &o){ return ISA(o); }
 };
 

@@ -133,13 +133,12 @@ HatchingGroupFree::get_hatch(TAGformat &d)
    err_mesg(ERR_LEV_WARN, "HatchingGroupFree::get_hatch() - ****** OLD FILE FORMAT - DUMPING ******");
 
    //Grab the class name... should be HatchingHatchFree
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingHatchFree::static_name())) 
-   {
+   if (str != HatchingHatchFree::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_hatch() - Not 'HatchingHatchFree': '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_hatch() - Not 'HatchingHatchFree': '%s'!!", str.c_str());
       return;
    }
 
@@ -185,12 +184,12 @@ HatchingGroupFree::get_level(TAGformat &d)
    assert(_instances[0]->num_base_levels() > 0);
 
    //Grab the class name... should be HatchingLevelBase
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingLevelBase::static_name())) {
+   if (str != HatchingLevelBase::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_level() - Not 'HatchingLevelBase': '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_level() - Not 'HatchingLevelBase': '%s'!!", str.c_str());
       return;
    }
 
@@ -299,13 +298,12 @@ HatchingGroupFree::get_backbone(TAGformat &d)
    assert(_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT);
 
    //Grab the class name... should be HatchingBackboneFree
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingBackboneFree::static_name())) 
-   {
+   if (str != HatchingBackboneFree::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_backbone() - Not 'HatchingBackboneFree': '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_backbone() - Not 'HatchingBackboneFree': '%s'!!", str.c_str());
       return;
    }
 
@@ -339,12 +337,12 @@ HatchingGroupFree::get_position(TAGformat &d)
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::get_position()");
 
    //Grab the class name... should be HatchingPositionFree
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   if ((str != HatchingPositionFree::static_name())) {
+   if (str != HatchingPositionFree::static_name()) {
       // XXX - should throw away stuff from unknown obj
-      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_position() - Not 'HatchingPositionFree': '%s'!!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::get_position() - Not 'HatchingPositionFree': '%s'!!", str.c_str());
       return;
    }
 

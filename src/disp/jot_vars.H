@@ -128,7 +128,7 @@ class JOTvar : public DATA_ITEM {
 
  virtual Cstr_ptr    &obj_name()    const { return _obj->name();} 
  virtual Cstr_ptr    &var_name()    const { return _vname;} 
- virtual STAT_STR_RET class_name()  const { return _inst_name;}// instance name!
+ virtual STAT_STR_RET class_name()  const { return string(**_inst_name);}// instance name!
  virtual DATA_ITEM   *dup()         const { return  0; }
  virtual CTAGlist    &tags()        const {
                            if (!_var_tags) {

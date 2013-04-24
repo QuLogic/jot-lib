@@ -145,14 +145,14 @@ PatternPen::init_proxy(Bface* f) {
       Patch* p = get_ctrl_patch(f);
       assert(p);
     
-      p->set_texture(PatternTexture::static_name());
+      p->set_texture(str_ptr(PatternTexture::static_name().c_str()));
       GTexture* cur_texture = p->cur_tex();
       if(!cur_texture->is_of_type(PatternTexture::static_name())) return;
       _pattern_texture = (PatternTexture*)cur_texture;
       _pattern_texture->set_patch(p);
       _ui->update();
 
-      _view->set_rendering(PatternTexture::static_name());
+      _view->set_rendering(str_ptr(PatternTexture::static_name().c_str()));
     
       _init_proxy = true;  
    }       
@@ -193,7 +193,7 @@ PatternPen::activate(State *s) {
    change_mode(STROKE);  
 
    if (_view)
-      _view->set_rendering(GTexture::static_name());     
+      _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
 
 }
 
@@ -298,7 +298,7 @@ PatternPen::create_new_group(int type, int ref){
 
 void 
 PatternPen::update_display(){
-   _view->set_rendering(SmoothShadeTexture::static_name());
+   _view->set_rendering(str_ptr(SmoothShadeTexture::static_name().c_str()));
 
    if (_mode==STROKE || _mode==SYNTH){
       // show relevant strokes
@@ -346,10 +346,10 @@ PatternPen::update_display(){
       // show geometry and change to patch's desired texture
       WORLD::display(_geometry);
       if (_view && _mode==PROXY){
-         //_view->set_rendering(PatternTexture::static_name());
-         _view->set_rendering(SmoothShadeTexture::static_name());
+         //_view->set_rendering(str_ptr(PatternTexture::static_name().c_str()));
+         _view->set_rendering(str_ptr(SmoothShadeTexture::static_name().c_str()));
       } else {
-         _view->set_rendering(SmoothShadeTexture::static_name());
+         _view->set_rendering(str_ptr(SmoothShadeTexture::static_name().c_str()));
       }
 
    }

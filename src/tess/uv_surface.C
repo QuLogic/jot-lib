@@ -1264,7 +1264,7 @@ UVsurface::notify_xform(BMESH*, CWtransf& xf, CMOD& mod)
       if (!_map->can_transform()) {
          err_adv(debug,
                  "UVsurface::notify_xform: can't transform the %s map",
-                 **_map->class_name());
+                 _map->class_name().c_str());
       } else 
          _map->transform(xf, mod);
    }

@@ -71,20 +71,19 @@ FFSTexture::draw_final(CVIEWptr& v)
 void
 FFSTexture::get_ffs_data_file ()
 {
-   str_ptr str;
+   string str;
    // Get the style file    
    
-   str = str_ptr(Config::JOT_ROOT().c_str()) + location;
+   str = Config::JOT_ROOT().c_str() + string(**location);
 
-   _data_file = str;   
+   _data_file = str_ptr(str.c_str());
 
    fstream fin;
-   fin.open(**(str),ios::in);
-   if (!fin){
-      err_mesg(ERR_LEV_ERROR, "FFSTexture - Could not find the file %s", **str);
+   fin.open(str.c_str(),ios::in);
+   if (!fin) {
+      err_mesg(ERR_LEV_ERROR, "FFSTexture - Could not find the file %s", str.c_str());
       //XXX - TO DO : Load some default values....           
-   } else {       
-      
+   } else {
       STDdstream s(&fin);
       s >> str;
       if (str != FFSTexture::static_name())

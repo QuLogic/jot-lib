@@ -309,7 +309,7 @@ TEXT2D::draw_debug(
    // XXX Incorrect behavior. Disabled for the moment
 	return;
    /*
-   if (view->rendering() == RCOLOR_ID || view->grabbing_screen())
+   if (view->rendering() == str_ptr(RCOLOR_ID.c_str()) || view->grabbing_screen())
       return;
    
    if (!_dl.valid(view)) initialize(view);
@@ -348,7 +348,7 @@ TEXT2D::draw_debug(
 
 void TEXT2D::draw_debug(const char* str, Wpt &pos, CVIEWptr& view)
 {
-   if (view->rendering() == RCOLOR_ID || view->grabbing_screen())
+   if (view->rendering() == str_ptr(RCOLOR_ID.c_str()) || view->grabbing_screen())
       return;
    
    if (!_dl.valid(view)) initialize(view);

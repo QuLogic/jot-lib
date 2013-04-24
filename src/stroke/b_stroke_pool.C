@@ -87,8 +87,8 @@ BStrokePool::get_base_prototype(TAGformat &d)
 {
 //   cerr << "BStrokePool::get_base_prototype()\n";
 
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
    if (_prototypes[0]->class_name() != str)
    {
@@ -134,8 +134,8 @@ BStrokePool::get_prototype(TAGformat &d)
 {
 //   cerr << "BStrokePool::get_prototype()\n";
 
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
    add_prototype();
 

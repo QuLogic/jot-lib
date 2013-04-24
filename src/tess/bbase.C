@@ -85,7 +85,7 @@ Bbase::is_last() const
 uintptr_t
 Bbase::key() 
 {
-   static uintptr_t k = (uintptr_t) **static_name();
+   static uintptr_t k = (uintptr_t) static_name().c_str();
    return k;
 }
 

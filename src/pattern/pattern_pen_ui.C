@@ -797,17 +797,17 @@ PatternPenUI::load_preset(const char *f)
       return false;
    }  
    STDdstream d(&fin);
-   str_ptr str;
+   string str;
    d >> str;
    
-   if ((str == BaseStroke::static_name())) {
+   if (str == BaseStroke::static_name()) {
       //In case we're testing offsets, let
       //trash the old ones
       _stroke->set_offsets(NULL);
       _stroke->decode(d);
 	  cerr << "Stroke Preset Loaded" << endl;
    } else {
-      err_mesg(ERR_LEV_ERROR,"PatternPenUI::load_preset() - Error! Not BaseStroke: '%s'", **str);
+      err_mesg(ERR_LEV_ERROR,"PatternPenUI::load_preset() - Error! Not BaseStroke: '%s'", str.c_str());
    }
    fin.close();
    return true;
@@ -1569,16 +1569,16 @@ PatternPenUI::load_preset(const char *f)
       return false;
    }  
    STDdstream d(&fin);
-   str_ptr str;
+   string str;
    d >> str;
 
-   if ((str == BaseStroke::static_name())) {
+   if (str == BaseStroke::static_name()) {
       //In case we're testing offsets, let
       //trash the old ones
       _stroke->set_offsets(NULL);
       _stroke->decode(d);
    } else {
-      err_mesg(ERR_LEV_ERROR,"StrokeUI::load_preset() - Error! Not BaseStroke: '%s'", **str);
+      err_mesg(ERR_LEV_ERROR,"StrokeUI::load_preset() - Error! Not BaseStroke: '%s'", str.c_str());
    }
    fin.close();
    return true;
