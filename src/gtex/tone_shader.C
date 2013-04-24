@@ -296,7 +296,9 @@ ToneShader::get_variable_locs()
    get_uniform_loc("is_tex_2d", _is_tex_2d_loc);
 
    for (int i=0; i<4; i++) {
-      str_ptr p = str_ptr("layer[") + str_ptr(i);
+      char tmp[50];
+      sprintf(tmp, "layer[%d", i);
+      string p = tmp;
       get_uniform_loc(p + "].is_enabled", _is_enabled_loc[i]);
       get_uniform_loc(p + "].remap_nl",   _remap_nl_loc  [i]);
       get_uniform_loc(p + "].remap",      _remap_loc     [i]);
@@ -308,13 +310,15 @@ ToneShader::get_variable_locs()
    }
 
    for (int i=0; i<_occluders.num(); i++) {
-      str_ptr p = str_ptr("occluder[") + str_ptr(i);
+      char tmp[50];
+      sprintf(tmp, "occluder[%d", i);
+      string p = tmp;
       get_uniform_loc(p+"].is_active",_occluders[i]._is_active_loc);
       get_uniform_loc(p+"].xf",       _occluders[i]._xf_loc);
       get_uniform_loc(p+"].softness", _occluders[i]._softness_loc);
    }
 
-   get_uniform_loc("is_reciever",_is_reciever_loc);
+   get_uniform_loc("is_reciever", _is_reciever_loc);
    get_uniform_loc("global_edge_len", _global_edge_len_loc);
    get_uniform_loc("P_matrix", _proj_der_loc);
 

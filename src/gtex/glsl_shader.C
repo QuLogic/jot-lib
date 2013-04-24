@@ -86,11 +86,11 @@ GLSLShader::print_shader_source(GLuint shader)
 }
 
 void
-GLSLShader::print_info(Cstr_ptr& gtex_name, GLuint obj)
+GLSLShader::print_info(const string& gtex_name, GLuint obj)
 {
    cerr << gtex_name << ": print_info: checking object " << obj << endl;
    GLint log_len = 0;
-   GL_VIEW::print_gl_errors(gtex_name + "::print_info:");
+   GL_VIEW::print_gl_errors(str_ptr(gtex_name.c_str()) + "::print_info:");
    glGetObjectParameterivARB(obj, GL_OBJECT_INFO_LOG_LENGTH_ARB, &log_len);
    if (log_len < 1) {
       cerr << " print_info: log length is 0" << endl;
@@ -105,7 +105,7 @@ GLSLShader::print_info(Cstr_ptr& gtex_name, GLuint obj)
 }
 
 bool
-GLSLShader::link_program(Cstr_ptr& gtex_name, GLuint prog)
+GLSLShader::link_program(const string& gtex_name, GLuint prog)
 {
    GLint status = 0;
    if (need_arb_ext) {
@@ -145,7 +145,7 @@ GLSLShader::link_program(Cstr_ptr& gtex_name, GLuint prog)
 }
 
 bool
-GLSLShader::compile_shader(Cstr_ptr& gtex_name, GLuint shader)
+GLSLShader::compile_shader(const string& gtex_name, GLuint shader)
 {
    GLint status = 0;
    if (need_arb_ext) {
@@ -162,14 +162,14 @@ GLSLShader::compile_shader(Cstr_ptr& gtex_name, GLuint shader)
 
 char*
 GLSLShader::read_file(
-  Cstr_ptr& gtex_name,
-  Cstr_ptr& filename,
+  const string& gtex_name,
+  const string& filename,
   GLint& length
 )
 {
    // Read characters from file into buffer
    char* buf = 0;
-   ifstream in(**filename, ifstream::in | ifstream::binary);
+   ifstream in(filename.c_str(), ifstream::in | ifstream::binary);
    if (in.is_open()) {
       in.seekg(0, ios::end);
       length = in.tellg();
@@ -204,7 +204,7 @@ GLSLShader::delete_shaders(CARRAY<GLuint>& shaders)
 }
 
 GLuint
-GLSLShader::load_shader(Cstr_ptr& gtex_name, Cstr_ptr& filename, GLenum type)
+GLSLShader::load_shader(const string& gtex_name, const string& filename, GLenum type)
 {
    // Read characters from file into dynamically allocated buffer:
    GLint length = 0;
@@ -268,12 +268,12 @@ GLSLShader::load_shader(Cstr_ptr& gtex_name, Cstr_ptr& filename, GLenum type)
 
 bool
 GLSLShader::load_shaders(
-   Cstr_ptr& gtex_name,
-   Cstr_list& filenames,
+   const string& gtex_name,
+   vector<string> filenames,
    ARRAY<GLuint>& shaders,
    GLenum type)
 {
-   for (int i=0; i<filenames.num(); i++) {
+   for (vector<string>::size_type i=0; i<filenames.size(); i++) {
       GLuint shader = load_shader(gtex_name, filenames[i], type);
       if (shader == 0) {
          cerr << gtex_name
@@ -357,10 +357,10 @@ GLSLShader::init()
       fp = GL_FRAGMENT_SHADER;
    }
 
-   if (load_shaders(str_ptr(class_name().c_str()), vp_filenames(), shaders, vp) &&
-       load_shaders(str_ptr(class_name().c_str()), fp_filenames(), shaders, fp) &&
+   if (load_shaders(class_name(), vp_filenames(), shaders, vp) &&
+       load_shaders(class_name(), fp_filenames(), shaders, fp) &&
        attach_shaders(shaders, program()) && bind_attributes(program()) &&
-       link_program(str_ptr(class_name().c_str()), program())) {
+       link_program(class_name(), program())) {
 
  
       // report success if debugging:
@@ -387,11 +387,11 @@ GLSLShader::use_program(GLuint prog)
 }
 
 bool
-GLSLShader::get_uniform_loc(Cstr_ptr& var_name, GLint& loc) 
+GLSLShader::get_uniform_loc(const string& var_name, GLint& loc) 
 {
    // wrapper for glGetUniformLocation, with error reporting
 
-   loc = glGetUniformLocation(program(), **var_name);
+   loc = glGetUniformLocation(program(), var_name.c_str());
    if ((loc < 0)&&(debug)) {
       cerr << class_name() << "::get_uniform_loc: error: variable "
            << "\"" << var_name << "\" not found"

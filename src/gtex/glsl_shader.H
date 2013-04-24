@@ -79,10 +79,10 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    string fp_name(const string& name) const { return shader_path() + name + ".fp"; }
 
    // Wrapper for glGetUniformLocation, with error reporting:
-   bool get_uniform_loc(Cstr_ptr& name, GLint& loc);
+   bool get_uniform_loc(const string& name, GLint& loc);
 
    // Optimistic convenience version of above:
-   GLint get_uniform_loc(Cstr_ptr& name) {
+   GLint get_uniform_loc(const string& name) {
       GLint ret = -1;
       get_uniform_loc(name, ret);
       return ret;
@@ -180,20 +180,20 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    static void delete_shader(GLuint shader);
    static void delete_shaders(CARRAY<GLuint>& shaders);
    static void print_shader_source(GLuint shader);
-   static void print_info(Cstr_ptr& gtex_name, GLuint obj);
-   static bool link_program(Cstr_ptr& gtex_name, GLuint prog);
-   static bool compile_shader(Cstr_ptr& gtex_name, GLuint shader);
+   static void print_info(const string& gtex_name, GLuint obj);
+   static bool link_program(const string& gtex_name, GLuint prog);
+   static bool compile_shader(const string& gtex_name, GLuint shader);
    static GLuint load_shader(
-      Cstr_ptr& gtex_name,
-      Cstr_ptr& filename,
+      const string& gtex_name,
+      const string& filename,
       GLenum type);
    static bool load_shaders(
-      Cstr_ptr& gtex_name,
-      Cstr_list& filenames,
+      const string& gtex_name,
+      vector<string> filenames,
       ARRAY<GLuint>& shaders,
       GLenum type);
 
-   static char* read_file(Cstr_ptr& gtex_name, Cstr_ptr& filename, GLint& len);
+   static char* read_file(const string& gtex_name, const string& filename, GLint& len);
    static bool attach_shaders(CARRAY<GLuint>& shaders, GLuint prog);
 
    //******** VIRTUAL METHODS ********
@@ -225,14 +225,14 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    // files; but usually there is only 1 file for each, in which
    // case it's more convenient to override the single-name
    // versions, above.
-   virtual str_list vp_filenames() {
-      str_list ret;
-      ret += str_ptr(vp_filename().c_str()); // override this method for single name case
+   virtual vector<string> vp_filenames() {
+      vector<string> ret;
+      ret.push_back(vp_filename()); // override this method for single name case
       return ret;
    }
-   virtual str_list fp_filenames() {
-      str_list ret;
-      ret += str_ptr(fp_filename().c_str()); // override this method for single name case
+   virtual vector<string> fp_filenames() {
+      vector<string> ret;
+      ret.push_back(fp_filename()); // override this method for single name case
       return ret;
    }
 };
