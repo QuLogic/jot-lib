@@ -31,7 +31,7 @@ static bool multithread = Config::get_var_bool("JOT_MULTITHREAD",false);
 
 static ThreadMutex polyextmutex;
 static ThreadMutex gl_version_mutex;
-static Cstr_ptr in_swap_buffers("GL_VIEW::swap_buffers");
+static const string in_swap_buffers("GL_VIEW::swap_buffers");
 
 bool    GL_VIEW::_checked_point_sizes = false;
 bool    GL_VIEW::_checked_line_widths = false;
@@ -490,14 +490,14 @@ GL_VIEW::stencil_draw(
 }
 
 bool
-GL_VIEW::print_gl_errors(Cstr_ptr &location)
+GL_VIEW::print_gl_errors(const string &location)
 {
    bool ret = false;
 
    GLenum err;
 
    while((err = glGetError())) {
-      str_ptr errstr;
+      const char *errstr;
       switch (err) {
          case GL_INVALID_ENUM:      errstr = "Invalid Enumerator";   break;
          case GL_INVALID_VALUE:     errstr = "Invalid Value";        break;
@@ -507,7 +507,7 @@ GL_VIEW::print_gl_errors(Cstr_ptr &location)
          case GL_OUT_OF_MEMORY:     errstr = "Out of Memory";        break;
          default:                   errstr = "Unknown Error";        break;
       }
-      err_msg("%s ***NOTE*** OpenGL Error: [%x] '%s'", **location, err, **errstr);
+      err_msg("%s ***NOTE*** OpenGL Error: [%x] '%s'", location.c_str(), err, errstr);
       ret = true;
    }
 

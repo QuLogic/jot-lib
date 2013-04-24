@@ -167,7 +167,7 @@ class GL_VIEW: public VIEWimpl {
    virtual void     draw_bb(mlib::CWpt_list &) const;
 
    //******** DIAGNOSTIC ********
-   static  bool   print_gl_errors(Cstr_ptr&);
+   static  bool   print_gl_errors(const string&);
 
   protected:
    void            setup_light(int i);
