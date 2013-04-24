@@ -87,9 +87,9 @@ class NameLookup {
       string ret;
       int i = 0;
       do {
-         // XXX - how to create string from int
-         //       without using str_ptr?
-         ret = base + **str_ptr(i++); 
+         char tmp[64];
+         sprintf(tmp, "%d", i++);
+         ret = base + tmp;
       } while (lookup(ret) != 0);
       return ret;
    }
