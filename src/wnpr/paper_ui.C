@@ -23,8 +23,6 @@
 
 #include "paper_ui.H"
 
-extern str_ptr JOT_ROOT;           // Accessed elsewhere
-
 void
 PaperUI::button_press_cb()
 {
@@ -38,5 +36,6 @@ PaperUI::init_listbox()
    // relative to JOT_ROOT ("/nprdata/paper_textures/paper.png") to be passed to
    // PaperEffect
    string sub_dir("/nprdata/paper_textures/");
-   fill_listbox(_listbox, _files, string(**JOT_ROOT) + sub_dir, sub_dir, ".png");
+   fill_listbox(_listbox, _files, Config::JOT_ROOT() + sub_dir, sub_dir, ".png");
 }
+
