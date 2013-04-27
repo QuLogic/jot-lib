@@ -58,10 +58,8 @@ GLuint   ntt_toon_prog_detail_arb, ntt_toon_prog_depth_arb, ntt_toon_prog_focus_
 GLuint   ntt_toon_prog_curvature_arb, ntt_toon_prog_orientation_arb, ntt_toon_prog_specularity_arb;
 GLuint   ntt_toon_prog_lookup_arb, ntt_toon_prog_orientation_lookup_arb, ntt_toon_prog_specularity_lookup_arb;
 
-LIST<str_ptr>*    XToonTexture::_toon_texture_names = 0;
-LIST<TEXTUREptr>* XToonTexture::_toon_texture_ptrs = 0;
-LIST<str_ptr>*    XToonTexture::_toon_texture_remap_orig_names = 0;
-LIST<str_ptr>*    XToonTexture::_toon_texture_remap_new_names = 0;
+map<string,TEXTUREptr>* XToonTexture::_toon_texture_map = 0;
+map<string,string>*     XToonTexture::_toon_texture_remap = 0;
 
 /*****************************************************************
  * Texture Remapping
@@ -1730,52 +1728,41 @@ XToonTexture::draw(CVIEWptr& v)
 void
 XToonTexture::update_tex(void)
 {
+   map<string,TEXTUREptr>::iterator ind;
 
-   int ind;
-
-   if (!_toon_texture_names)
-   {
-      _toon_texture_names = new LIST<str_ptr>; assert(_toon_texture_names);
-      _toon_texture_ptrs = new LIST<TEXTUREptr>; assert(_toon_texture_ptrs);
-
-      _toon_texture_remap_orig_names = new LIST<str_ptr>; assert(_toon_texture_remap_orig_names);
-      _toon_texture_remap_new_names = new LIST<str_ptr>; assert(_toon_texture_remap_new_names);
+   if (!_toon_texture_map) {
+      _toon_texture_map = new map<string,TEXTUREptr>; assert(_toon_texture_map);
+      _toon_texture_remap = new map<string,string>; assert(_toon_texture_remap);
 
       int i = 0;
-      while (toon_remap_fnames[i][0] != NULL)
-      {
-         _toon_texture_remap_orig_names->add(str_ptr(toon_remap_base) + toon_remap_fnames[i][0]);
-         _toon_texture_remap_new_names->add(str_ptr(toon_remap_base) + toon_remap_fnames[i][1]);
+      while (toon_remap_fnames[i][0] != NULL) {
+         (*_toon_texture_remap)[string(toon_remap_base) + toon_remap_fnames[i][0]] =
+                                string(toon_remap_base) + toon_remap_fnames[i][1];
          i++;
       }
    }
 
    str_ptr tf = _tex_name;
 
-   if (tf == NULL_STR)
-   {
+   if (tf == NULL_STR) {
       assert(_tex == NULL);
       //_tex_name = NULL_STR;
       //_tex = NULL;
-   }
-   else if (_tex == NULL)
-   {
-      if ((ind = _toon_texture_names->get_index(tf)) != BAD_IND)
-      {
+
+   } else if (_tex == NULL) {
+      if ((ind = _toon_texture_map->find(string(**tf))) != _toon_texture_map->end()) {
          //Finding original name in cache...
 
          //If its a failed texture...
-         if ((*_toon_texture_ptrs)[ind] == NULL)
-         {
+         if (ind->second == NULL) {
             //...see if it was remapped...
-            int ii = _toon_texture_remap_orig_names->get_index(tf);
+            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
             //...and change to looking up the remapped name            
-            if (ii != BAD_IND)
-            {
+            if (ii != _toon_texture_remap->end()) {
                string old_tf = string(**tf);
-               tf = (*_toon_texture_remap_new_names)[ii];
+               tf = str_ptr(ii->second.c_str());
 
-               ind = _toon_texture_names->get_index(tf);
+               ind = _toon_texture_map->find(string(**tf));
 
                err_mesg(ERR_LEV_SPAM, 
                   "XToonTexture::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
@@ -1784,42 +1771,36 @@ XToonTexture::update_tex(void)
          }
 
          //Now see if the final name yields a good texture...
-         if ((*_toon_texture_ptrs)[ind] != NULL)
-         {
-            _tex = (*_toon_texture_ptrs)[ind];
+         if (ind->second != NULL) {
+            _tex = ind->second;
             _tex_name = tf;
             err_mesg(ERR_LEV_SPAM, "XToonTexture::set_texture() - Using cached copy of texture.");
-         }
-         else
-         {
+
+         } else {
             err_mesg(ERR_LEV_INFO, "XToonTexture::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
             _tex = NULL;
             _tex_name = NULL_STR;
          }
-      }
+
       //Haven't seen this name before...
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_SPAM, "XToonTexture::set_texture() - Not in cache...");
       
          Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
          //Can't load the texture?
-         if (i.empty())
-         {
+         if (i.empty()) {
             //...check for a remapped file...
-            int ii = _toon_texture_remap_orig_names->get_index(tf);
+            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
 
             //...and use that name instead....
-            if (ii != BAD_IND)
-            {
+            if (ii != _toon_texture_remap->end()) {
                //...but also indicate that the original name is bad...
 
-               _toon_texture_names->add(tf);
-               _toon_texture_ptrs->add(NULL);
+               (*_toon_texture_map)[string(**tf)] = NULL;
 
                string old_tf = string(**tf);
-               tf = (*_toon_texture_remap_new_names)[ii];
+               tf = str_ptr(ii->second.c_str());
 
                err_mesg(ERR_LEV_ERROR, 
                   "XToonTexture::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
@@ -1830,41 +1811,33 @@ XToonTexture::update_tex(void)
          }
 
          //If the final name loads, store the cached texture...
-         if (!i.empty())
-	      {
+         if (!i.empty()) {
             TEXTUREglptr t = new TEXTUREgl();
 
             t->set_save_img(true);
             t->set_wrap_s(GL_CLAMP_TO_EDGE);
             t->set_wrap_t(GL_CLAMP_TO_EDGE);
-            t->set_image(i.copy(),i.width(),i.height(),i.bpp());
-         
+            t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-            _toon_texture_names->add(tf);
-            _toon_texture_ptrs->add(t);
+            (*_toon_texture_map)[string(**tf)] = t;
 
             err_mesg(ERR_LEV_INFO, "XToonTexture::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
                i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
             _tex = t;
             _tex_name = tf;
-	      }
+
          //Otherwise insert a failed NULL
-	      else
-	      {
+         } else {
             err_mesg(ERR_LEV_ERROR, "XToonTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
          
-            _toon_texture_names->add(tf);
-            _toon_texture_ptrs->add(NULL);
+            (*_toon_texture_map)[string(**tf)] = NULL;
 
             _tex = NULL;
             _tex_name = NULL_STR;
-	      }
+         }
       }   
    }
-
-
-
 }
 
 

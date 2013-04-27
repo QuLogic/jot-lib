@@ -18,6 +18,8 @@
 #ifndef PAPER_EFFECT_HEADER
 #define PAPER_EFFECT_HEADER
 
+#include <map>
+
 #include "disp/paper_effect_base.H"
 #include "geom/texturegl.H"
 
@@ -68,10 +70,8 @@ class PaperEffect : public PaperEffectBase {
    //filenames, and serve up textures from the cache.
 //   static LIST<str_ptr>             _paper_names;
 //   static LIST<TEXTUREptr>          _paper_textures;
-   static LIST<str_ptr>*      _paper_texture_names;
-   static LIST<TEXTUREptr>*   _paper_texture_ptrs;
-   static LIST<str_ptr>*      _paper_texture_remap_orig_names;
-   static LIST<str_ptr>*      _paper_texture_remap_new_names;
+   static map<string,TEXTUREptr>* _paper_texture_map;
+   static map<string,string>*     _paper_texture_remap;
  
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/

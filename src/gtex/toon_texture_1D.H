@@ -23,6 +23,8 @@
 #ifndef TOON_TEXTURE_1D_H_IS_INCLUDED
 #define TOON_TEXTURE_1D_H_IS_INCLUDED
 
+#include <map>
+
 #include "geom/texturegl.H"    // for ConventionalTexture
 #include "gtex/basic_texture.H"
 
@@ -38,10 +40,8 @@ class ToonTexture_1D : public BasicTexture {
    static TAGlist                *_ntt_tags;
 
  protected:
-   static LIST<str_ptr>*      _toon_texture_names;
-   static LIST<TEXTUREptr>*   _toon_texture_ptrs;
-   static LIST<str_ptr>*      _toon_texture_remap_orig_names;
-   static LIST<str_ptr>*      _toon_texture_remap_new_names;
+   static map<string,TEXTUREptr>* _toon_texture_map;
+   static map<string,string>*     _toon_texture_remap;
     
     //******** Member Variables ********
    TEXTUREptr                    _tex;     

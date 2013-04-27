@@ -35,10 +35,8 @@ class NPRSolidTexture : public BasicTexture {
    /******** STATIC MEMBER VARIABLES ********/
    static TAGlist                *_nst_tags;
  protected:
-   static LIST<str_ptr>*      _solid_texture_names;
-   static LIST<TEXTUREptr>*   _solid_texture_ptrs;
-   static LIST<str_ptr>*      _solid_texture_remap_orig_names;
-   static LIST<str_ptr>*      _solid_texture_remap_new_names;
+   static map<string,TEXTUREptr>* _solid_texture_map;
+   static map<string,string>*     _solid_texture_remap;
 
  protected:
    //******** Member Variables ********

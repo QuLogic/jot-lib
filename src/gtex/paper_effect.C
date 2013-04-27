@@ -110,10 +110,8 @@ int               PaperEffect::_implementation = PaperEffect::IMPLEMENTATION__NO
 
 TEXTUREptr        PaperEffect::_paper_texture;
 
-LIST<str_ptr>*    PaperEffect::_paper_texture_names = 0;
-LIST<TEXTUREptr>* PaperEffect::_paper_texture_ptrs = 0;
-LIST<str_ptr>*    PaperEffect::_paper_texture_remap_orig_names = 0;
-LIST<str_ptr>*    PaperEffect::_paper_texture_remap_new_names = 0;
+map<string,TEXTUREptr>* PaperEffect::_paper_texture_map = 0;
+map<string,string>*     PaperEffect::_paper_texture_remap = 0;
 
 GLuint            PaperEffect::_disabled_no_frag_prog_arb;
 GLuint            PaperEffect::_disabled_1d_frag_prog_arb;
@@ -1293,50 +1291,41 @@ PaperEffect::is_alpha_premult()
 TEXTUREptr
 PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
 {
-   int ind;
+   map<string,TEXTUREptr>::iterator ind;
 
    tf = in_tf;
 
    //Do lazy initialization...
-   if (!_paper_texture_names)
-   {
-      _paper_texture_names = new LIST<str_ptr>; assert(_paper_texture_names);
-      _paper_texture_ptrs = new LIST<TEXTUREptr>; assert(_paper_texture_ptrs);
-
-      _paper_texture_remap_orig_names = new LIST<str_ptr>; assert(_paper_texture_remap_orig_names);
-      _paper_texture_remap_new_names = new LIST<str_ptr>; assert(_paper_texture_remap_new_names);
+   if (!_paper_texture_map) {
+      _paper_texture_map = new map<string,TEXTUREptr>; assert(_paper_texture_map);
+      _paper_texture_remap = new map<string,string>; assert(_paper_texture_remap);
 
       int i = 0;
-      while (paper_remap_fnames[i][0] != NULL)
-      {
-         _paper_texture_remap_orig_names->add(str_ptr(Config::JOT_ROOT().c_str()) + paper_remap_base + paper_remap_fnames[i][0]);
-         _paper_texture_remap_new_names->add(str_ptr(Config::JOT_ROOT().c_str()) + paper_remap_base + paper_remap_fnames[i][1]);
+      while (paper_remap_fnames[i][0] != NULL) {
+         (*_paper_texture_remap)[Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][0]] =
+                                 Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][1];
          i++;
       }
    }
 
    //No paper
-   if (tf == NULL_STR)
-   {
+   if (tf == NULL_STR) {
       tf = NULL_STR;
-   return NULL;
-   }
-   else if ((ind = _paper_texture_names->get_index(tf)) != BAD_IND)
-   {
+      return NULL;
+
+   } else if ((ind = _paper_texture_map->find(string(**tf))) != _paper_texture_map->end()) {
       //Finding original name in cache...
 
       //If it's a failed texture...
-      if ((*_paper_texture_ptrs)[ind] == NULL)
-      {
+      if (ind->second == NULL) {
          //...see if it was remapped...
-         int ii = _paper_texture_remap_orig_names->get_index(tf);
+         map<string,string>::iterator ii = _paper_texture_remap->find(string(**tf));
          //...and change to looking up the remapped name            
-         if (ii != BAD_IND)
-         {
+         if (ii != _paper_texture_remap->end()) {
             str_ptr old_tf = tf;
-            tf = (*_paper_texture_remap_new_names)[ii];
+            tf = str_ptr(ii->second.c_str());
 
-            ind = _paper_texture_names->get_index(tf);
+            ind = _paper_texture_map->find(string(**tf));
 
             err_mesg(ERR_LEV_SPAM, 
                "PaperEffect::get_texture() - Previously remapped -=<[{ (%s) ---> (%s) }]>=-", 
@@ -1345,42 +1334,36 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
       }
 
       //Now see if the final name yields a good texture...
-      if ((*_paper_texture_ptrs)[ind] != NULL)
-      {
+      if (ind->second != NULL) {
          err_mesg(ERR_LEV_SPAM, "PaperEffect::get_texture() - Using cached copy of texture.");
          tf = tf;
-         return (*_paper_texture_ptrs)[ind];
-      }
-      else
-      {
+         return ind->second;
+
+      } else {
          err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
          tf = NULL_STR;
          return NULL;
       }
-   }
+
    //Haven't seen this name before...
-   else
-   {
+   } else {
       err_mesg(ERR_LEV_SPAM, "PaperEffect::get_texture() - Not in cache: '%s'", **tf);
 
       Image i(**tf);
 
       //Can't load the texture?
-      if (i.empty())
-      {
+      if (i.empty()) {
          //...check for a remapped file...
-         int ii = _paper_texture_remap_orig_names->get_index(tf);
+         map<string,string>::iterator ii = _paper_texture_remap->find(string(**tf));
 
          //...and use that name instead....
-         if (ii != BAD_IND)
-         {
+         if (ii != _paper_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            _paper_texture_names->add(tf);
-            _paper_texture_ptrs->add(NULL);
+            (*_paper_texture_map)[string(**tf)] = NULL;
 
             str_ptr old_tf = tf;
-            tf = (*_paper_texture_remap_new_names)[ii];
+            tf = str_ptr(ii->second.c_str());
 
             err_mesg(ERR_LEV_ERROR, 
                "PaperEffect::get_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
@@ -1391,30 +1374,26 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
       }
 
       //If the final name loads, store the cached texture...
-      if (!i.empty())
-      {
-      TEXTUREglptr t = new TEXTUREgl();
+      if (!i.empty()) {
+         TEXTUREglptr t = new TEXTUREgl();
          
          t->set_save_img(true);
          t->set_image(i.copy(),i.width(),i.height(),i.bpp());
 
-         _paper_texture_names->add(tf);
-         _paper_texture_ptrs->add(t);
+         (*_paper_texture_map)[string(**tf)] = t;
 
          err_mesg(ERR_LEV_INFO, 
             "PaperEffect::get_texture() - Cached: (w=%d h=%d bpp=%u) %s", 
                i.width(), i.height(), i.bpp(), **tf);
 
          tf = tf;
-      return t;
-      }
+         return t;
+
       //Otherwise insert a failed NULL...
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_ERROR, "PaperEffect::get_texture() - *****ERROR***** Failed loading to cache: '%s'", **tf);
 
-         _paper_texture_names->add(tf);
-         _paper_texture_ptrs->add(NULL);
+         (*_paper_texture_map)[string(**tf)] = NULL;
 
          tf = NULL_STR;
          return NULL;

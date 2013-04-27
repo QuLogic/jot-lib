@@ -45,10 +45,8 @@ GLuint   ntt_toon_prog_nv_1D;
 GLuint   ntt_toon_prog_arb_1D;
 
 //these are unchanged as they are inside the object
-LIST<str_ptr>*    ToonTexture_1D::_toon_texture_names = 0;
-LIST<TEXTUREptr>* ToonTexture_1D::_toon_texture_ptrs = 0;
-LIST<str_ptr>*    ToonTexture_1D::_toon_texture_remap_orig_names = 0;
-LIST<str_ptr>*    ToonTexture_1D::_toon_texture_remap_new_names = 0;
+map<string,TEXTUREptr>* ToonTexture_1D::_toon_texture_map = 0;
+map<string,string>*     ToonTexture_1D::_toon_texture_remap = 0;
 
 /*****************************************************************
  * Texture Remapping
@@ -639,141 +637,115 @@ ToonTexture_1D::draw(CVIEWptr& v)
 void
 ToonTexture_1D::update_tex(void)
 {
+   map<string,TEXTUREptr>::iterator ind;
 
-   int ind;
+   if (!_toon_texture_map) {
+      _toon_texture_map = new map<string,TEXTUREptr>; assert(_toon_texture_map);
+      _toon_texture_remap = new map<string,string>; assert(_toon_texture_remap);
 
-   if (!_toon_texture_names)
-      {
-         _toon_texture_names = new LIST<str_ptr>; assert(_toon_texture_names);
-         _toon_texture_ptrs = new LIST<TEXTUREptr>; assert(_toon_texture_ptrs);
-
-         _toon_texture_remap_orig_names = new LIST<str_ptr>; assert(_toon_texture_remap_orig_names);
-         _toon_texture_remap_new_names = new LIST<str_ptr>; assert(_toon_texture_remap_new_names);
-
-         int i = 0;
-         while (toon_remap_fnames_1D[i][0] != NULL)
-            {
-               _toon_texture_remap_orig_names->add(str_ptr(toon_remap_base_1D) + toon_remap_fnames_1D[i][0]);
-               _toon_texture_remap_new_names->add(str_ptr(toon_remap_base_1D) + toon_remap_fnames_1D[i][1]);
-               i++;
-            }
+      int i = 0;
+      while (toon_remap_fnames_1D[i][0] != NULL) {
+         (*_toon_texture_remap)[string(toon_remap_base_1D) + toon_remap_fnames_1D[i][0]] =
+                                string(toon_remap_base_1D) + toon_remap_fnames_1D[i][1];
+         i++;
       }
+   }
 
    str_ptr tf = _tex_name;
 
-   if (tf == NULL_STR)
-      {
-         assert(_tex == NULL);
-         //_tex_name = NULL_STR;
-         //_tex = NULL;
-      }
-   else if (_tex == NULL)
-      {
-         if ((ind = _toon_texture_names->get_index(tf)) != BAD_IND)
-            {
-               //Finding original name in cache...
+   if (tf == NULL_STR) {
+      assert(_tex == NULL);
+      //_tex_name = NULL_STR;
+      //_tex = NULL;
 
-               //If its a failed texture...
-               if ((*_toon_texture_ptrs)[ind] == NULL)
-                  {
-                     //...see if it was remapped...
-                     int ii = _toon_texture_remap_orig_names->get_index(tf);
-                     //...and change to looking up the remapped name            
-                     if (ii != BAD_IND)
-                        {
-                           string old_tf = string(**tf);
-                           tf = (*_toon_texture_remap_new_names)[ii];
+   } else if (_tex == NULL) {
+      if ((ind = _toon_texture_map->find(string(**tf))) != _toon_texture_map->end()) {
+         //Finding original name in cache...
 
-                           ind = _toon_texture_names->get_index(tf);
+         //If its a failed texture...
+         if (ind->second == NULL) {
+            //...see if it was remapped...
+            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
+            //...and change to looking up the remapped name
+            if (ii != _toon_texture_remap->end()) {
+               string old_tf = string(**tf);
+               tf = str_ptr(ii->second.c_str());
 
-                           err_mesg(ERR_LEV_SPAM, 
-                                    "ToonTexture_1D::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                                    (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
-                        }
-                  }
+               ind = _toon_texture_map->find(string(**tf));
 
-               //Now see if the final name yields a good texture...
-               if ((*_toon_texture_ptrs)[ind] != NULL)
-                  {
-                     _tex = (*_toon_texture_ptrs)[ind];
-                     _tex_name = tf;
-                     err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Using cached copy of texture.");
-                  }
-               else
-                  {
-                     err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
-                     _tex = NULL;
-                     _tex_name = NULL_STR;
-                  }
+               err_mesg(ERR_LEV_SPAM,
+                        "ToonTexture_1D::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
             }
-         //Haven't seen this name before...
-         else
-            {
-               err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Not in cache...");
-      
-               Image i((Config::JOT_ROOT()+string(**tf)).c_str());
+         }
 
-               //Can't load the texture?
-               if (i.empty())
-                  {
-                     //...check for a remapped file...
-                     int ii = _toon_texture_remap_orig_names->get_index(tf);
+         //Now see if the final name yields a good texture...
+         if (ind->second != NULL) {
+            _tex = ind->second;
+            _tex_name = tf;
+            err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Using cached copy of texture.");
+         } else {
+            err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
+            _tex = NULL;
+            _tex_name = NULL_STR;
+         }
 
-                     //...and use that name instead....
-                     if (ii != BAD_IND)
-                        {
-                           //...but also indicate that the original name is bad...
+      //Haven't seen this name before...
+      } else {
+         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Not in cache...");
 
-                           _toon_texture_names->add(tf);
-                           _toon_texture_ptrs->add(NULL);
+         Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
-                           string old_tf = string(**tf);
-                           tf = (*_toon_texture_remap_new_names)[ii];
+         //Can't load the texture?
+         if (i.empty()) {
+            //...check for a remapped file...
+            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
 
-                           err_mesg(ERR_LEV_ERROR, 
-                                    "ToonTexture_1D::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                                    (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
+            //...and use that name instead....
+            if (ii != _toon_texture_remap->end()) {
+               //...but also indicate that the original name is bad...
 
-                           i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
-                        }
-                  }
+               (*_toon_texture_map)[string(**tf)] = NULL;
 
-               //If the final name loads, store the cached texture...
-               if (!i.empty())
-                  {
-                     TEXTUREglptr t = new TEXTUREgl();
+               string old_tf = string(**tf);
+               tf = str_ptr(ii->second.c_str());
 
-                     t->set_save_img(true);
-                     t->set_wrap_s(GL_CLAMP_TO_EDGE);
-                     t->set_wrap_t(GL_CLAMP_TO_EDGE);
-                     t->set_image(i.copy(),i.width(),i.height(),i.bpp());
-         
+               err_mesg(ERR_LEV_ERROR,
+                        "ToonTexture_1D::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
-                     _toon_texture_names->add(tf);
-                     _toon_texture_ptrs->add(t);
+               i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
+            }
+         }
 
-                     err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-                              i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
+         //If the final name loads, store the cached texture...
+         if (!i.empty()) {
+            TEXTUREglptr t = new TEXTUREgl();
 
-                     _tex = t;
-                     _tex_name = tf;
-                  }
-               //Otherwise insert a failed NULL
-               else
-                  {
-                     err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
-         
-                     _toon_texture_names->add(tf);
-                     _toon_texture_ptrs->add(NULL);
+            t->set_save_img(true);
+            t->set_wrap_s(GL_CLAMP_TO_EDGE);
+            t->set_wrap_t(GL_CLAMP_TO_EDGE);
+            t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-                     _tex = NULL;
-                     _tex_name = NULL_STR;
-                  }
-            }   
+            (*_toon_texture_map)[string(**tf)] = t;
+
+            err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
+                     i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
+
+            _tex = t;
+            _tex_name = tf;
+
+         //Otherwise insert a failed NULL
+         } else {
+            err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
+
+            (*_toon_texture_map)[string(**tf)] = NULL;
+
+            _tex = NULL;
+            _tex_name = NULL_STR;
+         }
       }
-
-
-
+   }
 }
 
 /////////////////////////////////////

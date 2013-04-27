@@ -18,6 +18,8 @@
 #ifndef _BASE_STROKE_HEADER
 #define _BASE_STROKE_HEADER
 
+#include <map>
+
 #include "disp/color.H"
 #include "disp/view.H"
 #include "geom/texture.H"
@@ -567,10 +569,8 @@ class BaseStroke : public DATA_ITEM {
    //objects that are identical.  Instead, we
    //cache all of the textures, and their
    //filenames, and serve up textures from the cache.
-   static LIST<str_ptr>*      _stroke_texture_names;
-   static LIST<TEXTUREptr>*   _stroke_texture_ptrs;
-   static LIST<str_ptr>*      _stroke_texture_remap_orig_names;
-   static LIST<str_ptr>*      _stroke_texture_remap_new_names;
+   static map<string,TEXTUREptr>* _stroke_texture_map;
+   static map<string,string>*     _stroke_texture_remap;
 
  protected:
    static unsigned int  _stamp;

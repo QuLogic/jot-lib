@@ -41,10 +41,8 @@ GLuint   nst_solid_prog_arb;
 GLuint   nst_lit_solid_prog_nv;
 GLuint   nst_solid_prog_nv;
 
-LIST<str_ptr>*    NPRSolidTexture::_solid_texture_names = 0;
-LIST<TEXTUREptr>* NPRSolidTexture::_solid_texture_ptrs = 0;
-LIST<str_ptr>*    NPRSolidTexture::_solid_texture_remap_orig_names = 0;
-LIST<str_ptr>*    NPRSolidTexture::_solid_texture_remap_new_names = 0;
+map<string,TEXTUREptr>* NPRSolidTexture::_solid_texture_map = 0;
+map<string,string>*     NPRSolidTexture::_solid_texture_remap = 0;
 
 /*****************************************************************
  * Texture Remapping
@@ -1242,143 +1240,119 @@ NPRSolidTexture::draw(CVIEWptr& v)
 void
 NPRSolidTexture::update_tex(void)
 {
+   map<string,TEXTUREptr>::iterator ind;
 
-   int ind;
-
-   if (!_solid_texture_names)
-   {
-      _solid_texture_names = new LIST<str_ptr>; assert(_solid_texture_names);
-      _solid_texture_ptrs = new LIST<TEXTUREptr>; assert(_solid_texture_ptrs);
-
-      _solid_texture_remap_orig_names = new LIST<str_ptr>; assert(_solid_texture_remap_orig_names);
-      _solid_texture_remap_new_names = new LIST<str_ptr>; assert(_solid_texture_remap_new_names);
+   if (!_solid_texture_map) {
+      _solid_texture_map = new map<string,TEXTUREptr>; assert(_solid_texture_map);
+      _solid_texture_remap = new map<string,string>; assert(_solid_texture_remap);
 
       int i = 0;
-      while (solid_remap_fnames[i][0] != NULL)
-      {
-         _solid_texture_remap_orig_names->add(str_ptr(solid_remap_base) + solid_remap_fnames[i][0]);
-         _solid_texture_remap_new_names->add(str_ptr(solid_remap_base) + solid_remap_fnames[i][1]);
+      while (solid_remap_fnames[i][0] != NULL) {
+         (*_solid_texture_remap)[string(solid_remap_base) + solid_remap_fnames[i][0]] =
+                                 string(solid_remap_base) + solid_remap_fnames[i][1];
          i++;
       }
    }
 
    str_ptr tf = _tex_name;
 
-   if (tf == NULL_STR)
-   {
+   if (tf == NULL_STR) {
       assert(_tex == NULL);
       //_tex_name = NULL_STR;
       //_tex = NULL;
-   }
-   else if (_tex == NULL)
-   {
-      if ((ind = _solid_texture_names->get_index(tf)) != BAD_IND)
-      {
+
+   } else if (_tex == NULL) {
+      if ((ind = _solid_texture_map->find(string(**tf))) != _solid_texture_map->end()) {
          //Finding original name in cache...
 
          //If its a failed texture...
-         if ((*_solid_texture_ptrs)[ind] == NULL)
-         {
+         if (ind->second == NULL) {
             //...see if it was remapped...
-            int ii = _solid_texture_remap_orig_names->get_index(tf);
+            map<string,string>::iterator ii = _solid_texture_remap->find(string(**tf));
             //...and change to looking up the remapped name            
-            if (ii != BAD_IND)
-            {
+            if (ii != _solid_texture_remap->end()) {
                string old_tf = string(**tf);
-               tf = (*_solid_texture_remap_new_names)[ii];
+               tf = str_ptr(ii->second.c_str());
 
-               ind = _solid_texture_names->get_index(tf);
+               ind = _solid_texture_map->find(string(**tf));
 
-               err_mesg(ERR_LEV_SPAM, 
-                  "NPRSolidTexture::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
+               err_mesg(ERR_LEV_SPAM,
+                  "NPRSolidTexture::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
             }
          }
 
          //Now see if the final name yields a good texture...
-         if ((*_solid_texture_ptrs)[ind] != NULL)
-         {
-            _tex = (*_solid_texture_ptrs)[ind];
+         if (ind->second != NULL) {
+            _tex = ind->second;
             _tex_name = tf;
             err_mesg(ERR_LEV_SPAM, "NPRSolidTexture::set_texture() - Using cached copy of texture.");
-         }
-         else
-         {
+
+         } else {
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
             _tex = NULL;
             _tex_name = NULL_STR;
          }
-      }
+
       //Haven't seen this name before...
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_SPAM, "NPRSolidTexture::set_texture() - Not in cache...");
       
          Image i((Config::JOT_ROOT()+string(**tf)).c_str());
 
          //Can't load the texture?
-         if (i.empty())
-         {
+         if (i.empty()) {
             //...check for a remapped file...
-            int ii = _solid_texture_remap_orig_names->get_index(tf);
+            map<string,string>::iterator ii = _solid_texture_remap->find(string(**tf));
 
             //...and use that name instead....
-            if (ii != BAD_IND)
-            {
+            if (ii != _solid_texture_remap->end()) {
                //...but also indicate that the original name is bad...
 
-               _solid_texture_names->add(tf);
-               _solid_texture_ptrs->add(NULL);
+               (*_solid_texture_map)[string(**tf)] = NULL;
 
                string old_tf = string(**tf);
-               tf = (*_solid_texture_remap_new_names)[ii];
+               tf = str_ptr(ii->second.c_str());
 
-               err_mesg(ERR_LEV_ERROR, 
-                  "NPRSolidTexture::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str() );
+               err_mesg(ERR_LEV_ERROR,
+                  "NPRSolidTexture::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                     (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
                i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
             }
          }
 
          //If the final name loads, store the cached texture...
-         if (!i.empty())
-	      {
+         if (!i.empty()) {
             TEXTUREglptr t = new TEXTUREgl();
 
             t->set_save_img(true);
-            t->set_image(i.copy(),i.width(),i.height(),i.bpp());
-         
+            t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-            _solid_texture_names->add(tf);
-            _solid_texture_ptrs->add(t);
+            (*_solid_texture_map)[string(**tf)] = t;
 
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
                i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
 
             _tex = t;
             _tex_name = tf;
-	      }
+
          //Otherwise insert a failed NULL
-	      else
-	      {
+         } else {
             err_mesg(ERR_LEV_ERROR, "NPRSolidTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
-         
-            _solid_texture_names->add(tf);
-            _solid_texture_ptrs->add(NULL);
+
+            (*_solid_texture_map)[string(**tf)] = NULL;
 
             _tex = NULL;
             _tex_name = NULL_STR;
-	      }
+         }
       }   
    }
-
 
    if (_tex)
       nst_tex_flag = true;
    else
       nst_tex_flag = false;
-
 }
 
 /*

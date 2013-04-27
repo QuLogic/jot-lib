@@ -448,10 +448,8 @@ Wvec            BaseStroke::_cam_at_v;
 bool            BaseStroke::_debug = Config::get_var_bool("DEBUG_BASE_STROKES",false,true);
 bool            BaseStroke::_repair = Config::get_var_bool("BASE_STROKE_REPAIR_INTERSECTIONS",false,true);
 
-LIST<str_ptr>*    BaseStroke::_stroke_texture_names = 0;
-LIST<TEXTUREptr>* BaseStroke::_stroke_texture_ptrs = 0;
-LIST<str_ptr>*    BaseStroke::_stroke_texture_remap_orig_names = 0;
-LIST<str_ptr>*    BaseStroke::_stroke_texture_remap_new_names = 0;
+map<string,TEXTUREptr>* BaseStroke::_stroke_texture_map = 0;
+map<string,string>*     BaseStroke::_stroke_texture_remap = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // BaseStroke Methods
@@ -802,131 +800,111 @@ BaseStroke::get_offsets(TAGformat &d)
 void
 BaseStroke::set_texture(str_ptr tf)
 {
-   int ind;
+   map<string,TEXTUREptr>::iterator ind;
 
-   if (!_stroke_texture_names)
-   {
-      _stroke_texture_names = new LIST<str_ptr>; assert(_stroke_texture_names);
-      _stroke_texture_ptrs = new LIST<TEXTUREptr>; assert(_stroke_texture_ptrs);
-
-      _stroke_texture_remap_orig_names = new LIST<str_ptr>; assert(_stroke_texture_remap_orig_names);
-      _stroke_texture_remap_new_names = new LIST<str_ptr>; assert(_stroke_texture_remap_new_names);
+   if (!_stroke_texture_map) {
+      _stroke_texture_map = new map<string,TEXTUREptr>; assert(_stroke_texture_map);
+      _stroke_texture_remap = new map<string,string>; assert(_stroke_texture_remap);
 
       int i = 0;
-      while (stroke_remap_fnames[i][0] != NULL)
-      {
-         _stroke_texture_remap_orig_names->add(str_ptr(Config::JOT_ROOT().c_str()) + stroke_remap_base + stroke_remap_fnames[i][0]);
-         _stroke_texture_remap_new_names->add(str_ptr(Config::JOT_ROOT().c_str()) + stroke_remap_base + stroke_remap_fnames[i][1]);
+      while (stroke_remap_fnames[i][0] != NULL) {
+         (*_stroke_texture_remap)[Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][0]] =
+                                  Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][1];
          i++;
       }
    }
 
-   if (_tex_file == tf)
-   {
+   if (_tex_file == tf) {
       //No change
-   }
-   else if (tf == NULL_STR)
-   {
+
+   } else if (tf == NULL_STR) {
       _tex = NULL;
       _tex_file = NULL_STR;
-   }
-   else if ((ind = _stroke_texture_names->get_index(tf)) != BAD_IND)
-   {
+
+   } else if ((ind = _stroke_texture_map->find(string(**tf))) != _stroke_texture_map->end()) {
       //Finding original name in cache...
 
       //If its a failed texture...
-      if ((*_stroke_texture_ptrs)[ind] == NULL)
-      {
+      if (ind->second == NULL) {
          //...see if it was remapped...
-         int ii = _stroke_texture_remap_orig_names->get_index(tf);
+         map<string,string>::iterator ii = _stroke_texture_remap->find(string(**tf));
          //...and change to looking up the remapped name            
-         if (ii != BAD_IND)
-         {
+         if (ii != _stroke_texture_remap->end()) {
             str_ptr old_tf = tf;
-            tf = (*_stroke_texture_remap_new_names)[ii];
+            tf = str_ptr(ii->second.c_str());
 
-            ind = _stroke_texture_names->get_index(tf);
+            ind = _stroke_texture_map->find(string(**tf));
 
-            err_mesg(ERR_LEV_SPAM, 
-               "BaseStroke::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                  **old_tf, **tf );
+            err_mesg(ERR_LEV_SPAM,
+               "BaseStroke::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                  **old_tf, **tf);
          }
       }
 
       //Now see if the final name yields a good texture...
-      if ((*_stroke_texture_ptrs)[ind] != NULL)
-      {
-         _tex = (*_stroke_texture_ptrs)[ind];
+      if (ind->second != NULL) {
+         _tex = ind->second;
          _tex_file = tf;
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::set_texture() - Using cached copy of texture.");
-      }
-      else
-      {
+
+      } else {
          err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
          _tex = NULL;
          _tex_file = NULL_STR;
       }
-   }
+
    //Haven't seen this name before...
-   else
-   {
+   } else {
       err_mesg(ERR_LEV_SPAM, "BaseStroke::set_texture() - Not in cache...");
-      
+
       Image i(**tf);
 
       //Can't load the texture?
-      if (i.empty())
-      {
+      if (i.empty()) {
          //...check for a remapped file...
-         int ii = _stroke_texture_remap_orig_names->get_index(tf);
+         map<string,string>::iterator ii = _stroke_texture_remap->find(string(**tf));
 
          //...and use that name instead....
-         if (ii != BAD_IND)
-         {
+         if (ii != _stroke_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            _stroke_texture_names->add(tf);
-            _stroke_texture_ptrs->add(NULL);
+            (*_stroke_texture_map)[string(**tf)] = NULL;
 
             str_ptr old_tf = tf;
-            tf = (*_stroke_texture_remap_new_names)[ii];
+            tf = str_ptr(ii->second.c_str());
 
-            err_mesg(ERR_LEV_ERROR, 
-               "BaseStroke::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                  **old_tf, **tf );
+            err_mesg(ERR_LEV_ERROR,
+               "BaseStroke::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
+                  **old_tf, **tf);
 
             i.load_file(**tf);
          }
       }
 
       //If the final name loads, store the cached texture...
-      if (!i.empty())
-	   {
+      if (!i.empty()) {
          TEXTUREglptr t = new TEXTUREgl();
 
          t->set_save_img(true);
-         t->set_image(i.copy(),i.width(),i.height(),i.bpp());
+         t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-         _stroke_texture_names->add(tf);
-         _stroke_texture_ptrs->add(t);
+         (*_stroke_texture_map)[string(**tf)] = t;
 
          err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-            i.width(), i.height(), i.bpp(), **tf);;
+            i.width(), i.height(), i.bpp(), **tf);
 
          _tex = t;
          _tex_file = tf;
-	   }
+
       //Otherwise insert a failed NULL
-	   else
-	   {
+      } else {
          err_mesg(ERR_LEV_ERROR, "BaseStroke::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", **tf);
-         
-         _stroke_texture_names->add(tf);
-         _stroke_texture_ptrs->add(NULL);
+
+         (*_stroke_texture_map)[string(**tf)] = NULL;
 
          _tex = NULL;
          _tex_file = NULL_STR;
-	   }
+      }
    }   
 }
 
