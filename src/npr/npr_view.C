@@ -637,7 +637,7 @@ inline void
 show_message(const string& s)
 {
    cerr << s << endl;
-   WORLD::message(str_ptr(s.c_str()));
+   WORLD::message(s);
 }
 
 void

@@ -71,13 +71,13 @@ class REF_CLASS(WORLD) : public SCHEDULER {
 
    static DATA_ITEM *_default_decoder(STDdstream &, Cstr_ptr &, DATA_ITEM *);
 
-   virtual void  _Message(Cstr_ptr &m, double secs=3,
+   virtual void  _Message(const string &m, double secs=3,
                           mlib::CXYpt &pos=mlib::XYpt(0,.9));
-   virtual void  _Multi_Message(Cstr_list &m, double secs=3,
+   virtual void  _Multi_Message(const vector<string> &m, double secs=3,
                                 mlib::CXYpt &pos=mlib::XYpt(0,.9));
    //used in _Multi_Message
-   virtual str_list format_str(Cstr_ptr &str, const int line_length);
-   virtual int      get_next(Cstr_ptr &str, int loc, char chr);
+   virtual void  format_str(const string &str, const int line_length, vector<string> &formatted);
+   virtual int   get_next(const string &str, int loc, char chr);
  public:
        WORLD();
 
@@ -141,10 +141,10 @@ static bool is_displayed(CGELptr& o);
  // show a Wtransf
  static GELptr show(mlib::CWtransf& xf, double axis_length=15.0);
 
-static void message(Cstr_ptr&m, double sec=3.0, mlib::CXYpt&pos=mlib::XYpt(0,.9)) {
+static void message(const string &m, double sec=3.0, mlib::CXYpt&pos=mlib::XYpt(0,.9)) {
    _w->_Message(m, sec, pos);
 }
-static void multi_message(Cstr_list &m, double sec=3.0, mlib::CXYpt&pos=mlib::XYpt(0,.9)) {
+static void multi_message(const vector<string> &m, double sec=3.0, mlib::CXYpt&pos=mlib::XYpt(0,.9)) {
    _w->_Multi_Message(m, sec, pos);
 }
 

@@ -659,7 +659,7 @@ CRV_SKETCH::init(CGESTUREptr& g)
 
    // inform user of new state
 
-   str_ptr msg;
+   string msg;
 
    if (me->_mode == SHADOW) {
       msg = "Shadow sketch ";

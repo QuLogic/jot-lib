@@ -583,17 +583,16 @@ LinePen::perform_selection(
 void
 LinePen::display_mode() 
 {
-   
-   str_ptr mode_text;
+   string mode_text;
    int i;
  
    switch(_curr_mode) 
    {
       case EDIT_MODE_DECAL:
-         mode_text = str_ptr("Editing Decals");
+         mode_text = "Editing Decals";
       break;
       case EDIT_MODE_CREASE:
-         mode_text = str_ptr("Editing Creases");
+         mode_text = "Editing Creases";
       break;
       case EDIT_MODE_SIL:
          assert(_curr_tex);
@@ -610,10 +609,10 @@ LinePen::display_mode()
              }
          }
 
-         mode_text = str_ptr("Editing Lines (") + SilAndCreaseTexture::sil_stroke_pool(sil_type) + ")";
+         mode_text = string("Editing Lines (") + SilAndCreaseTexture::sil_stroke_pool(sil_type) + ")";
       break;
       case EDIT_MODE_NONE:
-         mode_text = str_ptr("Editing NOTHING");
+         mode_text = "Editing NOTHING";
       break;
       default:
          assert(0);
@@ -793,8 +792,9 @@ LinePen::button_noise_prototype_next()
 
    _ui->update();
 
-   WORLD::message(str_ptr("Selected Prototype ") + 
-                     str_ptr(sil_pool->get_edit_proto()+1) + " of " + str_ptr(sil_pool->get_num_protos()));
+   char msg[128];
+   sprintf(msg, "Selected Prototype %d of %d", sil_pool->get_edit_proto()+1, sil_pool->get_num_protos());
+   WORLD::message(msg);
 
    //XXX - Pools are smart enough to get dirty
    //_curr_tex->stroke_tex()->sil_and_crease_tex()->mark_all_dirty();

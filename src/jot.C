@@ -786,7 +786,7 @@ next_texture(const Event&, State *&)
 
    if (patch) {
       patch->next_texture();
-      WORLD::message(str_ptr(patch->cur_tex()->class_name().c_str()));
+      WORLD::message(patch->cur_tex()->class_name());
    }
 
    return 0;
@@ -899,17 +899,17 @@ sil_ui_toggle(const Event&, State *&)
 int
 toggle_antialias(const Event&, State *&)
 {
-
    int a = VIEW::peek()->get_antialias_enable();
 
    VIEW::peek()->set_antialias_enable(!a);
 
+   char tmp[32];
+   sprintf(tmp, "%d", VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode()));
+
    if (VIEW::peek()->get_antialias_enable()) {
-      WORLD::message(str_ptr("Antialiasing: ENALBED Jitters: ") +
-                     str_ptr(VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode())));
+      WORLD::message(string("Antialiasing: ENABLED Jitters: ") + tmp);
    } else {
-      WORLD::message(str_ptr("Antialiasing: DISABLED Jitters: ") +
-                     str_ptr(VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode())));
+      WORLD::message(string("Antialiasing: DISABLED Jitters: ") + tmp);
    }
 
    if (ViewUI::is_vis(VIEW::peek())) {
@@ -927,12 +927,13 @@ next_antialias(const Event&, State *&)
 
    VIEW::peek()->set_antialias_mode((m+1)%VIEW::get_jitter_mode_num());
 
+   char tmp[32];
+   sprintf(tmp, "%d", VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode()));
+
    if (VIEW::peek()->get_antialias_enable()) {
-      WORLD::message(str_ptr("Antialiasing: ENALBED Jitters: ") +
-                     str_ptr(VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode())));
+      WORLD::message(string("Antialiasing: ENABLED Jitters: ") + tmp);
    } else {
-      WORLD::message(str_ptr("Antialiasing: DISABLED Jitters: ") +
-                     str_ptr(VIEW::get_jitter_num(VIEW::peek()->get_antialias_mode())));
+      WORLD::message(string("Antialiasing: DISABLED Jitters: ") + tmp);
    }
 
    if (ViewUI::is_vis(VIEW::peek())) {
@@ -1240,7 +1241,7 @@ debug_cb(const Event& ev, State *&)
       NormalsTexture::toggle_uv_vectors();
 
       //WORLD::message(
-      //   str_ptr("Debug UV: ") + (FlatShadeTexture::debug_uv() ? "ON" : "OFF")
+      //   string("Debug UV: ") + (FlatShadeTexture::debug_uv() ? "ON" : "OFF")
       //   );
       //break;
 
@@ -1260,7 +1261,7 @@ debug_cb(const Event& ev, State *&)
    }
    case 'J' : {
       draw_skin_only = !draw_skin_only;
-      WORLD::message(str_ptr("Skin only: ") + (draw_skin_only ? "ON" : "OFF" ));
+      WORLD::message(string("Skin only: ") + (draw_skin_only ? "ON" : "OFF" ));
       break;
    }
    case 'z': {
@@ -1513,11 +1514,11 @@ JOTapp::do_save(string fullpath)
    if (status == SAVEobs::SAVE_ERROR_NONE) {
       cerr << "do_save() - ...done.\n";
 
-      WORLD::message(str_ptr(("Saved '" + fullpath + "'").c_str()));
+      WORLD::message("Saved '" + fullpath + "'");
    } else {
       cerr << "do_save() - ...aborted!!!" << endl;
 
-      WORLD::message(str_ptr(("Problem saving '" + fullpath + "'").c_str()));
+      WORLD::message("Problem saving '" + fullpath + "'");
 
       AlertBox *box = VIEW::peek()->win()->alert_box();
 
@@ -1611,7 +1612,7 @@ JOTapp::do_load(string fullpath)
 
       if (status == LOADobs::LOAD_ERROR_NONE) {
 
-         WORLD::message(str_ptr(("Loaded '" + fullpath + "'").c_str()));
+         WORLD::message("Loaded '" + fullpath + "'");
 
       } else {
          // replace entire scene with one loaded from file.
@@ -1624,7 +1625,7 @@ JOTapp::do_load(string fullpath)
               << fullpath
               << endl;
 
-         WORLD::message(str_ptr(("Problem loading '" + fullpath + "'").c_str()));
+         WORLD::message("Problem loading '" + fullpath + "'");
 
          switch (status) {
           case LOADobs::LOAD_ERROR_STREAM:
@@ -1946,7 +1947,7 @@ refine(const Event&, State *&)
       cerr << "Current mesh volume=" << ctrl_mesh->volume() <<endl;
 
    if (ctrl_mesh && ctrl_mesh->loc_calc() && !ctrl_mesh->loc_calc()->name().empty())
-      WORLD::message(str_ptr(ctrl_mesh->loc_calc()->name().c_str()));
+      WORLD::message(ctrl_mesh->loc_calc()->name());
 
    ctrl_mesh->refine();
    if (Config::get_var_bool("DEBUG_VOLUME_PRESERVATION",false))
@@ -1979,7 +1980,7 @@ cycle_subdiv_loc_calc(const Event&, State *&)
    assert(calc != 0);
    ctrl_mesh->set_subdiv_loc_calc(calc);
    ctrl_mesh->update();
-   WORLD::message(str_ptr(calc->name().c_str()) + " scheme in use");
+   WORLD::message(calc->name() + " scheme in use");
 
    return 0;
 }
@@ -2142,9 +2143,9 @@ write(const Event&, State *&)
    }
 
    if (mesh->write_file(fname.c_str())) {
-      WORLD::message(str_ptr("Wrote mesh: ") + str_ptr(fname.c_str()));
+      WORLD::message("Wrote mesh: " + fname);
    } else {
-      WORLD::message(str_ptr("Failed to write mesh: ") + str_ptr(fname.c_str()));
+      WORLD::message("Failed to write mesh: " + fname);
    }
 
    return 1;
@@ -2194,11 +2195,11 @@ save_config(const Event &e, State *&)
    ret = Config::save_config(Config::JOT_ROOT() + "jot.cfg");
 
    if (ret)
-      WORLD::message(str_ptr(("Wrote config to " +
-                     Config::JOT_ROOT() + "jot.cfg").c_str()));
+      WORLD::message("Wrote config to " +
+                     Config::JOT_ROOT() + "jot.cfg");
    else
-      WORLD::message(str_ptr(("FAILED!! Writing config to " +
-                     Config::JOT_ROOT() + "jot.cfg").c_str()));
+      WORLD::message("FAILED!! Writing config to " +
+                     Config::JOT_ROOT() + "jot.cfg");
 
    return 1;
 }

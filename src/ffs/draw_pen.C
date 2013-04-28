@@ -1848,7 +1848,7 @@ DrawPen::create_curve(GESTUREptr gest)
       // "panel" surface:
       Bsurface* surf = PanelAction::create(contour, cmd);
       if (surf) {
-         WORLD::message(str_ptr(("built " + surf->class_name()).c_str()));
+         WORLD::message("built " + surf->class_name());
       }
    }
    FLOOR::realign(mesh, cmd);

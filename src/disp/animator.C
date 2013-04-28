@@ -37,7 +37,7 @@ show_msg(const string& msg)
 inline void
 show_msg(const string& msg)
 {
-   WORLD::message(str_ptr(msg.c_str()));
+   WORLD::message(msg);
 }
 #endif
 

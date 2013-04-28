@@ -469,20 +469,20 @@ TEXT2Dptr msgtext;
 
 void
 WORLD::_Message(
-   Cstr_ptr &str,
+   const string &str,
    double   secs,
    CXYpt    &pos
    )
 {   
-   _Multi_Message(0);
+   _Multi_Message(vector<string>());
    if (!msgtext) {
-      msgtext = new TEXT2D(unique_name("msg"), string(**str), pos);
+      msgtext = new TEXT2D(unique_name("msg"), str, pos);
       GEOMptr g = msgtext;
       g->set_color(Color::firebrick);
       NETWORK.set(g, 0);
       create(g, false);
    } else {
-      msgtext->set_string(string(**str));
+      msgtext->set_string(str);
       msgtext->set_loc   (pos);
    }
 
@@ -522,8 +522,8 @@ class REF_CLASS(WMMSG) : public FRAMEobs {
    int tick() {
       if (_end_time && the_time() > _end_time) {
          //clear away all messages begin displayed
-         str_list list;
-         list += "";
+         vector<string> list;
+         list.push_back("");
          WORLD::multi_message(list);
          for (int i = 0; i < _num_msgs; i++) 
             _text[i]->set_string("");
@@ -541,7 +541,7 @@ TEXT2Dptr mmsgtext[MAXLINES];
 
 //returns the location of the next instance of chr in the string
 int
-WORLD::get_next(Cstr_ptr &str, int loc, char chr) {
+WORLD::get_next(const string &str, int loc, char chr) {
    while (str[loc] != '\0') {
       loc++;
       if ((str[loc] == chr)||(str[loc] == '\0'))
@@ -552,12 +552,11 @@ WORLD::get_next(Cstr_ptr &str, int loc, char chr) {
 
 /*given a string, returns an array such that each of its elements contains
   a maximum of line_length characters*/
-str_list
-WORLD::format_str(Cstr_ptr &str, const int line_length)
+void
+WORLD::format_str(const string &str, const int line_length, vector<string> &formatted)
 {
    int i = 0, len = 0;
    char *line = new char[line_length];
-   str_list formatted;
    while (str[len] != '\0') {
       if (str[i] == ' ') len++; //go on to next character if new line
       for (i = len; i < len + line_length; i++) {
@@ -569,43 +568,42 @@ WORLD::format_str(Cstr_ptr &str, const int line_length)
          line[i - len] = str[i];
       }
       line[i - len] = '\0';
-      formatted += line;
+      formatted.push_back(line);
       //this many characters formatted
       len = i;
    } 
    delete [] line;
-   return formatted;
 }
 
 void
 WORLD::_Multi_Message(
-   Cstr_list &str,
-   double     secs,
-   CXYpt     &pos
+   const vector<string> &str,
+   double                secs,
+   CXYpt                &pos
    )
 {
-   int i, w, h;
+   vector<string>::size_type i;
+   int j, w, h;
    //read each string into a single array
-   str_list formatted;
+   vector<string> formatted;
    TEXT2Dptr msg;
    VIEW::peek_size(w, h);
    int line_length = w / 10;
-   for (i = 0; i < str.num(); i++) 
-      formatted.operator+=(format_str(str[i], line_length));
-
+   for (i = 0; i < str.size(); i++)
+      format_str(str[i], line_length, formatted);
 
    //delete old messages
    if (msgtext) 
       msgtext->set_string("");
-   for (i = 0; i < MAXLINES; i++)
-      if (mmsgtext[i])
-         mmsgtext[i]->set_string("");
+   for (j = 0; j < MAXLINES; j++)
+      if (mmsgtext[j])
+         mmsgtext[j]->set_string("");
 
    XYpt pos2 = pos, jVec(0, -.08);
 
-   for (i = 0; ((i < formatted.num())&&(i < MAXLINES)); i++) 
+   for (i = 0; i < formatted.size() && (int)i < MAXLINES; i++) {
       if (!mmsgtext[i]) {
-         msg = new TEXT2D(unique_name("msg"), string(**formatted[i]), pos2);
+         msg = new TEXT2D(unique_name("msg"), formatted[i], pos2);
          GEOMptr g = msg;
          g->set_color(Color::firebrick);
          NETWORK.set(g, 0);
@@ -614,10 +612,11 @@ WORLD::_Multi_Message(
          mmsgtext[i] = msg;
          pos2 += jVec;
       } else {    //move text if it is currently being shown 
-         mmsgtext[i]->set_string(string(**formatted[i]));
+         mmsgtext[i]->set_string(formatted[i]);
          mmsgtext[i]->set_loc   (pos2);
          pos2 += jVec;
       }
+   }
 
    if (!WMMSG::msg()) {
       new WMMSG(mmsgtext);
