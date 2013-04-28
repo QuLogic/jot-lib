@@ -57,7 +57,7 @@ class Image {
  public:
    //******** MANAGERS ********
    Image();
-   Image(Cstr_ptr& file);
+   Image(const string& file);
    Image(uint w, uint h, uint bpp, uchar* data=0, bool nd=1);
    Image(const Image& img);
    virtual ~Image() { clear(); }
@@ -182,19 +182,19 @@ class Image {
 
    //******** I/O ********
 
-   int  load_file(const char* file);
-   int  read_png(const char* file);
+   int  load_file(const string &file);
+   int  read_png(const string &file);
    int  read_png(FILE* fp);
-   int  write_png(const char* file) const;
+   int  write_png(const string &file) const;
 
-   int  read_pnm(const char* file);
+   int  read_pnm(const string &file);
    int  read_pgm(istream& in, bool ascii);
    int  read_ppm(istream& in, bool ascii);
-   int  write_pnm(const char* file) const;
+   int  write_pnm(const string &file) const;
 
-   static int write_png(int w, int h, uint bpp, uchar* data, Cstr_ptr& file) {
+   static int write_png(int w, int h, uint bpp, uchar* data, const string& file) {
       Image img(w,h,bpp,data,1);
-      return img.write_png(**file);
+      return img.write_png(file.c_str());
    }
 
  protected:
@@ -207,7 +207,7 @@ class Image {
 
    //******** UTILITIES ********
 
-   FILE* open_png(const char* file);
+   FILE* open_png(const string &file);
 };
 
 #endif  // IMAGE_H_HAS_BEEN_INCLUDED

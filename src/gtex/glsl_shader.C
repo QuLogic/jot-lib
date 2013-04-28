@@ -447,7 +447,7 @@ GLSLShader::activate_texture(TEXTUREglptr& tex)
       sprintf(tmp, "%d", tex->get_raw_unit());
       GL_VIEW::print_gl_errors(
          string("glsl_shader::activate_texture: activating texture ") +
-         (tex ? string(**tex->file()) : "null pointer") +
+         (tex ? tex->file() : "null pointer") +
          " at unit " +
          tmp);
    }

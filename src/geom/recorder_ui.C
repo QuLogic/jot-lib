@@ -340,7 +340,7 @@ void
 RecorderUI::name_edittext_cb(int /* id */)
 { 
    if(_rec == NULL) return;
-   _rec->_name_buf = str_ptr ( _name_edittext->get_text() );
+   _rec->_name_buf = _name_edittext->get_text();
 }
 
 void

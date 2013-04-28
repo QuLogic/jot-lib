@@ -1125,7 +1125,7 @@ toggle_recorder (const Event &, State *&)
    else {
       if (_rec->get_ui() == NULL) {
          _rec->set_ui(new RecorderUI(_rec));
-         _rec->_name_buf = str_ptr ("default");
+         _rec->_name_buf = "default";
          _rec->new_path();
       }
       _rec->activate();
@@ -1235,8 +1235,8 @@ refine(const Event&, State *&)
    if (Config::get_var_bool("DEBUG_VOLUME_PRESERVATION",false))
       cerr << "Current mesh volume=" << ctrl_mesh->volume() <<endl;
 
-   if (ctrl_mesh && ctrl_mesh->loc_calc() && **ctrl_mesh->loc_calc()->name())
-      WORLD::message(**ctrl_mesh->loc_calc()->name());
+   if (ctrl_mesh && ctrl_mesh->loc_calc() && !ctrl_mesh->loc_calc()->name().empty())
+      WORLD::message(str_ptr(ctrl_mesh->loc_calc()->name().c_str()));
 
    ctrl_mesh->refine();
    if (Config::get_var_bool("DEBUG_VOLUME_PRESERVATION",false))
@@ -1263,7 +1263,7 @@ cycle_subdiv_loc_calc(const Event&, State *&)
    assert(calc != 0);
    ctrl_mesh->set_subdiv_loc_calc(calc);
    ctrl_mesh->update();
-   WORLD::message(calc->name() + " scheme in use");
+   WORLD::message(str_ptr(calc->name().c_str()) + " scheme in use");
 
    return 0;
 }
@@ -1340,12 +1340,12 @@ write(const Event&, State *&)
 
    mesh->print();
 
-   str_ptr fname = "out.sm";   
+   string fname = "out.sm";
 
-   if (mesh->write_file(**fname)) {
-      WORLD::message(str_ptr("Wrote mesh: ") + fname);
+   if (mesh->write_file(fname.c_str())) {
+      WORLD::message(str_ptr("Wrote mesh: ") + fname.c_str());
    } else {
-      WORLD::message(str_ptr("Failed to write mesh: ") + fname);
+      WORLD::message(str_ptr("Failed to write mesh: ") + fname.c_str());
    }
 
    return 1;

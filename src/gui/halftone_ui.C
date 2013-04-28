@@ -227,12 +227,12 @@ HalftoneUI::update_non_lives()
       _color_ui->set_current_color(c[0],c[1],c[2], true, true);
    }
 
-   if((layer->_mode == 1) && (!layer->_pattern_name))
+   if((layer->_mode == 1) && (layer->_pattern_name.empty()))
       _current_halftone->set_procedural_pattern(0, 0);  //Set defaults if the layers is not set up...
    
   
-   if(layer->_pattern_name){
-      GLUI_Listbox_Item* pattern_item = _listbox[LIST_PATTERN]->get_item_ptr(**(layer->_pattern_name));
+   if (!layer->_pattern_name.empty()) {
+      GLUI_Listbox_Item* pattern_item = _listbox[LIST_PATTERN]->get_item_ptr(layer->_pattern_name.c_str());
       if(pattern_item)
          _listbox[LIST_PATTERN]->set_int_val(pattern_item->id);
    } 
@@ -519,7 +519,7 @@ HalftoneUI::apply_changes_to_texture(operation_id_t op, Halftone_TX* tex, int la
        else 
        {
          if(tex->get_layer(layer)->_mode){
-          str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str();
+          string pattern = _listbox[LIST_PATTERN]->curr_text;
           tex->set_texture_pattern(layer, pattern);
          }
        }

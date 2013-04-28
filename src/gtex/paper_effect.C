@@ -369,7 +369,7 @@ void (APICALLCONVENTION * gl_multi_tex_coord_2dv) (GLenum, const GLdouble *) = &
 // Static Variable Initialization
 /////////////////////////////////////
 
-static str_ptr paper_filename_default = "/nprdata/paper_textures/paper.png";
+static string paper_filename_default = "/nprdata/paper_textures/paper.png";
 
 ////////////////////////////////////////////////////////////////////////////////
 // PaperEffect Methods
@@ -1289,7 +1289,7 @@ PaperEffect::is_alpha_premult()
 // get_texture() 
 /////////////////////////////////////
 TEXTUREptr
-PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
+PaperEffect::get_texture(const string &in_tf, string &tf)
 {
    map<string,TEXTUREptr>::iterator ind;
 
@@ -1309,27 +1309,27 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
    }
 
    //No paper
-   if (tf == NULL_STR) {
-      tf = NULL_STR;
+   if (tf == "") {
+      tf = "";
       return NULL;
 
-   } else if ((ind = _paper_texture_map->find(string(**tf))) != _paper_texture_map->end()) {
+   } else if ((ind = _paper_texture_map->find(tf)) != _paper_texture_map->end()) {
       //Finding original name in cache...
 
       //If it's a failed texture...
       if (ind->second == NULL) {
          //...see if it was remapped...
-         map<string,string>::iterator ii = _paper_texture_remap->find(string(**tf));
+         map<string,string>::iterator ii = _paper_texture_remap->find(tf);
          //...and change to looking up the remapped name            
          if (ii != _paper_texture_remap->end()) {
-            str_ptr old_tf = tf;
-            tf = str_ptr(ii->second.c_str());
+            string old_tf = tf;
+            tf = ii->second;
 
-            ind = _paper_texture_map->find(string(**tf));
+            ind = _paper_texture_map->find(tf);
 
             err_mesg(ERR_LEV_SPAM, 
                "PaperEffect::get_texture() - Previously remapped -=<[{ (%s) ---> (%s) }]>=-", 
-                  **old_tf, **tf );
+                  old_tf.c_str(), tf.c_str() );
          }
       }
 
@@ -1340,36 +1340,36 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
          return ind->second;
 
       } else {
-         err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
-         tf = NULL_STR;
+         err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
+         tf = "";
          return NULL;
       }
 
    //Haven't seen this name before...
    } else {
-      err_mesg(ERR_LEV_SPAM, "PaperEffect::get_texture() - Not in cache: '%s'", **tf);
+      err_mesg(ERR_LEV_SPAM, "PaperEffect::get_texture() - Not in cache: '%s'", tf.c_str());
 
-      Image i(**tf);
+      Image i(tf);
 
       //Can't load the texture?
       if (i.empty()) {
          //...check for a remapped file...
-         map<string,string>::iterator ii = _paper_texture_remap->find(string(**tf));
+         map<string,string>::iterator ii = _paper_texture_remap->find(tf);
 
          //...and use that name instead....
          if (ii != _paper_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            (*_paper_texture_map)[string(**tf)] = NULL;
+            (*_paper_texture_map)[tf] = NULL;
 
-            str_ptr old_tf = tf;
-            tf = str_ptr(ii->second.c_str());
+            string old_tf = tf;
+            tf = ii->second;
 
             err_mesg(ERR_LEV_ERROR, 
                "PaperEffect::get_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--", 
-                  **old_tf, **tf );
+                  old_tf.c_str(), tf.c_str() );
 
-            i.load_file(**tf);
+            i.load_file(tf.c_str());
          }
       }
 
@@ -1380,22 +1380,22 @@ PaperEffect::get_texture(Cstr_ptr &in_tf, str_ptr &tf)
          t->set_save_img(true);
          t->set_image(i.copy(),i.width(),i.height(),i.bpp());
 
-         (*_paper_texture_map)[string(**tf)] = t;
+         (*_paper_texture_map)[tf] = t;
 
          err_mesg(ERR_LEV_INFO, 
             "PaperEffect::get_texture() - Cached: (w=%d h=%d bpp=%u) %s", 
-               i.width(), i.height(), i.bpp(), **tf);
+               i.width(), i.height(), i.bpp(), tf.c_str());
 
          tf = tf;
          return t;
 
       //Otherwise insert a failed NULL...
       } else {
-         err_mesg(ERR_LEV_ERROR, "PaperEffect::get_texture() - *****ERROR***** Failed loading to cache: '%s'", **tf);
+         err_mesg(ERR_LEV_ERROR, "PaperEffect::get_texture() - *****ERROR***** Failed loading to cache: '%s'", tf.c_str());
 
-         (*_paper_texture_map)[string(**tf)] = NULL;
+         (*_paper_texture_map)[tf] = NULL;
 
-         tf = NULL_STR;
+         tf = "";
          return NULL;
       }
    }
@@ -1454,26 +1454,26 @@ PaperEffect::check_new_paper()
 {
    //XXX - Since mipmapping is NOT on, these textures must have 2^n dimensions? (REALLY?)
 
-   str_ptr new_paper_filename = (_paper_tex)?(str_ptr(Config::JOT_ROOT().c_str()) + _paper_tex):(NULL_STR);
+   string new_paper_filename = _paper_tex.empty()?"":(Config::JOT_ROOT() + _paper_tex);
 
    if (new_paper_filename != _paper_filename)        
    {
-      str_ptr ret_filename;
+      string ret_filename;
       
       _paper_texture = get_texture(new_paper_filename, ret_filename);
       _paper_filename = ret_filename;
 
-      if (ret_filename == NULL_STR)
+      if (ret_filename == "")
       {
-         _paper_tex = NULL_STR;         
+         _paper_tex = "";
       }
       else
       {
          //JOT_ROOT should be at start of this filename...
-         assert(strstr(**_paper_filename,Config::JOT_ROOT().c_str()) == **_paper_filename );
+         assert(strstr(_paper_filename.c_str(),Config::JOT_ROOT().c_str()) == _paper_filename.c_str() );
 
          //Now strip it off...
-         _paper_tex = &((**_paper_filename)[Config::JOT_ROOT().length()]);
+         _paper_tex = _paper_filename.substr(Config::JOT_ROOT().length());
       }
 
 

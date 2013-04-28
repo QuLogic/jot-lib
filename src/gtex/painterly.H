@@ -83,13 +83,13 @@ class Painterly : public GLSLShader_Layer_Base {
    // but only if they are currently not assigned textures.
    void init_default(int layer);
 
-   void init_layer(int l, Cstr_ptr& pattern, Cstr_ptr& paper);
+   void init_layer(int l, const string& pattern, const string& paper);
 
    layer_paint_t* get_layer(int l) const {
       return dynamic_cast<layer_paint_t*>(_layers[l]);
    }
    
-   Cstr_ptr& paper_name() const { return _paper_name; }
+   const string& paper_name() const { return _paper_name; }
 
    //******** I/O Methods ********
   
@@ -135,14 +135,14 @@ class Painterly : public GLSLShader_Layer_Base {
    virtual DATA_ITEM* dup() const { return new Painterly(); }
    virtual CTAGlist&  tags() const;
 
-   void set_texture_pattern(int layer, str_ptr file_name);
-   void set_paper_texture(str_ptr file_name);
+   void set_texture_pattern(int layer, string file_name);
+   void set_paper_texture(string file_name);
    void cleanup_unused_paper_textures(int tex_stage); 
 
  protected:
    //******** Member Variables ********
    GLint        _paper_tex; 
-   str_ptr      _paper_name;
+   string       _paper_name;
 
    static GLint _paper_tex_loc; 
    static TAGlist* _painterly_tags;

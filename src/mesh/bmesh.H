@@ -980,7 +980,7 @@ class BMESHobs {
    //******** UTILITIES ********
 
    // For debugging, e.g.:
-   virtual str_ptr name() const { return "bmesh_obs"; }
+   virtual string name() const { return "bmesh_obs"; }
 
    // Returns the observer list for a particular mesh:
    static const BMESHobs_list& observers(BMESH* m)  {

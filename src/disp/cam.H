@@ -194,7 +194,7 @@ class CAMobs {
 //----------------------------------------------
 class REF_CLASS(CAM): public SCHEDULER {
   protected: 
-   str_ptr      _name;
+   string       _name;
 
    CAMdataptr   _data;
 
@@ -210,11 +210,11 @@ class REF_CLASS(CAM): public SCHEDULER {
   protected:
 
   public:
-   CAM(Cstr_ptr &s):_name(s),//,_data(new CAMdata(this)),
+   CAM(const string &s):_name(s),//,_data(new CAMdata(this)),
       _min(-1,-1),_width(2),_height(2),
       _zoom(1), _ndc_proj_dirty(1) { _data = new CAMdata(this);}
       virtual           ~CAM()               { }
-      virtual str_ptr    name()        const { return str_ptr(_name); }
+      virtual string     name()        const { return _name; }
 
       void     set_aspect(double a);
 

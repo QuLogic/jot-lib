@@ -322,16 +322,16 @@ OGLTexture::check_patch_texture_map()
    if (!_patch || _patch->has_texture())
       return;
 
-   Cstr_ptr& n = _patch->texture_file();
+   const string& n = _patch->texture_file();
 
-   if (n && n != NULL_STR) {
+   if (n != "") {
       TEXTUREptr tex = new TEXTUREgl(n);
 
       if (tex->load_texture()) {
          _patch->set_texture(tex);
       }
 
-      _patch->set_texture_file(NULL_STR);
+      _patch->set_texture_file("");
    }
 }
 

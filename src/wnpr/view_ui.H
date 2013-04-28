@@ -192,8 +192,8 @@ class ViewUI {
    mlib::Wvec                    _spot_dir;
 
    GLUI*                         _glui;   
-   str_list                      _bkgtex_filenames;
-   str_list                      _paper_filenames;
+   vector<string>                _bkgtex_filenames;
+   vector<string>                _paper_filenames;
    ARRAY<GLUI_Listbox*>          _listbox;
    ARRAY<GLUI_Button*>           _button;
    ARRAY<GLUI_Slider*>           _slider;
@@ -239,8 +239,8 @@ class ViewUI {
 
    /******** Convenience Methods ********/
 
-   void     fill_bkgtex_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
-   void     fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
+   void     fill_bkgtex_listbox(GLUI_Listbox *lb, vector<string> &save_files, const string &full_path);
+   void     fill_paper_listbox(GLUI_Listbox *lb, vector<string> &save_files, const string &full_path);
    void     fill_anti_listbox(GLUI_Listbox *lb);
 
    /******** STATIC CALLBACK METHODS ********/

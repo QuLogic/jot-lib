@@ -54,7 +54,7 @@
 #define STROKEUI_DEFAULT_CONTRAST        0.5f
 #define STROKEUI_DEFAULT_BRIGHTNESS      0.5f
 #define STROKEUI_DEFAULT_TEX_FILE        (Config::JOT_ROOT() + "nprdata/stroke_textures/1D--dark-8.png")
-#define STROKEUI_DEFAULT_PAPER_FILE      NULL_STR
+#define STROKEUI_DEFAULT_PAPER_FILE      ""
 
 #include "gtex/gl_extensions.H"
 #include "base_jotapp/base_jotapp.H"
@@ -149,7 +149,7 @@ StrokeUI::StrokeUI(VIEWptr v) :
    _params.set_angle(STROKEUI_DEFAULT_ANGLE);
    _params.set_contrast(STROKEUI_DEFAULT_CONTRAST);
    _params.set_brightness(STROKEUI_DEFAULT_BRIGHTNESS);
-   _params.set_texture(str_ptr(STROKEUI_DEFAULT_TEX_FILE.c_str()));
+   _params.set_texture(STROKEUI_DEFAULT_TEX_FILE);
    _params.set_paper(STROKEUI_DEFAULT_PAPER_FILE);
 
    // Defer init() until the first build()
@@ -650,9 +650,9 @@ StrokeUI::build()
    assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)   _rollout.add(0);
    assert(_bitmapbox.num()==0);    for (i=0; i<BITMAPBOX_NUM; i++) _bitmapbox.add(0);
 
-   assert(_texture_filenames.num() == 0);
-   assert(_paper_filenames.num() == 0);
-   assert(_preset_filenames.num() == 0);
+   assert(_texture_filenames.empty());
+   assert(_paper_filenames.empty());
+   assert(_preset_filenames.empty());
 
    // Panel containing pen buttons
    _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
@@ -1025,9 +1025,9 @@ StrokeUI::destroy()
 
 void
 StrokeUI::fill_texture_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
    )
 {
    int j=0;
@@ -1038,7 +1038,7 @@ StrokeUI::fill_texture_listbox(
       if ( (len>3) && 
             (in_files[i].substr(len-4) == ".png"))
       {
-         save_files += str_ptr((full_path + in_files[i]).c_str());
+         save_files.push_back(full_path + in_files[i]);
          listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
@@ -1055,9 +1055,9 @@ StrokeUI::fill_texture_listbox(
 
 void
 StrokeUI::fill_paper_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
    )
 {
    int j=0;
@@ -1068,7 +1068,7 @@ StrokeUI::fill_paper_listbox(
       if ( (len>3) && 
             (in_files[i].substr(len-4) == ".png"))
       {
-         save_files += str_ptr((full_path + in_files[i]).c_str());
+         save_files.push_back(full_path + in_files[i]);
          listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
@@ -1085,23 +1085,22 @@ StrokeUI::fill_paper_listbox(
 
 void
 StrokeUI::fill_preset_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
    )
 {
-   int i;
+   vector<string>::size_type i;
 
    //First clear out any previous presets
-   for (i=1; i<=save_files.num();i++)
-   {
+   for (i = 1; i <= save_files.size(); i++) {
       int foo = listbox->delete_item(i);
       assert(foo);
    }
    save_files.clear();
 
    vector<string> in_files = dir_list(full_path);
-   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+   for (i = 0; i < in_files.size(); i++) {
       string::size_type len = in_files[i].length();
 
       if ( (len>3) && (in_files[i].substr(len-4) == ".pre"))
@@ -1110,8 +1109,8 @@ StrokeUI::fill_preset_listbox(
 
          if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files += str_ptr((full_path + in_files[i]).c_str());
-            listbox->add_item(save_files.num(), basename.c_str());
+            save_files.push_back(full_path + in_files[i]);
+            listbox->add_item(save_files.size(), basename.c_str());
          }
          else
          {
@@ -1248,20 +1247,19 @@ StrokeUI::internal_update()
 void
 StrokeUI::update_non_lives()
 {
+   vector<string>::iterator i;
 
-   int i;
-
-   i = _paper_filenames.get_index(_params.get_paper_file());
-   if (i==BAD_IND)
+   i = std::find(_paper_filenames.begin(), _paper_filenames.end(), _params.get_paper_file());
+   if (i == _paper_filenames.end())
       _listbox[LIST_PAPER]->set_int_val(0);
    else
-      _listbox[LIST_PAPER]->set_int_val(i+1);
+      _listbox[LIST_PAPER]->set_int_val(i - _paper_filenames.begin() + 1);
 
-   i = _texture_filenames.get_index(_params.get_texture_file());
-   if (i==BAD_IND)
+   i = std::find(_texture_filenames.begin(), _texture_filenames.end(), _params.get_texture_file());
+   if (i == _texture_filenames.end())
       _listbox[LIST_TEXTURE]->set_int_val(0);
    else
-      _listbox[LIST_TEXTURE]->set_int_val(i+1);
+      _listbox[LIST_TEXTURE]->set_int_val(i - _texture_filenames.begin() + 1);
 
    HSVCOLOR hsv(_params.get_color());
    _slider[SLIDE_H]->set_float_val(hsv[0]);
@@ -1286,7 +1284,7 @@ StrokeUI::preset_selected()
    }
    else
    {
-      if (!load_preset(**_preset_filenames[val-1]))
+      if (!load_preset(_preset_filenames[val-1].c_str()))
          return;
 
       // Update the controls that don't use
@@ -1329,7 +1327,7 @@ StrokeUI::preset_save_button()
    else
    {
 
-      if (!save_preset(**_preset_filenames[val-1])) 
+      if (!save_preset(_preset_filenames[val-1].c_str()))
          return;
       _button[BUT_SAVE]->disable();
    }
@@ -1412,9 +1410,9 @@ StrokeUI::preset_save_text()
 
    if (save_preset((Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre").c_str()))
       {
-         _preset_filenames += str_ptr((Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre").c_str());
-         _listbox[LIST_PRESET]->add_item(_preset_filenames.num(), newtext);
-         _listbox[LIST_PRESET]->set_int_val(_preset_filenames.num());
+         _preset_filenames.push_back(Config::JOT_ROOT() + PRESET_DIRECTORY + newtext + ".pre");
+         _listbox[LIST_PRESET]->add_item(_preset_filenames.size(), newtext);
+         _listbox[LIST_PRESET]->set_int_val(_preset_filenames.size());
       }
    else
       {
@@ -1557,7 +1555,7 @@ StrokeUI::listbox_cb(int id)
          if (i>0)
             _ui[id >> ID_SHIFT]->_params.set_texture(_ui[id >> ID_SHIFT]->_texture_filenames[i-1]);
          else 
-            _ui[id >> ID_SHIFT]->_params.set_texture(NULL_STR);
+            _ui[id >> ID_SHIFT]->_params.set_texture("");
          _ui[id >> ID_SHIFT]->params_changed();
          break;
        case LIST_PAPER:
@@ -1565,7 +1563,7 @@ StrokeUI::listbox_cb(int id)
          if (i>0)
             _ui[id >> ID_SHIFT]->_params.set_paper(_ui[id >> ID_SHIFT]->_paper_filenames[i-1]);
          else 
-            _ui[id >> ID_SHIFT]->_params.set_paper(NULL_STR);
+            _ui[id >> ID_SHIFT]->_params.set_paper("");
          _ui[id >> ID_SHIFT]->params_changed();
          break;
        case LIST_PRESET:

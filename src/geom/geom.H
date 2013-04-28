@@ -96,8 +96,8 @@ class GEOM : public GEL, public APPEAR {
 
  public: 
    //******** MANAGERS ********
-   GEOM(CGEOMptr &o, Cstr_ptr &);  // copy constructor
-   GEOM(Cstr_ptr&, CBODYptr& b = 0);
+   GEOM(CGEOMptr &o, const string &);  // copy constructor
+   GEOM(const string &, CBODYptr& b = 0);
    GEOM();
    virtual ~GEOM();
 
@@ -106,7 +106,7 @@ class GEOM : public GEL, public APPEAR {
    virtual CTAGlist &tags() const;
 
    //******** DATA ACCESSORS ********
-   Cstr_ptr &name()                     const { return _name; }
+   const string &name()                 const { return _name; }
    virtual BODYptr   body()             const { return _body; }
    virtual void set_body(CBODYptr& b);
 
@@ -129,7 +129,7 @@ class GEOM : public GEL, public APPEAR {
    virtual void set_texture  (CTEXTUREptr& t);
    virtual void unset_texture();
    virtual void set_xform    (mlib::CWtransf &x) { mult_by(x*inv_xform()); }
-   void set_name     (Cstr_ptr &n) { _name       = n; }
+   void         set_name     (const string &n) { _name       = n; }
    virtual void set_pickable (int f)       { PICKABLE.set(this,f);
       if(!f) set_transp(.8);
       else unset_transp(); }
@@ -230,11 +230,11 @@ class GEOM : public GEL, public APPEAR {
  public:
 
    //******** DATA_ITEM VIRTUAL METHODS ********
-   virtual GEOMptr dup(Cstr_ptr &n) const { return new GEOM((GEOM*)this,n);}
+   virtual GEOMptr dup(const string &n) const { return new GEOM((GEOM*)this,n);}
    virtual DATA_ITEM* dup() const { return new GEOM(_name); }
 
  protected:
-   str_ptr              _name;
+   string               _name;
    BBOX                 _bbox;
    mlib::Wtransf        _xform;
    BODYptr              _body;
@@ -276,8 +276,8 @@ STDdstream  &operator>>(STDdstream &d, GEOMptr &p);
 
 class XformConstraint : public hashenum<GEOM::cons> {
  public :
-   XformConstraint(Cstr_ptr &name, GEOM::cons cons, int net):
-      hashenum<GEOM::cons>(string(**name), cons, net) { }
+   XformConstraint(const string &name, GEOM::cons cons, int net):
+      hashenum<GEOM::cons>(name, cons, net) { }
    virtual string enum_to_str(GEOM::cons e) const {
       switch (e) {
        case GEOM::TRANS_FREE    : return "trans_free";

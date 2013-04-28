@@ -99,14 +99,16 @@ class SubdivUpdater : public Bnode, public BMESHobs {
 
    // Identifier used in diagnostic output. SubdivUpdater types print their
    // class name and level in the subdivision hierarchy.
-   virtual str_ptr identifier() const {
-      return Bnode::identifier() + "_level_" + str_ptr(subdiv_level());
+   virtual string identifier() const {
+      char tmp[64];
+      sprintf(tmp, "%d", subdiv_level());
+      return Bnode::identifier() + "_level_" + tmp;
    }
 
    //******** BMESHobs METHODS ********
 
    // Report Bnode identifier as BMESHobs name:
-   virtual str_ptr name() const { return identifier(); }
+   virtual string name() const { return identifier(); }
    
    //*****************************************************************
  protected: 

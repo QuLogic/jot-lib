@@ -342,7 +342,7 @@ ToneShaderUI::apply_changes_to_texture(operation_id_t op, ToneShader* tex, int l
    } 
    if((op==OP_ALL) || (op==OP_TEXTURE)){
       string name = _listbox[LIST_TEXTURE]->curr_text;
-      tex->set_tex(str_ptr(GtexUtil::toon_1D_name(name).c_str()));
+      tex->set_tex(GtexUtil::toon_1D_name(name));
    } 
    
    if(_parent)

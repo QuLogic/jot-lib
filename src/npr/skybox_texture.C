@@ -75,7 +75,7 @@ init_params(TEXTUREglptr& tex)
 Skybox_Texture::Skybox_Texture(Patch* patch) :
    BasicTexture(patch, new StripTexCoordsCB)
 {
-   set_tex(new TEXTUREgl(str_ptr(gradient_filename().c_str())));
+   set_tex(new TEXTUREgl(gradient_filename()));
    assert(_tex);
    if (!_tex->load_image()) {
       cerr << " Skybox_Texture : load_image failed on "
@@ -143,10 +143,10 @@ Skybox_Texture::draw(CVIEWptr& v)
 }
 
 void 
-Skybox_Texture::load_texture(str_ptr file_name)
+Skybox_Texture::load_texture(string file_name)
 {
    assert(_tex);
-   _tex-> set_texture(file_name);
+   _tex->set_texture(file_name);
     
    if (!_tex->load_image()) {
       cerr << " Skybox_Texture : load_image failed on "

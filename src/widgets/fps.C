@@ -43,10 +43,10 @@ FPS::FPS()
    // available when this is called... switching to hack for now:
    c = XYpt(0.671875,-0.95); // fixed below in tick()
 
-   _text = new TEXT2D(str_ptr("fps"), str_ptr::null, c);
+   _text = new TEXT2D("fps", "", c);
 
    _text->set_loc(c);
-   _text->set_string(str_ptr(""));
+   _text->set_string("");
 
    GEOMptr text(&*_text);
    NETWORK       .set(text, 0);
@@ -99,7 +99,7 @@ FPS::tick(void)
       // XXX - the string changes frequently, soon filling up the
       // strpool hash table, which only has 128 slots
       if (_text)
-         _text->set_string(str_ptr(fps_str) + tps_str);
+         _text->set_string(string(fps_str) + tps_str);
       else
          err_msg("%s", fps);
 

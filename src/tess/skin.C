@@ -371,7 +371,7 @@ Skin::Skin(
    CVertMapper& skel_map,
    int R,
    bool reverse,
-   Cstr_ptr& name,
+   const string& name,
    MULTI_CMDptr cmd
    ) :
    _skel_faces(skel_faces),
@@ -390,7 +390,9 @@ Skin::Skin(
    assert(R >= 0);
 
    set_mesh(mesh);
-   set_name(name + str_ptr(++skin_num));
+   char tmp[64];
+   sprintf(tmp, "%d", ++skin_num);
+   set_name(name + tmp);
 
    if (!gen_faces(skel_map)) {
       err_adv(debug, "  can't generate skin over skel faces");
@@ -569,12 +571,12 @@ Skin::create_subdiv_updater()
       // not procedurally controlled at all. Then it should never
       // change and we have no input. We are assuming changes to the
       // mesh only happen via Bnodes (Bsurfaces etc.).
-      err_adv(debug, "%s: not using SubdivUpdater", **identifier());
+      err_adv(debug, "%s: not using SubdivUpdater", identifier().c_str());
       delete su;
       su = 0;
    } else {
       _updater = su;
-      su->set_name(str_ptr("su-") + name());
+      su->set_name("su-" + name());
       hookup();
    }
 }

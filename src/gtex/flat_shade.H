@@ -135,7 +135,7 @@ class FlatShadeTexture : public BasicTexture {
    //! _patch->stamp() at last check for uv-coords.
    uint         _check_uv_coords_stamp;
    TEXTUREptr   _debug_uv_tex;   //!< texture image for revealing uv-coords
-   str_ptr      _debug_tex_path; //!< path to above image
+   string       _debug_tex_path; //!< path to above image
       
    //! Tells whether to make "debug uv" calls when rendering:
    static bool _debug_uv;

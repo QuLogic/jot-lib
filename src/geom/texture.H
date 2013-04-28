@@ -37,7 +37,7 @@ class TEXTURE : public REFcounter {
  public:
    //******** MANAGERS ********
     TEXTURE() : _scale(Wtransf::scaling(1.0,1.0,1.0)), _image_not_available(false), _expand_image(true) {}
-   TEXTURE(Cstr_ptr &file) : _file(file), _image_not_available(false),
+   TEXTURE(const string &file) : _file(file), _image_not_available(false),
      _expand_image(true) {
       // we don't load the image from file
       // until we actually need it
@@ -45,7 +45,7 @@ class TEXTURE : public REFcounter {
    virtual ~TEXTURE() {}
 
    //******** ACCESSORS ********
-   Cstr_ptr&    file()          const { return _file; }
+   const string&file()          const { return _file; }
    const Image& image()         const { return _img; }
    Image&       image()               { return _img; }
 
@@ -75,7 +75,7 @@ class TEXTURE : public REFcounter {
    virtual int dimension() const { return 2; }
 
  protected:
-   str_ptr              _file;
+   string               _file;
    Image                _img;
    mlib::Wtransf        _scale;                 
    bool                 _image_not_available; // true if load attempt failed

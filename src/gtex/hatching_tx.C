@@ -68,21 +68,21 @@ HatchingTX::init_default(int layer)
    // but only if they are currently not assigned textures.
 
    assert(_layers.valid_index(layer));
-   str_ptr pat = get_name(_layers[layer]->_pattern_name, "hatch1.png");
+   string pat = get_name(_layers[layer]->_pattern_name, "hatch1.png");
    assert(get_layer(layer));
-   str_ptr pap = get_name(get_layer(layer)->_paper_name, "basic_paper.png");
+   string pap = get_name(get_layer(layer)->_paper_name, "basic_paper.png");
    init_layer(layer, pat, pap); // no-op if already set
 }
 
 void          
-HatchingTX::init_layer(int l, Cstr_ptr& pattern, Cstr_ptr& paper)
+HatchingTX::init_layer(int l, const string& pattern, const string& paper)
 {
    set_texture_pattern(l, pattern);
    set_paper_texture(l,paper); 
 }
 
 void 
-HatchingTX::set_paper_texture(int layer_num, str_ptr file_name)
+HatchingTX::set_paper_texture(int layer_num, string file_name)
 {
    // screen out the crazies
    assert(_layers.valid_index(layer_num));
@@ -127,9 +127,9 @@ HatchingTX::set_paper_texture(int layer_num, str_ptr file_name)
    GLint tex_stage = get_free_tex_stage();
 
    string pre_path = Config::JOT_ROOT() + "nprdata/paper_textures/";
-   string path = pre_path + string(**file_name);
+   string path = pre_path + file_name;
    _paper_textures[tex_stage] =
-      new TEXTUREgl(str_ptr(path.c_str()), GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _paper_textures[tex_stage]->set_save_img(true);
 
    if (!_paper_textures[tex_stage]->load_image()) {
@@ -139,7 +139,7 @@ HatchingTX::set_paper_texture(int layer_num, str_ptr file_name)
       // fail in a civilized manner
       layer->_mode = 0;
       layer->_paper_tex = -1;
-      layer->_paper_name = str_ptr("");
+      layer->_paper_name = "";
       _paper_textures.erase(tex_stage);
       free_tex_stage(tex_stage);
 
@@ -287,7 +287,7 @@ HatchingTX::activate_textures()
 }
 
 void 
-HatchingTX::set_texture_pattern(int layer, str_ptr file_name)
+HatchingTX::set_texture_pattern(int layer, string file_name)
 {
    GLSLShader_Layer_Base::set_texture_pattern(
       layer,"nprdata/hatching_textures/",file_name
@@ -398,8 +398,8 @@ HatchingTX::get_layer(TAGformat &d)
 
    // Initialize the layer's textures: set the layer's texture
    // names to "", then call init_layer with the desired names:
-   str_ptr pat = layer->_pattern_name;
-   str_ptr pap = layer->_paper_name;
+   string pat = layer->_pattern_name;
+   string pap = layer->_paper_name;
    layer->_pattern_name = "";
    layer->_paper_name = "";
    init_layer(i, pat, pap);
@@ -491,7 +491,9 @@ layer_hatching_t::get_var_locs(int i, GLuint& program)
 {
    layer_base_t::get_var_locs(i,program);
 
-   str_ptr p = str_ptr("layer[") + str_ptr(i);
+   char tmp[32];
+   sprintf(tmp, "%d", i);
+   string p = string("layer[") + tmp;
    get_uniform_loc(p + "].angle",          _angle_loc,          program);
    get_uniform_loc(p + "].paper_contrast", _paper_contrast_loc, program);
    get_uniform_loc(p + "].paper_tex",      _paper_tex_loc,      program);

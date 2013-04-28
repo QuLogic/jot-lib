@@ -63,7 +63,7 @@ PatternPen::PatternPen(
    CEvent& d, CEvent& m, CEvent& u,
    CEvent& shift_down, CEvent& shift_up,
    CEvent& ctrl_down,  CEvent& ctrl_up) :
-   Pen(str_ptr("Pattern Mode"),
+   Pen("Pattern Mode",
        gest_int, d, m, u,
        shift_down, shift_up,
        ctrl_down, ctrl_up), 
@@ -145,7 +145,7 @@ PatternPen::init_proxy(Bface* f) {
       Patch* p = get_ctrl_patch(f);
       assert(p);
     
-      p->set_texture(str_ptr(PatternTexture::static_name().c_str()));
+      p->set_texture(PatternTexture::static_name());
       GTexture* cur_texture = p->cur_tex();
       if(!cur_texture->is_of_type(PatternTexture::static_name())) return;
       _pattern_texture = (PatternTexture*)cur_texture;

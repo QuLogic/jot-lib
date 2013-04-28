@@ -149,7 +149,7 @@ DrawPen::DrawPen(
    CEvent&       m,
    CEvent&       u
    ) :
-   Pen(str_ptr("draw"), gest_int, d, m, u),
+   Pen("draw", gest_int, d, m, u),
    _mode(DEFAULT),
    _drag_pt(0),
    _tap_timer(0),

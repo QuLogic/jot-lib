@@ -50,12 +50,12 @@ class FFSTexture : public NPRTexture  {
    virtual int  draw_final(CVIEWptr& v);
    
    void         get_ffs_data_file ();  
-   static void  set_location(str_ptr loc) { location = loc; }  
+   static void  set_location(string loc) { location = loc; }
 
  private:
    bool                     _got_ffs_file;
    FFSControlFrameTexture*  _controlframe;
-   static str_ptr           location;
+   static string            location;
 };
 
 #endif // FFSTEXTURE_H_IS_INCLUDED

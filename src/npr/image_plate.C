@@ -26,7 +26,7 @@ ImagePlate::ImagePlate() : GEOM()
    _do_halo = false;
 }
 
-ImagePlate::ImagePlate(Cstr_ptr& filename) : GEOM()
+ImagePlate::ImagePlate(const string& filename) : GEOM()
 {
    _do_halo = false;
 

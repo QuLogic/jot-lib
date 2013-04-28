@@ -32,7 +32,7 @@ XformPen::XformPen(
    CEvent &d,
    CEvent &m,
    CEvent &u) :
-   Pen(str_ptr("xform"), gest_int, d, m, u)
+   Pen("xform", gest_int, d, m, u)
 {
    // Set up GESTURE FSA (First matched will be executed)
 

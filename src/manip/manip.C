@@ -45,8 +45,8 @@ Simple_int::Simple_int(
    CEvent &up_ev    //                   Up
    ) 
 {
-   static Cstr_ptr default_entry_name("Simple_int Entry");
-   static Cstr_ptr default_move_name ("Simple_int Move");
+   static const string default_entry_name("Simple_int Entry");
+   static const string default_move_name ("Simple_int Move");
    _entry     .set_name(default_entry_name);
    _manip_move.set_name(default_move_name);
 

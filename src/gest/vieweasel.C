@@ -40,7 +40,7 @@ VIEW_EASEL::VIEW_EASEL(
    CVIEWptr &v) :
    _view(v) /* , _trace(NULL) */
 {
-   _camera = CAMptr( new CAM( str_ptr("easel cam") ) ); 
+   _camera = CAMptr( new CAM( "easel cam" ) );
    saveCam( _view->cam() );
 }
 

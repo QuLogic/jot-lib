@@ -183,7 +183,7 @@ class Skin:  public Bsurface {
         CVertMapper& skel_map,
         int res_level,
         bool reverse,
-        Cstr_ptr& name,
+        const string& name,
         MULTI_CMDptr cmd);
 
    // Create a child Skin of the given parent:

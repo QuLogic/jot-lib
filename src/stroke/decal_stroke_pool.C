@@ -52,10 +52,10 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
       // calls draw_start() appropriately for untextured strokes.
 
       TEXTUREptr proto_tex = prot->get_texture();
-      Cstr_ptr proto_tex_file = prot->get_texture_file();
+      const string proto_tex_file = prot->get_texture_file();
 
-      if (prot->get_texture()){      
-         prot->set_texture(NULL, NULL_STR);
+      if (prot->get_texture()) {
+         prot->set_texture(NULL, "");
       }
 
       prot->draw_start();

@@ -40,7 +40,7 @@ public:
       GLSLMarbleShader*, BasicTexture, CDATA_ITEM*);
 
    // Set the name of the texture to use (full path):
-   void set_tex(Cstr_ptr& full_path_name);
+   void set_tex(const string& full_path_name);
 
    //******** GLSLShader VIRTUAL METHODS ********
 

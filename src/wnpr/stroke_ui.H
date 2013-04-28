@@ -280,9 +280,9 @@ class StrokeUI : public PaperEffectObs {
 
    GLUI*                         _glui;   
    float                         _column_width;
-   str_list                      _texture_filenames;
-   str_list                      _paper_filenames;
-   str_list                      _preset_filenames;
+   vector<string>                _texture_filenames;
+   vector<string>                _paper_filenames;
+   vector<string>                _preset_filenames;
    ARRAY<GLUI_Listbox*>          _listbox;
    ARRAY<GLUI_Button*>           _button;
    ARRAY<GLUI_Slider*>           _slider;
@@ -330,9 +330,9 @@ class StrokeUI : public PaperEffectObs {
    /******** Convenience Methods ********/
 
    mlib::NDCZpt                  xy_to_ndcz(int x, int y);
-   void                    fill_texture_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
-   void                    fill_paper_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
-   void                    fill_preset_listbox(GLUI_Listbox *lb, str_list &save_files, const string &full_path);
+   void                    fill_texture_listbox(GLUI_Listbox *lb, vector<string> &save_files, const string &full_path);
+   void                    fill_paper_listbox(GLUI_Listbox *lb, vector<string> &save_files, const string &full_path);
+   void                    fill_preset_listbox(GLUI_Listbox *lb, vector<string> &save_files, const string &full_path);
 
    /******** EVENT HANDLERS ********/
 

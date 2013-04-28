@@ -425,9 +425,9 @@ BaseStrokeOffsetLIST::get_at_t(double t, BaseStrokeOffset& o) const
 #define  BASE_STROKE_DEFAULT_OFFSET_STRETCH  1.0f
 #define  BASE_STROKE_DEFAULT_OFFSET_PHASE    0.0f
 #define  BASE_STROKE_DEFAULT_TEX             NULL
-#define  BASE_STROKE_DEFAULT_TEX_FILE        NULL_STR
+#define  BASE_STROKE_DEFAULT_TEX_FILE        ""
 #define  BASE_STROKE_DEFAULT_PAPER           NULL
-#define  BASE_STROKE_DEFAULT_PAPER_FILE      NULL_STR
+#define  BASE_STROKE_DEFAULT_PAPER_FILE      ""
 
 float PIX_RES = (float)Config::get_var_dbl("PIX_RES",BASE_STROKE_DEFAULT_PIX_RES,true);
 
@@ -618,29 +618,24 @@ BaseStroke::put_texture_file(TAGformat &d) const
    //XXX - May need something to handle filenames with spaces
 
    d.id();
-   if (_tex_file == NULL_STR)
-      {
-         // << "BaseStroke::put_texture_file() - Wrote NULL string.\n";
+   if (_tex_file.empty()) {
+      // << "BaseStroke::put_texture_file() - Wrote NULL string.\n";
+      *d << "NULL_STR";
+      *d << " ";
+
+   } else {
+      if (_tex_file.find(Config::JOT_ROOT()) == string::npos) {
+         //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote NULL string.");
          *d << "NULL_STR";
          *d << " ";
+      } else {
+         //Here we strip off JOT_ROOT
+         string str = _tex_file.substr(Config::JOT_ROOT().length());
+         *d << str;
+         *d << " ";
+         //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote string: '%s'.", str.c_str());
       }
-   else
-      {
-         if (!_tex_file.contains(Config::JOT_ROOT().c_str()))
-            {
-               //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote NULL string.");
-               *d << "NULL_STR";
-               *d << " ";
-            }
-         else
-            {
-               //Here we strip off JOT_ROOT
-               string str = string(**_tex_file).substr(Config::JOT_ROOT().length());
-               *d << str.c_str();
-               *d << " ";
-               //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_texture_file() - Wrote string: '%s'.", str.c_str());
-            }
-      }
+   }
    d.end_id();
 }
 
@@ -654,21 +649,18 @@ BaseStroke::get_texture_file(TAGformat &d)
 
    //XXX - May need something to handle filenames with spaces
 
-   str_ptr str, tex, space;
+   string str, tex, space;
    *d >> str;      
    if (!(*d).ascii()) *d >> space; 
 
-   if (str == "NULL_STR") 
-      {
-         tex = NULL_STR;
-         //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_texture_file() - Loaded NULL string.");
-      }
-   else
-      {
+   if (str == "NULL_STR") {
+      tex = "";
+      //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_texture_file() - Loaded NULL string.");
+   } else {
       //Here we prepend JOT_ROOT
-      tex = str_ptr(Config::JOT_ROOT().c_str()) + str;
-         //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_texture_file() - Loaded string: '%s'.", **str);
-      }
+      tex = Config::JOT_ROOT() + str;
+      //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_texture_file() - Loaded string: '%s'.", str.c_str());
+   }
    set_texture(tex);
 
 }
@@ -685,29 +677,25 @@ BaseStroke::put_paper_file(TAGformat &d) const
    //XXX - May need something to handle filenames with spaces
 
    d.id();
-   if (_paper_file == NULL_STR)
-   {
+   if (_paper_file.empty()) {
       //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_paper_file() - Wrote NULL string.");
       *d << "NULL_STR";
       *d << " ";
-   }
-   else
-   {
-      if (!_paper_file.contains(str_ptr(Config::JOT_ROOT().c_str())))
-      {
+
+   } else {
+      if (_paper_file.find(Config::JOT_ROOT()) == string::npos) {
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::put_paper_file() - Wrote NULL string.");
          *d << "NULL_STR";
          *d << " ";
-      }
-      else
-      {
+
+      } else {
          //Here we strip off JOT_ROOT
          string str;
          //JOT_ROOT should be prefix
-         assert(strstr(**_paper_file,Config::JOT_ROOT().c_str()) == **_paper_file );
+         assert(strstr(_paper_file.c_str(),Config::JOT_ROOT().c_str()) == _paper_file.c_str() );
 
          //Now strip it off...
-         str = string(**_paper_file).substr(Config::JOT_ROOT().length());
+         str = _paper_file.substr(Config::JOT_ROOT().length());
          
          *d << str.c_str();
          *d << " ";
@@ -727,21 +715,19 @@ BaseStroke::get_paper_file(TAGformat &d)
 
    //XXX - May need something to handle filenames with spaces
 
-   str_ptr str, paper, space;
+   string str, paper, space;
    *d >> str;      
    if (!(*d).ascii()) *d >> space; 
 
-   if (str == "NULL_STR") 
-      {
-         paper = NULL_STR;
-         //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_paper_file() - Loaded NULL string.");
-      }
-   else
-      {
-         //Here we prepend JOT_ROOT
-         paper = str_ptr(Config::JOT_ROOT().c_str()) + str;
-         //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_paper_file() - Loaded string: '%s'.", **paper);
-      }
+   if (str == "NULL_STR") {
+      paper = "";
+      //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_paper_file() - Loaded NULL string.");
+
+   } else {
+      //Here we prepend JOT_ROOT
+      paper = Config::JOT_ROOT() + str;
+      //err_mesg(ERR_LEV_SPAM, "BaseStroke::get_paper_file() - Loaded string: '%s'.", paper.c_str());
+   }
    set_paper(paper);
 
 }
@@ -798,7 +784,7 @@ BaseStroke::get_offsets(TAGformat &d)
 /////////////////////////////////////
 
 void
-BaseStroke::set_texture(str_ptr tf)
+BaseStroke::set_texture(string tf)
 {
    map<string,TEXTUREptr>::iterator ind;
 
@@ -817,27 +803,27 @@ BaseStroke::set_texture(str_ptr tf)
    if (_tex_file == tf) {
       //No change
 
-   } else if (tf == NULL_STR) {
+   } else if (tf == "") {
       _tex = NULL;
-      _tex_file = NULL_STR;
+      _tex_file = "";
 
-   } else if ((ind = _stroke_texture_map->find(string(**tf))) != _stroke_texture_map->end()) {
+   } else if ((ind = _stroke_texture_map->find(tf)) != _stroke_texture_map->end()) {
       //Finding original name in cache...
 
       //If its a failed texture...
       if (ind->second == NULL) {
          //...see if it was remapped...
-         map<string,string>::iterator ii = _stroke_texture_remap->find(string(**tf));
+         map<string,string>::iterator ii = _stroke_texture_remap->find(tf);
          //...and change to looking up the remapped name            
          if (ii != _stroke_texture_remap->end()) {
-            str_ptr old_tf = tf;
-            tf = str_ptr(ii->second.c_str());
+            string old_tf = tf;
+            tf = ii->second;
 
-            ind = _stroke_texture_map->find(string(**tf));
+            ind = _stroke_texture_map->find(tf);
 
             err_mesg(ERR_LEV_SPAM,
                "BaseStroke::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
-                  **old_tf, **tf);
+                  old_tf.c_str(), tf.c_str());
          }
       }
 
@@ -848,36 +834,36 @@ BaseStroke::set_texture(str_ptr tf)
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::set_texture() - Using cached copy of texture.");
 
       } else {
-         err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
+         err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
          _tex = NULL;
-         _tex_file = NULL_STR;
+         _tex_file = "";
       }
 
    //Haven't seen this name before...
    } else {
       err_mesg(ERR_LEV_SPAM, "BaseStroke::set_texture() - Not in cache...");
 
-      Image i(**tf);
+      Image i(tf);
 
       //Can't load the texture?
       if (i.empty()) {
          //...check for a remapped file...
-         map<string,string>::iterator ii = _stroke_texture_remap->find(string(**tf));
+         map<string,string>::iterator ii = _stroke_texture_remap->find(tf);
 
          //...and use that name instead....
          if (ii != _stroke_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            (*_stroke_texture_map)[string(**tf)] = NULL;
+            (*_stroke_texture_map)[tf] = NULL;
 
-            str_ptr old_tf = tf;
-            tf = str_ptr(ii->second.c_str());
+            string old_tf = tf;
+            tf = ii->second;
 
             err_mesg(ERR_LEV_ERROR,
                "BaseStroke::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
-                  **old_tf, **tf);
+                  old_tf.c_str(), tf.c_str());
 
-            i.load_file(**tf);
+            i.load_file(tf);
          }
       }
 
@@ -888,22 +874,22 @@ BaseStroke::set_texture(str_ptr tf)
          t->set_save_img(true);
          t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-         (*_stroke_texture_map)[string(**tf)] = t;
+         (*_stroke_texture_map)[tf] = t;
 
          err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-            i.width(), i.height(), i.bpp(), **tf);
+            i.width(), i.height(), i.bpp(), tf.c_str());
 
          _tex = t;
          _tex_file = tf;
 
       //Otherwise insert a failed NULL
       } else {
-         err_mesg(ERR_LEV_ERROR, "BaseStroke::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", **tf);
+         err_mesg(ERR_LEV_ERROR, "BaseStroke::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", tf.c_str());
 
-         (*_stroke_texture_map)[string(**tf)] = NULL;
+         (*_stroke_texture_map)[tf] = NULL;
 
          _tex = NULL;
-         _tex_file = NULL_STR;
+         _tex_file = "";
       }
    }   
 }
@@ -917,7 +903,7 @@ BaseStroke::set_texture(str_ptr tf)
 //
 //////////////////////////////////////
 void
-BaseStroke::set_texture(TEXTUREptr tp, str_ptr tn)
+BaseStroke::set_texture(TEXTUREptr tp, string tn)
 {
    _tex = tp;
    _tex_file = tn;
@@ -933,29 +919,25 @@ BaseStroke::set_texture(TEXTUREptr tp, str_ptr tn)
 //
 /////////////////////////////////////
 void
-BaseStroke::set_paper(str_ptr tf)
+BaseStroke::set_paper(string tf)
 {
    if (_paper_file == tf) return;
 
-   str_ptr ret_tf;
+   string ret_tf;
    TEXTUREptr t;
 
-   if (tf == NULL_STR)
-   {
-      _paper_file = NULL_STR;
+   if (tf == "") {
+      _paper_file = "";
       _paper = NULL;
-   }
-   else if ((t = PaperEffect::get_texture(tf, ret_tf)) != 0)
-   {
+
+   } else if ((t = PaperEffect::get_texture(tf, ret_tf)) != 0) {
       _paper_file = ret_tf;
       _paper = t;
-   }
-   else
-   {
-      _paper_file = NULL_STR;
+
+   } else {
+      _paper_file = "";
       _paper = NULL;
    }   
-   
 }
 
 /////////////////////////////////////
@@ -967,7 +949,7 @@ BaseStroke::set_paper(str_ptr tf)
 //
 //////////////////////////////////////
 void
-BaseStroke::set_paper(TEXTUREptr tp, str_ptr tn)
+BaseStroke::set_paper(TEXTUREptr tp, string tn)
 {
    _paper = tp;
    _paper_file = tn;
@@ -1533,7 +1515,7 @@ BaseStroke::init_overdraw()
 
    _overdraw_stroke = new BaseStroke(); assert(_overdraw_stroke);
 
-   _overdraw_stroke->set_texture(OVERDRAW_STROKE_TEXTURE.c_str());
+   _overdraw_stroke->set_texture(OVERDRAW_STROKE_TEXTURE);
    _overdraw_stroke->set_width(  OVERDRAW_STROKE_WIDTH);
    _overdraw_stroke->set_alpha(  OVERDRAW_STROKE_ALPHA);
    _overdraw_stroke->set_flare(  OVERDRAW_STROKE_FLARE);

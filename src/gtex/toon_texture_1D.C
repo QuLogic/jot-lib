@@ -651,31 +651,31 @@ ToonTexture_1D::update_tex(void)
       }
    }
 
-   str_ptr tf = _tex_name;
+   string tf = _tex_name;
 
-   if (tf == NULL_STR) {
+   if (tf == "") {
       assert(_tex == NULL);
-      //_tex_name = NULL_STR;
+      //_tex_name = "";
       //_tex = NULL;
 
    } else if (_tex == NULL) {
-      if ((ind = _toon_texture_map->find(string(**tf))) != _toon_texture_map->end()) {
+      if ((ind = _toon_texture_map->find(tf)) != _toon_texture_map->end()) {
          //Finding original name in cache...
 
          //If its a failed texture...
          if (ind->second == NULL) {
             //...see if it was remapped...
-            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
+            map<string,string>::iterator ii = _toon_texture_remap->find(tf);
             //...and change to looking up the remapped name
             if (ii != _toon_texture_remap->end()) {
-               string old_tf = string(**tf);
-               tf = str_ptr(ii->second.c_str());
+               string old_tf = tf;
+               tf = ii->second;
 
-               ind = _toon_texture_map->find(string(**tf));
+               ind = _toon_texture_map->find(tf);
 
                err_mesg(ERR_LEV_SPAM,
                         "ToonTexture_1D::set_texture() - Previously remapped --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
-                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
+                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+tf).c_str());
             }
          }
 
@@ -685,36 +685,36 @@ ToonTexture_1D::update_tex(void)
             _tex_name = tf;
             err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Using cached copy of texture.");
          } else {
-            err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - **ERROR** Previous caching failure: '%s'...", **tf);
+            err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
             _tex = NULL;
-            _tex_name = NULL_STR;
+            _tex_name = "";
          }
 
       //Haven't seen this name before...
       } else {
          err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::set_texture() - Not in cache...");
 
-         Image i((Config::JOT_ROOT()+string(**tf)).c_str());
+         Image i(Config::JOT_ROOT()+tf);
 
          //Can't load the texture?
          if (i.empty()) {
             //...check for a remapped file...
-            map<string,string>::iterator ii = _toon_texture_remap->find(string(**tf));
+            map<string,string>::iterator ii = _toon_texture_remap->find(tf);
 
             //...and use that name instead....
             if (ii != _toon_texture_remap->end()) {
                //...but also indicate that the original name is bad...
 
-               (*_toon_texture_map)[string(**tf)] = NULL;
+               (*_toon_texture_map)[tf] = NULL;
 
-               string old_tf = string(**tf);
-               tf = str_ptr(ii->second.c_str());
+               string old_tf = tf;
+               tf = ii->second;
 
                err_mesg(ERR_LEV_ERROR,
                         "ToonTexture_1D::set_texture() - Remapping --===<<[[{{ (%s) ---> (%s) }}]]>>===--",
-                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+string(**tf)).c_str());
+                        (Config::JOT_ROOT()+old_tf).c_str(), (Config::JOT_ROOT()+tf).c_str());
 
-               i.load_file((Config::JOT_ROOT()+string(**tf)).c_str());
+               i.load_file(Config::JOT_ROOT()+tf);
             }
          }
 
@@ -727,22 +727,22 @@ ToonTexture_1D::update_tex(void)
             t->set_wrap_t(GL_CLAMP_TO_EDGE);
             t->set_image(i.copy(), i.width(), i.height(), i.bpp());
 
-            (*_toon_texture_map)[string(**tf)] = t;
+            (*_toon_texture_map)[tf] = t;
 
             err_mesg(ERR_LEV_INFO, "ToonTexture_1D::set_texture() - Cached: (w=%d h=%d bpp=%u) %s",
-                     i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+string(**tf)).c_str());
+                     i.width(), i.height(), i.bpp(), (Config::JOT_ROOT()+tf).c_str());
 
             _tex = t;
             _tex_name = tf;
 
          //Otherwise insert a failed NULL
          } else {
-            err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+string(**tf)).c_str());
+            err_mesg(ERR_LEV_ERROR, "ToonTexture_1D::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+tf).c_str());
 
-            (*_toon_texture_map)[string(**tf)] = NULL;
+            (*_toon_texture_map)[tf] = NULL;
 
             _tex = NULL;
-            _tex_name = NULL_STR;
+            _tex_name = "";
          }
       }
    }
@@ -820,7 +820,7 @@ ToonTexture_1D::put_layer_name(TAGformat &d) const
    err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_layer_name()");
         
    d.id();
-   if (get_layer_name() == NULL_STR)
+   if (get_layer_name() == "")
       {
          err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_layer_name() - Wrote NULL string.");
          *d << "NULL_STR";
@@ -828,9 +828,9 @@ ToonTexture_1D::put_layer_name(TAGformat &d) const
       }
    else
       {
-         *d << **(get_layer_name());
+         *d << get_layer_name();
          *d << " ";
-         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_layer_name() - Wrote string: '%s'", **get_tex_name());
+         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_layer_name() - Wrote string: '%s'", get_tex_name().c_str());
       }
    d.end_id();
 }
@@ -846,19 +846,19 @@ ToonTexture_1D::get_layer_name(TAGformat &d)
 
    //XXX - May need something to handle filenames with spaces
 
-   str_ptr str, lay, space;
+   string str, lay, space;
    *d >> str;      
    if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
       {
-         lay = NULL_STR;
+         lay = "";
          err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_layer_name() - Loaded NULL string.");
       }
    else
       {
          lay = str;
-         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_layer_name() - Loaded string: '%s'", **lay);
+         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_layer_name() - Loaded string: '%s'", lay.c_str());
       }
    set_layer_name(lay);
 
@@ -875,7 +875,7 @@ ToonTexture_1D::put_tex_name(TAGformat &d) const
    //XXX - May need something to handle filenames with spaces
 
    d.id();
-   if (_tex_name == NULL_STR)
+   if (_tex_name == "")
       {
          err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_tex_name() - Wrote NULL string.");
          *d << "NULL_STR";
@@ -883,9 +883,9 @@ ToonTexture_1D::put_tex_name(TAGformat &d) const
       }
    else
       {
-         *d << **(get_tex_name());
+         *d << get_tex_name();
          *d << " ";
-         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_tex_name() - Wrote string: '%s'", **get_tex_name());
+         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::put_tex_name() - Wrote string: '%s'", get_tex_name().c_str());
       }
    d.end_id();
 }
@@ -901,18 +901,18 @@ ToonTexture_1D::get_tex_name(TAGformat &d)
 
    //XXX - May need something to handle filenames with spaces
 
-   str_ptr str, space;
+   string str, space;
    *d >> str;      
    if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
       {
-         str = NULL_STR;
+         str = "";
          err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_tex_name() - Loaded NULL string.");
       }
    else
       {
-         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_tex_name() - Loaded string: '%s'", **str);
+         err_mesg(ERR_LEV_SPAM, "ToonTexture_1D::get_tex_name() - Loaded string: '%s'", str.c_str());
       }
    set_tex_name(str);
 

@@ -166,7 +166,7 @@ public :
    }
    CBaseStroke& get_prototype()  const { return _zx_edge_tex->get_prototype(); }
    void set_prototype(CBaseStroke &s){ _zx_edge_tex->set_prototype(s); }
-   void get_style(str_ptr path);
+   void get_style(const string path);
    double get_cur_size();
   
 protected:

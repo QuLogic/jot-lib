@@ -235,7 +235,7 @@ void
 Bbase::set_res_level(int r)
 {
    static bool debug = Config::get_var_bool("DEBUG_BBASE_RES_LEVEL",false);
-   err_adv(debug, "%s::set_res_level %d", **identifier(), r);
+   err_adv(debug, "%s::set_res_level %d", identifier().c_str(), r);
 
    // Set the resolution level:
    // (no negative numbers)
@@ -575,7 +575,7 @@ Bbase::rem_vert_meme(VertMeme* v)
       delete v;
       err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
          "%s::rem_vert_meme: %d left at level %d",
-         **identifier(),
+         identifier().c_str(),
          _vmemes.num(),
          bbase_level()
          );
@@ -725,7 +725,7 @@ Bbase::texbody() const
    return TEXBODY::upcast(geom()); 
 }
 
-str_ptr
+string
 Bbase::identifier() const 
 {
    // Identifier used in diagnostic output. Bbase types print their
@@ -733,7 +733,9 @@ Bbase::identifier() const
 
    if (is_control())
       return Bnode::identifier();
-   return Bnode::identifier() + str_ptr("_sub") + str_ptr(subdiv_level());
+   char tmp[64];
+   sprintf(tmp, "%d", subdiv_level());
+   return Bnode::identifier() + "_sub" + tmp;
 }
 
 /*****************************************************************
@@ -747,7 +749,7 @@ Bbase::notify_merge(BMESH* joined, BMESH* removed)
       assert(LMESH::isa(joined));
 
       if (Config::get_var_bool("DEBUG_MESH_MERGE",false))
-         err_msg("%s::notify_merge: changing meshes...", **identifier());
+         err_msg("%s::notify_merge: changing meshes...", identifier().c_str());
 
       set_mesh((LMESH*)joined);
    }
@@ -781,7 +783,7 @@ Bbase::notify_subdiv_gen(BMESH*)
 {
    if (Config::get_var_bool("DEBUG_BBASE_SUBDIV_GEN",false))
       err_msg("%s::notify_subdiv_gen: at res level %d",
-              **identifier(), _res_level);
+              identifier().c_str(), _res_level);
 
    // If res level > 0, produce a child Bbase 
    // of the correct type:

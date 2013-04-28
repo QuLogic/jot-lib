@@ -22,8 +22,8 @@
 /////////////////////////////////////
 ARRAY<PaperEffectObs*>  PaperEffectBase::_obs;
 
-str_ptr                 PaperEffectBase::_paper_tex;
-str_ptr                 PaperEffectBase::_paper_filename = str_ptr("");
+string                  PaperEffectBase::_paper_tex;
+string                  PaperEffectBase::_paper_filename = "";
 
 bool                    PaperEffectBase::_delayed_activate = false;
 bool                    PaperEffectBase::_delayed_activate_state = false;

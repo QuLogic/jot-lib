@@ -84,7 +84,7 @@ class PaperEffect : public PaperEffectBase {
 
    // Use this to get a texture for use with the
    // next two functions
-   static TEXTUREptr    get_texture(Cstr_ptr &tf, str_ptr &ret);
+   static TEXTUREptr    get_texture(const string &tf, string &ret);
 
    // Encloses objects being drawn in non-postprocess mode
    // If t==NULL then the paper effect is not invoked

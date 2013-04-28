@@ -267,10 +267,10 @@ int
 Recorder::new_path() 
 { 
 
-   str_ptr filename = ( **_name_buf != NULL ) ? _name_buf : str_ptr ( "path");
+   string filename = ( _name_buf != "" ) ? _name_buf : "path";
    _campaths.add ( new CameraPath( filename ));
    int id       = _campaths.num()-1;
-   _ui->add_path_entry ( id, **filename );
+   _ui->add_path_entry ( id, filename.c_str() );
    _cur_path_num = id;
    _cur_path    = _campaths[_cur_path_num];
    _path_pos    = 0;
@@ -301,14 +301,14 @@ Recorder::save_path ( int pathnum ) {
  
    CameraPath * cpath = _campaths[pathnum];
    fstream fout;
-   fout.open ( (char*) **(cpath->get_name()),ios::out );
+   fout.open ( cpath->get_name().c_str(), ios::out );
    if ( !fout )
       {
          err_ret("Recorder::save_path: error writing file");
       }
    int tmp = cpath->write_stream ( fout );
    fout.close();
-   err_msg("wrote %s", (char*) **(cpath->get_name()) );
+   err_msg("wrote %s", cpath->get_name().c_str() );
    return tmp;
 }
 
@@ -527,7 +527,7 @@ Recorder::post_draw_CB()
 
       //mkdir("imagedir");
       string base_dir = recorder_image_path;
-      string filename = base_dir + string(**_cur_path->get_name()) +
+      string filename = base_dir + _cur_path->get_name() +
          "_" + num + ".png";
       cerr << "writing " << filename << "\n";
       int w,h; VIEW_SIZE (w,h);

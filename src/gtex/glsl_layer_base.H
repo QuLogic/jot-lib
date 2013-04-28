@@ -98,14 +98,14 @@ class layer_base_t: public DATA_ITEM {
    // layer properties
    // these will be a part of presets
    // each property has a coresponding location in the GLSL code
-   bool get_uniform_loc(Cstr_ptr& var_name, GLint& loc, GLuint& program);
+   bool get_uniform_loc(const string& var_name, GLint& loc, GLuint& program);
 
    //******** DATA_ITEM VIRTUAL METHODS ********
    virtual DATA_ITEM* dup() const { return new layer_base_t(); }
    virtual CTAGlist&  tags() const;
 
    //******** MEMBER DATA ********
-   str_ptr _pattern_name;
+   string _pattern_name;
 
    // layer operation mode
    int   _mode;
@@ -175,7 +175,7 @@ class GLSLShader_Layer_Base : public GLSLShader {
 
    // layer control functions
 
-   void set_texture_pattern(int layer, str_ptr dir, str_ptr file_name);
+   void set_texture_pattern(int layer, string dir, string file_name);
    void set_procedural_pattern(int layer, int pattern_id);
    void disable_layer(int layer);
    void cleanup_unused_textures(int tex_stage);
@@ -228,7 +228,7 @@ class GLSLShader_Layer_Base : public GLSLShader {
 
    bool is_used_tex_stage(int tex_stage);
 
-   str_ptr get_name(Cstr_ptr& name, Cstr_ptr& default_name) {
+   string get_name(const string& name, const string& default_name) {
       return (name == "") ? default_name : name;
    }
 };

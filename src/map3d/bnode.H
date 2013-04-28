@@ -161,8 +161,8 @@ class Bnode : public DATA_ITEM {
 
    int bnode_num() const { return _num; }
 
-   Cstr_ptr& name()                     const   { return _name; }
-   void set_name(Cstr_ptr& name)                { _name = name; }
+   const string& name()                 const   { return _name; }
+   void set_name(const string& name)            { _name = name; }
 
    bool is_dirty() const { return _dirty; }
 
@@ -231,10 +231,12 @@ class Bnode : public DATA_ITEM {
 
    // Identifier used in diagnostic output. E.g. Bbase
    // types also print their level in the subdivision hierarchy.
-   virtual str_ptr identifier() const {
-      if (_name == NULL_STR)
-         return str_ptr(class_name().c_str()) + "_" + str_ptr(_num);
-      return str_ptr(class_name().c_str()) + "_" + _name + "_" + str_ptr(_num);
+   virtual string identifier() const {
+      char tmp[64];
+      sprintf(tmp, "%d", _num);
+      if (_name == "")
+         return class_name() + "_" + tmp;
+      return class_name() + "_" + _name + "_" + tmp;
    }
 
    // Print the list of immediate inputs and outputs:
@@ -271,7 +273,7 @@ class Bnode : public DATA_ITEM {
 
    // a name that can be assigned,
    // e.g. for debugging:
-   str_ptr      _name;  
+   string       _name;
 
    // The following is used when applying a transform to a
    // network of Bnodes. We want to avoid applying the

@@ -42,7 +42,7 @@ class layer_hatching_t : public layer_base_t {
    virtual DATA_ITEM* dup() const { return new layer_hatching_t(); }
    virtual CTAGlist&  tags() const;
 
-   str_ptr      _paper_name;
+   string       _paper_name;
 
    GLfloat      _angle; // initial rotation applied to pattern, in degrees
    GLint        _angle_loc;
@@ -86,7 +86,7 @@ class HatchingTX : public GLSLShader_Layer_Base {
    // but only if they are currently not assigned textures.
    void init_default(int layer);
 
-   void init_layer(int l, Cstr_ptr& pattern, Cstr_ptr& paper);
+   void init_layer(int l, const string& pattern, const string& paper);
 
    layer_hatching_t* get_layer(int i) const {
       return dynamic_cast<layer_hatching_t*>(_layers[i]);
@@ -132,8 +132,8 @@ class HatchingTX : public GLSLShader_Layer_Base {
    virtual DATA_ITEM* dup() const { return new HatchingTX(); }
    virtual CTAGlist&  tags() const;
 
-   void set_texture_pattern(int layer, str_ptr file_name);
-   void set_paper_texture(int layer, str_ptr file_name);
+   void set_texture_pattern(int layer, string file_name);
+   void set_paper_texture(int layer, string file_name);
    void cleanup_unused_paper_textures(int tex_stage); 
 
  protected:

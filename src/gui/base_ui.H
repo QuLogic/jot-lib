@@ -66,8 +66,8 @@ class BaseUI
    DEFINE_RTTI_METHODS_BASE("BaseUI", BaseUI*);
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   BaseUI(str_ptr n=0);
-   BaseUI(BaseUI* parent, str_ptr n=0);
+   BaseUI(string n="");
+   BaseUI(BaseUI* parent, string n="");
    virtual ~BaseUI() { }
    
    // In most cases these don't need to be over-writen my children
@@ -103,7 +103,7 @@ class BaseUI
                                bool         put_default=false,
                                str_ptr      default_text="-default-");   
    /******** MEMBERS VARS ********/    
-   str_ptr                             _name;     // The name of the window
+   string                              _name;     // The name of the window
    GLUI*                               _glui;
    BaseUI*                             _parent;
 

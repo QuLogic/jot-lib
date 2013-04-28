@@ -66,10 +66,10 @@ class SubdivCalc {
 
    // Used mainly for debugging, to identify the type of scheme
    // in cerr statements:
-   virtual str_ptr name() const {
+   virtual string name() const {
       // XXX - can't use static variables ...
       // The Sun compiler asks that you bear with it.
-      return str_ptr("SubdivCalc");
+      return string("SubdivCalc");
    }
 
    //******** SUBDIVISION CALCULATION ********
@@ -97,10 +97,10 @@ class SimpleCalc : public SubdivCalc<T> {
  public:
 
    //******** SubdivCalc VIRTUAL METHODS ********
-   virtual str_ptr name() const {
+   virtual string name() const {
       // XXX - can't use static variables ...
       // The Sun compiler asks that you bear with it.
-      return str_ptr("Simple subdivision");
+      return string("Simple subdivision");
    }
 
    //******** SUBDIVISION CALCULATION ********
@@ -161,10 +161,10 @@ class LoopCalc : public SubdivCalc<T> {
  public:
 
    //******** SubdivCalc VIRTUAL METHODS ********
-   virtual str_ptr name() const {
+   virtual string name() const {
       // XXX - can't use static variables ...
       // The Sun compiler asks that you bear with it.
-      return str_ptr("Loop subdivision");
+      return string("Loop subdivision");
    }
 
    virtual T centroid(CLvert* v) const {
@@ -433,10 +433,10 @@ class CatmullClarkCalc : public SubdivCalc<T> {
  public:
 
    //******** SubdivCalc VIRTUAL METHODS ********
-   virtual str_ptr name() const {
+   virtual string name() const {
       // XXX - can't use static variables ...
       // The Sun compiler asks that you bear with it.
-      return str_ptr("Catmull-Clark subdivision");
+      return string("Catmull-Clark subdivision");
    }
 
    T vcentroid(CBvert* v) const {
@@ -660,10 +660,10 @@ class HybridCalc : public SubdivCalc<T> {
    }
 
    //******** SubdivCalc VIRTUAL METHODS ********
-   virtual str_ptr name() const {
+   virtual string name() const {
       // XXX - can't use static variables ...
       // The Sun compiler asks that you bear with it.
-      return str_ptr("Hybrid subdivision");
+      return string("Hybrid subdivision");
    }
 
    //******** SUBDIVISION CALCULATION ********
@@ -791,8 +791,8 @@ class VolPreserve : public C {
 
    // Used mainly for debugging, to identify the type of scheme
    // in cerr statements:
-   virtual str_ptr name() const {
-      return C::name() + str_ptr(", with volume preservation");
+   virtual string name() const {
+      return C::name() + string(", with volume preservation");
    }
 
    //******** DUPLICATING ********

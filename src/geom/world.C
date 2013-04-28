@@ -85,20 +85,20 @@ WORLD::_default_decoder(
    // Use the object that's registered to decode 'name' only if that 
    // object's name is 'name' also.
    GELptr gel = GEL::upcast(hash);
-   if (gel && gel->name() == name)
+   if (gel && gel->name() == string(**name))
       return hash;
 
    // If nothing was registered to decode 'name', then check to see
    // if an object called 'name' exists and return it if it does.
-   gel = EXIST.lookup(name);
+   gel = EXIST.lookup(string(**name));
    if (gel)
       return gel;
 
    // Report failure:
    cerr << "WORLD::_default_decoder: can't find object named "
-        << name << endl;
+        << **name << endl;
    if (hash)
-      cerr << hash->class_name() << " vs. " << name << endl;
+      cerr << hash->class_name() << " vs. " << **name << endl;
 
    return 0;
 }
@@ -311,7 +311,7 @@ map_obj(
 
 GEOMptr
 WORLD::lookup(
-   Cstr_ptr &s 
+   const string &s
    )
 {   
    GELptr g = EXIST.lookup(s);
@@ -455,7 +455,7 @@ class REF_CLASS(WMSG) : public FRAMEobs {
    WMSG(CTEXT2Dptr &msg) : _text(msg), _end_time(0) { _msg = this;}
    int tick() {
       if (_end_time && the_time() > _end_time) {
-         _text->set_string(NULL_STR);
+         _text->set_string("");
          _msg = 0;
          return -1;
       } else return 1;
@@ -476,13 +476,13 @@ WORLD::_Message(
 {   
    _Multi_Message(0);
    if (!msgtext) {
-      msgtext = new TEXT2D(unique_name("msg"), str, pos);
+      msgtext = new TEXT2D(unique_name("msg"), string(**str), pos);
       GEOMptr g = msgtext;
       g->set_color(Color::firebrick);
       NETWORK.set(g, 0);
       create(g, false);
    } else {
-      msgtext->set_string(str);
+      msgtext->set_string(string(**str));
       msgtext->set_loc   (pos);
    }
 
@@ -526,7 +526,7 @@ class REF_CLASS(WMMSG) : public FRAMEobs {
          list += "";
          WORLD::multi_message(list);
          for (int i = 0; i < _num_msgs; i++) 
-            _text[i]->set_string(NULL_STR);
+            _text[i]->set_string("");
 
          _msg = 0;
          return -1;
@@ -596,16 +596,16 @@ WORLD::_Multi_Message(
 
    //delete old messages
    if (msgtext) 
-      msgtext->set_string(NULL_STR);
+      msgtext->set_string("");
    for (i = 0; i < MAXLINES; i++)
       if (mmsgtext[i])
-         mmsgtext[i]->set_string(NULL_STR);
+         mmsgtext[i]->set_string("");
 
    XYpt pos2 = pos, jVec(0, -.08);
 
    for (i = 0; ((i < formatted.num())&&(i < MAXLINES)); i++) 
       if (!mmsgtext[i]) {
-         msg = new TEXT2D(unique_name("msg"), formatted[i], pos2);
+         msg = new TEXT2D(unique_name("msg"), string(**formatted[i]), pos2);
          GEOMptr g = msg;
          g->set_color(Color::firebrick);
          NETWORK.set(g, 0);
@@ -614,7 +614,7 @@ WORLD::_Multi_Message(
          mmsgtext[i] = msg;
          pos2 += jVec;
       } else {    //move text if it is currently being shown 
-         mmsgtext[i]->set_string(formatted[i]);
+         mmsgtext[i]->set_string(string(**formatted[i]));
          mmsgtext[i]->set_loc   (pos2);
          pos2 += jVec;
       }

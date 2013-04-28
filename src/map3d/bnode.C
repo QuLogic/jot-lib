@@ -57,7 +57,7 @@ Bnode::tick()
 
    static bool debug = ::debug || Config::get_var_bool("DEBUG_BNODE_TICK", false);
 
-   err_adv(debug, "Bnode::tick: %s returning false", **identifier());
+   err_adv(debug, "Bnode::tick: %s returning false", identifier().c_str());
    return false; 
 }
 
@@ -264,8 +264,8 @@ Bnode::print_input_graph() const
    // (see http://www.graphviz.org/):
 
    ofstream fout;
-   str_ptr filename = identifier() + "_input_graph.dot";
-   fout.open(**filename, ios::trunc);
+   string filename = identifier() + "_input_graph.dot";
+   fout.open(filename.c_str(), ios::trunc);
    if (!fout) {
       cerr << "Bnode::print_input_graph: could not open output file: "
            << filename << endl;

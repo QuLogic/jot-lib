@@ -56,7 +56,7 @@ class ModeName {
       
       static void init();
       static TEXT2Dptr name()              { init(); return _mode_name; }
-      static void set_name(const string& n){ name()->set_string(str_ptr(n.c_str())); }
+      static void set_name(const string& n){ name()->set_string(n); }
 
 };
 

@@ -33,7 +33,7 @@
 /**********************************************************************
  * Pen:
  **********************************************************************/
-Pen::Pen(Cstr_ptr& pen_name,
+Pen::Pen(const string& pen_name,
          CGEST_INTptr &gest_int,
          CEvent &d, CEvent &m, CEvent &u,
          CEvent &shift_d, CEvent &shift_u,
@@ -57,7 +57,7 @@ Pen::Pen(Cstr_ptr& pen_name,
                              &Pen::ctrl_up);
    }
 
-   _entry.set_name(str_ptr("Pen Entry - ") + pen_name);
+   _entry.set_name("Pen Entry - " + pen_name);
 }
 
 /**********************************************************************

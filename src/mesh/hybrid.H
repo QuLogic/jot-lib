@@ -122,8 +122,8 @@ class HybridCalc2 : public SubdivCalc<T> {
    }
 
    //******** SubdivCalc VIRTUAL METHODS ********
-   virtual str_ptr name() const {
-      static str_ptr ret("Nouveau Hybrid Subdivision");
+   virtual string name() const {
+      static string ret("Nouveau Hybrid Subdivision");
       return ret;
    }
 

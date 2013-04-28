@@ -92,13 +92,13 @@ static void       timer_callback(CFRAMEobsptr &o){_w->schedule(o); }
 //static void       hash_add      (Cstr_ptr &t, STROKElist*l){_w->_Hash_add(t,l);}
 
        //!METHS:  wrappers on the EXIST list variable
-static GEOMptr lookup (Cstr_ptr &s);
+static GEOMptr lookup (const string &s);
 static void       create        (CGELptr &o, bool undoable=true);
 static void       destroy       (CGELptr &o, bool undoable=true);
 static void       destroy       (CGELlist& gels, bool undoable=true);
 
-static str_ptr    unique_name   (Cstr_ptr &s) { return EXIST.unique_name(s);}
-static str_ptr    unique_dupname(Cstr_ptr &s) { return EXIST.unique_dupname(s);}
+static string     unique_name   (const string &s) { return EXIST.unique_name(s);}
+static string     unique_dupname(const string &s) { return EXIST.unique_dupname(s);}
        //!METHS: wrappers on the DRAWN list variable
 static void       display       (CGELptr& o,     bool undoable=true);
 static void       display_gels  (CGELlist& gels, bool undoable=true);

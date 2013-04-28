@@ -34,7 +34,7 @@ MAKE_PTR_SUBC(TEXTUREgl, TEXTURE);
 typedef const TEXTUREglptr CTEXTUREglptr;
 class TEXTUREgl : public TEXTURE {
  public:
-   TEXTUREgl(Cstr_ptr& file         = "",
+   TEXTUREgl(const string & file    = "",
              GLenum    target       = GL_TEXTURE_2D,
              GLenum    texture_unit = GL_TEXTURE0);
    TEXTUREgl(CBBOX2D& bb, CVIEWptr &v);
@@ -48,7 +48,7 @@ class TEXTUREgl : public TEXTURE {
 
    // delete current texture (if any) and store the given filename
    // as the texture file to load next time we need the data:
-   void set_texture(Cstr_ptr& filename);
+   void set_texture(const string& filename);
 
    GLuint     get_tex_id()      const   { return _dl; }   
    bool       is_valid()        const   { return _dl_valid; }

@@ -214,8 +214,8 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
    bool                          _init;
    VIEWptr                       _view;
 
-   str_list                      _mesh_names;
-   str_list                      _buffer_filenames;
+   vector<string>                _mesh_names;
+   vector<string>                _buffer_filenames;
 
    int                           _zoom_strokes;
 
@@ -353,7 +353,7 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
    /******** Convenience Methods ********/
 
    bool     valid_gel(CGELptr g);
-   void     fill_buffer_listbox(GLUI_Listbox *, str_list &, const string &);
+   void     fill_buffer_listbox(GLUI_Listbox *, vector<string> &, const string &);
 
    /******** STATIC CALLBACK METHODS ********/
    static void button_cb(int id);

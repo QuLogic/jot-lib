@@ -32,8 +32,8 @@ typedef const TEXT2Dptr CTEXT2Dptr;
 
 class TEXT2D : public GEOM {
  protected:
-   str_ptr _string;
-   str_ptr _tmp_string;
+   string  _string;
+   string  _tmp_string;
    mlib::XYpt    _pt2d;
    bool     _is2d;
    bool     _center;
@@ -49,10 +49,10 @@ class TEXT2D : public GEOM {
    void   recompute_xform();
  public:
    TEXT2D() {}
-   TEXT2D(Cstr_ptr &n, Cstr_ptr &s) :
+   TEXT2D(const string &n, const string &s) :
       GEOM(n), _string(s), _is2d(0), _center(0),
       _can_intersect(1), _show_boxes(0) {}
-   TEXT2D(Cstr_ptr &n, Cstr_ptr &s, const mlib::XYpt &p);
+   TEXT2D(const string &n, const string &s, const mlib::XYpt &p);
 
    static void draw_debug(const char* str, mlib::XYpt& pos, CVIEWptr& view);
    static void draw_debug(const char* str, mlib::Wpt& pos, CVIEWptr& view);
@@ -61,7 +61,7 @@ class TEXT2D : public GEOM {
       return (_suppress_draw = !_suppress_draw);
    }
 
-   virtual  BBOX2D  bbox2d       (int b=5, char*s=0, int r=0) const;
+   virtual  BBOX2D  bbox2d       (int b=5, const char*s=0, int r=0) const;
    virtual  void    update       ()                { }
 
    virtual  int     draw         (CVIEWptr  &v);
@@ -70,10 +70,10 @@ class TEXT2D : public GEOM {
 
    bool     can_intersect()           const{ return _can_intersect; }
    void    can_intersect(bool c)           { _can_intersect = c;}
-   virtual  char   *get_string   ()           const;
-   void    set_string   (Cstr_ptr &n)     { _string     = n; }
+   virtual const char *get_string()   const;
+   void    set_string   (const string &n)  { _string     = n; }
    void    show_boxes   (bool sb =1 )      { _show_boxes = sb;}
-   void    tmpstr       (const char *s)   { _tmp_string = str_ptr(s);}
+   void    tmpstr       (const char *s)    { _tmp_string = string(s);}
    bool    &centered     ()                { return _center; }
    void    set_loc      (mlib::CXYpt &p)        { set_xform(mlib::Wpt(p[0],p[1],0));}
    bool     is2d         () const          { return _is2d;}

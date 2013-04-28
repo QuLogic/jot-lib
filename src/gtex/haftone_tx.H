@@ -112,7 +112,7 @@ class Halftone_TX : public GLSLShader_Layer_Base {
       _use_alpha_transitions=!_use_alpha_transitions;
    }
 
-   void set_texture_pattern(int layer, str_ptr file_name);
+   void set_texture_pattern(int layer, string file_name);
    void set_procedural_pattern(int layer, int pattern_id);
 
    //tone correction control

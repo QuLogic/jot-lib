@@ -54,7 +54,7 @@ class Skybox_Texture : public BasicTexture {
    //******** DATA_ITEM VIRTUAL METHODS ********
    virtual DATA_ITEM  *dup() const { return new Skybox_Texture; }
 
-   virtual void load_texture(str_ptr file_name);
+   virtual void load_texture(const string file_name);
 
  protected:
 

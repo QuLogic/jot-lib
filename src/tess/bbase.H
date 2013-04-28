@@ -408,7 +408,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Identifier used in diagnostic output. Bbase types print their
    // class name and level in the subdivision hierarchy.
-   virtual str_ptr identifier() const;
+   virtual string identifier() const;
 
    // Callback used called once per frame for "active" Bnodes.
    // Returns true if it wants to remain active:
@@ -434,7 +434,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    virtual void notify_update_request(BMESH* m);
 
    // For BMESHobs::name() return Bnode::name()
-   virtual str_ptr name() const { return Bnode::name(); }
+   virtual string name() const { return Bnode::name(); }
    
    //*****************************************************************
  protected: 

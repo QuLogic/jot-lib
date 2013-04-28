@@ -27,12 +27,12 @@
 #include "base_ui.H"
 
 
-BaseUI::BaseUI(str_ptr n)
+BaseUI::BaseUI(string n)
    : _name(n),
      _glui(0)
 {}
 
-BaseUI::BaseUI(BaseUI* parent, str_ptr n)
+BaseUI::BaseUI(BaseUI* parent, string n)
    : _name(n),
      _glui(0),
      _parent(parent)
@@ -86,7 +86,7 @@ BaseUI::build()
    VIEW::peek()->win()->size(root_w,root_h);
    VIEW::peek()->win()->position(root_x,root_y);
 
-   _glui = GLUI_Master.create_glui(**_name, 0, root_x + root_w + 10, root_y);
+   _glui = GLUI_Master.create_glui(_name.c_str(), 0, root_x + root_w + 10, root_y);
    _glui->set_main_gfx_window(VIEW::peek()->win()->id());
       
    build(_glui, NULL, true);

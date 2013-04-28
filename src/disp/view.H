@@ -313,7 +313,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    ARRAY<STENCILCB*> _stencil_cbs;// Stencil buffers!
 
-   str_ptr       _name;          // view's name
+   string        _name;          // view's name
    CAMptr        _cam;           // camera definition for view
    CAMhist       _cam_hist;      // history of previous camera views 
    int           _cam_hist_cur;  // current place in history
@@ -363,11 +363,11 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    double            _alpha;         // alpha of background (used by npr_view for papering)
    bool              _use_paper;     // whether paper effect should affect bkg
-   str_ptr           _bkg_file;      // filename of background image (NULL_STR = none)
+   string            _bkg_file;      // filename of background image (NULL_STR = none)
    TEXTUREptr        _bkg_tex;       // texture of the above image (setup by npr_view)
    mlib::Wtransf     _bkg_tf;        // NDC->UV bkg tex transform
 
-   str_ptr           _data_file;     // if not null_str, the view is seralized to _data_file.view
+   string            _data_file;     // if not null_str, the view is seralized to _data_file.view
 
    Animator*         _animator;
 
@@ -397,8 +397,8 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    Animator*         animator()                             { return _animator; }
 
-   void              set_data_file(str_ptr f)               { _data_file = f; }
-   Cstr_ptr&         get_data_file() const                  { return _data_file; }
+   void              set_data_file(string f)                { _data_file = f; }
+   const string&     get_data_file() const                  { return _data_file; }
 
    void              set_alpha(double a);
    double            get_alpha() const                      { return _alpha; }
@@ -407,10 +407,10 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    bool              get_use_paper() const                  { return _use_paper; }
 
    // Setting filename kills texture:
-   void              set_bkg_file(str_ptr f)                { _bkg_file = f; _bkg_tex = NULL; CHANGED(TEXTURE_CHANGED);}
+   void              set_bkg_file(string f)                 { _bkg_file = f; _bkg_tex = NULL; CHANGED(TEXTURE_CHANGED);}
    
    // npr_view sets this from the filename:
-   Cstr_ptr&         get_bkg_file() const                   { return _bkg_file; }
+   const string&     get_bkg_file() const                   { return _bkg_file; }
                                              
    void              set_bkg_tex(TEXTUREptr t)              { _bkg_tex = t; CHANGED(TEXTURE_CHANGED);}
    CTEXTUREptr&      get_bkg_tex() const                    { return _bkg_tex; }
@@ -629,7 +629,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    SCREENptr            _screen;
 
  public:
-   VIEW (Cstr_ptr &s, WINSYS *win, VIEWimpl *i);
+   VIEW (const string &s, WINSYS *win, VIEWimpl *i);
    virtual              ~VIEW () { while (_jitters.num() > 0) delete _jitters.pop(); }
 
    static int           stack_size()               { return _views.num(); }
@@ -680,7 +680,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    static mlib::Wvec      eye_vec(mlib::CWpt& p) { return (p - eye()).normalized(); }
 
    //!METHS: core components of a view
-   str_ptr              name()               const { return str_ptr(_name); }
+   string               name()               const { return _name; }
    VIEWimpl             *impl()               const { return _impl; }
    CGELlist             &drawn()              const { return _drawn; }
    GELlist              &drawn()                    { return _drawn; }
@@ -792,7 +792,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    // Grabs current scene as a hi-res image, scaled n times
    // the size of the current window in each dimension:
-   int         screen_grab(int scale, Cstr_ptr &filename);
+   int         screen_grab(int scale, const string &filename);
    void        screen_grab(int scale, Image &im);
 
    //!METHS: callbacks provided by the view 

@@ -55,11 +55,11 @@ layer_base_t::put_pattern_name(TAGformat &d) const
 }
 
 bool
-layer_base_t::get_uniform_loc(Cstr_ptr& var_name, GLint& loc, GLuint& program)
+layer_base_t::get_uniform_loc(const string& var_name, GLint& loc, GLuint& program)
 {
    // wrapper for glGetUniformLocation, with error reporting
 
-   loc = glGetUniformLocation(program, **var_name);
+   loc = glGetUniformLocation(program, var_name.c_str());
    if (loc < 0) {
       cerr << "layer_base_t" << "::get_uniform_loc: error: variable "
            << "\"" << var_name << "\" not found"
@@ -73,7 +73,9 @@ layer_base_t::get_uniform_loc(Cstr_ptr& var_name, GLint& loc, GLuint& program)
 void 
 layer_base_t::get_var_locs_some(int mode, int i, GLuint& program)
 {
-   str_ptr p = str_ptr("layer[") + str_ptr(i);
+   char tmp[32];
+   sprintf(tmp, "%d", i);
+   string p = string("layer[") + tmp;
    switch(mode) {
     case 0:  // All
       get_var_locs(i, program);
@@ -99,8 +101,9 @@ void
 layer_base_t::get_var_locs(int i, GLuint& program)
 {
    //we need to agree on the naming convention for layers in GLSL
-
-   str_ptr p = str_ptr("layer[") + str_ptr(i);
+   char tmp[32];
+   sprintf(tmp, "%d", i);
+   string p = string("layer[") + tmp;
 
    get_uniform_loc(p + "].mode",          _mode_loc,              program);
    get_uniform_loc(p + "].is_highlight",  _highlight_loc,         program);
@@ -277,9 +280,9 @@ GLSLShader_Layer_Base::activate_layer_textures()
 
 void
 GLSLShader_Layer_Base::set_texture_pattern(
-   int     layer_num,
-   str_ptr dir,
-   str_ptr file_name
+   int    layer_num,
+   string dir,
+   string file_name
    )
 {
    // screen out the crazies
@@ -323,10 +326,10 @@ GLSLShader_Layer_Base::set_texture_pattern(
 
    GLint tex_stage = get_free_tex_stage();
 
-   string pre_path = Config::JOT_ROOT() + string(**dir);
-   string path = pre_path + string(**file_name);
+   string pre_path = Config::JOT_ROOT() + dir;
+   string path = pre_path + file_name;
    _patterns[tex_stage] =
-      new TEXTUREgl(str_ptr(path.c_str()), GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _patterns[tex_stage]->set_save_img(true);
 
    if (!_patterns[tex_stage]->load_image()) {
@@ -336,7 +339,7 @@ GLSLShader_Layer_Base::set_texture_pattern(
       // fail in a civilized manner
       layer->_mode = 0;
       layer->_pattern_tex_stage = -1;
-      layer->_pattern_name = str_ptr("");
+      layer->_pattern_name = "";
       _patterns.erase(tex_stage);
       free_tex_stage(tex_stage);
 
@@ -379,7 +382,7 @@ GLSLShader_Layer_Base::disable_layer(int layer)
 {
    assert(_layers.valid_index(layer));
    _layers[layer]->_mode = 0;
-   _layers[layer]->_pattern_name = str_ptr("");
+   _layers[layer]->_pattern_name = "";
    GLint tex_stage =  _layers[layer]->_pattern_tex_stage;
    _layers[layer]->_pattern_tex_stage = -1;
    cleanup_unused_textures(tex_stage);
@@ -392,7 +395,7 @@ GLSLShader_Layer_Base::set_procedural_pattern(int layer, int pattern_id)
    assert(_layers.valid_index(layer) && _layers[layer]);
 
    _layers[layer]->_mode = 2 + pattern_id;
-   _layers[layer]->_pattern_name = str_ptr("");
+   _layers[layer]->_pattern_name = "";
 
    GLint tex_stage = _layers[layer]->_pattern_tex_stage;
    _layers[layer]->_pattern_tex_stage= -1;

@@ -46,14 +46,14 @@ class ICON2D : public GEOM {
       return (_suppress_draw = !_suppress_draw);
    }
       
-   void add_skin(Cstr_ptr &n);
+   void add_skin(const string &n);
    void update_skin();
    void toggle_active() { _active = !_active; }
    void toggle_hidden() { _hide = !_hide; }
    bool activate() { return (_active = true); }
    bool deactivate() {return (_active = false); }
 
-   Cstr_ptr name() {return _name; }
+   const string name() {return _name; }
 
    virtual  BBOX2D  bbox2d   (int b=5, char*s=0, int r=0) const;
    virtual  void    update   ()                { }
@@ -86,11 +86,11 @@ class ICON2D : public GEOM {
    bool                 _center;
    bool                 _can_intersect;
    bool                 _show_boxes;
-   str_ptr              _name;          //! name of button
-   str_ptr              _filename;      //! Filename of 2D image
-   LIST<str_ptr>        _skins;         //! Array of skins for 1 button
-   int                  _currentTex;  
-   LIST<TEXTUREglptr>   _texture;       // textures for normal icon
+   string               _name;          //! name of button
+   string               _filename;      //! Filename of 2D image
+   vector<string>       _skins;         //! Array of skins for 1 button
+   vector<TEXTUREglptr>::size_type _currentTex;
+   vector<TEXTUREglptr> _texture;       // textures for normal icon
    TEXTUREglptr         _act_tex;       // texture for active icon
                                         // representing "active"
    int                  _cam;           // Camera Number

@@ -98,7 +98,9 @@ Patch::Patch(BMESH* mesh) :
    if (_mesh)
      _mesh->changed(BMESH::RENDERING_CHANGED);
 
-   set_name(str_ptr("patch-") + str_ptr(_mesh->patches().num()));
+   char tmp[64];
+   sprintf(tmp, "%d", _mesh->patches().num());
+   set_name(string("patch-") + tmp);
 }
 
 Patch::~Patch()
@@ -549,7 +551,7 @@ Patch::set_texture(GTexture* gtex)
 }
 
 void
-Patch::set_texture(Cstr_ptr& style)
+Patch::set_texture(const string& style)
 {
    _cur_tex_i = get_tex_index(style);
 //    _mesh->changed(BMESH::RENDERING_CHANGED);
@@ -751,7 +753,7 @@ Patch::write_stream(ostream &os)
    _textures.write_stream(os);
 
    //******** NAME ********
-   if (_name != NULL_STR) {
+   if (_name != "") {
       os << "#BEGIN PATCHNAME" << endl;
       os << _name << endl;
       os << "#END PATCHNAME" << endl;
@@ -921,7 +923,7 @@ Patch::read_texture_map(istream &is, str_list &leftover)
 
    char buf[126];
    is >> buf;
-   _texture_file = str_ptr(buf);
+   _texture_file = string(buf);
 
    return 1;
 }
@@ -959,7 +961,7 @@ Patch::tags() const
          );
 
       *_patch_tags += new TAG_val<Patch,int>("cur_tex", &Patch::cur_tex_i_);
-      *_patch_tags += new TAG_val<Patch,str_ptr>("patchname", &Patch::name_);
+      *_patch_tags += new TAG_val<Patch,string>("patchname", &Patch::name_);
       *_patch_tags += new TAG_meth<Patch>(
          "color",  &Patch::put_color, &Patch::get_color, 0
          );
@@ -1081,14 +1083,15 @@ Patch::unset_texture()
 void
 Patch::get_texture(TAGformat &d)
 {
-   str_ptr str, str1;
+   string str;
+   str_ptr str1;
    *d >> str;
 
    if ((*d).ascii())
    {
       while (str1 = (*d).get_string_with_spaces())
       {
-         str = str + " " + str1;
+         str = str + " " + **str1;
       }
    }
 
@@ -1096,13 +1099,13 @@ Patch::get_texture(TAGformat &d)
 
    if (texnum < 0) 
    {
-      err_msg("Patch::get_texture() - ERROR! Could not find texture '%s'", **str);
+      err_msg("Patch::get_texture() - ERROR! Could not find texture '%s'", str.c_str());
       return;
    }
 
    GTexture* tex = _textures[texnum];   assert(tex);
 
-   err_mesg(ERR_LEV_SPAM, "Patch::get_texture() - Loaded: '%s'", **str);
+   err_mesg(ERR_LEV_SPAM, "Patch::get_texture() - Loaded: '%s'", str.c_str());
    
    tex->decode(*d);
 

@@ -33,7 +33,7 @@ class Animator : public DATA_ITEM {
  protected:
    /******** MEMBER VARIABLES ********/
    VIEWptr     _view;
-   str_ptr     _name;
+   string      _name;
 
    // sync mode:
    int         _fps;            // frames per second
@@ -87,7 +87,7 @@ class Animator : public DATA_ITEM {
    void   set_time_scale(double s)      { _time_scale = s;  }
    double get_time_scale()         const{ return _time_scale; }
 
-   void   set_name(str_ptr name)        { _name = name; }
+   void   set_name(const string name)   { _name = name; }
 
    void   set_current_frame(int f)      { _cur_frame = f;    }
    int    get_current_frame()      const{ return _cur_frame; }       

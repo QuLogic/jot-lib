@@ -144,13 +144,13 @@ class GEL: public REFcounter,
    virtual bool can_do_halo()           const   { return false; }
    virtual bool do_viewall()            const   { return true; }
 
-   virtual Cstr_ptr&  name ()           const   { return _name; }
+   virtual const string&  name ()       const   { return _name; }
 
    virtual ostream&   print(ostream &s) const   { return s; }
    virtual DATA_ITEM* dup  ()           const = 0;
 
  private:
-   static Cstr_ptr _name;
+   static const string _name;
  protected:
    GEL(CGELptr &g);
    static TAGlist* _gel_tags;
@@ -250,7 +250,7 @@ class DrawnList : public GELlist {
             DrawnList() { }
     void    add   (CGELptr &g);
     void    rem   (CGELptr &g);
-    GELptr  lookup(Cstr_ptr &n) const;
+    GELptr  lookup(const string &n) const;
 
    virtual void buffer()      { _buffering = 1;}
    virtual int  buffering()   { return _buffering; }
@@ -262,9 +262,9 @@ class ExistList : public GELlist {
             ExistList() { }
     void    add           (CGELptr &g);
     void    rem           (CGELptr &g);
-    GELptr  lookup        (Cstr_ptr &n) const;
-    str_ptr unique_dupname(Cstr_ptr &) const;
-    str_ptr unique_name   (Cstr_ptr &) const;
+    GELptr  lookup        (const string &n) const;
+    string  unique_dupname(const string &) const;
+    string  unique_name   (const string &) const;
     bool    allocated() const { return _array != 0; }
 };
 

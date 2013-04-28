@@ -63,8 +63,8 @@ class TEXBODY : public GEOM, public XFORMobs {
    //******** MANAGERS ********
 
    TEXBODY();
-   TEXBODY(CGEOMptr&, Cstr_ptr&);
-   TEXBODY(CBMESHptr& m, Cstr_ptr& name=NULL_STR);
+   TEXBODY(CGEOMptr&, const string&);
+   TEXBODY(CBMESHptr& m, const string& name="");
 
    virtual ~TEXBODY();
 
@@ -102,7 +102,7 @@ class TEXBODY : public GEOM, public XFORMobs {
    void           set_apply_xf(bool b)    { _apply_xf = b; }
    bool           apply_xf()     const    { return _apply_xf; }
    // See comments below
-   Cstr_ptr&      mesh_file()    const    { return _mesh_file; }         
+   const string&  mesh_file()    const    { return _mesh_file; }
 
    //******** CONVENIENCE ********
 
@@ -237,7 +237,7 @@ class TEXBODY : public GEOM, public XFORMobs {
    virtual RAYnear&  nearest(RAYnear &r, CWtransf& =mlib::Identity)      const;
    virtual bool      inside(CXYpt_list&)                                 const;
    virtual BBOX      bbox(int recurse=0)                                 const;
-   virtual GEOMptr   dup(Cstr_ptr &n)                                    const;
+   virtual GEOMptr   dup(const string &n)                                const;
    virtual int       draw(CVIEWptr &v);
    virtual BODYptr   body()  const   { return cur_rep(); }
 
@@ -301,7 +301,7 @@ class TEXBODY : public GEOM, public XFORMobs {
    // XXX -
    //   This policy needs work, and in particular a glui widget
    //   so you can confirm overwrites and invoke renaming...
-   str_ptr      _mesh_file;       
+   string       _mesh_file;
 
    // If not NULL_STR, it's the (.sm) filename that was used last
    // to update this texboy's mesh.  It's used when resaving
@@ -309,7 +309,7 @@ class TEXBODY : public GEOM, public XFORMobs {
    // loading it and then resaving to a new destination.
    //
    // XXX - This policy needs work:
-   str_ptr      _mesh_update_file;
+   string       _mesh_update_file;
 
    Script*      _script;
 

@@ -64,10 +64,10 @@ BasecoatShader::BasecoatShader(Patch* p) :
    _color_steepness(0.5),
    _light_separation(0)
 {
-   set_tex(str_ptr(Config::get_var_str(
+   set_tex(Config::get_var_str(
               "BASECOAT_SHADER_FILENAME",
               GtexUtil::toon_name("clear-black.png")
-              ).c_str()));
+              ));
 
    set_draw_sils(Config::get_var_bool("BASECOAT_IMG_DRAW_SILS",false));
 

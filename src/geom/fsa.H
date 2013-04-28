@@ -263,8 +263,8 @@ class State_t {
    
       typedef Arc_t<EVENT> arc_type;
    
-      State_t()                     { }
-      State_t(Cstr_ptr &n):_name(n) { }
+      State_t()                         { }
+      State_t(const string &n):_name(n) { }
       
       int is_empty() { return !_arcs.num(); }
       
@@ -290,8 +290,8 @@ class State_t {
       const ARRAY<arc_type> &arcs() const { return _arcs; }
       ARRAY<arc_type> &arcs()             { return _arcs; }
       
-      Cstr_ptr &name() const { return _name; }
-      void set_name(Cstr_ptr &n) { _name = n; }
+      const string &name() const     { return _name; }
+      void set_name(const string &n) { _name = n; }
       
       int operator == (const State_t<EVENT> &a) const
          { cerr << "XXX: Dummy State_t::operator== got called\n"; return 0; }
@@ -299,7 +299,7 @@ class State_t {
    private:
    
       ARRAY<arc_type> _arcs;
-      str_ptr         _name;
+      string          _name;
 
 };
 

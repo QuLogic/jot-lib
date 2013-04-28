@@ -52,13 +52,13 @@ stroke_tex_name()
  *****************************************************************/
 GLSLPaperShader* GLSLPaperShader::_instance(0);
 TEXTUREglptr     GLSLPaperShader::_paper_tex;
-str_ptr          GLSLPaperShader::_paper_tex_name;
+string           GLSLPaperShader::_paper_tex_name;
 
 // XXX - bogus:
-str_ptr          GLSLPaperShader::_paper_tex_filename = "basic_paper.png";
+string           GLSLPaperShader::_paper_tex_filename = "basic_paper.png";
 
 TEXTUREglptr     GLSLPaperShader::_tex;
-str_ptr          GLSLPaperShader::_tex_name;
+string           GLSLPaperShader::_tex_name;
 double           GLSLPaperShader::_contrast = 2.0;
 GLint            GLSLPaperShader::_paper_tex_loc(-1);
 GLint            GLSLPaperShader::_tex_loc(-1);
@@ -79,8 +79,8 @@ bool             GLSLPaperShader::_do_texture(false);
  **********************************************************************/
 GLSLPaperShader::GLSLPaperShader(Patch* p) : GLSLShader(p)
 {
-   set_paper(str_ptr(paper_tex_name().c_str()));
-   set_tex  (str_ptr(stroke_tex_name().c_str()));
+   set_paper(paper_tex_name());
+   set_tex  (stroke_tex_name());
 }
 
 GLSLPaperShader* 
@@ -92,7 +92,7 @@ GLSLPaperShader::instance()
 }
 
 void 
-GLSLPaperShader::set_paper(Cstr_ptr& filename)
+GLSLPaperShader::set_paper(const string& filename)
 {
    // Set the name of the paper texture to use
 
@@ -108,7 +108,7 @@ GLSLPaperShader::set_paper(Cstr_ptr& filename)
 }
 
 void 
-GLSLPaperShader::set_tex(Cstr_ptr& filename)
+GLSLPaperShader::set_tex(const string& filename)
 {
    // name of stroke texture (will be bound to tex unit 3):
 

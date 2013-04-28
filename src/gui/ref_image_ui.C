@@ -172,7 +172,7 @@ RefImageUI::listbox_cb(int id)
      assert(tex);
      string file = Config::JOT_ROOT() + "/nprdata/sky_textures/" + **_ui[0]->_sky_filenames[_ui[0]->_listbox[LISTBOX_SKY]->get_int_val()];
      cout << "Loading : " << file << endl;
-     tex->load_texture( str_ptr(file.c_str()) );
+     tex->load_texture(file);
   }
 }
 

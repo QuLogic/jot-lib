@@ -28,16 +28,16 @@
 
 #ifdef DONT_LINK_GEOM_IN_DISP
 inline void
-show_msg(Cstr_ptr& msg)
+show_msg(const string& msg)
 {
-   err_msg("%s", **msg);
+   err_msg("%s", msg.c_str());
 }
 #else
 #include "geom/world.H"
 inline void
-show_msg(Cstr_ptr& msg)
+show_msg(const string& msg)
 {
-   WORLD::message(msg);
+   WORLD::message(str_ptr(msg.c_str()));
 }
 #endif
 
@@ -83,7 +83,7 @@ Animator::toggle_activation()
       } else if (_end_frame < _start_frame) {
          show_msg("Cannot activate Animator!");
          err_adv(debug, "Animator::toggle_activation() - Bad end_frame");
-      } else if (_name == NULL_STR) {
+      } else if (_name == "") {
          show_msg("Cannot activate Animator!");
          err_adv(debug, "Animator::toggle_activation() - No name set");
       } else {
@@ -253,7 +253,7 @@ Animator::pre_draw_CB()
 
    //Now make sure the desired frame's loaded
    if (_cur_frame >= 0 && _cur_frame <= _end_frame && _last_loaded != _cur_frame) {
-      sprintf(bname, "%s[%05d].jot", **_name, _cur_frame);
+      sprintf(bname, "%s[%05d].jot", _name.c_str(), _cur_frame);
       string fname = IOManager::cwd() + bname;
       LOADobs::load_status_t status;
       cerr <<  "loading in " << fname << endl;
@@ -285,7 +285,7 @@ Animator::post_draw_CB()
       // grab the current frame and write it to disk
       char buf[1024];
       sprintf (buf, "%s[%dFPS][%dto%d]-%05d.png",
-               **_name, _fps, _start_frame, _end_frame, _cur_frame);
+               _name.c_str(), _fps, _start_frame, _end_frame, _cur_frame);
       err_msg("Animator::post_draw_CB() - Writing '%s'...", buf);
 
       int w,h;
@@ -328,7 +328,7 @@ Animator::format(STDdstream &d)  const
    if ( (_fps > 0) &&
         (_start_frame >=0) &&
         (_end_frame > _start_frame) &&
-        (_name != NULL_STR) ) {
+        (_name != "") ) {
       cerr << "Animator::format: Found .jot file containing multiple frames."
            << endl
            << "Each frame will be loaded and resaved..." << endl;
@@ -341,7 +341,7 @@ Animator::format(STDdstream &d)  const
       for (int i = _end_frame; i >= _start_frame; i--) {
          sprintf(buf, "%05d", i);
 
-         string bname = string(**_name) + "[" + buf + "].jot";
+         string bname = _name + "[" + buf + "].jot";
 
          string lname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
          string sname = IOManager::cwd() + bname;  //IOManager::cached_prefix()
@@ -411,18 +411,18 @@ Animator::tags() const
 void
 Animator::get_name (TAGformat &d)
 {
-   str_ptr str, space;
+   string str, space;
    *d >> str;
 
    if (!(*d).ascii())
       *d >> space;
 
    if (str == "NULL_STR") {
-      _name = NULL_STR;
+      _name = "";
       err_mesg(ERR_LEV_SPAM, "Animator::get_name() - Loaded NULL string.");
    } else {
       _name = str;
-      err_mesg(ERR_LEV_SPAM, "Animator::get_name() - Loaded string: '%s'.", **str);
+      err_mesg(ERR_LEV_SPAM, "Animator::get_name() - Loaded string: '%s'.", str.c_str());
    }
 
 }
@@ -434,14 +434,14 @@ void
 Animator::put_name (TAGformat &d) const
 {
    d.id();
-   if (_name == NULL_STR) {
+   if (_name == "") {
       err_mesg(ERR_LEV_SPAM, "Animator::put_name() - Wrote NULL string.");
       *d << "NULL_STR";
       *d << " ";
    } else {
       *d << _name;
       *d << " ";
-      err_mesg(ERR_LEV_SPAM, "Animator::put_name() - Wrote string: '%s'.", **_name);
+      err_mesg(ERR_LEV_SPAM, "Animator::put_name() - Wrote string: '%s'.", _name.c_str());
    }
    d.end_id();
 }

@@ -169,13 +169,13 @@ GLSLXToonShader::set_normals(int i)
 }
 
 void 
-GLSLXToonShader::set_tex(Cstr_ptr& filename)
+GLSLXToonShader::set_tex(const string& filename)
 {
    // Set the name of the texture to use
    if (_tex) {
-      _tex->set_texture(str_ptr(Config::JOT_ROOT().c_str()) + filename);
+      _tex->set_texture(Config::JOT_ROOT() + filename);
    } else {
-      _tex = new TEXTUREgl(str_ptr(Config::JOT_ROOT().c_str()) + filename);
+      _tex = new TEXTUREgl(Config::JOT_ROOT() + filename);
       assert(_tex);
       _tex->set_wrap_s(GL_CLAMP_TO_EDGE);
       _tex->set_wrap_t(GL_CLAMP_TO_EDGE);

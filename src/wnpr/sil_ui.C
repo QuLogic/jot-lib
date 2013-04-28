@@ -208,7 +208,7 @@ SilUI::get_selected_gel(TAGformat &d)
 
    update_mesh_list();
 
-   if (index > _mesh_names.num())
+   if (index > (int)_mesh_names.size())
    {
       cerr << "SilUI::get_selected_gel() - ERROR!!! GEL index was bad!\n";
       index = 0;  
@@ -782,8 +782,8 @@ SilUI::build()
    assert(_radgroup.num()==0);      for (i=0; i<RADGROUP_NUM; i++)   _radgroup.add(0);
    assert(_radbutton.num()==0);     for (i=0; i<RADBUT_NUM; i++)     _radbutton.add(0);
 
-   assert(_mesh_names.num() == 0);
-   assert(_buffer_filenames.num() == 0);
+   assert(_mesh_names.empty());
+   assert(_buffer_filenames.empty());
 
    //Top panel
    _panel[PANEL_TOP] = new GLUI_Panel(_glui, "Selection");
@@ -1439,7 +1439,8 @@ SilUI::update_non_lives()
 bool
 SilUI::update_mesh_list()
 {
-   int new_i,old_i,i,j;
+   vector<string>::size_type new_i,old_i,i;
+   int j;
    CGELlist& list = _view->active();
 
    //-Hold on to the current selected name
@@ -1449,36 +1450,29 @@ SilUI::update_mesh_list()
 
    old_i = _listbox[LIST_MESH]->get_int_val();
 
-   str_ptr old_name = ( old_i==0 ) ? (NULL_STR) : (_mesh_names[old_i-1]);
+   string old_name = old_i==0 ? "" : _mesh_names[old_i-1];
 
    //Clear out any previous names
-   for (i=1; i<=_mesh_names.num();i++)
-   {
+   for (i=1; i<=_mesh_names.size(); i++) {
       assert(_listbox[LIST_MESH]->delete_item(i));
    }
    _mesh_names.clear();
 
-
-
    new_i = 0;
-   i=0;
-
-   i++;
+   i=1;
 
    assert(valid_gel(_bufferGEL));
-   _mesh_names += _bufferGEL->name();
-   _listbox[LIST_MESH]->add_item(i, **_mesh_names.last());
-   if (old_name == _mesh_names.last()) new_i = i;
+   _mesh_names.push_back(_bufferGEL->name());
+   _listbox[LIST_MESH]->add_item(i, _mesh_names.back().c_str());
+   if (old_name == _mesh_names.back()) new_i = i;
 
-   for (j=0; j < list.num(); j++) 
-   {
-      if ( valid_gel(list[j]) )
-      {
+   for (j=0; j < list.num(); j++) {
+      if ( valid_gel(list[j]) ) {
          i++;
-         _mesh_names += list[j]->name();
-         _listbox[LIST_MESH]->add_item(i, **_mesh_names.last());
+         _mesh_names.push_back(list[j]->name());
+         _listbox[LIST_MESH]->add_item(i, _mesh_names.back().c_str());
 
-         if (old_name == _mesh_names.last()) new_i = i;
+         if (old_name == _mesh_names.back()) new_i = i;
       }
    }
 
@@ -1909,23 +1903,22 @@ SilUI::buffer_grab()
 
 void
 SilUI::fill_buffer_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
    )
 {
-   int i;
+   vector<string>::size_type i;
 
    //First clear out any previous presets
-   for (i=1; i<=save_files.num();i++)
-   {
+   for (i = 1; i <= save_files.size(); i++) {
       int foo = listbox->delete_item(i);
       assert(foo);
    }
    save_files.clear();
 
    vector<string> in_files = dir_list(full_path);
-   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+   for (i = 0; i < in_files.size(); i++) {
       string::size_type len = in_files[i].length();
 
       if ( (len>3) && (in_files[i].substr(len-4) == ".sil"))
@@ -1934,8 +1927,8 @@ SilUI::fill_buffer_listbox(
 
          if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files += str_ptr((full_path + in_files[i]).c_str());
-            listbox->add_item(save_files.num(), basename.c_str());
+            save_files.push_back(full_path + in_files[i]);
+            listbox->add_item(save_files.size(), basename.c_str());
          }
          else
          {
@@ -2023,9 +2016,9 @@ SilUI::buffer_name_text()
 
    if (buffer_save((Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil").c_str()))
    {
-      _buffer_filenames += str_ptr((Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil").c_str());
-      _listbox[LIST_BUFFER]->add_item(_buffer_filenames.num(), newtext);
-      _listbox[LIST_BUFFER]->set_int_val(_buffer_filenames.num());
+      _buffer_filenames.push_back(Config::JOT_ROOT() + BUFFER_DIRECTORY + newtext + ".sil");
+      _listbox[LIST_BUFFER]->add_item(_buffer_filenames.size(), newtext);
+      _listbox[LIST_BUFFER]->set_int_val(_buffer_filenames.size());
    }
    else
    {
@@ -2062,7 +2055,7 @@ SilUI::buffer_save_button()
    }
    else
    {
-      if (!buffer_save(**_buffer_filenames[val-1])) return;
+      if (!buffer_save(_buffer_filenames[val-1].c_str())) return;
       //_button[BUT_SAVE]->disable();
    }
 
@@ -2143,7 +2136,7 @@ SilUI::buffer_selected()
    }
    else
    {
-      if (!buffer_load(**_buffer_filenames[val-1]))
+      if (!buffer_load(_buffer_filenames[val-1].c_str()))
          return;
 
       // Update the controls that don't use
@@ -2602,7 +2595,7 @@ SilUI::select_name()
       return;
    }
 
-   str_ptr name = _mesh_names[index-1];
+   string name = _mesh_names[index-1];
 
    CGELlist& list = _view->active();
 

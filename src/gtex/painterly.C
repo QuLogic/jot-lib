@@ -75,14 +75,14 @@ Painterly::init_default(int layer)
    // but only if they are currently not assigned textures.
 
    assert(_layers.valid_index(layer));
-   str_ptr pat = get_name(_layers[layer]->_pattern_name, "paint1.png");
+   string pat = get_name(_layers[layer]->_pattern_name, "paint1.png");
    assert(get_layer(layer));
-   str_ptr pap = get_name(_paper_name, "basic_paper.png");
+   string pap = get_name(_paper_name, "basic_paper.png");
    init_layer(layer, pat, pap); // no-op if already set
 }
 
 void          
-Painterly::init_layer(int l, Cstr_ptr& pattern, Cstr_ptr& paper)
+Painterly::init_layer(int l, const string& pattern, const string& paper)
 {
    set_paper_texture(paper); 
    set_texture_pattern(l, pattern);  //finger_print-ht.png hatch.png
@@ -211,7 +211,7 @@ Painterly::activate_textures()
 }
 
 void 
-Painterly::set_texture_pattern(int layer, str_ptr file_name)
+Painterly::set_texture_pattern(int layer, string file_name)
 {
    GLSLShader_Layer_Base::set_texture_pattern(
       layer,"nprdata/painterly_textures/",file_name
@@ -234,7 +234,7 @@ Painterly::cleanup_unused_paper_textures(int tex_stage)
 }
 
 void
-Painterly::set_paper_texture(str_ptr file_name)
+Painterly::set_paper_texture(string file_name)
 {
    // if texture is already set, do nothing:
    if (_paper_name == file_name)
@@ -252,17 +252,17 @@ Painterly::set_paper_texture(str_ptr file_name)
    GLint tex_stage = get_free_tex_stage();
 
    string pre_path = Config::JOT_ROOT() + "nprdata/paper_textures/";
-   string path = pre_path + string(**file_name);
+   string path = pre_path + file_name;
 
    _paper_textures[tex_stage] =
-      new TEXTUREgl(str_ptr(path.c_str()), GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _paper_textures[tex_stage]->set_save_img(true);
 
    if (!_paper_textures[tex_stage]->load_image()) {
       cerr << "Painterly::set_paper_texture: "
            << "Invalid paper texture " << path << endl;
       _paper_tex = -1;
-      _paper_name = str_ptr("");
+      _paper_name = "";
       _paper_textures.erase(tex_stage);
       free_tex_stage(tex_stage);
    } else {
@@ -375,7 +375,7 @@ Painterly::get_layer(TAGformat &d)
    
    // Initialize the layer's texture: set the layer's texture name
    // to "", then call set_texture_pattern with the desired name:
-   str_ptr pat = layer->_pattern_name;
+   string pat = layer->_pattern_name;
    layer->_pattern_name = "";
    set_texture_pattern(i, pat);
 }
@@ -383,7 +383,7 @@ Painterly::get_layer(TAGformat &d)
 void         
 Painterly::get_paper_name (TAGformat &d)
 {
-   str_ptr pap = "";
+   string pap = "";
    *d >> pap;  
 
    // XXX - hack to deal w/ removed hack that would write empty
@@ -426,15 +426,17 @@ layer_paint_t::layer_paint_t() :
 void 
 layer_paint_t::get_var_locs(int i, GLuint& program) 
 {
-   if(i == 0){
+   char tmp[32];
+   sprintf(tmp, "%d", i);
+   if (i == 0) {
       layer_base_t::get_var_locs_some(2,i,program);
-      str_ptr p = str_ptr("layer[") + str_ptr(i);
+      string p = string("layer[") + tmp;
       get_uniform_loc(p + "].angle",          _angle_loc,          program);
       get_uniform_loc(p + "].paper_contrast", _paper_contrast_loc, program);   
       get_uniform_loc(p + "].paper_scale",    _paper_scale_loc,    program);
    } else {
       layer_base_t::get_var_locs_some(1,i,program);
-      str_ptr p = str_ptr("layer[") + str_ptr(i);
+      string p = string("layer[") + tmp;
       get_uniform_loc(p + "].angle",          _angle_loc,          program);
       get_uniform_loc(p + "].paper_contrast", _paper_contrast_loc, program);   
       get_uniform_loc(p + "].paper_scale",    _paper_scale_loc,    program);

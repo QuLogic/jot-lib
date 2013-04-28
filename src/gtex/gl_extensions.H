@@ -130,8 +130,8 @@ class GLExtensions {
                   { init(); return _gl_arb_fragment_shader_supported; }
 
    
-   static bool gl_arb_vertex_program_loaded(Cstr_ptr &,bool &, const unsigned char *);
-   static bool gl_arb_fragment_program_loaded(Cstr_ptr &,bool &, const unsigned char *);
+   static bool gl_arb_vertex_program_loaded(const string &,bool &, const unsigned char *);
+   static bool gl_arb_fragment_program_loaded(const string &,bool &, const unsigned char *);
 };
 
 #endif // GL_EXTENSIONS_H_IS_INCLUDED

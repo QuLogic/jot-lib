@@ -42,14 +42,14 @@ class GLSLPaperShader : public GLSLShader {
 
    // Use this to get the paper texture
    static TEXTUREglptr get_texture();
-   static str_ptr get_paper_filename() { return _paper_tex_filename; }; 
+   static string  get_paper_filename()   { return _paper_tex_filename; };
    static void    set_contrast(double c) { _contrast = c; }
 
    // Set the name of the paper texture to use (full path):
-   static void set_paper(Cstr_ptr& full_path_name);
+   static void set_paper(const string& full_path_name);
 
    // name of stroke texture (will be bound to tex unit 3):
-   static void set_tex(Cstr_ptr& full_path_name);
+   static void set_tex(const string& full_path_name);
 
    static void    begin_glsl_paper(Patch* p);
    static void    end_glsl_paper();
@@ -85,10 +85,10 @@ class GLSLPaperShader : public GLSLShader {
    //******** Member Variables ********
    static GLSLPaperShader* _instance;
    static TEXTUREglptr     _paper_tex;            // the paper texture
-   static str_ptr          _paper_tex_name;       // paper texture name
-   static str_ptr          _paper_tex_filename;   // paper texture filename
+   static string           _paper_tex_name;       // paper texture name
+   static string           _paper_tex_filename;   // paper texture filename
    static TEXTUREglptr     _tex;                  // the stroke texture
-   static str_ptr          _tex_name;             // stroke texture name
+   static string           _tex_name;             // stroke texture name
    static double           _contrast;
    static GLint            _paper_tex_loc;
    static GLint            _tex_loc;

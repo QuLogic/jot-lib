@@ -317,10 +317,10 @@ VIEW::get_view_data_file (TAGformat &d)
 
    if (str == "NULL_STR") {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded NULL string.");
-      _data_file = NULL_STR;
+      _data_file = "";
    } else {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_data_file() - Loaded string: '%s'.", str.c_str());
-      _data_file = str_ptr(str.c_str());
+      _data_file = str;
 
       string fname = IOManager::load_prefix() + str + ".view";
 
@@ -365,10 +365,10 @@ VIEW::put_view_data_file (TAGformat &d) const
    if (_in_data_file) return;
 
    //If there's not view file, dump the null string
-   if (_data_file == NULL_STR)
+   if (_data_file == "")
    {
       d.id();
-      *d << str_ptr("NULL_STR");
+      *d << "NULL_STR";
       d.end_id();
    }
    //Otherwise, try to open the file, then write the
@@ -376,7 +376,7 @@ VIEW::put_view_data_file (TAGformat &d) const
    //to the given tag stream
    else
    {
-      string fname = IOManager::save_prefix() + string(**_data_file) + ".view";
+      string fname = IOManager::save_prefix() + _data_file + ".view";
       fstream fout;
       fout.open(fname.c_str(), ios::out);
       //If this fails, then dump the null string
@@ -386,10 +386,10 @@ VIEW::put_view_data_file (TAGformat &d) const
 
          //and actually change view's policy so the
          //view tags serialize into the main stream
-         ((str_ptr)_data_file) = NULL_STR;
+         const_cast<VIEW*>(this)->_data_file = "";
 
          d.id();
-         *d << str_ptr("NULL_STR");
+         *d << "NULL_STR";
          d.end_id();
       }
       //Otherwise, do the right thing
@@ -460,8 +460,8 @@ void
 VIEW::get_view_color(TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    COLOR c;
    *d >> c;
@@ -475,9 +475,9 @@ VIEW::get_view_color(TAGformat &d)
 void
 VIEW::put_view_color(TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << color();
@@ -492,8 +492,8 @@ void
 VIEW::get_view_alpha (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    double a;
    *d >> a;
@@ -506,9 +506,9 @@ VIEW::get_view_alpha (TAGformat &d)
 void
 VIEW::put_view_alpha (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << get_alpha();
@@ -523,8 +523,8 @@ void
 VIEW::get_view_paper_use (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int p;
    *d >> p;
@@ -537,9 +537,9 @@ VIEW::get_view_paper_use (TAGformat &d)
 void
 VIEW::put_view_paper_use (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << ((get_use_paper())?(1):(0));
@@ -554,30 +554,24 @@ void
 VIEW::get_view_paper_name (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    //XXX - May need something to handle filenames with spaces
-   str_ptr str, tex, space;
+   string str, tex, space;
    *d >> str;      
 
-   //XXX - Ooops... serializing "NULL_STR" and str_ptr("NULL_STR")
-   //      yields different results.  The former doesn't put a trialing
-   //      space, so we've been adding it manually, but that
-   //      needs to be parsed on binary streams... I should go thourgh and
-   //      clean all of this up in backward compatible way, chanigng
-   //      all cases to the later...
    if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
    {
-      tex = NULL_STR;
+      tex = "";
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_paper_name() - Loaded NULL string.");
    }
    else
    {
       tex = str;
-      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_paper_name() - Loaded string: '%s'", **tex);
+      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_paper_name() - Loaded string: '%s'", tex.c_str());
    }
    PaperEffectBase::set_paper_tex(tex);
    
@@ -589,13 +583,13 @@ VIEW::get_view_paper_name (TAGformat &d)
 void
 VIEW::put_view_paper_name (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
    //XXX - May need something to handle filenames with spaces
 
    d.id();
-   if (PaperEffectBase::get_paper_tex() == NULL_STR)
+   if (PaperEffectBase::get_paper_tex() == "")
    {
       err_mesg(ERR_LEV_SPAM, "VIEW::put_view_paper_name() - Wrote NULL string.");
       *d << "NULL_STR";
@@ -606,7 +600,7 @@ VIEW::put_view_paper_name (TAGformat &d) const
       //Here we strip off JOT_ROOT
       *d << PaperEffectBase::get_paper_tex();
       *d << " ";
-      err_mesg(ERR_LEV_SPAM, "VIEW::put_view_paper_name() - Wrote string: '%s'", **PaperEffectBase::get_paper_tex());
+      err_mesg(ERR_LEV_SPAM, "VIEW::put_view_paper_name() - Wrote string: '%s'", PaperEffectBase::get_paper_tex().c_str());
    }
    d.end_id();
 }
@@ -618,8 +612,8 @@ void
 VIEW::get_view_paper_active (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int a;
    *d >> a;
@@ -632,9 +626,9 @@ VIEW::get_view_paper_active (TAGformat &d)
 void
 VIEW::put_view_paper_active (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << ((PaperEffectBase::is_active())?(1):(0));
@@ -649,8 +643,8 @@ void
 VIEW::get_view_paper_cont (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    float c;
    *d >> c;
@@ -663,9 +657,9 @@ VIEW::get_view_paper_cont (TAGformat &d)
 void
 VIEW::put_view_paper_cont (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << PaperEffectBase::get_cont();
@@ -680,8 +674,8 @@ void
 VIEW::get_view_paper_brig (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    float b;
    *d >> b;
@@ -694,9 +688,9 @@ VIEW::get_view_paper_brig (TAGformat &d)
 void
 VIEW::put_view_paper_brig (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << PaperEffectBase::get_brig();
@@ -710,10 +704,10 @@ void
 VIEW::get_view_texture (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
-   str_ptr str, space;
+   string str, space;
    *d >> str;      
 
    if (!(*d).ascii()) *d >> space; 
@@ -721,12 +715,12 @@ VIEW::get_view_texture (TAGformat &d)
    if (str == "NULL_STR") 
    {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_texture() - Loaded NULL string.");
-      set_bkg_file(NULL_STR);
+      set_bkg_file("");
    }
    else
    {
-      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_texture() - Loaded string: '%s'", **str);
-      set_bkg_file(str_ptr(Config::JOT_ROOT().c_str()) + str);
+      err_mesg(ERR_LEV_SPAM, "VIEW::get_view_texture() - Loaded string: '%s'", str.c_str());
+      set_bkg_file(Config::JOT_ROOT() + str);
    }
    
 }
@@ -737,14 +731,14 @@ VIEW::get_view_texture (TAGformat &d)
 void
 VIEW::put_view_texture (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    //XXX - May need something to handle filenames with spaces
 
    d.id();
-   if (get_bkg_file() == NULL_STR)
+   if (get_bkg_file() == "")
    {
       err_mesg(ERR_LEV_SPAM, "VIEW::put_view_texture() - Wrote NULL string.");
       *d << "NULL_STR";
@@ -753,7 +747,7 @@ VIEW::put_view_texture (TAGformat &d) const
    else
    {
       //Here we strip off JOT_ROOT
-      string tex = string(**get_bkg_file());
+      string tex = get_bkg_file();
       string str = tex.substr(Config::JOT_ROOT().length());
       *d << str.c_str();
       *d << " ";
@@ -770,8 +764,8 @@ void
 VIEW::get_view_light_coords (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<Wvec> c;
    *d >> c;
@@ -787,7 +781,7 @@ VIEW::get_view_light_coords (TAGformat &d)
 void
 VIEW::put_view_light_coords (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
 
    ARRAY<Wvec> c;
@@ -805,8 +799,8 @@ void
 VIEW::get_view_light_positional (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<int> p;
    *d >> p;
@@ -821,7 +815,7 @@ VIEW::get_view_light_positional (TAGformat &d)
 void
 VIEW::put_view_light_positional (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
 
    ARRAY<int> p;
@@ -840,8 +834,8 @@ void
 VIEW::get_view_light_cam_space (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<int> c;
    *d >> c;
@@ -857,9 +851,9 @@ VIEW::get_view_light_cam_space (TAGformat &d)
 void
 VIEW::put_view_light_cam_space (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    ARRAY<int> c;
    for (int i=0; i<MAX_LIGHTS; i++)
@@ -877,8 +871,8 @@ void
 VIEW::get_view_light_color_diff (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<COLOR> c;
    *d >> c;
@@ -893,9 +887,9 @@ VIEW::get_view_light_color_diff (TAGformat &d)
 void
 VIEW::put_view_light_color_diff (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    ARRAY<COLOR> c;
    for (int i=0; i<MAX_LIGHTS; i++)
@@ -913,8 +907,8 @@ void
 VIEW::get_view_light_color_amb (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<COLOR> a;
    *d >> a;
@@ -930,9 +924,9 @@ VIEW::get_view_light_color_amb (TAGformat &d)
 void
 VIEW::put_view_light_color_amb (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    ARRAY<COLOR> a;
    for (int i=0; i<MAX_LIGHTS; i++)
@@ -951,8 +945,8 @@ void
 VIEW::get_view_light_color_global (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    COLOR g;
    *d >> g;
@@ -966,9 +960,9 @@ VIEW::get_view_light_color_global (TAGformat &d)
 void
 VIEW::put_view_light_color_global (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << light_get_global_ambient();
@@ -983,8 +977,8 @@ void
 VIEW::get_view_light_enable (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    ARRAY<int> e;
    *d >> e;
@@ -1000,9 +994,9 @@ VIEW::get_view_light_enable (TAGformat &d)
 void
 VIEW::put_view_light_enable (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity checl
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    ARRAY<int> e;
    for (int i=0; i<MAX_LIGHTS; i++)
@@ -1016,7 +1010,7 @@ VIEW::put_view_light_enable (TAGformat &d) const
 void     
 VIEW::put_view_light_spot_direction(TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
 
    ARRAY<Wvec> c;
@@ -1149,8 +1143,8 @@ void
 VIEW::get_view_antialias_enable (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int e;
    *d >> e;
@@ -1166,9 +1160,9 @@ VIEW::get_view_antialias_enable (TAGformat &d)
 void
 VIEW::put_view_antialias_enable (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << get_antialias_enable();
@@ -1183,8 +1177,8 @@ void
 VIEW::get_view_antialias_mode (TAGformat &d) 
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int m;
    *d >> m;
@@ -1200,9 +1194,9 @@ VIEW::get_view_antialias_mode (TAGformat &d)
 void
 VIEW::put_view_antialias_mode (TAGformat &d) const 
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR)) return;
+   if ((!_in_data_file) && (_data_file != "")) return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << get_antialias_mode();
@@ -1227,13 +1221,13 @@ VIEW::peek_ptr()
 
 
 VIEW::VIEW(
-   Cstr_ptr &s,
+   const string &s,
    WINSYS   *w,
    VIEWimpl *i ) :
    _in_data_file(false),
    _impl(i),
    _view_id(_num_views), 
-   _cam(new CAM(str_ptr("camera"))),
+   _cam(new CAM("camera")),
    _cam_hist(100),
    _cam_hist_cur(0), // current camera starts at first index to set
    _width(0), 
@@ -1249,9 +1243,9 @@ VIEW::VIEW(
    _recorder(0), 
    _alpha(1), 
    _use_paper(false), 
-   _bkg_file(NULL_STR), 
+   _bkg_file(""),
    _bkg_tex(NULL),
-   _data_file(NULL_STR),
+   _data_file(""),
    _animator(0),
    _render_mode(NORMAL_MODE),
    _antialias_mode(2),
@@ -2001,7 +1995,7 @@ VIEW::screen_grab(
 int
 VIEW::screen_grab(
    int       scale_factor, 
-   Cstr_ptr& filename
+   const string& filename
    )
 {
    bool alpha = Config::get_var_bool("GRAB_ALPHA",false);
@@ -2018,9 +2012,9 @@ VIEW::screen_grab(
    screen_grab(scale_factor, output);
 
    // write output. return 1 for success, 0 for failure:
-   if (!output.write_png(**filename)) {
+   if (!output.write_png(filename.c_str())) {
       // failed.  try writing as pnm (actually a ppm file)
-      return output.write_pnm(**filename);
+      return output.write_pnm(filename.c_str());
    } else {
       // success writing as png file
       return 1;

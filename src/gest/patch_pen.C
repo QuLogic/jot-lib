@@ -80,7 +80,7 @@ CHANGE_PATCH_CMD::undoit()
  * PatchPen
  *****************************************************************/
 PatchPen::PatchPen(CGEST_INTptr &gest_int, CEvent &d, CEvent &m, CEvent &u) :
-   Pen(str_ptr("patch"), gest_int, d, m, u),
+   Pen("patch", gest_int, d, m, u),
    _prev_rendering("")
 {
    // Set up GESTURE FSA (First matched will be executed)

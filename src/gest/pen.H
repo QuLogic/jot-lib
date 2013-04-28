@@ -47,7 +47,7 @@ class Pen : public Simple_int, public GestObs {
    GEST_INTptr  _gest_int;
    State*       _shift_fsa;
    State*       _ctrl_fsa;
-   str_ptr      _pen_name;
+   string       _pen_name;
    VIEWptr      _view;
    DrawState    _draw_start;
    DrawFSA      _fsa;
@@ -61,14 +61,14 @@ class Pen : public Simple_int, public GestObs {
 
  public:
    //******** MANAGERS ********
-   Pen(Cstr_ptr& pen_name,
+   Pen(const string& pen_name,
        CGEST_INTptr &gest_int = GEST_INTptr(),
        CEvent &d = Event(), CEvent &m = Event(), CEvent &u = Event(),
        CEvent &shift_d = Event(), CEvent &shift_u  = Event(),
        CEvent &ctrl_d  = Event(),  CEvent &ctrl_u  = Event());
 
    // ******** CONVENIENCE ********
-   str_ptr pen_name()        const { return _pen_name; }
+   string pen_name()         const { return _pen_name; }
    XYpt get_ptr_position ()  const {
       return DEVice_2d::last ? DEVice_2d::last->cur() : XYpt();
    }

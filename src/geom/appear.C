@@ -34,13 +34,13 @@ APPEAR::get_texture(TAGformat &d)
 {
    _has_texture = 1;
 
-   str_ptr texture_name;
+   string texture_name;
    *d >> _tex_xform >> texture_name;
    _texture = 0;
-   if (texture_name && texture_name != str_ptr("NO_TEXTURE")) {
+   if (!texture_name.empty() && texture_name != "NO_TEXTURE") {
       // XXX - taken from CLI::get_file_relative
-      if ((**texture_name)[0] != '/' && (*texture_name)[0] != '.')
-         texture_name = str_ptr(Config::JOT_ROOT().c_str()) + "/" + texture_name;
+      if (texture_name[0] != '/' && texture_name[0] != '.')
+         texture_name = Config::JOT_ROOT() + "/" + texture_name;
       _texture = new TEXTUREgl(texture_name);
    }
 }
@@ -54,16 +54,16 @@ APPEAR::put_texture(TAGformat &d) const
    d.id() << _tex_xform;
 
    if (_texture) {
-      str_ptr texture_name =_texture->file();
+      string texture_name =_texture->file();
       // If texture name begins with JOT_ROOT, strip it off
       // XXX - does not work if filename is below JOT_ROOT but the path to
       // the file does not start with JOT_ROOT
-      if (strstr(**texture_name, Config::JOT_ROOT().c_str()) == **texture_name) {
+      if (texture_name.find(Config::JOT_ROOT()) == 0) {
          cerr << texture_name << endl;
-         char *name =  **texture_name + Config::JOT_ROOT().length() + 1;
+         const char *name = texture_name.substr(Config::JOT_ROOT().length()+1).c_str();
          // Strip extra slashes ("/")
          while (name && *name == '/' && *name != '\0') name++;
-         texture_name = str_ptr(name);
+         texture_name = string(name);
       }
       *d << texture_name;
    } else *d << "NO_TEXTURE";

@@ -499,7 +499,7 @@ GLExtensions::is_extension_supported(const char *extension)
 /////////////////////////////////////
 bool
 GLExtensions::gl_arb_vertex_program_loaded(
-   Cstr_ptr &header,
+   const string &header,
    bool &native, 
    const unsigned char *prog)
 {
@@ -507,7 +507,7 @@ GLExtensions::gl_arb_vertex_program_loaded(
 
    if (!gl_arb_vertex_program_supported())
    {
-      err_mesg(ERR_LEV_INFO, "%sGL_ARB_vertex_program not supported.", **header);
+      err_mesg(ERR_LEV_INFO, "%sGL_ARB_vertex_program not supported.", header.c_str());
       native = false;
       success = false;
    }
@@ -523,7 +523,7 @@ GLExtensions::gl_arb_vertex_program_loaded(
       
       GLenum err = glGetError();
 
-      err_mesg(ERR_LEV_INFO, "%sLoading program...", **header);
+      err_mesg(ERR_LEV_INFO, "%sLoading program...", header.c_str());
 
       err_str = glGetString( GL_PROGRAM_ERROR_STRING_ARB );
       glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err_pos );
@@ -570,35 +570,35 @@ GLExtensions::gl_arb_vertex_program_loaded(
 
          assert(err_str && (err_str[0] != 0));
 
-         err_mesg(ERR_LEV_ERROR, "%s*** Failed! ***", **header);
+         err_mesg(ERR_LEV_ERROR, "%s*** Failed! ***", header.c_str());
          
          if (err_pos != -1)
          {
-            err_mesg(ERR_LEV_ERROR, "%sERROR LOCATION: %d",  **header, err_pos); 
-            err_mesg(ERR_LEV_ERROR, "%sERROR EXCERPT: [%s]", **header, err_buf1);
-            err_mesg(ERR_LEV_ERROR, "%s               [%s]", **header, err_buf2);
+            err_mesg(ERR_LEV_ERROR, "%sERROR LOCATION: %d",  header.c_str(), err_pos);
+            err_mesg(ERR_LEV_ERROR, "%sERROR EXCERPT: [%s]", header.c_str(), err_buf1);
+            err_mesg(ERR_LEV_ERROR, "%s               [%s]", header.c_str(), err_buf2);
          }
 
-         err_mesg(ERR_LEV_ERROR, "%sERROR STRING: '%s'", **header, err_str);
+         err_mesg(ERR_LEV_ERROR, "%sERROR STRING: '%s'", header.c_str(), err_str);
       }
       else
       {
          success = true;
 
          if (native)
-            err_mesg(ERR_LEV_INFO, "%sWill execute natively in hardware.", **header);
+            err_mesg(ERR_LEV_INFO, "%sWill execute natively in hardware.", header.c_str());
          else
-            err_mesg(ERR_LEV_WARN, "%sWill execute **BUT** not natively in hardware. Using emulation...", **header);
+            err_mesg(ERR_LEV_WARN, "%sWill execute **BUT** not natively in hardware. Using emulation...", header.c_str());
 
          if (err_pos != -1)
          {
-            err_mesg(ERR_LEV_WARN, "%sWARNING LOCATION: %d",  **header, err_pos); 
-            err_mesg(ERR_LEV_WARN, "%sWARNING EXCERPT: [%s]", **header, err_buf1);
-            err_mesg(ERR_LEV_WARN, "%s                 [%s]", **header, err_buf2);
+            err_mesg(ERR_LEV_WARN, "%sWARNING LOCATION: %d",  header.c_str(), err_pos);
+            err_mesg(ERR_LEV_WARN, "%sWARNING EXCERPT: [%s]", header.c_str(), err_buf1);
+            err_mesg(ERR_LEV_WARN, "%s                 [%s]", header.c_str(), err_buf2);
          }
 
          if (err_str && (err_str[0] != 0))
-            err_mesg(ERR_LEV_WARN, "%sWARNING STRING: '%s'", **header, err_str);
+            err_mesg(ERR_LEV_WARN, "%sWARNING STRING: '%s'", header.c_str(), err_str);
 
       }
 
@@ -638,18 +638,18 @@ GLExtensions::gl_arb_vertex_program_loaded(
       glGetProgramivARB(GL_VERTEX_PROGRAM_ARB,  GL_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB,       &nadd_num);      
       glGetProgramivARB(GL_VERTEX_PROGRAM_ARB,  GL_MAX_PROGRAM_NATIVE_ADDRESS_REGISTERS_ARB,   &nadd_max);      
 
-      err_mesg(ERR_LEV_SPAM, "%sResource Usage:", **header);
-      err_mesg(ERR_LEV_SPAM, "%s  Instructions (ARB): MAX=%d  USED=%d", **header, ins_max,   ins_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", **header, nins_max,  nins_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Temporaries  (ARB): MAX=%d  USED=%d", **header, tmp_max,   tmp_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", **header, ntmp_max,  tmp_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Parameters   (ARB): MAX=%d  USED=%d", **header, par_max,   par_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", **header, npar_max,  npar_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Attributes   (ARB): MAX=%d  USED=%d", **header, att_max,   att_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", **header, natt_max,  natt_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Addressors   (ARB): MAX=%d  USED=%d", **header, add_max,   add_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", **header, nadd_max,  nadd_num);
-      err_mesg(ERR_LEV_SPAM, "%s...done.", **header);
+      err_mesg(ERR_LEV_SPAM, "%sResource Usage:", header.c_str());
+      err_mesg(ERR_LEV_SPAM, "%s  Instructions (ARB): MAX=%d  USED=%d", header.c_str(), ins_max,   ins_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", header.c_str(), nins_max,  nins_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Temporaries  (ARB): MAX=%d  USED=%d", header.c_str(), tmp_max,   tmp_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", header.c_str(), ntmp_max,  tmp_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Parameters   (ARB): MAX=%d  USED=%d", header.c_str(), par_max,   par_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", header.c_str(), npar_max,  npar_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Attributes   (ARB): MAX=%d  USED=%d", header.c_str(), att_max,   att_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", header.c_str(), natt_max,  natt_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Addressors   (ARB): MAX=%d  USED=%d", header.c_str(), add_max,   add_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d", header.c_str(), nadd_max,  nadd_num);
+      err_mesg(ERR_LEV_SPAM, "%s...done.", header.c_str());
 #endif
    }
    return success;
@@ -661,7 +661,7 @@ GLExtensions::gl_arb_vertex_program_loaded(
 /////////////////////////////////////
 bool
 GLExtensions::gl_arb_fragment_program_loaded(
-   Cstr_ptr &header,
+   const string &header,
    bool &native, 
    const unsigned char *prog)
 {
@@ -669,7 +669,7 @@ GLExtensions::gl_arb_fragment_program_loaded(
 
    if (!gl_arb_fragment_program_supported())
    {
-      err_mesg(ERR_LEV_INFO, "%GL_ARB_fragment_program not supported.", **header);
+      err_mesg(ERR_LEV_INFO, "%GL_ARB_fragment_program not supported.", header.c_str());
       native = false;
       success = false;
    }
@@ -685,7 +685,7 @@ GLExtensions::gl_arb_fragment_program_loaded(
       
       GLenum err = glGetError();
 
-      err_mesg(ERR_LEV_INFO, "%sLoading program...", **header);
+      err_mesg(ERR_LEV_INFO, "%sLoading program...", header.c_str());
 
       err_str = glGetString( GL_PROGRAM_ERROR_STRING_ARB );
       glGetIntegerv(GL_PROGRAM_ERROR_POSITION_ARB, &err_pos );
@@ -732,16 +732,16 @@ GLExtensions::gl_arb_fragment_program_loaded(
 
          assert(err_str && (err_str[0] != 0));
 
-         err_mesg(ERR_LEV_ERROR, "%s*** Failed! ***", **header);
+         err_mesg(ERR_LEV_ERROR, "%s*** Failed! ***", header.c_str());
          
          if (err_pos != -1)
          {
-            err_mesg(ERR_LEV_ERROR, "%sERROR LOCATION: %d",  **header, err_pos); 
-            err_mesg(ERR_LEV_ERROR, "%sERROR EXCERPT: [%s]", **header, err_buf1);
-            err_mesg(ERR_LEV_ERROR, "%s               [%s]", **header, err_buf2);
+            err_mesg(ERR_LEV_ERROR, "%sERROR LOCATION: %d",  header.c_str(), err_pos);
+            err_mesg(ERR_LEV_ERROR, "%sERROR EXCERPT: [%s]", header.c_str(), err_buf1);
+            err_mesg(ERR_LEV_ERROR, "%s               [%s]", header.c_str(), err_buf2);
          }
 
-         err_mesg(ERR_LEV_ERROR, "%sERROR STRING: '%s'", **header, err_str);
+         err_mesg(ERR_LEV_ERROR, "%sERROR STRING: '%s'", header.c_str(), err_str);
 
       }
       else
@@ -749,19 +749,19 @@ GLExtensions::gl_arb_fragment_program_loaded(
          success = true;
 
          if (native)
-            err_mesg(ERR_LEV_INFO, "%sWill execute natively in hardware.", **header);
+            err_mesg(ERR_LEV_INFO, "%sWill execute natively in hardware.", header.c_str());
          else
-            err_mesg(ERR_LEV_WARN, "%sWill execute **BUT** not natively in hardware. Using emulation...", **header);
+            err_mesg(ERR_LEV_WARN, "%sWill execute **BUT** not natively in hardware. Using emulation...", header.c_str());
 
          if (err_pos != -1)
          {
-            err_mesg(ERR_LEV_WARN, "%sWARNING LOCATION: %d",  **header, err_pos); 
-            err_mesg(ERR_LEV_WARN, "%sWARNING EXCERPT: [%s]", **header, err_buf1);
-            err_mesg(ERR_LEV_WARN, "%s                 [%s]", **header, err_buf2);
+            err_mesg(ERR_LEV_WARN, "%sWARNING LOCATION: %d",  header.c_str(), err_pos);
+            err_mesg(ERR_LEV_WARN, "%sWARNING EXCERPT: [%s]", header.c_str(), err_buf1);
+            err_mesg(ERR_LEV_WARN, "%s                 [%s]", header.c_str(), err_buf2);
          }
 
          if (err_str && (err_str[0] != 0))
-            err_mesg(ERR_LEV_WARN, "%sWARNING STRING: '%s'", **header, err_str);
+            err_mesg(ERR_LEV_WARN, "%sWARNING STRING: '%s'", header.c_str(), err_str);
 
       }
 
@@ -813,22 +813,22 @@ GLExtensions::gl_arb_fragment_program_loaded(
       glGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB,  GL_PROGRAM_NATIVE_ATTRIBS_ARB,       &natt_num);      
       glGetProgramivARB(GL_FRAGMENT_PROGRAM_ARB,  GL_MAX_PROGRAM_NATIVE_ATTRIBS_ARB,   &natt_max);      
 
-      err_mesg(ERR_LEV_SPAM, "%sResource Usage:", **header);
-      err_mesg(ERR_LEV_SPAM, "%s  Instructions - ALL (ARB): MAX=%d  USED=%d",    **header, ins_max,   ins_num);
-      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d",    **header, nins_max,  nins_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Instructions - ALU (ARB): MAX=%d  USED=%d",    **header, ains_max,  ains_num);
-      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d",    **header, nains_max, nains_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Instructions - TEX (ARB): MAX=%d  USED=%d",    **header, tins_max,  tins_num);
-      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d",    **header, ntins_max, ntins_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Tex Indirections (ARB): MAX=%d  USED=%d",      **header, txns_max,  txns_num);
-      err_mesg(ERR_LEV_SPAM, "%s                (NATIVE): MAX=%d  USED=%d",      **header, ntxns_max, ntxns_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Temporaries  (ARB): MAX=%d  USED=%d",          **header, tmp_max,   tmp_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",          **header, ntmp_max,  tmp_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Parameters   (ARB): MAX=%d  USED=%d",          **header, par_max,   par_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",          **header, npar_max,  npar_num);
-      err_mesg(ERR_LEV_SPAM, "%s  Attributes   (ARB): MAX=%d  USED=%d",          **header, att_max,   att_num);
-      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",          **header, natt_max,  natt_num);
-      err_mesg(ERR_LEV_SPAM, "%s...done.", **header);
+      err_mesg(ERR_LEV_SPAM, "%sResource Usage:", header.c_str());
+      err_mesg(ERR_LEV_SPAM, "%s  Instructions - ALL (ARB): MAX=%d  USED=%d", header.c_str(), ins_max,   ins_num);
+      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d", header.c_str(), nins_max,  nins_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Instructions - ALU (ARB): MAX=%d  USED=%d", header.c_str(), ains_max,  ains_num);
+      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d", header.c_str(), nains_max, nains_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Instructions - TEX (ARB): MAX=%d  USED=%d", header.c_str(), tins_max,  tins_num);
+      err_mesg(ERR_LEV_SPAM, "%s                  (NATIVE): MAX=%d  USED=%d", header.c_str(), ntins_max, ntins_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Tex Indirections (ARB): MAX=%d  USED=%d",   header.c_str(), txns_max,  txns_num);
+      err_mesg(ERR_LEV_SPAM, "%s                (NATIVE): MAX=%d  USED=%d",   header.c_str(), ntxns_max, ntxns_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Temporaries  (ARB): MAX=%d  USED=%d",       header.c_str(), tmp_max,   tmp_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",       header.c_str(), ntmp_max,  tmp_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Parameters   (ARB): MAX=%d  USED=%d",       header.c_str(), par_max,   par_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",       header.c_str(), npar_max,  npar_num);
+      err_mesg(ERR_LEV_SPAM, "%s  Attributes   (ARB): MAX=%d  USED=%d",       header.c_str(), att_max,   att_num);
+      err_mesg(ERR_LEV_SPAM, "%s            (NATIVE): MAX=%d  USED=%d",       header.c_str(), natt_max,  natt_num);
+      err_mesg(ERR_LEV_SPAM, "%s...done.", header.c_str());
 #endif
    }
    return success;

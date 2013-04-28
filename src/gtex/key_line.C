@@ -43,9 +43,9 @@ KeyLineTexture::KeyLineTexture(Patch* patch) :
    _toon(new GLSLToonShader(patch)),
    _sil_frame(new SilFrameTexture(patch))
 {
-   _toon->set_tex(str_ptr((
+   _toon->set_tex((
       Config::JOT_ROOT() + "nprdata/toon_textures/clear-gray-keyline.png"
-      ).c_str()));
+      ));
 
    float w = (float)Config::get_var_dbl("KEYLINE_SIL_WIDTH", 2.0);
    _sil_frame->set_sil_width(w);

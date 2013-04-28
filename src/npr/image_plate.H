@@ -25,7 +25,7 @@ typedef const ImagePlateptr CImagePlateptr;
 
 class ImagePlate : public GEOM {
 public:
-   ImagePlate(Cstr_ptr& filename);
+   ImagePlate(const string& filename);
    ImagePlate();
    virtual ~ImagePlate();
 

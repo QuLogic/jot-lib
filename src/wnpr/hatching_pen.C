@@ -48,7 +48,7 @@ HatchingPen::HatchingPen(
    CEvent& d, CEvent& m, CEvent& u,
    CEvent& shift_down, CEvent& shift_up,
    CEvent& ctrl_down,  CEvent& ctrl_up) :
-   Pen(str_ptr("Hatching"), 
+   Pen("Hatching",
        gest_int, d, m, u,
        shift_down, shift_up, 
        ctrl_down, ctrl_up)
@@ -485,7 +485,7 @@ HatchingPen::generate_stroke(CGESTUREptr& gest)
    }
 
    Patch* p = get_ctrl_patch(f);       assert(p);
-   p->set_texture(str_ptr(NPRTexture::static_name().c_str()));
+   p->set_texture(NPRTexture::static_name());
    GTexture* cur_texture = p->cur_tex();
    if(!cur_texture->is_of_type(NPRTexture::static_name())) return 0;
    NPRTexture* npr_texture = (NPRTexture*)cur_texture;

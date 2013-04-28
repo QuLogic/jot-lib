@@ -47,15 +47,15 @@ Image::Image() :
 {
 }
 
-Image::Image(Cstr_ptr& file) :
+Image::Image(const string& file) :
    _width(0),
    _height(0),
    _bpp(0),
    _data(0),
    _no_delete(false) 
 {
-   if (file)
-      load_file(**file);
+   if (!file.empty())
+      load_file(file);
 }
 
 Image::Image(uint w, uint h, uint bpp, uchar* data, bool nd) :
@@ -220,26 +220,26 @@ Image::copy_tile(const Image& tile, uint i, uint j)
 
 /***********************************************************************
  * Method : Image::load_file
- * Params : const char* file
+ * Params : const string &file
  * Returns: int (success/failure)
  * Effects: tries to load data from file
  ***********************************************************************/
 int
-Image::load_file(const char* file)
+Image::load_file(const string &file)
 {
-   if (!file || *file == '\0')
+   if (file.empty())
       return 0;
 
    // see if file can be opened before running off parsing...
    {
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1300)) /*VS 6.0*/
-      ifstream in(file, ios::in | ios::nocreate );
+      ifstream in(file.c_str(), ios::in | ios::nocreate );
 #else
-      ifstream in(file);
+      ifstream in(file.c_str());
 #endif
       if (!in.good()) 
          {
-            err_mesg(ERR_LEV_INFO | ERR_INCL_ERRNO, "Image::load_file() - ERROR! Can't open file %s", file);
+            err_mesg(ERR_LEV_INFO | ERR_INCL_ERRNO, "Image::load_file() - ERROR! Can't open file %s", file.c_str());
             return 0;
          }
    }
@@ -257,17 +257,17 @@ Image::load_file(const char* file)
 }
 
 int
-Image::read_pnm(const char* file)
+Image::read_pnm(const string &file)
 {
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1200)) /*VS 6.0*/
-   ifstream in(file, ios::in | ios::binary | ios::nocreate );
+   ifstream in(file.c_str(), ios::in | ios::binary | ios::nocreate );
 #else
-   ifstream in(file);
+   ifstream in(file.c_str());
 #endif
 
    if (!in.good()) 
       {
-         err_ret("Image::read_pnm() - ERROR! Can't open file %s", file);
+         err_ret("Image::read_pnm() - ERROR! Can't open file %s", file.c_str());
          return 0;
       }
 
@@ -407,12 +407,12 @@ Image::read_ppm(istream& in, bool ascii)
 
 /***********************************************************************
  * Method : Image::write_pnm
- * Params : const char* file_name
+ * Params : const string &file_name
  * Returns: int (success/failure)
  * Effects: writes pnm file to disk (not implemented)
  ***********************************************************************/
 int
-Image::write_pnm(const char* file) const
+Image::write_pnm(const string &file) const
 {
    if (_bpp != 3) {
       err_msg("Image::write_pnm: writing files w/o 3 BPP is unimplemented");
@@ -427,7 +427,7 @@ Image::write_pnm(const char* file) const
         << endl;
 
    FILE* fp;
-   fp = fopen(file, "wb");
+   fp = fopen(file.c_str(), "wb");
 
    // write ppm RGB header
    fprintf(fp, "P6\n");
@@ -485,26 +485,26 @@ static const unsigned int PNG_BYTES_TO_CHECK = 8;
 
 /***********************************************************************
  * Method : Image::open_png
- * Params : const char* file_name
+ * Params : const string &file_name
  * Returns: FILE* (null on failure)
  * Effects: opens given file and verifies it is a png file
  ***********************************************************************/
 FILE*
-Image::open_png(const char* file_name)
+Image::open_png(const string &file_name)
 {
    // open the file and verify it is a PNG file:
    // Windows needs the following to be "rb", the b turns off
    // translating from DOS text to UNIX text
-   FILE* fp = fopen(file_name, "rb");
+   FILE* fp = fopen(file_name.c_str(), "rb");
    if (!fp) {
-      err_ret("Image::open_png() - ERROR! Can't open file %s", file_name);
+      err_ret("Image::open_png() - ERROR! Can't open file %s", file_name.c_str());
       return 0;
    }
 
    // Read in the signature bytes:
    unsigned char buf[PNG_BYTES_TO_CHECK];
    if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK) {
-      err_ret("Image::open_png: can't read file %s", file_name);
+      err_ret("Image::open_png: can't read file %s", file_name.c_str());
       return 0;
    }
 
@@ -522,12 +522,12 @@ Image::open_png(const char* file_name)
 
 /***********************************************************************
  * Method : Image::read_png
- * Params : const char* file_name
+ * Params : const string &file_name
  * Returns: int (success/failure)
  * Effects: opens file, reads data into memory (if it is a png file)
  ***********************************************************************/
 int
-Image::read_png(const char* file)
+Image::read_png(const string &file)
 {
    FILE *fp = open_png(file);
    if (!fp)
@@ -537,7 +537,7 @@ Image::read_png(const char* file)
    fclose(fp);
    if (success)
       return 1;
-   err_msg("Image::read_png: error reading file: %s", file);
+   err_msg("Image::read_png: error reading file: %s", file.c_str());
    return 0;
 }
 
@@ -661,12 +661,12 @@ Image::read_png(FILE* fp)
 
 /***********************************************************************
  * Method : Image::write_png
- * Params : const char* file_name
+ * Params : const string file_name
  * Returns: int (success/failure)
  * Effects: opens file, writes data to disk
  ***********************************************************************/
 int
-Image::write_png(const char* file) const
+Image::write_png(const string &file) const
 {
    if (_width == 0 || _height == 0 || _data == 0) {
       err_msg("Image::write_png: image has no data");
@@ -678,8 +678,8 @@ Image::write_png(const char* file) const
    }
 
    FILE* fp;
-   if ((fp = fopen(file, "wb")) == 0) {
-      err_ret("Image::write_png: can't open file %s", file);
+   if ((fp = fopen(file.c_str(), "wb")) == 0) {
+      err_ret("Image::write_png: can't open file %s", file.c_str());
       return 0;
    }
 
@@ -710,7 +710,7 @@ Image::write_png(const char* file) const
       // free all memory associated with the png_ptr and info_ptr
       fclose(fp);
       png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
-      err_msg("Image::write_png: error writing file %s", file);
+      err_msg("Image::write_png: error writing file %s", file.c_str());
       return 0;
    }
 

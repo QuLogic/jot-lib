@@ -258,9 +258,9 @@ class NPRPenUI {
 
    void     fill_tex_listbox(GLUI_Listbox *lb, const vector<string> &save_files);
    void     fill_layer_listbox();
-   str_ptr  get_layer_name(int);
-   str_ptr  try_layer_name(int,str_ptr);
-   bool     set_layer_name(int,str_ptr);
+   string   get_layer_name(int);
+   string   try_layer_name(int,string);
+   bool     set_layer_name(int,string);
 
    /******** STATIC CALLBACK METHODS ********/
    static void button_cb(int id);

@@ -296,7 +296,7 @@ class JOTcreate : public FUNC_ITEM {
    virtual void  put(TAGformat &d) const              { *d << _g->name(); }
    virtual void  get(TAGformat &d)
    {
-      str_ptr name;
+      string name;
       *d >> name;
       GELlist gels(1);
       int i;
@@ -314,7 +314,7 @@ class JOTcreate : public FUNC_ITEM {
          // Destroy all but last GEL with name
          for (i = 0; i < gels.num()-1; i++) 
          {
-            err_msg("JOTcreate::get: Destroying a GEL named: '%s'", **name);
+            err_msg("JOTcreate::get: Destroying a GEL named: '%s'", name.c_str());
 
             WORLD::destroy(gels[i]);
          }
@@ -341,7 +341,7 @@ class JOTcreate : public FUNC_ITEM {
       } 
       else 
       {
-         err_msg("JOTcreate::get: Couldn't create: '%s'", **name);
+         err_msg("JOTcreate::get: Couldn't create: '%s'", name.c_str());
       }
    }
 };
@@ -678,7 +678,7 @@ DISTRIB::load_stream(
 
    LOADobs::load_status_t result;
 
-   str_ptr header;
+   string header;
 
    if (s.attached())
    {
@@ -694,7 +694,7 @@ DISTRIB::load_stream(
          {
             err_adv(debug,
                     "DISTRIB::load_stream: Founder expected header: '%s'",
-                    **header);
+                    header.c_str());
             err_adv(debug,
                     "DISTRIB::load_stream: Attempting conventional load...");
             ret = load(s);
@@ -713,12 +713,12 @@ DISTRIB::load_stream(
          {
             if (!from_file)
             {
-               err_msg("DISTRIB::load_stream: *LOAD FAILED* Not '#jot' header: '%s'", **header);
+               err_msg("DISTRIB::load_stream: *LOAD FAILED* Not '#jot' header: '%s'", header.c_str());
                result = LOADobs::LOAD_ERROR_READ;
             }
             else
             {
-               err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", **header);
+               err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", header.c_str());
                err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
 
                ret = LOADER::load(s.name());
@@ -1011,7 +1011,7 @@ DISTRIB::save(
              !NO_SAVE.get(geoms[i]) &&
              filter.get_index(geoms[i]) == BAD_IND) {
             err_adv(debug, "DISTRIB::save: Writing GEOM Update'%s'..." ,
-                    **geoms[i]->name());
+                    geoms[i]->name().c_str());
             s << JOTupdate_geom(geoms[i]); 
             err_adv(debug, "DISTRIB::save: ...finished writing GEOM Update.");
          } 
@@ -1079,7 +1079,7 @@ DISTRIB::notify_exist(
 
    if (f)  {
       if (NETWORK.get(g)) {
-         DATA_ITEM::add_decoder(string(**g->name()), (DATA_ITEM *)&*g, 0);
+         DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
          if (!(GEOM::isa(g) && NO_SAVE.get(g)))
             *this << NETcontext<< JOTsend_geom(g) << JOTcreate(g) << JOTdone();
       }

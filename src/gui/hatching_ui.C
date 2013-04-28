@@ -256,17 +256,17 @@ HatchingUI::update_non_lives()
       _color_ui->set_current_color(c[0],c[1],c[2], true, true);
    }
 
-   if((layer->_mode == 1) && (!layer->_pattern_name || !layer->_paper_name))
+   if((layer->_mode == 1) && (layer->_pattern_name.empty() || layer->_paper_name.empty()))
       _current_hatching->init_layer(_texture_selection_ui->get_layer_num(), "hatch1.png", "basic_paper.png");  //Set defaults if the layers is not set up...
    
   
-   if(layer->_pattern_name){
-      GLUI_Listbox_Item* pattern_item = _listbox[LIST_PATTERN]->get_item_ptr(**(layer->_pattern_name));
+   if (!layer->_pattern_name.empty()) {
+      GLUI_Listbox_Item* pattern_item = _listbox[LIST_PATTERN]->get_item_ptr(layer->_pattern_name.c_str());
       if(pattern_item)
          _listbox[LIST_PATTERN]->set_int_val(pattern_item->id);
    }
-   if(layer->_paper_name){
-      GLUI_Listbox_Item* paper_item = _listbox[LIST_PAPER]->get_item_ptr(**(layer->_paper_name));
+   if (!layer->_paper_name.empty()) {
+      GLUI_Listbox_Item* paper_item = _listbox[LIST_PAPER]->get_item_ptr(layer->_paper_name.c_str());
       if(paper_item)
          _listbox[LIST_PAPER]->set_int_val(paper_item->id);
    }
@@ -546,16 +546,16 @@ HatchingUI::apply_changes_to_texture(operation_id_t op, HatchingTX* tex, int lay
    }
    if((op==OP_ALL) || (op==OP_PATTERN_TEXTURE)){
        if(tex->get_layer(layer)->_mode){
-         str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str(); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
-         str_ptr paper   = _listbox[LIST_PAPER]->curr_text.c_str();//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
+         string pattern = _listbox[LIST_PATTERN]->curr_text; //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
+         string paper   = _listbox[LIST_PAPER]->curr_text;//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
          // cerr << " ----------- " << pattern << " ---------- " <<  paper << endl;
          tex->init_layer(layer, pattern, paper);
        }
    }
    if((op==OP_ALL) || (op==OP_PAPER_TEXTURE)){
       if(tex->get_layer(layer)->_mode){
-        str_ptr pattern = _listbox[LIST_PATTERN]->curr_text.c_str(); //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
-        str_ptr paper   = _listbox[LIST_PAPER]->curr_text.c_str();//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
+        string pattern = _listbox[LIST_PATTERN]->curr_text; //_pattern_filenames[_listbox[LIST_PATTERN]->get_int_val()];
+        string paper   = _listbox[LIST_PAPER]->curr_text;//_paper_filenames[_listbox[LIST_PAPER]->get_int_val()];
         //cerr << " ----------- " << pattern << " ---------- " <<  paper << endl;
         tex->init_layer(layer, pattern, paper);
       }

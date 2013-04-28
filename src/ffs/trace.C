@@ -121,7 +121,7 @@ TRACE::file_cbs(void *ptr, int idx, int action, string path, string file)
 {
    if(idx == FILE_LOAD_TRACE_CB && (action == FileSelect::OK_ACTION)){
       TRACE* t = (TRACE*)ptr;
-      t->_filename = str_ptr((path+file).c_str());
+      t->_filename = path+file;
 
       t->_texture = new TEXTUREgl(((TRACE*)ptr)->_filename);
       if(!(t->is_valid = t->_texture->load_texture())){

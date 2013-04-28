@@ -141,8 +141,8 @@ FlatShadeTexture::draw(CVIEWptr& v)
       // we only try a given pathname once. but if it fails
       // and they reset DEBUG_UV_TEX_MAP while running the
       // program we can pick up the change and try again.
-      if (path != **_debug_tex_path) {
-         _debug_tex_path = str_ptr(path.c_str());
+      if (path != _debug_tex_path) {
+         _debug_tex_path = path;
          TEXTUREglptr tex = new TEXTUREgl(_debug_tex_path);
          bool do_mipmap = Config::get_var_bool("DEBUG_TEX_USE_MIPMAP",false);
          tex->set_mipmap(do_mipmap);
@@ -155,7 +155,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
 
          if (!_debug_uv_tex->load_texture()) {
             cerr << "Can't load debug uv texture: "
-                 << **_debug_tex_path
+                 << _debug_tex_path
                  << endl
                  << "Set environment variable DEBUG_UV_TEX_MAP "
                  << "to an image file in "

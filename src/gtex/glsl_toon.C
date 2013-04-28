@@ -35,10 +35,10 @@ GLSLToonShader* GLSLToonShader::_instance(0);
 
 GLSLToonShader::GLSLToonShader(Patch* p) : GLSLShader(p)
 {
-   set_tex(str_ptr(Config::get_var_str(
+   set_tex(Config::get_var_str(
               "GLSL_TOON_FILENAME",
               GtexUtil::toon_name("clear-black.png")
-              ).c_str()));
+              ));
 }
 
 GLSLToonShader* 
@@ -52,7 +52,7 @@ GLSLToonShader::get_instance()
 }
 
 void 
-GLSLToonShader::set_tex(Cstr_ptr& filename)
+GLSLToonShader::set_tex(const string& filename)
 {
    // Set the name of the texture to use
    if (_tex) {

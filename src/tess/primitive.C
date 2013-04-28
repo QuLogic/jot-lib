@@ -496,9 +496,9 @@ Primitive::create_ball(Bpoint* skel, double pix_rad, MULTI_CMDptr cmd)
 }
 
 void
-init_name(Bbase* b, Cstr_ptr& name)
+init_name(Bbase* b, const string& name)
 {
-   if (b && b->name() == NULL_STR)
+   if (b && b->name() == "")
       b->set_name(name);
 }
 
@@ -516,7 +516,9 @@ Primitive::build_ball(Bpoint* skel, double pix_rad)
    assert(_mesh && is_control() && _patch && bfaces().empty());
 
    static int ball_num=0;
-   set_name(str_ptr("ball_") + str_ptr(++ball_num));
+   char tmp[64];
+   sprintf(tmp, "%d", ++ball_num);
+   set_name(string("ball_") + tmp);
    init_name(skel, name() + "_skel_point");
    absorb_skel(skel);
 
@@ -1247,7 +1249,7 @@ create_skel_curve(
    const param_list_t& tvals,
    Bpoint* b1,
    Bpoint* b2,
-   Cstr_ptr& name,
+   const string& name,
    MULTI_CMDptr cmd
    )
 {
@@ -1581,7 +1583,9 @@ Primitive::extend(
    assert(cmd != NULL);
 
    static int roof_num=0;
-   set_name(str_ptr("roof_") + str_ptr(++roof_num));
+   char tmp[64];
+   sprintf(tmp, "%d", ++roof_num);
+   set_name(string("roof_") + tmp);
 
    static bool debug = ::debug ||
       Config::get_var_bool("DEBUG_ROOF",true);
@@ -1804,7 +1808,9 @@ Primitive::extend(
    assert(cmd != NULL);
 
    static int branch_num=0;
-   set_name(str_ptr("branch_") + str_ptr(++branch_num));
+   char tmp[64];
+   sprintf(tmp, "%d", ++branch_num);
+   set_name(string("branch_") + tmp);
 
    static bool debug = ::debug ||
       Config::get_var_bool("DEBUG_EXTENDER",false);
@@ -2089,7 +2095,9 @@ Primitive::build_simple_tube(
       Config::get_var_bool("DEBUG_SIMPLE_TUBE",false);
 
    static int tube_num=0;
-   set_name(str_ptr("simple_tube_") + str_ptr(++tube_num));
+   char tmp[64];
+   sprintf(tmp, "%d", ++tube_num);
+   set_name(string("simple_tube_") + tmp);
 
    double L = pts.length();
    int num_segs = (int)round(L/w);

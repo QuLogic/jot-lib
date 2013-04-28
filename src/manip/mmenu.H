@@ -109,7 +109,7 @@ class MMENU : public FRAMEobs, public Simple_int
   void add(CGEOMptr &g, MenuCb_t *o=0) {
       _items.add(MMENUMenuItem(g, o));
   }
-  void add(Cstr_ptr &n, MenuCb_t *o=0){
+  void add(const string &n, MenuCb_t *o=0){
       add(new TEXT2D("",n), o);
   }
   void clear(){

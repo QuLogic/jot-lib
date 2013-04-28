@@ -39,7 +39,7 @@ class GLSLXToonShader : public GLSLShader {
                         GLSLXToonShader*, BasicTexture, CDATA_ITEM*);
 
    // Set the name of the texture to use (full path):
-   void set_tex(Cstr_ptr& full_path_name);
+   void set_tex(const string& full_path_name);
 
    //******** GLSLShader VIRTUAL METHODS ********
 
@@ -73,43 +73,43 @@ class GLSLXToonShader : public GLSLShader {
 
    //******** Accessors ********
 
-   virtual Cstr_ptr& get_tex_name() const       { return _tex_name;     }
-   virtual void set_tex_name(Cstr_ptr& tn)  {
+   virtual const string& get_tex_name() const   { return _tex_name;     }
+   virtual void set_tex_name(const string& tn)  {
      // cerr << "GLSLXToonShader::set_tex_name: deconstructing... ";
      // _tex = NULL;
      // cerr << "done" << endl;
       _tex_name = tn; 
-	  set_tex(_tex_name);
+      set_tex(_tex_name);
    }
 
-   virtual str_ptr      get_layer_name() const     { return _layer_name;   }
-   virtual void         set_layer_name(Cstr_ptr ln){ _layer_name = ln;   _update_uniforms=true;  }
-   virtual int          get_use_paper() const      { return false;}//_use_paper;    }
-   virtual void         set_use_paper(int p)       { _use_paper = p;    _update_uniforms=true;   }
-   virtual int          get_travel_paper() const   { return _travel_paper; }
-   virtual void         set_travel_paper(int t)    { _travel_paper = t; _update_uniforms=true; }
-   virtual int          get_transparent() const    { return _transparent;  }
-   virtual int          get_annotate() const       { return _annotate;     }
-   virtual double       get_alpha() const          { return _alpha;        }
-   virtual void         set_alpha(double a)        { _alpha = a;     _update_uniforms=true;       }
-   virtual COLOR        get_color() const          { return _color;        }
-   virtual int          set_color(CCOLOR &c)       { _color = c; _update_uniforms=true; return 0; }
-   virtual int          get_light_index() const    { return _light_index;  }
-   virtual void         set_light_index(int i)     { _light_index = i;     _update_uniforms=true; }
-   virtual int          get_light_dir() const      { return _light_dir;    }
-   virtual void         set_light_dir(int d)       { _update_uniforms=true; _light_dir = d;       }
-   virtual int          get_light_cam() const      { return _light_cam;    }
-   virtual void         set_light_cam(int c)       { _light_cam = c;     _update_uniforms=true;   }
-   virtual mlib::Wvec   get_light_coords() const   { return _light_coords; }
-   virtual void         set_light_coords(mlib::CWvec &c) { _light_coords = c;   _update_uniforms=true;  }
-   virtual double       get_target_length() const  { return _target_length;}
-   virtual void         set_target_length(double t){ _target_length = t;   _update_uniforms=true; }
-   virtual double       get_max_factor() const     { return _max_factor;   }
-   virtual void         set_max_factor(double f)   { _max_factor = f;     _update_uniforms=true;  }
-   virtual double       get_smooth_factor() const  { return _smooth_factor;}
-   virtual void         set_smooth_factor(double f){ _smooth_factor = f;   _update_uniforms=true; }
-   virtual double       get_smooth_detail() const  { return _smoothDetail;}
-   virtual void         set_smooth_detail(int d)   { _smoothDetail = d;   _update_uniforms=true; }
+   virtual string     get_layer_name() const     { return _layer_name;   }
+   virtual void       set_layer_name(const string ln){ _layer_name = ln;   _update_uniforms=true;  }
+   virtual int        get_use_paper() const      { return false;}//_use_paper;    }
+   virtual void       set_use_paper(int p)       { _use_paper = p;    _update_uniforms=true;   }
+   virtual int        get_travel_paper() const   { return _travel_paper; }
+   virtual void       set_travel_paper(int t)    { _travel_paper = t; _update_uniforms=true; }
+   virtual int        get_transparent() const    { return _transparent;  }
+   virtual int        get_annotate() const       { return _annotate;     }
+   virtual double     get_alpha() const          { return _alpha;        }
+   virtual void       set_alpha(double a)        { _alpha = a;     _update_uniforms=true;       }
+   virtual COLOR      get_color() const          { return _color;        }
+   virtual int        set_color(CCOLOR &c)       { _color = c; _update_uniforms=true; return 0; }
+   virtual int        get_light_index() const    { return _light_index;  }
+   virtual void       set_light_index(int i)     { _light_index = i;     _update_uniforms=true; }
+   virtual int        get_light_dir() const      { return _light_dir;    }
+   virtual void       set_light_dir(int d)       { _update_uniforms=true; _light_dir = d;       }
+   virtual int        get_light_cam() const      { return _light_cam;    }
+   virtual void       set_light_cam(int c)       { _light_cam = c;     _update_uniforms=true;   }
+   virtual mlib::Wvec get_light_coords() const   { return _light_coords; }
+   virtual void       set_light_coords(mlib::CWvec &c) { _light_coords = c;   _update_uniforms=true;  }
+   virtual double     get_target_length() const  { return _target_length;}
+   virtual void       set_target_length(double t){ _target_length = t;   _update_uniforms=true; }
+   virtual double     get_max_factor() const     { return _max_factor;   }
+   virtual void       set_max_factor(double f)   { _max_factor = f;     _update_uniforms=true;  }
+   virtual double     get_smooth_factor() const  { return _smooth_factor;}
+   virtual void       set_smooth_factor(double f){ _smooth_factor = f;   _update_uniforms=true; }
+   virtual double     get_smooth_detail() const  { return _smoothDetail;}
+   virtual void       set_smooth_detail(int d)   { _smoothDetail = d;   _update_uniforms=true; }
 
    //******** IO Methods **********
 
@@ -146,8 +146,8 @@ class GLSLXToonShader : public GLSLShader {
 
    TEXTUREglptr _tex;   
    Image        _image;
-   str_ptr      _tex_name;
-   str_ptr      _layer_name;
+   string       _tex_name;
+   string       _layer_name;
    int          _use_paper;
    int          _travel_paper;
    int          _transparent;

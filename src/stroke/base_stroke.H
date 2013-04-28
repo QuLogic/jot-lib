@@ -630,8 +630,8 @@ class BaseStroke : public DATA_ITEM {
    float                   _brightness;
    float                   _offset_stretch;
    float                   _offset_phase;
-   str_ptr                 _tex_file;
-   str_ptr                 _paper_file;
+   string                  _tex_file;
+   string                  _paper_file;
 
    int                     _press_vary_width;
    int                     _press_vary_alpha;
@@ -789,21 +789,21 @@ class BaseStroke : public DATA_ITEM {
    // associated filename. Setting the name
    // as NULL_STR will disable texturing, and 
    // enable antialiasing.
-   virtual void   set_texture(str_ptr tn);
-   virtual void   set_texture(TEXTUREptr tp, str_ptr tn);
+   virtual void   set_texture(string tn);
+   virtual void   set_texture(TEXTUREptr tp, string tn);
 
    TEXTUREptr     get_texture()           { return _tex;                }
-   Cstr_ptr       get_texture_file() const{ return _tex_file;           }
+   const string   get_texture_file() const{ return _tex_file;           }
 
    // User sets paper texture via it's filename (relative
    // to JOT_ROOT) or as a TEXTUREptr and the
    // associated filename. Setting the name as NULL_STR 
    // will disable paper texturing.
-   virtual void   set_paper(str_ptr tn);
-   virtual void   set_paper(TEXTUREptr tp, str_ptr tn);
+   virtual void   set_paper(string tn);
+   virtual void   set_paper(TEXTUREptr tp, string tn);
 
    TEXTUREptr     get_paper()             { return _paper;              }
-   Cstr_ptr       get_paper_file() const  { return _paper_file;         }
+   const string   get_paper_file() const  { return _paper_file;         }
 
 
    virtual void   set_vis(int v)          { _vis_type = v; set_dirty(); }

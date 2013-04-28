@@ -66,7 +66,7 @@ LinePen::LinePen(
    CEvent& d, CEvent& m, CEvent& u,
    CEvent& shift_down, CEvent& shift_up,
    CEvent& ctrl_down,  CEvent& ctrl_up) :
-   Pen(str_ptr("Line"), 
+   Pen("Line",
        gest_int, d, m, u,
        shift_down, shift_up, 
        ctrl_down, ctrl_up)
@@ -108,7 +108,7 @@ LinePen::LinePen(
 
    BaseStroke *s = _baseline_gel->stroke();
 
-   s->set_texture((Config::JOT_ROOT() + BASELINE_STROKE_TEXTURE).c_str());
+   s->set_texture(Config::JOT_ROOT() + BASELINE_STROKE_TEXTURE);
    s->set_width(  BASELINE_STROKE_WIDTH);
    s->set_alpha(  BASELINE_STROKE_ALPHA);
    s->set_flare(  BASELINE_STROKE_FLARE);
@@ -416,7 +416,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
       if (!t || !(t->class_name() == NPRTexture::static_name()))
       {
          //Set the selected face's patch to using NPRTexture
-         p->set_texture(str_ptr(NPRTexture::static_name().c_str()));
+         p->set_texture(NPRTexture::static_name());
 
          t = p->cur_tex();  assert(t && (t->class_name() == NPRTexture::static_name()));
       }         

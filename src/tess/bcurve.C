@@ -1144,7 +1144,7 @@ next_curve(Bpoint* b, Bcurve* c, bool ccw)
    }
    if (debug) {
       cerr << "next_curve (" << (ccw ? "ccw" : "cw") << "): curve: "
-           << (ret ? ret->identifier() : str_ptr("null"))
+           << (ret ? ret->identifier() : "null")
            << ", angle: " << rad2deg(min_angle) << endl;
    }
    return ret;

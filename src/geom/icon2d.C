@@ -48,12 +48,12 @@ ICON2D::ICON2D(const string &n,
                int num,
                bool tog,
                const mlib::PIXEL &p) :
-   GEOM(str_ptr(n.c_str())),
+   GEOM(n),
    _is2d(0),
    _center(0),
    _can_intersect(1),
    _show_boxes(0),
-   _filename(str_ptr((Config::JOT_ROOT() + filename).c_str())),
+   _filename(Config::JOT_ROOT() + filename),
    _cam(num),
    _suppress_draw(false),
    _active(false),
@@ -65,11 +65,11 @@ ICON2D::ICON2D(const string &n,
       cerr << "ICON2D::ICON2D: loading file: " << _filename << endl;
    
    //load "normal" state texture  
-   _texture += new TEXTUREgl(_filename + ".png", GL_TEXTURE_2D, GL_TEXTURE0);
-   assert(!_texture.empty() && _texture.last());;
-   _texture.last()->set_tex_fn(GL_REPLACE);
+   _texture.push_back(new TEXTUREgl(_filename + ".png", GL_TEXTURE_2D, GL_TEXTURE0));
+   assert(!_texture.empty() && _texture.back());;
+   _texture.back()->set_tex_fn(GL_REPLACE);
 
-   if (_texture.last()->load_image()) {
+   if (_texture.back()->load_image()) {
       _suppress_draw = false;
    } else {
       cerr << "ICON2D error : texture not loaded" << endl;
@@ -91,11 +91,11 @@ ICON2D::ICON2D(const string &n,
       }
    }
    //icon location
-   _name = str_ptr(n.c_str());
+   _name = n;
    _toggle = tog;
    _pix = p;
    _currentTex = 0;
-   _skins.push(_filename);      //add the first skin to the array
+   _skins.push_back(_filename);      //add the first skin to the array
 }
 
 inline bool
@@ -247,24 +247,24 @@ ICON2D::bbox2d(
 }
 
 void 
-ICON2D::add_skin(Cstr_ptr &n)
+ICON2D::add_skin(const string &n)
 {
-   _texture.push(new TEXTUREgl(_filename + ".png")); 
-   assert(!_texture.empty() && _texture.first());
-   _texture.first()->set_tex_fn(GL_REPLACE);
+   _texture.push_back(new TEXTUREgl(_filename + ".png"));
+   assert(!_texture.empty() && _texture.back());
+   _texture.back()->set_tex_fn(GL_REPLACE);
 
-   if (!_texture.first()->load_image())
+   if (!_texture.back()->load_image())
       cerr << "ICON2D error : texture not loaded" << endl;
 
    _currentTex++;
-   //_skins.push(n);
+   //_skins.push_back(n);
 }
 
 void 
 ICON2D::update_skin()
 {
    _currentTex++;
-   if(_currentTex >= _texture.num())
+   if (_currentTex >= _texture.size())
       _currentTex = 0;
 }
 

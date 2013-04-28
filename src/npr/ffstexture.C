@@ -24,7 +24,7 @@
 
 #include <fstream>
 
-str_ptr FFSTexture::location = "nprdata/ffs_style/ffs_texture.ffs";
+string FFSTexture::location = "nprdata/ffs_style/ffs_texture.ffs";
 
 FFSTexture::FFSTexture(Patch* patch) :
    NPRTexture(patch),
@@ -74,9 +74,9 @@ FFSTexture::get_ffs_data_file ()
    string str;
    // Get the style file    
    
-   str = Config::JOT_ROOT().c_str() + string(**location);
+   str = Config::JOT_ROOT() + location;
 
-   _data_file = str_ptr(str.c_str());
+   _data_file = str;
 
    fstream fin;
    fin.open(str.c_str(),ios::in);

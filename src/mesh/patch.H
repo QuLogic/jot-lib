@@ -135,10 +135,10 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
       
    BMESH*       mesh ()                 const      { return _mesh; }
    void         set_mesh(BMESH* m)                 { _mesh = m; changed(); }
-   Cstr_ptr&    name ()                 const      { return _name;}
-   void         set_name(Cstr_ptr &str)            { _name = str;}
-   Cstr_ptr&    texture_file ()         const      { return _texture_file;}
-   void         set_texture_file(Cstr_ptr &str)    { _texture_file = str;}
+   const string&name ()                 const      { return _name;}
+   void         set_name(const string &str)        { _name = str;}
+   const string&texture_file ()         const      { return _texture_file;}
+   void         set_texture_file(const string &str){ _texture_file = str;}
    TexCoordGen* tex_coord_gen()         const      { return _tex_coord_gen; }
    void         set_tex_coord_gen(TexCoordGen* tg);
       
@@ -364,7 +364,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //@{
       
    void      set_texture(GTexture* gtex);
-   void      set_texture(Cstr_ptr& style);
+   void      set_texture(const string& style);
    void      next_texture();
    
    //! \brief Returns an existing texture of the given type, or nil.
@@ -374,8 +374,8 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    GTexture* get_tex(const string& tex_name);
    
    //! \brief Returns an index for a texture.
-   int get_tex_index(Cstr_ptr& tex_name) {
-      return _textures.get_index(get_tex(string(**tex_name)));
+   int get_tex_index(const string& tex_name) {
+      return _textures.get_index(get_tex(tex_name));
    }
    
    //! \brief Return "current" GTexture, based on the mesh's render style
@@ -561,8 +561,8 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    uint              _mesh_version;     //!< last recorded mesh version
    bool              _tri_strips_dirty; //!< used to rebuild _tri_strips
    
-   str_ptr           _name;             //!< name
-   str_ptr           _texture_file;     //!< name of texture map image file
+   string            _name;             //!< name
+   string            _texture_file;     //!< name of texture map image file
    
    TexCoordGen*      _tex_coord_gen;    //!< for generating texture coordinates
    PatchData*        _data;             //!< optional custom data
@@ -638,7 +638,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
       
    static TAGlist      *_patch_tags;
    COLOR   &color_    () { return _color;}
-   str_ptr &name_     () { return _name;}
+   string  &name_     () { return _name;}
    int     &cur_tex_i_() { return _cur_tex_i;}
 
    // D2D I/O

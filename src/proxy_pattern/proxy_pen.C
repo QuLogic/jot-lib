@@ -39,7 +39,7 @@ ProxyPen::ProxyPen(
    CEvent& d, CEvent& m, CEvent& u,
    CEvent& shift_down, CEvent& shift_up,
    CEvent& ctrl_down,  CEvent& ctrl_up) :
-   Pen(str_ptr("Proxy Mode"),
+   Pen("Proxy Mode",
        gest_int, d, m, u,
        shift_down, shift_up,
        ctrl_down, ctrl_up)

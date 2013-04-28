@@ -93,7 +93,7 @@ class BlurShader : public GLSLShader {
    //******** DATA_ITEM VIRTUAL METHODS ********
    virtual DATA_ITEM  *dup() const { return new BlurShader; }
 
-   void set_tex(Cstr_ptr& full_path_name){
+   void set_tex(const string& full_path_name){
 
       ((ToneShader*)_patch->get_tex("ToneShader"))->set_tex(full_path_name);
    }

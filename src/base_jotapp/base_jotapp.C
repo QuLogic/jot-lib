@@ -217,7 +217,7 @@ BaseJOTapp::new_view(WINSYS *win)
    // allows subclasses to make their own types of views without
    // repeating the code in BaseJOTapp::create_view.
 
-   return new VIEW(str_ptr("OGL View"), win, new GL_VIEW);
+   return new VIEW("OGL View", win, new GL_VIEW);
 }
 
 
@@ -545,7 +545,7 @@ BaseJOTapp::new_geom(BMESH* mesh, const string& name) const
 {
    // Default method for creating GEOM or derived type to hold a mesh:
 
-   return new GEOM(str_ptr(name.c_str()), mesh);
+   return new GEOM(name, mesh);
 }
 
 bool
@@ -569,7 +569,7 @@ BaseJOTapp::load_png_file(const string &file)
    m->set_render_style("Flat Shading");
    return create_mesh(m, "sphere");*/
 
-   ImagePlateptr im = new ImagePlate(str_ptr(file.c_str()));
+   ImagePlateptr im = new ImagePlate(file);
 
    WORLD::create(im);
 
@@ -626,7 +626,7 @@ BaseJOTapp::activate_button(const string &file)
         it != BaseJOTapp::instance()->_buttons.end(); ++it)
    {
       ICON2D *but = *it;
-      if (string(**but->name()) == file)
+      if (but->name() == file)
          but->activate();
    }
 }
@@ -641,7 +641,7 @@ BaseJOTapp::update_button(const string &file)
         it != BaseJOTapp::instance()->_buttons.end(); ++it)
    {
       ICON2D *but = *it;
-      if (string(**but->name()) == file)
+      if (but->name() == file)
          but->update_skin();
    }
 }
@@ -670,7 +670,7 @@ BaseJOTapp::toggle_button(const string &file)
         it != BaseJOTapp::instance()->_buttons.end(); ++it)
    {
       ICON2D *but = *it;
-      if (string(**but->name()) == file)
+      if (but->name() == file)
          but->toggle_active();
    }
 }
@@ -1008,7 +1008,7 @@ BaseJOTapp::toggle_menu()
 
 /* KeyMenu Callback Functions */
 
-inline str_ptr
+inline string
 get_name(const State* s)
 {
    return (!s ? "null" : s->name() == "" ? "\"\"" : s->name());

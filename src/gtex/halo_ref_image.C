@@ -219,7 +219,7 @@ HaloRefImage::draw_objects(CGELlist& drawn)
    GELlist objects;
    for (int i=0; i < drawn.num(); i++ ) {
       if (drawn[i]->is_3D()) 
-         if (drawn[i]->name()!=str_ptr("Skybox")) // XXX - hack!!
+         if (drawn[i]->name()!="Skybox") // XXX - hack!!
             objects+=drawn[i];
    }
 

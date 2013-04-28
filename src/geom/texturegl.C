@@ -30,7 +30,7 @@ using mlib::CWtransf;
 
 static bool debug = Config::get_var_bool("DEBUG_TEXTURE",false);
 
-TEXTUREgl::TEXTUREgl(Cstr_ptr& file, GLenum target, GLenum texture_unit) :
+TEXTUREgl::TEXTUREgl(const string& file, GLenum target, GLenum texture_unit) :
    TEXTURE(file),
    _dl(0),
    _dl_valid(false),
@@ -155,7 +155,7 @@ TEXTUREgl::set_image(unsigned char *data, int w, int h, uint bpp)
 }
 
 void 
-TEXTUREgl::set_texture(Cstr_ptr& filename)
+TEXTUREgl::set_texture(const string& filename)
 {
    // delete current texture (if any) and store the given filename
    // as the texture file to load next time we need the data:
@@ -312,9 +312,9 @@ TEXTUREgl::load_texture(unsigned char **copy)
  * TEXTUREgl::load_cube_map
  ***********************************************************************/
 inline bool
-load_cube_map_face(Cstr_ptr& fullpath, Image& img)
+load_cube_map_face(const string& fullpath, Image& img)
 {
-   if (img.load_file(**fullpath))
+   if (img.load_file(fullpath.c_str()))
       return true;
    
    cerr << "load_cube_map_face: can't load " << fullpath << endl;
@@ -346,7 +346,7 @@ TEXTUREgl::load_cube_map()
    }
 
    // load the 6 images:
-   str_ptr basepath = _file;
+   string basepath = _file;
    Image right, left, front, back, top, bottom;
    if (!(load_cube_map_face(basepath + "/right.png", right) &&
          load_cube_map_face(basepath + "/left.png",  left)  &&

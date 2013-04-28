@@ -132,7 +132,7 @@ GLubyte rasters[][13] = {
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x8f, 0xf1, 0x60, 0x00, 0x00, 0x00} 
 };
 
-TEXT2D::TEXT2D(Cstr_ptr &n, Cstr_ptr &s, CXYpt &p) :
+TEXT2D::TEXT2D(const string &n, const string &s, CXYpt &p) :
    GEOM(n),
    _string(s),
    _is2d(1),
@@ -152,15 +152,15 @@ TEXT2D::recompute_xform()
    else _pt2d = XYpt(xform().origin()[0], xform().origin()[1]);
 }
 
-char *
+const char *
 TEXT2D::get_string() const
 {
-   char *s;
-   if ((**_tmp_string)[0] == '\0') {
+   const char *s;
+   if (_tmp_string[0] == '\0') {
       ((TEXT2D *)this)->update();
-      s = **_string;
+      s = _string.c_str();
    } else
-      s = **_tmp_string;
+      s = _tmp_string.c_str();
    return s;
 }
 
@@ -181,7 +181,7 @@ TEXT2D::draw(
       return 0;
    
    // Get string we are going to display
-   char *s = get_string();
+   const char *s = get_string();
 
    // quit early if we aren't displaying anything
    if (!s || *s == '\0')
@@ -433,9 +433,9 @@ TEXT2D::intersect(
  *************************************************************************/
 BBOX2D
 TEXT2D::bbox2d(
-   int       border, 
-   char     *s,
-   int       force
+   int         border,
+   const char *s,
+   int         force
    ) const
 {
    if (s == 0) 
@@ -491,7 +491,7 @@ TEXT2D::inside(
 {
    if (_is2d) return false;
 
-   char *s = get_string();
+   const char *s = get_string();
 
    // Blow this pop stand if there isn't anything to intersect
    if (!s || *s == '\0')

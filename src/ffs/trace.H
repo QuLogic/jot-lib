@@ -100,7 +100,7 @@ class TRACE : public DrawWidget {
    TEXTUREgl* _texture;
 
    //! Filename of 2D image
-   str_ptr      _filename;
+   string      _filename;
 
    //! Translation in XY obtained from calibration
    //mlib::XYpt         _translation;

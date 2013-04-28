@@ -54,8 +54,8 @@ class PaperEffectBase {
    /******** STATIC MEMBER VARIABLES ********/
    static ARRAY<PaperEffectObs*>    _obs;
 
-   static str_ptr    _paper_tex;   
-   static str_ptr    _paper_filename;
+   static string     _paper_tex;
+   static string     _paper_filename;
 
    static bool       _delayed_activate;
    static bool       _delayed_activate_state;
@@ -79,8 +79,8 @@ class PaperEffectBase {
    static void    rem_obs(PaperEffectObs* p)    { if (p) _obs -= p; }
    static void    add_obs(PaperEffectObs* p)    { if (p) _obs += p; }
 
-   static str_ptr get_paper_tex()               { return _paper_tex; }
-   static void    set_paper_tex(Cstr_ptr &p)    { _paper_tex = p; notify_paper_changed(); }
+   static string  get_paper_tex()               { return _paper_tex; }
+   static void    set_paper_tex(const string&p) { _paper_tex = p; notify_paper_changed(); }
 
    static bool    is_active()                   { return _is_active; }
 

@@ -54,7 +54,7 @@ NPRControlFrameTexture::NPRControlFrameTexture(
          _strip(0) 
 {
    _strokes.add(new BaseStroke);
-   _strokes[0]->set_texture(str_ptr((Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE).c_str()));
+   _strokes[0]->set_texture(Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE);
    _strokes[0]->set_use_depth(true);
    _strokes[0]->set_width(4);
    _strokes[0]->set_flare(0.2f);

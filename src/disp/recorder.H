@@ -51,7 +51,7 @@ class CameraPath {
 
  protected:
 
-   str_ptr _name;
+   string _name;
 
  public:
 
@@ -61,18 +61,18 @@ class CameraPath {
    ARRAY <CamState*> state_list;
 
    CameraPath() { 
-      _name = str_ptr ("path");
+      _name = "path";
 
    }
    ~CameraPath () { 
       for ( int i=0; i < state_list.num() ; i++ ) delete state_list[i];
    }
 
-   CameraPath(str_ptr name ) {
+   CameraPath(const string &name) {
       _name = name;
    }
 
-   str_ptr get_name() { return _name; }
+   string get_name() { return _name; }
 
 
    void add(double time, CCAMptr& ncam) { 
@@ -117,7 +117,7 @@ class Recorder {
 
    ~Recorder();
 
-   str_ptr _name_buf;
+   string _name_buf;
 
    //******** ACCESSORS ********
    RecorderUIBase* get_ui()                     const   { return _ui; }

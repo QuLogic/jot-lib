@@ -77,7 +77,7 @@ NPRTexture::NPRTexture(Patch *patch) :
 
    _selected(false),
 
-   _data_file(NULL_STR),
+   _data_file(""),
    _in_data_file(false)
 
 {
@@ -826,11 +826,11 @@ NPRTexture::get_npr_data_file (TAGformat &d)
 
    if (str == "NULL_STR") {
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Loaded NULL string.");
-      _data_file = NULL_STR;
+      _data_file = "";
    } else {
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_npr_data_file() - Loaded string: '%s'.", str.c_str());
 
-      _data_file = str_ptr(str.c_str());
+      _data_file = str;
 
       string fname = IOManager::load_prefix() + str + ".npr";
 
@@ -877,16 +877,16 @@ NPRTexture::put_npr_data_file (TAGformat &d) const
       return;
 
    //If there's no npr file, dump the null string
-   if (_data_file == NULL_STR) {
+   if (_data_file == "") {
       d.id();
-      *d << str_ptr("NULL_STR");
+      *d << "NULL_STR";
       d.end_id();
    }
    //Otherwise, try to open the file, then write the
    //tags to the external file, and dump the filename
    //to the given tag stream
    else {
-      string fname = IOManager::save_prefix() + string(**_data_file) + ".npr";
+      string fname = IOManager::save_prefix() + _data_file + ".npr";
       fstream fout;
       fout.open(fname.c_str(), ios::out);
       //If this fails, then dump the null string
@@ -895,10 +895,10 @@ NPRTexture::put_npr_data_file (TAGformat &d) const
 
          //and actually change tex's policy so the
          //tags serialize into the main stream
-         ((str_ptr)_data_file) = NULL_STR;
+         const_cast<NPRTexture*>(this)->_data_file = "";
 
          d.id();
-         *d << str_ptr("NULL_STR");
+         *d << "NULL_STR";
          d.end_id();
       }
       //Otherwise, do the right thing
@@ -927,10 +927,10 @@ NPRTexture::put_npr_data_file (TAGformat &d) const
 void
 NPRTexture::put_collection(TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::put_collection()");
 
@@ -949,8 +949,8 @@ void
 NPRTexture::get_collection(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::get_collection()");
 
@@ -988,8 +988,8 @@ NPRTexture::get_line_stroke_texture(TAGformat &d)
 {
 
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_line_stroke_texture() -- Eating old file format nonesense...");
 
@@ -1011,10 +1011,10 @@ NPRTexture::get_line_stroke_texture(TAGformat &d)
 void
 NPRTexture::put_feature_stroke_texture(TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::put_feature_stroke_texture()");
 
@@ -1033,8 +1033,8 @@ void
 NPRTexture::get_feature_stroke_texture(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::get_feature_stroke_texture()");
 
@@ -1070,8 +1070,8 @@ void
 NPRTexture::get_basecoat_id(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_basecoat_id() - ***NOTE: Loading OLD format file!***");
 
@@ -1097,8 +1097,8 @@ void
 NPRTexture::get_bkg_texture(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_bkg_texture() - ***NOTE: Loading OLD format file!***");
 
@@ -1139,8 +1139,8 @@ void
 NPRTexture::get_solid_texture(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_solid_texture() - ***NOTE: Loading OLD format file!***");
 
@@ -1185,8 +1185,8 @@ void
 NPRTexture::get_toon_texture(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_toon_texture() - ***NOTE: Loading OLD format file!***");
 
@@ -1234,8 +1234,8 @@ NPRTexture::get_xtoon_texture(TAGformat &d)
 {
 	cout << "D" << endl;
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::get_xtoon_texture() - ***NOTE: Loading OLD format file!***");
 
@@ -1268,10 +1268,10 @@ NPRTexture::get_xtoon_texture(TAGformat &d)
 void
 NPRTexture::put_transparent (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << _transparent;
@@ -1286,8 +1286,8 @@ void
 NPRTexture::get_transparent (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   if (!( ( _in_data_file && (_data_file != NULL_STR)) ||
-          (!_in_data_file && (_data_file == NULL_STR))    )) {
+   if (!( ( _in_data_file && (_data_file != "")) ||
+          (!_in_data_file && (_data_file == ""))    )) {
       err_mesg(ERR_LEV_WARN, "NPRTexture::get_transparent - WARNING!! This tag should not be here. Resave this file!");
    }
 
@@ -1301,10 +1301,10 @@ NPRTexture::get_transparent (TAGformat &d)
 void
 NPRTexture::put_annotate (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << _annotate;
@@ -1319,8 +1319,8 @@ void
 NPRTexture::get_annotate (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   if (!( ( _in_data_file && (_data_file != NULL_STR)) ||
-          (!_in_data_file && (_data_file == NULL_STR))    )) {
+   if (!( ( _in_data_file && (_data_file != "")) ||
+          (!_in_data_file && (_data_file == ""))    )) {
       err_mesg(ERR_LEV_WARN, "NPRTexture::get_annotate - WARNING!! This tag should be here. Resave this file!");
    }
 
@@ -1334,10 +1334,10 @@ NPRTexture::get_annotate (TAGformat &d)
 void
 NPRTexture::put_polygon_offset_factor (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << _polygon_offset_factor;
@@ -1352,8 +1352,8 @@ void
 NPRTexture::get_polygon_offset_factor (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   if (!( ( _in_data_file && (_data_file != NULL_STR)) ||
-          (!_in_data_file && (_data_file == NULL_STR))    )) {
+   if (!( ( _in_data_file && (_data_file != "")) ||
+          (!_in_data_file && (_data_file == ""))    )) {
       err_mesg(ERR_LEV_WARN, "NPRTexture::get_polygon_offset_factor - WARNING!! This tag should be here. Resave this file!");
    }
 
@@ -1367,10 +1367,10 @@ NPRTexture::get_polygon_offset_factor (TAGformat &d)
 void
 NPRTexture::put_polygon_offset_units (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << _polygon_offset_units;
@@ -1386,8 +1386,8 @@ NPRTexture::get_polygon_offset_units (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
    //Sanity check - might change policy on 2nd part
-   if (!( ( _in_data_file && (_data_file != NULL_STR)) ||
-          (!_in_data_file && (_data_file == NULL_STR))    )) {
+   if (!( ( _in_data_file && (_data_file != "")) ||
+          (!_in_data_file && (_data_file == ""))    )) {
       err_mesg(ERR_LEV_WARN, "NPRTexture::get_polygon_offset_units - WARNING!! This tag should be here. Resave this file!");
    }
 
@@ -1402,10 +1402,10 @@ NPRTexture::get_polygon_offset_units (TAGformat &d)
 void
 NPRTexture::put_see_thru (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    *d << ((_see_thru)?(1):(0));
@@ -1420,8 +1420,8 @@ void
 NPRTexture::get_see_thru (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int s;
    *d >> s;
@@ -1434,10 +1434,10 @@ NPRTexture::get_see_thru (TAGformat &d)
 void
 NPRTexture::put_see_thru_flags (TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    d.id();
    assert(_see_thru_flags.num() == ZXFLAG_NUM);
@@ -1456,8 +1456,8 @@ void
 NPRTexture::get_see_thru_flags (TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    int n;
 
@@ -1478,10 +1478,10 @@ NPRTexture::get_see_thru_flags (TAGformat &d)
 void
 NPRTexture::put_basecoats(TAGformat &d) const
 {
-   if ((!_in_data_file) && (_data_file != NULL_STR))
+   if ((!_in_data_file) && (_data_file != ""))
       return;
    //Sanity check
-   assert(!(_in_data_file && _data_file == NULL_STR));
+   assert(!(_in_data_file && _data_file == ""));
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::put_basecoats()");
 
@@ -1500,8 +1500,8 @@ void
 NPRTexture::get_basecoat(TAGformat &d)
 {
    //Sanity check - might change policy on 2nd part
-   assert( ( _in_data_file && (_data_file != NULL_STR)) ||
-           (!_in_data_file && (_data_file == NULL_STR))    );
+   assert( ( _in_data_file && (_data_file != "")) ||
+           (!_in_data_file && (_data_file == ""))    );
 
    err_mesg(ERR_LEV_SPAM, "NPRTexture::get_basecoat()");
 
@@ -1637,15 +1637,15 @@ NPRTexture::get_view_paper_name (TAGformat &d)
 {
    //XXX - May need something to handle filenames with spaces
 
-   str_ptr str, tex;
+   string str, tex;
    *d >> str;
 
    if (str == "NULL_STR") {
-      tex = NULL_STR;
+      tex = "";
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_paper_name() - Loaded NULL string.");
    } else {
       tex = str;
-      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_paper_name() - Loaded string: '%s'", **tex);
+      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_paper_name() - Loaded string: '%s'", tex.c_str());
    }
    PaperEffect::set_paper_tex(tex);
 
@@ -1660,7 +1660,7 @@ NPRTexture::put_view_paper_name (TAGformat &d) const
    if (put_view_stuff) {
       //XXX - May need something to handle filenames with spaces
       d.id();
-      if (PaperEffect::get_paper_tex() == NULL_STR) {
+      if (PaperEffect::get_paper_tex() == "") {
          err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_paper_name() - Wrote NULL string.");
          *d << "NULL_STR";
          *d << " ";
@@ -1668,7 +1668,7 @@ NPRTexture::put_view_paper_name (TAGformat &d) const
          //Here we strip off JOT_ROOT
          *d << PaperEffect::get_paper_tex();
          *d << " ";
-         err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_paper_name() - Wrote string: '%s'", **PaperEffect::get_paper_tex());
+         err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_paper_name() - Wrote string: '%s'", PaperEffect::get_paper_tex().c_str());
       }
       d.end_id();
    }
@@ -1710,15 +1710,15 @@ NPRTexture::get_view_texture (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    if (str == "NULL_STR") {
       err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_texture() - Loaded NULL string.");
-      v->set_bkg_file(NULL_STR);
+      v->set_bkg_file("");
    } else {
-      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_texture() - Loaded string: '%s'", **str);
-      v->set_bkg_file(str_ptr(Config::JOT_ROOT().c_str())+str);
+      err_mesg(ERR_LEV_SPAM, "NPRTexture::get_view_texture() - Loaded string: '%s'", str.c_str());
+      v->set_bkg_file(Config::JOT_ROOT()+str);
    }
 
 }
@@ -1736,14 +1736,14 @@ NPRTexture::put_view_texture (TAGformat &d) const
       //XXX - May need something to handle filenames with spaces
 
       d.id();
-      if (v->get_bkg_file() == NULL_STR) {
+      if (v->get_bkg_file() == "") {
          err_mesg(ERR_LEV_SPAM, "NPRTexture::put_view_texture() - Wrote NULL string.");
          *d << "NULL_STR";
          *d << " ";
       } else {
          //Here we strip off JOT_ROOT
 
-         string tex = string(**v->get_bkg_file());
+         string tex = v->get_bkg_file();
          string str = tex.substr(Config::JOT_ROOT().length());
          *d << str.c_str();
          *d << " ";

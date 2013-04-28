@@ -45,8 +45,8 @@ class ToonTexture_1D : public BasicTexture {
     
     //******** Member Variables ********
    TEXTUREptr                    _tex;     
-   str_ptr                       _tex_name;
-   str_ptr                       _layer_name;
+   string                        _tex_name;
+   string                        _layer_name;
    int                           _use_paper;
    int                           _travel_paper;
    int                           _transparent;
@@ -62,7 +62,7 @@ class ToonTexture_1D : public BasicTexture {
     // ******** CONSTRUCTOR ********
    ToonTexture_1D(Patch* patch = 0) :
       BasicTexture(patch, new ToonTexCB_1D),
-      _tex_name(NULL_STR),
+      _tex_name(""),
       _layer_name("Shader"),
       _use_paper(0),
       _travel_paper(0),
@@ -78,10 +78,10 @@ class ToonTexture_1D : public BasicTexture {
    //******** Member Methods ********
  public:
    //******** Accessors ********
-   virtual str_ptr      get_tex_name() const       { return _tex_name;     }
-   virtual void         set_tex_name(Cstr_ptr tn)  { _tex_name = tn; _tex=NULL;  }
-   virtual str_ptr      get_layer_name() const     { return _layer_name;   }
-   virtual void         set_layer_name(Cstr_ptr ln){ _layer_name = ln;     }
+   virtual string       get_tex_name() const       { return _tex_name;     }
+   virtual void         set_tex_name(const string &tn)  { _tex_name = tn; _tex=NULL;  }
+   virtual string       get_layer_name() const     { return _layer_name;   }
+   virtual void         set_layer_name(const string &ln){ _layer_name = ln;     }
    virtual int          get_use_paper() const      { return _use_paper;    }
    virtual void         set_use_paper(int p)       { _use_paper = p;       }
    virtual int          get_travel_paper() const   { return _travel_paper; }

@@ -33,7 +33,7 @@ TEXTURE::load_image()
    if (_image_not_available || _file == "")
       return 0;
 
-   _img.load_file(**_file);
+   _img.load_file(_file.c_str());
    expand_image();
    if (_img.empty()) {
       _image_not_available = true;

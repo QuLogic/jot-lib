@@ -87,7 +87,7 @@ class NPRTexture : public OGLTexture {
 
    bool                          _selected;
 
-   str_ptr                       _data_file;
+   string                        _data_file;
    bool                          _in_data_file;
 
    ARRAY<SilDebugObs *>          _sdolist;
@@ -103,8 +103,8 @@ class NPRTexture : public OGLTexture {
 
    void                 set_selected(bool s)                { _selected = s;        }
    bool                 get_selected() const                { return _selected;     }
-   void                 set_data_file(str_ptr f)            { _data_file = f; }
-   Cstr_ptr&            get_data_file() const               { return _data_file; }
+   void                 set_data_file(string &f)            { _data_file = f; }
+   const string&        get_data_file() const               { return _data_file; }
    virtual int          get_transparent() const             { return _transparent;  }
    virtual void         set_transparent(int t)              { _transparent = t;     }
    virtual int          get_annotate() const                { return _annotate;     }

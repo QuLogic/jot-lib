@@ -46,13 +46,13 @@ toon_name(const string& name)
 GLSLPerlinTest::GLSLPerlinTest(Patch* p) :
    GLSLShader(p, new VertNormStripCB)
 {
-   set_tex(str_ptr(toon_name(
+   set_tex(toon_name(
       Config::get_var_str("GLSL_TOON_FILENAME","clear-black.png")
-      ).c_str()));
+      ));
 }
 
 void 
-GLSLPerlinTest::set_tex(Cstr_ptr& filename)
+GLSLPerlinTest::set_tex(const string& filename)
 {
    // Set the name of the texture to use
    if (_tex) {

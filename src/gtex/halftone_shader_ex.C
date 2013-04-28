@@ -273,7 +273,7 @@ HalftoneShaderEx::HalftoneShaderEx(Patch* patch) :
 {
    // Specify the texture we'd like to use.
    string tex_name = "nprdata/toon_textures/clear-black.png";
-   m_toon_tone_shader->set_tex(str_ptr((Config::JOT_ROOT() + tex_name).c_str()));
+   m_toon_tone_shader->set_tex(Config::JOT_ROOT() + tex_name);
 
    _perlin=0;
    _perlin_generator= Perlin::get_instance();

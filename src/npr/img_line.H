@@ -166,7 +166,7 @@ public:
    virtual DATA_ITEM  *dup() const { return new ImgLineTexture; }
 
    // ACCESSOR FOR UI
-   void set_tex(Cstr_ptr& full_path_name){
+   void set_tex(const string& full_path_name){
       if(!_ridge)
 	 return;
       _ridge->set_tex(full_path_name);

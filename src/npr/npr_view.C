@@ -265,10 +265,10 @@ NPRview::draw_background()
    
       // First see if the texture needs updating
 
-      str_ptr     tex_name = _view->get_bkg_file();
+      string      tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
    
-      if ((tex_name != NULL_STR) && (tex_ptr == NULL)) {
+      if ((tex_name != "") && (tex_ptr == NULL)) {
          Image image(tex_name);
 
          if (!image.empty()) {
@@ -282,17 +282,17 @@ NPRview::draw_background()
             tex_ptr = t;
             _view->set_bkg_tex(t);
          } else {
-            err_mesg(ERR_LEV_ERROR, "NPRview::draw_background() - *****ERROR***** Failed loading background: '%s'", **tex_name);
+            err_mesg(ERR_LEV_ERROR, "NPRview::draw_background() - *****ERROR***** Failed loading background: '%s'", tex_name.c_str());
             err_mesg(ERR_LEV_INFO, "NPRview::draw_background() - Resetting background.");
 
             // Clear the name (and tex ptr)
-            _view->set_bkg_file(NULL_STR);
+            _view->set_bkg_file("");
 
             //Make sure the GUI shows this
             if (ViewUI::is_vis(_view)) 
                ViewUI::update(_view);
          }
-      } else if (tex_name == NULL_STR) {
+      } else if (tex_name == "") {
          assert(tex_ptr == NULL);
       }
 
@@ -388,10 +388,10 @@ NPRview::draw_background()
 
       GL_VIEW::print_gl_errors("NPRview::draw_background [Start] - ");
    
-      str_ptr     tex_name = _view->get_bkg_file();
+      string      tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
 
-      if ((tex_name != NULL_STR) && (tex_ptr == NULL)) {
+      if ((tex_name != "") && (tex_ptr == NULL)) {
          Image image(tex_name);
 
          if (!image.empty()) {
@@ -406,17 +406,17 @@ NPRview::draw_background()
             tex_ptr = t;
             _view->set_bkg_tex(t);
          } else {
-            err_mesg(ERR_LEV_ERROR, "NPRview::draw_background() - *****ERROR***** Failed loading background: '%s'", **tex_name);
+            err_mesg(ERR_LEV_ERROR, "NPRview::draw_background() - *****ERROR***** Failed loading background: '%s'", tex_name.c_str());
             err_mesg(ERR_LEV_INFO, "NPRview::draw_background() - Resetting background.");
 
             // Clear the name (and tex ptr)
-            _view->set_bkg_file(NULL_STR);
+            _view->set_bkg_file("");
 
             //Make sure the GUI shows this
             if (ViewUI::is_vis(_view)) 
                ViewUI::update(_view);
          }
-      } else if (tex_name == NULL_STR) {
+      } else if (tex_name == "") {
          assert(tex_ptr == NULL);
       }
    
@@ -591,10 +591,10 @@ NPRview::swap_buffers()
 
       const int max_num = 10000;
 
-      str_ptr fname_base = str_ptr("big_grab");
-      str_ptr fname_suffix = str_ptr(".png");
+      string fname_base = string("big_grab");
+      string fname_suffix = string(".png");
 
-      str_ptr fname;
+      string fname;
 
       char buf[10];
 
@@ -612,7 +612,7 @@ NPRview::swap_buffers()
       for (i=1; i< max_num; i++) {
          sprintf(buf,"%05d",i);
          fname = fname_base + buf + fname_suffix;
-         FILE *fp = fopen(**fname,"r");
+         FILE *fp = fopen(fname.c_str(), "r");
 
          if (!fp) break;
 
@@ -621,7 +621,7 @@ NPRview::swap_buffers()
 
       if (i != max_num) {
          _view->screen_grab(1, fname);
-         err_mesg(ERR_LEV_ERROR, "NPRView::swap_buffers() - Wrote grab to: '%s'", **fname);
+         err_mesg(ERR_LEV_ERROR, "NPRView::swap_buffers() - Wrote grab to: '%s'", fname.c_str());
       } else {
          err_mesg(ERR_LEV_ERROR,
                   "NPRView::swap_buffers() - Couldn't get a free output filename for grab!!");
@@ -634,10 +634,10 @@ NPRview::swap_buffers()
 }
 
 inline void
-show_message(Cstr_ptr& s)
+show_message(const string& s)
 {
    cerr << s << endl;
-   WORLD::message(s);
+   WORLD::message(str_ptr(s.c_str()));
 }
 
 void

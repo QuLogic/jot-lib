@@ -661,7 +661,7 @@ debug_check_verts(Cstr_ptr& msg, CBvert_list& verts, CBvert_list& dirty_verts)
    }
 }
 
-inline str_ptr
+inline string
 get_name(LMESH* m)
 {
    return (m && m->geom()) ? m->geom()->name() :
@@ -711,7 +711,7 @@ LMESH::update_subdivision(int level)
       }
       if (level > 0 && ret) {
          err_adv(debug, "%s: level %d updating subdiv mesh",
-                 **::get_name(this), _subdiv_level);
+                 ::get_name(this).c_str(), _subdiv_level);
       }
    }
    err_adv(ret && debug,
@@ -721,7 +721,7 @@ LMESH::update_subdivision(int level)
            _faces.num(),
            _dirty_verts.num(),
            _verts.num(),
-           **_loc_calc->name());
+           _loc_calc->name().c_str());
 
    // Q: How do we know which mesh elements to visit to tell them
    //    to generate and update their subdivision elements?
@@ -741,7 +741,7 @@ LMESH::update_subdivision(int level)
               _faces.num(),
               _dirty_verts.num(),
               _verts.num(),
-              **_loc_calc->name());
+              _loc_calc->name().c_str());
       debug_check_verts("  before", _verts, _dirty_verts);
    }
    while (!_dirty_verts.empty()) {
@@ -899,8 +899,9 @@ LMESH::set_parent(LMESH* parent)
    LMESH* c = control_mesh();
    assert(c != 0);
    if (c->has_name()) {
-      // XXX - how to turn an int into a string without using str_ptr?
-      set_name(c->get_name() + "-sub" + **str_ptr(_subdiv_level));
+      char tmp[32];
+      sprintf(tmp, "%d", _subdiv_level);
+      set_name(c->get_name() + "-sub" + tmp);
    }
 }
 

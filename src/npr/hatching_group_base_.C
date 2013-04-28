@@ -1875,7 +1875,7 @@ HatchingSelectBase::HatchingSelectBase(
    assert(_left_stroke);
 
    //Configure the stroke
-   _left_stroke->set_texture(str_ptr((Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE).c_str()));
+   _left_stroke->set_texture(Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE);
    _left_stroke->set_width(4);
    _left_stroke->set_alpha(1);
    _left_stroke->set_flare(1.0);

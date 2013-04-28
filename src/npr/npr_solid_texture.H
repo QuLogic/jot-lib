@@ -41,8 +41,8 @@ class NPRSolidTexture : public BasicTexture {
  protected:
    //******** Member Variables ********
    TEXTUREptr                    _tex;     
-   str_ptr                       _tex_name;
-   str_ptr                       _layer_name;
+   string                        _tex_name;
+   string                        _layer_name;
    int                           _use_paper;
    int                           _travel_paper;
    int                           _use_lighting;
@@ -57,7 +57,7 @@ class NPRSolidTexture : public BasicTexture {
     // ******** CONSTRUCTOR ********
    NPRSolidTexture(Patch* patch = 0) :
       BasicTexture(patch, new NPRSolidTexCB),
-      _tex_name(NULL_STR),
+      _tex_name(""),
       _layer_name("Shader"),
       _use_paper(0),
       _travel_paper(0),
@@ -72,24 +72,24 @@ class NPRSolidTexture : public BasicTexture {
    //******** Member Methods ********
  public:
    //******** Accessors ********
-   virtual str_ptr      get_tex_name() const       { return _tex_name;        }
-   virtual void         set_tex_name(Cstr_ptr tn)  { _tex_name = tn; _tex=NULL;  }
-   virtual str_ptr      get_layer_name() const     { return _layer_name;      }
-   virtual void         set_layer_name(Cstr_ptr ln){ _layer_name = ln;        }
-   virtual int          get_use_paper() const      { return _use_paper;       }
-   virtual void         set_use_paper(int p)       { _use_paper = p;          }
-   virtual int          get_travel_paper() const   { return _travel_paper;    }
-   virtual void         set_travel_paper(int t)    { _travel_paper = t;       }
-   virtual int          get_use_lighting() const   { return _use_lighting;    }
-   virtual void         set_use_lighting(int l)    { _use_lighting = l;       }
-   virtual int          get_light_specular() const { return _light_specular;  }
-   virtual void         set_light_specular(int s)  { _light_specular = s;     }
-   virtual int          get_transparent() const    { return _transparent;     }
-   virtual int          get_annotate() const       { return _annotate;        }
-   virtual double       get_alpha() const          { return _alpha;           }
-   virtual void         set_alpha(double a)        { _alpha = a;              }
-   virtual COLOR        get_color() const          { return _color;           }
-   virtual int          set_color(CCOLOR &c)       { _color = c; return 1;    }
+   virtual string get_tex_name() const           { return _tex_name;        }
+   virtual void   set_tex_name(const string tn)  { _tex_name = tn; _tex=NULL;  }
+   virtual string get_layer_name() const         { return _layer_name;      }
+   virtual void   set_layer_name(const string ln){ _layer_name = ln;        }
+   virtual int    get_use_paper() const          { return _use_paper;       }
+   virtual void   set_use_paper(int p)           { _use_paper = p;          }
+   virtual int    get_travel_paper() const       { return _travel_paper;    }
+   virtual void   set_travel_paper(int t)        { _travel_paper = t;       }
+   virtual int    get_use_lighting() const       { return _use_lighting;    }
+   virtual void   set_use_lighting(int l)        { _use_lighting = l;       }
+   virtual int    get_light_specular() const     { return _light_specular;  }
+   virtual void   set_light_specular(int s)      { _light_specular = s;     }
+   virtual int    get_transparent() const        { return _transparent;     }
+   virtual int    get_annotate() const           { return _annotate;        }
+   virtual double get_alpha() const              { return _alpha;           }
+   virtual void   set_alpha(double a)            { _alpha = a;              }
+   virtual COLOR  get_color() const              { return _color;           }
+   virtual int    set_color(CCOLOR &c)           { _color = c; return 1;    }
 
  protected:
    //******** Internal Methods ********

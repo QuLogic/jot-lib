@@ -186,7 +186,7 @@ GEOM::GEOM() :
    _do_halo = false;
 }
 
-GEOM::GEOM(Cstr_ptr &n, CBODYptr& b) :
+GEOM::GEOM(const string &n, CBODYptr& b) :
    GEL(),
    _name(n),
    _body(b),
@@ -200,7 +200,7 @@ GEOM::GEOM(Cstr_ptr &n, CBODYptr& b) :
 
 GEOM::GEOM(
    CGEOMptr &o,
-   Cstr_ptr &name
+   const string &name
    ) :
    GEL(o),
    APPEAR(o),

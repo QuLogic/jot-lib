@@ -39,7 +39,7 @@ MAKE_NET_HASHVAR(NO_CONSTRAINT_MOD, int,  0);
 MAKE_NET_HASHVAR(CONSTRAINT_VECTOR, Wvec, Wvec(0,1,0));
 MAKE_NET_HASHVAR(CONSTRAINT_POINT,  Wpt,  Wpt (0,0,0));
 
-Cstr_ptr  GEL::_name("work'er");
+const string GEL::_name("work'er");
 TAGlist  *GEL::_gel_tags = 0;
 
 // Static constructors can be the spawn of satan.
@@ -266,7 +266,7 @@ DrawnList::rem(
 
 GELptr
 DrawnList::lookup(
-   Cstr_ptr &s
+   const string &s
    ) const
 {
    for (int i = 0; i < num(); i++)
@@ -311,7 +311,7 @@ ExistList::rem(
 
 GELptr
 ExistList::lookup(
-   Cstr_ptr &s
+   const string &s
    ) const
 {
    for (int i = 0; i < num(); i++)
@@ -323,18 +323,18 @@ ExistList::lookup(
 //
 // Gets a unique name for a duplicate of an object
 //
-str_ptr
+string
 ExistList::unique_dupname(
-   Cstr_ptr &buff
+   const string &buff
    ) const
 {
    static char nbuff[255];
    int count = 0;
 
-   sprintf(nbuff, "C%d_%s", count++, **buff);
+   sprintf(nbuff, "C%d_%s", count++, buff.c_str());
 
    while (lookup(nbuff))
-      sprintf(nbuff, "C%d_%s", count++, **buff);
+      sprintf(nbuff, "C%d_%s", count++, buff.c_str());
 
    return nbuff;
 }
@@ -342,9 +342,9 @@ ExistList::unique_dupname(
 //
 // Gets a unique name for an object
 //
-str_ptr
+string
 ExistList::unique_name(
-   Cstr_ptr &pref
+   const string &pref
    ) const
 {
    static char nbuff[255];
@@ -352,10 +352,10 @@ ExistList::unique_name(
    int count = 1;
    gethostname(buff, 255);
 
-   sprintf(nbuff, "%s_%d(%s)", **pref, count++, buff);
+   sprintf(nbuff, "%s_%d(%s)", pref.c_str(), count++, buff);
 
    while (lookup(nbuff))
-      sprintf(nbuff, "%s_%d(%s)", **pref, count++, buff);
+      sprintf(nbuff, "%s_%d(%s)", pref.c_str(), count++, buff);
 
    return nbuff;
 }

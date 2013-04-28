@@ -242,7 +242,7 @@ RefImage::write_file(char* file)
       _height,
       4,        // 4 bytes: GL_RGBA
       (GLubyte*)_values,
-      str_ptr(file)
+      file
       );
 }
 

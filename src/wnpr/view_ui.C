@@ -369,8 +369,8 @@ ViewUI::build()
    for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
 
 
-   assert(_bkgtex_filenames.num() == 0);
-   assert(_paper_filenames.num() == 0);
+   assert(_bkgtex_filenames.empty());
+   assert(_paper_filenames.empty());
 
 
    //Lighting
@@ -1077,9 +1077,9 @@ ViewUI::fill_anti_listbox(
 
 void
 ViewUI::fill_bkgtex_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
 )
 {
    int j=0;
@@ -1088,7 +1088,7 @@ ViewUI::fill_bkgtex_listbox(
       string::size_type len = in_files[i].length();
       if ( (len>3) &&
            (in_files[i].substr(len-4) == ".png")) {
-         save_files += str_ptr((full_path + in_files[i]).c_str());
+         save_files.push_back(full_path + in_files[i]);
          listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
@@ -1105,9 +1105,9 @@ ViewUI::fill_bkgtex_listbox(
 
 void
 ViewUI::fill_paper_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
 )
 {
    int j=0;
@@ -1116,7 +1116,7 @@ ViewUI::fill_paper_listbox(
       string::size_type len = in_files[i].length();
       if ( (len>3) &&
            (in_files[i].substr(len-4) == ".png")) {
-         save_files += str_ptr((PAPER_DIRECTORY + in_files[i]).c_str());
+         save_files.push_back(PAPER_DIRECTORY + in_files[i]);
          listbox->add_item(1+j++, in_files[i].c_str());
       }
    }
@@ -1308,15 +1308,13 @@ ViewUI::update_bkg()
 
    _checkbox[CHECK_PAPER]->set_int_val((_view->get_use_paper())?(1):(0));
 
-   int i = _bkgtex_filenames.get_index(_view->get_bkg_file());
-   if (i==BAD_IND)
+   vector<string>::iterator i = std::find(_bkgtex_filenames.begin(), _bkgtex_filenames.end(), _view->get_bkg_file());
+   if (i == _bkgtex_filenames.end())
       _listbox[LIST_BKGTEX]->set_int_val(0);
    else
-      _listbox[LIST_BKGTEX]->set_int_val(i+1);
-
-
-
+      _listbox[LIST_BKGTEX]->set_int_val(i - _bkgtex_filenames.begin() + 1);
 }
+
 /////////////////////////////////////
 // update_paper()
 /////////////////////////////////////
@@ -1324,12 +1322,12 @@ ViewUI::update_bkg()
 void
 ViewUI::update_paper()
 {
-
-   int i = _paper_filenames.get_index(PaperEffect::get_paper_tex());
-   if (i==BAD_IND)
+   vector<string>::iterator i;
+   i = std::find(_paper_filenames.begin(), _paper_filenames.end(), PaperEffect::get_paper_tex());
+   if (i == _paper_filenames.end())
       _listbox[LIST_PAPER]->set_int_val(0);
    else
-      _listbox[LIST_PAPER]->set_int_val(i+1);
+      _listbox[LIST_PAPER]->set_int_val(i - _paper_filenames.begin() + 1);
 
    _slider[SLIDE_BRIG]->set_float_val(PaperEffect::get_brig());
    _slider[SLIDE_CONT]->set_float_val(PaperEffect::get_cont());
@@ -1517,12 +1515,11 @@ ViewUI::apply_bkg()
 
    int i = _listbox[LIST_BKGTEX]->get_int_val();
    if (i == 0)
-      _view->set_bkg_file(NULL_STR);
+      _view->set_bkg_file("");
    else {
       if (_view->get_bkg_file() != _bkgtex_filenames[i-1])
          _view->set_bkg_file(_bkgtex_filenames[i-1]);
    }
-
 }
 
 /////////////////////////////////////
@@ -1537,7 +1534,7 @@ ViewUI::apply_paper()
 
    int i = _listbox[LIST_PAPER]->get_int_val();
    if (i == 0)
-      PaperEffect::set_paper_tex(NULL_STR);
+      PaperEffect::set_paper_tex("");
    else
       PaperEffect::set_paper_tex(_paper_filenames[i-1]);
 

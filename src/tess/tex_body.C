@@ -47,20 +47,20 @@ static int foo = DECODER_ADD(TEXBODY);
 TEXBODY::TEXBODY() :
    _apply_xf(0),
    _skel_curves_visible(false),
-   _mesh_file(NULL_STR),
-   _mesh_update_file(NULL_STR),
+   _mesh_file(""),
+   _mesh_update_file(""),
    _script(0)
 {
    // disallow a mesh from being added to the list twice
    _meshes.set_unique();
 }
 
-TEXBODY::TEXBODY(CGEOMptr& geom, Cstr_ptr& name) :
+TEXBODY::TEXBODY(CGEOMptr& geom, const string& name) :
    GEOM(geom, WORLD::unique_name(name)),
    _apply_xf(0),
    _skel_curves_visible(false),
-   _mesh_file(NULL_STR),
-   _mesh_update_file(NULL_STR),
+   _mesh_file(""),
+   _mesh_update_file(""),
    _script(0)
 {
    // disallow a mesh from being added to the list twice
@@ -83,12 +83,12 @@ TEXBODY::TEXBODY(CGEOMptr& geom, Cstr_ptr& name) :
    }
 }
 
-TEXBODY::TEXBODY(CBMESHptr& m, Cstr_ptr& name) :
+TEXBODY::TEXBODY(CBMESHptr& m, const string& name) :
    GEOM(WORLD::unique_name(name)),
    _apply_xf(0),
    _skel_curves_visible(false),
-   _mesh_file(NULL_STR),
-   _mesh_update_file(NULL_STR),
+   _mesh_file(""),
+   _mesh_update_file(""),
    _script(0)
 {
    // disallow a mesh from being added to the list twice
@@ -139,7 +139,7 @@ TEXBODY::display(CBMESHptr& mesh, MULTI_CMDptr cmd)
       return; // all done
 
    // If not, create one
-   TEXBODYptr tex = new TEXBODY(mesh, mesh->get_name().c_str());
+   TEXBODYptr tex = new TEXBODY(mesh, mesh->get_name());
 
    // Put it in the WORLD's DRAWN and EXIST lists:
    WORLD::create(tex, !cmd);
@@ -610,7 +610,7 @@ TEXBODY::bbox(int) const
 }
 
 GEOMptr
-TEXBODY::dup(Cstr_ptr &n) const
+TEXBODY::dup(const string &n) const
 {
    // See also TEXBODY::dup() below
 
@@ -776,16 +776,16 @@ TEXBODY::get_mesh_data_file(TAGformat &d)
          (cur = new LMESH);
    assert(cur);
 
-   str_ptr filename;
+   string filename;
    *d >> filename;
 
    if (filename == "NULL_STR") {
-      _mesh_file = NULL_STR;
+      _mesh_file = "";
       if (debug_io)
          err_msg("TEXBODY::get_mesh_data_file - Found NULL_STR");
    } else {
       _mesh_file = filename;
-      string fname = IOManager::load_prefix() + string(**_mesh_file);
+      string fname = IOManager::load_prefix() + _mesh_file;
       if (debug_io) {
          cerr << "TEXBODY::get_mesh_data_file: file: "
               << filename
@@ -806,19 +806,19 @@ TEXBODY::put_mesh_data_file(TAGformat &d) const
    if (IOManager::state() == IOManager::STATE_PARTIAL_SAVE)
       return;
 
-   if (_mesh_file == NULL_STR) {
+   if (_mesh_file == "") {
       err_msg("TEXBODY::put_mesh_data_file - Writing NULL_STR to file.");
       d.id();
-      *d << str_ptr("NULL_STR");
+      *d << "NULL_STR";
       d.end_id();
    } else {
       err_msg("TEXBODY::put_mesh_data_file - Writing '%s' to file",
-               **_mesh_file);
+              _mesh_file.c_str());
       d.id();
       *d << _mesh_file;
       d.end_id();
 
-      string fname = IOManager::save_prefix() + string(**_mesh_file);
+      string fname = IOManager::save_prefix() + _mesh_file;
 
       err_msg("TEXBODY::put_mesh_data_file - Exporting mesh data to '%s'...",
                fname.c_str());
@@ -875,7 +875,7 @@ TEXBODY::put_mesh_data(TAGformat &d) const
       return;
         
    BMESHptr cur = cur_rep();
-   if (cur && (_mesh_file == NULL_STR)) {
+   if (cur && (_mesh_file == "")) {
       err_msg("TEXBODY::put_mesh_data() - Writing embedded mesh data.");
 
       d.id();
@@ -898,7 +898,7 @@ TEXBODY::get_mesh_data_update_file(TAGformat &d)
 
    *d >> _mesh_update_file;
 
-   string fname = IOManager::load_prefix() + string(**_mesh_update_file);
+   string fname = IOManager::load_prefix() + _mesh_update_file;
 
    cur->read_file(fname.c_str());
 }
@@ -912,15 +912,15 @@ TEXBODY::put_mesh_data_update_file(TAGformat &d) const
    if (IOManager::state() != IOManager::STATE_PARTIAL_SAVE)
       return;
 
-   if (_mesh_update_file == NULL_STR) {}
+   if (_mesh_update_file == "") {}
    else {
-      err_msg("TEXBODY::put_mesh_data_update_file() - Writing '%s' to file.", **_mesh_update_file);
+      err_msg("TEXBODY::put_mesh_data_update_file() - Writing '%s' to file.", _mesh_update_file.c_str());
 
       d.id();
       *d << _mesh_update_file;
       d.end_id();
 
-      string fname = IOManager::save_prefix() + string(**_mesh_update_file);
+      string fname = IOManager::save_prefix() + _mesh_update_file;
 
       err_msg("TEXBODY::put_mesh_data_update_file() - Exporting mesh data to '%s'...", fname.c_str());
 
@@ -952,7 +952,7 @@ TEXBODY::get_mesh_data_update(TAGformat &d)
 
    //If the data's embedded in the TEXBODY, we're not expecting
    //an external file reference...
-   _mesh_update_file = NULL_STR;
+   _mesh_update_file = "";
 }
 
 void
@@ -965,7 +965,7 @@ TEXBODY::put_mesh_data_update(TAGformat &d) const
 
    BMESHptr cur = cur_rep();
 
-   if (cur && (_mesh_update_file == NULL_STR)) {
+   if (cur && (_mesh_update_file == "")) {
       err_msg("TEXBODY::put_mesh_data_update() - Writing embedded mesh data update.");
 
       d.id();
@@ -992,16 +992,16 @@ TEXBODY::get_mesh_file(TAGformat &d)
    assert(cur);
 
 
-   str_ptr filename;
+   string filename;
    *d >> filename;
 
    if (filename == "NULL_STR") {
-      _mesh_file = NULL_STR;
+      _mesh_file = "";
       err_msg("TEXBODY::get_mesh_file() - Found NULL_STR");
    } else {
       _mesh_file = filename;
-      err_msg("TEXBODY::get_mesh_file() - Found '%s'", **filename);
-      cur->read_file(**_mesh_file);
+      err_msg("TEXBODY::get_mesh_file() - Found '%s'", filename.c_str());
+      cur->read_file(_mesh_file.c_str());
    }
 }
 
@@ -1047,10 +1047,10 @@ TEXBODY::get_mesh_update_file(TAGformat &d)
          (cur = new LMESH);
    assert(cur);
 
-   str_ptr filename;
+   string filename;
    *d >> filename;
 
-   cur->read_update_file(**filename);
+   cur->read_update_file(filename.c_str());
 }
 
 void
@@ -1144,7 +1144,7 @@ toon_tex()
    static TEXTUREglptr ret;
    if (!ret) {
       ret = new TEXTUREgl(
-         str_ptr(GtexUtil::toon_name(Config::get_var_str("HALO_TEX","halo_white2.png")).c_str())
+         GtexUtil::toon_name(Config::get_var_str("HALO_TEX","halo_white2.png"))
          );
       ret->set_wrap_s(GL_CLAMP_TO_EDGE);
       ret->set_wrap_t(GL_CLAMP_TO_EDGE);

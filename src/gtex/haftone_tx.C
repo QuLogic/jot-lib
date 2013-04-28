@@ -45,7 +45,9 @@ halftone_layer_t::get_var_locs(int i, GLuint& program)
 {
    layer_base_t::get_var_locs(i,program);
 
-   str_ptr p = str_ptr("layer[") + str_ptr(i);
+   char tmp[32];
+   sprintf(tmp, "%d", i);
+   string p = string("layer[") + tmp;
 
    get_uniform_loc(p + "].use_tone_correction",
                    _use_tone_correction_loc, program);
@@ -410,7 +412,7 @@ Halftone_TX::set_style(int s)
      //   craqulure-ht.png
      //   cross_fibre-ht.png
      //   finger_print-ht.png
-     _current_pattern = str_ptr("finger_print-ht.png");
+     _current_pattern = "finger_print-ht.png";
 
      _use_correction = false;
      _lod_only_corr = false;
@@ -472,7 +474,7 @@ Halftone_TX::set_style(int s)
      break;
 
      case 3:
-     _current_pattern = str_ptr("pattern5.png");
+     _current_pattern = "pattern5.png";
 
      //set_color(23, 93, 50);
 
@@ -511,7 +513,7 @@ Halftone_TX::set_style(int s)
 
      // colors from durer
 
-     _current_pattern = str_ptr("finger_print-ht.png");
+     _current_pattern = "finger_print-ht.png";
 
      _use_correction = false;
      _lod_only_corr = false;
@@ -557,7 +559,7 @@ Halftone_TX::set_style(int s)
      //   craqulure-ht.png
      //   cross_fibre-ht.png
      //   finger_print-ht.png
-     _current_pattern = str_ptr("finger_print-ht.png");
+     _current_pattern = "finger_print-ht.png";
 
      _use_correction = false;
      _lod_only_corr = false;
@@ -609,7 +611,7 @@ Halftone_TX::set_style(int s)
      case 7:
      // colors from roy lichtenstein, "Girl with ball"
 
-     _current_pattern = str_ptr("big_rough-ht.png");
+     _current_pattern = "big_rough-ht.png";
 
      _use_correction = false;
      _lod_only_corr = false;
@@ -1178,7 +1180,7 @@ Halftone_TX::disable_lod_only_correction(int layer_num)
 }
 
 void 
-Halftone_TX::set_texture_pattern(int layer, str_ptr file_name)
+Halftone_TX::set_texture_pattern(int layer, string file_name)
 {
    GLSLShader_Layer_Base::set_texture_pattern(
       layer,"nprdata/haftone_textures/",file_name
@@ -1242,7 +1244,7 @@ Halftone_TX::get_layer(TAGformat &d)
 
    // save the name here so we can load the texture properly
    // in set_texture_pattern(), below:
-   str_ptr pattern_name = layer->_pattern_name;
+   string pattern_name = layer->_pattern_name;
    layer->_pattern_name = "";
 
    // save the parameters because pattern loading resets these

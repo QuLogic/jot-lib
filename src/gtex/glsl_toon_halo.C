@@ -31,13 +31,13 @@ static bool debug = Config::get_var_bool("DEBUG_GLSL_TOON", false);
 GLSLToonShaderHalo::GLSLToonShaderHalo(Patch* p) :
    GLSLShader(p, new VertNormStripCB)
 {
-   set_tex(str_ptr(GtexUtil::toon_name(
+   set_tex(GtexUtil::toon_name(
       Config::get_var_str("HALO_TEX","halo_white2.png")
-      ).c_str()));
+      ));
 }
 
 void 
-GLSLToonShaderHalo::set_tex(Cstr_ptr& filename)
+GLSLToonShaderHalo::set_tex(const string& filename)
 {
    // Set the name of the texture to use
    if (_tex) {

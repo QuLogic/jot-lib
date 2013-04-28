@@ -29,7 +29,7 @@ inline GTexture*
 get_tone_shader(Patch* p)
 {
    ToneShader* ret = new ToneShader(p);
-   ret->set_tex(str_ptr((Config::JOT_ROOT() + "nprdata/toon_textures/clear-black.png").c_str()));
+   ret->set_tex(Config::JOT_ROOT() + "nprdata/toon_textures/clear-black.png");
    return ret;
 }
 
