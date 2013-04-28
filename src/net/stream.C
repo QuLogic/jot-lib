@@ -39,8 +39,8 @@ STDdstream::STDdstream():
    _istream(0),
    _ostream(0),
    _indent(0),
-   _fail(STD_FALSE),
-   _block(STD_TRUE) 
+   _fail(false),
+   _block(true)
 {
 }
 
@@ -49,8 +49,8 @@ STDdstream::STDdstream(iostream* s):
    _istream(0),
    _ostream(0),
    _indent(0),
-   _fail(STD_FALSE),
-   _block(STD_TRUE) 
+   _fail(false),
+   _block(true)
 {
 }
 
@@ -59,8 +59,8 @@ STDdstream::STDdstream(istream* s):
    _istream(s),
    _ostream(0),
    _indent(0),
-   _fail(STD_FALSE),
-   _block(STD_TRUE) 
+   _fail(false),
+   _block(true)
 {
 }
 
@@ -69,8 +69,8 @@ STDdstream::STDdstream(ostream* s):
    _istream(0),
    _ostream(s),
    _indent(0),
-   _fail(STD_FALSE),
-   _block(STD_TRUE) 
+   _fail(false),
+   _block(true)
 {
 }
 
@@ -86,7 +86,7 @@ STDdstream::peekahead()
    {
       //This is sometimes used to entice an EOF
       //to detect the end of input streams.  In this
-      //case, the ensuing _fail=STD_TRUE is undesirable...
+      //case, the ensuing _fail=true is undesirable...
       
       bool was_good = !fail();
       
@@ -94,7 +94,7 @@ STDdstream::peekahead()
       
       if (fail() && eof() && was_good)
       {
-         _fail = STD_FALSE;
+         _fail = false;
       }
 
       istr()->putback(c);
@@ -125,7 +125,7 @@ STDdstream::write (
       
    /* Since flushes aren't guaranteed anyway, we don't care what happened */
    if (!_block)
-      _fail = STD_FALSE;
+      _fail = false;
 }
 
 
@@ -171,11 +171,11 @@ STDdstream::read (
            _in_queue.get (data, count);
       else _in_queue.peek(data, count);
 
-      _fail = STD_FALSE;
+      _fail = false;
    }
    else {
       cerr << "Failed to read message" << endl;
-      _fail = STD_TRUE;
+      _fail = true;
    }
 }
 
@@ -212,7 +212,7 @@ STDdstream::flush (void)
    if (buffer)
       free(buffer);
 
-   _fail = (_out_queue.count () > 0) ? STD_TRUE : STD_FALSE;
+   _fail = (_out_queue.count () > 0);
 }
 
 
@@ -324,7 +324,7 @@ operator >> (STDdstream &ds, char * &data)
    if (ds.ascii())
    {
       *ds.istr() >> data;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
    }
    else {
       ds.read_delim();
@@ -343,7 +343,7 @@ operator << (STDdstream &ds, const char * const data)
    if (ds.ascii()) 
    {
       *ds.ostr() << data;
-      ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.ostr()->fail();
    } else {
       ds.write_delim(' ');   // write out the delimiter
 
@@ -367,7 +367,7 @@ operator >> (STDdstream &ds, string &data)
    if (ds.ascii()) 
    {
       *ds.istr() >> usebuff;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
       data = string(usebuff);
    } else {
       ds.read_delim();
@@ -394,7 +394,7 @@ operator << (STDdstream &ds, const string &data)
    if (ds.ascii())
    {
       *ds.ostr() << data.c_str() << " ";
-      ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.ostr()->fail();
    }
    else {
       ds.write_delim(' '); // write out the delimiter 
@@ -414,7 +414,7 @@ operator >> (STDdstream &ds, short &data)
    if (ds.ascii()) 
    {
        *ds.istr() >> data;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else {
       assert(0);
@@ -429,7 +429,7 @@ operator << (STDdstream &ds, short data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       assert(0);
@@ -449,7 +449,7 @@ operator >> (STDdstream &ds, int &data)
    if (ds.ascii()) 
    {
       *ds.istr() >> data;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
    } 
    else {
       INIT_UNPACK;
@@ -463,7 +463,7 @@ operator << (STDdstream &ds, int data)
    if (ds.ascii()) 
    {
       *ds.ostr() << data << " ";
-      ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.ostr()->fail();
    } 
    else {
       assert(0);
@@ -483,7 +483,7 @@ operator >> (STDdstream &ds, long &data)
    if (ds.ascii()) 
    {
       *ds.istr() >> data;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
    }
    else {
       INIT_UNPACK;
@@ -497,7 +497,7 @@ operator << (STDdstream &ds, long data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       INIT_PACK;
@@ -516,7 +516,7 @@ operator >> (STDdstream &ds, unsigned short &data)
    if (ds.ascii()) 
    {
        *ds.istr() >> data;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else {
       INIT_UNPACK;
@@ -530,7 +530,7 @@ operator << (STDdstream &ds, unsigned short data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       INIT_PACK;
@@ -549,7 +549,7 @@ operator >> (STDdstream &ds, unsigned int &data)
    if (ds.ascii()) 
    {
       *ds.istr() >> data;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
    }
    else {
       INIT_UNPACK;
@@ -563,7 +563,7 @@ operator << (STDdstream &ds, unsigned int data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       INIT_PACK;
@@ -582,7 +582,7 @@ operator >> (STDdstream &ds, unsigned long &data)
    if (ds.ascii()) 
    {
        *ds.istr() >> data;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else {
       INIT_UNPACK;
@@ -596,7 +596,7 @@ operator << (STDdstream &ds, unsigned long data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       INIT_PACK;
@@ -615,7 +615,7 @@ operator >> (STDdstream &ds, float &temp)
    if (ds.ascii()) 
    {
        *ds.istr() >> temp;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else {
       // This is called data because INIT_UNPACK uses the size of "data"
@@ -632,7 +632,7 @@ operator << (STDdstream &ds, float data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       double temp = data;
@@ -652,7 +652,7 @@ operator >> (STDdstream &ds, double &data)
    if (ds.ascii()) 
    {
       *ds.istr() >> data;
-      ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+      ds._fail = ds.istr()->fail();
    } 
    else {
       INIT_UNPACK;
@@ -666,7 +666,7 @@ operator << (STDdstream &ds, double data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       INIT_PACK;
@@ -685,7 +685,7 @@ operator >> (STDdstream &ds, char &data)
    if (ds.ascii()) 
    {
        *ds.istr() >> data;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else  {
       ds.read_delim();
@@ -700,7 +700,7 @@ operator << (STDdstream &ds, char data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       ds.write_delim(' ');
@@ -719,7 +719,7 @@ operator >> (STDdstream &ds, unsigned char &data)
    if (ds.ascii()) 
    {
        *ds.istr() >> data;
-       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.istr()->fail();
    }
    else {
       ds.read_delim();
@@ -734,7 +734,7 @@ operator << (STDdstream &ds, unsigned char data)
    if (ds.ascii()) 
    {
        *ds.ostr() << data << " ";
-       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
+       ds._fail = ds.ostr()->fail();
    }
    else {
       ds.write_delim(' ');   // write out the delimiter 

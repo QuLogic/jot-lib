@@ -32,10 +32,6 @@
 
 typedef char   	    UGAgeneric;
 typedef UGAgeneric *UGAptr;
-typedef enum {
-     STD_FALSE = 0,
-     STD_TRUE  = 1
-} STDbool;
 
 /* --------------------------     Classes      ----------------------------- */
 
@@ -57,7 +53,7 @@ class mem_push {
     mem_push(size_t datasize = sizeof(UGAgeneric));
     virtual ~mem_push();
 
-   STDbool is_empty () const { return num_objects == 0 ? STD_TRUE : STD_FALSE; }
+   bool is_empty () const { return num_objects == 0; }
    
    void remove_all() {remove_top(0, count());}
 

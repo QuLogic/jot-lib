@@ -463,7 +463,7 @@ NetStream::NetStream(
    else
       no_linger(_fd);
 
-   block(STD_FALSE);
+   block(false);
 
    if (_fd != -1) {
       set_blocking(false);
@@ -505,7 +505,7 @@ NetStream::NetStream(
       }
    }
 
-   block(STD_FALSE);
+   block(false);
 }
 
 NetStream::NetStream(
@@ -572,7 +572,7 @@ NetStream::NetStream(
    //       Hopefully we don't need it:
    _fd = -1;  
 
-   block(STD_FALSE);
+   block(false);
 }
 
 

@@ -952,7 +952,7 @@ DISTRIB::save(
 
    // Now save things...
 
-   s.block(STD_FALSE);  // Make sure we are non-blocking
+   s.block(false);  // Make sure we are non-blocking
 
    if (!s.STDdstream::ascii())
    {

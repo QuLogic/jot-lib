@@ -74,10 +74,10 @@ class STDdstream {
    int     eof() const { return istr() ? istr()->eof(): !_in_queue.count(); }
 
    void    ws(const char *);
-   STDbool operator ! ()        const { return _fail; }
-   STDbool fail       ()        const { return _fail; }
-   STDbool block      ()        const { return _block; }
-   STDbool block(STDbool flag)        { STDbool old=_block; _block = flag; return old; }
+   bool    operator ! ()        const { return _fail; }
+   bool    fail       ()        const { return _fail; }
+   bool    block      ()        const { return _block; }
+   bool    block(bool flag)           { bool old=_block; _block = flag; return old; }
    // Get a string with spaces in it - the same as STDdstream >> string when
    // using a binary stream, but different when doing ascii
    string get_string_with_spaces();
@@ -95,8 +95,8 @@ class STDdstream {
    int          _indent;
 
  private:
-   STDbool      _fail;
-   STDbool      _block;
+   bool         _fail;
+   bool         _block;
 
  //So _fail can get set by ascii IO...
    friend STDdstream & operator >> (STDdstream &, char &);
