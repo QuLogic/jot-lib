@@ -78,7 +78,7 @@ FLOOR::FLOOR(
    assert(p);
    m->compute_creases();
   
-   m->set_render_style(str_ptr(KeyLineTexture::static_name().c_str()));
+   m->set_render_style(KeyLineTexture::static_name());
 
    KeyLineTexture* key = get_keyline(p);
    assert(key);

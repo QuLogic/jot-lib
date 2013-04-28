@@ -106,7 +106,7 @@ NPRPen::activate(State *s)
 
    //Change to patch's desired textures
    if (_view)
-     _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
+     _view->set_rendering(GTexture::static_name());
 }
 
 /////////////////////////////////////

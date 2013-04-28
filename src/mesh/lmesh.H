@@ -283,16 +283,16 @@ class LMESH : public BMESH {
    // override the current rendering style of the view. i.e., almost
    // never. Virtual methods over-rode in LMESH to deflect calls to
    // the control mesh.
-   virtual void set_render_style(Cstr_ptr& s) {
+   virtual void set_render_style(const string& s) {
       control_mesh()->BMESH::set_render_style(s);
    }
-   virtual void push_render_style(Cstr_ptr& s) {
+   virtual void push_render_style(const string& s) {
       control_mesh()->BMESH::push_render_style(s);
    }
    virtual void pop_render_style() {
       control_mesh()->BMESH::pop_render_style();
    }
-   virtual Cstr_ptr& render_style() const {
+   virtual const string& render_style() const {
       return control_mesh()->BMESH::render_style();
    }
 

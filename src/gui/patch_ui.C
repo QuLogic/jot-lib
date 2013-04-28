@@ -341,7 +341,7 @@ PatchUI::apply_changes_to_patch(operation_id_t op, Patch* p)
          if(cur_texture)
             cur_texture->set_patch(p);   
          //activate_this_texture(cur_texture);
-         VIEW::peek()->set_rendering(str_ptr("Textured patch"));     
+         VIEW::peek()->set_rendering("Textured patch");
       }
    }
    if((op==OP_ALL) || (op==OP_USE_DIRECTION)){

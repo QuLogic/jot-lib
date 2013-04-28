@@ -3820,14 +3820,14 @@ void
 BMESH::put_render_style(TAGformat &d) const
 {
    /* XXX - Saving this makes the texture menu ineffectual...
-      str_ptr style;
+      string style;
     
       if (_render_style.num())
       // XXX - What does this mean?!?!?!?
       // this ain't right, but shifting out the str_list _render_style
       // doesn't get decoded on the other side right because individual
       // elements aren't separatable.
-      style = _render_style.last();
+      style = _render_style.back();
       else
       style = VIEW::peek()->rendering();
     
@@ -4085,7 +4085,7 @@ BMESH::get_render_style(TAGformat &d)
    str_ptr style = (*d).get_string_with_spaces();
 
    //   _render_style.clear();
-   //   _render_style += style;
+   //   _render_style.push_back(style);
 
    //   changed(RENDERING_CHANGED);  // XXX - ?
 }
@@ -4661,19 +4661,19 @@ BMESH::compute_pix_size()
 // i.e., almost never.
 //
 void
-BMESH::set_render_style(Cstr_ptr& s)
+BMESH::set_render_style(const string& s)
 {
    if (_render_style.empty())
       push_render_style(s) ;
    else
-      _render_style.last() = s;
+      _render_style.back() = s;
    changed(RENDERING_CHANGED);
 }
 
 void
-BMESH::push_render_style(Cstr_ptr& s)
+BMESH::push_render_style(const string& s)
 {
-   _render_style += s;
+   _render_style.push_back(s);
    changed(RENDERING_CHANGED);
 }
 
@@ -4681,14 +4681,14 @@ void
 BMESH::pop_render_style()
 {
    if (!_render_style.empty())
-      _render_style.pop();
+      _render_style.pop_back();
    changed(RENDERING_CHANGED);
 }
 
-Cstr_ptr&
+const string&
 BMESH::render_style() const
 {
-   return _render_style.empty() ? str_ptr::null_str() : _render_style.last();
+   return _render_style.empty() ? "" : _render_style.back();
 }
 
 void 

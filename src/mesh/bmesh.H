@@ -181,12 +181,12 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    // override the current rendering style of the view. i.e., almost
    // never. Virtual methods over-rode in LMESH to deflect calls to
    // the control mesh.
-   virtual void set_render_style(Cstr_ptr& s);
-   virtual void push_render_style(Cstr_ptr& s);
+   virtual void set_render_style(const string& s);
+   virtual void push_render_style(const string& s);
    virtual void pop_render_style();
-   virtual Cstr_ptr& render_style() const;
+   virtual const string& render_style() const;
 
-   void toggle_render_style(Cstr_ptr& s) {
+   void toggle_render_style(const string& s) {
       if (render_style() == s)  pop_render_style();
       else                      push_render_style(s);
    }
@@ -737,7 +737,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    //******** RENDERING STUFF ********
    RefImageClient_list  _drawables;     ///< list of drawable things
-   LIST<str_ptr>        _render_style;  ///< name of render style to use (if any)
+   vector<string>       _render_style;  ///< name of render style to use (if any)
    bool                 _draw_enabled;  ///< flag to enable/disable drawing
    double               _pix_size;      ///< approx pix size
    uint                 _pix_size_stamp;///< for caching per-frame

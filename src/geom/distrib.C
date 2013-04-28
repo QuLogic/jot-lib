@@ -97,16 +97,16 @@ class JOTrender_mode : public FUNC_ITEM
       *d << VIEW::peek()->rendering();
       err_adv(debug, 
          "JOTrender_mode::put: Pushing rendering mode: '%s'", 
-            **VIEW::peek()->rendering());
+            VIEW::peek()->rendering().c_str());
    }
    virtual void  get (TAGformat &d) 
    {
-      str_ptr mode;
+      string mode;
       *d >> mode;
       VIEW::peek()->set_rendering(mode);
       err_adv(debug, 
          "JOTrender_mode::put: Setting rendering mode from network to: '%s'", 
-            **mode);
+            mode.c_str());
    }
 };
 

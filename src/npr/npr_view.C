@@ -194,7 +194,7 @@ NPRview::set_size(int w, int h, int x, int y)
 static bool started_drawing = false;
 
 void   
-NPRview::set_rendering(Cstr_ptr &)
+NPRview::set_rendering(const string &)
 {
    // XXX - should use observers for rendering changes
 

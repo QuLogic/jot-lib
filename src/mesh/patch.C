@@ -628,12 +628,11 @@ Patch::get_tex(const string& tex_name)
 GTexture*
 Patch::cur_tex(CVIEWptr& v)
 {
-
    // What name are we going for?
-   string tex_name = string(**
-      (_mesh->render_style() == str_ptr::null_str() ?
+   string tex_name =
+      _mesh->render_style().empty() ?
       v->rendering() :
-      _mesh->render_style()));
+      _mesh->render_style();
 
    if (tex_name == GTexture::static_name()) {
       GTexture* tex = cur_tex();

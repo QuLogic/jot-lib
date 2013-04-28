@@ -97,14 +97,14 @@ PatchPen::activate(State* s)
    Pen::activate(s);
    if (_view) {
       _prev_rendering = _view->rendering();
-      _view->set_rendering(str_ptr(PatchColorTexture::static_name().c_str()));
+      _view->set_rendering(PatchColorTexture::static_name());
    }
 }
 
 bool
 PatchPen::deactivate(State* s)
 {
-   if (_view && _view->rendering() == str_ptr(PatchColorTexture::static_name().c_str())) {
+   if (_view && _view->rendering() == PatchColorTexture::static_name()) {
       _view->set_rendering(_prev_rendering);
    }
    return Pen::deactivate(s);

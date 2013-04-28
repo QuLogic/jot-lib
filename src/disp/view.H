@@ -145,7 +145,7 @@ class REF_CLASS(VIEWimpl) {
    };
    virtual        ~VIEWimpl()                    {}
    virtual void   set_view(CVIEWptr &v)          { _view = v; }
-   virtual void   set_rendering(Cstr_ptr &)      {}
+   virtual void   set_rendering(const string&)   {}
    virtual void   set_stereo (stereo_mode)       {}
    virtual void   set_size   (int, int, int, int){}
    virtual void   set_cursor (int)               {} // Switch to 'i'th cursor
@@ -304,7 +304,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
 
    static VIEWlist _views;       // view stack used by points.H types
-   static str_list _rend_types;  // list of rendering styles
+   static vector<string> _rend_types;  // list of rendering styles
 
    VIEWimpl     *_impl;          // display implementation
 
@@ -326,7 +326,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    COLOR         _bkgnd_col;     // background color of view
 
    stereo_mode   _stereo;        // whether we're in stereo mode
-   str_ptr       _render_type;   // the current render technique
+   string        _render_type;   // the current render technique
    int           _tris;          // number of triangles drawn
 
    bool          _is_clipping;   // Is a clipping plane in effect?
@@ -665,9 +665,9 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    static unsigned int  stamp()                    { return _stamp; }
 
-   static void          add_rend_type(const string &r) { _rend_types += str_ptr(r.c_str()); }
-   static Cstr_list&    rend_list()                { return _rend_types; }
-   static void          set_rend_list(Cstr_list& l){ _rend_types = l; }
+   static void                  add_rend_type(const string &r)        { _rend_types.push_back(r); }
+   static const vector<string>& rend_list()                           { return _rend_types; }
+   static void                  set_rend_list(const vector<string>& l){ _rend_types = l; }
 
    static int           num_views()                { return _num_views;}
 
@@ -705,9 +705,9 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    //!METHS: general rendering parameters
    void        stereo(stereo_mode m)      { _stereo      = m;}
    stereo_mode stereo()             const { return   _stereo;}
-   void        set_rendering(Cstr_ptr &s) { _render_type = s;
+   void        set_rendering(const string &s) { _render_type = s;
    if (_impl) _impl->set_rendering(s);}
-   Cstr_ptr&   rendering()          const { return _render_type; }
+   const string&rendering()          const { return _render_type; }
    int         tris()               const { return _tris; }
    double      line_scale()         const { return _line_scale; }
    bool        grabbing_screen()    const { return _grabbing_screen; }

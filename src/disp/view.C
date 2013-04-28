@@ -96,7 +96,7 @@ const string RSIL_FRAME      ("Sil Frame");
 //
 // List of rendering types
 //
-str_list                   VIEW::_rend_types(25); 
+vector<string>             VIEW::_rend_types(25);
 VIEWlist                   VIEW::_views;
 VIEWlist                   VIEWS;
 VIEWobs::view_list        *VIEWobs::_view_obs;
@@ -1264,7 +1264,7 @@ VIEW::VIEW(
    init_jitter();
 
    _stereo      = VIEWimpl::NONE;
-   _render_type = str_ptr(Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE).c_str());
+   _render_type = Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE);
    _name        = s;
    _tris        = 0;
 

@@ -731,10 +731,10 @@ BaseJOTapp::init_interact_cb(WINDOW &win)
 class RenderSet : public MenuItem {
  protected:
    VIEWptr  _view;
-   Cstr_ptr  _render_mode;
+   const string _render_mode;
  public:
-   RenderSet(CVIEWptr &view, Cstr_ptr &m) :
-      MenuItem(**m),
+   RenderSet(CVIEWptr &view, const string &m) :
+      MenuItem(m),
       _view(view),
       _render_mode(m) {}
    virtual void exec(CXYpt &) { _view->set_rendering(_render_mode); }
@@ -743,8 +743,8 @@ class RenderSet : public MenuItem {
 inline void
 add_render_styles(CVIEWptr& view, MoveMenu* menu)
 {
-   str_list rend_modes = view->rend_list();
-   for (int i=0; i<rend_modes.num(); i++) {
+   vector<string> rend_modes = view->rend_list();
+   for (vector<string>::size_type i = 0; i < rend_modes.size(); i++) {
       menu->items() += new RenderSet(view, rend_modes[i]); 
    }
 }

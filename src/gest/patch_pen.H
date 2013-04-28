@@ -116,7 +116,7 @@ class PatchPen : public Pen {
  protected:
    //******** MEMBER DATA ********
    // rendering style before activating pen:
-   str_ptr              _prev_rendering; 
+   string               _prev_rendering;
    CHANGE_PATCH_CMDptr  _cmd; // command that does all the work
 
    //******** UTILITIES ********

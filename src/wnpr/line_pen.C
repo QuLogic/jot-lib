@@ -195,7 +195,7 @@ LinePen::activate(State *s)
    _gest_int->set_drawer(_gesture_drawer);   
 
    //Change to patch's desired textures
-   if (_view) _view->set_rendering(str_ptr(GTexture::static_name().c_str()));
+   if (_view) _view->set_rendering(GTexture::static_name());
 }
 
 /////////////////////////////////////

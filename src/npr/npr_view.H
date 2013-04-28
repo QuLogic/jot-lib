@@ -43,7 +43,7 @@ class NPRview : public GL_VIEW {
 
    //******** VIEWimpl METHODS ********
    virtual void   set_view(CVIEWptr &);
-   virtual void   set_rendering(Cstr_ptr &s);
+   virtual void   set_rendering(const string &s);
    virtual void   set_size(int w, int h, int x, int y);
    virtual void   draw_setup();
 

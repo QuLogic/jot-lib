@@ -346,8 +346,8 @@ JOTapp::init_scene()
    // variable gives a different default:
    for (it = _windows.begin(); it != _windows.end(); ++it) {
       WINDOW *win = *it;
-      win->_view->set_rendering(str_ptr(
-         Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE).c_str()));
+      win->_view->set_rendering(
+         Config::get_var_str("JOT_RENDER_STYLE", RSMOOTH_SHADE));
    }
 }
 
@@ -2092,7 +2092,7 @@ toggle_sil_frame(const Event&, State *&)
    if (!mesh)
       return 0;
 
-   mesh->toggle_render_style(str_ptr(SilFrameTexture::static_name().c_str()));
+   mesh->toggle_render_style(SilFrameTexture::static_name());
 
    return 0;
 }

@@ -99,7 +99,7 @@ connectivity_edit()
    // When the global rendering style is ControlLineTexture,
    // editing of mesh connectivity is considered to be enabled.
    
-   return (VIEW::peek()->rendering() == str_ptr(ControlLineTexture::static_name().c_str()));
+   return (VIEW::peek()->rendering() == ControlLineTexture::static_name());
 }
 /*****************************************************************
  * WidgetGuard:
@@ -1940,7 +1940,7 @@ DrawPen::activate(State *start)
 
    // Change to control line texture
    if (_view)
-      _view->set_rendering(str_ptr(ControlLineTexture::static_name().c_str()));
+      _view->set_rendering(ControlLineTexture::static_name());
 
    // Turn on floor
    FLOOR::show();

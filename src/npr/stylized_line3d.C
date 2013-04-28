@@ -29,7 +29,7 @@ using mlib::CWpt_list;
 inline bool 
 is_stylized() 
 {
-   return VIEW::peek()->rendering() == str_ptr(FFSTexture::static_name().c_str()) ||
+   return VIEW::peek()->rendering() == FFSTexture::static_name() ||
       VIEW::peek()->rendering() == "FFSTexture2";
 }
 
