@@ -195,8 +195,8 @@ BStrokePool::get_stroke(TAGformat &d)
 {
 //   cerr << "BStrokePool::get_stroke()\n";
 
-   str_ptr str;
-   *d >> str;      
+   string str;
+   *d >> str;
 
    DATA_ITEM *data_item = DATA_ITEM::lookup(str);
 
@@ -538,8 +538,8 @@ read_stroke(istream &is, OutlineStroke*& stroke)
    STDdstream d(&is);
 
    //Grab the class name... should be OutlineStroke
-   str_ptr name;
-   d >> name;      
+   string name;
+   d >> name;
 
 //    cerr << "BStrokePool<Global>::read_stroke() - Got class name: "
 //         << name << endl;

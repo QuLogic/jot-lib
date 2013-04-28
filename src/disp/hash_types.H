@@ -89,7 +89,7 @@ class hashdist : public DATA_ITEM, public GELdistobs,
       virtual void     notify_dup  (CGELptr &old,CGELptr &newg) = 0;
       virtual void     put_var(TAGformat &d,  CGELptr &g) const=0;
       virtual void     notify_distrib(STDdstream &ds,CGELptr&g) {
-                               TAGformat d(&ds,str_ptr(class_name().c_str()),1); put_var(d,g);}
+                               TAGformat d(&ds,class_name(),1); put_var(d,g);}
 };
 
 template <class T>
@@ -161,7 +161,7 @@ class hashenum : public hashdist {
                                             HASHobs::notify_hash_obs(g,this); }
    
     // 2005 VS generates compiler warnings for this funcion 		   
-   //virtual str_ptr enum_to_str(T e) const { char b[20];sprintf(b,"%d",(int)e); 
+   //virtual string enum_to_str(T e) const { char b[20];sprintf(b,"%d",(int)e);
    //                                         return b; }
    virtual T    str_to_enum(const string &s) const { return (T)atoi(s.c_str()); }
    virtual void put_var(TAGformat &d, CGELptr &gel) const {

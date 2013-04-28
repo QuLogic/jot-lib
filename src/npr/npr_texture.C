@@ -795,7 +795,7 @@ NPRTexture::tags() const
 STDdstream  &
 NPRTexture::old_format(STDdstream &ds) const
 {
-   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
+   TAGformat d(&ds, class_name(), 1);
 
    err_mesg(ERR_LEV_WARN, "NPRTexture::old_format()");
 

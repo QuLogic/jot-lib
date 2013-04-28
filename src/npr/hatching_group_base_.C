@@ -1264,21 +1264,21 @@ void
 HatchingLevelBase::get_hatch(TAGformat &d)
 {
    //Grab the class name... should be HatchingHatchFixed, or HatchingHatchFree
-   str_ptr str;
+   string str;
    *d >> str;      
 
-   err_mesg(ERR_LEV_SPAM, "HatchingLevelBase::get_hatch() - Found: '%s'", **str);
+   err_mesg(ERR_LEV_SPAM, "HatchingLevelBase::get_hatch() - Found: '%s'", str.c_str());
 
    DATA_ITEM *data_item = DATA_ITEM::lookup(str);
 
    if (!data_item) 
    {
-      err_mesg(ERR_LEV_ERROR, "HatchingLevelBase::get_hatch() - Class: '%s' could not be found!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingLevelBase::get_hatch() - Class: '%s' could not be found!", str.c_str());
       return;
    }
    if (!HatchingHatchBase::isa(data_item)) 
    {
-      err_mesg(ERR_LEV_ERROR, "HatchingLevelBase::get_hatch() - Class: '%s' not derived from 'HatchingHatchBase'!", **str);
+      err_mesg(ERR_LEV_ERROR, "HatchingLevelBase::get_hatch() - Class: '%s' not derived from 'HatchingHatchBase'!", str.c_str());
       return;
    }
 

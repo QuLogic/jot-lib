@@ -842,18 +842,18 @@ TEXBODY::get_mesh_data(TAGformat &d)
          (cur = new LMESH);
    assert(cur);
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    DATA_ITEM *data_item = DATA_ITEM::lookup(str);
 
    if (!data_item) {
-      err_msg("TEXBODY::get_mesh_data() - Class name '%s' could not be found!!!!!!!", **str);
+      err_msg("TEXBODY::get_mesh_data() - Class name '%s' could not be found!!!!!!!", str.c_str());
       return;
    }
    if (!BMESH::isa(data_item)) {
       err_msg("TEXBODY::get_mesh_data() - Class name '%s' not a 'BMESH' or a derived class",
-              **str);
+              str.c_str());
       return;
    }
 

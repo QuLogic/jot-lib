@@ -602,7 +602,7 @@ Patch::get_tex(const string& tex_name)
       return tex;
 
    // if not found, instantiate it.
-   tex = (GTexture*)DATA_ITEM::lookup(str_ptr(tex_name.c_str()));
+   tex = (GTexture*)DATA_ITEM::lookup(tex_name);
    if (!tex)
       return 0;        // can't look it up
 

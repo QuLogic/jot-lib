@@ -134,7 +134,7 @@ class FLOOR : public DrawWidget {
    }
 
    // prevent warnings
-   static  DATA_ITEM  *lookup(Cstr_ptr& d) { return DATA_ITEM::lookup(d); }
+   static  DATA_ITEM  *lookup(const string& d) { return DATA_ITEM::lookup(d); }
 
    static FLOOR* null;
 

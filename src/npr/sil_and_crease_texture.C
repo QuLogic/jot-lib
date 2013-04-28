@@ -283,7 +283,7 @@ SilAndCreaseTexture::get_crease_pool(TAGformat &d)
 {
    //   cerr << "SilAndCreaseTexture::get_crease_pool()\n";
 
-   str_ptr str;
+   string str;
    *d >> str;
 
    DATA_ITEM *data_item = DATA_ITEM::lookup(str);

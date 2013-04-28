@@ -24,7 +24,7 @@ using mlib::Wpt;
 using mlib::Wvec;
 
 HASH *DATA_ITEM::_hash = 0;
-DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, Cstr_ptr&, DATA_ITEM*) = 0;
+DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, const string&, DATA_ITEM*) = 0;
 
 const string NAME_INT    ("int");
 const string NAME_DOUBLE ("double");
@@ -77,7 +77,7 @@ DATA_ITEM::Decode(
    ) 
 {
    // read the keyword or class name
-   str_ptr str; 
+   string str;
    d >> str;
 
    if (Config::get_var_bool("DEBUG_DATA_ITEM",false))
@@ -85,7 +85,7 @@ DATA_ITEM::Decode(
 
    DATA_ITEM* di = lookup(str);
    if (di) {
-      if (di->class_name() != string(**str)) {
+      if (di->class_name() != str) {
          // DATA_ITEM only decodes classes
          // app may be able to decode objects
          // if app can't, then it's an error
@@ -100,12 +100,12 @@ DATA_ITEM::Decode(
          if (!DelayDecoding) 
             di->decode(d);
       }
-   } else if (str) {
+   } else if (!str.empty()) {
       if (_decode_unknown)
          di = _decode_unknown(d, str, 0);
 
       if (!di) {
-         char *x = **str; char _buf[128], *buf = _buf;
+         const char *x = str.c_str(); char _buf[128], *buf = _buf;
          while (*x && isupper(*x)) 
             *buf++ = *x++;  
          *buf++ = '\0';  
@@ -120,7 +120,7 @@ DATA_ITEM::Decode(
 
 class COMMENT : public TAG {
    public:
-      COMMENT(Cstr_ptr &name = str_ptr("//")) : _name(name) {}
+      COMMENT(const string &name = "//") : _name(name) {}
       virtual ~COMMENT() {}
 
       STDdstream &format(CDATA_ITEM *, STDdstream &d) { return d; }
@@ -132,14 +132,14 @@ class COMMENT : public TAG {
             char name[size];
             d.istr()->getline(name, 1024);
          } else {
-            str_ptr str;
+            string str;
             d >> str;
          }
          return d;
       }
-      virtual Cstr_ptr &name() const { return _name; }
+      virtual const string &name() const { return _name; }
    protected:
-      Cstr_ptr  _name;
+      const string _name;
       TAGformat _delim;
 };
 
@@ -161,7 +161,7 @@ class COMMENT : public TAG {
 STDdstream &
 DATA_ITEM::decode(STDdstream &ds)
 {
-   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
+   TAGformat d(&ds, class_name(), 1);
    static COMMENT comment;
    
    d.read_id();                                 // read the start delimiter
@@ -170,7 +170,7 @@ DATA_ITEM::decode(STDdstream &ds)
       tags()[0]->decode(this, *d);                   // just call its decoder
    else
       while (d) {                  // if stream hasn't hit an end delimiter
-         str_ptr  tag_name;
+         string tag_name;
          *d >> tag_name;                         // read tag name,
          int j;
          for (j = 0; j < tags().num(); j++)  // then find tag reader
@@ -184,12 +184,12 @@ DATA_ITEM::decode(STDdstream &ds)
             } else { // skip over tag's data section
                int count = 0, finished = 0;
                while (!finished) {
-                  str_ptr s;
+                  string s;
                   *d >> s;
                   if (!count && s[0] != '{')  // tag is single-valued
                      break;
                   // skip over matching { }'s
-                  for (int x=0; x < (int)s->len(); x++) {
+                  for (string::size_type x=0; x < s.length(); x++) {
                      if (s[x] == '{')   count++;
                      if (s[x] == '}') { count--; if (count == 0) finished=1; }
                   }
@@ -210,7 +210,7 @@ DATA_ITEM::decode(STDdstream &ds)
 STDdstream  &
 DATA_ITEM::format(STDdstream &ds) const 
 {
-   TAGformat d(&ds, str_ptr(class_name().c_str()), 1);
+   TAGformat d(&ds, class_name(), 1);
 
    if (Config::get_var_bool("DEBUG_DATA_ITEM",false))
       cerr << "Formatting " << class_name() << endl;

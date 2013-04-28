@@ -60,33 +60,33 @@ class DATA_ITEM;
    ---------------------------------------------------------------------- */
 class TAGformat {
   protected :
-     str_ptr     _name;
+     string      _name;
      int         _multi;
      STDdstream *_ds;
   public:
-         TAGformat(STDdstream *d, Cstr_ptr &n,int m):_name(n),_multi(m),_ds(d){}
-         TAGformat(               Cstr_ptr &n,int m):_name(n),_multi(m),_ds(0){}
+         TAGformat(STDdstream *d, const string &n,int m):_name(n),_multi(m),_ds(d){}
+         TAGformat(               const string &n,int m):_name(n),_multi(m),_ds(0){}
          TAGformat() : _multi(0), _ds(0) {}
      void        set_stream(STDdstream *d) { _ds = d; }
      STDdstream &operator*()               { return *_ds; }
-     STDdstream &read_id()                 { if (_name != NULL_STR && _multi)
+     STDdstream &read_id()                 { if (_name != "" && _multi)
                                                 _ds->read_open_delim();
                                              return *_ds; }
-     STDdstream &read_end_id()             { if (_name != NULL_STR && _multi)
+     STDdstream &read_end_id()             { if (_name != "" && _multi)
                                                 _ds->read_close_delim();
                                              return *_ds; }
      STDdstream &id()                      { _ds->write_newline();
-                                             if (_name != NULL_STR) {
+                                             if (_name != "") {
                                                 *_ds << _name; _ds->ws("\t");
                                                 if (_multi)
                                                    _ds->write_open_delim();
                                              }
                                              return *_ds; }
-     STDdstream &end_id()                  { if (_name != NULL_STR && _multi)
+     STDdstream &end_id()                  { if (_name != "" && _multi)
                                                 _ds->write_close_delim();
                                              return *_ds; }
-     operator    int()                     { return !_ds->eof()&&_ds->check(); }
-     Cstr_ptr   &name()      const         { return _name; }
+     operator      int()                   { return !_ds->eof()&&_ds->check(); }
+     const string& name()      const       { return _name; }
 };
 
 
@@ -98,9 +98,9 @@ class TAG {
    public:
      TAG() { }
      virtual ~TAG() {}
-     virtual STDdstream &format(CDATA_ITEM *me, STDdstream &d) = 0;
-     virtual STDdstream &decode(CDATA_ITEM *me, STDdstream &d) = 0;
-     virtual Cstr_ptr   &name() const = 0;
+     virtual STDdstream   &format(CDATA_ITEM *me, STDdstream &d) = 0;
+     virtual STDdstream   &decode(CDATA_ITEM *me, STDdstream &d) = 0;
+     virtual const string &name() const = 0;
 };
 typedef ARRAY<TAG *> TAGlist;
 #define CTAGlist const TAGlist
@@ -125,7 +125,7 @@ class TAG_meth : public TAG {
      infunc    _decode;
   public:
     TAG_meth() { }
-    TAG_meth(Cstr_ptr &field_name, outfunc format, infunc decode, int multi=0): 
+    TAG_meth(const string &field_name, outfunc format, infunc decode, int multi=0):
                                         _delim(field_name, multi),
                                         _format(format), _decode(decode) { }
     virtual ~TAG_meth() {}
@@ -138,7 +138,7 @@ class TAG_meth : public TAG {
                                        (((T *)me)->*_decode)(_delim);
                                        _delim.read_end_id();
                                        return d; }
-    Cstr_ptr   &name()     const      { return _delim.name(); }
+    const string &name()     const   { return _delim.name(); }
 };
 
 template <class T, class V>
@@ -150,7 +150,7 @@ class TAG_val : public TAG {
    testval   _test;
  public:
    TAG_val() { }
-   TAG_val(Cstr_ptr &field_name, value val, testval test=0)
+   TAG_val(const string &field_name, value val, testval test=0)
       : _delim(field_name, 0), _value(val), _test(test) { }
    virtual ~TAG_val() {}
    STDdstream &format(CDATA_ITEM *me, STDdstream &d) {
@@ -170,7 +170,7 @@ class TAG_val : public TAG {
       { _delim.set_stream(&d);
       _delim.read_id()>>(((T *)me)->*_value)();
       return d; }
-   Cstr_ptr   &name()     const      { return _delim.name(); }
+   const string &name()     const      { return _delim.name(); }
 };
 
 #if WIN32_VCPLUSPLUS_DIDNT_HAVE_PROBLEMS
@@ -208,7 +208,7 @@ TAG *TAGmeth(char *str,
 class DATA_ITEM {
    private:
     static HASH *_hash;
-    static DATA_ITEM *(*_decode_unknown)(STDdstream &, Cstr_ptr &, DATA_ITEM *);
+    static DATA_ITEM *(*_decode_unknown)(STDdstream &, const string &, DATA_ITEM *);
    protected:
       int          _copy;
       TAGlist      _DEFINERtags;
@@ -231,12 +231,12 @@ class DATA_ITEM {
 
      /* -------- Class functions -------- */
  static  int         add_decoder(const string &d, DATA_ITEM *di, int copy= -1);
- static  void        set_default_decoder(DATA_ITEM *(*d)(STDdstream&, Cstr_ptr&,
+ static  void        set_default_decoder(DATA_ITEM *(*d)(STDdstream&, const string&,
                                                          DATA_ITEM *))
                                                  { _decode_unknown = d; }
  static  DATA_ITEM  *Decode     (STDdstream &d, int DelayDecoding = 0);
- static  DATA_ITEM  *lookup     (Cstr_ptr   &d) { return !_hash ? 0 : 
-                                                (DATA_ITEM *) _hash->find(**d);}
+ static  DATA_ITEM  *lookup     (const string &d) { return !_hash ? 0 :
+                                                (DATA_ITEM *) _hash->find(d.c_str());}
      /* -------- Static debugging functions -------- */
  static  HASH       *di_hash    ()              { return _hash; }
 };
@@ -263,7 +263,7 @@ class TDI : public DATA_ITEM {
          void        get_val(TAGformat &d)       { *d >> _x; }
   public:
                      TDI(const T &x): _x(x)
-     { _tags+=new TAG_meth<TDI<T> >(NULL_STR, &TDI<T>::put_val, &TDI<T>::get_val, 1);}
+     { _tags+=new TAG_meth<TDI<T> >("", &TDI<T>::put_val, &TDI<T>::get_val, 1);}
                  T   &get()                  { return _x; }
          const   T   &get()            const { return _x; }
  virtual DATA_ITEM   *dup()            const { return new TDI<T>(_x); }
@@ -281,11 +281,11 @@ class TDI : public DATA_ITEM {
  * ----------------------------------------------------------- */
 class FUNC_ITEM : public DATA_ITEM {
  public:
-   FUNC_ITEM(Cstr_ptr &n): _name(**n) {
+   FUNC_ITEM(const string &n): _name(n) {
       if (!lookup(n)) 
          add_decoder(_name,this);
       _tags += new TAG_meth<FUNC_ITEM>(
-         str_ptr(), &FUNC_ITEM::put, &FUNC_ITEM::get, 1
+         string(), &FUNC_ITEM::put, &FUNC_ITEM::get, 1
          );
    }
 

@@ -1681,7 +1681,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
       // If we don't yet have a mesh, or the mesh we have is the wrong
       // type, then get one of the right type:
       if (!(ret && ret->is_of_type(class_name))) {
-         DATA_ITEM* di = DATA_ITEM::lookup(str_ptr(class_name.c_str()));
+         DATA_ITEM* di = DATA_ITEM::lookup(class_name);
          if (!di) {
             err_msg(
                "BMESH::read_jot_stream() - Error: Supposed mesh class '#%s' not found.",

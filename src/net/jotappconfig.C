@@ -203,7 +203,7 @@ BaseJOTappConfig::get_string_var(TAGformat &d)
    if (str_val == "NULL_STR")
       str_val = "";
 
-   set_var_str(string(**d.name()), str_val);
+   set_var_str(d.name(), str_val);
 
 }
 
@@ -215,10 +215,10 @@ BaseJOTappConfig::put_string_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_string_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(string(**d.name()))) {
+   if (get_var_is_set(d.name())) {
       string str_val;
 
-      str_val = get_var_str(string(**d.name()));
+      str_val = get_var_str(d.name());
 
       if (str_val == "")
          str_val = "NULL_STR";
@@ -272,7 +272,7 @@ BaseJOTappConfig::get_integer_var(TAGformat &d)
 
    //cerr << "BaseJOTappConfig::get_integer_var() [" << d.name() << "] - Loaded integer: '"  << int_val << "'\n";
 
-   set_var_int(string(**d.name()), int_val);
+   set_var_int(d.name(), int_val);
 
 }
 
@@ -284,10 +284,10 @@ BaseJOTappConfig::put_integer_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_integer_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(string(**d.name()))) {
+   if (get_var_is_set(d.name())) {
       int int_val;
 
-      int_val = get_var_int(string(**d.name()));
+      int_val = get_var_int(d.name());
 
       cerr << "BaseJOTappConfig::put_integer_var() [" << d.name() << "] - Writing integer '" << int_val << "'\n";
 
@@ -314,7 +314,7 @@ BaseJOTappConfig::get_double_var(TAGformat &d)
 
    //cerr << "BaseJOTappConfig::get_double_var() [" << d.name() << "] - Loaded double: '"  << dbl_val << "'\n";
 
-   set_var_dbl(string(**d.name()), dbl_val);
+   set_var_dbl(d.name(), dbl_val);
 }
 
 /////////////////////////////////////
@@ -325,10 +325,10 @@ BaseJOTappConfig::put_double_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_double_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(string(**d.name()))) {
+   if (get_var_is_set(d.name())) {
       double dbl_val;
 
-      dbl_val = get_var_dbl(string(**d.name()));
+      dbl_val = get_var_dbl(d.name());
 
       cerr << "BaseJOTappConfig::put_double_var() [" << d.name() << "] - Writing double '" << dbl_val << "'\n";
 
@@ -365,7 +365,7 @@ BaseJOTappConfig::get_bool_var(TAGformat &d)
       cerr << "BaseJOTappConfig::get_bool_var() [" << d.name() << "] - ERROR!! Loaded bool: '"  << foo << "', but should be 'true' or 'false'. Assuming 'false'...\n";
    }
 
-   set_var_bool(string(**d.name()), bool_val);
+   set_var_bool(d.name(), bool_val);
 }
 
 /////////////////////////////////////
@@ -376,10 +376,10 @@ BaseJOTappConfig::put_bool_var(TAGformat &d) const
 {
    //cerr << "BaseJOTappConfig::put_bool_var() [" << d.name() << "]\n";
 
-   if (get_var_is_set(string(**d.name()))) {
+   if (get_var_is_set(d.name())) {
 
       bool bool_val;
-      bool_val = get_var_bool(string(**d.name()));
+      bool_val = get_var_bool(d.name());
 
       string foo;
       foo = bool_val?"true":"false";

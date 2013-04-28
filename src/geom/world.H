@@ -69,7 +69,7 @@ class REF_CLASS(WORLD) : public SCHEDULER {
    virtual   void    _clear_redoable();
    virtual   void    _print_command_list();
 
-   static DATA_ITEM *_default_decoder(STDdstream &, Cstr_ptr &, DATA_ITEM *);
+   static DATA_ITEM *_default_decoder(STDdstream &, const string &, DATA_ITEM *);
 
    virtual void  _Message(const string &m, double secs=3,
                           mlib::CXYpt &pos=mlib::XYpt(0,.9));

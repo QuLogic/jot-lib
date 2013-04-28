@@ -78,27 +78,27 @@ LOADER::load(
 DATA_ITEM*
 WORLD::_default_decoder(
    STDdstream& , 
-   Cstr_ptr&  name, 
+   const string& name,
    DATA_ITEM* hash
    )
 {
    // Use the object that's registered to decode 'name' only if that 
    // object's name is 'name' also.
    GELptr gel = GEL::upcast(hash);
-   if (gel && gel->name() == string(**name))
+   if (gel && gel->name() == name)
       return hash;
 
    // If nothing was registered to decode 'name', then check to see
    // if an object called 'name' exists and return it if it does.
-   gel = EXIST.lookup(string(**name));
+   gel = EXIST.lookup(name);
    if (gel)
       return gel;
 
    // Report failure:
    cerr << "WORLD::_default_decoder: can't find object named "
-        << **name << endl;
+        << name << endl;
    if (hash)
-      cerr << hash->class_name() << " vs. " << **name << endl;
+      cerr << hash->class_name() << " vs. " << name << endl;
 
    return 0;
 }
