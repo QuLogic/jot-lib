@@ -197,7 +197,7 @@ QuadCell::add_quad(CBface* quad)
          err_msg("Can not extend");  
          return false;
       } 
-   } catch (str_ptr str){
+   } catch (string str) {
       WORLD::message(str);
       return false;
    }   
@@ -616,7 +616,7 @@ QuadCell::cellUV_to_loc(CUVpt& uv_p)
    Bvert *a=0, *b=0, *c=0, *d=0;
    
    if(!f || !f->is_quad())
-      throw str_ptr("QuadCell::cellUV_to_loc : face no good or not a quad"); 
+      throw string("QuadCell::cellUV_to_loc : face no good or not a quad"); 
    
    f->get_quad_verts(a, b, c, d);   
    
@@ -633,12 +633,12 @@ QuadCell::cellUV_to_loc(CUVpt& uv_p)
      //cerr << "a is 0,1" << endl;
      quad_uv = UVpt(1-q_v, q_u);  
    } else {
-     throw str_ptr("QuadCell::cellUV_to_loc : could not convert uv to quad uv");  
+     throw string("QuadCell::cellUV_to_loc : could not convert uv to quad uv");  
    }
    
    if(!f){    
      cerr << "j i is" << j << " " << i << " with " << u << " " << v << endl;
-     throw str_ptr("QuadCell::cellUV_to_loc : could not find new face");                           
+     throw string("QuadCell::cellUV_to_loc : could not find new face");                           
    } 
    
    return f->quad_uv2loc(quad_uv);
@@ -684,7 +684,7 @@ QuadCell::my_UV_to_controlCell_UV(UVpt uv_in, QuadCell* c_cell, CBedge* e)
      UVpt new_uv;
 
      if(!e)
-       throw str_ptr("QuadCell::my_UV_to_controlCell_UV : no edge");;
+       throw string("QuadCell::my_UV_to_controlCell_UV : no edge");;
      
      UVpt a_c = c_cell->bvert_to_uv(e->v1());
      UVpt b_c = c_cell->bvert_to_uv(e->v2());
@@ -737,19 +737,19 @@ QuadCell::my_UV_to_controlCell_UV(UVpt& ret_uv,
    
    if(!current_cell)
       return false;
-      //throw str_ptr("QuadCell::my_UV_to_controlCell_UV : could no current_cell");                              
+      //throw string("QuadCell::my_UV_to_controlCell_UV : could no current_cell");                              
           
    while(current_cell->uv_out_of_range(uv_list[i])){
       //get point inside the current cell        
       Bedge* edge = current_cell->find_in_edge(i, uv_list);
       if(!edge){
          return false;
-         //throw str_ptr("QuadCell::my_UV_to_controlCell_UV : could not find edge");                              
+         //throw string("QuadCell::my_UV_to_controlCell_UV : could not find edge");                              
       }  
       n_cell =  current_cell->find_neighbor_cell(edge);
       if(!n_cell){
          return false;
-         //throw str_ptr("QuadCell::my_UV_to_controlCell_UV : could not find neighbor_cell");                              
+         //throw string("QuadCell::my_UV_to_controlCell_UV : could not find neighbor_cell");                              
       }         
       // make the uv list in turms of the new cell
       UVpt_list tmp = uv_list; uv_list.clear();
@@ -1001,7 +1001,7 @@ QuadCell::find_in_edge(int i, Pattern3dStroke* stroke)
  
    if(!(uv_out_of_range(out_uv))){
       cerr << "old uv is " << out_uv << endl;
-      throw str_ptr("QuadCell::find_in_edge: is not out of fange...what ta hell...");
+      throw string("QuadCell::find_in_edge: is not out of fange...what ta hell...");
    }
    UVline stroke_seg(in_uv, out_uv);
    
@@ -1061,7 +1061,7 @@ QuadCell::find_in_edge(int i, CUVpt_list& uv_stroke)
  
    if(!(uv_out_of_range(out_uv))){
       cerr << "old uv is " << out_uv << endl;
-      throw str_ptr("QuadCell::find_in_edge: is not out of fange...what ta hell...");
+      throw string("QuadCell::find_in_edge: is not out of fange...what ta hell...");
    }
    UVline stroke_seg(in_uv, out_uv);
    
@@ -1148,7 +1148,7 @@ QuadCell::add_group(Stroke_List* old_group)
                      else
                         break;
                   }                     
-                      //throw str_ptr("QuadCell::add_group : could not find edge");
+                      //throw string("QuadCell::add_group : could not find edge");
                   
                   neighbor_cell = find_neighbor_cell(e_temp);
                     
@@ -1159,7 +1159,7 @@ QuadCell::add_group(Stroke_List* old_group)
                         break;
                   }*/   
 /*                  
-                  //throw str_ptr("QuadCell::add_group : could not find neighbor_cell");                              
+                  //throw string("QuadCell::add_group : could not find neighbor_cell");                              
                   QuadCell* neighbor_cell;  
                   uv_tmp = my_UV_to_controlCell_UV(neighbor_cell, k, adjusted_uv_pts);  
                   
@@ -1173,13 +1173,13 @@ QuadCell::add_group(Stroke_List* old_group)
                      else
                         break;
                   }
-                     //throw str_ptr("QuadCell::add_group : could not find a face");
+                     //throw string("QuadCell::add_group : could not find a face");
                   
                } else {                  
                   new_pts += cellUV_to_loc(old_uv);                  
                   f = cellUV_to_face(old_uv);
                   if(!f)
-                     throw str_ptr("QuadCell::add_group : could not find a face2");                  
+                     throw string("QuadCell::add_group : could not find a face2");                  
                }                  
                new_f += f;    
                new_norms += f->norm();  
@@ -1206,7 +1206,7 @@ QuadCell::add_group(Stroke_List* old_group)
            
             new_group->add(new_stroke);              
          } //try
-         catch(str_ptr error){
+         catch(string error){
                cerr << error << endl; 
          }
 			//make sure avarage info is up to date
@@ -1346,7 +1346,7 @@ QuadCell::add_group_var(Stroke_List* old_group)
                         break;
                   }
                   
-                      //throw str_ptr("QuadCell::add_group : could not find edge");
+                      //throw string("QuadCell::add_group : could not find edge");
                   
                   neighbor_cell = find_neighbor_cell(e_temp);
                   
@@ -1355,7 +1355,7 @@ QuadCell::add_group_var(Stroke_List* old_group)
                         continue;
                      else
                         break;
-                        //throw str_ptr("QuadCell::add_group : could not find neighbor_cell");                              
+                        //throw string("QuadCell::add_group : could not find neighbor_cell");                              
                   }
                   */                  
                   //uv_tmp = my_UV_to_controlCell_UV(old_uv, neighbor_cell, e_temp);  
@@ -1375,13 +1375,13 @@ QuadCell::add_group_var(Stroke_List* old_group)
                         continue;
                      else
                         break;
-                     //throw str_ptr("QuadCell::add_group : could not find a face");
+                     //throw string("QuadCell::add_group : could not find a face");
                   }
                } else {                  
                   new_pts += cellUV_to_loc(old_uv);                  
                   cbf = cellUV_to_face(old_uv);
                   if(!cbf)
-                     throw str_ptr("QuadCell::add_group : could not find a face2");                  
+                     throw string("QuadCell::add_group : could not find a face2");                  
                }                  
                
                new_f += cbf;    
@@ -1420,7 +1420,7 @@ QuadCell::add_group_var(Stroke_List* old_group)
            
             new_group->add(new_stroke);              
          } //try
-         catch(str_ptr error){
+         catch (string error) {
                cerr << error << endl; 
          }
 			//make sure avarage info is up to date
@@ -1687,7 +1687,7 @@ QuadCell::opposite_edges(CBvert_list& list , Bvert_list& new_list)
       e = lookup_edge(list[i], list[i+1]);
       f = outside_face(e);
       if(!f)
-         throw str_ptr("Cell in a way, cannot expand");
+         throw string("Cell in a way, cannot expand");
       
       new_e = f->opposite_quad_edge(e);
       new_v1 = new_e->v1();
