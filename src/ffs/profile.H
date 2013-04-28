@@ -102,7 +102,7 @@ class PROFILE : public DrawWidget {
    //******** MODE NAME ********
 
    //! displayed in jot window
-   virtual str_ptr      mode_name()     const { return "profile"; }
+   virtual string mode_name() const { return "profile"; }
 
    //******** DRAW FSA METHODS ********
 

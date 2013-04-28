@@ -103,8 +103,8 @@ class DrawWidget : public GEOM,
       //******** MODE NAME ********
    
       // displayed in jot window
-      virtual str_ptr      mode_name()     const { return NULL_STR; }
-      bool                 has_mode_name() const { return mode_name() != NULL_STR; }
+      virtual string       mode_name()     const { return ""; }
+      bool                 has_mode_name() const { return !mode_name().empty(); }
    
       //******** GESTURE PROCESSING ********
    

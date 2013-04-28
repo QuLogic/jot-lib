@@ -61,7 +61,7 @@ class INFLATE : public DrawWidget {
    //******** MODE NAME ********
 
    //! displayed in jot window
-   virtual str_ptr      mode_name()     const { return "inflate"; }
+   virtual string mode_name() const { return "inflate"; }
 
    //******** ACTIVATION ********
 

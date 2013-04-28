@@ -102,7 +102,7 @@ class CRV_SKETCH : public DrawWidget {
    //******** MODE NAME ********
 
    //! displayed in jot window
-   virtual str_ptr mode_name()     const { return "curve edit"; }
+   virtual string mode_name() const { return "curve edit"; }
 
    //******** CAMobs Method *************
 

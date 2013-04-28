@@ -84,7 +84,7 @@ class MODE_TEXT : public TEXT2D {
 };
 
 TEXT2Dptr       ModeName::_mode_name;
-LIST<str_ptr>   ModeName::_names;
+vector<string>  ModeName::_names;
 
 void
 ModeName::init()
@@ -102,9 +102,9 @@ ModeName::init()
 }
 
 void
-ModeName::push_name(Cstr_ptr& n)
+ModeName::push_name(const string& n)
 {
-   _names += n;
+   _names.push_back(n);
    set_name(n);
 }
 
@@ -115,6 +115,6 @@ ModeName::pop_name()
       cerr << "ModeName::pop_name: error: empty stack" << endl;
       return;
    }
-   _names.pop();
-   set_name(_names.empty() ? NULL_STR : _names.last());
+   _names.pop_back();
+   set_name(_names.empty() ? "" : _names.back());
 }

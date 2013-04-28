@@ -41,10 +41,10 @@ class ModeName {
    public:
    
       //! \brief Name currently displayed.
-      static str_ptr get_name() { return name()->get_string(); }
+      static string  get_name() { return name()->get_string(); }
       
       //! \brief set a new name.
-      static void push_name(Cstr_ptr& n);
+      static void push_name(const string& n);
       
       //! \brief Remove the last name set, restore the one before it.
       static void pop_name();
@@ -52,11 +52,11 @@ class ModeName {
    protected:
    
       static TEXT2Dptr     _mode_name;
-      static LIST<str_ptr> _names;
+      static vector<string> _names;
       
       static void init();
       static TEXT2Dptr name()              { init(); return _mode_name; }
-      static void set_name(Cstr_ptr& n)    { name()->set_string(n); }
+      static void set_name(const string& n){ name()->set_string(str_ptr(n.c_str())); }
 
 };
 

@@ -93,7 +93,7 @@ class CREASE_WIDGET : public DrawWidget {
    //******** MODE NAME ********
 
    //! displayed in jot window
-   virtual str_ptr      mode_name()     const { return "edit creases"; }
+   virtual string mode_name() const { return "edit creases"; }
 
    //******** DRAW FSA METHODS ********
 

@@ -182,7 +182,7 @@ class SWEEP_BASE : public DrawWidget {
    //******** MODE NAME ********
 
    // displayed in jot window
-   virtual str_ptr      mode_name()     const { return "revolve"; }
+   virtual string mode_name() const { return "revolve"; }
 };
 
 /*****************************************************************
