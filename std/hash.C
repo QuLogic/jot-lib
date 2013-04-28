@@ -267,7 +267,7 @@ HASH::add(const char *key, void *data, char *&loc, int create_new)
  *           0 if the key was not in the table.
  *************************************************************************/
 void  *
-HASH::find(char *key) const
+HASH::find(const char *key) const
 {
    CriticalSection cs(&mutex);
    assert(table());

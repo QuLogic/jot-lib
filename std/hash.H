@@ -69,7 +69,7 @@ class HASH {
 	int    add(const char *key, char *&loc) {return add(key, (void *) _lastval++, loc);}
 	int    del(long key);
 	void  *find(long key) const {void **data = find_addr(key); return data ? *data : 0;}
-	void  *find(char *key) const;
+	void  *find(const char *key) const;
 	void **find_addr(long key) const;
 	int    bfind(long key, void *&data) const;
 
