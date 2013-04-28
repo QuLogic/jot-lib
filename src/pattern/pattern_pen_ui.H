@@ -155,7 +155,7 @@ protected:
   PatternPen*            _pen;
   int                    _id;
   bool                   _init;
-  str_list               _preset_filenames;
+  vector<string>         _preset_filenames;
   int                    _current_mode;  
   mlib::Wvec             _light;
   BaseStroke*            _stroke;
@@ -179,9 +179,9 @@ protected:
   //void     add_layer();
   //void     add_grid_layer();
   //void     del_layer();
-  void     fill_preset_listbox( GLUI_Listbox *listbox,
-                                str_list     &save_files,
-                                const string &full_path);
+  void     fill_preset_listbox( GLUI_Listbox   *listbox,
+                                vector<string> &save_files,
+                                const string   &full_path);
   bool     load_preset(const char *f);
   void     preset_stroke();
 

@@ -739,24 +739,23 @@ void
 PatternPenUI::preset_stroke()
 {
    int val = _listbox[LIST_STROKE_PRESET]->get_int_val();
-   if (!load_preset(**_preset_filenames[val-1]))
+   if (!load_preset(_preset_filenames[val-1].c_str()))
         return;
    _glui->sync_live();
 } 
 
 void
 PatternPenUI::fill_preset_listbox(
-   GLUI_Listbox *listbox,
-   str_list     &save_files,
-   const string &full_path
+   GLUI_Listbox   *listbox,
+   vector<string> &save_files,
+   const string   &full_path
    )
 {
    int i;
 
    //First clear out any previous presets
-   for (i=1; i<=save_files.num();i++)
-   {
-      if(listbox)
+   for (i = 1; i <= (int)save_files.size(); i++) {
+      if (listbox)
         listbox->delete_item(i);    
    }
    save_files.clear();
@@ -771,8 +770,8 @@ PatternPenUI::fill_preset_listbox(
 
          if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files += str_ptr((full_path + in_files[i]).c_str());
-            listbox->add_item(save_files.num(), basename.c_str());
+            save_files.push_back(full_path + in_files[i]);
+            listbox->add_item(save_files.size(), basename.c_str());
          }
          else
          {
