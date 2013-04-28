@@ -852,32 +852,4 @@ Image::mult_by(double s)
    }
 }
 
-/**********************************************************************
- * PixelOP:
- *
- *  function object that applies some operation to an Image pixel.
- *    
- **********************************************************************/
-/*
-class PixelOP {
- public:
-   virtual ~PixelOP() {}
-
-   // apply the operation to the pixel for the given channel.
-   // data is the address of the channel value, and channel
-   // tells what channel
-   virtual void apply(uchar* data, uint channel) = 0;
-};
-
-void
-Image::apply_op(PixelOP& op)
-{
-   uchar* d = data();
-   uint   n = num_pixels();
-   for (uint i=0; i<n; i++) {
-      op.apply(d[i], i%_bpp);
-   }
-}
-//*/
-
 // end of file image.C

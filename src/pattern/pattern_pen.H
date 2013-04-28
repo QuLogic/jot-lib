@@ -225,51 +225,6 @@ private:
   
 };
 
-
-
-
-
-
-
-
-
-/*****************************************************************
- * ADD_STROKE_GROUP_CMD
- *
- *      Perform an ADD_STROKE_GROUP_CMD operation.
- *
- *****************************************************************/
-
-/*
-MAKE_PTR_SUBC(ADD_STROKE_GROUP_CMD,COMMAND);
-class ADD_STROKE_GROUP_CMD : public COMMAND {
- public:
-   // ******** MANAGERS ********
-   ADD_STROKE_GROUP_CMD(QuadCell* cell, Stroke_List* group) :
-       _cell(cell),
-       _group(group),
-       _pos(-1)
-   {}
-
-   // ******** RUN-TIME TYPE ID ********
-   DEFINE_RTTI_METHODS2("STROKE_SYNTHESIS_CMD", COMMAND, CCOMMAND*);
-
-   // ******** COMMAND VIRTUAL METHODS ********
-   virtual bool doit();
-   virtual bool undoit();
-   // ******** DIAGNOSTIC ********
-
-   virtual void print() const {
-      cerr << class_name();
-   }
-
- protected:
-   QuadCell*        _cell;
-   Stroke_List*     _group;
-   int              _pos;
-};
-*/
-
 #endif   // _PATTERN_PEN_H_IS_INCLUDED_
 
 /* end of file pattern_pen.H */

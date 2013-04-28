@@ -141,45 +141,4 @@ class JOTvar : public DATA_ITEM {
                         }
 };
 
-
-/*
-
-MAKE_PTR_SUBC(Rake,GEOM);
-class Rake : public GEOM {
-    JOTvar<Rake,int>  _num_streams;
-    JOTvar<Rake,int>  _num_rakes;
-    TAGlist          *_tg_tags; // can't be static unless JOTvar tags are redone
-
-    CTAGlist  &tags()   const   {
-                            if (!_tg_tags) {
-                               ((Rake  *)this)->_tg_tags  = new TAGlist;
-                               *((Rake *)this)->_tg_tags += GEOM::tags();
-                               *((Rake *)this)->_tg_tags += _num_rakes.tags();
-                               *((Rake *)this)->_tg_tags += _num_streams.tags();
-                            }
-                            return *_tg_tags; 
-                         }
-
-   public:
-
-    Rake():_tg_tags(0), _num_rakes  (0, this, "NumRakes",   set_num_rakes),
-                        _num_streams(0, this, "NumStreams", set_num_streams) { }
-
-    Rake(Cstr_ptr &n):GEOM(n),_tg_tags(0),
-                        _num_rakes  (0, this, "NumRakes",   set_num_rakes),
-                        _num_streams(0, this, "NumStreams", set_num_streams) { }
-
-    int      num_rakes()            { return _num_rakes.get(); }
-    void     set_num_rakes(int n)   { _num_rakes.set(n); }
-
-    int      num_streams()          { return _num_streams.get(); }
-    void     set_num_streams(int n) { _num_streams.set(n); }
-
-    DEFINE_RTTI_METHODS2("Rake", GEOM, CDATA_ITEM *);
-
-   virtual DATA_ITEM *dup()            const { return new Rake(_name); }
-   virtual GEOMptr    dup(Cstr_ptr &n) const { cerr <<"Whaaa\n"; return 0;}
-};
-*/
-
 #endif

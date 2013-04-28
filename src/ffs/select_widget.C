@@ -920,11 +920,6 @@ SELECT_WIDGET::select_faces(CPIXEL_list& pts)
       return false;
    }
    
-//    // XXX - Old code (to be deleted).  Selects faces individually instead of as
-//    // a group:
-//    for (int i=0; i<pts.num(); i++)
-//       try_select_face(pts[i], 0.1);
-
    Bface_list flist;
 
    for(int i = 0; i < pts.num(); ++i){
