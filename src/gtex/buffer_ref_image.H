@@ -62,7 +62,7 @@ class BufferRefImage : public RefImage,
    int need_update();
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const { return str_ptr("BufferRefImage"); }
+   virtual string class_id() const { return string("BufferRefImage"); }
 
    void force_dirty() { _dirty = 1; }
 

@@ -40,7 +40,7 @@ class HaloRefImage :  public RefImage {
    //******** RefImage VIRTUAL METHODS ********
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const { return str_ptr("HaloRefImage"); }
+   virtual string class_id() const { return string("HaloRefImage"); }
 
 
    //******** OTHER ********

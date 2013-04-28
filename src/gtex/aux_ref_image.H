@@ -103,7 +103,7 @@ class AuxRefImage : public RefImage {
    virtual void         update();
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const { return str_ptr("AuxRefImage"); }
+   virtual string class_id() const { return string("AuxRefImage"); }
 
    virtual void         draw_objects(CGELlist&) const;
 

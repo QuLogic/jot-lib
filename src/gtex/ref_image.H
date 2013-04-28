@@ -205,7 +205,7 @@ class RefImage : public Array2d<GLuint> {
    virtual void update() = 0;
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const = 0;
+   virtual string class_id() const = 0;
 
    //******** IMAGE COPYING ********
    // return an Image with same dimensions
@@ -407,8 +407,10 @@ class ColorRefImage : public RefImage {
    virtual void update();
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const {
-      return str_ptr("ColorRefImage") + str_ptr(_index);
+   virtual string class_id() const {
+      char tmp[32];
+      sprintf(tmp, "%d", _index);
+      return string("ColorRefImage") + tmp;
    }
 
  protected:
@@ -496,7 +498,7 @@ class IDRefImage : public RefImage {
    virtual void update();
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const { return str_ptr("IDRefImage"); }
+   virtual string class_id() const { return string("IDRefImage"); }
 
    //******** RGBA <---> KEY CONVERSIONS ********
    // Convert Bsimplex key value to 32-bit RGBA that can be given to
@@ -737,7 +739,7 @@ class VisRefImage : public    IDRefImage,
    //******** RefImage VIRTUAL METHODS ********
 
    // for debugging: string ID for this class:
-   virtual str_ptr class_id() const { return str_ptr("VisRefImage"); }
+   virtual string class_id() const { return string("VisRefImage"); }
 
    //******** STATICS ********
    static void init();
