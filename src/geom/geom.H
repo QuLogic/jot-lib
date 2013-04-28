@@ -277,8 +277,8 @@ STDdstream  &operator>>(STDdstream &d, GEOMptr &p);
 class XformConstraint : public hashenum<GEOM::cons> {
  public :
    XformConstraint(Cstr_ptr &name, GEOM::cons cons, int net):
-      hashenum<GEOM::cons>(name, cons, net) { }
-   virtual str_ptr enum_to_str(GEOM::cons e) const { 
+      hashenum<GEOM::cons>(string(**name), cons, net) { }
+   virtual string enum_to_str(GEOM::cons e) const {
       switch (e) {
        case GEOM::TRANS_FREE    : return "trans_free";
        case GEOM::TRANS_LINE    : return "trans_line";
@@ -294,7 +294,7 @@ class XformConstraint : public hashenum<GEOM::cons> {
        default                  : return "none";
       }
    }
-   virtual GEOM::cons str_to_enum(Cstr_ptr &s) const { 
+   virtual GEOM::cons str_to_enum(const string &s) const {
       if (s == "trans_free")    return GEOM::TRANS_FREE   ;
       else if (s == "trans_line")    return GEOM::TRANS_LINE   ;
       else if (s == "trans_plane")   return GEOM::TRANS_PLANE  ;

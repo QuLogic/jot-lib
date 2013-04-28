@@ -62,7 +62,7 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                                               }
    public:
       virtual        ~hashdist()   { }
-                      hashdist(Cstr_ptr &str, int dist, int dup=1):_str(**str),
+                      hashdist(const string &str, int dist, int dup=1):_str(str),
                                        _dist(dist), _dhash(16), _dup(dup) {
                          if (_dist)   // if hash is distributed, we watch
                             distrib_obs(); // when any GEL is distributed
@@ -97,7 +97,7 @@ class hashvar : public hashdist {
    T       _val;                 // default value of hash variable
    virtual void del_item(void * item) { delete (TDI<T> *) item;}
   public :
-                 hashvar(Cstr_ptr &var, T val, int dist=0, int dup=1):
+                 hashvar(const string &var, T val, int dist=0, int dup=1):
                       hashdist(var,dist,dup), _val(val) {}
    virtual      ~hashvar()         { del_hash_items();} // Can't do in ~hashdist
 
@@ -128,7 +128,7 @@ class hashptr : public hashdist {
    T       _val;                 // default value of hash variable
    virtual void del_item(void *item) { ((T) item)->Free(); }
   public :
-                hashptr(Cstr_ptr &var, const T v, int dist=0,int dup=1):
+                hashptr(const string &var, const T v, int dist=0,int dup=1):
                       hashdist(var,dist,dup), _val(v) { if (v) v->Own(); }
                ~hashptr()          { del_hash_items();} // Can't do in ~hashdist
            T    get(CGELptr &g)    { return find(g) ? (T)find(g) : _val;}
@@ -150,7 +150,7 @@ class hashenum : public hashdist {
    T       _val;                 // default value of hash variable
    virtual void del_item(void *item) { delete ((TDI<int> *) item); }
   public :
-                hashenum(Cstr_ptr &var, T val, int dist=0, int dup=0):
+                hashenum(const string &var, T val, int dist=0, int dup=0):
                          hashdist(var,dist,dup), _val(val) {}
                ~hashenum()         { del_hash_items();} // Can't do in ~hashdist
            T    get(CGELptr &g) const { return (T)(find(g) ? 
@@ -163,13 +163,13 @@ class hashenum : public hashdist {
     // 2005 VS generates compiler warnings for this funcion 		   
    //virtual str_ptr enum_to_str(T e) const { char b[20];sprintf(b,"%d",(int)e); 
    //                                         return b; }
-   virtual T    str_to_enum(Cstr_ptr &s) const { return (T)atoi(**s); }
+   virtual T    str_to_enum(const string &s) const { return (T)atoi(s.c_str()); }
    virtual void put_var(TAGformat &d, CGELptr &gel) const {
                                         if (!class_name().empty() && find(gel)) {
                                            d.id() << gel->name() << " " << get(gel);
                                            d.end_id(); } 
                                        }
-   virtual void get_var(TAGformat &d)  {  GELptr g; str_ptr val;
+   virtual void get_var(TAGformat &d)  {  GELptr g; string val;
                                          *d >> g >> val; 
                                          if (g) set(g, str_to_enum(val)); }
 
