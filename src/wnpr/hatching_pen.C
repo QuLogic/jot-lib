@@ -282,7 +282,7 @@ dup_group(HatchingGroup* g)
    ret->set_patch(g->patch());
 
    // read the class name of g:
-   str_ptr str; in >> str;     
+   string str; in >> str;
 
    // read the rest of the file into the
    // new instance and return it:

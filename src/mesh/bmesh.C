@@ -4082,7 +4082,7 @@ BMESH::get_render_style(TAGformat &d)
 
    // Get render style string, but the string may have spaces in it, which
    // makes things non-trivial
-   str_ptr style = (*d).get_string_with_spaces();
+   string style = (*d).get_string_with_spaces();
 
    //   _render_style.clear();
    //   _render_style.push_back(style);
@@ -4111,7 +4111,7 @@ BMESH::get_colors(TAGformat &d)
 void
 BMESH::get_patches(TAGformat &d)
 {
-   str_ptr patchname;
+   string patchname;
    *d >> patchname;
 
    //XXX - Check class name...

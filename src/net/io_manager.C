@@ -56,7 +56,7 @@ IOManager::get_basename (TAGformat &d)
 {
    assert(state_() == STATE_SCENE_LOAD);
 
-   str_ptr str;
+   string str;
    *d >> str; 
 
    if (str == "NULL_STR") 
@@ -66,8 +66,8 @@ IOManager::get_basename (TAGformat &d)
    }
    else
    {
-      _basename = string(**str);
-      err_mesg(ERR_LEV_SPAM, "IOManager::get_basename() - Loaded string: '%s'", **str);
+      _basename = str;
+      err_mesg(ERR_LEV_SPAM, "IOManager::get_basename() - Loaded string: '%s'", str.c_str());
    }
    
 }
@@ -84,7 +84,7 @@ IOManager::put_basename (TAGformat &d) const
    if (_basename == "")
    {
       err_mesg(ERR_LEV_SPAM, "IOManager::put_basename() - Wrote NULL string.");
-      *d << str_ptr("NULL_STR");
+      *d << "NULL_STR";
    }
    else
    {

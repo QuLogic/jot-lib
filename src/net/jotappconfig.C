@@ -196,7 +196,7 @@ BaseJOTappConfig::get_string_var(TAGformat &d)
 {
    //cerr << "BaseJOTappConfig::get_string_var() [" << d.name() << "]\n";
 
-   string str_val = string(**(*d).get_string_with_spaces());
+   string str_val = (*d).get_string_with_spaces();
 
    //cerr << "BaseJOTappConfig::get_string_var() [" << d.name() << "] - Loaded string: '"  << str_val << "'\n";
 
@@ -242,7 +242,7 @@ BaseJOTappConfig::get_old_var(TAGformat &d)
 {
    //cerr << "BaseJOTappConfig::get_old_var() [" << d.name() << "]\n";
 
-   string str_val = string(**(*d).get_string_with_spaces());
+   string str_val = (*d).get_string_with_spaces();
 
    cerr << "BaseJOTappConfig::get_old_var() [" << d.name() << "] - **Deprecated Variable** Loaded string: '"  << str_val << "'\n";
 
@@ -350,7 +350,7 @@ BaseJOTappConfig::get_bool_var(TAGformat &d)
 {
    //cerr << "BaseJOTappConfig::get_bool_var() [" << d.name() << "]\n";
 
-   str_ptr foo;
+   string foo;
    *d >> foo;
 
    bool bool_val;
@@ -358,7 +358,7 @@ BaseJOTappConfig::get_bool_var(TAGformat &d)
       bool_val = true;
       //cerr << "BaseJOTappConfig::get_bool_var() [" << d.name() << "] - Loaded bool: '"  << foo << "'\n";
    } else if (foo == "false") {
-      bool_val= false;
+      bool_val = false;
       //cerr << "BaseJOTappConfig::get_bool_var() [" << d.name() << "] - Loaded bool: '"  << foo << "'\n";
    } else {
       bool_val = false;

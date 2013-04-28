@@ -78,9 +78,9 @@ class STDdstream {
    STDbool fail       ()        const { return _fail; }
    STDbool block      ()        const { return _block; }
    STDbool block(STDbool flag)        { STDbool old=_block; _block = flag; return old; }
-   // Get a string with spaces in it - the same as STDdstream >> str_ptr when
+   // Get a string with spaces in it - the same as STDdstream >> string when
    // using a binary stream, but different when doing ascii
-   str_ptr get_string_with_spaces();
+   string get_string_with_spaces();
 
  protected:
 
@@ -101,7 +101,6 @@ class STDdstream {
  //So _fail can get set by ascii IO...
    friend STDdstream & operator >> (STDdstream &, char &);
    friend STDdstream & operator >> (STDdstream &, char *&);
-   friend STDdstream & operator >> (STDdstream &, str_ptr&);
    friend STDdstream & operator >> (STDdstream &, string&);
    friend STDdstream & operator >> (STDdstream &, short &);
    friend STDdstream & operator >> (STDdstream &, int &);
@@ -115,7 +114,6 @@ class STDdstream {
 
    friend STDdstream & operator << (STDdstream &, char);
    friend STDdstream & operator << (STDdstream &, const char * const);
-   friend STDdstream & operator << (STDdstream &, str_ptr);
    friend STDdstream & operator << (STDdstream &, const string&);
    friend STDdstream & operator << (STDdstream &, short);
    friend STDdstream & operator << (STDdstream &, int);
@@ -134,7 +132,6 @@ inline STDdstream & flush (STDdstream &ds)  { ds.flush(); return (ds); }
 
 STDdstream & operator >> (STDdstream &, char &);
 STDdstream & operator >> (STDdstream &, char *&);
-STDdstream & operator >> (STDdstream &, str_ptr&);
 STDdstream & operator >> (STDdstream &, short &);
 STDdstream & operator >> (STDdstream &, int &);
 STDdstream & operator >> (STDdstream &, long &);
@@ -147,7 +144,6 @@ STDdstream & operator >> (STDdstream &, double &);
 
 STDdstream & operator << (STDdstream &, char);
 STDdstream & operator << (STDdstream &, const char * const);
-STDdstream & operator << (STDdstream &, str_ptr);
 STDdstream & operator << (STDdstream &, short);
 STDdstream & operator << (STDdstream &, int);
 STDdstream & operator << (STDdstream &, long);

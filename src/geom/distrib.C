@@ -125,7 +125,7 @@ class JOTupdate_geom : public FUNC_ITEM
       *d >> _g;
       if (_g) 
       {
-         str_ptr str; 
+         string str;
          *d >> str; // skip over unneeded class name
          _g->decode(*d);
       }
@@ -275,7 +275,7 @@ class JOTview : public FUNC_ITEM {
    virtual void put(TAGformat  &d) const { _v->format(*d);
                                           }
    virtual void get(TAGformat  &d) {
-      str_ptr str;
+      string str;
       *d >> str;
       VIEWS[0]->decode(*d);
    }
@@ -356,7 +356,7 @@ class JOTio : public FUNC_ITEM {
    public: 
      JOTio(IOManager *io):FUNC_ITEM("CHNG_IO"), _io(io)  { }
       virtual void       put(TAGformat  &d)   const { _io->format(*d);}
-      virtual void       get(TAGformat  &d)   { str_ptr str; *d >> str; IOManager::instance()->decode(*d); }
+      virtual void       get(TAGformat  &d)   { string str; *d >> str; IOManager::instance()->decode(*d); }
    protected:
       IOManager *_io;
 };
@@ -488,7 +488,6 @@ class JOTtransp : public FUNC_ITEM
    }
    virtual void  get (TAGformat &d)       
    { 
-      str_ptr nm;
       int     has_transp;
       double  transp;
       *d >> _g >> has_transp >> transp;

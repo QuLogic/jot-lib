@@ -1082,15 +1082,14 @@ Patch::unset_texture()
 void
 Patch::get_texture(TAGformat &d)
 {
-   string str;
-   str_ptr str1;
+   string str, str1;
    *d >> str;
 
    if ((*d).ascii())
    {
-      while (str1 = (*d).get_string_with_spaces())
+      while (!(str1 = (*d).get_string_with_spaces()).empty())
       {
-         str = str + " " + **str1;
+         str = str + " " + str1;
       }
    }
 

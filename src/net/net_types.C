@@ -31,12 +31,12 @@ operator >> (STDdstream &ds, HASH &h)
    h.clear();
    int num;
    ds >> num;
-   str_ptr key;
+   string key;
    for (int i = 0; i < num; i++) {
       ds >> key;
       DATA_ITEM *di = DATA_ITEM::Decode(ds);
 
-      h.add(**key, (void *) di);
+      h.add(key.c_str(), (void *) di);
    }
    return ds;
 }
@@ -49,7 +49,7 @@ operator << (STDdstream &ds, CHASH &h)
    h.get_items(keys, items);
    ds << items.num();
    for (int i = 0; i < items.num(); i++) {
-      ds << str_ptr((char *) keys[i]) << *((DATA_ITEM *) items[i]);
+      ds << (char *) keys[i] << *((DATA_ITEM *) items[i]);
    }
    return ds;
 }

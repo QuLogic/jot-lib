@@ -257,7 +257,7 @@ STDdstream::read_delim()
    return delim;
 }
 
-str_ptr
+string
 STDdstream::get_string_with_spaces()
 {
    if (ascii()) 
@@ -297,9 +297,9 @@ STDdstream::get_string_with_spaces()
       {
          start++;
       }
-      return str_ptr(buf + start);
+      return string(buf + start);
    }
-   str_ptr the_string;
+   string the_string;
    (*this) >> the_string;
    return the_string;
 }
@@ -352,11 +352,12 @@ operator << (STDdstream &ds, const char * const data)
    }
    return ds;
 }
+
 /* -------------------------------------------------------------------------
- * DESCR   :	Stream pack/unpack for str_ptr
+ * DESCR   :	Stream pack/unpack for string
  * ------------------------------------------------------------------------- */
 STDdstream &
-operator >> (STDdstream &ds, str_ptr &data)
+operator >> (STDdstream &ds, string &data)
 {  
    int len;
    const int buflen = 4096;
@@ -367,7 +368,7 @@ operator >> (STDdstream &ds, str_ptr &data)
    {
       *ds.istr() >> usebuff;
       ds._fail = ((ds.istr()->fail())?(STD_TRUE):(STD_FALSE));
-      data = str_ptr(usebuff);
+      data = string(usebuff);
    } else {
       ds.read_delim();
 
@@ -378,7 +379,7 @@ operator >> (STDdstream &ds, str_ptr &data)
       ds.read(usebuff, len * sizeof(char));
       usebuff[len] = '\0';
 
-      data = str_ptr(usebuff);
+      data = string(usebuff);
  
       if (len + 1 > buflen)
          delete [] usebuff;
@@ -388,36 +389,19 @@ operator >> (STDdstream &ds, str_ptr &data)
 }
 
 STDdstream &
-operator << (STDdstream &ds, str_ptr data)
+operator << (STDdstream &ds, const string &data)
 {
    if (ds.ascii())
    {
-      *ds.ostr() << **data << " ";
+      *ds.ostr() << data.c_str() << " ";
       ds._fail = ((ds.ostr()->fail())?(STD_TRUE):(STD_FALSE));
    }
    else {
       ds.write_delim(' '); // write out the delimiter 
 
-      ds << strlen(**data);
-      ds.write(**data, strlen(**data) * sizeof(char));
+      ds << data.length();
+      ds.write(data.c_str(), data.length());
    }
-   return ds;
-}
-
-STDdstream &
-operator >> (STDdstream &ds, string& str)
-{  
-   // use str_ptr functionality for now
-   str_ptr tmp;
-   ds >> tmp;
-   str = **tmp;
-   return ds;
-}
-
-STDdstream &
-operator << (STDdstream &ds, const string& str)
-{
-   ds << str.c_str();
    return ds;
 }
 

@@ -807,7 +807,7 @@ NetStream::interpret()
                      NetStream *s = network_->streams_[i];
                      if (s->port() != -1 && s != this) {
                         *this << NETadd_connection 
-                              << s->name()
+                              << string(**s->name())
                               << s->port()
                               << NETflush;
                      }
@@ -817,11 +817,11 @@ NetStream::interpret()
                *this >> buff;
                cerr << "(* " << print_name() << " *) " << buff << endl;
             brcase NETbroadcast: { 
-               str_ptr flag;
+               string flag;
                *this >> flag;
                int i;
                for (i = 0; i < tags_.num(); i++)
-                  if (flag == tags_[i])
+                  if (flag == string(**tags_[i]))
                      break; 
                if (i == tags_.num()) {
                   _in_queue.remove_all();
