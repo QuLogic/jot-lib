@@ -23,9 +23,9 @@ main()
    NetStream n1("/tmp/x", NetStream::write);
    NetStream n2("/tmp/x", NetStream::read);
 
-   n1 << 3 << str_ptr("hello") << 5 << NETflush;
+   n1 << 3 << string("hello") << 5 << NETflush;
 
-   int x; str_ptr y; int z;
+   int x; string y; int z;
    n2 >> x >> y >> z;
 
    cerr << x << y << z << endl;

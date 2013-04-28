@@ -162,7 +162,7 @@ IOManager::notify_preload(
       case STATE_IDLE:
          _state.add((full_scene)?(STATE_SCENE_LOAD):(STATE_PARTIAL_LOAD));
          err_mesg(ERR_LEV_INFO, "IOManager::notify_preload() - Loading '%s'... [Source: '%s']",
-            ((full_scene)?("entire scene"):("scene update")), **s.name());
+            full_scene?"entire scene":"scene update", s.name().c_str());
       break;
       //If we're already saving a entire scene, we might encounter
       //and enmbedded partial load when we are loading and
@@ -172,7 +172,7 @@ IOManager::notify_preload(
          _state.add(STATE_PARTIAL_LOAD);
          err_mesg(ERR_LEV_INFO,
             "IOManager::notify_preload() - Loading 'scene update' for subsequent save... [Source: '%s']",
-               **s.name());
+               s.name().c_str());
       break;
      //No other states should reach this callback...
       case STATE_PARTIAL_SAVE:
@@ -225,11 +225,11 @@ IOManager::notify_preload(
       //Now, set new cwd...
       //Stream name should be the filename for file streams.
       //Extract path, file and extension... Abort on failure...
-      else if (!split_filename(string(**s.name()),path,file,ext))
+      else if (!split_filename(s.name(), path, file, ext))
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't derive a path from stream target: '%s'. Aborting...", 
-               **s.name());
+               s.name().c_str());
          load_status = LOADobs::LOAD_ERROR_CWD;
       }
       else
@@ -255,11 +255,11 @@ IOManager::notify_preload(
                _cached_cwd_plus_basename.c_str());
          load_status = LOADobs::LOAD_ERROR_CWD;
       }
-      else if (!split_filename(string(**s.name()), path, file, ext))
+      else if (!split_filename(s.name(), path, file, ext))
       {
          err_msg(
             "IOManager::notify_preload() - *WARNING* Couldn't derive a path from stream target: '%s'. Aborting...",
-               **s.name());
+               s.name().c_str());
          load_status = LOADobs::LOAD_ERROR_CWD;
       }
       else if (path != cpath)
@@ -325,7 +325,7 @@ IOManager::notify_postload(
             _cached_cwd_plus_basename = path + "/" + _basename + (_basename!=""?"--":"");
             
             //err_msg(
-            //   "IOManager::notify_postload() - ...completed 'entire scene' load. [Source: '%s']", **s.name());
+            //   "IOManager::notify_postload() - ...completed 'entire scene' load. [Source: '%s']", s.name().c_str());
             err_mesg(ERR_LEV_INFO, 
                "IOManager::notify_postload() - ...completed 'entire scene' load.");
             err_mesg(ERR_LEV_INFO, 
@@ -341,7 +341,7 @@ IOManager::notify_postload(
          
          //Keep old _cached_cwd_plus_basename 
          //err_mesg(ERR_LEV_INFO, 
-         //   "IOManager::notify_postload() - ...completed 'scene update' load. [Source: '%s']", **s.name());
+         //   "IOManager::notify_postload() - ...completed 'scene update' load. [Source: '%s']", s.name().c_str());
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_postload() - ...completed 'scene update' load.");
 
@@ -358,7 +358,7 @@ IOManager::notify_postload(
          _cached_cwd_plus_basename = "";
 
          err_msg(
-            "IOManager::notify_postload() - ...failed 'entire scene' load. [Source: '%s']", **s.name());
+            "IOManager::notify_postload() - ...failed 'entire scene' load. [Source: '%s']", s.name().c_str());
 
          if (_old_cwd != "")
          {
@@ -391,7 +391,7 @@ IOManager::notify_postload(
 
          //Keep old _cached_cwd_plus_basename 
          err_msg(
-            "IOManager::notify_postload() - ...failed 'scene update' load. [Source: '%s']", **s.name());
+            "IOManager::notify_postload() - ...failed 'scene update' load. [Source: '%s']", s.name().c_str());
       }
    }
    _state.pop();
@@ -428,7 +428,7 @@ IOManager::notify_presave(
          _state.add(STATE_SCENE_SAVE);
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_presave() - Saving 'entire scene'... [Dest: '%s']",
-               **s.name());
+               s.name().c_str());
       break;
       //If we're already saving a full scene, we might encounter
       //and enmbedded partial save when we are loading and
@@ -438,7 +438,7 @@ IOManager::notify_presave(
          _state.add(STATE_PARTIAL_SAVE);
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_presave() - Saving 'scene update'... [Dest: '%s']",
-               **s.name());
+               s.name().c_str());
       break;
       //No other states should reach this callback...
       case STATE_PARTIAL_SAVE:
@@ -488,11 +488,11 @@ IOManager::notify_presave(
 
          //Stream name should be the filename for file streams.
          //Extract path, file and extension... Abort on failure...
-         if (!split_filename(string(**s.name()), path, file, ext))
+         if (!split_filename(s.name(), path, file, ext))
          {
             err_msg(
                "IOManager::notify_presave() - *WARNING* Couldn't derive valid path from target: '%s'. Aborting...", 
-                  **s.name());
+                  s.name().c_str());
             save_status = SAVEobs::SAVE_ERROR_CWD;
          }
          else
@@ -517,11 +517,11 @@ IOManager::notify_presave(
       //the currently occuring full save There should, therefore, be not path
       //component to the filename... Check this!
 
-      if (!split_filename(string(**s.name()), path, file, ext))
+      if (!split_filename(s.name(), path, file, ext))
       {
          err_msg(
             "IOManager::notify_presave() - *WARNING* Couldn't derive valid path from target: '%s'. Aborting...", 
-               **s.name());
+               s.name().c_str());
          save_status = SAVEobs::SAVE_ERROR_CWD;
       }
       else if (path != getcwd_())
@@ -587,7 +587,7 @@ IOManager::notify_postsave(
          {
             _cached_cwd_plus_basename = path + "/" + _basename + (_basename!=""?"--":"");
             //err_msg(
-            //   "IOManager::notify_postsave() - ...completed 'entire scene' save. [Dest: '%s']", **s.name());
+            //   "IOManager::notify_postsave() - ...completed 'entire scene' save. [Dest: '%s']", s.name().c_str());
             err_mesg(ERR_LEV_INFO, 
                "IOManager::notify_postsave() - ...completed 'entire scene' save.");
             err_mesg(ERR_LEV_INFO, 
@@ -603,7 +603,7 @@ IOManager::notify_postsave(
          
          //Keep old _cached_cwd_plus_basename 
          //err_mesg(ERR_LEV_INFO, 
-         //   "IOManager::notify_postsave() - ...completed 'scene update' save. [Dest: '%s']", **s.name());
+         //   "IOManager::notify_postsave() - ...completed 'scene update' save. [Dest: '%s']", s.name().c_str());
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_postsave() - ...completed 'scene update' save.");
       }
@@ -626,7 +626,7 @@ IOManager::notify_postsave(
          _basename = _old_basename;
 
          err_msg(
-            "IOManager::notify_postsave() - ...failed 'entire scene' save. [Dest: '%s']", **s.name());
+            "IOManager::notify_postsave() - ...failed 'entire scene' save. [Dest: '%s']", s.name().c_str());
 
          //Restore old cwd
          if (_old_cwd != "")
@@ -661,7 +661,7 @@ IOManager::notify_postsave(
          //Keep old _cached_cwd_plus_basename 
 
          err_msg(
-            "IOManager::notify_postsave() - ...failed 'scene update' save. [Dest: '%s']", **s.name());
+            "IOManager::notify_postsave() - ...failed 'scene update' save. [Dest: '%s']", s.name().c_str());
       }
    }
    _state.pop();

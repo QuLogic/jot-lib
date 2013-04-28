@@ -83,16 +83,16 @@ class NetStream : public STDdstream, public FD_EVENT {
 
               NetStream (int port, const char         *name);
               NetStream (int fd,   struct sockaddr_in *client,bool block=false);
-	           NetStream (Cstr_ptr &name, StreamFlags);
+              NetStream (const string &name, StreamFlags);
    virtual   ~NetStream();
 
-   str_ptr    name       (void) const  { return name_; }
-   str_ptr    print_name (void) const  { return print_name_; }
+   string     name       (void) const  { return name_; }
+   string     print_name (void) const  { return print_name_; }
    int        port       (void) const  { return port_; }
    int        processing (void) const  { return processing_; }
    Network*   network    (void) const  { return network_; }
-   void       subscribe  (Cstr_ptr  &t){ tags_ += t; }
-   void       subscribe  (Cstr_list &t){ tags_  = t; }
+   void       subscribe  (const string &t){ tags_.push_back(t); }
+   void       subscribe  (const vector<string> &t){ tags_  = t; }
 
    bool       attached   (void) const  { return (!!iostr()) || (_fd != -1); }
 
@@ -123,12 +123,12 @@ class NetStream : public STDdstream, public FD_EVENT {
    
    void _die(const char *msg);
 
-   str_list tags_;
-   str_ptr  name_;
+   vector<string> tags_;
+   string   name_;
    int      port_;
    int      msgSize_;
    int      processing_;
-   str_ptr  print_name_;
+   string   print_name_;
    Network *network_;
 };
 
@@ -154,9 +154,9 @@ class Network: public FD_EVENT {
    FD_MANAGER  *_manager;
    int          nStreams_;
    NetStream   *streams_[256];
-   str_list     tags_;
+   vector<string> tags_;
    int          port_;    // port number we're listening for connections on
-   str_ptr      name_;    // name of the host we're running on
+   string       name_;    // name of the host we're running on
    int          first_;   // whether this is the primary connection server
 
    virtual void  sample    ()                 { accept_stream(); }
@@ -189,13 +189,13 @@ class Network: public FD_EVENT {
                                          connect_to(new NetStream(port,host)); }
    void       flush_data ();
   
-   void       subscribe  (Cstr_ptr &tag)   { tags_ += tag;
-                                             for (int i=0; i < nStreams_; i++)
-                                               streams_[i]->subscribe(tag); }
+   void       subscribe  (const string &tag){ tags_.push_back(tag);
+                                              for (int i=0; i < nStreams_; i++)
+                                                 streams_[i]->subscribe(tag); }
    NetStream *operator[] (int i)           { return streams_[i]; }
    int        num_streams(void)  const     { return nStreams_; }
    int        port       (void)  const     { return port_; }
-   Cstr_ptr  &name       (void)  const     { return name_; }
+   const string &name    (void)  const     { return name_; }
    int        processing (void)  const;
 
    #undef barrier

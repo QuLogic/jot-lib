@@ -27,11 +27,11 @@ class LOADER {
    protected:
       static LOADER *_all;
       LOADER        *_next;
-      virtual bool try_load(Cstr_ptr &path) = 0;
+      virtual bool try_load(const string &path) = 0;
       LOADER();
       virtual ~LOADER() {}
    public:
-      static  bool load(Cstr_ptr &path);
+      static  bool load(const string &path);
 };
 
 

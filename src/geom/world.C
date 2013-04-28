@@ -48,7 +48,7 @@ LOADER::LOADER()
 
 bool
 LOADER::load(
-   Cstr_ptr &path
+   const string &path
    )
 {
    bool loaded = 0;

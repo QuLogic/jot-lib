@@ -246,7 +246,7 @@ dup_group(HatchingGroup* g)
    }
 
    // choose a name for a tmp file:
-   str_ptr tmp("tmp.jot");
+   string tmp("tmp.jot");
 
    {
       // using braces so the stream closes
@@ -255,7 +255,7 @@ dup_group(HatchingGroup* g)
       // open a stream to write to the tmp file:
       NetStream out(tmp, NetStream::ascii_w);
       if (out.fd() < 0) {
-         err_ret("dup_group: error: can't open %s for writing", **tmp);
+         err_ret("dup_group: error: can't open %s for writing", tmp.c_str());
          return 0;
       }
 
@@ -267,7 +267,7 @@ dup_group(HatchingGroup* g)
    // open a stream to read from the tmp file:
    NetStream in(tmp, NetStream::ascii_r);
    if (in.fd() < 0) {
-      err_ret("dup_group: error: can't open %s for reading", **tmp);
+      err_ret("dup_group: error: can't open %s for reading", tmp.c_str());
       return 0;
    }
 

@@ -609,7 +609,7 @@ BaseJOTapp::load_jot_file(const string &file)
 {
    LOADobs::load_status_t status;
 
-   NetStream s(str_ptr(file.c_str()), NetStream::ascii_r);
+   NetStream s(file, NetStream::ascii_r);
 
    LOADobs::notify_load_obs(s, status, true, true);
 

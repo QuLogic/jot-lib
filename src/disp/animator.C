@@ -257,7 +257,7 @@ Animator::pre_draw_CB()
       string fname = IOManager::cwd() + bname;
       LOADobs::load_status_t status;
       cerr <<  "loading in " << fname << endl;
-      NetStream s(str_ptr(fname.c_str()), NetStream::ascii_r);
+      NetStream s(fname, NetStream::ascii_r);
       LOADobs::notify_load_obs(s, status, true, false);
 
       _last_loaded = _cur_frame;
@@ -351,7 +351,7 @@ Animator::format(STDdstream &d)  const
          //Keep scope issolated so load stream closes before saving
          //just in case we're overwriting...
          {
-            NetStream l(str_ptr(lname.c_str()), NetStream::ascii_r);
+            NetStream l(lname, NetStream::ascii_r);
             LOADobs::notify_load_obs(l, lstatus, true, false);
 
             if (lstatus != LOADobs::LOAD_ERROR_NONE) {
@@ -362,7 +362,7 @@ Animator::format(STDdstream &d)  const
          }
 
          {
-            NetStream s(str_ptr(sname.c_str()), NetStream::ascii_w);
+            NetStream s(sname, NetStream::ascii_w);
             SAVEobs::notify_save_obs(s, sstatus, true, false);
 
             if (sstatus != SAVEobs::SAVE_ERROR_NONE) {

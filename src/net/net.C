@@ -354,7 +354,7 @@ static bool debug = Config::get_var_bool("DEBUG_NET_STREAM",false);
 class NetHost {
  protected:
    unsigned long addr_;
-   str_ptr       name_;
+   string        name_;
    int           port_;
 
  public:
@@ -366,7 +366,7 @@ class NetHost {
                                         port_ = rhs.port_; return *this; }
 
    int     port(void)       const     { return port_; }
-   str_ptr name(void)       const     { return name_; }
+   string  name(void)       const     { return name_; }
    void    get_address(struct sockaddr_in *addr) const {
       // DON'T free this memory; copy it
       // returns architecture-dependent address information
@@ -388,7 +388,7 @@ NetHost::NetHost(
       unsigned long netAddr = inet_addr(hostname);
       entry = gethostbyaddr((const char*) &netAddr, sizeof(netAddr), AF_INET);
       if (entry) {
-         name_ = str_ptr(entry->h_name);
+         name_ = string(entry->h_name);
       } else name_ = hostname;
       addr_ = netAddr;
       port_ = -1;
@@ -400,7 +400,7 @@ NetHost::NetHost(
          exit(1);
       }
 
-      name_ = str_ptr(entry->h_name);
+      name_ = string(entry->h_name);
       addr_ = *(unsigned long*)(entry->h_addr_list[0]);
       port_ = -1;
    }
@@ -425,7 +425,7 @@ NetHost::NetHost(
    }
 
    port_ = ntohs(addr->sin_port);
-   name_ = str_ptr(entry->h_name);
+   name_ = string(entry->h_name);
    addr_ = *(unsigned long*)(entry->h_addr_list[0]);
 }
 
@@ -438,7 +438,7 @@ NetStream::set_port(
    )
 {
    port_ = p;
-   print_name_ = get_host_print_name(port(), **name());
+   print_name_ = get_host_print_name(port(), name().c_str());
 }
 
 NetStream::NetStream(
@@ -483,9 +483,11 @@ NetStream::NetStream(
 
    if (client == 0) 
    {
-      name_ = str_ptr(fd);
+      char tmp[32];
+      sprintf(tmp, "%d", fd);
+      name_ = string(tmp);
       port_ = 0;
-      print_name_ = str_ptr("file descriptor ") + name_;
+      print_name_ = string("file descriptor ") + name_;
       // XXX - assumes fd is not a socket and doesn't need no_tcp_delay()
    } 
    else 
@@ -493,7 +495,7 @@ NetStream::NetStream(
       NetHost host(client);
       name_       = host.name();
       port_       = -1;  // host.port();
-      print_name_ = str_ptr(get_host_print_name(port_, **name_));
+      print_name_ = string(get_host_print_name(port_, name_.c_str()));
 
       no_linger(_fd);
       if (_fd != -1) 
@@ -507,7 +509,7 @@ NetStream::NetStream(
 }
 
 NetStream::NetStream(
-   Cstr_ptr     &name, 
+   const string            &name,
    NetStream::StreamFlags   flags) :
       name_(name), 
       port_(0), 
@@ -527,21 +529,21 @@ NetStream::NetStream(
            << "stream is readable AND writeable. Truncating file: "
            << name
            << endl;
-      fs = new fstream(**name, fstream::in | fstream::out | fstream::trunc);
+      fs = new fstream(name.c_str(), fstream::in | fstream::out | fstream::trunc);
    } else if (writeable) {
       if (debug) {
          cerr << "NetStream::NetStream: creating fstream for writing: "
               << name
               << endl;
       }
-      fs = new fstream(**name, fstream::out | fstream::trunc);
+      fs = new fstream(name.c_str(), fstream::out | fstream::trunc);
    } else if (readable) {
       if (debug) {
          cerr << "NetStream::NetStream: creating fstream for reading: "
               << name
               << endl;
       }
-      fs = new fstream(**name, fstream::in);
+      fs = new fstream(name.c_str(), fstream::in);
    } else {
       // this never happens, does it?
       assert(0);
@@ -562,7 +564,7 @@ NetStream::NetStream(
       cerr << "NetStream::NetStream: is_ascii: "
            << (STDdstream::ascii() ? "true" : "false")
            << endl;
-//       *this << str_ptr("fooyah");
+//       *this << string("fooyah");
 //       *_ostream << std::endl;
    }
 
@@ -807,7 +809,7 @@ NetStream::interpret()
                      NetStream *s = network_->streams_[i];
                      if (s->port() != -1 && s != this) {
                         *this << NETadd_connection 
-                              << string(**s->name())
+                              << s->name()
                               << s->port()
                               << NETflush;
                      }
@@ -819,11 +821,9 @@ NetStream::interpret()
             brcase NETbroadcast: { 
                string flag;
                *this >> flag;
-               int i;
-               for (i = 0; i < tags_.num(); i++)
-                  if (flag == string(**tags_[i]))
-                     break; 
-               if (i == tags_.num()) {
+               vector<string>::iterator it;
+               it = std::find(tags_.begin(), tags_.end(), flag);
+               if (it == tags_.end()) {
                   _in_queue.remove_all();
                   if (Config::get_var_bool("PRINT_ERRS",false,true))
                      cerr << "Ignoring broadcast " << flag << endl;
@@ -1056,7 +1056,7 @@ Network::configure(
 
    port_ = port;
    gethostname(buff, 255);
-   name_ = str_ptr(buff);
+   name_ = string(buff);
 
    // Make the socket
    if ((_fd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
