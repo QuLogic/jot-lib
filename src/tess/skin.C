@@ -355,10 +355,10 @@ Skin::create_multi_sleeve(
 }
 
 inline void
-report(CVertMapper& mapper, Cstr_ptr& msg)
+report(CVertMapper& mapper, const string& msg)
 {
    err_msg("  %s: %d verts to %d verts, %d edges to %d edges",
-           **msg,
+           msg.c_str(),
            mapper.A().num(),
            mapper.B().num(),
            mapper.a_edges().num(),
@@ -747,18 +747,18 @@ show_polys(BMESH* m)
 }
 
 inline bool
-join(CBvert_list& o, CBvert_list& c, MULTI_CMDptr& cmd, Cstr_ptr& msg)
+join(CBvert_list& o, CBvert_list& c, MULTI_CMDptr& cmd, const string& msg)
 {
    // Used in Skin::join_to_skel() to join seams of a mesh together.
 
    JOIN_SEAM_CMDptr join = new JOIN_SEAM_CMD(o, c);
    if (join->doit()) {
       err_adv(debug, "  joined %s (%d verts to %d verts)",
-              **msg, o.num(), c.num());
+              msg.c_str(), o.num(), c.num());
       cmd->add(join);
       return true;
    } else {
-      err_adv(debug, "  error: can't join %s", **msg);
+      err_adv(debug, "  error: can't join %s", msg.c_str());
       return false;
    }
 }
