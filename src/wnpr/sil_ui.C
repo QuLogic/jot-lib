@@ -1499,8 +1499,9 @@ SilUI::update_patch()
 
       int i = pl.get_index(_selectedPatch);
       assert(i!=BAD_IND);
-      str_ptr text = str_ptr(i+1) + " of " + str_ptr(pl.num());
-      _text[TEXT_PATCH]->set_text(**text);
+      char text[128];
+      sprintf(text, "%d of %d", i + 1, pl.num());
+      _text[TEXT_PATCH]->set_text(text);
 
       _button[BUT_PATCH_NEXT]->enable();
    }
@@ -1535,20 +1536,20 @@ SilUI::update_path()
          update_path_indices();
 
          //Path number
-         str_ptr text;
-         if (_votePathIndex == -1)
-         {
-            text = str_ptr("Showing NONE of ") + str_ptr(pl.num()) + " Paths";
-         }
-         else
-         {
-            text = str_ptr("Showing Path ") + str_ptr(_votePathIndex+1) 
-                     + " of " + str_ptr(pl.num())  + " - "  
+         char tmp[128];
+         string text;
+         if (_votePathIndex == -1) {
+            sprintf(tmp, "Showing NONE of %d Paths", pl.num());
+            text = string(tmp);
+
+         } else {
+            sprintf(tmp, "Showing Path %d of %d - ", _votePathIndex + 1, pl.num());
+            text = string(tmp)
                      + SilAndCreaseTexture::sil_stroke_pool(
                         SilAndCreaseTexture::type_and_vis_to_sil_stroke_pool(
                            pl[_votePathIndex]->type(), pl[_votePathIndex]->vis()));
          }
-         _text[TEXT_PATH]->set_text(**text);   
+         _text[TEXT_PATH]->set_text(text.c_str());
 
          if (_graph[GRAPH_PATH]->name != "Parameter Votes vs. Arc-length")
          {
@@ -1605,19 +1606,19 @@ SilUI::update_seg()
          if (_votePathIndex != -1)
          {
             //Stroke number
-            str_ptr text;
-            if (_strokePathIndex == -1)
-            {
-               text = str_ptr("Showing NONE of ") + str_ptr(pl[_votePathIndex]->groups().num()) + " Strokes";
-            }
-            else
-            {
-               text = str_ptr("Showing Stroke ") + str_ptr(_strokePathIndex+1) 
-                     + " of " + str_ptr(pl[_votePathIndex]->groups().num()) + " - " 
+            string text;
+            char tmp[128];
+            if (_strokePathIndex == -1) {
+               sprintf(tmp, "Showing NONE of %d Strokes", pl[_votePathIndex]->groups().num());
+               text = string(tmp);
+
+            } else {
+               sprintf(tmp, "Showing Stroke %d of %d - ", _strokePathIndex + 1, pl[_votePathIndex]->groups().num());
+               text = string(tmp)
                      + VoteGroup::vg_status(pl[_votePathIndex]->groups()[_strokePathIndex].status()) + " - " 
                      + VoteGroup::fit_status(pl[_votePathIndex]->groups()[_strokePathIndex].fstatus());
             }
-            _text[TEXT_SEG]->set_text(**text);   
+            _text[TEXT_SEG]->set_text(text.c_str());
 
             if (_graph[GRAPH_SEG]->name != "Parameter Votes vs. Arc-length")
             {
@@ -1670,11 +1671,9 @@ SilUI::update_seg()
 void
 SilUI::update_vote()
 {
+   if (_selectedGEL) {
+      char text[128];
 
-   if (_selectedGEL)
-   {
-      str_ptr text;
-      
       assert(_selectedPatch);
 
       if (_observedTexture)
@@ -1695,14 +1694,11 @@ SilUI::update_vote()
                VoteGroup &g = l->groups()[_strokePathIndex];
 
                //Vote
-               if (_voteIndex != -1)
-               {
+               if (_voteIndex != -1) {
                   //Actually draw the good in the notify_cb
-                  text = str_ptr("Showing Vote ") + str_ptr(_voteIndex+1) + " of " + str_ptr(g.num());
-               }
-               else
-               {
-                  text = str_ptr("Showing NONE of ") + str_ptr(g.num()) + " Votes";
+                  sprintf(text, "Showing Vote %d of %d", _voteIndex + 1, g.num());
+               } else {
+                  sprintf(text, "Showing NONE of %d Votes", g.num());
                }
 
                if (_panel[PANEL_VOTE_DATA]->name != "Vote Information")
@@ -1718,7 +1714,7 @@ SilUI::update_vote()
                if (_panel[PANEL_VOTE_DATA]->name != "N/A")
                   _panel[PANEL_VOTE_DATA]->set_name("N/A");
 
-               text = str_ptr("No stroke selected");
+               sprintf(text, "No stroke selected");
 
                _button[BUT_VOTE_NEXT]->disable();
                _button[BUT_VOTE_PREV]->disable();
@@ -1732,7 +1728,7 @@ SilUI::update_vote()
             if (_panel[PANEL_VOTE_DATA]->name != "N/A")
                _panel[PANEL_VOTE_DATA]->set_name("N/A");
 
-            text = str_ptr("No path and stroke selected");
+            sprintf(text, "No path and stroke selected");
 
             _button[BUT_VOTE_NEXT]->disable();
             _button[BUT_VOTE_PREV]->disable();
@@ -1747,13 +1743,13 @@ SilUI::update_vote()
 
           _panel[PANEL_VOTE_DATA]->set_name("N/A");
          
-          text = str_ptr("");
+          text[0] = '\0';
 
          _button[BUT_VOTE_NEXT]->disable();
          _button[BUT_VOTE_PREV]->disable();
       }
 
-      _text[TEXT_VOTE]->set_text(**text);   
+      _text[TEXT_VOTE]->set_text(text);
    }
    else
    {
@@ -2772,16 +2768,19 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                      y.add(g.vote(k)._t);
                   }
 
+                  char path_str[64];
+                  sprintf(path_str, "Path #%d", total);
+
                   if ((int)g.id() != _strokePathId)
                   {
-                     _graph[GRAPH_PATH]->set_series_name(2*total,**(str_ptr("Path #") + str_ptr(total)));
+                     _graph[GRAPH_PATH]->set_series_name(2*total,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total,GLUI_GRAPH_SERIES_LINE);
                      _graph[GRAPH_PATH]->set_series_size(2*total,1.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total, &series_color[cnt%6][0]);
 
                      _graph[GRAPH_PATH]->set_series_data(2*total,x.num(),x.array(),y.array());
 
-                     _graph[GRAPH_PATH]->set_series_name(2*total+1,**(str_ptr("Path #") + str_ptr(total)));
+                     _graph[GRAPH_PATH]->set_series_name(2*total+1,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_PATH]->set_series_size(2*total+1,4.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total+1,&series_color[j%6][0]);
@@ -2792,14 +2791,14 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                   {
                      seg_total--;
 
-                     _graph[GRAPH_PATH]->set_series_name(2*total,**(str_ptr("Path #") + str_ptr(total)));
+                     _graph[GRAPH_PATH]->set_series_name(2*total,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total,GLUI_GRAPH_SERIES_LINE);
                      _graph[GRAPH_PATH]->set_series_size(2*total,1.4);
                      _graph[GRAPH_PATH]->set_series_color(2*total, &series_color_selected[cnt%6][0]);
 
                      _graph[GRAPH_PATH]->set_series_data(2*total,x.num(),x.array(),y.array());
 
-                     _graph[GRAPH_PATH]->set_series_name(2*total+1,**(str_ptr("Path #") + str_ptr(total)));
+                     _graph[GRAPH_PATH]->set_series_name(2*total+1,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_PATH]->set_series_size(2*total+1,5.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total+1,&series_color_selected[j%6][0]);
@@ -2807,14 +2806,16 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                      _graph[GRAPH_PATH]->set_series_data(2*total+1,x.num(),x.array(),y.array());
 
 
-                     _graph[GRAPH_SEG]->set_series_name(2*seg_total,**(str_ptr("Path #") + str_ptr(seg_total)));
+                     sprintf(path_str, "Path #%d", seg_total);
+
+                     _graph[GRAPH_SEG]->set_series_name(2*seg_total,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total,GLUI_GRAPH_SERIES_LINE);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total,1.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total, &series_color[cnt%6][0]);
 
                      _graph[GRAPH_SEG]->set_series_data(2*seg_total,x.num(),x.array(),y.array());
 
-                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+1,**(str_ptr("Path #") + str_ptr(seg_total)));
+                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+1,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+1,4.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+1,&series_color[j%6][0]);
@@ -2830,14 +2831,14 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                         y.add(g.fit(k)[1]);
                      }
 
-                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+2,**(str_ptr("Path #") + str_ptr(seg_total)));
+                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+2,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total+2,GLUI_GRAPH_SERIES_LINE);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+2,1.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+2, &series_color_fit[0]);
 
                      _graph[GRAPH_SEG]->set_series_data(2*seg_total+2,x.num(),x.array(),y.array());
 
-                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+3,**(str_ptr("Path #") + str_ptr(seg_total)));
+                     _graph[GRAPH_SEG]->set_series_name(2*seg_total+3,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total+3,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+3,4.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+3,&series_color_fit[0]);
@@ -2852,14 +2853,16 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                         x.add(g.vote(_voteIndex)._s);
                         y.add(g.vote(_voteIndex)._t);
 
-                        _graph[GRAPH_SEG]->set_series_name(2*seg_total+4,**(str_ptr("Path #") + str_ptr(seg_total+1)));
+                        sprintf(path_str, "Path #%d", seg_total + 1);
+
+                        _graph[GRAPH_SEG]->set_series_name(2*seg_total+4,path_str);
                         _graph[GRAPH_SEG]->set_series_type(2*seg_total+4,GLUI_GRAPH_SERIES_DOT);
                         _graph[GRAPH_SEG]->set_series_size(2*seg_total+4,7.0);
                         _graph[GRAPH_SEG]->set_series_color(2*seg_total+4,&series_color_selected[j%6][0]);
 
                         _graph[GRAPH_SEG]->set_series_data(2*seg_total+4,x.num(),x.array(),y.array());
 
-                        _graph[GRAPH_SEG]->set_series_name(2*seg_total+5,**(str_ptr("Path #") + str_ptr(seg_total+1)));
+                        _graph[GRAPH_SEG]->set_series_name(2*seg_total+5,path_str);
                         _graph[GRAPH_SEG]->set_series_type(2*seg_total+5,GLUI_GRAPH_SERIES_DOT);
                         _graph[GRAPH_SEG]->set_series_size(2*seg_total+5,4.0);
                         _graph[GRAPH_SEG]->set_series_color(2*seg_total+5,inner_dot_color);
@@ -2905,17 +2908,17 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       {
          assert(_strokePathIndex != -1);
          LuboVote &v = gs[_strokePathIndex].vote(_voteIndex);
-         str_ptr text;
+         char text[128];
             
          //Output some stuff 
-         text = str_ptr("PATH_ID =") + str_ptr((int)v._path_id) + "    STROKE_ID = " + str_ptr((int)v._stroke_id);
-         _text[TEXT_VOTE_1]->set_text(**text);   
-         text = str_ptr("S = ") + str_ptr(v._s) + "      T =" + str_ptr(v._t);
-         _text[TEXT_VOTE_2]->set_text(**text);   
-         text = str_ptr("WORLD_DIST = ") + str_ptr(v._world_dist) + "      NDC_DIST =" + str_ptr(v._ndc_dist);
-         _text[TEXT_VOTE_3]->set_text(**text);   
-         text = str_ptr("CONF = ") + str_ptr(v._conf) + "      STATUS=" + LuboVote::lv_status(v._status);
-         _text[TEXT_VOTE_4]->set_text(**text);   
+         sprintf(text, "PATH_ID = %u    STROKE_ID = %u", v._path_id, v._stroke_id);
+         _text[TEXT_VOTE_1]->set_text(text);
+         sprintf(text, "S = %g      T = %g", v._s, v._t);
+         _text[TEXT_VOTE_2]->set_text(text);
+         sprintf(text, "WORLD_DIST = %g      NDC_DIST = %g", v._world_dist, v._ndc_dist);
+         _text[TEXT_VOTE_3]->set_text(text);
+         sprintf(text, "CONF = %g      STATUS = %s", v._conf, LuboVote::lv_status(v._status));
+         _text[TEXT_VOTE_4]->set_text(text);
       }
       else
       {

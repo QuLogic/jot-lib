@@ -1362,7 +1362,7 @@ LinePenUI::update_noise()
    BStrokePool*         curr_pool = _pen->curr_pool();
    LinePen::edit_mode_t curr_mode = _pen->curr_mode();
 
-   str_ptr text;
+   char text[128];
 
    if (curr_tex)
    {
@@ -1371,8 +1371,8 @@ LinePenUI::update_noise()
       {
          assert(curr_pool->class_name() == SilStrokePool::static_name());
          SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
-      
-         text = str_ptr(sil_pool->get_edit_proto()+1) + " of " + str_ptr(sil_pool->get_num_protos());
+
+         sprintf(text, "%d of %d", sil_pool->get_edit_proto() + 1, sil_pool->get_num_protos());
 
          if (sil_pool->get_num_protos()>1)
          {
@@ -1394,7 +1394,7 @@ LinePenUI::update_noise()
       {
          assert(curr_pool->class_name() != SilStrokePool::static_name());
 
-         text = " N/A";
+         sprintf(text, " N/A");
 
          _button[BUT_NOISE_PROTOTYPE_NEXT]->disable();
          _button[BUT_NOISE_PROTOTYPE_DEL]->disable();
@@ -1414,7 +1414,7 @@ LinePenUI::update_noise()
    }
    else
    {
-      text = " N/A";
+      sprintf(text, " N/A");
 
       _button[BUT_NOISE_PROTOTYPE_NEXT]->disable();
       _button[BUT_NOISE_PROTOTYPE_DEL]->disable();
@@ -1427,7 +1427,7 @@ LinePenUI::update_noise()
       _slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION]->disable();
    }
    
-   _statictext[TEXT_NOISE_PROTOTYPE]->set_text(**text);
+   _statictext[TEXT_NOISE_PROTOTYPE]->set_text(text);
 }
 
 
@@ -1445,7 +1445,8 @@ LinePenUI::update_edit()
    OutlineStroke*       curr_stroke = _pen->curr_stroke();
    LinePen::edit_mode_t curr_mode   = _pen->curr_mode();
 
-   str_ptr text1, text2;
+   string text1;
+   char text2[128];
 
    if (curr_mode == LinePen::EDIT_MODE_SIL)
    {
@@ -1522,8 +1523,9 @@ LinePenUI::update_edit()
           }
       }
 
-      text1 = str_ptr("Edit: Line ") + SilAndCreaseTexture::sil_stroke_pool(sil_type);
-      text2 = str_ptr("Proto: ") + str_ptr(sil_pool->get_edit_proto()+1) + " of " + str_ptr(sil_pool->get_num_protos());
+      text1 = string("Edit: Line ") + SilAndCreaseTexture::sil_stroke_pool(sil_type);
+      sprintf(text2, "Proto: %d of %d",
+              sil_pool->get_edit_proto() + 1, sil_pool->get_num_protos());
 
       _checkbox[CHECK_EDIT_PRESSURE_WIDTH]->set_int_val((p->get_press_vary_width()?1:0));
       _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->set_int_val((p->get_press_vary_alpha()?1:0));
@@ -1560,7 +1562,8 @@ LinePenUI::update_edit()
       ARRAY<EdgeStrokePool*>* pools = curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools(); assert(pools);
       int i = pools->get_index(edge_pool); assert(i != BAD_IND);
 
-      text1 = str_ptr("Edit: Crease ") + str_ptr(i+1) + " of " + str_ptr(pools->num());
+      sprintf(text2, "Edit: Crease %d of %d", i + 1, pools->num());
+      text1 = string(text2);
 
       if (curr_stroke)
       {
@@ -1595,9 +1598,8 @@ LinePenUI::update_edit()
          
          _button[BUT_EDIT_STROKE_DEL]->enable();
 
-
-         text2 = str_ptr("Stroke: ") + str_ptr(1+curr_pool->get_selected_stroke_index()) 
-                                                      + " of " + str_ptr(curr_pool->num_strokes());
+         sprintf(text2, "Stroke: %d of %d",
+                 curr_pool->get_selected_stroke_index() + 1, curr_pool->num_strokes());
 
          _checkbox[CHECK_EDIT_PRESSURE_WIDTH]->set_int_val((curr_stroke->get_press_vary_width()?1:0));
          _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->set_int_val((curr_stroke->get_press_vary_alpha()?1:0));
@@ -1623,7 +1625,7 @@ LinePenUI::update_edit()
          
          _button[BUT_EDIT_STROKE_DEL]->disable();
 
-         text2 = str_ptr("Stroke: ") + "None" + " of " + str_ptr(curr_pool->num_strokes());      
+         sprintf(text2, "Stroke: None of %d", curr_pool->num_strokes());
       }
    }
    else if (curr_mode == LinePen::EDIT_MODE_DECAL)
@@ -1659,7 +1661,7 @@ LinePenUI::update_edit()
       _button[BUT_EDIT_SYNTH_EX_CLEAR]->disable();
       _button[BUT_EDIT_SYNTH_ALL_CLEAR]->disable();
 
-      text1 = str_ptr("Edit: Decal");
+      text1 = string("Edit: Decal");
       
       if (curr_stroke)
       {
@@ -1674,8 +1676,8 @@ LinePenUI::update_edit()
          _checkbox[CHECK_EDIT_PRESSURE_WIDTH]->enable();
          _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->enable();
 
-         text2 = str_ptr("Mark: ") + str_ptr(1+curr_pool->get_selected_stroke_index()) 
-                                                      + " of " + str_ptr(curr_pool->num_strokes());
+         sprintf(text2, "Mark: %d of %d",
+                 curr_pool->get_selected_stroke_index() + 1, curr_pool->num_strokes());
 
          _checkbox[CHECK_EDIT_PRESSURE_WIDTH]->set_int_val((curr_stroke->get_press_vary_width()?1:0));
          _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->set_int_val((curr_stroke->get_press_vary_alpha()?1:0));
@@ -1702,7 +1704,7 @@ LinePenUI::update_edit()
          _checkbox[CHECK_EDIT_PRESSURE_WIDTH]->disable();
          _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->disable();
 
-         text2 = str_ptr("Mark: ") + "None" + " of " + str_ptr(curr_pool->num_strokes());            
+         sprintf(text2, "Mark: None of %d", curr_pool->num_strokes());
       }
    }
    else
@@ -1742,11 +1744,11 @@ LinePenUI::update_edit()
       _checkbox[CHECK_EDIT_PRESSURE_ALPHA]->disable();
 
       text1 = "Edit: Nothing!";
-      text2 = "";
+      text2[0] = '\0';
    }
 
-   _statictext[TEXT_EDIT_STATUS_1]->set_text(**text1);
-   _statictext[TEXT_EDIT_STATUS_2]->set_text(**text2);
+   _statictext[TEXT_EDIT_STATUS_1]->set_text(text1.c_str());
+   _statictext[TEXT_EDIT_STATUS_2]->set_text(text2);
 
    _radgroup[RADGROUP_EDIT_OVERSKETCH]->set_int_val(
       (_pen->get_virtual_baseline() ? RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE : 

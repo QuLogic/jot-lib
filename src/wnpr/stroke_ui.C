@@ -964,7 +964,7 @@ StrokeUI::build()
 
    // Add the Plugin Rollout
    _rollout[ROLLOUT_PLUGIN] = new GLUI_Rollout(_glui,
-      **(str_ptr(_client->plugin_name()) + " Plug-in Controls"), true);
+      (string(_client->plugin_name()) + " Plug-in Controls").c_str(), true);
    assert(_rollout[ROLLOUT_PLUGIN]);
    // Tell the client to draw in
    _client->build(_glui, _rollout[ROLLOUT_PLUGIN], _rollout[ROLLOUT_SHAPE]->get_w());

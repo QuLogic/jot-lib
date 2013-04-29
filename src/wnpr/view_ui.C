@@ -1066,7 +1066,9 @@ ViewUI::fill_anti_listbox(
 {
 
    for (int i = 0; i < VIEW::get_jitter_mode_num(); i++) {
-      listbox->add_item(i, **(str_ptr("Jittered - ") + str_ptr(VIEW::get_jitter_num(i)) + " Samples"));
+      char tmp[128];
+      sprintf(tmp, "Jittered - %d Samples", VIEW::get_jitter_num(i));
+      listbox->add_item(i, tmp);
    }
 }
 

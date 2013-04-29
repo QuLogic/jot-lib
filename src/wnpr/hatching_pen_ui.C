@@ -225,7 +225,7 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
 
    // COL1
    _panel[PANEL_TYPE] = new GLUI_Panel(_panel[PANEL_CONTROLS],
-               **(str_ptr("Mode: ") + HatchingGroup::name(_pen->hatch_mode())) );
+               (string("Mode: ") + HatchingGroup::name(_pen->hatch_mode())).c_str());
    assert(_panel[PANEL_TYPE]);
    _button[BUT_TYPE] = new GLUI_Button(
       _panel[PANEL_TYPE], "Type", 
@@ -254,7 +254,7 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    new GLUI_Column(_panel[PANEL_CONTROLS], false);
 
    _panel[PANEL_CURVES] = new GLUI_Panel(_panel[PANEL_CONTROLS],
-               **(str_ptr("Mode: ") + HatchingGroup::curve_mode_name(_pen->curve_mode())) );
+               (string("Mode: ") + HatchingGroup::curve_mode_name(_pen->curve_mode())).c_str());
    assert(_panel[PANEL_CURVES]);
    _button[BUT_CURVES] = new GLUI_Button(
       _panel[PANEL_CURVES], "Curves", 
@@ -274,7 +274,7 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    new GLUI_Column(_panel[PANEL_CONTROLS], false);
    
    _panel[PANEL_STYLE] = new GLUI_Panel(_panel[PANEL_CONTROLS],
-               **(str_ptr("Mode: ") + HatchingGroup::style_mode_name(_pen->params().anim_style())) );
+               (string("Mode: ") + HatchingGroup::style_mode_name(_pen->params().anim_style())).c_str());
    assert(_panel[PANEL_STYLE]);
    _button[BUT_STYLE] = new GLUI_Button(
       _panel[PANEL_STYLE], "Style", 
@@ -400,10 +400,10 @@ void
 HatchingPenUI::update()
 {
    _panel[PANEL_TYPE]->set_name( 
-         **( str_ptr("Mode: ") + HatchingGroup::name(_pen->hatch_mode())));
+         (string("Mode: ") + HatchingGroup::name(_pen->hatch_mode())).c_str());
 
    _panel[PANEL_STYLE]->set_name( 
-         **( str_ptr("Mode: ") + HatchingGroup::style_mode_name(_pen->params().anim_style())));
+         (string("Mode: ") + HatchingGroup::style_mode_name(_pen->params().anim_style())).c_str());
 
    bool ret = StrokeUI::set_params(_pen->view(), this, &(_pen->params().stroke()));
 
@@ -436,7 +436,7 @@ HatchingPenUI::button_cb(int id)
          _ui[id >> ID_SHIFT]->_pen->next_hatch_mode();
 
          _ui[id >> ID_SHIFT]->_panel[PANEL_TYPE]->set_name( 
-            **( str_ptr("Mode: ") + HatchingGroup::name(_ui[id >> ID_SHIFT]->_pen->hatch_mode())));
+            (string("Mode: ") + HatchingGroup::name(_ui[id >> ID_SHIFT]->_pen->hatch_mode())).c_str());
          //_ui[id >> ID_SHIFT]->update();
       break;
       case BUT_CURVES:
@@ -444,14 +444,14 @@ HatchingPenUI::button_cb(int id)
          _ui[id >> ID_SHIFT]->_pen->next_curve_mode();
 
          _ui[id >> ID_SHIFT]->_panel[PANEL_CURVES]->set_name( 
-            **( str_ptr("Mode: ") + HatchingGroup::curve_mode_name(_ui[id >> ID_SHIFT]->_pen->curve_mode())));
+            (string("Mode: ") + HatchingGroup::curve_mode_name(_ui[id >> ID_SHIFT]->_pen->curve_mode())).c_str());
          //_ui[id >> ID_SHIFT]->update();
       break;
       case BUT_STYLE:
          cerr << "HatchingPenUI::button_cb() - Style toggle\n";
          _ui[id >> ID_SHIFT]->_pen->next_style_mode();
          _ui[id >> ID_SHIFT]->_panel[PANEL_STYLE]->set_name(
-               **( str_ptr("Mode: ") + HatchingGroup::style_mode_name(_ui[id >> ID_SHIFT]->_pen->params().anim_style())));
+               (string("Mode: ") + HatchingGroup::style_mode_name(_ui[id >> ID_SHIFT]->_pen->params().anim_style())).c_str());
          //_ui[id >> ID_SHIFT]->update();
       break;
       case BUT_APPLY:
