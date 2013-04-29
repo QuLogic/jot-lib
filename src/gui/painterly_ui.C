@@ -61,7 +61,7 @@ PainterlyUI::PainterlyUI(BaseUI* parent) :
    _ui.push_back(this);
    _id = (_ui.size()-1); 
    _color_ui = new ColorUI(this);
-   _presets_ui = new PresetsUI(this, str_ptr("nprdata/painterly_presets/"), str_ptr(".paint"));
+   _presets_ui = new PresetsUI(this, "nprdata/painterly_presets/", ".paint");
    _texture_selection_ui = new PatchSelectionUI(this, true);
    _tone_shader_ui = new ToneShaderUI(this);
    _current_painterly = 0;  
@@ -589,7 +589,7 @@ PainterlyUI::apply_changes_to_texture(operation_id_t op, Painterly* tex, int lay
 bool
 PainterlyUI::load_preset()
 {   
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("PainterlyUI::save_preset - file not specified");
       return false;
@@ -622,7 +622,7 @@ bool
 PainterlyUI::save_preset()
 { 
    cerr << "PainterlyUI::save_preset()" << endl;
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("PainterlyUI::save_preset - file not specified");
       return false;

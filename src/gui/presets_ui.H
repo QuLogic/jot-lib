@@ -66,26 +66,26 @@ class PresetsUI : public BaseUI {
    DEFINE_RTTI_METHODS3("PresetsUI", PresetsUI*, PresetsUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   PresetsUI(BaseUI* parent, str_ptr dir=0, str_ptr ext=0);
+   PresetsUI(BaseUI* parent, string dir=0, string ext=0);
    virtual ~PresetsUI(){}
 
    /******** MEMBERS METHODS ********/  
    virtual void build(GLUI*, GLUI_Panel*, bool open);  
    virtual void update_non_lives();
-   str_ptr get_filename() { return _filename; }    
+   string get_filename() { return _filename; }
  protected:
    
    /******** MEMBERS VARS ********/
    int                 _id;
-   str_ptr             _directory;
-   str_ptr             _extension;
-   str_list            _preset_filenames;
-   str_ptr             _filename;
+   string              _directory;
+   string              _extension;
+   vector<string>      _preset_filenames;
+   string              _filename;
  protected:     
    /******** Convenience Methods ********/
    //void          fill_preset_listbox(GLUI_Listbox *listbox,
-   //                         str_list     &save_files,
-   //                         Cstr_ptr     &full_path);
+   //                         vector<string>&save_files,
+   //                         const string  &full_path);
    void          preset_selected();
    void          preset_save_button();
    void          preset_save_text();

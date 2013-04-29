@@ -119,7 +119,7 @@ class ToneShaderUI : public BaseUI {
    /******** MEMBERS VARS ********/
    int               _id;
    operation_id_t    _last_op;
-   str_list          _texture_filenames;
+   vector<string>    _texture_filenames;
 
  protected:     
    /******** Convenience Methods ********/

@@ -136,7 +136,7 @@ class HalftoneUI : public BaseUI {
    Halftone_TX*         _current_halftone;
    PresetsUI*           _presets_ui;
    ToneShaderUI*        _tone_shader_ui;
-   str_list             _pattern_filenames;
+   vector<string>       _pattern_filenames;
    int                  _color_sel;
  protected:     
    /******** Convenience Methods ********/

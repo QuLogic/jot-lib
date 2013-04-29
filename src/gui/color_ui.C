@@ -52,7 +52,7 @@ ColorUI::ColorUI(BaseUI* parent) :
         _set_palette_mode(false)
 
 {
-    _presets_ui = new PresetsUI(this, str_ptr("nprdata/color_presets/"), str_ptr(".col"));
+    _presets_ui = new PresetsUI(this, "nprdata/color_presets/", ".col");
    _ui.push_back(this);
    _id = (_ui.size()-1);  
 }
@@ -219,7 +219,7 @@ ColorUI::child_callback(BaseUI* sender, int event)
 bool
 ColorUI::load_preset()
 {
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    ifstream fin(f, ifstream::in);
 
    if (!fin)    {
@@ -238,8 +238,7 @@ ColorUI::load_preset()
 bool         
 ColorUI::save_preset()
 { 
-   
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f)
       return false;
    fstream fout;

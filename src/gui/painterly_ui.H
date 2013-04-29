@@ -136,8 +136,8 @@ class PainterlyUI : public BaseUI {
    Painterly*          _current_painterly;
    PresetsUI*           _presets_ui;
    ToneShaderUI*        _tone_shader_ui;
-   str_list             _pattern_filenames;
-   str_list             _paper_filenames;
+   vector<string>       _pattern_filenames;
+   vector<string>       _paper_filenames;
    int                  _color_sel;
  protected:     
    /******** Convenience Methods ********/

@@ -47,7 +47,7 @@ LightUI::LightUI(VIEWptr v) :
    _ui = this;
    _color =  COLOR(1.0,1.0,1.0);
    _color_ui = new ColorUI(this);
-   _presets_ui = new PresetsUI(this, str_ptr("nprdata/lights_presets/"), str_ptr(".view"));
+   _presets_ui = new PresetsUI(this, "nprdata/lights_presets/", ".view");
 
 }
 
@@ -320,7 +320,7 @@ bool
 LightUI::load_preset()
 {
     cerr << "LightUI::load_preset()" << endl;
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("LightUI::save_preset - file not specified");
       return false;
@@ -351,7 +351,7 @@ bool
 LightUI::save_preset()
 { 
    cerr << "LightUI::save_preset()" << endl;
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("LightUI::save_preset - file not specified");
       return false;

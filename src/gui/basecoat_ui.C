@@ -264,7 +264,7 @@ BasecoatUI::apply_changes_to_texture(operation_id_t op, ImageLineShader* tex, in
       tex->get_basecoat_shader()->set_color_steepness(_slider[SLIDE_COLOR_STEEPNESS]->get_float_val());  
    }
    if((op==OP_ALL) || (op==OP_TEXTURE)){
-      tex->get_basecoat_shader()->set_tex(GtexUtil::toon_1D_name(string(**_texture_filenames[_listbox[LIST_TEXTURE]->get_int_val()])));
+      tex->get_basecoat_shader()->set_tex(GtexUtil::toon_1D_name(_texture_filenames[_listbox[LIST_TEXTURE]->get_int_val()]));
    } 
    
    if(_parent)

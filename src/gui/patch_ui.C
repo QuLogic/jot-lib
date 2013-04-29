@@ -554,14 +554,14 @@ PatchUI::checkbox_cb(int id)
 void
 PatchUI::fill_texture_listbox()
 {
-    str_list rend_modes; 
+    vector<string> rend_modes;
     
-    rend_modes.add("Smooth Shading");
-    rend_modes.add("HatchingTX");
-    rend_modes.add("Halftone_TX");
-    rend_modes.add("Painterly");
-    rend_modes.add("ProxyTexture");
-    rend_modes.add("Other...");
+    rend_modes.push_back("Smooth Shading");
+    rend_modes.push_back("HatchingTX");
+    rend_modes.push_back("Halftone_TX");
+    rend_modes.push_back("Painterly");
+    rend_modes.push_back("ProxyTexture");
+    rend_modes.push_back("Other...");
   
     fill_listbox(_listbox[LIST_TEX_SEL], rend_modes);      
 }

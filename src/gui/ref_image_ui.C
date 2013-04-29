@@ -170,7 +170,7 @@ RefImageUI::listbox_cb(int id)
   {
      Skybox_Texture* tex = get_tex<Skybox_Texture>(SKY_BOX::lookup()->get_patch());
      assert(tex);
-     string file = Config::JOT_ROOT() + "/nprdata/sky_textures/" + **_ui[0]->_sky_filenames[_ui[0]->_listbox[LISTBOX_SKY]->get_int_val()];
+     string file = Config::JOT_ROOT() + "/nprdata/sky_textures/" + _ui[0]->_sky_filenames[_ui[0]->_listbox[LISTBOX_SKY]->get_int_val()];
      cout << "Loading : " << file << endl;
      tex->load_texture(file);
   }

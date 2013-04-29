@@ -91,7 +91,7 @@ class PatchSelectionUI : public BaseUI {
    // For the textures only...(if there is filter, i.e. patch, this is not called...)
    template <class T> void fill_my_texture_listbox()
    {
-      str_list list;
+      vector<string> list;
       int index;
       GUI::get_all_my_textures<T>(list, index, _patch, _patches);
       fill_listbox(_listbox[LIST_PATCH], list);   

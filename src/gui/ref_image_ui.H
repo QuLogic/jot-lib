@@ -88,7 +88,7 @@ protected:
    
    /******** MEMBERS VARS ********/
    int                 _id;
-   str_list            _sky_filenames;
+   vector<string>      _sky_filenames;
    
    /******** STATIC CALLBACK METHODS ********/
    static void  radiogroup_cb(int id);

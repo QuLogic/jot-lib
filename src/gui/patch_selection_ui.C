@@ -223,7 +223,7 @@ PatchSelectionUI::checkbox_cb(int id)
 
 // Fill out values with list all the patches in the scene
 inline void 
-fill_all_patches_listbox(str_list& list, int& index, Patch*& my_p, Patch_list& my_patches)
+fill_all_patches_listbox(vector<string>& list, int& index, Patch*& my_p, Patch_list& my_patches)
 {   
    my_patches.clear();
    BMESH_list meshes = BMESH_list(DRAWN);  
@@ -231,7 +231,9 @@ fill_all_patches_listbox(str_list& list, int& index, Patch*& my_p, Patch_list& m
          Patch_list patch = meshes[i]->patches();
          for(int j=0; j < patch.num(); ++j){
             my_patches.add(patch[j]);
-            list.add(str_ptr(" m_")+str_ptr(i)+str_ptr("_p_")+str_ptr(j));
+            char tmp[64];
+            sprintf(tmp, " m_%d_p_%d", i, j);
+            list.push_back(string(tmp));
             if(Patch::is_focus(patch[j])){
                index=my_patches.num()-1;              
                my_p=patch[j];
@@ -242,13 +244,12 @@ fill_all_patches_listbox(str_list& list, int& index, Patch*& my_p, Patch_list& m
 
 void 
 PatchSelectionUI::fill_my_patch_listbox()
-   {
-      str_list list;
-      int index;      
-      fill_all_patches_listbox(list, index, _patch, _patches);
-      fill_listbox(_listbox[LIST_PATCH], list);      
-      _listbox[LIST_PATCH]->set_int_val(index);
-
-   }
+{
+   vector<string> list;
+   int index;
+   fill_all_patches_listbox(list, index, _patch, _patches);
+   fill_listbox(_listbox[LIST_PATCH], list);
+   _listbox[LIST_PATCH]->set_int_val(index);
+}
 
 // patch_selection_ui.C

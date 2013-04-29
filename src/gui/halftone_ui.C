@@ -55,7 +55,7 @@ HalftoneUI::HalftoneUI(BaseUI* parent) :
    _ui.push_back(this);
    _id = (_ui.size()-1); 
    _color_ui = new ColorUI(this);
-   _presets_ui = new PresetsUI(this, str_ptr("nprdata/halftone_presets/"), str_ptr(".hatch"));
+   _presets_ui = new PresetsUI(this, "nprdata/halftone_presets/", ".hatch");
    _texture_selection_ui = new PatchSelectionUI(this, true);
    _tone_shader_ui = new ToneShaderUI(this);
    _current_halftone = 0;  
@@ -542,8 +542,7 @@ HalftoneUI::apply_changes_to_texture(operation_id_t op, Halftone_TX* tex, int la
 bool
 HalftoneUI::load_preset()
 {   
-  
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("HalftoneUI::save_preset - file not specified");
       return false;
@@ -576,9 +575,8 @@ HalftoneUI::load_preset()
 bool         
 HalftoneUI::save_preset()
 { 
-   
    cerr << "HalftoneUI::save_preset()" << endl;
-   char* f = **(_presets_ui->get_filename());
+   const char* f = _presets_ui->get_filename().c_str();
    if(!f){
       err_msg("HalftoneUI::save_preset - file not specified");
       return false;

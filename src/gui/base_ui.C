@@ -118,7 +118,7 @@ BaseUI::destroy()
 }
 
 void 
-BaseUI::fill_listbox(GLUI_Listbox* listbox, Cstr_list& list)
+BaseUI::fill_listbox(GLUI_Listbox* listbox, const vector<string>& list)
 {
    if(!listbox)
       return;
@@ -126,29 +126,27 @@ BaseUI::fill_listbox(GLUI_Listbox* listbox, Cstr_list& list)
    //clear the listbox
    int i=0;
    while (listbox->delete_item(i++));
-        
-   for(i=0; i < list.num(); ++i)
-   {
-      listbox->add_item(i, **(list[i]));  
+
+   for (vector<string>::size_type i=0; i < list.size(); ++i) {
+      listbox->add_item(i, list[i].c_str());
    }
 }
 
 void 
 BaseUI::fill_directory_listbox(GLUI_Listbox* listbox,
-                               str_list     &save_files,
+                               vector<string> &save_files,
                                const string &full_path,
                                const string &extension,
                                bool         hide_extension,
                                bool         put_default,
-                               Cstr_ptr     default_text)
+                               const string default_text)
 {
    //cerr << "Does this BaseUI::fill_directory_listbox work? not for me....I'm using the one without save_files..." << endl;
 
    int current_count = 0;
    //First clear out any previous presets
-   int i=0;
-   for (i=1; i<=save_files.num();i++)
-   {
+   vector<string>::size_type i=0;
+   for (i=1; i<=save_files.size(); i++) {
       listbox->delete_item(i);
    }  
    save_files.clear();
@@ -157,19 +155,16 @@ BaseUI::fill_directory_listbox(GLUI_Listbox* listbox,
    //inserts a -default- choice in the listbox
    //it will have the int value zero
    //this is usefull for setting the procedural mode in halftone shader
-   if(put_default)
-   {
-      str_ptr default_name = default_text;
+   if (put_default) {
+      string default_name = default_text;
       
-      save_files+=default_name;
-      listbox->add_item(current_count++, **default_name);
-
+      save_files.push_back(default_name);
+      listbox->add_item(current_count++, default_name.c_str());
    }
 
-   
    string::size_type extension_length = extension.length();
    vector<string> in_files = dir_list(full_path);
-   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
+   for (i = 0; i < in_files.size(); i++) {
       string::size_type len = in_files[i].length();
 
       if ((len>3) && (in_files[i].substr(len-extension_length) == extension))
@@ -180,7 +175,7 @@ BaseUI::fill_directory_listbox(GLUI_Listbox* listbox,
          else
             basename = in_files[i];
 
-         save_files += str_ptr(in_files[i].c_str());
+         save_files.push_back(in_files[i]);
          listbox->add_item(current_count++, basename.c_str());
       }
       else if (in_files[i] != "CVS")

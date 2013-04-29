@@ -114,7 +114,7 @@ class BasecoatUI : public BaseUI {
    operation_id_t    _last_op;
    ImageLineShader*     _current_tex;
 
-   str_list             _texture_filenames;
+   vector<string>       _texture_filenames;
 
  protected:     
    /******** Convenience Methods ********/

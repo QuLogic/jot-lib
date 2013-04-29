@@ -41,7 +41,7 @@ using namespace mlib;
 vector<PresetsUI*>         PresetsUI::_ui;
 static int MY_WIDTH = 100;
 
-PresetsUI::PresetsUI(BaseUI* parent, str_ptr dir, str_ptr ext) :
+PresetsUI::PresetsUI(BaseUI* parent, string dir, string ext) :
      BaseUI(parent, "PresetsUI"),
      _directory(dir),
      _extension(ext)
@@ -68,7 +68,7 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+LIST_PRESET, listbox_cb);
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(MY_WIDTH);   
-   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + string(**_directory), string(**_extension), false, true, "-=NEW=-");
+   fill_directory_listbox(_listbox[LIST_PRESET], _preset_filenames, Config::JOT_ROOT() + _directory, _extension, false, true, "-=NEW=-");
 
    new GLUI_Separator(_panel[PANEL_PRESET]);
 
@@ -158,7 +158,7 @@ PresetsUI::preset_selected()
    if(val != 0)
    {
       string filename = _listbox[LIST_PRESET]->curr_text;
-      _filename = str_ptr((Config::JOT_ROOT() + string(**_directory) + filename).c_str());
+      _filename = Config::JOT_ROOT() + _directory + filename;
       _parent->child_callback(this, PRESET_SELECTED);
     //  if(!_parent->child_callback(this, PRESET_SELECTED))
     //     return;
@@ -182,7 +182,7 @@ PresetsUI::preset_save_button()
    else
    {
       string filename = _listbox[LIST_PRESET]->curr_text;
-      _filename = str_ptr((Config::JOT_ROOT() + string(**_directory) + filename).c_str());//_preset_filenames[val-1]);
+      _filename = Config::JOT_ROOT() + _directory + filename;//_preset_filenames[val-1]);
       _parent->child_callback(this, PRESET_SAVE);
       _edittext[EDITTEXT_SAVE]->disable();
       //   return;
@@ -262,12 +262,12 @@ PresetsUI::preset_save_text()
       }
 
   
-   _filename = str_ptr(Config::JOT_ROOT().c_str()) + _directory + newtext + _extension;
+   _filename = Config::JOT_ROOT() + _directory + newtext + _extension;
    if(_parent->child_callback(this, PRESET_SAVE_NEW)){
-      _preset_filenames += (str_ptr(newtext) + _extension);
+      _preset_filenames.push_back(newtext + _extension);
       
-      _listbox[LIST_PRESET]->add_item(_preset_filenames.num(), **_preset_filenames[_preset_filenames.num()-1]);
-      _listbox[LIST_PRESET]->set_int_val(_preset_filenames.num());
+      _listbox[LIST_PRESET]->add_item(_preset_filenames.size(), _preset_filenames[_preset_filenames.size()-1].c_str());
+      _listbox[LIST_PRESET]->set_int_val(_preset_filenames.size());
    }
 
    _edittext[EDITTEXT_SAVE]->set_text("");

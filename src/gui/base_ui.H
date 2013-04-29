@@ -94,14 +94,14 @@ class BaseUI
    virtual ToneShader*  get_tone_shader() { return 0; }
  protected:
    
-   void fill_listbox(GLUI_Listbox* listbox, Cstr_list& list);  
+   void fill_listbox(GLUI_Listbox* listbox, const vector<string>& list);
    void fill_directory_listbox(GLUI_Listbox* listbox,
-                               str_list     &save_files,
+                               vector<string> &save_files,
                                const string &full_path,
                                const string &extension,
                                bool         hide_extension=false,
                                bool         put_default=false,
-                               str_ptr      default_text="-default-");   
+                               string       default_text="-default-");
    /******** MEMBERS VARS ********/    
    string                              _name;     // The name of the window
    GLUI*                               _glui;

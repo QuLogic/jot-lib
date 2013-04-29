@@ -34,7 +34,7 @@ inline T* get_current_texture(Patch* p=Patch::focus())
 
 template <class T>
 inline void get_all_my_textures(
-   str_list& list,              // names displayed in GUI for my_patches
+   vector<string>& list,        // names displayed in GUI for my_patches
    int& index,                  // index of my_p in list
    Patch*& my_p,                // "focus" patch if its cur tex is T
    Patch_list& my_patches       // all patches whose cur tex is T
@@ -49,11 +49,12 @@ inline void get_all_my_textures(
       for (int j=0; j < patch.num(); ++j) {
          if (T::upcast(patch[j]->cur_tex())) {
             my_patches.add(patch[j]);
-            list.add(str_ptr(" m_") + str_ptr(i) +
-                     str_ptr("_p_") + str_ptr(j));
+            char tmp[64];
+            sprintf(tmp, " m_%d_p_%d", i, j);
+            list.push_back(string(tmp));
             if (patch[j] == Patch::focus()) {
                my_p = patch[j];
-               index = list.num()-1;
+               index = list.size()-1;
             }
          }
       }
@@ -63,7 +64,7 @@ inline void get_all_my_textures(
 template <class T>
 inline bool exists_in_the_world()
 {
-   str_list list;
+   vector<string> list;
    Patch_list my_patches;
    Patch* my_p;
    int index;
