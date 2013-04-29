@@ -70,7 +70,7 @@ class TAG_var : public TAG {
      T        *_var;
   public:
                 TAG_var( ) : _var(0),_value(0) { }
-                TAG_var(T *var, Cstr_ptr &field_name, value val, set_meth m): 
+                TAG_var(T *var, const string &field_name, value val, set_meth m):
                     _var(var), _delim(field_name, 0), _value(val), _smeth(m) { }
     STDdstream &format(CDATA_ITEM *, STDdstream &d) 
                                       { _delim.set_stream(&d);
@@ -82,7 +82,7 @@ class TAG_var : public TAG {
                                         _delim.read_id() >> val;
                                         (_var->*_smeth)(val);
                                         return d; }
-    Cstr_ptr   &name()     const      { return _delim.name(); }
+    const string &name()   const      { return _delim.name(); }
 };
 
 //
@@ -95,8 +95,8 @@ class JOTvar : public DATA_ITEM {
       typedef void (OBJ::*set_meth)(TYPE t);
    protected:
       TAGlist   *_var_tags;   // tags for reading/writing the variables
-      str_ptr    _vname;      // name of the variable
-      str_ptr    _inst_name;  // variable instance name:  object::variable
+      string     _vname;      // name of the variable
+      string     _inst_name;  // variable instance name:  object::variable
 
       set_meth   _smeth;      // containing class method used to set variable
       OBJ       *_obj;        // containing instance
@@ -104,7 +104,7 @@ class JOTvar : public DATA_ITEM {
       TYPE       _val;        // variable value
 
       void       set_val(TYPE val)        { (_obj->*_smeth)(val); }
-      str_ptr    inst_name()              { return _obj->name() + "::"+_vname; }
+      string     inst_name()              { return _obj->name() + "::"+_vname; }
       virtual void      check_inst_name() { if (inst_name() != _inst_name) {
                                               // New instantiation name
                                               _inst_name = inst_name();
@@ -115,7 +115,7 @@ class JOTvar : public DATA_ITEM {
 
    public:
                      // constructor: each JOTvar instance is a unique decoder!
-                     JOTvar(TYPE v, OBJ *obj, Cstr_ptr &vname, set_meth m):
+                     JOTvar(TYPE v, OBJ *obj, const string &vname, set_meth m):
                           _vname(vname), _val(v), _obj(obj), _smeth(m), 
                           _var_tags(0)
                                           { _inst_name = inst_name(); 
@@ -126,9 +126,9 @@ class JOTvar : public DATA_ITEM {
                                           JOTvar_obs::notify_jot_var_obs(this);}
          TYPE         get()         const { return _val; }
 
- virtual Cstr_ptr    &obj_name()    const { return _obj->name();} 
- virtual Cstr_ptr    &var_name()    const { return _vname;} 
- virtual STAT_STR_RET class_name()  const { return string(**_inst_name);}// instance name!
+ virtual const string &obj_name()   const { return _obj->name();}
+ virtual const string &var_name()   const { return _vname;}
+ virtual STAT_STR_RET class_name()  const { return _inst_name;}// instance name!
  virtual DATA_ITEM   *dup()         const { return  0; }
  virtual CTAGlist    &tags()        const {
                            if (!_var_tags) {
