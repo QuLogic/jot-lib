@@ -96,7 +96,7 @@ const string RSIL_FRAME      ("Sil Frame");
 //
 // List of rendering types
 //
-vector<string>             VIEW::_rend_types(25);
+vector<string>             VIEW::_rend_types;
 VIEWlist                   VIEW::_views;
 VIEWlist                   VIEWS;
 VIEWobs::view_list        *VIEWobs::_view_obs;
