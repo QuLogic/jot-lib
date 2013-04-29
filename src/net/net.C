@@ -785,7 +785,7 @@ NetStream::interpret()
    processing_ = 1;
    int     ret = 0;
 
-   while (_in_queue.count()) {
+   while (_in_queue.in_avail() > 0) {
       *this >> code;
       switch (code) {
             case NETadd_connection: {
@@ -824,7 +824,8 @@ NetStream::interpret()
                vector<string>::iterator it;
                it = std::find(tags_.begin(), tags_.end(), flag);
                if (it == tags_.end()) {
-                  _in_queue.remove_all();
+                  /* clear input queue */
+                  _in_queue.pubseekoff(0, ios_base::beg, ios_base::in | ios_base::out);
                   if (Config::get_var_bool("PRINT_ERRS",false,true))
                      cerr << "Ignoring broadcast " << flag << endl;
                }
@@ -843,8 +844,8 @@ NetStream::interpret()
 
 void NetStream::flush_data()
 {
-   int count = _out_queue.count();
-   if (!count) return;
+   streamsize count = _out_queue.in_avail();
+   if (count <= 0) return;
    if (Config::get_var_bool("PRINT_ERRS",false,true)) 
       cerr << "NetStream: sending message to net of length " << count << endl;
    
@@ -892,7 +893,7 @@ NetStream::read_stuff()
       if (msgSize_ > (int)BUFSIZE) {
          //XXX - Better error checking... (I hope)
          if (num_read != (int)BUFSIZE) return num_read;
-         _in_queue.put((UGAptr)buff, BUFSIZE);
+         _in_queue.sputn(buff, BUFSIZE);
          msgSize_ -= BUFSIZE;
          if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: Big message, storing first BUFSIZE bytes (msgSize = " << msgSize_ << endl;
          num_read  = 0;
@@ -905,7 +906,7 @@ NetStream::read_stuff()
    if (num_read >= msgSize_) {
       // For each full message...
       while (num_read && num_read >= msgSize_) {
-        _in_queue.put((UGAptr)tbuf, msgSize_); // Stuff the message onto queue
+        _in_queue.sputn(tbuf, msgSize_); // Stuff the message onto queue
         num_read -= msgSize_;                  // skip to end of this message
         tbuf     += msgSize_;
 
@@ -926,7 +927,7 @@ NetStream::read_stuff()
    }
    // Anything left over is less than a complete message, so we store it
    // away in _in_queue and decrease our msgSize_ request accordingly
-   _in_queue.put(tbuf, num_read);
+   _in_queue.sputn(tbuf, num_read);
    msgSize_ -= num_read;
    if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: saved for next time " << num_read << " (msgSize = " << msgSize_ << endl;
    return 0;

@@ -117,7 +117,7 @@ STDdstream::write (
    int               count
    )
 {
-   _out_queue.put (data, count);
+   _out_queue.sputn(data, count);
 
    // Don't flush here - message size won't be prepended. - lsh
    if (_block)
@@ -138,38 +138,35 @@ STDdstream::write (
  * ------------------------------------------------------------------------- */
 void
 STDdstream::read (
-   UGAptr data,
+   char  *data,
    int    count,
    int    pop    // flag for removing the read characters from input buffer
    )
 {
-   UGAptr buffer = NULL;
+   char *buffer = NULL;
    size_t recv_request, recv_result;
 
-   while ((int)_in_queue.count () < count)
-   {
-      if (!buffer)
-      {
+   while ((int)_in_queue.in_avail() < count) {
+      if (!buffer) {
          recv_request = count * DSTREAM_READ_AHEAD_FACTOR;
-         buffer = (UGAptr)malloc(recv_request);
+         buffer = new char [recv_request];
       }
 
-      recv_result = recv (buffer, recv_request);
+      recv_result = recv(buffer, recv_request);
       
       if (recv_result)
-         _in_queue.put (buffer, recv_result);
+         _in_queue.sputn(buffer, recv_result);
 
       if (!_block)
          break;
    }
    if (buffer)
-      free(buffer); 
+      delete[] buffer;
 
-   if ((int)_in_queue.count () >= count)
-   {
+   if ((int)_in_queue.in_avail() >= count) {
       if (pop)
-           _in_queue.get (data, count);
-      else _in_queue.peek(data, count);
+           _in_queue.sgetn(data, count);
+      else memcpy(data, _in_queue.str().data(), count);
 
       _fail = false;
    }
@@ -189,30 +186,28 @@ STDdstream::read (
 void
 STDdstream::flush (void)
 {
-   UGAptr buffer = NULL;
+   char *buffer = NULL;
    size_t send_request, send_result;
 
-   while (_out_queue.count ())
-   {
-      if (!buffer)
-      {
-         send_request = _out_queue.count ();
-         buffer = (UGAptr)malloc(send_request);
+   while (_out_queue.in_avail() > 0) {
+      if (!buffer) {
+         send_request = _out_queue.in_avail();
+         buffer = new char [send_request];
       }
 
-      _out_queue.peek (buffer, send_request);
-      send_result = send (buffer, send_request);
+      memcpy(buffer, _out_queue.str().data(), send_request);
+      send_result = send(buffer, send_request);
       
       if (send_result)
-         _out_queue.get (buffer, send_result);
+         _out_queue.sgetn(buffer, send_result);
 
       if (!_block)
          break;
    }
    if (buffer)
-      free(buffer);
+      delete[] buffer;
 
-   _fail = (_out_queue.count () > 0);
+   _fail = (_out_queue.in_avail() > 0);
 }
 
 
@@ -724,7 +719,7 @@ operator >> (STDdstream &ds, unsigned char &data)
    else {
       ds.read_delim();
 
-      ds.read ((UGAptr)&data, sizeof(unsigned char));
+      ds.read((char *)&data, sizeof(unsigned char));
    }
    return ds;
 }
@@ -739,7 +734,7 @@ operator << (STDdstream &ds, unsigned char data)
    else {
       ds.write_delim(' ');   // write out the delimiter 
 
-      ds.write ((UGAptr)&data, sizeof(unsigned char));
+      ds.write((const char *)&data, sizeof(unsigned char));
    }
    return ds;
 }

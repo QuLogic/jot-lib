@@ -40,7 +40,6 @@
 #endif
 
 #include "std/support.H"
-#include "mem_push.H"
 #include "stream.H"
 #include "dev/tty.H"
 
@@ -113,9 +112,9 @@ class NetStream : public STDdstream, public FD_EVENT {
    ssize_t     write_to_net (const void *buf, size_t nbyte) const;
    ssize_t     read_from_net(      void *buf, size_t nbyte) const;
    int         interpret    (void);
-   virtual size_t recv(UGAptr, int)                  
+   virtual size_t recv(char *, int)
                  { cerr << "NetStream: recv unimplemented\n"; return 0; }
-   virtual size_t send(const UGAptr data, int count) 
+   virtual size_t send(const char *data, int count)
                  { return write_to_net((const void *)data, (size_t)count); }
    void        remove_me(); // Remove this stream from its Network
 

@@ -18,8 +18,9 @@
 #ifndef STD_STREAM_HAS_BEEN_INCLUDED
 #define STD_STREAM_HAS_BEEN_INCLUDED
 
+#include <sstream>
+
 #include "std/support.H"
-#include "mem_push.H"
 
 /* --------------------------    Constants     ----------------------------- */
 
@@ -50,7 +51,7 @@ class STDdstream {
    virtual ~STDdstream ()  {}
 
    void    write(const char * const data, int count);
-   void    read (     UGAptr data, int count, int pop = 1);
+   void    read (      char *       data, int count, int pop = 1);
    void    flush();
 
    iostream* iostr() const { return _iostream; }
@@ -71,7 +72,7 @@ class STDdstream {
    char    read_delim();
 
    int     check() { char brace = peekahead(); return brace == '}' ? 0 : 1; }
-   int     eof() const { return istr() ? istr()->eof(): !_in_queue.count(); }
+   int     eof()   { return istr() ? istr()->eof(): _in_queue.in_avail()<1; }
 
    void    ws(const char *);
    bool    operator ! ()        const { return _fail; }
@@ -84,11 +85,11 @@ class STDdstream {
 
  protected:
 
-   virtual size_t send (const UGAptr data, int count) { _in_queue.put(data,count); return count; }
-   virtual size_t recv (UGAptr data, int count)       { return _out_queue.get (data, count); }
+   virtual size_t send (const char *data, int count) { return _in_queue.sputn(data, count); }
+   virtual size_t recv (char *data, int count)       { return _out_queue.sgetn(data, count); }
 
-   STDmem_queue _in_queue;
-   STDmem_queue _out_queue;
+   stringbuf    _in_queue;
+   stringbuf    _out_queue;
    iostream*    _iostream;      // iostream, may be null
    istream*     _istream;       // just an in stream (used when iostream is null)
    ostream*     _ostream;       // just an out stream (used when iostream is null)
