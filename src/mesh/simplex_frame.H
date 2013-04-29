@@ -87,8 +87,8 @@ class SimplexFrame : public SimplexData, public CoordFrame {
    }
 
    // Prevents warnings:
-   void set(uint id, Bsimplex* s)       { SimplexData::set(id, s); }
-   void set(Cstr_ptr& str, Bsimplex* s) { SimplexData::set(str, s); }
+   void set(uint id, Bsimplex* s)           { SimplexData::set(id, s); }
+   void set(const string& str, Bsimplex* s) { SimplexData::set(str, s); }
 
  //*******************************************************
  // PROTECTED

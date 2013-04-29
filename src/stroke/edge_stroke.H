@@ -92,7 +92,7 @@ class EdgeStroke : public OutlineStroke {
       // This assumes that only one
       // EdgeStroke can own a face.
       FaceData(EdgeStroke* s, Bface* f) :
-         SimplexData(str_ptr(s->static_name().c_str()), f),
+         SimplexData(s->static_name(), f),
          _stroke(s) {}
 
       //******** ACCESSORS ********

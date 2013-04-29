@@ -136,7 +136,7 @@ class Bsimplex {
       return _data_list ? _data_list->get_item(key) : 0;
    }
 
-   SimplexData* find_data(Cstr_ptr& s) const { return find_data((uintptr_t)**s);}
+   SimplexData* find_data(const string& s) const { return find_data((uintptr_t)s.c_str());}
    SimplexData* find_data(void *key)   const { return find_data((uintptr_t)key);}
    
    void add_simplex_data(SimplexData* sd);

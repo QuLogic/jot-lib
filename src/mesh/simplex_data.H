@@ -45,10 +45,10 @@ class SimplexData {
 
    // Store the data on the simplex with a given "owner ID":
    void set(uintptr_t id, Bsimplex* s);
-   void set(Cstr_ptr& str, Bsimplex* s) { set((uintptr_t)**str, s); }
+   void set(const string& str, Bsimplex* s) { set((uintptr_t)str.c_str(), s); }
 
    SimplexData(uintptr_t key, Bsimplex* s): _id(0), _simplex(0) { set(key, s);}
-   SimplexData(Cstr_ptr& str, Bsimplex* s): _id(0), _simplex(0) { set(str, s);}
+   SimplexData(const string& str, Bsimplex* s): _id(0), _simplex(0) { set(str, s);}
   
    virtual ~SimplexData();
 

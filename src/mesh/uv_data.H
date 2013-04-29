@@ -225,8 +225,8 @@ class UVdata : public SimplexData {
    //******** SimplexData VIRTUAL METHODS ********
    // These are here to prevent warnings:
    // store it on the given simplex:
-   void set(uint id, Bsimplex* s)       { SimplexData::set(id,s); }
-   void set(Cstr_ptr& str, Bsimplex* s) { SimplexData::set(str,s); }
+   void set(uint id, Bsimplex* s)           { SimplexData::set(id,s); }
+   void set(const string& str, Bsimplex* s) { SimplexData::set(str,s); }
    
    virtual void notify_split(Bsimplex*) {
       // Q: Need to do something?
