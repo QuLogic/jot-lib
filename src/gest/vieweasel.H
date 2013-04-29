@@ -62,10 +62,10 @@ class VIEW_EASEL : public REFcounter {
       
       void clear_lines();
       
-      GELptr extract_closest(Cstr_ptr &type, const mlib::XYpt &pt,
+      GELptr extract_closest(const string &type, const mlib::XYpt &pt,
                              double max_dist, const GELptr &except = GELptr());
       
-      GELptr extract_closest_pix(Cstr_ptr &type, const mlib::XYpt &pt,
+      GELptr extract_closest_pix(const string &type, const mlib::XYpt &pt,
                                  double max_dist, const GELptr &except = GELptr());
 
    protected:

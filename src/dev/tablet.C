@@ -75,8 +75,8 @@ Tablet::activate()
       set_charsize(CS8);
       set_parity  (TTY_NONE);
 
-      if (_desc._init_str != str_ptr()) {
-         if (write(**_desc._init_str, strlen(**_desc._init_str), 20) < 0)
+      if (_desc._init_str != string()) {
+         if (write(_desc._init_str.c_str(), _desc._init_str.length(), 20) < 0)
             perror("initializing tablet");
       }
    }

@@ -195,7 +195,7 @@ class Halftone_TX : public GLSLShader_Layer_Base {
 
    //******** UTILITIES ********
 
-   str_ptr default_falftone() {return ("pattern5.png"); }
+   string default_falftone() {return ("pattern5.png"); }
 
    void build_correction_tex(
       TEXTUREglptr correction_map,TEXTUREglptr source

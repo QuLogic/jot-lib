@@ -297,7 +297,7 @@ TRACE::init(CGESTUREptr&)
       TRACEptr me = get_instance();
 
       // for now, hardcode 2D image name
-      me->_filename = str_ptr("testfile.pnm");
+      me->_filename = string("testfile.pnm");
 
       me->_texture = new TEXTUREgl(me->_filename);
 

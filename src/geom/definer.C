@@ -130,7 +130,7 @@ DEFINER::get_inputs(TAGformat &d)
    for (int k = _inputs.num() - 1; k>= 0; k--)
       rem_input(_inputs[k]);
 
-   str_ptr str;
+   string str;
    GEOMptr o;
    for (int i = 0; i < 1000; i++) {
       if (!d)
@@ -202,7 +202,7 @@ CSG_DEF::decode(STDdstream &ds)
    if (print_errs)
       cerr << "CSG_DEF::decode: (" << num << "):";
 
-   str_ptr str;
+   string str;
    GEOMptr o;
    int   int_csgop;
    for (i = 0; i < num; i++) {

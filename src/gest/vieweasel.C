@@ -126,7 +126,7 @@ VIEW_EASEL::clear_lines()
 
 GELptr 
 VIEW_EASEL::extract_closest(
-   Cstr_ptr&            /* type */,
+   const string&        /* type */,
    const XYpt&          /* pt */,
    double               /* max_dist */, 
    const GELptr&        /* except */
@@ -138,7 +138,7 @@ VIEW_EASEL::extract_closest(
 
 GELptr 
 VIEW_EASEL::extract_closest_pix(
-   Cstr_ptr&            /* type */,
+   const string&        /* type */,
    const XYpt&          /* pt */,
    double               /* max_dist */, 
    const GELptr&        /* except */

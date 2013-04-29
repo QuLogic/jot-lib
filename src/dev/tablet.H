@@ -36,13 +36,13 @@ class TabletDesc {
 
    int        _baud;
    int        _rec_len;
-   str_ptr    _init_str;
+   string     _init_str;
    int        _yres;
    TabletType _type;
 
    TabletDesc()  { }
    TabletDesc(TabletType t);
-   TabletDesc(int baud, int rec_len, Cstr_ptr &s, int yres):
+   TabletDesc(int baud, int rec_len, const string &s, int yres):
               _baud(baud), _rec_len(rec_len), _init_str(s), _yres(yres) { }
 };
 

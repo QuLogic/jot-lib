@@ -88,9 +88,6 @@ static void       timer_callback(CFRAMEobsptr &o){_w->schedule(o); }
 
  static bool       is_over() { return _is_over; }
 
-//static STROKElist*hash          (Cstr_ptr &t) { return _w->_Hash(t); }
-//static void       hash_add      (Cstr_ptr &t, STROKElist*l){_w->_Hash_add(t,l);}
-
        //!METHS:  wrappers on the EXIST list variable
 static GEOMptr lookup (const string &s);
 static void       create        (CGELptr &o, bool undoable=true);

@@ -1398,7 +1398,7 @@ DrawPen::x_cb(CGESTUREptr& gest, DrawState*&)
 }
 
 inline bool
-check_stroke_length(str_ptr msg, CGESTUREptr& gest, bool debug)
+check_stroke_length(string msg, CGESTUREptr& gest, bool debug)
 {
    const double MIN_LEN  = Config::get_var_dbl("JOT_MIN_STROKE_LEN", 25.0, true);
    assert(gest && gest->is_stroke());
@@ -1412,7 +1412,7 @@ check_stroke_length(str_ptr msg, CGESTUREptr& gest, bool debug)
 }
 
 inline bool
-check_stroke_duration(str_ptr msg, CGESTUREptr& gest, bool debug)
+check_stroke_duration(string msg, CGESTUREptr& gest, bool debug)
 {
    const double MIN_TIME = Config::get_var_dbl("JOT_MIN_STROKE_TIME", 0.5, true);
    assert(gest && gest->is_stroke());
