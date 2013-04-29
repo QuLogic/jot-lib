@@ -34,7 +34,7 @@ char header[] =
 "       vertexProperty         VertexProperty {\n"
 "\n";
 
-Cstr_ptr comma(", ");
+const string comma(", ");
         
 void
 write_verts(const BMESH &mesh, ostream &os)
@@ -73,13 +73,13 @@ class Formatter {
       int      _pos;
    public:
       Formatter(ostream *os, int width) : _os(os), _width(width), _pos(0) {}
-      void write(Cstr_ptr &str) {
-         if (_pos + (int)str->len() > _width) {
+      void write(const string &str) {
+         if (_pos + (int)str.length() > _width) {
             *_os << endl;
             _pos = 0;
          }
          *_os << str;
-         _pos += str->len();
+         _pos += str.length();
       }
 };
 
@@ -90,12 +90,16 @@ class IVNormalIterator : public StripCB {
       IVNormalIterator(Formatter *form) : _form(form) {}
 
       virtual void faceCB(CBvert *, CBface *f) {
+         char tmp[64];
          CWvec &norm = f->norm();
-         _form->write(norm[0]);
+         sprintf(tmp, "%g", norm[0]);
+         _form->write(tmp);
          _form->write(" ");
-         _form->write(norm[1]);
+         sprintf(tmp, "%g", norm[1]);
+         _form->write(tmp);
          _form->write(" ");
-         _form->write(norm[2]);
+         sprintf(tmp, "%g", norm[2]);
+         _form->write(tmp);
          _form->write(comma);
       }
 };
@@ -123,15 +127,20 @@ class IVTriStripIterator : public StripCB {
    public:
       IVTriStripIterator(Formatter *form) : _form(form),_left(0) {}
       virtual void begin_faces(TriStrip *str) {
-         _form->write(str_ptr(str->verts()[0]->index()) + comma);
-         _form->write(str_ptr(str->verts()[1]->index()) + comma);
+         char tmp[64];
+         sprintf(tmp, "%d", str->verts()[0]->index());
+         _form->write(string(tmp) + comma);
+         sprintf(tmp, "%d", str->verts()[1]->index());
+         _form->write(string(tmp) + comma);
          _left--;
       }
       virtual void faceCB(CBvert *v, CBface *) {
-         _form->write(str_ptr(v->index()) + comma);
+         char tmp[64];
+         sprintf(tmp, "%d", v->index());
+         _form->write(string(tmp) + comma);
       }
       virtual void end_faces(TriStrip *) {
-         _form->write(str_ptr("-1"));
+         _form->write("-1");
          if (_left) _form->write(comma);
       }
       void set_left(int left) { _left = left;}
@@ -140,7 +149,7 @@ class IVTriStripIterator : public StripCB {
 void
 write_strips(const BMESH &mesh, ostream &os)
 {
-    const str_ptr intro("          coordIndex [");
+    const string intro("          coordIndex [");
     Formatter out(&os, 77);
     out.write(intro);
     

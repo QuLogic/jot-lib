@@ -277,7 +277,7 @@ read_obj(ARRAY<LMESHptr>& meshes, istream& in)
 
 
 inline
-void output_update_mesh_start(ostream& os, str_ptr name)
+void output_update_mesh_start(ostream& os, const char *name)
 {
    os << "UPDATE_GEOM	{ " << name << endl;
    os << "TEXBODY {"       << endl; 
@@ -287,7 +287,7 @@ void output_update_mesh_start(ostream& os, str_ptr name)
 }
 
 inline
-void output_update_mesh_end(ostream& os, str_ptr name)
+void output_update_mesh_end(ostream& os, const char *name)
 {
    os << "}" << endl; //mesh_data
    os << "}" << endl; //TEXBODY
@@ -295,7 +295,7 @@ void output_update_mesh_end(ostream& os, str_ptr name)
 }
 
 inline
-void output_mesh_start(ostream& os, str_ptr name)
+void output_mesh_start(ostream& os, const char *name)
 {
    os << "TEXBODY {"       << endl; 
 	os << "name " << name   << endl; 
@@ -303,7 +303,7 @@ void output_mesh_start(ostream& os, str_ptr name)
 	os << "mesh_data 	{"    << endl;   
 }
 inline
-void output_mesh_end(ostream& os, str_ptr name)
+void output_mesh_end(ostream& os, const char *name)
 {
    os << "}" << endl;
    //os << "mesh_data_file 	{ NULL_STR }" << endl;
@@ -312,7 +312,7 @@ void output_mesh_end(ostream& os, str_ptr name)
 }
 
 inline
-void output_end_jot_file(ostream& os, str_ptr name, int frame_num)
+void output_end_jot_file(ostream& os, string name, int frame_num)
 {
    os << "CHNG_VIEW 	{" << endl;
 	os << "VIEW 	{ " << endl;
@@ -335,26 +335,24 @@ main(int argc, char *argv[])
       return 1;
    }
    int total_frames = argc-4; 
-   str_ptr jot_path(argv[1]);
-   str_ptr jot_filename(argv[2]);
-   str_ptr obj_path(argv[3]);
+   string jot_path(argv[1]);
+   string jot_filename(argv[2]);
+   string obj_path(argv[3]);
    
    for(int i=0; i < total_frames; ++i)
    {  
-      char bname[1024];           
-      sprintf(bname, "%s%s[%05d]", **jot_path,**jot_filename, i);
+      string in_name = obj_path + string(argv[i+4]);
+      string jot_out_name_first = jot_path + jot_filename + ".jot";
+      char bname[16];
+      sprintf(bname, "[%05d].jot", i);
+      string jot_out_name = jot_path + jot_filename + bname;
 
-      str_ptr in_name  = obj_path + str_ptr(argv[i+4]);      
-      str_ptr jot_out_name = str_ptr(bname) + ".jot"; 
-      
-      str_ptr jot_out_name_first = jot_path + jot_filename + ".jot"; 
-            
-      ifstream in(**in_name);
+      ifstream in(in_name.c_str());
       if(!in){
          cerr << in_name << " file is not found" << endl;
          return 1;
       }     
-      ofstream out_jot(**jot_out_name, ios::out);
+      ofstream out_jot(jot_out_name.c_str(), ios::out);
       if(!out_jot){
          cerr << jot_out_name << " file is not found" << endl;
          return 1;
@@ -366,15 +364,15 @@ main(int argc, char *argv[])
       
       if(i == 0){
          //First Frames
-         ofstream out_jot_first(**jot_out_name_first, ios::out);
+         ofstream out_jot_first(jot_out_name_first.c_str(), ios::out);
          if(!out_jot_first){
             cerr << jot_out_name_first << " file is not found" << endl;
             return 1;
          }
          out_jot_first << "#jot" << endl;
-         for(int j=0; j < meshes.num(); ++j)
-         {  
-            str_ptr m_name = str_ptr("mesh")+str_ptr(j);
+         for(int j=0; j < meshes.num(); ++j) {
+            char m_name[128];
+            sprintf(m_name, "mesh%d", j);
             output_mesh_start(out_jot_first, m_name);
             //meshes[j]->recenter();
             meshes[j]->write_stream(out_jot_first);
@@ -385,9 +383,9 @@ main(int argc, char *argv[])
 
       // Update Frames
       out_jot << "#jot" << endl;
-      for(int j=0; j < meshes.num(); ++j)
-      {  
-         str_ptr m_name = str_ptr("mesh")+str_ptr(j);
+      for(int j=0; j < meshes.num(); ++j) {
+         char m_name[64];
+         sprintf(m_name, "mesh%d", j);
          output_update_mesh_start(out_jot, m_name);
          //meshes[j]->recenter();
          IOManager::add_state(IOManager::STATE_PARTIAL_SAVE);
