@@ -1621,12 +1621,12 @@ VIEW::intersect(
 RAYhit
 VIEW::intersect(
    RAYhit   &r,
-   Cstr_ptr &cn,
+   const string &cn,
    filt      filter
    ) const
 {
    for (int i = 0; i < _drawn.num(); i++)
-      if (_drawn[i]->class_name() == string(**cn) &&
+      if (_drawn[i]->class_name() == cn &&
           (PICKABLE.get(_drawn[i]) || (filter & H_UNPICKABLE)))
          _drawn[i]->intersect(r, Identity);
 
@@ -1650,12 +1650,12 @@ VIEW::nearest(
 RAYnear
 VIEW::nearest(
    RAYnear    &r,
-   Cstr_ptr   &cn,
+   const string &cn,
    filt        filter
    ) const
 {
    for (int i = 0; i < _drawn.num(); i++)
-      if (_drawn[i]->class_name() == string(**cn) &&
+      if (_drawn[i]->class_name() == cn &&
           (PICKABLE.get(_drawn[i]) || (filter & H_UNPICKABLE)))
          _drawn[i]->nearest(r, Identity);
 

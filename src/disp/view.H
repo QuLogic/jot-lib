@@ -745,10 +745,10 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    RAYhit      intersect       (mlib::CXYpt  &x,              filt f=H_GEOM) const;
    RAYhit      intersect       (RAYhit &r,              filt f=H_GEOM) const;
    RAYhit      intersect       (RAYhit &r, GELptr &,    filt f=H_GEOM) const;
-   RAYhit      intersect       (RAYhit &r, Cstr_ptr &cn,filt f=H_GEOM) const;
+   RAYhit      intersect       (RAYhit &r, const string &cn, filt f=H_GEOM) const;
    RAYhit      intersect       (RAYhit &r, const GELFILTlist &)        const;
    RAYnear     nearest         (RAYnear&r,              filt f=H_GEOM) const;
-   RAYnear     nearest         (RAYnear&r, Cstr_ptr&,   filt f=H_GEOM) const;
+   RAYnear     nearest         (RAYnear&r, const string &, filt f=H_GEOM) const;
    GELlist     inside          (mlib::CXYpt_list &lasso) const;
 
    //!METHS: scissor region accessors/setters
