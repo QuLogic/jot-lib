@@ -414,8 +414,9 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
 
    DIR_ENTRYptr      _current_path;
    mode_t            _current_mode;
-   str_ptr           _current_mode_saved_file;
-   str_list          _current_recent_paths;
+   string            _current_mode_saved_file;
+   vector<string>    _current_recent_paths;
+   set<string>       _current_recent_path_set;
    sort_t            _current_sort;
    int               _current_selection;
    double            _current_selection_time;

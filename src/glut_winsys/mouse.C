@@ -40,7 +40,7 @@ static bool stylus2_down = false;
 
 static bool debug = Config::get_var_bool("DEBUG_GLUT_WACOM",false);
 
-inline str_ptr
+inline string
 wacom_device_name(int device)
 {
    // Convert Wacom device numeric code to string.
@@ -55,11 +55,11 @@ wacom_device_name(int device)
     case GLUT_WACOM_MENU:
       return "menu";
     default:
-      return "unkown device";
+      return "unknown device";
    }
 }
 
-inline str_ptr
+inline string
 wacom_button_state(int state)
 {
    // Convert Wacom button state code to string.
@@ -74,7 +74,7 @@ wacom_button_state(int state)
    }
 }
 
-inline str_ptr
+inline string
 wacom_tablet_state(int state)
 {
    // Convert Wacom tablet state code to string.

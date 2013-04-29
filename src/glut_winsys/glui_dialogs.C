@@ -664,10 +664,13 @@ GLUIFileSelect::undisplay(int button, string path, string file)
 
    if (button == OK_ACTION)
    {
-      _current_recent_paths.add_uniquely(str_ptr(_path.c_str()));
-      while(_current_recent_paths.num() > GLUI_FILE_SELECT_NUM_RECENT) 
-      {
-         _current_recent_paths.pull_index(0);
+      pair<set<string>::iterator,bool> result = _current_recent_path_set.insert(_path);
+      if (result.second) {
+         _current_recent_paths.push_back(_path);
+         while (_current_recent_paths.size() > GLUI_FILE_SELECT_NUM_RECENT) {
+            _current_recent_path_set.erase(_current_recent_paths[0]);
+            _current_recent_paths.erase(_current_recent_paths.begin());
+         }
       }
    }
 
@@ -938,11 +941,12 @@ GLUIFileSelect::build_glui()
    assert(_statictext[STATICTEXT_SPACER_FILES_NAME]);
    _statictext[STATICTEXT_SPACER_FILES_NAME]->set_w(0); 
 
-   for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
-   {
+   for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++) {
+      char tmp[64];
+      sprintf(tmp, "Filename #%d", i);
       _activetext[ACTIVETEXT_NUM + i] = new GLUI_ActiveText(
          _panel[PANEL_FILES],
-         **(str_ptr("Filename #") + str_ptr(i)),
+         tmp,
          id+ACTIVETEXT_NUM + i, activetext_cbs);
       assert(_activetext[ACTIVETEXT_NUM + i]);
       _activetext[ACTIVETEXT_NUM + i]->set_alignment(GLUI_ALIGN_LEFT);
@@ -1559,7 +1563,7 @@ GLUIFileSelect::stat_(const string &cpath, DIR_ENTRYptr &ret)
 bool
 GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 {
-   int i;
+   vector<string>::size_type i;
 
    assert((dir->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
           (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE) ||
@@ -1577,13 +1581,13 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
                                            (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?".":""),
                                         get_filter());
 
-      for (vector<string>::size_type j=0; j<entries.size(); j++) {
+      for (i=0; i<entries.size(); i++) {
          // Careful about assembling paths, /'s and filenames
          // Don't need trailing slashes for root direntories a.k.a. 'drives'...
          DIR_ENTRYptr e = generate_dir_entry(
             dir->_full_path + 
-               (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") + entries[j],
-            entries[j]);
+               (dir->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") + entries[i],
+            entries[i]);
 
          if (  (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
                (e->_type == DIR_ENTRY::DIR_ENTRY_FILE) )
@@ -1610,7 +1614,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 
       assert(drives != 0);
 
-      for (i=0; i < 26; i++) {
+      for (int i=0; i < 26; i++) {
          if (drives & 1<<i) {
             string drv((char)('A'+i));
             e = generate_dir_entry(drv + ":\\", drv + ": ");
@@ -1641,8 +1645,8 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 
       //These paths have been 'tested' by chdiring to them,
       //and reading back the getcwd... They're 'safe'
-      for (i=0; i<_current_recent_paths.num(); i++) {
-         e = generate_dir_entry(string(**_current_recent_paths[i]), "");
+      for (i=0; i<_current_recent_paths.size(); i++) {
+         e = generate_dir_entry(_current_recent_paths[i], "");
          if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
             dir->_contents += e;
          }
@@ -2141,7 +2145,7 @@ GLUIFileSelect::do_delete_action()
       assert(0); 
    }
 
-   //_edittext[EDITTEXT_FILE]->set_text(**_current_mode_saved_file);
+   //_edittext[EDITTEXT_FILE]->set_text(_current_mode_saved_file.c_str());
    _edittext[EDITTEXT_FILE]->set_text("");
    _current_mode = MODE_NORMAL;
 
@@ -2168,7 +2172,7 @@ GLUIFileSelect::do_rename_action()
       cerr << "GLUIFileSelect::do_rename_action() - **FAILED**\n";
    }
 
-   //_edittext[EDITTEXT_FILE]->set_text(**_current_mode_saved_file);
+   //_edittext[EDITTEXT_FILE]->set_text(_current_mode_saved_file.c_str());
    _edittext[EDITTEXT_FILE]->set_text("");
    _current_mode = MODE_NORMAL;
 
@@ -2193,7 +2197,7 @@ GLUIFileSelect::do_add_action()
       cerr << "GLUIFileSelect::do_add_action() - Failed to create directory: '" << new_folder << "'\n";
    }
 
-   _edittext[EDITTEXT_FILE]->set_text(**_current_mode_saved_file);
+   _edittext[EDITTEXT_FILE]->set_text(_current_mode_saved_file.c_str());
    _current_mode = MODE_NORMAL;
 
    do_refresh();
@@ -2205,7 +2209,7 @@ GLUIFileSelect::do_add_action()
 void
 GLUIFileSelect::do_cancel_action()
 {
-   _edittext[EDITTEXT_FILE]->set_text(**_current_mode_saved_file);
+   _edittext[EDITTEXT_FILE]->set_text(_current_mode_saved_file.c_str());
    _current_mode = MODE_NORMAL;
    update();
 }
