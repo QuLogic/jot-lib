@@ -68,16 +68,16 @@ class GELFILTothers : public GELFILT {
 class GELFILTclass_name : public GELFILT {
  public:
    //******** MANAGERS ********
-   GELFILTclass_name(Cstr_ptr  &cn  ) { _cn.add(cn); }
-   GELFILTclass_name(Cstr_list &list) : _cn(list) { }
+   GELFILTclass_name(const string         &cn  ) { _cn.push_back(cn); }
+   GELFILTclass_name(const vector<string> &list) : _cn(list) { }
 
-   void add(Cstr_ptr &cn)            { _cn.add(cn); }
+   void add(const string &cn)            { _cn.push_back(cn); }
 
    //******** VIRTUAL METHOD ********
-   virtual bool  accept(CGELptr &g) { return _cn.contains(str_ptr(g->class_name().c_str())); }
+   virtual bool  accept(CGELptr &g) { return std::find(_cn.begin(), _cn.end(), g->class_name()) != _cn.end(); }
 
  protected:
-   str_list _cn;        // acceptable class names
+   vector<string> _cn;        // acceptable class names
 };
 
 /*****************************************************************
@@ -87,15 +87,15 @@ class GELFILTclass_name : public GELFILT {
 class GELFILTclass_desc : public GELFILTclass_name {
  public:
    //******** MANAGERS ********
-   GELFILTclass_desc(Cstr_ptr& cn)    : GELFILTclass_name(cn)  {}
-   GELFILTclass_desc(Cstr_list& list) : GELFILTclass_name(list){}
+   GELFILTclass_desc(const string        & cn)   : GELFILTclass_name(cn)  {}
+   GELFILTclass_desc(const vector<string>& list) : GELFILTclass_name(list){}
 
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) {
-      for (int i=0; i<_cn.num(); i++)
-         if (g->is_of_type(string(**_cn[i])))
-            return 1;
-      return 0;
+      for (vector<string>::size_type i=0; i<_cn.size(); i++)
+         if (g->is_of_type(_cn[i]))
+            return true;
+      return false;
    }
 };
 
@@ -106,8 +106,8 @@ class GELFILTclass_desc : public GELFILTclass_name {
 class GELFILTclass_name_excl : public GELFILTclass_name {
  public:
    //******** MANAGERS ********
-   GELFILTclass_name_excl(Cstr_ptr  &cn)   : GELFILTclass_name(cn)   {}
-   GELFILTclass_name_excl(Cstr_list &list) : GELFILTclass_name(list) {}
+   GELFILTclass_name_excl(const string           &cn) : GELFILTclass_name(cn)   {}
+   GELFILTclass_name_excl(const vector<string> &list) : GELFILTclass_name(list) {}
 
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) { return !GELFILTclass_name::accept(g); }
@@ -120,8 +120,8 @@ class GELFILTclass_name_excl : public GELFILTclass_name {
 class GELFILTclass_desc_excl : public GELFILTclass_desc {
  public:
    //******** MANAGERS ********
-   GELFILTclass_desc_excl(Cstr_ptr  &cn  ) : GELFILTclass_desc(cn)  {}
-   GELFILTclass_desc_excl(Cstr_list &list) : GELFILTclass_desc(list){}
+   GELFILTclass_desc_excl(const string         &cn  ) : GELFILTclass_desc(cn)  {}
+   GELFILTclass_desc_excl(const vector<string> &list) : GELFILTclass_desc(list){}
 
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) { return !GELFILTclass_desc::accept(g); }
