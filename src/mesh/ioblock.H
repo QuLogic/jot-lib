@@ -27,32 +27,32 @@
 #define CIOBlock const IOBlock
 class IOBlock {
    protected:
-      str_ptr _name;
+      string _name;
    public:
-      IOBlock(Cstr_ptr &name) : _name(name) {}
+      IOBlock(const string &name) : _name(name) {}
       virtual ~IOBlock() {}
       
       // Callback for when #BEGIN NAME is encountered
       // (where NAME is what is contained in _name)
-      virtual int consume_block(istream &, str_list &leftover) = 0;
+      virtual int consume_block(istream &, vector<string> &leftover) = 0;
 
-      Cstr_ptr &name() const {return _name;}
+      const string &name() const {return _name;}
       virtual int operator==(CIOBlock &b) {return b._name == _name;}
       static int consume(istream &is, const IOBlockList &list,
-                         str_list &leftover);
+                         vector<string> &leftover);
 };
 
 template <class T>
 class IOBlockMeth: public IOBlock {
    public:
-      typedef int (T::*METH)(istream &is, str_list &leftover);
+      typedef int (T::*METH)(istream &is, vector<string> &leftover);
    protected:
       METH  _meth;
       T    *_inst;
    public:
-      IOBlockMeth(Cstr_ptr &name, METH meth, T *inst)
+      IOBlockMeth(const string &name, METH meth, T *inst)
          : IOBlock(name), _meth(meth), _inst(inst) {}
-      virtual int consume_block(istream &is, str_list &leftover)
+      virtual int consume_block(istream &is, vector<string> &leftover)
          {return (_inst->*_meth)(is, leftover);}
       void set_obj(T *inst) { _inst = inst;}
 };

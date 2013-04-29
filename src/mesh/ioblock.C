@@ -24,14 +24,18 @@
 
 #include "ioblock.H"
 
-str_ptr
-get_word(istream &is, str_list &list)
+string
+get_word(istream &is, vector<string> &list)
 {
-   if (list.num()) return list.pop();
+   if (list.size() > 0) {
+      string result = list.back();
+      list.pop_back();
+      return result;
+   }
    char buf[1024];
 //   is >> buf;
-//   return str_ptr(buf);
-   return (is >> buf) ? str_ptr(buf) : NULL_STR;
+//   return string(buf);
+   return (is >> buf) ? string(buf) : "";
 }
 
 /*************************************************************************
@@ -41,17 +45,17 @@ get_word(istream &is, str_list &list)
  * Effects: 
  *************************************************************************/
 int
-IOBlock::consume(istream &is, const IOBlockList &list, str_list &leftover)
+IOBlock::consume(istream &is, const IOBlockList &list, vector<string> &leftover)
 {
    leftover.clear();
    if (is.bad()) return 0;
    if (is.eof()) return 1;
 
-   static Cstr_ptr endtoken  ("#END");
-   static Cstr_ptr begintoken("#BEGIN");
-   str_ptr str1;
-   str_ptr str2;
-   str_ptr starttype;
+   static const string endtoken  ("#END");
+   static const string begintoken("#BEGIN");
+   string str1;
+   string str2;
+   string starttype;
    int consumed = 0;
 
    str1 = get_word(is, leftover);
@@ -64,7 +68,7 @@ IOBlock::consume(istream &is, const IOBlockList &list, str_list &leftover)
       consumed = 0;
       for (int i = 0; !consumed && i < list.num(); i++) {
          if (starttype == list[i]->name()) {
-            if (leftover.num()) {
+            if (leftover.size()) {
                cerr << "IOBlock::consume - " 
                     << "warning: leftover data before consume"
                     << ", at byte " << is.tellg() << endl;
@@ -91,7 +95,7 @@ IOBlock::consume(istream &is, const IOBlockList &list, str_list &leftover)
       if (is.eof()) return 1;
 
       str1 = get_word(is, leftover);
-      if (str1 == NULL_STR) {
+      if (str1 == "") {
          cerr << "IOBlock::consume - empty string at beginning of block, "
               << "after block " << starttype
               << ", at byte " << is.tellg() << endl;
@@ -102,11 +106,11 @@ IOBlock::consume(istream &is, const IOBlockList &list, str_list &leftover)
          // Read until #END
          while (!is.eof() && !is.fail() && str1 != endtoken) {
             str1 = get_word(is, leftover);
-            str2 = NULL_STR;
+            str2 = "";
          }
          
          // Get type
-         if (str2 == NULL_STR) {
+         if (str2 == "") {
             str2 = get_word(is, leftover);
             if (str2 != starttype) {
                   cerr << "IOBlock::consume - found " << str1 << " " << str2
@@ -124,8 +128,8 @@ IOBlock::consume(istream &is, const IOBlockList &list, str_list &leftover)
    }
    if (!is.eof()) {
       // Push onto stack in reverse order
-      leftover += str_ptr(str2);
-      leftover += str_ptr(str1);
+      leftover.push_back(str2);
+      leftover.push_back(str1);
    }
    return 1;
 }

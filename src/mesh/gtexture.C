@@ -22,9 +22,9 @@
 #include "mesh/patch.H"
 #include "mlib/points.H"
 
-Cstr_ptr GTexture::_type_name("GTEXTURE");
-Cstr_ptr GTexture::_begin_tag(str_ptr("#BEGIN ") + _type_name + str_ptr("\n"));
-Cstr_ptr GTexture::_end_tag  (str_ptr("\n#END ") + _type_name + str_ptr("\n"));
+const string GTexture::_type_name("GTEXTURE");
+const string GTexture::_begin_tag(string("#BEGIN ") + _type_name + string("\n"));
+const string GTexture::_end_tag  (string("\n#END ") + _type_name + string("\n"));
 
 // GTexture is not serialized into jot files, so an empty TAGlist is created
 CTAGlist &

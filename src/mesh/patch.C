@@ -778,7 +778,7 @@ Patch::write_stream(ostream &os)
 }
 
 int
-Patch::read_stream(istream &is, str_list &leftover)
+Patch::read_stream(istream &is, vector<string> &leftover)
 {
    leftover.clear();
    // Number of faces in this patch
@@ -869,7 +869,7 @@ Patch::read_stream(istream &is, str_list &leftover)
 }
 
 int
-Patch::read_texture(istream &is, str_list &leftover)
+Patch::read_texture(istream &is, vector<string> &leftover)
 {
    leftover.clear();
    const int namelen = 256;
@@ -904,7 +904,7 @@ Patch::read_texture(istream &is, str_list &leftover)
 }
 
 int
-Patch::read_color(istream &is, str_list &leftover)
+Patch::read_color(istream &is, vector<string> &leftover)
 {
    leftover.clear();
 
@@ -916,7 +916,7 @@ Patch::read_color(istream &is, str_list &leftover)
 }
 
 int
-Patch::read_texture_map(istream &is, str_list &leftover)
+Patch::read_texture_map(istream &is, vector<string> &leftover)
 {
    leftover.clear();
 
@@ -928,7 +928,7 @@ Patch::read_texture_map(istream &is, str_list &leftover)
 }
 
 int
-Patch::read_patchname(istream &is, str_list &leftover)
+Patch::read_patchname(istream &is, vector<string> &leftover)
 {
    leftover.clear();
    const int namelen = 256;

@@ -393,11 +393,11 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //@{
       
    virtual int write_stream     (ostream &os);
-   virtual int read_stream      (istream &is, str_list &leftover);
-   virtual int read_texture     (istream &is, str_list &leftover);
-   virtual int read_color       (istream &is, str_list &leftover);
-   virtual int read_texture_map (istream &is, str_list &leftover);
-   virtual int read_patchname   (istream &is, str_list &leftover);
+   virtual int read_stream      (istream &is, vector<string> &leftover);
+   virtual int read_texture     (istream &is, vector<string> &leftover);
+   virtual int read_color       (istream &is, vector<string> &leftover);
+   virtual int read_texture_map (istream &is, vector<string> &leftover);
+   virtual int read_patchname   (istream &is, vector<string> &leftover);
       
    //@}
 

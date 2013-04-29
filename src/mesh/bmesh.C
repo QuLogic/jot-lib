@@ -1855,14 +1855,14 @@ BMESH::read_blocks(istream &is)
          ((IOBlockMeth<BMESH> *) blocklist[i])->set_obj(this);
       }
    }
-   str_list leftover;
+   vector<string> leftover;
    int ret = IOBlock::consume(is, blocklist, leftover);
    // Put leftover words back on stream
-   for (int w = 0; w < leftover.num(); w++) {
-      str_ptr str = leftover[w];
+   for (vector<string>::size_type w = 0; w < leftover.size(); w++) {
+      string str = leftover[w];
       is.putback(' ');
-      for (int i = str.len()-1; i >= 0; i--) {
-         is.putback(str[i]);
+      for (string::size_type i = str.length(); i > 0; i--) {
+         is.putback(str[i-1]);
       }
    }
 
@@ -1871,7 +1871,7 @@ BMESH::read_blocks(istream &is)
 }
 
 int
-BMESH::read_include(istream& is, str_list &/*leftover*/)
+BMESH::read_include(istream& is, vector<string> &/*leftover*/)
 {
    const int len = 1024;
    char buff[len];
@@ -1991,7 +1991,7 @@ BMESH::read_creases(istream& is)
 }
 
 int
-BMESH::read_weak_edges(istream& is, str_list &leftover)
+BMESH::read_weak_edges(istream& is, vector<string> &leftover)
 {
    leftover.clear();
 
@@ -2041,7 +2041,7 @@ BMESH::read_polylines(istream& is)
 }
 
 int
-BMESH::read_colors(istream& is, str_list &leftover)
+BMESH::read_colors(istream& is, vector<string> &leftover)
 {
    leftover.clear();
    for (int i = 0; i< nverts(); i++) {
@@ -2055,7 +2055,7 @@ BMESH::read_colors(istream& is, str_list &leftover)
 
 
 int
-BMESH::read_texcoords2(istream& is, str_list &leftover)
+BMESH::read_texcoords2(istream& is, vector<string> &leftover)
 {
    static double UV_RESOLUTION = Config::get_var_dbl("UV_RESOLUTION",0,true);
 
@@ -2091,7 +2091,7 @@ BMESH::read_texcoords2(istream& is, str_list &leftover)
 }
 
 int
-BMESH::read_patch(istream& is, str_list &leftover)
+BMESH::read_patch(istream& is, vector<string> &leftover)
 {
    return new_patch()->read_stream(is, leftover);
 }
@@ -3824,7 +3824,7 @@ BMESH::put_render_style(TAGformat &d) const
     
       if (_render_style.num())
       // XXX - What does this mean?!?!?!?
-      // this ain't right, but shifting out the str_list _render_style
+      // this ain't right, but shifting out the vector _render_style
       // doesn't get decoded on the other side right because individual
       // elements aren't separatable.
       style = _render_style.back();

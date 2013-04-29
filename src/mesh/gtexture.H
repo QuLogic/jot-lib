@@ -251,7 +251,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
 
    //******** I/O FUNCTIONS ********
 
-   virtual int read_stream (istream &, str_list &)              { return 1;}
+   virtual int read_stream (istream &, vector<string> &)        { return 1;}
    virtual int write_data  (ostream &)                  const   { return 0;};
    virtual int write_stream(ostream &os) const {
       os << _begin_tag << class_name() << endl;
@@ -280,9 +280,9 @@ class GTexture : public DATA_ITEM, public RefImageClient {
    GTexture*    _ctrl;
 
    // for I/O:
-   static Cstr_ptr      _type_name;
-   static Cstr_ptr      _begin_tag;
-   static Cstr_ptr      _end_tag;
+   static const string _type_name;
+   static const string _begin_tag;
+   static const string _end_tag;
 };
 
 inline void 

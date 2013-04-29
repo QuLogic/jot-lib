@@ -643,7 +643,7 @@ check(Ledge* e)
 }
 
 inline void
-debug_check_verts(Cstr_ptr& msg, CBvert_list& verts, CBvert_list& dirty_verts)
+debug_check_verts(const string& msg, CBvert_list& verts, CBvert_list& dirty_verts)
 {
    Bvert_list A = verts.filter(BitSetSimplexFilter(Lvert::DIRTY_VERT_LIST_BIT));
    if (!dirty_verts.contains_all(A)) {

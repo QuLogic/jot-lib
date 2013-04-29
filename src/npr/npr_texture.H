@@ -160,9 +160,9 @@ class NPRTexture : public OGLTexture {
 
    // We pipe these into the better IO system...
    virtual int          write_stream(ostream &os) const;
-   virtual int          read_stream (istream &, str_list &leftover);
+   virtual int          read_stream (istream &, vector<string> &leftover);
 
-   virtual int          read_gtexture(istream &is, str_list &);
+   virtual int          read_gtexture(istream &is, vector<string> &);
 
 
    /******** DATA_ITEM METHODS ********/

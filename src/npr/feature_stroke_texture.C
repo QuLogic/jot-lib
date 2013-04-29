@@ -201,15 +201,16 @@ FeatureStrokeTexture::get_legacy_stream(TAGformat &d)
 {
    err_mesg(ERR_LEV_WARN, "FeatureStrokeTexture::get_legacy_stream() - **Old School**");
 
-   str_list leftover;
+   vector<string> leftover;
 
-   read_stream(*(*d).istr(),leftover);
+   read_stream(*(*d).istr(), leftover);
 
    // XXX - Not sure what order to put these back
    // but this is temporary and seems to work...
-   while (leftover.num()>0)
-      ((*d).istr())->putback(***(leftover.pop()));
-
+   while (leftover.size()>0) {
+      ((*d).istr())->putback(leftover.back().c_str()[0]);
+      leftover.pop_back();
+   }
 }
 
 
@@ -403,7 +404,7 @@ FeatureStrokeTexture::write_stream(ostream& os)  const
  * Effects: 
  ***********************************************************************/
 int
-FeatureStrokeTexture::read_stream(istream &is, str_list& leftover)
+FeatureStrokeTexture::read_stream(istream &is, vector<string>& leftover)
 {
    assert(DecalLineStroke::mesh() == 0);
 
@@ -450,7 +451,7 @@ FeatureStrokeTexture::read_stream(istream &is, str_list& leftover)
 int
 FeatureStrokeTexture::read_gtexture(
    istream & is,
-   str_list & leftover )
+   vector<string> & leftover )
 {
    // XXX much from Patch::read_gtexture()
    leftover.clear();

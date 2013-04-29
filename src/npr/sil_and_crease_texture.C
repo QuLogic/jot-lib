@@ -612,7 +612,7 @@ SilAndCreaseTexture::create_crease_strokes()
 
 //XXX - OLD, remove this?
 int
-SilAndCreaseTexture::read_stream(istream& is, str_list &leftover)
+SilAndCreaseTexture::read_stream(istream& is, vector<string> &leftover)
 {
    assert(_patch);
    assert(_sil_stroke_pools[SIL_VIS]->get_prototype()->get_patch() == _patch);

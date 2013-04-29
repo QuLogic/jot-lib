@@ -567,11 +567,11 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    virtual int  read_faces      (istream& is);
    virtual int  read_creases    (istream& is);
    virtual int  read_polylines  (istream& is);
-   virtual int  read_weak_edges (istream& is, str_list &leftover);
-   virtual int  read_colors     (istream& is, str_list &leftover);
-   virtual int  read_texcoords2 (istream& is, str_list &leftover);
-   virtual int  read_patch      (istream& is, str_list &leftover);
-   virtual int  read_include    (istream& is, str_list &leftover);
+   virtual int  read_weak_edges (istream& is, vector<string> &leftover);
+   virtual int  read_colors     (istream& is, vector<string> &leftover);
+   virtual int  read_texcoords2 (istream& is, vector<string> &leftover);
+   virtual int  read_patch      (istream& is, vector<string> &leftover);
+   virtual int  read_include    (istream& is, vector<string> &leftover);
 
    //******** I/O - WRITE ********
    virtual int  write_file      (const char *filename);

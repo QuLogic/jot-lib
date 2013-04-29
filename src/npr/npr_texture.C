@@ -507,7 +507,7 @@ NPRTexture::write_stream(ostream &os) const
 // read_stream()
 /////////////////////////////////////
 int
-NPRTexture::read_stream(istream &is, str_list & leftover)
+NPRTexture::read_stream(istream &is, vector<string> & leftover)
 {
    err_mesg(ERR_LEV_WARN,
             "NPRTexture::read_stream() - Piping to newer tag method...\n");
@@ -567,7 +567,7 @@ NPRTexture::read_stream(istream &is, str_list & leftover)
 int
 NPRTexture::read_gtexture(
    istream & is,
-   str_list & leftover )
+   vector<string> & leftover )
 {
    assert(_stroke_tex);
 

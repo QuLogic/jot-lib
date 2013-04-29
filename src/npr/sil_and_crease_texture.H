@@ -307,7 +307,7 @@ public :
    /******** DATA_ITEM METHODS ********/
 
    virtual int       write_stream(ostream &os) const;
-   virtual int       read_stream (istream &, str_list &leftover);
+   virtual int       read_stream (istream &, vector<string> &leftover);
 
 protected:
    /******** INTERNAL METHODS ********/

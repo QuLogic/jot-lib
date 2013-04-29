@@ -58,7 +58,7 @@ main(int argc, char *argv[])
    }
    mesh_name[n - 3] = 0;        // stomp the extension
 
-   str_ptr mesh_path = str_ptr(mesh_name);
+   string mesh_path = string(mesh_name);
 
    BMESHptr mesh = BMESH::read_jot_stream(fin);
    if (!mesh || mesh->empty())
@@ -73,18 +73,20 @@ main(int argc, char *argv[])
 
    err_msg("got %d meshes", meshes.num());
 
-   str_ptr out_mesh = mesh_path + str_ptr(0) + str_ptr(".sm");
-   cerr << "\nwriting " << **out_mesh << endl;
+   string out_mesh = mesh_path + "0.sm");
+   cerr << "\nwriting " << out_mesh << endl;
    if (Config::get_var_bool("JOT_RECENTER"))
       mesh->recenter();
-   mesh->write_file(**out_mesh);
+   mesh->write_file(out_mesh.c_str());
 
    for (int i=0; i<meshes.num(); i++) {
-      out_mesh = mesh_path + str_ptr(i + 1) + str_ptr(".sm");
-      cerr << "\nwriting " << **out_mesh << endl;
+      char tmp[32];
+      sprintf(tmp, "%d", i + 1);
+      out_mesh = mesh_path + tmp + string(".sm");
+      cerr << "\nwriting " << out_mesh << endl;
       if (Config::get_var_bool("JOT_RECENTER"))
          meshes[i]->recenter();
-      meshes[i]->write_file(**out_mesh);
+      meshes[i]->write_file(out_mesh.c_str());
    }
 
    return 0;
