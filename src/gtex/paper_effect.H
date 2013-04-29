@@ -68,8 +68,6 @@ class PaperEffect : public PaperEffectBase {
    //objects that are identical.  Instead, we
    //cache all of the textures, and their
    //filenames, and serve up textures from the cache.
-//   static LIST<str_ptr>             _paper_names;
-//   static LIST<TEXTUREptr>          _paper_textures;
    static map<string,TEXTUREptr>* _paper_texture_map;
    static map<string,string>*     _paper_texture_remap;
  

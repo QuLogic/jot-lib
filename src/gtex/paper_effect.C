@@ -819,19 +819,6 @@ PaperEffect::begin_paper_effect_nv(TEXTUREptr t, float cont, float brig, double 
 
       // XXX - Newer version premultiplies by alpha!!!!!!!
 
-   /*
-      //Final stage:
-      //Outgoing RGB,ALPHA <-- SPARE0(RGB),SPARE0(ALPHA)
-      glFinalCombinerInputNV(GL_VARIABLE_A_NV,
-                             GL_ZERO,        GL_UNSIGNED_IDENTITY_NV,   GL_RGB);
-      glFinalCombinerInputNV(GL_VARIABLE_C_NV,
-                             GL_SPARE0_NV,   GL_UNSIGNED_IDENTITY_NV,   GL_RGB);
-      glFinalCombinerInputNV(GL_VARIABLE_D_NV,
-                             GL_ZERO,        GL_UNSIGNED_IDENTITY_NV,   GL_RGB);
-      glFinalCombinerInputNV(GL_VARIABLE_G_NV,
-                             GL_SPARE0_NV,   GL_UNSIGNED_IDENTITY_NV,   GL_ALPHA);
-   */
-
       //Final stage:
       //Outgoing RGB,ALPHA <-- SPARE0(RGB),SPARE0(ALPHA)
       glFinalCombinerInputNV(GL_VARIABLE_A_NV,
@@ -1402,49 +1389,6 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
    // g++ 4.0 on macosx needs the following:
    return NULL;
 }
-
-/*
-TEXTUREptr
-PaperEffect::get_texture(Cstr_ptr &tf)
-{
-   int index;
-   
-   if (tf == NULL_STR)
-   {
-   return 0;
-   }
-   else if ((index = _paper_names.get_index(tf)) != BAD_IND)
-   {
-      err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - Using cached copy of texture.");
-      return _paper_textures[index];
-   }
-   else
-   {
-      err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - Not in cache: %s", **tf);
-
-      Image image(**tf);
-
-      if (!image.empty())
-      {
-      TEXTUREglptr t = new TEXTUREgl("");
-         t->set_save_img(true);
-      t->set_image(image.copy(),image.width(),image.height(),image.bpp());
-
-         err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - Cached: w=%d h=%d bpp=%d", image.width(), image.height(), image.bpp());
-
-         _paper_names.add(tf);
-         _paper_textures.add(t);
-
-      return t;
-      }
-      else
-      {
-         err_mesg(ERR_LEV_ERROR, "PaperEffect::get_texture() - Error loading to cache: %s", **tf);
-         return 0;
-      }
-   }   
-}
-*/
 
 /////////////////////////////////////
 // check_new_paper() 
