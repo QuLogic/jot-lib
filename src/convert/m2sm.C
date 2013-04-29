@@ -46,13 +46,13 @@ read_vert(Wpt_list& pts)
 }
 
 void
-read_face(ARRAY<Point3i>& faces)
+read_face(vector<Point3i>& faces)
 {
   int num; // face number (ignored)
   int i = -1, j = -1, k = -1; // vert indices
   cin >> num >> i >> j >> k;
   if ( i>0 && j>0 && k>0 ) {
-    faces += Point3i(i,j,k);
+    faces.push_back(Point3i(i,j,k));
   } else {
     cerr << "error reading face " << num 
          << ": " << i << ", " << j << ", " << k << endl;
@@ -69,7 +69,7 @@ main(int argc, char *argv[])
    }
 
    Wpt_list pts;
-   ARRAY<Point3i> faces;
+   vector<Point3i> faces;
 
    char keyword[256];
 
@@ -92,7 +92,7 @@ main(int argc, char *argv[])
      mesh->add_vertex(pts[i]);
    }
 
-   for (i=0; i<faces.num(); i++) {
+   for (vector<Point3i>::size_type i=0; i<faces.size(); i++) {
      mesh->add_face(faces[i][0]-1,
                     faces[i][1]-1,
                     faces[i][2]-1);

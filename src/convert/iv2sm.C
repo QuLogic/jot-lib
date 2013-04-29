@@ -50,7 +50,6 @@
 
 // Reference dev symbols
 DEVice_2d *DEVice_2d::last = 0;
-ARRAY<DEVpoll *> DEVpoll::_pollable;
 
 void outputMesh(ostream &os);
 
@@ -79,9 +78,9 @@ ostream &operator<<(ostream &os, const Triangle &tri) {
    return os << tri[0] << " " << tri[1] << " " << tri[2];
 }
 
-ARRAY<SbVec3f>  points(1024);
-ARRAY<Triangle> tris(1024);
-ARRAY<SbVec2f>  texcoords(1024);
+vector<SbVec3f>  points(1024);
+vector<Triangle> tris(1024);
+vector<SbVec2f>  texcoords(1024);
 
 //array for textures
 //array for colors? no, only a vector
@@ -166,7 +165,7 @@ add_state_coords(SoCallbackAction *cb)
    for (i = 0; i < num_coords; i++) {
       SbVec3f point;
       mat.multVecMatrix(cb->getCoordinate3(i), point);
-      points += point;
+      points.push_back(point);
    }
 
    // Add texture coords if any
@@ -184,7 +183,7 @@ add_state_coords(SoCallbackAction *cb)
 
       // cerr << "tex coords: " << num_coords << endl;
       for (i = 0; i < num_coords; i++) {
-         texcoords += cb->getTextureCoordinate2(i);
+         texcoords.push_back(cb->getTextureCoordinate2(i));
       }
    }
 }
@@ -205,7 +204,7 @@ add_field_coords(SoCallbackAction *cb, const SoMFVec3f &coords)
    for (i = 0; i < coords.getNum(); i++) {
       SbVec3f point;
       mat.multVecMatrix(verts[i], point);
-      points += point;
+      points.push_back(point);
    }
 }
 
@@ -224,7 +223,7 @@ indexed_face_set(SoIndexedFaceSet *fs, SoCallbackAction *cb)
    // Add triangles
    const int32_t *tri_coords = fs->coordIndex.getValues(0);
    for (int i = 0; i < fs->coordIndex.getNum(); i+=4) {
-      tris.add(Triangle(tri_coords[i], tri_coords[i+1], tri_coords[i+2]));
+      tris.push_back(Triangle(tri_coords[i], tri_coords[i+1], tri_coords[i+2]));
    }
 }
 
@@ -243,7 +242,7 @@ ind_tri_strip(SoIndexedTriangleStripSet *tristrip, SoCallbackAction *cb)
    }
 
    //vertices have been added to points array
-   // cerr << "Points: " << points.num() << endl;
+   // cerr << "Points: " << points.size() << endl;
    if (!tris.empty()) {
       cerr << "indexed_face_set - warning: removing unused tris" << endl;
    }
@@ -261,7 +260,7 @@ ind_tri_strip(SoIndexedTriangleStripSet *tristrip, SoCallbackAction *cb)
          secondvert = -1;
       } else {
          if (firstvert != -1 && secondvert != -1 && firstvert != secondvert) {
-            tris.add(Triangle(firstvert, secondvert,tri_coords[i]));
+            tris.push_back(Triangle(firstvert, secondvert,tri_coords[i]));
          }
          firstvert = secondvert;
          secondvert = tri_coords[i];
@@ -400,7 +399,7 @@ printTriangleCallback(void *, SoCallbackAction *cb,
    if (a == b || a == c ||  b == c) {
        badtris++;
    } else {
-      tris.add(Triangle(a, b, c));
+      tris.push_back(Triangle(a, b, c));
    }
 }
 
@@ -414,23 +413,23 @@ printVertex(const SoPrimitiveVertex *vertex,
    // new plan: we add disconnected triangles,
    // then fix them up later
    
-   points += point;
-   return points.num() - 1;
+   points.push_back(point);
+   return points.size() - 1;
 /*
    int index = -1;
    const float eps = 1e-7;
 //   const float eps = 1e-5;
 
-   for (int i = points.num()-1; index == -1 && i >= 0; i--) {
+   for (vector<SbVec3f>::size_type i = points.size()-1; index == -1 && i >= 0; i--) {
       if (points[i].equals(point, eps)) {
          index = i;
       }
    }
    if (index == -1) {
-      index = points.num();
-      points += point;
-      if (points.num() % 1000 == 0) {
-         // fprintf(stderr, "%d vertices\n", points.num());
+      index = points.size();
+      points.push_back(point);
+      if (points.size() % 1000 == 0) {
+         // fprintf(stderr, "%d vertices\n", points.size());
       }
    } else {
       reppts++;
@@ -448,20 +447,19 @@ outputMesh(ostream &os)
    // fprintf(stderr, "Starting to output\n");
    BMESHptr mesh = new BMESH;
   
-   int i;
-   for (i = 0; i < points.num(); i++) {
+   for (vector<SbVec3f>::size_type i = 0; i < points.size(); i++) {
       const float *data = points[i].getValue();
       mesh->add_vertex(Wpt(data[0], data[1], data[2]));
    }
   
-   for (i = 0; i < tris.num(); i++) {
+   for (vector<Triangle> i = 0; i < tris.size(); i++) {
       const int *data = tris[i].data();
       mesh->add_face(data[0], data[1], data[2]);
    }
 
    if (!texcoords.empty()) {
       const float* data = 0;
-      for (i = 0; i < mesh->nfaces(); i++) {
+      for (int i = 0; i < mesh->nfaces(); i++) {
          // for each face, set texture coordinates of
          // the 3 vertices of that face.
          Bface* f = mesh->bf(i);

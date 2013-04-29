@@ -197,15 +197,15 @@ add_tri(LMESH* mesh, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v
 }
 
 inline void
-add_poly(LMESH* mesh, CUVpt_list& uvs, const ARRAY<vtn>& vtns)
+add_poly(LMESH* mesh, CUVpt_list& uvs, const vector<vtn>& vtns)
 {
-   assert(vtns.num() > 2);
+   assert(vtns.size() > 2);
 
-   for (int k=2; k < vtns.num(); k++) {
+   for (vector<vtn>::size_type k=2; k < vtns.size(); k++) {
       add_tri(mesh, uvs, vtns[0], vtns[k-1], vtns[k]);
    }
    // if it is a quad, mark the quad diagonal as "weak"
-   if (vtns.num() == 4) {
+   if (vtns.size() == 4) {
       Bedge* e = lookup_edge(mesh->bv(vtns[0]._v), mesh->bv(vtns[2]._v));
       assert(e);
       e->set_bit(Bedge::WEAK_BIT);
@@ -222,7 +222,7 @@ read_face(LMESH* mesh, CUVpt_list& uvs, istream& in)
    // vertices. If there are exactly 4 we make a quad.
 
    // use an istringstream to read vertices until the end of the line:
-   ARRAY<vtn> vtns;
+   vector<vtn> vtns;
    const int BUF_SIZE = (1 << 12);
    char buf[BUF_SIZE] = {};
    in.getline(buf, BUF_SIZE);
@@ -233,13 +233,13 @@ read_face(LMESH* mesh, CUVpt_list& uvs, istream& in)
       vtn v;
       is >> v;
       if (v.is_valid())
-         vtns += v;
+         vtns.push_back(v);
       else break;
    }
 
    // create a polygon (triangle fan) from the vertices:
-   if (vtns.num() < 3) {
-      cerr << "read_face: error: read " << vtns.num() << " vertices for face" << endl;
+   if (vtns.size() < 3) {
+      cerr << "read_face: error: read " << vtns.size() << " vertices for face" << endl;
       return;
    }
    add_poly(mesh, uvs, vtns);

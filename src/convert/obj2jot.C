@@ -191,15 +191,15 @@ add_tri(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, co
 }
 
 inline void
-add_poly(LMESH* mesh, Patch* p, CUVpt_list& uvs, const ARRAY<vtn>& vtns)
+add_poly(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vector<vtn>& vtns)
 {
-   assert(vtns.num() > 2);
+   assert(vtns.size() > 2);
 
-   for (int k=2; k < vtns.num(); k++) {
+   for (vector<vtn>::size_type k=2; k < vtns.size(); k++) {
       add_tri(mesh, p, uvs, vtns[0], vtns[k-1], vtns[k]);
    }
    // if it is a quad, mark the quad diagonal as "weak"
-   if (vtns.num() == 4) {
+   if (vtns.size() == 4) {
       Bedge* e = lookup_edge(mesh->bv(vtns[0]._v), mesh->bv(vtns[2]._v));
       assert(e);
       e->set_bit(Bedge::WEAK_BIT);
@@ -216,7 +216,7 @@ read_face(LMESH* mesh, CUVpt_list& uvs, Patch* p, istream& in)
    // vertices. If there are exactly 4 we make a quad.
 
    // use an istringstream to read vertices until the end of the line:
-   ARRAY<vtn> vtns;
+   vector<vtn> vtns;
    const int BUF_SIZE = (1 << 12);
    char buf[BUF_SIZE] = {};
    in.getline(buf, BUF_SIZE);
@@ -227,24 +227,24 @@ read_face(LMESH* mesh, CUVpt_list& uvs, Patch* p, istream& in)
       vtn v;
       is >> v;
       if (v.is_valid())
-         vtns += v;
+         vtns.push_back(v);
       else break;
    }
 
    // create a polygon (triangle fan) from the vertices:
-   if (vtns.num() < 3) {
-      cerr << "read_face: error: read " << vtns.num() << " vertices for face" << endl;
+   if (vtns.size() < 3) {
+      cerr << "read_face: error: read " << vtns.size() << " vertices for face" << endl;
       return;
    }
    add_poly(mesh, p, uvs, vtns);
 }
 
 inline void
-read_obj(ARRAY<LMESHptr>& meshes, istream& in)
+read_obj(vector<LMESHptr>& meshes, istream& in)
 {
    UVpt_list    uvs;
   
-   meshes.add(new LMESH);
+   meshes.push_back(new LMESH);
    int curr_mesh = 0;
    Patch* curr_patch = 0;
 
@@ -255,7 +255,7 @@ read_obj(ARRAY<LMESHptr>& meshes, istream& in)
          //curr_patch = meshes[curr_mesh]->new_patch();
          skip_line(in);
          //cerr << "Starting a new Mesh: " << endl;
-         //meshes.add(new LMESH);
+         //meshes.push_back(new LMESH);
          //curr_mesh++;
       } else if(token == "usemtl") {         
          //cerr << "Starting a new patch: " << endl;
@@ -358,7 +358,7 @@ main(int argc, char *argv[])
          return 1;
       }
 
-      ARRAY<LMESHptr> meshes;
+      vector<LMESHptr> meshes;
       read_obj(meshes, in);      
       
       
@@ -370,9 +370,9 @@ main(int argc, char *argv[])
             return 1;
          }
          out_jot_first << "#jot" << endl;
-         for(int j=0; j < meshes.num(); ++j) {
+         for (vector<LMESHptr>::size_type j=0; j < meshes.size(); ++j) {
             char m_name[128];
-            sprintf(m_name, "mesh%d", j);
+            sprintf(m_name, "mesh%d", (int)j);
             output_mesh_start(out_jot_first, m_name);
             //meshes[j]->recenter();
             meshes[j]->write_stream(out_jot_first);
@@ -383,9 +383,9 @@ main(int argc, char *argv[])
 
       // Update Frames
       out_jot << "#jot" << endl;
-      for(int j=0; j < meshes.num(); ++j) {
+      for (vector<LMESHptr>::size_type j=0; j < meshes.size(); ++j) {
          char m_name[64];
-         sprintf(m_name, "mesh%d", j);
+         sprintf(m_name, "mesh%d", (int)j);
          output_update_mesh_start(out_jot, m_name);
          //meshes[j]->recenter();
          IOManager::add_state(IOManager::STATE_PARTIAL_SAVE);
