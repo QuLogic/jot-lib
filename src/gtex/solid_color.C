@@ -154,7 +154,7 @@ SolidColorTexture::write_stream(ostream& os) const
 }
 
 int
-SolidColorTexture::read_stream(istream& is, str_list &leftover)
+SolidColorTexture::read_stream(istream& is, vector<string> &leftover)
 {
    leftover.clear();
    COLOR col;

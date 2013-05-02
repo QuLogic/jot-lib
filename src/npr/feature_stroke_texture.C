@@ -399,7 +399,7 @@ FeatureStrokeTexture::write_stream(ostream& os)  const
 
 /***********************************************************************
  * Method : FeatureStrokeTexture::read_stream
- * Params : istream&, str_list& leftover
+ * Params : istream&, vector<string>& leftover
  * Returns: int
  * Effects: 
  ***********************************************************************/

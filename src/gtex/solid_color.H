@@ -56,7 +56,7 @@ class SolidColorTexture : public BasicTexture {
    virtual void set_alpha(double a)    { _alpha = a; }
    virtual int draw(CVIEWptr& v); 
    virtual int  write_stream(ostream& os) const;
-   virtual int  read_stream (istream& is, str_list &leftover);
+   virtual int  read_stream (istream& is, vector<string> &leftover);
 
    //******** DATA_ITEM VIRTUAL METHODS ********
    virtual DATA_ITEM  *dup() const { return new SolidColorTexture; }
