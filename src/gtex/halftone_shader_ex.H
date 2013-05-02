@@ -82,8 +82,6 @@ class HalftoneShaderEx : public GLSLShader {
    GLSLToonShader*   m_toon_tone_shader;
    TEXTUREglptr      m_texture;
    TEXTUREglptr		 _perlin;
-   GLint			 _lod_loc;
-
 
    GLint             m_tex_loc;
    GLint             m_width;

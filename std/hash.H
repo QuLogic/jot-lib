@@ -49,7 +49,6 @@ class HASH {
 	int         _size;
         hash_node **_table;
 	int         _mask;
-	int         _seq_val;
 	hash_node **table() const {return _table;}
 	uintptr_t   _lastval;
 	int  hash(const long key) const;
