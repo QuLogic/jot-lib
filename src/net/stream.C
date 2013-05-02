@@ -78,26 +78,13 @@ STDdstream::STDdstream(ostream* s):
  * DESCR   :	Peeks at the next input character without actually
  * 		removing it from the input queue.
  * ------------------------------------------------------------------------- */
-char
+int
 STDdstream::peekahead()         
 { 
    char c;
    if (istr()) 
    {
-      //This is sometimes used to entice an EOF
-      //to detect the end of input streams.  In this
-      //case, the ensuing _fail=true is undesirable...
-      
-      bool was_good = !fail();
-      
-      (*this) >> c;
-      
-      if (fail() && eof() && was_good)
-      {
-         _fail = false;
-      }
-
-      istr()->putback(c);
+      c = istr()->peek();
    } 
    else  
    {

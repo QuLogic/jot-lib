@@ -60,7 +60,7 @@ class STDdstream {
 
    int     ascii() const { return istr() || ostr(); }
 
-   char    peekahead();
+   int     peekahead();
    void    read_open_delim();
    void    read_close_delim();
 
