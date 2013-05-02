@@ -136,7 +136,7 @@ int    GLUI_Graph::mouse_down_handler( int local_x, int local_y )
 
 /**************************** GLUI_Graph::mouse_up_handler() */
 
-int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, int inside )
+int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, bool inside )
 {
 	int graph_x, graph_y;
 
@@ -165,7 +165,7 @@ int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, int inside )
 
 /****************************** GLUI_Graph::mouse_held_down_handler() ******/
 
-int    GLUI_Graph::mouse_held_down_handler( int local_x, int local_y, int inside)
+int    GLUI_Graph::mouse_held_down_handler( int local_x, int local_y, bool inside)
 {
 
 	int graph_x,graph_y;

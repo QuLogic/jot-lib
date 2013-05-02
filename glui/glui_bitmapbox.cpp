@@ -72,9 +72,10 @@ int    GLUI_BitmapBox::mouse_down_handler( int local_x, int local_y )
 
 /**************************** GLUI_BitmapBox::mouse_up_handler() */
 
-int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, int new_inside )
+int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, bool new_inside )
 {
-	int bitmap_x, bitmap_y, old_inside;
+	int bitmap_x, bitmap_y;
+	bool old_inside;
 
 	bitmap_x = local_x - x_abs - (w - image_w)/2;
 	if (bitmap_x < 0) bitmap_x = 0;
@@ -107,10 +108,11 @@ int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, int new_insid
 
 /****************************** GLUI_BitmapBox::mouse_held_down_handler() ******/
 
-int    GLUI_BitmapBox::mouse_held_down_handler( int local_x, int local_y, int new_inside)
+int    GLUI_BitmapBox::mouse_held_down_handler( int local_x, int local_y, bool new_inside)
 {
 
-	int bitmap_x, bitmap_y, old_inside;
+	int bitmap_x, bitmap_y;
+	bool old_inside;
 
 	bitmap_x = local_x - x_abs - (w - image_w)/2;
 	if (bitmap_x < 0) bitmap_x = 0;
@@ -192,7 +194,7 @@ int    GLUI_BitmapBox::general_mouse_down_handler( int but, int local_x, int loc
 
 /**************************** GLUI_BitmapBox::general_mouse_up_handler() */
 
-int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local_y, int new_inside )
+int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local_y, bool new_inside )
 {
 	int bitmap_x, bitmap_y;
 
@@ -234,7 +236,7 @@ int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local
 
 /****************************** GLUI_BitmapBox::general_mouse_held_down_handler() ******/
 
-int    GLUI_BitmapBox::general_mouse_held_down_handler( int but, int local_x, int local_y, int new_inside)
+int    GLUI_BitmapBox::general_mouse_held_down_handler( int but, int local_x, int local_y, bool new_inside)
 {
 	int bitmap_x, bitmap_y;
 

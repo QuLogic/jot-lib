@@ -81,15 +81,15 @@ class GLUI_ActiveText;
 class GLUI_Slider : public GLUI_Control
 {
 public:
-  int	pressed;
+  bool pressed;
   int		data_type;
   float	float_low, float_high;
   int		int_low, int_high;
   int		graduations;
 
   int  mouse_down_handler( int local_x, int local_y );
-  int  mouse_up_handler( int local_x, int local_y, int inside );
-  int  mouse_held_down_handler( int local_x, int local_y, int inside );
+  int  mouse_up_handler( int local_x, int local_y, bool inside );
+  int  mouse_held_down_handler( int local_x, int local_y, bool inside );
   int  special_handler( int key, int modifiers );
 
   void draw( int x, int y );
@@ -151,13 +151,13 @@ protected:
 class GLUI_ActiveText : public GLUI_Control
 {
 public:
-  int  currently_pressed;
-  int  currently_inside;
-  int  currently_highlighted;
+  bool currently_pressed;
+  bool currently_inside;
+  bool currently_highlighted;
 
   int  mouse_down_handler( int local_x, int local_y );
-  int  mouse_up_handler( int local_x, int local_y, int same );
-  int  mouse_held_down_handler( int local_x, int local_y, int inside );
+  int  mouse_up_handler( int local_x, int local_y, bool same );
+  int  mouse_held_down_handler( int local_x, int local_y, bool inside );
   int  key_handler( unsigned char key,int modifiers );
 
   void draw( int x, int y );
@@ -166,8 +166,8 @@ public:
 
   void set_text( const char *text );
 
-  int  get_highlighted();
-  void set_highlighted(int h);
+  bool get_highlighted();
+  void set_highlighted(bool h);
 
   void update_size( void );
   int check_fit(const char *s);
@@ -198,8 +198,8 @@ protected:
 class GLUI_BitmapBox : public GLUI_Control
 {
 public:
-  int	            currently_pressed;
-  int             currently_inside;
+  bool            currently_pressed;
+  bool            currently_inside;
 
   unsigned char *	image;
   unsigned char *	image_disabled;
@@ -240,12 +240,12 @@ public:
   void	set_depressable( int d );
 
   int		general_mouse_down_handler( int but, int local_x, int local_y );
-  int		general_mouse_up_handler( int but,  int local_x, int local_y, int inside );
-  int		general_mouse_held_down_handler( int but,  int local_x, int local_y, int inside );
+  int		general_mouse_up_handler( int but,  int local_x, int local_y, bool inside );
+  int		general_mouse_held_down_handler( int but,  int local_x, int local_y, bool inside );
 
   int		mouse_down_handler( int local_x, int local_y );
-  int		mouse_up_handler( int local_x, int local_y, int inside );
-  int		mouse_held_down_handler( int local_x, int local_y, int inside );
+  int		mouse_up_handler( int local_x, int local_y, bool inside );
+  int		mouse_held_down_handler( int local_x, int local_y, bool inside );
 
   int		special_handler( int key, int modifiers );
 
@@ -339,7 +339,7 @@ public:
    double   max_x;
    double   max_y;
 
-   int   pressed;
+   bool  pressed;
 
    int   graph_w;
    int   graph_h;
@@ -394,8 +394,8 @@ public:
    void  clear_series( void );
 
    int   mouse_down_handler( int local_x, int local_y );
-   int   mouse_up_handler( int local_x, int local_y, int inside );
-   int   mouse_held_down_handler( int local_x, int local_y, int inside );
+   int   mouse_up_handler( int local_x, int local_y, bool inside );
+   int   mouse_held_down_handler( int local_x, int local_y, bool inside );
    int   special_handler( int key, int modifiers );
 
    void  draw( int x, int y );

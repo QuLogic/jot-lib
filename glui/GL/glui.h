@@ -861,8 +861,8 @@ public:
     virtual void   set_id( int id ) { user_id=id; }
 
     virtual int    general_mouse_down_handler( int but, int local_x, int local_y ) { return false; }
-    virtual int    general_mouse_up_handler( int but,  int local_x, int local_y, int inside ) { return false; }
-    virtual int    general_mouse_held_down_handler( int but,  int local_x, int local_y, int inside ) { return false; }
+    virtual int    general_mouse_up_handler( int but,  int local_x, int local_y, bool inside ) { return false; }
+    virtual int    general_mouse_held_down_handler( int but,  int local_x, int local_y, bool inside ) { return false; }
 
     virtual int mouse_down_handler( int local_x, int local_y )                 { return false; }
     virtual int mouse_up_handler( int local_x, int local_y, bool inside )       { return false; }
