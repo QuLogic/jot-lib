@@ -58,7 +58,7 @@ class STDdstream {
    istream*  istr()  const { return _iostream ? (istream*)_iostream : _istream; }
    ostream*  ostr()  const { return _iostream ? (ostream*)_iostream : _ostream; }
 
-   int     ascii() const { return istr() || ostr(); }
+   bool    ascii() const { return istr() || ostr(); }
 
    int     peekahead();
    void    read_open_delim();
@@ -71,8 +71,8 @@ class STDdstream {
    void    write_delim(char);
    char    read_delim();
 
-   int     check() { char brace = peekahead(); return brace == '}' ? 0 : 1; }
-   int     eof()   { return istr() ? istr()->eof(): _in_queue.in_avail()<1; }
+   bool    check() { int brace = peekahead(); return brace != '}'; }
+   bool    eof()   { return istr() ? istr()->eof() : _in_queue.in_avail()<1; }
 
    void    ws(const char *);
    bool    operator ! ()        const { return _fail; }
