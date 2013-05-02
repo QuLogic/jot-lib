@@ -25,9 +25,9 @@
  
 #include <cassert>
 
-using namespace std;
-
 #include "global.H"
+
+using namespace std;
 
 const double mlib::gEpsZeroMath  = 1e-12;    //!< Really a very small value
 
