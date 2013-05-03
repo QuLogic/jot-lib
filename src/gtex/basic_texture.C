@@ -393,7 +393,7 @@ Tex_Unit_Manager::make_this_stage_used(int tex_stage)
 }
 
 double
-IDVisibilityTest::visibility(CWpt& p, double len)
+IDVisibilityTest::visibility(CWpt& p, double len) const
 {
    IDRefImage* id = IDRefImage::lookup();
    assert(id);
