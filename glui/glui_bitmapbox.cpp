@@ -548,6 +548,8 @@ void    GLUI_BitmapBox::draw_active_area( void )
             glRasterPos2f( (x+1) + (image_w-1), (y+1) );
             glDrawPixels( 1, image_h, GL_RGB, GL_UNSIGNED_BYTE, foo );
          }
+
+         free(foo);
       }
    }
 
@@ -694,6 +696,8 @@ void    GLUI_BitmapBox::set_img_size( int i_w, int i_h )
 		}
 		else
 		{
+			if (new_image)          free(new_image);
+			if (new_image_disabled) free(new_image_disabled);
 			fprintf(stderr,"GLUI_BitmapBox::set_img_size - Failed to alloc new image.\n");
 		}
 
