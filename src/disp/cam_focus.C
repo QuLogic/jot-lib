@@ -272,9 +272,7 @@ CamBreathe::tick(void)
       return 0;
     
    _speed = 2;
-   //_size = 0.005 ;
   
-  // cout << "Sixe: " << _size << endl;
    CAMdataptr data(_cam->data());
 
    Wvec upv(data->up_v());
@@ -314,19 +312,11 @@ CamOrbit::tick(void)
    XYpt        cpt   = data->center();
    double      radsq = sqr(1+fabs(cpt[0])); // squared rad of virtual cylinder
 
-   //Toss in some XY pts
-   //to simulate a mouse movement
-   //that produces rotation...
-   //XYpt        tp    = XYpt(0.495, 0.5); 
-   // XYpt        te    = XYpt(0.5,0.5);
-
    Wvec   op  (tp[0], 0, 0);             // get start and end X coordinates
    Wvec   oe  (te[0], 0, 0);             //    of cursor motion
    double opsq = op * op, oesq = oe * oe;
    double lop  = opsq > radsq ? 0 : sqrt(radsq - opsq);
    double loe  = oesq > radsq ? 0 : sqrt(radsq - oesq);
-   //Wvec   nop  = Wvec(op[0], 0, lop).normalized();
-   //Wvec   noe  = Wvec(oe[0], 0, loe).normalized();
    Wvec   nop  = Wvec(op[0], 0, lop).normalized();
    Wvec   noe  = Wvec(oe[0], 0, loe).normalized();
 
@@ -408,11 +398,7 @@ CamCruise::tick(void)
    if(_stop)
       return -1;
 
-//   if(_pause)
-//      return 0;
-
    CAMdataptr data(_cam->data());
-   //data->set_center(_cent);
    
    XYvec      delta(te-tp);
 
@@ -422,11 +408,7 @@ CamCruise::tick(void)
       }
    else
       {
-         //Collide            _collision;
-
          Wpt     spt  (XYpt(tp[0],te[1]));
-         Wvec    svec (spt - Wline(data->from(), data->at_v()).project(spt));
- //      double  sfact(1 + delta[1]);
          Wvec velocity, movec;
 
 			if(_pause)
@@ -434,8 +416,7 @@ CamCruise::tick(void)
 			else
 				movec = (data->at() - data->from());
 		    
-            //Wvec    gravity = BaseGravity::instance()->get_dir(data->from());
-            velocity = BaseCollide::instance()->get_move(data->from(), //gravity + 
+            velocity = BaseCollide::instance()->get_move(data->from(),
                                                          (_speed * movec.normalized() * (movec.length() * delta[1] * -4)));
         
             data->set_center(data->at());
@@ -451,13 +432,10 @@ CamCruise::tick(void)
 void 
 CamCruise::travel(mlib::Wpt p)
 { 
-   //cout << "traveling: " << p << endl;
    _travel = true;
    _pause = true;
    _start = _cam->data()->from();
    _dest = p;
-  // cout << "start: " << _start << endl; 
-  // cout << "From: " << p << endl; 
    _from = _cam->data()->from();
    _at       = _cam->data()->up();
    _up       = _cam->data()->from()-_cam->data()->at_v();

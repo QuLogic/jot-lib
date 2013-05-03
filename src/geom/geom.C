@@ -160,7 +160,6 @@ GEOM::do_cam_focus(CVIEWptr& view, CRAYhit& r)
          norm = -data->at_v();
 
       Wvec  off   (cross(Wvec::Y(),norm).normalized() * 3);
-      Wvec  atv   (data->at_v() - Wvec::Y() * (data->at_v() * Wvec::Y()));
       Wvec  newvec(norm*6 + 4.0*Wvec::Y()); 
       if ((center + newvec + off - data->from()).length() > 
           (center + newvec - off - data->from()).length())
