@@ -971,7 +971,7 @@ public:
         spacebar_mouse_click = true;    /* Does spacebar simulate a mouse click? */
         live_type      = GLUI_LIVE_NONE;
         text = "";
-        last_live_text == "";
+        last_live_text = "";
         live_inited    = false;
         collapsible    = false;
         is_open        = true;
@@ -1346,7 +1346,7 @@ public:
     void set_level(int l) { level = l; }
     void set_format(int f) { format = f; }
     void set_current(int c) { is_current = c; }
-    int get_id() { return id; }
+    int get_id() const { return id; }
     int get_level() { return level; }
     int get_child_number() { return child_number; }
     void enable_bar() { if (column) { column->int_val = 1;  set_color(red, green, blue); } }
