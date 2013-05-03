@@ -2085,7 +2085,7 @@ void
 NPRPenUI::add_layer()
 {
    int i;
-   GTexture *t;
+   GTexture *t = NULL;
    NPRTexture *npr = _pen->curr_npr_tex();
 
    if (npr)
@@ -2097,8 +2097,8 @@ NPRPenUI::add_layer()
          t = new NPRSolidTexture(npr->patch()); //add solid NPR texture
       else if (_radgroup[RADGROUP_GTEX]->get_int_val() == RADBUT_TOON)
          t = new XToonTexture(npr->patch()); //add X-Toon texture
-	  else if (_radgroup[RADGROUP_GTEX]->get_int_val() == RADBUT_XTOON)
-		  t = new GLSLXToonShader(npr->patch()); //add GLSL X-Toon texture
+      else if (_radgroup[RADGROUP_GTEX]->get_int_val() == RADBUT_XTOON)
+         t = new GLSLXToonShader(npr->patch()); //add GLSL X-Toon texture
 
       assert(t);
 
