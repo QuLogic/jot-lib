@@ -55,7 +55,7 @@ GLUI_String& glui_format_str(GLUI_String& str, const char* fmt, ...)
     if (buf==stackbuf) buf = (char*)malloc(sizeof(char)*bufsz);
     else buf = (char*)realloc(buf, sizeof(char)*bufsz);
   }
+  str=GLUI_String(buf);
   if (buf!=stackbuf) free(buf);
-  str=buf;
   return str;
 }
