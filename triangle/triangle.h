@@ -279,17 +279,10 @@ struct triangulateio {
   int numberofedges;                                             /* Out only */
 };
 
-#ifndef WIN32
-// the following line was commented out to fix a comiler warning on
-// WIN32.  unfortunately that caused a compiler error on linux, so
-// we're trying an ifdef instead:
-#define VOID int
-#endif
-
 #ifdef ANSI_DECLARATORS
 void triangulate(const char *, struct triangulateio *, struct triangulateio *,
                  struct triangulateio *);
-void trifree(VOID *memptr);
+void trifree(void *memptr);
 #else /* not ANSI_DECLARATORS */
 void triangulate();
 void trifree();
