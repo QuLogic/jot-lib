@@ -1803,7 +1803,7 @@ WpathStroke::optimizing_fit(VoteGroup& g, double freq)
       bool bad = false;
 
       for (j=0; j<n; j++) {
-         double fj,fj_1;
+         double fj,fj_1 = 0.0;
 
          xj = begin + (double)j*ndc_delta;
 
