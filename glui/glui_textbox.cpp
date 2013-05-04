@@ -166,7 +166,6 @@ int    GLUI_TextBox::mouse_held_down_handler( int local_x, int local_y,
 /****************************** GLUI_TextBox::key_handler() **********/
 int    GLUI_TextBox::key_handler( unsigned char key,int modifiers )
 {
-  int regular_key;
   /* int has_selection;              */
 
   if ( NOT glui )
@@ -175,7 +174,6 @@ int    GLUI_TextBox::key_handler( unsigned char key,int modifiers )
   if ( debug )
     dump( stdout, "-> KEY HANDLER" );
 
-  regular_key = false;
   bool ctrl_down = (modifiers & GLUT_ACTIVE_CTRL)!=0;
   /*  has_selection = (sel_start != sel_end);              */
 
@@ -272,14 +270,6 @@ int    GLUI_TextBox::key_handler( unsigned char key,int modifiers )
     if ( key == 13 )           /* RETURNS are written as newlines*/
       key = '\n';
 
-    regular_key = true;
-
-    /** This is just to get rid of warnings - the flag regular_key is
-        set if the key was not a backspace, return, whatever.  But I
-        believe if we're here, we know it was a regular key anyway */
-    if ( regular_key ) {
-    }
-
     /**** If there's a current selection, erase it ******/
     if ( sel_start != sel_end ) {
       clear_substring( MIN(sel_start,sel_end), MAX(sel_start,sel_end ));
@@ -299,11 +289,6 @@ int    GLUI_TextBox::key_handler( unsigned char key,int modifiers )
   }
 
   /******** Now redraw text ***********/
-  /* Hack to prevent text box from being cleared first **/
-  /**  int substring_change =  update_substring_bounds();
-       draw_text_only =
-       (NOT substring_change AND NOT has_selection AND regular_key );
-  */
 
   draw_text_only = false;  /** Well, hack is not yet working **/
   update_and_draw_text();
@@ -588,7 +573,6 @@ void    GLUI_TextBox::draw_text( int x, int y )
   if ( sel_start != sel_end ) {
     sel_x_start = text_x;
     sel_x_end   = text_x;
-    delta = 0;
     for( i=substring_start; sel_x_end < (w - text_x) && i<=substring_end; i++ ) {
       delta = 0;
       if (text[i] == '\t') // Character is a tab, go to next tab stop

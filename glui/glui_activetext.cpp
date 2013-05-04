@@ -21,9 +21,9 @@ int    GLUI_ActiveText::mouse_down_handler( int local_x, int local_y )
 /****************************** GLUI_ActiveText::mouse_held_down_handler() ******/
 
 int    GLUI_ActiveText::mouse_held_down_handler( int local_x, int local_y,
-					     int new_inside)
+					         bool new_inside)
 {
-   int old_inside;
+   bool old_inside;
 
    old_inside  = currently_inside;
    currently_inside = new_inside;
@@ -41,9 +41,9 @@ int    GLUI_ActiveText::mouse_held_down_handler( int local_x, int local_y,
 
 /****************************** GLUI_ActiveText::mouse_up_handler() **********/
 
-int    GLUI_ActiveText::mouse_up_handler( int local_x, int local_y, int new_inside )
+int    GLUI_ActiveText::mouse_up_handler( int local_x, int local_y, bool new_inside )
 {
-   int old_inside;
+   bool old_inside;
 
    set_int_val( 0 );
 
@@ -177,16 +177,16 @@ void    GLUI_ActiveText::set_text( const char *text )
 
 /************************************** GLUI_ActiveText::get_highlighted() **********/
 
-int  GLUI_ActiveText::get_highlighted()
+bool GLUI_ActiveText::get_highlighted()
 {
    return currently_highlighted;
 }
 
 /************************************** GLUI_ActiveText::set_highlighted() **********/
 
-void GLUI_ActiveText::set_highlighted(int h)
+void GLUI_ActiveText::set_highlighted(bool h)
 {
-   int oh;
+   bool oh;
    oh = currently_highlighted;
    currently_highlighted = h;
    if (h != oh)

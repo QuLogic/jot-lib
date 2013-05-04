@@ -207,7 +207,7 @@ int    GLUI_EditText::mouse_held_down_handler( int local_x, int local_y,
 
 int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
 {
-  int i, regular_key;
+  int i;
   /* int has_selection;              */
 
   if ( NOT glui )
@@ -216,7 +216,6 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
   if ( debug )
     dump( stdout, "-> KEY HANDLER" );
 
-  regular_key = false;
   bool ctrl_down = (modifiers & GLUT_ACTIVE_CTRL)!=0;
   /*  has_selection = (sel_start != sel_end);              */
 
@@ -329,7 +328,6 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
     return true;
   }
   else { /* Regular key */
-    regular_key = true;
 
     /** Check if we only accept numbers **/
     if (data_type == GLUI_EDITTEXT_FLOAT ) {
@@ -396,12 +394,6 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
       }
     }
 
-    /** This is just to get rid of warnings - the flag regular_key is
-      set if the key was not a backspace, return, whatever.  But I
-      believe if we're here, we know it was a regular key anyway */
-    if ( regular_key ) {
-    }
-
     /**** If there's a current selection, erase it ******/
     if ( sel_start != sel_end ) {
       clear_substring( MIN(sel_start,sel_end), MAX(sel_start,sel_end ));
@@ -421,11 +413,6 @@ int    GLUI_EditText::key_handler( unsigned char key,int modifiers )
   }
 
   /******** Now redraw text ***********/
-  /* Hack to prevent text box from being cleared first **/
-  /**  int substring_change =  update_substring_bounds();
-  draw_text_only =
-  (NOT substring_change AND NOT has_selection AND regular_key );
-  */
 
   draw_text_only = false;  /** Well, hack is not yet working **/
   update_and_draw_text();
@@ -555,7 +542,7 @@ void    GLUI_EditText::draw( int x, int y )
   glVertex2i( text_x_offset, h );     glVertex2i( w, h );
   glVertex2i( w, h );                 glVertex2i( w, 0 );
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
     glColor3f( 0., 0., 0. );
   else
     glColor3f( .25, .25, .25 );
@@ -659,7 +646,7 @@ void    GLUI_EditText::draw_text( int x, int y )
   if ( debug )    dump( stdout, "-> DRAW_TEXT" );
 
   if ( NOT draw_text_only ) {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3f( 1., 1., 1. );
     else
       set_to_bkgd_color();
@@ -709,7 +696,7 @@ void    GLUI_EditText::draw_text( int x, int y )
 
 
   if ( sel_start == sel_end ) {   /* No current selection */
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3b( 0, 0, 0 );
     else
       glColor3b( 32, 32, 32 );

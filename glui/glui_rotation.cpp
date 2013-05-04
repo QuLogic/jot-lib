@@ -152,7 +152,7 @@ void    GLUI_Rotation::iaction_draw_active_area_ortho( void )
   for( k=0; k<60; k++ ) {
     float phi = 2*M_PI*(float)k/60.0;
     vec2 p( cos(phi) * (1.0 + radius), sin(phi) * (1.0 + radius));
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) ) {
+    if ( enabled AND NOT glui->get_blocked() ) {
       if ( p[1] < -p[0] ) 			glColor3ub( 0,0,0);
       else					glColor3ub( 192,192,192);
     }
@@ -276,7 +276,7 @@ void    GLUI_Rotation::setup_lights( void )
   glEnable(GL_COLOR_MATERIAL);
   GLfloat light0_position[] = {-1.f, 1.f, 1.0f, 0.0f};
   glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) ) { /* enabled colors */
+  if ( enabled AND NOT glui->get_blocked() ) { /* enabled colors */
 	GLfloat light0_ambient[] =  {0.2f, 0.2f, 0.2f, 1.0f};
 	GLfloat light0_diffuse[] =  {1.f, 1.f, 1.0f, 1.0f};
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);

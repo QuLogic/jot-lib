@@ -245,13 +245,13 @@ void    GLUI_RadioButton::draw( int x, int y )
 
   /*** See if we're the currently-selected button.  If so, draw ***/
   if ( group->int_val == this->user_id ) {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_ON, 0, 0 );
     else
       glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_ON_DIS, 0, 0 );
   }
   else {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_OFF, 0, 0 );
     else
       glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_OFF_DIS, 0, 0 );
@@ -268,7 +268,7 @@ void    GLUI_RadioButton::draw( int x, int y )
 void   GLUI_RadioButton::draw_checked( void )
 {
   GLUI_DRAWINGSENTINAL_IDIOM
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
     glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_ON, 0, 0 );
   else
     glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_ON_DIS, 0, 0 );
@@ -282,7 +282,7 @@ void   GLUI_RadioButton::draw_unchecked( void )
 {
   GLUI_DRAWINGSENTINAL_IDIOM
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
     glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_OFF, 0, 0 );
   else
     glui->std_bitmaps.draw( GLUI_STDBITMAP_RADIOBUTTON_OFF_DIS, 0, 0 );

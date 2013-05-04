@@ -72,9 +72,10 @@ int    GLUI_BitmapBox::mouse_down_handler( int local_x, int local_y )
 
 /**************************** GLUI_BitmapBox::mouse_up_handler() */
 
-int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, int new_inside )
+int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, bool new_inside )
 {
-	int bitmap_x, bitmap_y, old_inside;
+	int bitmap_x, bitmap_y;
+	bool old_inside;
 
 	bitmap_x = local_x - x_abs - (w - image_w)/2;
 	if (bitmap_x < 0) bitmap_x = 0;
@@ -107,10 +108,11 @@ int    GLUI_BitmapBox::mouse_up_handler( int local_x, int local_y, int new_insid
 
 /****************************** GLUI_BitmapBox::mouse_held_down_handler() ******/
 
-int    GLUI_BitmapBox::mouse_held_down_handler( int local_x, int local_y, int new_inside)
+int    GLUI_BitmapBox::mouse_held_down_handler( int local_x, int local_y, bool new_inside)
 {
 
-	int bitmap_x, bitmap_y, old_inside;
+	int bitmap_x, bitmap_y;
+	bool old_inside;
 
 	bitmap_x = local_x - x_abs - (w - image_w)/2;
 	if (bitmap_x < 0) bitmap_x = 0;
@@ -192,7 +194,7 @@ int    GLUI_BitmapBox::general_mouse_down_handler( int but, int local_x, int loc
 
 /**************************** GLUI_BitmapBox::general_mouse_up_handler() */
 
-int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local_y, int new_inside )
+int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local_y, bool new_inside )
 {
 	int bitmap_x, bitmap_y;
 
@@ -234,7 +236,7 @@ int    GLUI_BitmapBox::general_mouse_up_handler( int but, int local_x, int local
 
 /****************************** GLUI_BitmapBox::general_mouse_held_down_handler() ******/
 
-int    GLUI_BitmapBox::general_mouse_held_down_handler( int but, int local_x, int local_y, int new_inside)
+int    GLUI_BitmapBox::general_mouse_held_down_handler( int but, int local_x, int local_y, bool new_inside)
 {
 	int bitmap_x, bitmap_y;
 
@@ -513,7 +515,7 @@ void    GLUI_BitmapBox::draw_active_area( void )
          glRasterPos2f( x, y );
       }
 
-      if (enabled AND (!glui OR !glui->get_blocked()))
+      if (enabled AND NOT glui->get_blocked())
          glDrawPixels( image_w, image_h, GL_RGB, GL_UNSIGNED_BYTE, image );
       else
          glDrawPixels( image_w, image_h, GL_RGB, GL_UNSIGNED_BYTE, image_disabled );
@@ -546,6 +548,8 @@ void    GLUI_BitmapBox::draw_active_area( void )
             glRasterPos2f( (x+1) + (image_w-1), (y+1) );
             glDrawPixels( 1, image_h, GL_RGB, GL_UNSIGNED_BYTE, foo );
          }
+
+         free(foo);
       }
    }
 
@@ -692,6 +696,8 @@ void    GLUI_BitmapBox::set_img_size( int i_w, int i_h )
 		}
 		else
 		{
+			if (new_image)          free(new_image);
+			if (new_image_disabled) free(new_image_disabled);
 			fprintf(stderr,"GLUI_BitmapBox::set_img_size - Failed to alloc new image.\n");
 		}
 

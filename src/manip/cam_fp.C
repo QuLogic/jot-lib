@@ -51,7 +51,6 @@ class CAMwidget_anchor : public GEOM {
 
       // Color the Patch blue:
       mesh->patch(0)->set_color(COLOR(0.1, 0.1, 0.9));
-//      mesh->patch(0)->set_transp(0.9);
 
       // Store the mesh:
       _body = mesh;
@@ -144,7 +143,7 @@ Cam_int_fp::Cam_int_fp(
 
    //evens possible while the camera is orbiting
    _orbit      += Arc(orbit,     Cb(&Cam_int_fp::stop_orbit, (State *)-1));
-   _orbit      += Arc(down_ev,   Cb(&Cam_int_fp::down,  &_cam_choose));//&_orb_rot));
+   _orbit      += Arc(down_ev,   Cb(&Cam_int_fp::down,  &_cam_choose));
    _orbit      += Arc(down2_ev,   Cb(&Cam_int_fp::down2));
    _orbit          += Arc(toggle,   Cb(&Cam_int_fp::toggle_buttons));
 
@@ -361,12 +360,7 @@ Cam_int_fp::down2(
       //////////////////
       if(r.geom()->name() == "orbit")
          {
-            //if(CamBreathe::cur()) CamBreathe::cur()->stop(); 
             BaseJOTapp::deactivate_button();
-            //_button = r.geom();
-            //GELptr sad = r.geom();
-            //r.geom()->toggle_active();
-            //_button = r.geom();
             if(s == &_orbit)
                { 
                   s = (State *)-1;
@@ -405,7 +399,6 @@ Cam_int_fp::down2(
                   BaseJOTapp::activate_button("cruise");
                   stop_actions(e,s);
                   s = &_cruise;
-                  //BaseCollide::update_scene();
                   return cruise(e,s); 
                }
          }
@@ -430,7 +423,6 @@ Cam_int_fp::down2(
       else if(r.geom()->name() == "gravity")
          {
 			 cout << "BUTTON IS HIT" << endl;
-            //BaseJOTapp::deactivate_button();
             BaseJOTapp::update_button("gravity");
 			_gravity->toggle_type();
          }
@@ -459,7 +451,6 @@ Cam_int_fp::stop_actions(
    )
 {
    if(CamOrbit::cur()) CamOrbit::cur()->stop(); 
-   //if(CamBreathe::cur()) CamBreathe::cur()->stop();
    if(CamCruise::cur()) CamCruise::cur()->stop(); 
    return 0;
 }
@@ -527,10 +518,7 @@ Cam_int_fp::orbit(CEvent &e, State *&s)
 
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
    VIEWptr         view(e.view());
-     
-
 
    //get the object to orbit
    RAYhit r(view->intersect(data->center()));  
@@ -561,11 +549,8 @@ Cam_int_fp::breathe(CEvent &e, State *&)
 {
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
    VIEWptr         view(e.view());
       
-//if(CamBreathe::cur()) CamBreathe::cur()->stop();
-
    if(CamBreathe::cur())
       {
          CamBreathe::cur()->stop();
@@ -604,12 +589,8 @@ Cam_int_fp::cruise_down(CEvent &e, State *&s)
                CamCruise::cur()->travel(r.point());
 			   _speed = .00001 * g->bbox().dim().length();
                CamCruise::cur()->speed(.00001 * g->bbox().dim().length());
-               //_gravity->set_grav(g, Wvec(1,0,0), 0);
 			   _collision->set_land(g);
 			   cout << "Loading Finished" << endl;
-               //_gravity->set_globe(g);
-               //cout << "VOL: " << g->bbox().volume() << endl;
-               //cout << "DIM: " << g->bbox().dim().length() << endl;
             }
          return 0;
       }
@@ -619,7 +600,7 @@ Cam_int_fp::cruise_down(CEvent &e, State *&s)
    _land_clock.set();
    
    //if the user clicks at the edge of the screen rotate
-   if (fabs(curpt[0]) > .6 )//|| fabs(curpt[1]) > .6)
+   if (fabs(curpt[0]) > .6 )
       {
          s = &_cruise_rot;
          return 0;
@@ -642,7 +623,6 @@ Cam_int_fp::cruise_zoom(
    CAMptr     cam  (e.view()->cam());
    CAMdataptr data (cam->data());
    XYvec      delta(ptr->delta());
-   //double     ratio;
 
    _tp    = ptr->old(); 
    _te    = ptr->cur();
@@ -655,17 +635,7 @@ Cam_int_fp::cruise_zoom(
       Wvec    movec(data->at() - data->from());
 
       data->set_center(data->at());
-      //BaseCollide::instance()->get_move(.1 * movec.normalized() 
-      //                                                                      * (movec.length() * delta[1] * -4));
-/*
-  Wvec    movec(_down_pt - data->from());
-
-  data->set_center(_down_pt);*/
-      // data->translate(.1 * movec.normalized() * (movec.length() * delta[1] * -4));
       data->translate(_speed * movec.normalized() * (movec.length() * delta[1] * -4));
-
-      //ratio = cam->height() / cam->width() *
-      //   (movec * data->at_v()) * data->width() / data->focal();
 
    } else {
       Wpt     spt  (XYpt(ptr->cur()[0],_scale_pt[1]));
@@ -674,35 +644,8 @@ Cam_int_fp::cruise_zoom(
       data->translate( svec * (1.0 - sfact));
       data->set_width (data->width() * sfact);
       data->set_height(data->height()* sfact);
-      //ratio = data->height();
    }
 
-   //data->translate(-delta[0]/2 * data->right_v() * ratio);
-   //data->set_at(Wline(data->from(), data->at_v()).project(data->center()));
-   //data->set_center(data->at());
-
-
-   /*
-     XYvec      delta(_te-_tp);
-     double     ratio;
-
-     Wpt     spt  (XYpt(_tp[0],_te[1]));
-     Wvec    svec (spt - Wline(data->from(), data->at_v()).project(spt));
-     double  sfact(1 + delta[1]);
-
-
-     data->translate( svec * (1.0 - sfact));
-     data->set_width (data->width() * sfact);
-     data->set_height(data->height()* sfact);
-     ratio = data->height();
-
-     //.2 is temperary to slow it down a bit
-     Wvec velocity = .2 * delta[0]/2 * data->at_v() * ratio;
- 
-     data->translate(velocity);
-     data->set_at(Wline(data->from(), data->at_v()).project(data->center()));
-     data->set_center(data->at());
-   */
    return 0;
 }
 
@@ -717,7 +660,6 @@ Cam_int_fp::cruise_zoom_up(
       {
          CamCruise::cur()->pause();
          if(CamBreathe::cur()) CamBreathe::cur()->unpause();
-         //travel(e,s);
       }
    else
       {
@@ -736,7 +678,6 @@ Cam_int_fp::cruise(CEvent &e, State *&s)
 
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
    VIEWptr         view(e.view());
       
 
@@ -780,14 +721,11 @@ Cam_int_fp::orbit_zoom(
    DEVice_2d *ptr=(DEVice_2d *)e._d;
    CAMptr     cam  (e.view()->cam());
    CAMdataptr data (cam->data());
-   XYvec      delta(ptr->delta());
-//   double     ratio;
-
 
    XYpt        tp    = ptr->old(); 
    XYpt        te    = ptr->cur();
 
-   double distscale = -100 * (te[1] - tp[1]); //tp.dist(te);
+   double distscale = -100 * (te[1] - tp[1]);
 
    cam->set_zoom(1);
    cam->set_min(NDCpt(XYpt(-1,-1)));
@@ -841,9 +779,7 @@ Cam_int_fp::orbit_rot(
       data->rotate(Wline(data->center(), Wvec::Y()),
                    -2*Acos(dot) * Sign(_te[0]-_tp[0]));
 
-//      Wvec   dvec  = data->from() - data->center();
       double rdist = _te[1]-_tp[1];
-//      double tdist = Acos(Wvec::Y() * dvec.normalized());
 
       CAMdata   dd = CAMdata(*data);
 
@@ -891,7 +827,6 @@ Cam_int_fp::forward(
 
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
 
 
    VIEWptr         view(e.view());
@@ -931,14 +866,11 @@ Cam_int_fp::back(
 
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
 
    XYpt        cpt   = (data->from()-data->at_v());
    VIEWptr         view(e.view());
    RAYhit ray(view->intersect(cpt));         
 
-//if(!ray.success() || ray.dist() > 1 || ray.dist() < 0)
-//   {
    cam->set_zoom(1);
    cam->set_min(NDCpt(XYpt(-1,-1)));
    cam->data()->changed();
@@ -949,7 +881,6 @@ Cam_int_fp::back(
    //update camera
    data->translate(-delt);
    data->set_center(data->at());
-//   }
    
    return 0;
 }
@@ -964,7 +895,6 @@ Cam_int_fp::left(
 
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
 
    cam->set_zoom(1);
    cam->set_min(NDCpt(XYpt(-1,-1)));
@@ -974,7 +904,6 @@ Cam_int_fp::left(
    Wvec delt = 2*data->right_v().normalized();
 
    data->translate(-delt);
-   //data->set_at(Wline(data->from(), data->at_v()).project(_down_pt));
    data->set_center(data->at());
    
    return 0;
@@ -990,7 +919,6 @@ Cam_int_fp::right(
   
    CAMptr      cam (e.view()->cam());
    CAMdataptr  data(cam->data());
-//   DEVice_2d  *ptr=(DEVice_2d *)e._d;
 
    cam->set_zoom(1);
    cam->set_min(NDCpt(XYpt(-1,-1)));
@@ -1000,7 +928,6 @@ Cam_int_fp::right(
    Wvec delt = 2*data->right_v().normalized();
 
    data->translate(delt);
-   //data->set_at(Wline(data->from(), data->at_v()).project(_down_pt));
    data->set_center(data->at());
    
    return 0;
@@ -1018,8 +945,6 @@ Cam_int_fp::rot(
    CAMdataptr  data(cam->data());
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
 
-
-//cam->set_zoom(1);
    cam->set_min(NDCpt(XYpt(-1,-1)));
    cam->data()->changed();
 
@@ -1043,9 +968,7 @@ Cam_int_fp::rot(
       data->rotate(Wline(data->from(), Wvec::Y()),
                    -2*Acos(dot) * Sign(te[0]-tp[0]));
 
-//      Wvec   dvec  = data->from() - data->center();
       double rdist = te[1]-tp[1];
-//      double tdist = Acos(Wvec::Y() * dvec.normalized());
 
       CAMdata   dd = CAMdata(*data);
 
@@ -1056,12 +979,9 @@ Cam_int_fp::rot(
          *data = dd;
    }
 
-
-
    //rot not working when cruising =[
    data->set_center(data->at());
-   //VIEWptr         view(e.view());
-   //view->save_cam();
+
    return 0;
 }
 
@@ -1099,10 +1019,6 @@ Cam_int_fp::focus(
          Wpt  newpos(r.surf() + r.dist() * v.normalized());
          newpos[1] = data->from()[1];
          newpos = r.surf() + (newpos - r.surf()).normalized() * r.dist();
-         //  if(s==&_cruise)
-         //      CamCruise::cur()->
-         //else
-         //{
     
          new CamFocus(view, newpos, r.surf(), newpos + Wvec::Y(), r.surf(),
                       data->width(), data->height());
@@ -1114,7 +1030,6 @@ Cam_int_fp::focus(
             norm = -data->at_v();
 
          Wvec  off   (cross(Wvec::Y(),norm).normalized() * 3);
-         Wvec  atv   (data->at_v() - Wvec::Y() * (data->at_v() * Wvec::Y()));
          // Must use 4.0 instead of 4 due to AIX C++ weirdness
          Wvec  newvec(norm*6 + 4.0*Wvec::Y()); 
          if ((center + newvec + off - data->from()).length() > 
@@ -1122,19 +1037,11 @@ Cam_int_fp::focus(
             off = newvec - off;
          if (data->persp())
             off = (newvec + off).normalized() * 
-//                  (geom->bbox().min() - geom->bbox().max()).length();
                (data->from()-Wline(data->from(),data->at()).project(center)).
                length();
 
-         //       if(s = &_cruise)
-         //              {
-         //               CamCruise::cur()->set_focus(center + off);
-         //              }
-         //       else
-         //       {
          new CamFocus(view, center + off, center, center + off + Wvec::Y(), 
                       center, data->width(), data->height());
-         // }
       }
    } else
       cerr << "Cam_int_fp::focus() - Nothing to focus on!!!\n";
@@ -1264,8 +1171,6 @@ Cam_int_fp::up(
          CamOrbit::cur()->pause();
          if(CamBreathe::cur()) CamBreathe::cur()->unpause();
       }
-   //if(CamCruise::cur())
-   //      return travel(e,s);
 
    if(CamBreathe::cur()) CamBreathe::cur()->unpause();
    DEVice_buttons *btns=(DEVice_buttons *)e._d;
@@ -1285,7 +1190,6 @@ Cam_int_fp::up(
       RAYhit ray(view->intersect(ptr->cur()));
       if (ray.success()) {
          GEOMptr geom(ray_geom(ray,GEOM::null));
-         //geom->set_xform(Wtransf::scaling(2,2,2));
          if (CamOrbit::cur()) {CamOrbit::cur()->set_target(ray.surf());}
 
          // Create the anchor (blue ball) on the surface:
@@ -1295,41 +1199,12 @@ Cam_int_fp::up(
          if (m)
             BMESH::set_focus(m, dynamic_cast<Patch*>(ray.appear()));
       } else {
-         //if (CamCruise::cur()) {CamCruise::cur()->unset_target();}
-         // _camwidg.display_anchor(hitp.intersect(ray.screen_point()));
       }
    }
    cam->data()->end_manip();
    return 0;
 }
-/*
-//robcm - travel
-int
-Cam_int_fp::travel(
-CEvent &e, 
-State *&s
-)
-{
-DEVice_buttons *btns=(DEVice_buttons *)e._d;
-DEVice_2d      *ptr=btns->ptr2d();
-VIEWptr         view(e.view());
-CAMptr          cam (view->cam());
 
-if(_down_pt_2d == ptr->cur() && _clock2.elapsed_time() < .2) 
-{
-RAYhit ray(view->intersect(ptr->cur()));
-if (ray.success())
-CamCruise::cur()->travel(ray.surf());
-}
-else
-{
-_clock2.set();
-_down_pt_2d = ptr->cur();
-}
-
-return 0;
-}
-*/
 int
 Cam_int_fp::grow(
    CEvent &e, 
@@ -1339,8 +1214,6 @@ Cam_int_fp::grow(
    DEVice_2d *ptr=(DEVice_2d *)e._d;
    CAMptr     cam  (e.view()->cam());
    CAMdataptr data (cam->data());
-   XYvec      delta(ptr->delta());
-//   double     ratio;
 
    _tp    = ptr->old(); 
    _te    = ptr->cur();
@@ -1361,6 +1234,7 @@ Cam_int_fp::grow_change(
    cout << "_" << endl;
    return 0;
 }
+
 //
 // reset() - UP observer method
 //   Cam_int_fp is an observer of 'UP' events on other objects.

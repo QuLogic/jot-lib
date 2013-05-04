@@ -53,7 +53,7 @@ class ICON2D : public GEOM {
    bool activate() { return (_active = true); }
    bool deactivate() {return (_active = false); }
 
-   const string name() {return _name; }
+   const string &name() const {return _name; }
 
    virtual  BBOX2D  bbox2d   (int b=5, char*s=0, int r=0) const;
    virtual  void    update   ()                { }

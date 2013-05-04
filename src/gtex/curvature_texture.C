@@ -24,8 +24,6 @@
 
 #include <cassert>
 
-using namespace std;
-
 #include "gtex/gl_extensions.H"
 #include <GL/glu.h>
 
@@ -34,6 +32,7 @@ using namespace std;
 
 #include "mlib/points.H"
 
+using namespace std;
 using namespace mlib;
 
 /* Utility Function Prototypes */

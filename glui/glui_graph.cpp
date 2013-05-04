@@ -136,7 +136,7 @@ int    GLUI_Graph::mouse_down_handler( int local_x, int local_y )
 
 /**************************** GLUI_Graph::mouse_up_handler() */
 
-int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, int inside )
+int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, bool inside )
 {
 	int graph_x, graph_y;
 
@@ -165,7 +165,7 @@ int    GLUI_Graph::mouse_up_handler( int local_x, int local_y, int inside )
 
 /****************************** GLUI_Graph::mouse_held_down_handler() ******/
 
-int    GLUI_Graph::mouse_held_down_handler( int local_x, int local_y, int inside)
+int    GLUI_Graph::mouse_held_down_handler( int local_x, int local_y, bool inside)
 {
 
 	int graph_x,graph_y;
@@ -593,7 +593,10 @@ GLUI_Graph::set_min_x( bool autom, double val)
             }
          }
       }
-      min_x = min_x - ((maxx - min_x)?(maxx - min_x):(min_x)) * (val);
+      if (init)
+         min_x = min_x - ((maxx - min_x)?(maxx - min_x):min_x) * val;
+      else
+         min_x = val;
    }
 }
 
@@ -637,7 +640,10 @@ GLUI_Graph::set_min_y( bool autom, double val)
             }
          }
       }
-      min_y = min_y - ((maxy - min_y)?(maxy - min_y):(min_y)) * (val);
+      if (init)
+         min_y = min_y - ((maxy - min_y)?(maxy - min_y):min_y) * val;
+      else
+         min_y = val;
    }
 }
 
@@ -681,7 +687,10 @@ GLUI_Graph::set_max_x( bool autom, double val)
             }
          }
       }
-      max_x = max_x + ((max_x - minx)?(max_x - minx):(max_x)) * (val);
+      if (init)
+         max_x = max_x + ((max_x - minx)?(max_x - minx):max_x) * val;
+      else
+         max_x = val;
    }
 }
 
@@ -725,7 +734,10 @@ GLUI_Graph::set_max_y( bool autom, double val)
             }
          }
       }
-      max_y = max_y + ((max_y - miny)?(max_y - miny):(max_y)) * (val);
+      if (init)
+         max_y = max_y + ((max_y - miny)?(max_y - miny):max_y) * val;
+      else
+         max_y = val;
    }
 }
 

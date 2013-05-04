@@ -92,7 +92,7 @@ void GLUI_Control::draw_box_inwards_outline( int x_min, int x_max, int y_min, in
   glVertex2i( x_min, y_max );     glVertex2i( x_max, y_max );
   glVertex2i( x_max, y_max );     glVertex2i( x_max, y_min );
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
     glColor3f( 0., 0., 0. );
   else
     glColor3f( .25, .25, .25 );
@@ -348,7 +348,7 @@ void GLUI_Control::draw_name(int x, int y)
   if ( NOT can_draw() )
     return;
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
   {
     set_to_bkgd_color();
     glRasterPos2i(x+1, y+1);

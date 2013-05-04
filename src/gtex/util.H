@@ -201,7 +201,7 @@ namespace GtexUtil {
 class IDVisibilityTest : public VisibilityTest {
  public:
    // does visibility test using ID image
-   virtual double visibility(CWpt& p, double len);
+   virtual double visibility(CWpt& p, double len) const;
 };
 
 #endif // GTEX_UTIL_H_IS_INCLUDED

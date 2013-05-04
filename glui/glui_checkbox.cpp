@@ -117,13 +117,13 @@ void    GLUI_Checkbox::draw( int x, int y )
   GLUI_DRAWINGSENTINAL_IDIOM
 
   if ( int_val != 0 ) {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glui->std_bitmaps.draw( GLUI_STDBITMAP_CHECKBOX_ON, 0, 0 );
     else
       glui->std_bitmaps.draw( GLUI_STDBITMAP_CHECKBOX_ON_DIS, 0, 0 );
   }
   else {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glui->std_bitmaps.draw( GLUI_STDBITMAP_CHECKBOX_OFF, 0, 0 );
     else
       glui->std_bitmaps.draw( GLUI_STDBITMAP_CHECKBOX_OFF_DIS, 0, 0 );

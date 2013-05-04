@@ -257,7 +257,7 @@ void    GLUI_Spinner::draw( int x, int y )
 {
   GLUI_DRAWINGSENTINAL_IDIOM
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) ) {
+  if ( enabled AND NOT glui->get_blocked() ) {
     /*** Draw the up arrow either pressed or unrpessed ***/
     if ( state == GLUI_SPINNER_STATE_UP OR state == GLUI_SPINNER_STATE_BOTH )
       glui->std_bitmaps.draw( GLUI_STDBITMAP_SPINNER_UP_ON,

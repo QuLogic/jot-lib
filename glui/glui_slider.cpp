@@ -69,7 +69,7 @@ int    GLUI_Slider::mouse_down_handler( int local_x, int local_y )
 
 /**************************** GLUI_Slider::mouse_up_handler() */
 
-int    GLUI_Slider::mouse_up_handler( int local_x, int local_y, int inside )
+int    GLUI_Slider::mouse_up_handler( int local_x, int local_y, bool inside )
 {
    pressed = false;
 
@@ -86,7 +86,7 @@ int    GLUI_Slider::mouse_up_handler( int local_x, int local_y, int inside )
 
 /****************************** GLUI_Slider::mouse_held_down_handler() ******/
 
-int    GLUI_Slider::mouse_held_down_handler( int local_x, int local_y, int inside)
+int    GLUI_Slider::mouse_held_down_handler( int local_x, int local_y, bool inside)
 {
 
    //printf("%d %d %d\n",local_x,local_y,inside);

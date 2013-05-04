@@ -178,7 +178,6 @@ mlib::Point2list<L,P,V,S>::ray_intersect(
     ) const
 {
     const int n = loop ? num() : num() -1;
-    bool intersected = false;
     for (int i = 0; i < n ; i++) {
        P tmp;
        if(ray_seg_intersect(pt,

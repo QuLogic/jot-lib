@@ -1984,8 +1984,6 @@ LinePen::easel_pop()
 {
    VIEW_EASELptr e = BaseJOTapp::instance()->easels().cur_easel();
    
-  (_gestures.num() > 0);
-
    assert(e != NULL);
    assert(e->lines().num() == (_gestures.num()+1));
 

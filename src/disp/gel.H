@@ -181,7 +181,7 @@ public :
     return ret;    
   }
 
-  int draw(CVIEWptr& v) const {
+  int draw(CVIEWptr& v) {
     int ret = 0;
     for (int i=0; i<num(); i++)
       ret += (*this)[i]->draw(v);
