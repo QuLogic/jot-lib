@@ -76,4 +76,19 @@ class KeyMenu : public Interactor<KeyMenu, Event, State> {
 
 };
 
+/*!
+ *  \brief Holds all information needed about an entry in a KeyMenu.
+ *
+ */
+struct KeyMenuItem {
+
+   KeyMenuItem(char k, string d, KeyMenu::key_callback_t cb)
+      : key(k), desc(d), callback(cb) { }
+
+   char key;
+   string desc;
+   KeyMenu::key_callback_t callback;
+
+};
+
 #endif // KEY_MENU_H_IS_INCLUDED

@@ -34,21 +34,6 @@ using namespace std;
 #include "key_menu.H"
 
 /*!
- *  \brief Holds all information needed about an entry in a KeyMenu.
- *
- */
-struct KeyMenuItem {
-   
-   KeyMenuItem(char k, string d, KeyMenu::key_callback_t cb)
-      : key(k), desc(d), callback(cb) { }
-   
-   char key;   
-   string desc;   
-   KeyMenu::key_callback_t callback;
-   
-};
-
-/*!
  *  \param[in] start_in The FSA State where keyboard events will originate from.
  *
  */
