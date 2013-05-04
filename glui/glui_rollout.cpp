@@ -207,7 +207,7 @@ void   GLUI_Rollout::draw( int x, int y )
 
   glBegin( GL_LINES );
   if ( is_open ) {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3f( 0.0, 0.0, 0.0 );
     else
       glColor3f( 0.5, 0.5, 0.5 );
@@ -222,7 +222,7 @@ void   GLUI_Rollout::draw( int x, int y )
     glVertex2i(right-9,top+3);							glVertex2i(right-9,bottom-4);
     glVertex2i(right-14,(top+bottom)/2);		glVertex2i(right-5,(top+bottom)/2);
 
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3f( 0.0, 0.0, 0.0 );
     else
       glColor3f( 0.5, 0.5, 0.5 );

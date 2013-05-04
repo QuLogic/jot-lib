@@ -542,7 +542,7 @@ void    GLUI_EditText::draw( int x, int y )
   glVertex2i( text_x_offset, h );     glVertex2i( w, h );
   glVertex2i( w, h );                 glVertex2i( w, 0 );
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+  if ( enabled AND NOT glui->get_blocked() )
     glColor3f( 0., 0., 0. );
   else
     glColor3f( .25, .25, .25 );
@@ -646,7 +646,7 @@ void    GLUI_EditText::draw_text( int x, int y )
   if ( debug )    dump( stdout, "-> DRAW_TEXT" );
 
   if ( NOT draw_text_only ) {
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3f( 1., 1., 1. );
     else
       set_to_bkgd_color();
@@ -696,7 +696,7 @@ void    GLUI_EditText::draw_text( int x, int y )
 
 
   if ( sel_start == sel_end ) {   /* No current selection */
-    if ( enabled AND (NOT glui OR NOT glui->get_blocked()) )
+    if ( enabled AND NOT glui->get_blocked() )
       glColor3b( 0, 0, 0 );
     else
       glColor3b( 32, 32, 32 );

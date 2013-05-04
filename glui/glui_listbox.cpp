@@ -117,7 +117,7 @@ void    GLUI_Listbox::draw( int x, int y )
   }
 
 
-  if ( enabled AND (NOT glui OR NOT glui->get_blocked()) ) {
+  if ( enabled AND NOT glui->get_blocked() ) {
     glui->std_bitmaps.
       draw(GLUI_STDBITMAP_LISTBOX_UP,
 	   w-glui->std_bitmaps.width(GLUI_STDBITMAP_LISTBOX_UP)-1,
