@@ -4688,7 +4688,8 @@ BMESH::pop_render_style()
 const string&
 BMESH::render_style() const
 {
-   return _render_style.empty() ? "" : _render_style.back();
+   static string empty("");
+   return _render_style.empty() ? empty : _render_style.back();
 }
 
 void 
