@@ -23,7 +23,6 @@ uniform float smoothDetail;
 
 uniform float lightIndex;
 uniform float lightDir;
-uniform float lightCam;
 uniform vec3  lightCoords;
 
 
@@ -31,7 +30,7 @@ uniform vec3  lightCoords;
 //functions
 //////////////////////////////////
 
-vec3 light(float index, float dir, float cam, vec3 pos, vec3 point);
+vec3 light(float index, float dir, vec3 pos, vec3 point);
 float depth(float max,float min, float z);
 float DOF(float maxFactor,float targetLength, float dv, float dc);
 float backLight(vec3 N,vec3 V, float R);
@@ -49,7 +48,7 @@ void main() {
    vec3 bNorm = normalize(gl_NormalMatrix * blendNorm);   // per-fragment "abstract" normal
    vec3 EyeDir = vec3(gl_ModelViewMatrix * gl_Vertex);    // per-fragment view vector
    vec3 Fpoint = vec3(gl_ModelViewMatrix * focusPoint);   //focal point
-   vec3 L = light(lightIndex,lightDir,lightCam,lightCoords,EyeDir);
+   vec3 L = light(lightIndex,lightDir,lightCoords,EyeDir);
       
    vec3 R = normalize(reflect(L,N));
 
@@ -100,7 +99,7 @@ void main() {
 //Light Function
 //Calculates light vector
 //////////////////////////////
-vec3 light(float index, float dir, float cam, vec3 pos, vec3 point)
+vec3 light(float index, float dir, vec3 pos, vec3 point)
 {
 if (index == -1.0)  //custom light
    {
