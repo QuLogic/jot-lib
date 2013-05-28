@@ -247,7 +247,7 @@ GLSLPaperShader::get_texture()
 void    
 GLSLPaperShader::begin_glsl_paper(Patch* p)
 {
-   GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: start");
+   GL_VIEW_PRINT_GL_ERRORS("start");
 
    GLSLPaperShader* paper = GLSLPaperShader::instance();
    paper->set_patch(p);
@@ -255,11 +255,11 @@ GLSLPaperShader::begin_glsl_paper(Patch* p)
    if (!paper->init())
       return;
 
-   GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: init");
+   GL_VIEW_PRINT_GL_ERRORS("init");
   
    // Load textures (if any) and set their parameters. 
    paper->init_textures();
-    GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: init_textures");
+    GL_VIEW_PRINT_GL_ERRORS("init_textures");
 
    
     // call glPushAttrib() and set desired state 
@@ -269,23 +269,23 @@ GLSLPaperShader::begin_glsl_paper(Patch* p)
 
    // activate textures, if any:
    paper->activate_textures(); // GL_ENABLE_BIT
-   GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: activate_textures");
+   GL_VIEW_PRINT_GL_ERRORS("activate_textures");
 
    // activate program:
    paper->activate_program();
-   GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: activate_program");
+   GL_VIEW_PRINT_GL_ERRORS("activate_program");
 
      
    // send values to uniform variables:
    paper->set_uniform_variables();
 
-   GL_VIEW::print_gl_errors("GLSLPaperShader::begin_glsl_paper: end");
+   GL_VIEW_PRINT_GL_ERRORS("end");
 }
 
 void
 GLSLPaperShader::end_glsl_paper()
 {
-   GL_VIEW::print_gl_errors("GLSLPaperShader::end_glsl_paper: start");
+   GL_VIEW_PRINT_GL_ERRORS("start");
    GLSLPaperShader* paper = GLSLPaperShader::instance();  
    paper->deactivate_program();
 
@@ -295,7 +295,7 @@ GLSLPaperShader::end_glsl_paper()
    //glPopAttrib();
   
    paper->set_patch(0);
-   GL_VIEW::print_gl_errors("GLSLPaperShader::end_glsl_paper: end");
+   GL_VIEW_PRINT_GL_ERRORS("end");
 }
 
 // end of file glsl_paper.C

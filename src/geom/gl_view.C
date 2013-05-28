@@ -27,6 +27,8 @@
 
 using namespace mlib;
 
+#define PRINT_GL_ERRORS(loc) print_gl_errors(__FUNCTION__, loc)
+
 static bool multithread = Config::get_var_bool("JOT_MULTITHREAD",false);
 
 static ThreadMutex polyextmutex;
@@ -44,6 +46,7 @@ void
 GL_VIEW::load_proj_mat(CAMdata::eye e)
 {
    glLoadMatrixd(_view->wpt_proj(_view->screen(),e).transpose().matrix());
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -51,6 +54,7 @@ GL_VIEW::load_cam_mat(CAMdata::eye e)
 {
    CCAMdataptr &camdata = ((CVIEWptr &) _view)->cam()->data();
    glLoadMatrixd(camdata->xform(_view->screen(), e).transpose().matrix());
+   PRINT_GL_ERRORS("");
 }
 
 /* ------------------ GL_VIEW static class definitions --------------------- */
@@ -137,6 +141,7 @@ GL_VIEW::paint()
       _focusPending = false;
    }
 
+   PRINT_GL_ERRORS("");
 // HACK CITY
 //   if (!_view->dont_swap() || Config::get_var_bool("ASYNCH",false,true))
 //      swap_buffers();
@@ -169,6 +174,8 @@ GL_VIEW::draw_setup()
    // setup scissor region if applicable
    if (_view->has_scissor_region())
       setup_scissor();
+
+   PRINT_GL_ERRORS("");
 }
 
 /*
@@ -188,6 +195,8 @@ GL_VIEW::draw_frame(
       for (int i = 0; i < _view->stencil_cbs().num(); i++)
          tris += _view->stencil_cbs()[i]->stencil_cb();
 
+   PRINT_GL_ERRORS("");
+
    return tris;
 }
 
@@ -198,7 +207,6 @@ GL_VIEW::draw_frame(
 void
 GL_VIEW::swap_buffers()
 {
-
    if (_view->has_scissor_region())
       glDisable(GL_SCISSOR_TEST);
 
@@ -207,7 +215,7 @@ GL_VIEW::swap_buffers()
    else
       glFlush();
 
-   print_gl_errors(in_swap_buffers);
+   PRINT_GL_ERRORS(in_swap_buffers);
 }
 
 void
@@ -233,6 +241,8 @@ GL_VIEW::clear_draw_buffer()
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
    _view->notify_clearobs();
+
+   PRINT_GL_ERRORS("");
 }
 
 /*
@@ -288,6 +298,8 @@ GL_VIEW::setup_stencil()
    glPopMatrix();               // Restore modelview matrix
    glMatrixMode(GL_PROJECTION); // Switch to projection matrix
    glPopMatrix();               // Restore projection matrix
+
+   PRINT_GL_ERRORS("");
 }
 
 /* 
@@ -310,6 +322,8 @@ GL_VIEW::setup_scissor()
 
    glScissor(x, y, w, h);
    glEnable (GL_SCISSOR_TEST);
+
+   PRINT_GL_ERRORS("");
 }
 
 inline void
@@ -461,6 +475,8 @@ GL_VIEW::draw_objects(
    //       class versions. for now to const_cast:
    const_cast<GELlist*>(&objs)->draw_final(_view);
 
+   PRINT_GL_ERRORS("");
+
    return tris;
 }
 
@@ -487,10 +503,12 @@ GL_VIEW::stencil_draw(
       cerr << "GL_VIEW::stencil_draw - couldn't find STENCILCB" << endl;
       return 0;
    }
+
+   PRINT_GL_ERRORS("");
 }
 
 bool
-GL_VIEW::print_gl_errors(const string &location)
+GL_VIEW::print_gl_errors(const string &function, const string &location)
 {
    bool ret = false;
 
@@ -507,7 +525,7 @@ GL_VIEW::print_gl_errors(const string &location)
          case GL_OUT_OF_MEMORY:     errstr = "Out of Memory";        break;
          default:                   errstr = "Unknown Error";        break;
       }
-      err_msg("%s ***NOTE*** OpenGL Error: [%x] '%s'", location.c_str(), err, errstr);
+      err_msg("%s: %s ***NOTE*** OpenGL Error: [%x] '%s'", function.c_str(), location.c_str(), err, errstr);
       ret = true;
    }
 
@@ -614,12 +632,14 @@ GL_VIEW::setup_light(int i)
    glLightf (num, GL_SPOT_CUTOFF,    light._spot_cutoff);
 
    glPopMatrix();
+
+   PRINT_GL_ERRORS("");
 }
 
 void
 GL_VIEW::setup_lights(CAMdata::eye e)
 {
-   print_gl_errors("GL_VIEW::setup_lights: starting");
+   PRINT_GL_ERRORS("starting");
 
    if (_view->lights_on()) {
       glEnable(GL_LIGHTING);
@@ -639,7 +659,7 @@ GL_VIEW::setup_lights(CAMdata::eye e)
    for (int i=0; i<VIEW::max_lights(); i++)
       setup_light(i);
    
-   print_gl_errors("GL_VIEW::setup_lights: end");
+   PRINT_GL_ERRORS("end");
 }
 
 void
@@ -647,6 +667,7 @@ GL_VIEW::end_buf_read()
 {
    // restore default state:
    glPixelStorei(GL_PACK_ALIGNMENT,4);
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -654,6 +675,7 @@ GL_VIEW::prepare_buf_read()
 {
    glReadBuffer(GL_BACK);
    glPixelStorei(GL_PACK_ALIGNMENT,1);  // needed to avoid seg faults
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -677,6 +699,8 @@ GL_VIEW::read_pixels(
       glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,data);
    else
       glReadPixels(0,0,width,height,GL_RGB,GL_UNSIGNED_BYTE,data);
+
+   PRINT_GL_ERRORS("");
 }
 
 //
@@ -739,6 +763,8 @@ GL_VIEW::set_size(
       static double pixel_warp_factor = Config::get_var_dbl("PIXEL_WARP_FACTOR",1.0,true);
       _view->cam()->set_aspect(double(width)/double(height)*pixel_warp_factor);
    }
+
+   PRINT_GL_ERRORS("");
 }
 
 //
@@ -773,12 +799,16 @@ GL_VIEW::init_polygon_offset(
 {
    glEnable(mode);                              // GL_ENABLE_BIT
    glPolygonOffset(factor, units);              // GL_POLYGON_BIT
+
+   PRINT_GL_ERRORS("");
 }
 
 void
 GL_VIEW::end_polygon_offset()
 {
    glDisable(GL_POLYGON_OFFSET_FILL);        // GL_ENABLE_BIT
+
+   PRINT_GL_ERRORS("");
 }
 
 void 
@@ -801,6 +831,8 @@ GL_VIEW::check_point_sizes()
            << "max: " << _max_point_size << ", "
            << "granularity: " << granularity << endl;
    }
+
+   PRINT_GL_ERRORS("");
 }
 
 void 
@@ -823,6 +855,8 @@ GL_VIEW::check_line_widths()
            << "max: " << _max_line_width << ", "
            << "granularity: " << granularity << endl;
    }
+
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -859,18 +893,24 @@ GL_VIEW::init_point_smooth(GLfloat size, GLbitfield mask, GLfloat* a)
    }
 
    glPointSize(size);                                    // GL_POINT_BIT
+
+   PRINT_GL_ERRORS("");
 }
 
 void
 GL_VIEW::end_point_smooth()
 {
    glPopAttrib();
+
+   PRINT_GL_ERRORS("");
 }
 
 void
 GL_VIEW::end_line_smooth()
 {
    glPopAttrib();
+
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -896,6 +936,8 @@ GL_VIEW::draw_pts(
       glEnd();
       GL_VIEW::end_point_smooth();      // pop state
    }
+
+   PRINT_GL_ERRORS("");
 }
 
 void 
@@ -933,6 +975,8 @@ GL_VIEW::draw_wpt_list(
    glEnd();
 
    glPopAttrib();
+
+   PRINT_GL_ERRORS("");
 }
 
 void 
@@ -973,6 +1017,8 @@ GL_VIEW::draw_lines(
    glEnd();
 
    glPopAttrib();
+
+   PRINT_GL_ERRORS("");
 }
 
 void
@@ -1005,6 +1051,8 @@ GL_VIEW::draw_bb(CWpt_list &bb_pts) const
    glDisable(GL_LINE_SMOOTH);
    glLineWidth(float(_view->line_scale()*1.0));
    glEnable(GL_LIGHTING);
+
+   PRINT_GL_ERRORS("");
 }
 
 // end of file gl_view.C

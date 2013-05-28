@@ -472,7 +472,7 @@ void
 PaperEffect::begin_paper_effect(TEXTUREptr t, float cont, float brig, double orig_x, double orig_y)
 {
 
-   GL_VIEW::print_gl_errors("PaperEffect::begin_paper_effect() [Start] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
    if (!_is_inited) init();
 
@@ -495,7 +495,7 @@ PaperEffect::begin_paper_effect(TEXTUREptr t, float cont, float brig, double ori
       assert(_implementation == IMPLEMENTATION__NONE);
    }
 
-   GL_VIEW::print_gl_errors("PaperEffect::begin_paper_effect() [End] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 }
 
 /////////////////////////////////////
@@ -504,7 +504,7 @@ PaperEffect::begin_paper_effect(TEXTUREptr t, float cont, float brig, double ori
 void
 PaperEffect::end_paper_effect(TEXTUREptr t)
 {
-   GL_VIEW::print_gl_errors("PaperEffect::end_paper_effect() [Start] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
    assert(_is_inited);
 
@@ -527,7 +527,7 @@ PaperEffect::end_paper_effect(TEXTUREptr t)
       assert(_implementation == IMPLEMENTATION__NONE);
    }
 
-   GL_VIEW::print_gl_errors("PaperEffect::end_paper_effect() [End] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 }
 
 /////////////////////////////////////
@@ -1220,7 +1220,7 @@ PaperEffect::end_paper_effect_arb(TEXTUREptr t)
    assert(_is_supported);
    assert(_implementation & IMPLEMENTATION__GL_ARB);
 
-   GL_VIEW::print_gl_errors("PaperEffect::end_paper_effect_arb() [Start] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
 #if defined(GL_ARB_fragment_program) && defined(GL_ARB_multitexture)
 
@@ -1257,7 +1257,7 @@ PaperEffect::end_paper_effect_arb(TEXTUREptr t)
    }
 
 #endif
-   GL_VIEW::print_gl_errors("PaperEffect::end_paper_effect_arb() [End] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 }
 
 /////////////////////////////////////
@@ -1434,7 +1434,7 @@ PaperEffect::check_new_paper()
 void
 PaperEffect::init()
 {
-   GL_VIEW::print_gl_errors("PaperEffect::init() [Start] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
    assert(!_is_inited);
 
@@ -1513,7 +1513,7 @@ PaperEffect::init()
       err_mesg(ERR_LEV_INFO, "PaperEffect::init() - ...hardware support *NOT* available! **SORRY**");
    }
 
-   GL_VIEW::print_gl_errors("PaperEffect::init() [End] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 
 }
 
@@ -1591,7 +1591,7 @@ PaperEffect::init_ati()
 #if !defined(NON_ATI_GFX)
 #ifdef GL_ATI_fragment_shader
 
-      GL_VIEW::print_gl_errors("PaperEffect::init_ati() [Start] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
       ret = true;
 
@@ -1676,7 +1676,7 @@ PaperEffect::init_ati()
 
       glEndFragmentShaderATI();
 
-      ret = !GL_VIEW::print_gl_errors("PaperEffect::init_ati() [End] - ") && ret;
+      ret = !GL_VIEW_PRINT_GL_ERRORS("[End] - ") && ret;
 
       if (ret)
       {
@@ -1706,7 +1706,7 @@ PaperEffect::init_arb()
    bool ret = false;
 
    //XXX - Make sure we're not getting here with pending errors...
-   GL_VIEW::print_gl_errors("PaperEffect::init_arb() [Start] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
 
    if (GLExtensions::gl_arb_fragment_program_supported())
    {
@@ -1783,7 +1783,7 @@ PaperEffect::init_arb()
       err_mesg(ERR_LEV_INFO, "PaperEffect::init_arb() - GL_ARB_fragment_program is NOT supported by hardware!");
    }
 
-   GL_VIEW::print_gl_errors("PaperEffect::init_arb() [End] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 
    return ret;
 }

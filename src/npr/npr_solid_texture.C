@@ -664,7 +664,7 @@ bool nst_init_vertex_program_arb()
       err_mesg(ERR_LEV_INFO, "NPRSolidTexture::init() - Can use ARB vertex programs!");
 #ifdef GL_ARB_vertex_program
       
-      GL_VIEW::print_gl_errors("NPRSolidTexture::init [Start] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
       
       glGenProgramsARB(1, &nst_solid_prog_arb); 
       glBindProgramARB(GL_VERTEX_PROGRAM_ARB, nst_solid_prog_arb); 
@@ -672,7 +672,7 @@ bool nst_init_vertex_program_arb()
                            strlen((char * ) NPRSolidShaderARB), NPRSolidShaderARB);
       success = GLExtensions::gl_arb_vertex_program_loaded("NPRSolidTexture::init (unlit) - ", native, NPRSolidShaderARB);
 
-      GL_VIEW::print_gl_errors("NPRSolidTexture::init [Middle] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Middle] - ");
       
       glGenProgramsARB(1, &nst_lit_solid_prog_arb); 
       glBindProgramARB(GL_VERTEX_PROGRAM_ARB, nst_lit_solid_prog_arb); 
@@ -681,7 +681,7 @@ bool nst_init_vertex_program_arb()
 
       success = success && GLExtensions::gl_arb_vertex_program_loaded("NPRSolidTexture::init (lit) - ", native, NPRLitSolidShaderARB);
 
-      GL_VIEW::print_gl_errors("NPRSolidTexture::init [End] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[End] - ");
 #endif
       return success;
    }
@@ -1023,7 +1023,7 @@ TAGlist *       NPRSolidTexture::_nst_tags = 0;
 int
 NPRSolidTexture::draw(CVIEWptr& v) 
 {
-   GL_VIEW::print_gl_errors("NPRSolidTexture::draw - Begin");
+   GL_VIEW_PRINT_GL_ERRORS("- Begin");
    
    int dl;
 
@@ -1227,7 +1227,7 @@ NPRSolidTexture::draw(CVIEWptr& v)
 
    glPopAttrib();
 
-   GL_VIEW::print_gl_errors("NPRSolidTexture::draw - End");
+   GL_VIEW_PRINT_GL_ERRORS("End");
 
    return _patch->num_faces();
 

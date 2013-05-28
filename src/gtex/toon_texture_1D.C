@@ -489,7 +489,7 @@ ToonTexture_1D::update_lights(CVIEWptr& v)
 int
 ToonTexture_1D::draw(CVIEWptr& v) 
 {
-   GL_VIEW::print_gl_errors("ToonTexture_1D::draw - Begin");
+   GL_VIEW_PRINT_GL_ERRORS("Begin");
 
    int dl;
    
@@ -624,7 +624,7 @@ ToonTexture_1D::draw(CVIEWptr& v)
 
    glPopAttrib();
 
-   GL_VIEW::print_gl_errors("ToonTexture_1D::draw - End");
+   GL_VIEW_PRINT_GL_ERRORS("End");
 
    return _patch->num_faces();
 }

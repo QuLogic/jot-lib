@@ -258,7 +258,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
       }
    }
 
-   GL_VIEW::print_gl_errors("FlatShadeTexture::draw - End");
+   GL_VIEW_PRINT_GL_ERRORS("End");
 
    return _patch->num_faces();
 }

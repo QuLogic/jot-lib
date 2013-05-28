@@ -261,7 +261,7 @@ NPRview::draw_background()
    bool do_pattern =  Config::get_var_bool("ENABLE_PATTERN",false);
     
    if(!do_pattern) {
-      GL_VIEW::print_gl_errors("NPRview::draw_background [Start] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
    
       // First see if the texture needs updating
 
@@ -301,7 +301,7 @@ NPRview::draw_background()
       if ((tex_ptr == NULL) || (!_view->get_use_paper()) || (_view->get_alpha() == 1.0))
          return 0;
 
-      GL_VIEW::print_gl_errors("NPRview::draw_background [Middle] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Middle] - ");
 
       // Now update the texture's matrix for this window
       // such that NDC->UV
@@ -383,10 +383,10 @@ NPRview::draw_background()
   
       glPopAttrib();
 
-      GL_VIEW::print_gl_errors("NPRview::draw_background [End] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[End] - ");
    } else {
 
-      GL_VIEW::print_gl_errors("NPRview::draw_background [Start] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[Start] - ");
    
       string      tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
@@ -487,7 +487,7 @@ NPRview::draw_background()
       glPopMatrix();
 
       glPopAttrib();
-      GL_VIEW::print_gl_errors("NPRview::draw_background [End] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[End] - ");
    }
 
    return 2;

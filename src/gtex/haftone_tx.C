@@ -81,7 +81,7 @@ halftone_layer_t::send_to_glsl()  const
       send_var (_r_function_tex_loc,_r_function_tex_stage);
    }
 
-   GL_VIEW::print_gl_errors("halftone_layer_t  send : ");
+   GL_VIEW_PRINT_GL_ERRORS("");
 }
 
 CTAGlist&  

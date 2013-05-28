@@ -511,7 +511,7 @@ layer_hatching_t::send_to_glsl()  const
    glUniform1i  (_paper_tex_loc, _paper_tex);
    glUniform1f  (_paper_scale_loc, _paper_scale);
    glUniform1f  (_tone_push_loc, _tone_push);  
-   GL_VIEW::print_gl_errors("layer_hatching_t::send_to_glsl() : ");
+   GL_VIEW_PRINT_GL_ERRORS("");
 }
 
 // end of file hatching_tx.C

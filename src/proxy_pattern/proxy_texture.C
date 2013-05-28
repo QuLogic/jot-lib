@@ -152,11 +152,11 @@ ProxyTexture::draw(CVIEWptr& v)
 
    patch()->update_dynamic_samples();
 
-   GL_VIEW::print_gl_errors("ProxyTexture::draw: update_dynamic_samples");
+   GL_VIEW_PRINT_GL_ERRORS("update_dynamic_samples");
 
    int ret = _base->draw(v);
 
-   GL_VIEW::print_gl_errors("ProxyTexture::draw: _base->draw");
+   GL_VIEW_PRINT_GL_ERRORS("_base->draw");
 
    if (_show_sils) {      
    }

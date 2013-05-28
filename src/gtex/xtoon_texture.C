@@ -1563,7 +1563,7 @@ XToonTexture::draw(CVIEWptr& v)
   stop_watch chrono;
   // computeC
 
-   GL_VIEW::print_gl_errors("XToonTexture::draw - Begin");
+   GL_VIEW_PRINT_GL_ERRORS("Begin");
 
    int dl;
    
@@ -1716,7 +1716,7 @@ XToonTexture::draw(CVIEWptr& v)
 
    glPopAttrib();
 
-   GL_VIEW::print_gl_errors("XToonTexture::draw - End");
+   GL_VIEW_PRINT_GL_ERRORS("End");
    return _patch->num_faces();
 }
 

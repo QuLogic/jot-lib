@@ -1573,11 +1573,11 @@ BaseStroke::draw_body()
    double a = _alpha * ((_width < 2.0)?(_width*_width/4.0):1.0);
 
    int start,i;
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [1] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[1] - ");
    glVertexPointer(3, GL_DOUBLE, 0, _array_verts.array());
    glColorPointer(4, GL_DOUBLE, 0, _array_color.array());
    if (_tex) glTexCoordPointer(2, GL_DOUBLE, 0, _array_tex_0.array());
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [2] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[2] - ");
    if (GLExtensions::gl_arb_multitexture_supported())
    {
 #ifdef GL_ARB_multitexture
@@ -1586,14 +1586,14 @@ GL_VIEW::print_gl_errors("BaseStroke::draw_body() [2] - ");
       glClientActiveTextureARB(GL_TEXTURE0_ARB); 
 #endif
    }
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [3] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[3] - ");
    if (GLExtensions::gl_ext_compiled_vertex_array_supported())
    {
 #ifdef GL_EXT_compiled_vertex_array
       glLockArraysEXT(0,_array_counts_total);
 #endif
    }
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [4] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[4] - ");
    if (!_tex )
    {
       glEnable(GL_LINE_SMOOTH);
@@ -1606,7 +1606,7 @@ GL_VIEW::print_gl_errors("BaseStroke::draw_body() [4] - ");
       // use line width a, or the minimum supported width,
       // whichever is bigger:
       glLineWidth(max(GLfloat(a), line_widths[0]));
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [5] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[5] - ");
       start = 0;
       for (i=0; i< _array_counts.num(); i++)
       {
@@ -1619,10 +1619,10 @@ GL_VIEW::print_gl_errors("BaseStroke::draw_body() [5] - ");
          glDrawElements(GL_LINE_STRIP, _array_counts[i]/2, GL_UNSIGNED_INT, &(_array_i1.array()[start]));
          start += _array_counts[i]/2;
       }
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [6] - ");
+      GL_VIEW_PRINT_GL_ERRORS("[6] - ");
       glDisable(GL_LINE_SMOOTH);
    }
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [7] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[7] - ");
    // XXX - Drawing the triangles before the lines causes
    // havoc when compiled arrays are used with paper... Don't
    // ask me why.  Maybe an NVidia bug (imagine that!).
@@ -1632,14 +1632,14 @@ GL_VIEW::print_gl_errors("BaseStroke::draw_body() [7] - ");
       glDrawArrays(GL_QUAD_STRIP, start, _array_counts[i]);
       start += _array_counts[i];
    }
- GL_VIEW::print_gl_errors("BaseStroke::draw_body() [8] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[8] - ");
    if (GLExtensions::gl_ext_compiled_vertex_array_supported())
    {
 #ifdef GL_EXT_compiled_vertex_array
       glUnlockArraysEXT();
 #endif
    }
-GL_VIEW::print_gl_errors("BaseStroke::draw_body() [9] - ");
+   GL_VIEW_PRINT_GL_ERRORS("[9] - ");
    int ret;
    ret = _array_counts_total - 2*_array_counts.num();
    assert(ret>0);

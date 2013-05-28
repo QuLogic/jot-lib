@@ -355,7 +355,7 @@ Perlin::create_perlin_texture3(int tex_stage)
 
    cerr << "Texture copied to hardware " << endl;
 
-   GL_VIEW::print_gl_errors("3D perlin noise setup D: ");
+   GL_VIEW_PRINT_GL_ERRORS("3D perlin noise setup D: ");
 
    delete[] noise3DTexPtr;
 

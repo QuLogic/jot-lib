@@ -221,7 +221,7 @@ SKY_BOX::DrawGradient(CVIEWptr &v)
 
    glPopAttrib();
 
-   GL_VIEW::print_gl_errors("sky_box.C : draw_gradient (regular) : ");
+   GL_VIEW_PRINT_GL_ERRORS("(regular) : ");
 
    return ret;
 }

@@ -186,15 +186,15 @@ TEXTUREgl::declare_texture()
    // (no-op after first time):
    if (!_dl) {
       glGenTextures(1, &_dl);
-      if (debug) GL_VIEW::print_gl_errors( " Texture GL :: declare_texture :: glGenTextures ");
+      if (debug) GL_VIEW_PRINT_GL_ERRORS("glGenTextures");
 
       _dl_valid = (_dl > 0);
       if (_dl_valid) {
          glActiveTexture(_tex_unit);
-         if (debug) GL_VIEW::print_gl_errors( " Texture GL :: declare_texture :: glActiveTexture ");
+         if (debug) GL_VIEW_PRINT_GL_ERRORS("glActiveTexture");
          
          glBindTexture(_target, _dl);
-         if (debug) GL_VIEW::print_gl_errors( " Texture GL :: declare_texture :: glBindTexture ");
+         if (debug) GL_VIEW_PRINT_GL_ERRORS("glBindTexture");
          
          if (debug) {
             cerr << "TEXTUREgl::declare_texture: succeeded (file: \""
@@ -273,7 +273,7 @@ TEXTUREgl::load_texture(unsigned char **copy)
             // nonzero return signals error:
             cerr << "TEXTUREgl::load_texture: error building mipmaps" << endl
                  << "  (texture file: " << file() << ")" << endl;
-            GL_VIEW::print_gl_errors("TEXTUREgl::load_texture");
+            GL_VIEW_PRINT_GL_ERRORS("");
          }
       } else {
          glTexImage2D(_target,

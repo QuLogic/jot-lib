@@ -167,7 +167,7 @@ class GL_VIEW: public VIEWimpl {
    virtual void     draw_bb(mlib::CWpt_list &) const;
 
    //******** DIAGNOSTIC ********
-   static  bool   print_gl_errors(const string&);
+   static  bool   print_gl_errors(const string&, const string&);
 
   protected:
    void            setup_light(int i);
@@ -204,6 +204,8 @@ class GL_VIEW: public VIEWimpl {
    static void check_point_sizes();
    static void check_line_widths();
 };
+
+#define GL_VIEW_PRINT_GL_ERRORS(loc) GL_VIEW::print_gl_errors(__FUNCTION__, loc)
 
 #endif // GL_VIEW_H
 

@@ -54,7 +54,7 @@ draw_wire(BMESHptr mesh)
 void
 HaloSphere::draw_halo(CVIEWptr &v, CBBOX& box, double scale)
 {
-   GL_VIEW::print_gl_errors("halo_sphere.C : draw_halo #1 : OPEN_GL error : ");
+   GL_VIEW_PRINT_GL_ERRORS("#1");
 
    if (!box.valid())
       return;
@@ -75,12 +75,12 @@ HaloSphere::draw_halo(CVIEWptr &v, CBBOX& box, double scale)
       draw_wire(sphere_mesh);
    sphere_mesh->draw(v);
  
-   GL_VIEW::print_gl_errors("halo_sphere.C : draw_halo #1 : OPEN_GL error : ");
+   GL_VIEW_PRINT_GL_ERRORS("#2");
 
    glMatrixMode(GL_MODELVIEW);
    glPopMatrix();
 
    glPopAttrib();
 
-   GL_VIEW::print_gl_errors("halo_sphere.C : draw_halo  #2 : OPEN_GL error : ");
+   GL_VIEW_PRINT_GL_ERRORS("#3");
 }

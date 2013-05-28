@@ -67,8 +67,7 @@ OutlineStroke::apply_offset(BaseStrokeVertex* v, BaseStrokeOffset* o)
 void
 OutlineStroke::draw_start()
 {
-
-   GL_VIEW::print_gl_errors("OutlineStroke::draw_start: start");
+   GL_VIEW_PRINT_GL_ERRORS("start");
 
    if(!use_glsl_paper)
       return BaseStroke::draw_start();
@@ -118,7 +117,7 @@ OutlineStroke::draw_start()
       //   glClientActiveTextureARB(GL_TEXTURE0_ARB); 
       //}
   // }
-   GL_VIEW::print_gl_errors("OutlineStroke::draw_start: glEnableClientState");
+   GL_VIEW_PRINT_GL_ERRORS("glEnableClientState");
 
 
    // Set projection and modelview matrices for drawing in NDC:
@@ -126,13 +125,13 @@ OutlineStroke::draw_start()
    glPushMatrix();
    glLoadMatrixd(VIEW::peek()->ndc_proj().transpose().matrix());
 
-   GL_VIEW::print_gl_errors("OutlineStroke::draw_start: GL_PROJECTION");
+   GL_VIEW_PRINT_GL_ERRORS("GL_PROJECTION");
 
    glMatrixMode(GL_MODELVIEW);
    glPushMatrix();
    glLoadIdentity();
 
-   GL_VIEW::print_gl_errors("OutlineStroke::draw_start: GL_MODELVIEW");
+   GL_VIEW_PRINT_GL_ERRORS("GL_MODELVIEW");
 
    // Cache view related info:
    if (_stamp != VIEW::stamp()) 
