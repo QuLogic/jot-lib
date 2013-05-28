@@ -600,7 +600,7 @@ DISTRIB::interpret(
             }
             if (sender->STDdstream::ascii())
             {
-               sender->peekahead(); // forces an eof() if done
+               sender->check_end_delim(); // forces an eof() if done
             }
          } while (!sender->eof());
          broadcaster = 0;

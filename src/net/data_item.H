@@ -85,7 +85,7 @@ class TAGformat {
      STDdstream &end_id()                  { if (_name != "" && _multi)
                                                 _ds->write_close_delim();
                                              return *_ds; }
-     operator      int()                   { return !_ds->eof()&&_ds->check(); }
+     operator      int()                   { return !_ds->eof()&&_ds->check_end_delim(); }
      const string& name()      const       { return _name; }
 };
 

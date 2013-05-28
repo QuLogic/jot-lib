@@ -75,22 +75,24 @@ STDdstream::STDdstream(ostream* s):
 }
 
 /* -------------------------------------------------------------------------
- * DESCR   :	Peeks at the next input character without actually
- * 		removing it from the input queue.
+ * DESCR   :	Checks if the next input character is the end delimiter.
  * ------------------------------------------------------------------------- */
-int
-STDdstream::peekahead()         
-{ 
-   char c;
-   if (istr()) 
-   {
-      c = istr()->peek();
-   } 
-   else  
-   {
+bool
+STDdstream::check_end_delim()
+{
+   int brace;
+   if (istr()) {
+      std::istream::sentry s(*istr(), false);
+      if (s)
+         brace = istr()->rdbuf()->sgetc();
+      else
+         brace = EOF;
+   } else {
+      char c;
       read(&c, sizeof(char), 0);
+      brace = c;
    }
-   return c;
+   return brace != '}';
 }
 
 /* -------------------------------------------------------------------------

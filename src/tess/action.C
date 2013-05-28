@@ -183,7 +183,7 @@ operator>>(STDdstream& ds, Action_list& al)
    assert(ds.ascii());
    char brace; ds >> brace;
    al.clear();
-   while (ds.check()) {
+   while (ds.check_end_delim()) {
       Action* a = Action::upcast(DATA_ITEM::Decode(ds, false));
       if (a) {
          err_adv(debug, "Action_list::decode:  read %s", a->class_name().c_str());

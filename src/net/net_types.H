@@ -204,7 +204,7 @@ template <class T>
 inline STDdstream &operator>>(STDdstream &ds, ARRAY<T> &list) {
    if (ds.ascii()) { 
       char brace; ds >> brace;
-      while (ds.check()) {
+      while (ds.check_end_delim()) {
          // Declare 'var' inside this loop (not outside) in case it is
          // an ARRAY type. Since the list is not being cleared before
          // we read from the stream, we want it to start out empty

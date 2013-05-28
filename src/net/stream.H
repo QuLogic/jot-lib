@@ -60,7 +60,6 @@ class STDdstream {
 
    bool    ascii() const { return istr() || ostr(); }
 
-   int     peekahead();
    void    read_open_delim();
    void    read_close_delim();
 
@@ -71,7 +70,7 @@ class STDdstream {
    void    write_delim(char);
    char    read_delim();
 
-   bool    check() { int brace = peekahead(); return brace != '}'; }
+   bool    check_end_delim();
    bool    eof()   { return istr() ? istr()->eof() : _in_queue.in_avail()<1; }
 
    void    ws(const char *);
