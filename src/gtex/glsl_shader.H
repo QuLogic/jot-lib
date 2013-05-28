@@ -178,7 +178,7 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
 
    static void delete_program(GLuint& prog);
    static void delete_shader(GLuint shader);
-   static void delete_shaders(CARRAY<GLuint>& shaders);
+   static void delete_shaders(const vector<GLuint>& shaders);
    static void print_shader_source(GLuint shader);
    static void print_info(const string& gtex_name, GLuint obj);
    static bool link_program(const string& gtex_name, GLuint prog);
@@ -190,11 +190,11 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
    static bool load_shaders(
       const string& gtex_name,
       vector<string> filenames,
-      ARRAY<GLuint>& shaders,
+      vector<GLuint>& shaders,
       GLenum type);
 
    static char* read_file(const string& gtex_name, const string& filename, GLint& len);
-   static bool attach_shaders(CARRAY<GLuint>& shaders, GLuint prog);
+   static bool attach_shaders(const vector<GLuint>& shaders, GLuint prog);
 
    //******** VIRTUAL METHODS ********
 

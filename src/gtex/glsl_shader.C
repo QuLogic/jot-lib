@@ -209,9 +209,9 @@ GLSLShader::delete_shader(GLuint shader)
 }
 
 void
-GLSLShader::delete_shaders(CARRAY<GLuint>& shaders)
+GLSLShader::delete_shaders(const vector<GLuint>& shaders)
 {
-   for (int i=0; i<shaders.num(); i++)
+   for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
       delete_shader(shaders[i]);
 }
 
@@ -282,7 +282,7 @@ bool
 GLSLShader::load_shaders(
    const string& gtex_name,
    vector<string> filenames,
-   ARRAY<GLuint>& shaders,
+   vector<GLuint>& shaders,
    GLenum type)
 {
    for (vector<string>::size_type i=0; i<filenames.size(); i++) {
@@ -302,20 +302,20 @@ GLSLShader::load_shaders(
 
          print_shader_source(shader);
       }
-      shaders += shader;
+      shaders.push_back(shader);
    }
    // returns true even if the list of filenames is empty:
    return true; 
 }
 
 bool
-GLSLShader::attach_shaders(CARRAY<GLuint>& shaders, GLuint prog)
+GLSLShader::attach_shaders(const vector<GLuint>& shaders, GLuint prog)
 {
    if (need_arb_ext) {
-      for (int i=0; i<shaders.num(); i++)
+      for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
          glAttachObjectARB(prog, shaders[i]);
    } else {
-      for (int i=0; i<shaders.num(); i++)
+      for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
          glAttachShader(prog, shaders[i]);
    }
    return true;
@@ -359,7 +359,7 @@ GLSLShader::init()
 
    // Read shaders from files, compile them, 
    // attach them to the program, and link...
-   ARRAY<GLuint> shaders;
+   vector<GLuint> shaders;
    GLenum vp, fp;
    if (need_arb_ext) {
       vp = GL_VERTEX_SHADER_ARB;
