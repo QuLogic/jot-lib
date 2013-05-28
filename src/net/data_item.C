@@ -165,19 +165,21 @@ DATA_ITEM::decode(STDdstream &ds)
    static COMMENT comment;
    
    d.read_id();                                 // read the start delimiter
-                                                     // if object only has
-   if (tags().num() == 1 && tags()[0]->name() == "") // 1 unnamed tag, then
-      tags()[0]->decode(this, *d);                   // just call its decoder
-   else
-      while (d) {                  // if stream hasn't hit an end delimiter
-         str_ptr  tag_name;
-         *d >> tag_name;                         // read tag name,
+
+   if (tags().num() == 1 && tags()[0]->name() == "") {
+      // if object only has 1 unnamed tag, then just call its decoder
+      tags()[0]->decode(this, *d);
+   } else {
+      while (d) {
+         str_ptr tag_name;
+         *d >> tag_name;
          int j;
-         for (j = 0; j < tags().num(); j++)  // then find tag reader
-            if (tags()[j]->name() == tag_name) { // corresponding to tag.
-               tags()[j]->decode(this, *d);      // invoke tag reader.
+         for (j = 0; j < tags().num(); j++) {
+            if (tags()[j]->name() == tag_name) {
+               tags()[j]->decode(this, *d);
                break;
             }
+         }
          if (j == tags().num()) {
             if (comment.name() == tag_name) {
                comment.decode(this, *d);
@@ -199,6 +201,7 @@ DATA_ITEM::decode(STDdstream &ds)
             }
          }
       }
+   }
 
    d.read_end_id();                             // read the end delimiter
 
