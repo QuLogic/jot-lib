@@ -122,9 +122,7 @@ vec2 hatch_uv(int layer_num)
 vec4 hatching(in float tone,           
                in int   layer_num)
 {
-  
-   
-   vec4 output;  
+   vec4 result;
    
    vec2 uv = hatch_uv(layer_num);
    
@@ -148,15 +146,15 @@ vec4 hatching(in float tone,
    
        
    if (st <= 0.0) {
-      output = h1;
+      result = h1;
    } else if (st >= 1.0) {
-      output = h2;
+      result = h2;
    } else {
       // blend between the two results
-      output = mix(h1, h2, st); 
+      result = mix(h1, h2, st);
    }   
    
-   return output;
+   return result;
 }
 
 void add_layer_contribution(
