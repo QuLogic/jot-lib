@@ -315,12 +315,9 @@ class TEXBODY : public GEOM, public XFORMobs {
 
    // Serialization:
    static TAGlist* _texbody_tags;
-   static TAGlist* _action_tags;
 
    // currently selected TEXBODY:
    static TEXBODYptr _focus;
-
-   CTAGlist& action_tags() const;
 
    //******** INTERNAL METHODS ********
    void init_xform_obs();    // enable observation of GEOM::xform

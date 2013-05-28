@@ -36,7 +36,6 @@ using namespace mlib;
 //******** STATIC MEMBER DATA ********
 TEXBODY*   TEXBODY::null          = 0;
 TAGlist*   TEXBODY::_texbody_tags = 0;
-TAGlist*   TEXBODY::_action_tags  = 0;
 TEXBODYptr TEXBODY::_focus;
 
 HaloBase* HaloBase::_instance    = 0;
@@ -629,16 +628,12 @@ TEXBODY::dup() const
    return new TEXBODY();
 }
 
-static bool  save_actions = Config::get_var_bool("SAVE_ACTIONS", false);
 static bool debug_actions = Config::get_var_bool("DEBUG_ACTION", false);
 static bool debug_io      = Config::get_var_bool("DEBUG_IO", false);
 
 CTAGlist &
 TEXBODY::tags() const
 {
-   if (save_actions) {
-      return action_tags();
-   }
    if (!_texbody_tags) {
       _texbody_tags = new TAGlist;
       *_texbody_tags += GEOM::tags();
@@ -678,23 +673,13 @@ TEXBODY::tags() const
          "mesh_update_file",
          &TEXBODY::put_mesh_update_file,
          &TEXBODY::get_mesh_update_file, 1);
-   }
-   return *_texbody_tags;
-}
 
-CTAGlist&
-TEXBODY::action_tags() const
-{
-   if (!_action_tags) {
-      _action_tags = new TAGlist;
-      *_action_tags += GEOM::tags();
-
-      *_action_tags += new TAG_meth<TEXBODY>(
+      *_texbody_tags += new TAG_meth<TEXBODY>(
          "script",
          &TEXBODY::put_script,
          &TEXBODY::get_script, 1);
    }
-   return *_action_tags;
+   return *_texbody_tags;
 }
 
 void
