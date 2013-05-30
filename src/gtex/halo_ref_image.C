@@ -18,6 +18,8 @@
 #include "halo_ref_image.H"
 
 
+static bool use_fbos = false;
+
 // The halo reference image, winter 2007 by KS
 
 static bool debug = Config::get_var_bool("DEBUG_REF_IMAGES",false);
@@ -47,7 +49,22 @@ HaloRefImage::HaloRefImage(CVIEWptr& v) : RefImage(v)
    _scratch_tex->set_wrap_t(GL_CLAMP_TO_EDGE);
    _blur_filter->set_input_tex(_scratch_tex);
 
+   if (GLEW_VERSION_3_0 || GLEW_EXT_framebuffer_object) {
+      use_fbos = true;
 
+      GLuint color_tex;
+      glGenTextures(1, &color_tex);
+      glBindTexture(GL_TEXTURE_2D, color_tex);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+      glGenFramebuffers(1, &_fbo);
+      glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
+      glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_tex, 0);
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+   }
 }
 
 HaloRefImage* 
@@ -194,19 +211,38 @@ HaloRefImage::copy_to_tex_aux()
    // Specify texture
    _texture->apply_texture();   // GL_ENABLE_BIT
 
-   //copy contents of the aux0 buffer to output texture
-   glReadBuffer(GL_AUX0);
+   if (use_fbos) {
+      //copy contents of the frame buffer to output texture
+      glBindFramebuffer(GL_READ_FRAMEBUFFER, _fbo);
 
-   // Copies the frame buffer into a texture in gpu texture memory.
-   glCopyTexImage2D(
-      GL_TEXTURE_2D,  // The target to which the image data will be changed.
-      0,              // Level of detail, 0 is base detail
-      GL_RGBA,        // internal format
-      0,              // x-coord of lower left corner of the window
-      0,              // y-coord of lower left corner of the window
-      _width,         // texture width
-      _height,        // texture height
-      0);             // border size, must be 0 or 1
+      // Copies the frame buffer into a texture in gpu texture memory.
+      glCopyTexImage2D(
+         GL_TEXTURE_2D,  // The target to which the image data will be changed.
+         0,              // Level of detail, 0 is base detail
+         GL_RGBA,        // internal format
+         0,              // x-coord of lower left corner of the window
+         0,              // y-coord of lower left corner of the window
+         _width,         // texture width
+         _height,        // texture height
+         0);             // border size, must be 0 or 1
+
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+   } else {
+      //copy contents of the aux0 buffer to output texture
+      glReadBuffer(GL_AUX0);
+
+      // Copies the frame buffer into a texture in gpu texture memory.
+      glCopyTexImage2D(
+         GL_TEXTURE_2D,  // The target to which the image data will be changed.
+         0,              // Level of detail, 0 is base detail
+         GL_RGBA,        // internal format
+         0,              // x-coord of lower left corner of the window
+         0,              // y-coord of lower left corner of the window
+         _width,         // texture width
+         _height,        // texture height
+         0);             // border size, must be 0 or 1
+   }
 
    glPopAttrib();
 }
@@ -240,10 +276,14 @@ HaloRefImage::draw_objects(CGELlist& drawn)
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // GL_COLOR_BUFFER_BIT
 
    //clear the aux0 buffer 
-   glDrawBuffer(GL_AUX0);
+   if (use_fbos)
+      glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fbo);
+   else
+      glDrawBuffer(GL_AUX0);
    glClearColor(1.0,1.0,1.0,0.0);     
    glClear(GL_COLOR_BUFFER_BIT);
-      
+   if (use_fbos)
+      glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
    if (get_kernel_size()>0) { //no need to do this if kernel size is zero
       glReadBuffer(GL_BACK);
@@ -279,9 +319,14 @@ HaloRefImage::draw_objects(CGELlist& drawn)
          //accumulate    
          copy_to_scratch();       
          glEnable(GL_BLEND);
-           
-         glDrawBuffer(GL_AUX0);
+
+         if (use_fbos)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, _fbo);
+         else
+            glDrawBuffer(GL_AUX0);
          draw_scratch(); //composite into AUX0 buffer
+         if (use_fbos)
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
       }  
    }
 
@@ -348,9 +393,15 @@ HaloRefImage::update()
    // copy image to main memory or texture memory
    // (or both) as requested:
    if (_update_main_mem) {
-      glReadBuffer(GL_AUX0); //because the image is constructed in aux0
+      if (use_fbos)
+         glBindFramebuffer(GL_READ_FRAMEBUFFER, _fbo);
+      else
+         glReadBuffer(GL_AUX0); //because the image is constructed in aux0
       copy_to_ram();
-      glReadBuffer(GL_BACK);
+      if (use_fbos)
+         glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+      else
+         glReadBuffer(GL_BACK);
    }
    if (_update_tex_mem)
       copy_to_tex_aux(); //copies from aux0
@@ -381,12 +432,18 @@ HaloRefImage::get_kernel_size()
 void
 HaloRefImage::draw_output()
 {
-   glReadBuffer(GL_AUX0);
+   if (use_fbos)
+      glBindFramebuffer(GL_READ_FRAMEBUFFER, _fbo);
+   else
+      glReadBuffer(GL_AUX0);
    glDrawBuffer(GL_BACK);
    glDisable(GL_BLEND);
    glCopyPixels(0,0,800,600,GL_COLOR);
    glEnable(GL_BLEND);
-   glReadBuffer(GL_BACK);
+   if (use_fbos)
+      glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+   else
+      glReadBuffer(GL_BACK);
 }
 
 // end of halo_ref_image.C
