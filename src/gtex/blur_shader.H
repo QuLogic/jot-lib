@@ -122,7 +122,7 @@ class BlurShader : public GLSLShader {
    GLint _height_loc;
    GLint _blur_size_loc;
    GLint _unit_len_loc, _edge_len_scale_loc; 
-   GLint _ratio_scale_loc, _user_depth_loc;
+   GLint _user_depth_loc;
    GLint _global_edge_len_loc;
    GLint _proj_der_loc;
    GLint _detail_func_loc;

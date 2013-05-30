@@ -5,7 +5,7 @@ uniform float blur_size;
 
 uniform mat4 P_matrix;
 uniform int detail_func; // control line width according to depth or user factor
-uniform float unit_len, ratio_scale, edge_len_scale; // parameters for depth computation
+uniform float unit_len, edge_len_scale; // parameters for depth computation
 uniform float user_depth; // user depth for detail control
 
 varying vec4 P; // vertex position, eye space
