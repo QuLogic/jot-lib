@@ -1,25 +1,23 @@
 // 1D toon shader vertex program
 
-void main() 
+void
+main()
 {
-   // Take the light direction from light 0.
-   // XXX - The following assumes a directional light;
-   //       should be fixed to handle postional lights too.
-   
-   vec3 l = (gl_ModelViewMatrix * gl_Vertex).xyz;
-   l = normalize(-l);
-   
+  // Take the light direction from light 0.
+  // XXX - The following assumes a directional light;
+  //       should be fixed to handle positional lights too.
 
-   // vertex normal in eye space:
-   vec3 n = normalize(gl_NormalMatrix * gl_Normal);
+  vec3 l = (gl_ModelViewMatrix * gl_Vertex).xyz;
+  l = normalize(-l);
 
-   // get n*l, clamp negative values to 0:
-   float nl = max(dot(n,l), 0.0);
+  // vertex normal in eye space:
+  vec3 n = normalize(gl_NormalMatrix * gl_Normal);
 
-   // texture coordinate is just n*l:
-   gl_TexCoord[0] = vec4(nl,vec3(0.0));
-   gl_FrontColor  = gl_Color;
-   gl_Position    = ftransform();
+  // get n*l, clamp negative values to 0:
+  float nl = max(dot(n, l), 0.0);
+
+  // texture coordinate is just n*l:
+  gl_TexCoord[0] = vec4(nl, vec3(0.0));
+  gl_FrontColor  = gl_Color;
+  gl_Position    = ftransform();
 }
-
-// halo.vp

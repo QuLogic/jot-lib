@@ -3,13 +3,12 @@
 
 varying vec3 normal;
 
-void main()
+void
+main()
 {
-   // vertex normal in eye coordinates:
-   normal = gl_NormalMatrix * gl_Normal;
+  // vertex normal in eye coordinates:
+  normal = gl_NormalMatrix * gl_Normal;
 
-   gl_FrontColor = gl_Color;
-   gl_Position = ftransform();
+  gl_FrontColor = gl_Color;
+  gl_Position = ftransform();
 }
-
-// simple.vp
