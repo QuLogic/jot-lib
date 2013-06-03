@@ -186,7 +186,6 @@ class GLSLXToonShader : public GLSLShader {
    GLint _Fpnt_loc;
    GLint _Lidx_loc;
    GLint _Ldir_loc;
-   GLint _Lcam_loc;
    GLint _Lcoord_loc;
 
 

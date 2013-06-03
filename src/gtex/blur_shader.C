@@ -42,7 +42,6 @@ BlurShader::BlurShader(Patch* p) :
    _unit_len(0.5),
    _edge_len_scale(0.1),
    _user_depth(0.0),
-   _ratio_scale(0.5),
    _global_edge_len(-1)
 {
   if(debug){
@@ -95,7 +94,6 @@ BlurShader::get_variable_locs()
    get_uniform_loc("detail_func", _detail_func_loc);
    get_uniform_loc("unit_len", _unit_len_loc);
    get_uniform_loc("edge_len_scale", _edge_len_scale_loc);
-   get_uniform_loc("ratio_scale", _ratio_scale_loc);
    get_uniform_loc("user_depth", _user_depth_loc);
    get_uniform_loc("global_edge_len", _global_edge_len_loc);
    get_uniform_loc("P_matrix", _proj_der_loc);
@@ -118,7 +116,6 @@ BlurShader::set_uniform_variables() const
       glUniform1i(_detail_func_loc, _detail_func);
       glUniform1f(_unit_len_loc, _unit_len);
       glUniform1f(_edge_len_scale_loc, _edge_len_scale);
-      glUniform1f(_ratio_scale_loc, _ratio_scale);
       glUniform1f(_user_depth_loc, _user_depth);
       glUniform1f(_global_edge_len_loc, _global_edge_len);
       Wtransf P_matrix =  VIEW::peek()->eye_to_pix_proj();

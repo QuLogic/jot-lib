@@ -222,7 +222,6 @@ GLSLXToonShader::get_variable_locs()
    get_uniform_loc("focusPoint", _Fpnt_loc);
    get_uniform_loc("lightIndex",_Lidx_loc);
    get_uniform_loc("lightDir",_Ldir_loc);
-   get_uniform_loc("lightCam",_Lcam_loc);
    get_uniform_loc("lightCoords", _Lcoord_loc);
 
    return true;
@@ -256,8 +255,6 @@ GLSLXToonShader::set_uniform_variables() const
    glUniform1f(_Lidx_loc,_light_index);
    //pass in bool if light is directional or positional
    glUniform1f(_Ldir_loc,_light_dir);
-   //pass in the cam frame? (not sure what this is)
-   glUniform1f(_Lcam_loc,_light_cam);
    //pass in the light coordinates
    glUniform3fv(_Lcoord_loc, 1, float3(_light_coords));
    return true;

@@ -72,17 +72,29 @@ GLSLShader::delete_program(GLuint& prog)
 void
 GLSLShader::print_shader_source(GLuint shader)
 {
-   GLint src_len = 0;
-   glGetObjectParameterivARB(shader, GL_OBJECT_SHADER_SOURCE_LENGTH_ARB,
-                             &src_len);
-   if (src_len < 1) {
-      cerr << "  source length is 0" << endl;
-      return;
+   if (need_arb_ext) {
+      GLint src_len = 0;
+      glGetObjectParameterivARB(shader, GL_OBJECT_SHADER_SOURCE_LENGTH_ARB,
+                                &src_len);
+      if (src_len < 1) {
+         cerr << "  source length is 0" << endl;
+         return;
+      }
+      GLcharARB* buf = new GLcharARB [ src_len ];
+      GLint chars_written = 0;
+      glGetShaderSourceARB(shader, src_len, &chars_written, buf);
+      cerr << buf << endl;
+   } else {
+      GLsizei src_len = 0;
+      glGetShaderiv(shader, GL_SHADER_SOURCE_LENGTH, &src_len);
+      if (src_len < 1) {
+         cerr << "  source length is 0" << endl;
+         return;
+      }
+      GLchar* buf = new GLchar [ src_len ];
+      glGetShaderSource(shader, src_len, NULL, buf);
+      cerr << buf << endl;
    }
-   GLcharARB* buf = new GLcharARB [ src_len ];
-   GLint chars_written = 0;
-   glGetShaderSourceARB(shader, src_len, &chars_written, buf);
-   cerr << buf << endl;
 }
 
 void
@@ -284,7 +296,7 @@ GLSLShader::load_shaders(
          delete_shaders(shaders);
          return false;
       }
-      if (debug && need_arb_ext) {
+      if (debug) {
          cerr << gtex_name
               << ": print_shader_source: checking shader " << shader << endl;
 

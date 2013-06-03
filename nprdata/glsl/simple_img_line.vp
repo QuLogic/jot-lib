@@ -1,9 +1,8 @@
 // img_line vertex shader:
 //
 
-void main()
+void
+main()
 {
-   gl_Position = ftransform();
+  gl_Position = ftransform();
 }
-
-// img_line.vp

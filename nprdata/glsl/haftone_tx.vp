@@ -1,15 +1,12 @@
-// dots_tx vertex program
+// haftone_tx vertex program
 
-varying   float opacity;
+varying float opacity;
 attribute float opacity_attr;
 
-
-
-void main()
+void
+main()
 {
-   opacity = opacity_attr;
-   gl_FrontColor = gl_Color;
-   gl_Position   = ftransform();
+  opacity = opacity_attr;
+  gl_FrontColor = gl_Color;
+  gl_Position   = ftransform();
 }
-
-// dots_tx.vp

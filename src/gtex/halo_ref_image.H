@@ -94,6 +94,7 @@ class HaloRefImage :  public RefImage {
    COLOR _pass_color;
    TEXTUREglptr _scratch_tex; //objects are rendered here in order for the GLSL blur to work
    HaloBlurShader* _blur_filter;
+   GLuint _fbo;
 
 };
 

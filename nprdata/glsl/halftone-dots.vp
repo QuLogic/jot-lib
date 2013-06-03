@@ -1,9 +1,8 @@
 // dots vertex program
 
-void main()
+void
+main()
 {
-   gl_FrontColor = gl_Color;
-   gl_Position   = ftransform();
+  gl_FrontColor = gl_Color;
+  gl_Position   = ftransform();
 }
-
-// halftone-dots.vp

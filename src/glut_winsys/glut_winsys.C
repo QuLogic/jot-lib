@@ -170,7 +170,23 @@ GLUT_WINSYS::setup(CVIEWptr &v)
       if (Config::get_var_bool("JOT_PRINT_GLEW_INFO", false)) {
          cerr << "\nGLUT_WINSYS::setup: using GLEW "
               << glewGetString(GLEW_VERSION) << endl;
-         if (GLEW_VERSION_2_0)
+         if (GLEW_VERSION_4_2)
+            cerr << "OpenGL 4.2 is supported" << endl;
+         else if (GLEW_VERSION_4_1)
+            cerr << "OpenGL 4.1 is supported" << endl;
+         else if (GLEW_VERSION_4_0)
+            cerr << "OpenGL 4.0 is supported" << endl;
+         else if (GLEW_VERSION_3_3)
+            cerr << "OpenGL 3.3 is supported" << endl;
+         else if (GLEW_VERSION_3_2)
+            cerr << "OpenGL 3.2 is supported" << endl;
+         else if (GLEW_VERSION_3_1)
+            cerr << "OpenGL 3.1 is supported" << endl;
+         else if (GLEW_VERSION_3_0)
+            cerr << "OpenGL 3.0 is supported" << endl;
+         else if (GLEW_VERSION_2_1)
+            cerr << "OpenGL 2.1 is supported" << endl;
+         else if (GLEW_VERSION_2_0)
             cerr << "OpenGL 2.0 is supported" << endl;
          else if (GLEW_VERSION_1_5)
             cerr << "OpenGL 1.5 is supported" << endl;
