@@ -23,6 +23,8 @@
 #ifndef TTY_HAS_BEEN_INCLUDED
 #define TTY_HAS_BEEN_INCLUDED
 
+#include <set>
+
 #include "std/support.H"
 
 #include <fcntl.h>
@@ -74,8 +76,8 @@ class FD_TIMEOUT {
 
 class FD_MANAGER {
    protected:
-     ARRAY<FD_TIMEOUT *> _timeouts;
-     static FD_MANAGER  *_mgr;
+     set<FD_TIMEOUT *>  _timeouts;
+     static FD_MANAGER *_mgr;
    public : 
                          FD_MANAGER() {}
      virtual            ~FD_MANAGER() {}
@@ -83,10 +85,10 @@ class FD_MANAGER {
      virtual void add (FD_EVENT *fd)          = 0;
      virtual void rem (FD_EVENT *fd)          = 0;
      virtual void loop(int infinite=1)        = 0;
-     virtual void add_timeout(FD_TIMEOUT *t) { _timeouts.add_uniquely(t); }
-     virtual void rem_timeout(FD_TIMEOUT *t) { _timeouts -= t; }
+     virtual void add_timeout(FD_TIMEOUT *t) { _timeouts.insert(t); }
+     virtual void rem_timeout(FD_TIMEOUT *t) { _timeouts.erase(t); }
 
-     virtual ARRAY<FD_TIMEOUT*> timeouts()             { return _timeouts; }
+     virtual set<FD_TIMEOUT*>   timeouts()             { return _timeouts; }
      static  FD_MANAGER        *mgr()                  { return _mgr; }
      static  void               set_mgr(FD_MANAGER *m) { _mgr = m; }
 };

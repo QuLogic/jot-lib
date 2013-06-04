@@ -217,8 +217,9 @@ class GLUT_MANAGER : public FD_MANAGER {
       int old_window = glutGetWindow();
 
       if (!_blocker) {
-         for (int i = 0; i < _timeouts.num(); i++) {
-            _timeouts[i]->timeout();
+         set<FD_TIMEOUT *>::iterator i;
+         for (i = _timeouts.begin(); i != _timeouts.end(); ++i) {
+            (*i)->timeout();
          }
       }
       if (old_window != 1) {

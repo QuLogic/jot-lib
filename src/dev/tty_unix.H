@@ -42,7 +42,7 @@ class UNIX_MANAGER : public FD_MANAGER {
       fd_set selectFDs;
       fd_set exceptFDs;
       do {
-         struct timeval  tval,  *to = (_timeouts.num()||!infinite) ? &tval : 0;
+         struct timeval  tval,  *to = (_timeouts.size()||!infinite) ? &tval : 0;
                 tval.tv_sec  = 0; tval.tv_usec =  10;
          // Clear out list of file descriptors (fd's) we're interested in
          FD_ZERO(&selectFDs);
@@ -63,8 +63,11 @@ class UNIX_MANAGER : public FD_MANAGER {
          }
          // Block waiting for input on any of the fd's
          readyFDs = select(max + 1, &selectFDs, 0, &exceptFDs, to);
-         if (readyFDs == 0 && _timeouts.num())
-            for (i = 0; i < _timeouts.num(); i++) _timeouts[i]->timeout();
+         if (readyFDs == 0 && _timeouts.size()) {
+            set<FD_TIMEOUT *>::iterator i;
+            for (i = _timeouts.begin(); i != _timeouts.end(); ++i)
+               (*i)->timeout();
+         }
          for (i = 0; i < _ids.num() && (num < readyFDs); i++) {
             if (FD_ISSET(_ids[i]._fd->fd(), &selectFDs)) {
                _ids[i]._fd->sample(); // This fd has input waiting, read it
