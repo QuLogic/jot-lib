@@ -19,11 +19,13 @@
 #define GEL_OBS_H_HAS_BEEN_INCLUDED
 
 #include "disp/gel.H"
+#include <map>
+#include <set>
 
 #define CGELdistobs_list  const GELdistobs_list
 #define CGELdistobs       const GELdistobs
 class   GELdistobs;
-typedef ARRAY<GELdistobs *> GELdistobs_list;
+typedef set<GELdistobs *> GELdistobs_list;
 //--------------------------------------------
 // GELdistobs -
 //   An object that can be notified when some
@@ -38,19 +40,21 @@ class GELdistobs {
    public:
    virtual ~GELdistobs() {}
    static  void notify_distrib_obs(STDdstream &d, CGELptr &gel) {
-                                     for (int i=0; i<distobs_list()->num(); i++)
-                                       (*_dist_obs)[i]->notify_distrib(d,gel); }
+                                     GELdistobs_list::iterator i;
+                                     for (i=distobs_list()->begin(); i!=distobs_list()->end(); ++i)
+                                       (*i)->notify_distrib(d,gel);
+                                   }
    virtual void notify_distrib    (STDdstream &d, CGELptr &gel) = 0;
 
-           void distrib_obs  ()   { distobs_list()->add_uniquely(this);}
-           void unobs_distrib()   { distobs_list()->rem         (this);}
+           void distrib_obs  ()   { distobs_list()->insert(this);}
+           void unobs_distrib()   { distobs_list()->erase (this);}
 };
 
 
 #define CEXISTobs_list const EXISTobs_list
 #define CEXISTobs      const EXISTobs
 class   EXISTobs;
-typedef ARRAY<EXISTobs*> EXISTobs_list;
+typedef set<EXISTobs*> EXISTobs_list;
 //--------------------------------------------
 // EXISTobs -
 //   An object that can be notified when some
@@ -67,26 +71,28 @@ class EXISTobs {
    public:
    virtual ~EXISTobs() {}
    static  void notify_exist_obs(CGELptr &o, int f){
-                                          if (!_exist_obs) return; int i;
-                                          for (i=0;i<existobs_list()->num();i++)
-                                            (*_exist_obs)[i]->notify_exist(o,f); }
+                                   if (!_exist_obs) return;
+                                   EXISTobs_list::iterator i;
+                                   for (i=existobs_list()->begin(); i!=existobs_list()->end(); ++i)
+                                     (*i)->notify_exist(o,f);
+                                 }
    virtual void notify_exist   (CGELptr &, int flag) = 0;
    
-           void exist_obs()           { existobs_list()->add_uniquely(this); }
-           void unobs_exist()         { existobs_list()->rem         (this); }
+           void exist_obs()           { existobs_list()->insert(this); }
+           void unobs_exist()         { existobs_list()->erase (this); }
 };
 
 #define CDISPobs_list const DISPobs_list
 #define CDISPobs      const DISPobs
 class DISPobs;
-typedef ARRAY<DISPobs*> DISPobs_list;
+typedef set<DISPobs*> DISPobs_list;
 //--------------------------------------------
 // DISPobs -
 //   An object that can be notified when some
 // other object is transformed
 //--------------------------------------------
 class DISPobs {
-    static  HASH         _hash_disp;
+    static  map<CGELptr,DISPobs_list*> _hash_disp;
     static  int          _suspend_disp;
     static  DISPobs_list _all_disp;
   public:
@@ -96,17 +102,21 @@ class DISPobs {
    static   void notify_disp_obs(CGELptr &g, int disp);
 
    /* ---  object xform observer --- */
-   void        disp_obs     (CGELptr &g) { disp_obs_list(g).add_uniquely(this);}
-   void        unobs_display(CGELptr &g) { disp_obs_list(g).rem(this); }
-   void        disp_obs     ()           { _all_disp.add_uniquely(this); }
-   void        unobs_display()           { _all_disp.rem(this); }
+   void        disp_obs     (CGELptr &g) { disp_obs_list(g).insert(this);}
+   void        unobs_display(CGELptr &g) { disp_obs_list(g).erase(this); }
+   void        disp_obs     ()           { _all_disp.insert(this); }
+   void        unobs_display()           { _all_disp.erase(this); }
    static void suspend_disp_obs()        { _suspend_disp = 1; }
    static void activate_disp_obs()       { _suspend_disp = 0; }
    protected :
-      static DISPobs_list &disp_obs_list(CGELptr &g)  {
-         DISPobs_list *list = (DISPobs_list *) _hash_disp.find((long ) &*g);
-         if (!list)
-            _hash_disp.add((long)&* g, (void *)(list = new DISPobs_list));
+      static DISPobs_list &disp_obs_list(CGELptr &g) {
+         DISPobs_list *list;
+         map<CGELptr,DISPobs_list*>::iterator it = _hash_disp.find(g);
+         if (it == _hash_disp.end()) {
+           list = new DISPobs_list;
+           _hash_disp[g] = list;
+         } else
+           list = it->second;
          return *list;
       }
 };
@@ -114,7 +124,7 @@ class DISPobs {
 #define CDUPobs_list const DUPobs_list
 #define CDUPobs      const DUPobs
 class   DUPobs;
-typedef ARRAY<DUPobs*> DUPobs_list;
+typedef set<DUPobs*> DUPobs_list;
 //--------------------------------------------
 // DUPobs -
 //   An object that can be notified when some
@@ -128,20 +138,23 @@ class DUPobs {
                                    return _dup_obs; }
    public:
    virtual ~DUPobs() {}
-   static  void notify_dup_obs(CGELptr &o, CGELptr &newg)
-      {if (!_dup_obs) return;
-       for (int i=0;i<_dup_obs->num();i++) (*_dup_obs)[i]->notify_dup(o,newg);}
+   static  void notify_dup_obs(CGELptr &o, CGELptr &newg) {
+                                 if (!_dup_obs) return;
+                                 DUPobs_list::iterator i;
+                                 for (i=_dup_obs->begin(); i!=_dup_obs->end(); ++i)
+                                   (*i)->notify_dup(o,newg);
+                               }
    virtual void notify_dup    (CGELptr &old, CGELptr &newg) = 0;
    
-           void dup_obs()           { dupobs_list()->add_uniquely(this); }
-           void unobs_dup()         { dupobs_list()->rem         (this); }
+           void dup_obs()           { dupobs_list()->insert(this); }
+           void unobs_dup()         { dupobs_list()->erase (this); }
 };
 
 
 #define CGRABobs_list const GRABobs_list
 #define CGRABobs      const GRABobs
 class GRABobs;
-typedef ARRAY<GRABobs*> GRABobs_list;
+typedef set<GRABobs*> GRABobs_list;
 //--------------------------------------------
 // GRABobs -
 //   An object that can be notified when some
@@ -156,20 +169,22 @@ class GRABobs {
       virtual ~GRABobs() {}
       virtual void notify_grab    (CGELptr &,  int flag) = 0;
       static  void notify_grab_obs(CGELptr &g, int flag) {
-                                        if (!_grab_obs) return;  int i;
-                                        for (i=0; i<grabobs_list()->num(); i++)
-                                          (*_grab_obs)[i]->notify_grab(g,flag);}
+                                     if (!_grab_obs) return;
+                                     GRABobs_list::iterator i;
+                                     for (i=grabobs_list()->begin(); i!=grabobs_list()->end(); ++i)
+                                       (*i)->notify_grab(g,flag);
+                                   }
 
    /* ---  object xform observer --- */
-      void   grab_obs  ()            { grabobs_list()->add_uniquely(this); }
-      void   unobs_grab()            { grabobs_list()->rem(this); }
+      void   grab_obs  ()            { grabobs_list()->insert(this); }
+      void   unobs_grab()            { grabobs_list()->erase(this); }
 };
 
 
 #define CSAVEobs_list const SAVEobs_list
 #define CSAVEobs      const SAVEobs
 class SAVEobs;
-typedef ARRAY<SAVEobs*> SAVEobs_list;
+typedef set<SAVEobs*> SAVEobs_list;
 //--------------------------------------------
 // SAVEobs -
 //   An object that can be notified when some
@@ -201,19 +216,19 @@ class SAVEobs {
    static  void notify_save_obs(NetStream &s, save_status_t &status, bool to_file, bool full_scene); 
 
    /* ---  object save observer --- */
-   void   presave_obs  ()  { presaveobs_list()->add_uniquely(this); }
-   void   postsave_obs  () { postsaveobs_list()->add_uniquely(this); }
-   void   save_obs  ()     { saveobs_list()->add_uniquely(this); }
-   void   unobs_save()     { saveobs_list()->rem(this); }
-   void   unobs_presave()  { presaveobs_list()->rem(this); }
-   void   unobs_postsave() { postsaveobs_list()->rem(this); }
+   void   presave_obs  ()  { presaveobs_list()->insert(this); }
+   void   postsave_obs  () { postsaveobs_list()->insert(this); }
+   void   save_obs  ()     { saveobs_list()->insert(this); }
+   void   unobs_save()     { saveobs_list()->erase(this); }
+   void   unobs_presave()  { presaveobs_list()->erase(this); }
+   void   unobs_postsave() { postsaveobs_list()->erase(this); }
 };
 
 
 #define CLOADobs_list const LOADobs_list
 #define CLOADobs      const LOADobs
 class LOADobs;
-typedef ARRAY<LOADobs*> LOADobs_list;
+typedef set<LOADobs*> LOADobs_list;
 //--------------------------------------------
 // LOADobs -
 //   An object that can be notified when some
@@ -246,12 +261,12 @@ class  LOADobs {
    static  void notify_load_obs(NetStream &s, load_status_t &status, bool to_file, bool full_scene);
 
    /* ---  object load observer --- */
-   void   preload_obs ()        { preloadobs_list()->add_uniquely(this); }
-   void   postload_obs()        { postloadobs_list()->add_uniquely(this); }
-   void   load_obs    ()        { loadobs_list()->add_uniquely(this); }
-   void   unobs_load  ()        { loadobs_list()->rem(this); }
-   void   unobs_preload()       { preloadobs_list()->rem(this); }
-   void   unobs_postload()      { postloadobs_list()->rem(this); }
+   void   preload_obs ()        { preloadobs_list()->insert(this); }
+   void   postload_obs()        { postloadobs_list()->insert(this); }
+   void   load_obs    ()        { loadobs_list()->insert(this); }
+   void   unobs_load  ()        { loadobs_list()->erase(this); }
+   void   unobs_preload()       { preloadobs_list()->erase(this); }
+   void   unobs_postload()      { postloadobs_list()->erase(this); }
 };
 
 #endif // GEL_OBS_H_HAS_BEEN_INCLUDED

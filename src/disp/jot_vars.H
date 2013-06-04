@@ -30,7 +30,7 @@
 // DATA_ITEM methods such as format or decode.
 //
 class JOTvar_obs;
-typedef ARRAY<JOTvar_obs *> JOTvar_obs_list;
+typedef set<JOTvar_obs *> JOTvar_obs_list;
 class JOTvar_obs {
    static JOTvar_obs_list  *_jot_var_obs_list;
    JOTvar_obs_list *jot_var_obs_list(){ if (!_jot_var_obs_list) 
@@ -38,15 +38,16 @@ class JOTvar_obs {
                                          return _jot_var_obs_list; }
  public:
    virtual ~JOTvar_obs() {}
-   static  void notify_jot_var_obs(DATA_ITEM *item)
-                                 { if (!_jot_var_obs_list) return;
-                                   for (int i=0;i<_jot_var_obs_list->num();i++) 
-                                       (*_jot_var_obs_list)[i]->
-                                             notify_jot_var(item); }
+   static  void notify_jot_var_obs(DATA_ITEM *item) {
+                                     if (!_jot_var_obs_list) return;
+                                     JOTvar_obs_list::iterator i;
+                                     for (i=_jot_var_obs_list->begin(); i!=_jot_var_obs_list->end(); ++i)
+                                       (*i)->notify_jot_var(item);
+                                   }
    virtual void notify_jot_var(DATA_ITEM *item) = 0;
    
-           void jot_var_obs()     { jot_var_obs_list()->add_uniquely(this); }
-           void unobs_jot_var()   { jot_var_obs_list()->rem         (this); }
+           void jot_var_obs()     { jot_var_obs_list()->insert(this); }
+           void unobs_jot_var()   { jot_var_obs_list()->erase (this); }
 };
 
 

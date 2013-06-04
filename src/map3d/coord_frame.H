@@ -20,6 +20,8 @@
 
 #include "mlib/points.H"
 
+#include <set>
+
 /*****************************************************************
  * CoordFrame:
  *
@@ -58,16 +60,16 @@ class CoordFrameObs {
 /************************************************************
  * CoordFrameObs_list
  ************************************************************/
-class CoordFrameObs_list : public ARRAY<CoordFrameObs*> {
+class CoordFrameObs_list : public set<CoordFrameObs*> {
  public:
    // convenience methods:
    void notify_frame_changed(CoordFrame* f) {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_frame_changed(f);
+      for (set<CoordFrameObs*>::iterator k=begin(); k!=end(); ++k)
+         (*k)->notify_frame_changed(f);
    }
    void notify_frame_deleted(CoordFrame* f) {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_frame_deleted(f);
+      for (set<CoordFrameObs*>::iterator k=begin(); k!=end(); ++k)
+         (*k)->notify_frame_deleted(f);
    }
 };
 
@@ -91,8 +93,8 @@ class CoordFrame {
 
    //******** OBSERVERS ********
 
-   void add_obs(CoordFrameObs* o) { _observers.add_uniquely(o); }
-   void rem_obs(CoordFrameObs* o) { _observers -= o; }
+   void add_obs(CoordFrameObs* o) { _observers.insert(o); }
+   void rem_obs(CoordFrameObs* o) { _observers.erase(o); }
 
    virtual void changed() { _observers.notify_frame_changed(this); }
 

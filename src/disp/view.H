@@ -29,16 +29,18 @@
 #include "std/support.H"
 #include "std/stop_watch.H"
 
+#include <set>
+
 class Animator;
 class Recorder;
 class WINSYS;
 class FRAME_TIME_OBSERVER;
 
-class FRAME_TIME_OBSERVER_list: public ARRAY<FRAME_TIME_OBSERVER*> {
+class FRAME_TIME_OBSERVER_list: public set<FRAME_TIME_OBSERVER*> {
  public:
-   FRAME_TIME_OBSERVER_list(int n=0) : ARRAY<FRAME_TIME_OBSERVER*>(n) {}
+   FRAME_TIME_OBSERVER_list(int n=0) : set<FRAME_TIME_OBSERVER*>() {}
    FRAME_TIME_OBSERVER_list(const FRAME_TIME_OBSERVER_list& l) :
-      ARRAY<FRAME_TIME_OBSERVER*>(l) {}
+      set<FRAME_TIME_OBSERVER*>(l) {}
 
    void frame_time_changed() const;
 };
@@ -63,7 +65,7 @@ MAKE_PTR_SUBC(VIEW, SCHEDULER);
 class VIEWobs {
 
  public:
-   typedef ARRAY<VIEWobs *> view_list;
+   typedef set<VIEWobs *> view_list;
  protected:
    static view_list *_view_obs;
    static view_list *viewobs_list() { return _view_obs ? _view_obs: 
@@ -72,10 +74,12 @@ class VIEWobs {
    virtual ~VIEWobs() {}
    virtual void notify_view   (CVIEWptr &, int) = 0;
    static  void notify_viewobs(CVIEWptr &v, int f) {
-      for (int i=0; i<viewobs_list()->num(); i++)
-         (*_view_obs)[i]->notify_view(v,f); }
-   void view_obs  ()     { viewobs_list()->add_uniquely(this); }
-   void unobs_view()     { viewobs_list()->rem         (this); }
+     view_list::iterator i;
+     for (i=viewobs_list()->begin(); i!=viewobs_list()->end(); ++i)
+       (*i)->notify_view(v,f);
+   }
+   void view_obs  ()     { viewobs_list()->insert(this); }
+   void unobs_view()     { viewobs_list()->erase (this); }
 };
 
 #define CVIEWlist const VIEWlist
@@ -94,7 +98,7 @@ class VIEWlist : public LIST<VIEWptr> {
 // the first time
 //
 class ThreadObs;
-typedef ARRAY<ThreadObs*> Threadobs_list;
+typedef set<ThreadObs*> Threadobs_list;
 class ThreadObs {
  protected:
    static Threadobs_list *_all_thread;
@@ -104,11 +108,13 @@ class ThreadObs {
    virtual ~ThreadObs() {}
    virtual void notify_render_thread    (CVIEWptr &) = 0;
    static  void notify_render_thread_obs(CVIEWptr &v) {
-      for (int i=0; i < thread_list()->num(); i++)
-         (*thread_list())[i]->notify_render_thread(v); }
+     Threadobs_list::iterator i;
+     for (i=thread_list()->begin(); i!=thread_list()->end(); ++i)
+       (*i)->notify_render_thread(v);
+   }
 
-   void thread_obs()           { thread_list()->add_uniquely(this); }
-   void unobs_thread()         { thread_list()->rem         (this); }
+   void thread_obs()           { thread_list()->insert(this); }
+   void unobs_thread()         { thread_list()->erase (this); }
 };
 
 class STENCILCB {
@@ -122,7 +128,7 @@ class STENCILCB {
 MAKE_PTR_BASEC(CLEARobs);
 class CLEARobs : public REFcounter {
  public :
-   virtual void notify_clear(CVIEWptr &) = 0;
+   virtual void notify_clear(CVIEWptr &) const = 0;
 };
 
 
@@ -300,7 +306,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
  protected:
 
-   LIST<CLEARobsptr> _clear_obs;// callbacks for when display is cleared
+   set<CLEARobsptr> _clear_obs;  // callbacks for when display is cleared
 
 
    static VIEWlist _views;       // view stack used by points.H types
@@ -657,10 +663,10 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    void set_frame_time(double t);
 
    void add_frame_time_observer(FRAME_TIME_OBSERVER* obs) {
-      _frame_time_observers.add_uniquely(obs);
+      _frame_time_observers.insert(obs);
    }
    void remove_frame_time_observer(FRAME_TIME_OBSERVER* obs) {
-      _frame_time_observers.rem(obs);
+      _frame_time_observers.erase(obs);
    }
 
    static unsigned int  stamp()                    { return _stamp; }
@@ -796,10 +802,12 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    void        screen_grab(int scale, Image &im);
 
    //!METHS: callbacks provided by the view 
-   void         notify_clearobs()       { for (int i=0; i<_clear_obs.num(); i++)
-      _clear_obs[i]->notify_clear(this);}
-   void         clear_obs  (CCLEARobsptr &o) { _clear_obs.add_uniquely(o); }
-   void         unobs_clear(CCLEARobsptr &o) { _clear_obs.rem(o); }
+   void         notify_clearobs()       { set<CLEARobsptr>::iterator i;
+                                          for (i=_clear_obs.begin(); i!=_clear_obs.end(); ++i)
+                                            (*i)->notify_clear(this);
+                                        }
+   void         clear_obs  (CCLEARobsptr &o) { _clear_obs.insert(o); }
+   void         unobs_clear(CCLEARobsptr &o) { _clear_obs.erase(o); }
 
 
    //!METHS: methods for synchronizing multiple views

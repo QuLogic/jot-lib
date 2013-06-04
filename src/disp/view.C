@@ -107,8 +107,8 @@ double          VIEW::_pix_to_ndc_scale         = 0;
 void 
 FRAME_TIME_OBSERVER_list::frame_time_changed() const 
 {
-   for (int i=0; i<num(); i++)
-      (*this)[i]->frame_time_changed();
+   for (FRAME_TIME_OBSERVER_list::iterator i=begin(); i!=end(); ++i)
+      (*i)->frame_time_changed();
 }
 
 #ifdef USE_PTHREAD

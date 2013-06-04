@@ -362,8 +362,8 @@ ExistList::unique_name(
 
 /* ---- DISPobs routines----- */
 
-DISPobs_list DISPobs::_all_disp(32);
-HASH         DISPobs::_hash_disp(32);
+DISPobs_list DISPobs::_all_disp;
+map<CGELptr,DISPobs_list*> DISPobs::_hash_disp;
 int          DISPobs::_suspend_disp = 0;
 
 /* -------------------------------------------------------------
@@ -382,15 +382,15 @@ DISPobs::notify_disp_obs(
 {
    if (_suspend_disp || WORLD::is_over())
        return;
-   int i;
+   DISPobs_list::iterator i;
    // Notify observers who want to know about all undisplays
-   for (i = 0; i < _all_disp.num(); i++)
-      _all_disp[i]->notify(g, disp);
+   for (i = _all_disp.begin(); i != _all_disp.end(); ++i)
+      (*i)->notify(g, disp);
 
    // Notify observers who want to know about undisplays of this object
    CDISPobs_list obj_obs = disp_obs_list((GEL *)&*g);
-   for (i = 0; i < obj_obs.num(); i++)
-      obj_obs[i]->notify(g, disp);
+   for (i = obj_obs.begin(); i != obj_obs.end(); ++i)
+      (*i)->notify(g, disp);
 }
 
 
@@ -401,15 +401,15 @@ SAVEobs::notify_save_obs(
    bool to_file, 
    bool full_scene) 
 {
-   int i;
+   SAVEobs_list::iterator i;
    distrib();
    status = SAVE_ERROR_NONE;
-   for (i=0; i<presaveobs_list()->num(); i++) 
-      (*_presave_obs)[i]->notify_presave(s, status, to_file, full_scene);
-   for (i=0; i<saveobs_list()->num(); i++) 
-      (*_save_obs)[i]->notify_save(s, status, to_file, full_scene);
-   for (i=0; i<postsaveobs_list()->num(); i++) 
-      (*_postsave_obs)[i]->notify_postsave(s, status, to_file, full_scene);
+   for (i=presaveobs_list()->begin(); i!=presaveobs_list()->end(); ++i)
+      (*i)->notify_presave(s, status, to_file, full_scene);
+   for (i=saveobs_list()->begin(); i!=saveobs_list()->end(); ++i)
+      (*i)->notify_save(s, status, to_file, full_scene);
+   for (i=postsaveobs_list()->begin(); i!=postsaveobs_list()->end(); ++i)
+      (*i)->notify_postsave(s, status, to_file, full_scene);
 }
 
 void
@@ -419,13 +419,13 @@ LOADobs::notify_load_obs(
    bool to_file,
    bool full_scene )
 {
-   int i;
+   LOADobs_list::iterator i;
    distrib();
    status = LOAD_ERROR_NONE;
-   for (i=0; i<preloadobs_list()->num(); i++)  
-      (*_preload_obs)[i]->notify_preload(s, status, to_file, full_scene);
-   for (i=0; i<loadobs_list()->num(); i++)     
-      (*_load_obs)[i]->notify_load(s, status, to_file, full_scene);
-   for (i=0; i<postloadobs_list()->num(); i++) 
-      (*_postload_obs)[i]->notify_postload(s, status, to_file, full_scene);
+   for (i=preloadobs_list()->begin(); i!=preloadobs_list()->end(); ++i)
+      (*i)->notify_preload(s, status, to_file, full_scene);
+   for (i=loadobs_list()->begin(); i!=loadobs_list()->end(); ++i)
+      (*i)->notify_load(s, status, to_file, full_scene);
+   for (i=postloadobs_list()->begin(); i!=postloadobs_list()->end(); ++i)
+      (*i)->notify_postload(s, status, to_file, full_scene);
 }

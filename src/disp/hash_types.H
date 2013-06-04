@@ -19,11 +19,13 @@
 #ifndef HASH_TYPES_H_INCLUDED
 #define HASH_TYPES_H_INCLUDED
 
+#include <set>
+
 /* ------------------- Hash table variables ----------------------------- */
 
 class   HASHobs;
 class   hashdist;
-typedef ARRAY<HASHobs *> HASHobs_list;
+typedef set<HASHobs *> HASHobs_list;
 class HASHobs {
    static HASHobs_list  *_hash_obs_list;
    HASHobs_list *hash_list()     { if (!_hash_obs_list) 
@@ -31,14 +33,16 @@ class HASHobs {
                                    return _hash_obs_list; }
    public:
    virtual ~HASHobs() {}
-   static  void notify_hash_obs(CGELptr &o, hashdist *h)
-                                 { if (!_hash_obs_list) return;
-                                   for (int i=0;i<_hash_obs_list->num();i++) 
-                                     (*_hash_obs_list)[i]->notify_hash(o,h); }
+   static  void notify_hash_obs(CGELptr &o, hashdist *h) {
+                                  if (!_hash_obs_list) return;
+                                  HASHobs_list::iterator i;
+                                  for (i=_hash_obs_list->begin(); i!=_hash_obs_list->end(); ++i)
+                                    (*i)->notify_hash(o,h);
+                                }
    virtual void notify_hash(CGELptr &old, hashdist *h) = 0;
    
-           void hash_obs()       { hash_list()->add_uniquely(this); }
-           void unobs_hash()     { hash_list()->rem         (this); }
+           void hash_obs()       { hash_list()->insert(this); }
+           void unobs_hash()     { hash_list()->erase (this); }
 };
 
 class hashdist : public DATA_ITEM, public GELdistobs,

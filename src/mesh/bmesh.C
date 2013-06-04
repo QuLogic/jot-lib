@@ -64,8 +64,8 @@ bool use_new_bface_io = Config::get_var_bool("JOT_USE_NEW_BFACE_IO",true);
 // when the LMESH is constructed.
 // On WIN32 this wasn't happening...
 
-BMESHobs_list BMESHobs::_all_observers(32);
-HASH          BMESHobs::_hash(300);
+BMESHobs_list BMESHobs::_all_observers;
+map<BMESH*,BMESHobs_list*> BMESHobs::_hash;
 
 // add BMESH to decoder hash table:
 static class DECODERS {
@@ -4845,64 +4845,73 @@ BMESHobs::broadcast_update_request(BMESH* m)
 void
 BMESHobs_list::notify_change(BMESH* mesh, BMESH::change_t change) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_change(mesh, change);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_change(mesh, change);
 }
 
 void
 BMESHobs_list::notify_xform(BMESH* mesh, CWtransf& xf, CMOD& m) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_xform(mesh, xf, m);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_xform(mesh, xf, m);
 }
 
 void
 BMESHobs_list::notify_merge(BMESH* m1, BMESH* m2) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_merge(m1, m2);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_merge(m1, m2);
 }
 
 void
 BMESHobs_list::notify_split(BMESH* mesh, CARRAY<BMESH*>& pieces) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_split(mesh, pieces);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_split(mesh, pieces);
 }
 
 void
 BMESHobs_list::notify_subdiv_gen(BMESH* mesh) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_subdiv_gen(mesh);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_subdiv_gen(mesh);
 }
 
 void
 BMESHobs_list::notify_delete(BMESH* mesh) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_delete(mesh);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_delete(mesh);
 }
 
 void
 BMESHobs_list::notify_sub_delete(BMESH* mesh) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_sub_delete(mesh);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_sub_delete(mesh);
 }
 
 void
 BMESHobs_list::notify_update_request(BMESH* mesh) const
 {
-   for (int i=0; i<_num; i++)
-      _array[i]->notify_update_request(mesh);
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      (*i)->notify_update_request(mesh);
 }
 
 void
 BMESHobs_list::print_names() const
 {
-   for (int i=0; i<_num; i++)
-      cerr << _array[i]->name() << " ";
+   BMESHobs_list::iterator i;
+   for (i=begin(); i!=end(); ++i)
+      cerr << (*i)->name() << " ";
    cerr << endl;
 }
 

@@ -37,6 +37,9 @@
 #include "mesh/vert_strip.H"
 #include "mesh/zcross_path.H"
 
+#include <map>
+#include <set>
+
 class Patch;
 /**********************************************************************/
 /*!BMESH:
@@ -887,18 +890,18 @@ set_edit_level(BMESHptr m, int level)
 /************************************************************
  * BMESHobs_list:
  *
- *      Convenience class: ARRAY of BMESH observers
+ *      Convenience class: set of BMESH observers
  *      (class BMESHobs) with methods for forwarding
  *      notifications to all observers in the list.
  *      See BMESHobs class, below.
  ************************************************************/
 class BMESHobs;
-class BMESHobs_list : public ARRAY<BMESHobs*> {
+class BMESHobs_list : public set<BMESHobs*> {
  public:
 
    //******** MANAGERS ********
 
-   BMESHobs_list(int k=0) : ARRAY<BMESHobs*>(k) { set_unique(); }
+   BMESHobs_list() : set<BMESHobs*>() { }
 
    //******** CONVENIENCE METHODS ********
 
@@ -934,19 +937,19 @@ class BMESHobs {
    // Used by observers to subscribe or unsubscribe 
    // to mesh notifications for a given BMESH:
    void subscribe_mesh_notifications(BMESH* m) {
-      bmesh_obs_list(m).add_uniquely(this);
+      bmesh_obs_list(m).insert(this);
    }
    void unsubscribe_mesh_notifications(BMESH* m) {
-      bmesh_obs_list(m).rem(this);
+      bmesh_obs_list(m).erase(this);
    }
 
    // Used by observers to subscribe or unsubscribe 
    // to mesh notifications for all BMESHes:
    void subscribe_all_mesh_notifications() {
-      _all_observers.add_uniquely(this);
+      _all_observers.insert(this);
    }
    void unsubscribe_all_mesh_notifications() {
-      _all_observers.rem(this);
+      _all_observers.erase(this);
    }
 
    //******** NOTIFICATION CALLBACKS ********
@@ -991,7 +994,7 @@ class BMESHobs {
 
  protected:
    // Hash table that maps an observer list to a particular mesh:
-   static HASH  _hash;
+   static map<BMESH*,BMESHobs_list*> _hash;
 
    // List of observers that want to get notified if ANY mesh
    // changes:
@@ -999,9 +1002,13 @@ class BMESHobs {
 
    // Returns the observer list for a particular mesh:
    static BMESHobs_list& bmesh_obs_list(BMESH* m)  {
-      BMESHobs_list *list = (BMESHobs_list*) _hash.find((long)m);
-      if (!list)
-         _hash.add((long)m, (void*)(list = new BMESHobs_list));
+      map<BMESH*,BMESHobs_list*>::iterator it = _hash.find(m);
+      BMESHobs_list *list;
+      if (it == _hash.end()) {
+        list = new BMESHobs_list;
+        _hash[m] = list;
+      } else
+        list = it->second;
       return *list;
    }
 };

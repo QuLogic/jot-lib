@@ -423,11 +423,11 @@ GEOM::unset_texture()
 
 /* ---- GEOMobs routines ----- */
 
-GEOMobs_list GEOMobs::_all_geom(32);
+GEOMobs_list GEOMobs::_all_geom;
 
 /* ---- TRANSPobs routines ----- */
 
-TRANSPobs_list TRANSPobs::_all_transp(32);
+TRANSPobs_list TRANSPobs::_all_transp;
 
 /* ---- COLORobs routines ----- */
 
@@ -439,9 +439,9 @@ TEXTUREobs_list *TEXTUREobs::_all_texture = 0;
 
 /* ---- XFORMobs routines ----- */
 
-XFORMobs_list XFORMobs::_every_xf(32);
-XFORMobs_list XFORMobs::_all_xf(32);
-HASH          XFORMobs::_hash_xf(32);
+XFORMobs_list XFORMobs::_every_xf;
+XFORMobs_list XFORMobs::_all_xf;
+map<CGELptr,XFORMobs_list*> XFORMobs::_hash_xf;
 
 /* -------------------------------------------------------------
  *
@@ -460,14 +460,14 @@ XFORMobs::notify_xform_obs(
    )
 {
    // Notify observers who want to know about all xform
-   int i;
-   for (i = 0; i < _all_xf.num(); i++)
-      _all_xf[i]->notify_xform(g, st);
+   XFORMobs_list::iterator i;
+   for (i = _all_xf.begin(); i != _all_xf.end(); ++i)
+      (*i)->notify_xform(g, st);
 
    // Notify all xform observers
    XFORMobs_list &list = xform_obs_list(g);
-   for (i = 0; i <list.num(); i++) {
-      XFORMobs *obs = list[i];
+   for (i = list.begin(); i != list.end(); ++i) {
+      XFORMobs *obs = *i;
       obs->notify_xform(g, st);
    }
 }
@@ -478,9 +478,9 @@ XFORMobs::notify_xform_every_obs(
    )
 {
    // Notify observers who want to know about all xform
-   int i;
-   for (i = 0; i < _every_xf.num(); i++)
-      _every_xf[i]->notify_xform(g, EVERY);
+   XFORMobs_list::iterator i;
+   for (i = _every_xf.begin(); i != _every_xf.end(); ++i)
+      (*i)->notify_xform(g, EVERY);
 }
 
 // end of file geom.C
