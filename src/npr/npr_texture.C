@@ -2039,8 +2039,8 @@ NPRTexture::put_view_light_enable (TAGformat &d) const
 void
 NPRTexture::notify_sdo_draw (SilAndCreaseTexture *t)
 {
-   for (int i=0; i<_sdolist.num(); i++)
-      _sdolist[i]->notify_draw(t);
-
-
+   set<SilDebugObs *>::iterator i;
+   for (i=_sdolist.begin(); i!=_sdolist.end(); ++i)
+      (*i)->notify_draw(t);
 }
+

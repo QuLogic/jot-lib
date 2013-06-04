@@ -30,6 +30,8 @@
 //
 ////////////////////////////////////////////
 
+#include <set>
+
 #include "wnpr/sil_ui.H"
 #include "gtex/ref_image.H"
 #include "mesh/patch.H"
@@ -90,7 +92,7 @@ class NPRTexture : public OGLTexture {
    string                        _data_file;
    bool                          _in_data_file;
 
-   ARRAY<SilDebugObs *>          _sdolist;
+   set<SilDebugObs *>            _sdolist;
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
    NPRTexture(Patch* patch = 0);
@@ -131,8 +133,12 @@ class NPRTexture : public OGLTexture {
    void                 remove_basecoat(int i);
 
 
-   void                 add_obs(SilDebugObs *o)             { bool u = _sdolist.add_uniquely(o); assert(u); }
-   void                 rem_obs(SilDebugObs *o)             { _sdolist.rem(o);}
+   void                 add_obs(SilDebugObs *o)             {
+      std::pair<set<SilDebugObs *>::iterator,bool> u;
+      u = _sdolist.insert(o);
+      assert(u.second);
+   }
+   void                 rem_obs(SilDebugObs *o)             { _sdolist.erase(o);}
    void                 notify_sdo_draw(SilAndCreaseTexture *t);
 
    /******** GTEXTURE METHODS ********/
