@@ -32,6 +32,8 @@
 #include "npr/hatching_group.H"
 #include "npr/hatching_group_base.H"
 
+#include <set>
+
 /*****************************************************************
  * HatchingGroupFixed
  *****************************************************************/
@@ -232,7 +234,7 @@ class HatchingHatchFixed :
 class HatchingSimplexDataFixed : public SimplexData {
  protected:
 
-   ARRAY<HatchingGroupFixed *>     _hatchgroups;
+   std::set<HatchingGroupFixed *>     _hatchgroups;
         
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
@@ -242,20 +244,17 @@ class HatchingSimplexDataFixed : public SimplexData {
 
    /******** MEMBER METHODS *******/
 
-   bool    exists(HatchingGroupFixed* hgf)         { return _hatchgroups.contains(hgf);}
-   bool    add(HatchingGroupFixed *hgf)            { return _hatchgroups.add_uniquely(hgf);}
-   bool    remove(HatchingGroupFixed *hgf)         { return _hatchgroups.rem(hgf);}
+   bool    exists(HatchingGroupFixed* hgf)         { return _hatchgroups.find(hgf)!=_hatchgroups.end();}
+   bool    exists(CHatchingGroupFixed* hgf)        { return std::find(_hatchgroups.begin(), _hatchgroups.end(), hgf)!=_hatchgroups.end();}
+   bool    add(HatchingGroupFixed *hgf)            { std::pair<std::set<HatchingGroupFixed *>::iterator, bool> ret;
+                                                     ret = _hatchgroups.insert(hgf);
+                                                     return ret.second;
+                                                   }
+   bool    remove(HatchingGroupFixed *hgf)         { return _hatchgroups.erase(hgf);}
 
    void    clear(void)           { _hatchgroups.clear(); }
-   int     num(void)             { return _hatchgroups.num();}
+   int     num(void)             { return _hatchgroups.size();}
  
-   //For get_visibility (seems we can't convert CHatchingGroup* to CHatchingGroup*&)
-   bool  hack_exists(CHatchingGroupFixed* hgf) 
-   { 
-      for (int i=0;i<_hatchgroups.num();i++) if (_hatchgroups[i] == hgf) return true;
-      return false;
-   }
-
    /******** STATIC MEMBER METHODS *******/
 
    //Use a static method to look these up

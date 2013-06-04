@@ -222,7 +222,7 @@ HatchingGroupFixed::put_visibility(TAGformat &d) const
          HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(faces[k]);
          if (hsdf) 
             {
-               if(hsdf->hack_exists(this))
+               if(hsdf->exists(this))
                   indices += faces[k]->index();
             }
       }
