@@ -126,9 +126,9 @@ WORLD::WORLD() : _hash(10)
 void
 WORLD::poll(void)
 {
-   ARRAY<DEVpoll *> &p = DEVpoll::pollable();
-   for(int i=0;i<p.num();i++)
-      p[i]->exec_poll();
+   vector<DEVpoll *> &p = DEVpoll::pollable();
+   for (vector<DEVpoll *>::iterator i=p.begin();i!=p.end();++i)
+      (*i)->exec_poll();
 }
 
 #ifdef USE_PTHREAD

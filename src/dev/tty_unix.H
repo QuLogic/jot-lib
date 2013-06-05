@@ -21,6 +21,7 @@
 #include "std/support.H"
 #include "dev/tty.H"
 
+#include <vector>
 
 class UNIX_MANAGER : public FD_MANAGER {
   public:
@@ -33,7 +34,7 @@ class UNIX_MANAGER : public FD_MANAGER {
       };
 
   protected :
-   ARRAY<tty_to_id> _ids;
+   vector<tty_to_id> _ids;
 
   public :
    UNIX_MANAGER() { }
@@ -49,16 +50,18 @@ class UNIX_MANAGER : public FD_MANAGER {
          FD_ZERO(&exceptFDs);
          int max = -1, fd, num = 0, readyFDs;
          // Set the fd's we're interested in
-         int i;
-         for (i = _ids.num() - 1; i >= 0; i--) {
-            fd = _ids[i]._fd->fd();
+         vector<tty_to_id>::iterator i;
+         i = _ids.begin();
+         while (i != _ids.end()) {
+            fd = (*i)._fd->fd();
             if (fd >= 0) {
                FD_SET(fd, &selectFDs);
                FD_SET(fd, &exceptFDs);
                if (fd > max) max = fd;
+               ++i;
             } else {
                cerr << "UNIX_MANAGER::loop - removing bad FD_EVENT" << endl;
-               rem(_ids[i]._fd);
+               i = _ids.erase(i);
             }
          }
          // Block waiting for input on any of the fd's
@@ -68,7 +71,7 @@ class UNIX_MANAGER : public FD_MANAGER {
             for (i = _timeouts.begin(); i != _timeouts.end(); ++i)
                (*i)->timeout();
          }
-         for (i = 0; i < _ids.num() && (num < readyFDs); i++) {
+         for (vector<tty_to_id>::size_type i = 0; i < _ids.size() && (num < readyFDs); i++) {
             if (FD_ISSET(_ids[i]._fd->fd(), &selectFDs)) {
                _ids[i]._fd->sample(); // This fd has input waiting, read it
                num++;
@@ -81,13 +84,13 @@ class UNIX_MANAGER : public FD_MANAGER {
       } while (infinite);
    }
    virtual void add(FD_EVENT *fd) { 
-      _ids += tty_to_id(fd);
+      _ids.push_back(tty_to_id(fd));
    }
 
    virtual void rem(FD_EVENT *fd) {
-      int ind = _ids.get_index(tty_to_id(fd));
-      if (ind != BAD_IND) {
-         _ids -= tty_to_id(fd);
+      vector<tty_to_id>::iterator it = std::find(_ids.begin(), _ids.end(), tty_to_id(fd));
+      if (it != _ids.end()) {
+         _ids.erase(it)
       }
    }
 };

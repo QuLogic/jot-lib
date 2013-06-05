@@ -435,7 +435,7 @@ TabletMultimode::sample()
       int bit;
       if(event.is_eraser()) bit = 3;
       else bit = 0;
-      if(BIT(0, event.get_buttons()) != old_buttons.get(bit)) {
+      if(BIT(0, event.get_buttons()) != old_buttons.get_btn(bit)) {
          if(BIT(0, event.get_buttons())) {
             old_buttons.event(bit, DEVice_buttons::DOWN, mods);
          }
@@ -443,14 +443,14 @@ TabletMultimode::sample()
       }
       for(bit = 1; bit < 3; bit++) {
          int state = BIT(bit, event.get_buttons()) ? 1 : 0;
-         if(state != old_buttons.get(bit)) {
+         if(state != old_buttons.get_btn(bit)) {
             if(state) old_buttons.event(bit, DEVice_buttons::DOWN, mods);
             else old_buttons.event(bit, DEVice_buttons::UP, mods);
          }
       }
       if(event.is_eraser()) bit = 7;
       else bit = 8;
-      if(event.touching_tablet() != old_buttons.get(bit)) {
+      if(event.touching_tablet() != old_buttons.get_btn(bit)) {
          if(event.touching_tablet()) {
             old_buttons.event(bit, DEVice_buttons::DOWN, mods);
          }
@@ -474,14 +474,14 @@ TabletMultimode::sample()
       //
       if (event.get_device() == TabletEvent::STYLUS &&
           BIT(2,event.get_buttons()) &&   // button 3 is pressed
-          !old_buttons.get(2) &&          // and button 3 wasn't pressed before
+          !old_buttons.get_btn(2) &&      // and button 3 wasn't pressed before
           event.touching_tablet() &&      // and the stylus is touching now
-          !old_buttons.get(8)) {          // but it wasn't before
+          !old_buttons.get_btn(8)) {      // but it wasn't before
          _using_stylus_eraser = true;
          old_buttons.event(7, DEVice_buttons::DOWN, mods);
          for (int i = 0; i < 2; i++) { // check the state of each button
             int state = BIT(i,event.get_buttons()) ? 1 : 0;
-            if (state != old_buttons.get(i)) {
+            if (state != old_buttons.get_btn(i)) {
                if (state) {
                   if (i != 0) {
                      old_buttons.event(i, DEVice_buttons::DOWN, mods);
@@ -501,7 +501,7 @@ TabletMultimode::sample()
          const int eraser_bit = 3;
 
          int state = BIT(0, event.get_buttons()) ? 1 : 0;
-         if (state != old_buttons.get(eraser_bit)) {
+         if (state != old_buttons.get_btn(eraser_bit)) {
             if (state)
                old_buttons.event(eraser_bit, DEVice_buttons::DOWN, mods);
             else old_buttons.event(eraser_bit, DEVice_buttons::UP  , mods);
@@ -512,7 +512,7 @@ TabletMultimode::sample()
             //   touching the tablet
             for (int i = 0; i < 3; i++) { // check the state of each button
                int state = BIT(i,event.get_buttons()) ? 1 : 0;
-               if (state != old_buttons.get(i)) {
+               if (state != old_buttons.get_btn(i)) {
                   if (state) 
                      old_buttons.event(i, DEVice_buttons::DOWN, mods);
                   else old_buttons.event(i, DEVice_buttons::UP  , mods);
@@ -523,7 +523,7 @@ TabletMultimode::sample()
      
       // set new 2d device position & generate events
       int touching(event.touching_tablet() ? 1 : 0);
-      if (touching != old_buttons.get(8)) {
+      if (touching != old_buttons.get_btn(8)) {
          if (touching)
             old_buttons.event(8, DEVice_buttons::DOWN, mods);
          else old_buttons.event(8, DEVice_buttons::UP  , mods);

@@ -20,6 +20,7 @@
 
 #include "dev/tty.H"
 
+#include <vector>
 
 class WIN_MANAGER : public FD_MANAGER {
   public:
@@ -53,29 +54,31 @@ class WIN_MANAGER : public FD_MANAGER {
       };
 
   protected :
-   ARRAY<tty_to_id> _ids;
+   vector<tty_to_id> _ids;
 
   public :
    WIN_MANAGER() { }
 
    virtual void loop() {
       while (1) {
-	for (int i=0; i<_ids.num(); i++)
-	  if (_ids[i].ready())
-	    ((FD_EVENT *)_ids[i]._fd)->sample();
+        vector<tty_to_id>::iterator i;
+        for (i=_ids.begin(); i!=_ids.end(); ++i)
+          if ((*i).ready())
+            ((FD_EVENT *)(*i)._fd)->sample();
       }
    }
 
    virtual void add(FD_EVENT *fd) { 
-      _ids += tty_to_id(fd);
+      _ids.push_back(tty_to_id(fd));
    }
 
    virtual void rem(FD_EVENT *fd) {
-       int ind = _ids.get_index(tty_to_id(fd));
-       if (ind != BAD_IND) {
-          _ids -= tty_to_id(fd);
-       }
+      vector<tty_to_id>::iterator it = std::find(_ids.begin(), _ids.end(), tty_to_id(fd));
+      if (it != _ids.end()) {
+         _ids.erase(it);
+      }
    }
+
    virtual FD_TIMEOUT  *timeout()             { return FD_MANAGER::_timeout; }
    virtual void         timeout(FD_TIMEOUT *) {
 	   cerr << "WIN_MANAGER::timeout - Timeouts not implemented" << endl;

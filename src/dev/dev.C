@@ -87,9 +87,9 @@ DEVmod_gen::mods()
 {
    Evd::DEVmod mods = Evd::EMPTY;
 
-   for (int m = 0; m < _mods.num(); m++) {
+   for (DEVmod_desc_list::size_type m = 0; m < _mods.size(); m++) {
       DEVice_buttons *btns = _mods[m].ice();
-      if (btns->get(_mods[m].btn_ind()))
+      if (btns->get_btn(_mods[m].btn_ind()))
          mods = Evd::DEVmod(((int)mods) | (int)(_mods[m].mod()));
    }
 

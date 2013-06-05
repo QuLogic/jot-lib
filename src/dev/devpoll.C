@@ -18,4 +18,4 @@
 
 #include "devpoll.H"
 
-ARRAY<DEVpoll *> DEVpoll::_pollable;
+vector<DEVpoll *> DEVpoll::_pollable;

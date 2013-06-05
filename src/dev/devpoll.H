@@ -21,13 +21,15 @@
 
 #include "std/support.H"
 
+#include <vector>
+
 // DEVpoll defines an interface for pollable devices.
 // 
 
 class DEVpoll
 {
  protected:
-   static ARRAY<DEVpoll *> _pollable;
+   static vector<DEVpoll *> _pollable;
 
  public:
    virtual ~DEVpoll() {}
@@ -35,10 +37,10 @@ class DEVpoll
 
    virtual void exec_poll() = 0;
 
-   static void add_pollable( DEVpoll *dp ) { _pollable += dp; }
-   static void rem_pollable( DEVpoll *dp ) { _pollable -= dp; }
+   static void add_pollable( DEVpoll *dp ) { _pollable.push_back(dp); }
+   static void rem_pollable( DEVpoll *dp ) { _pollable.erase(std::find(_pollable.begin(), _pollable.end(), dp)); }
 
-   static ARRAY<DEVpoll *> &pollable() { return _pollable; }
+   static vector<DEVpoll *> &pollable() { return _pollable; }
 };
 
 #endif

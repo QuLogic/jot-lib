@@ -21,6 +21,8 @@
 #include "std/support.H"
 #include "mlib/points.H"
 
+#include <set>
+#include <vector>
 
 //---------------------------------------------
 //
@@ -274,7 +276,7 @@ class DEVhandler {
 
 class DEVice {
   protected:
-   ARRAY<DEVhandler *>      _handlers;   // Pointer to the event handler
+   set<DEVhandler *>        _handlers;   // Pointer to the event handler
                                          // for this device
   public:
 //    static mlib::Wtransf booth_to_room;
@@ -288,8 +290,8 @@ class DEVice {
                  DEVice()  {}
    virtual      ~DEVice()  {}
 
-   virtual void  add_handler( DEVhandler *h ) { _handlers += h; }
-   virtual void  rem_handler( DEVhandler *h ) { _handlers -= h; }
+   virtual void  add_handler( DEVhandler *h ) { _handlers.insert(h); }
+   virtual void  rem_handler( DEVhandler *h ) { _handlers.erase(h); }
 };
 
 //----------------------------------------------
@@ -308,9 +310,9 @@ class DEVice_2d : public DEVice {
 
    virtual void _event(mlib::CXYpt &p, Evd::DEVmod mod)
                                             { set_val(map(p));
-                                              for(int i=0;i<_handlers.num();i++)
-	                                         _handlers[i]->handle_event(
-                                                          Evd(this,MOV,mod));
+                                              set<DEVhandler *>::iterator i;
+                                              for(i=_handlers.begin();i!=_handlers.end();++i)
+                                                 (*i)->handle_event(Evd(this,MOV,mod));
                                             }
 
   public :
@@ -387,15 +389,18 @@ class DEVice_buttons : public DEVice {
 
    void        set_ptr(DEVice_2d *d)  { _dev2 = d; }
    DEVice_2d  *ptr2d()                { return _dev2; }
-   int         get  (int i)           { return ((_state & (1<<i)) ? 1 : 0); }
-   void        set  (int i, int b)    { if (b) _state |= (1<<i); 
-                                         else   _state &= (~(1<<i)); }
+   int         get_btn(int i)         { return ((_state & (1<<i)) ? 1 : 0); }
+   void        set_btn(int i, int b)  { if (b) _state |= (1<<i);
+                                        else   _state &= (~(1<<i)); }
 
    virtual void event(int num, DEVbutton_action action, Evd::DEVmod mod) {
-        set(num,action);
-        for (int i=0; i<_handlers.num(); i++)
-          _handlers[i]->handle_event(Evd(this,
-                              (DEVact)(num*2 + ((action == UP) ? 0 : 1)),mod));
+        set_btn(num,action);
+        set<DEVhandler *>::iterator i;
+        for (i=_handlers.begin(); i!=_handlers.end(); ++i) {
+          (*i)->handle_event(Evd(this,
+                                 (DEVact)(num*2 + (action == UP ? 0 : 1)),
+                                 mod));
+        }
    }
 };
 
@@ -428,7 +433,7 @@ class DEVmod_desc {
      int             operator == (CDEVmod_desc &d) const
 	       { return d._mod==_mod && d._ice==_ice && d._ind==_ind; }
 };
-typedef ARRAY<DEVmod_desc> DEVmod_desc_list;
+typedef vector<DEVmod_desc> DEVmod_desc_list;
 
 
 //------------------------------------------------------
@@ -448,7 +453,7 @@ class DEVmod_gen {
    static  void         set_gen(DEVmod_gen     *gen)  { _gen = gen; }
    static  void         force_mods(Evd::DEVmod  mods) { _forced_mods = mods; }
    static  Evd::DEVmod  force_mods()                  { return _forced_mods; }
-   static  void         add_mod(CDEVmod_desc &desc)   { _mods += desc; }
+   static  void         add_mod(CDEVmod_desc &desc)   { _mods.push_back(desc); }
    virtual Evd::DEVmod  gen_mods()                    { return Evd::EMPTY; }
 
    static  Evd::DEVmod  mods();
