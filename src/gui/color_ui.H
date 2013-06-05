@@ -123,7 +123,7 @@ class ColorUI : public BaseUI {
    /******** Convenience Methods ********/
     
    void         update_color();
-   void         apply_color(CARRAY<COLOR>& colors);
+   void         apply_color(const vector<COLOR>& colors);
        
    bool         load_preset();
    bool         save_preset();

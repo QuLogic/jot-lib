@@ -1659,44 +1659,44 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
 // sort_dir_contents()
 //////////////////////////////////////////////////////
 
-static int sort_name(const void* va, const void* vb)
+static int sort_name(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
 #ifdef WIN32
 //Case-sensitive string comparison...
-//{ return strcmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
+//{ return strcmp(      va->_name.c_str(), vb->_name.c_str());   }
 //Case-INsensitive version...
-{ return _stricmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
+{ return _stricmp(      va->_name.c_str(), vb->_name.c_str());   }
 #else
 //Case-sensitive string comparison...
-//{ return strcmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
+//{ return strcmp(      va->_name.c_str(), vb->_name.c_str());   }
 //Case-INsensitive version...
-{ return strcasecmp(      (*((DIR_ENTRYptr *)va))->_name.c_str(), (*((DIR_ENTRYptr *)vb))->_name.c_str());   }
+{ return strcasecmp(    va->_name.c_str(), vb->_name.c_str());   }
 #endif
 
-static int sort_type(const void* va, const void* vb)
-{ return                (*((DIR_ENTRYptr *)va))->_type -  (*((DIR_ENTRYptr *)vb))->_type;    }
-static int sort_size(const void* va, const void* vb)
-{ return Sign2(         (*((DIR_ENTRYptr *)va))->_size -  (*((DIR_ENTRYptr *)vb))->_size);   }
-static int sort_date(const void* va, const void* vb)
-{ return Sign2(difftime((*((DIR_ENTRYptr *)va))->_date,   (*((DIR_ENTRYptr *)vb))->_date));  }
+static int sort_type(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ return                va->_type -  vb->_type;    }
+static int sort_size(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ return Sign2(         va->_size -  vb->_size);   }
+static int sort_date(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ return Sign2(difftime(va->_date,   vb->_date));  }
 
 
-static int sort_by_name_up(const void* va, const void* vb)
-{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_name(va,vb))) ret = sort_date(va,vb); return ret; }
-static int sort_by_date_up(const void* va, const void* vb)
-{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_date(va,vb))) ret = sort_name(va,vb); return ret; }
-static int sort_by_size_up(const void* va, const void* vb)
-{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_size(va,vb))) ret = sort_name(va,vb); return ret; }
+static bool sort_by_name_up(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_name(va,vb))) ret = sort_date(va,vb); return ret < 0; }
+static bool sort_by_date_up(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_date(va,vb))) ret = sort_name(va,vb); return ret < 0; }
+static bool sort_by_size_up(CDIR_ENTRYptr va, CDIR_ENTRYptr vb)
+{ int ret; if (!(ret = sort_type(va,vb))) if (!(ret = sort_size(va,vb))) ret = sort_name(va,vb); return ret < 0; }
 
-static int sort_by_name_down(const void* va, const void* vb) { return sort_by_name_up(vb,va);   }
-static int sort_by_date_down(const void* va, const void* vb) { return sort_by_date_up(vb,va); }
-static int sort_by_size_down(const void* va, const void* vb) { return sort_by_size_up(vb,va); }
+static bool sort_by_name_down(CDIR_ENTRYptr va, CDIR_ENTRYptr vb) { return sort_by_name_up(vb,va); }
+static bool sort_by_date_down(CDIR_ENTRYptr va, CDIR_ENTRYptr vb) { return sort_by_date_up(vb,va); }
+static bool sort_by_size_down(CDIR_ENTRYptr va, CDIR_ENTRYptr vb) { return sort_by_size_up(vb,va); }
 
 void
 GLUIFileSelect::sort_dir_contents(DIR_ENTRYptr &dir, sort_t sort)
 {
    assert(dir != NULL);
 
-   compare_func_t func;
+   bool (*func)(CDIR_ENTRYptr, CDIR_ENTRYptr);
 
    switch(sort)
    {
@@ -1709,8 +1709,7 @@ GLUIFileSelect::sort_dir_contents(DIR_ENTRYptr &dir, sort_t sort)
       default: assert(0); break;
    }
 
-   if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
-   {
+   if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT) {
       std::sort(dir->_contents.begin(), dir->_contents.end(), func);
    }
 }

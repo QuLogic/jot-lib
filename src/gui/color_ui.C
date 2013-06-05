@@ -173,21 +173,21 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       _rollout[i]->set_alignment(GLUI_ALIGN_LEFT);
    }
   
-   ARRAY<COLOR> colors;
-   colors.add(Color::white);
-   colors.add(Color::white);
-   colors.add(Color::blue1);
-   colors.add(Color::blue2);
-   colors.add(Color::blue3);
-   colors.add(Color::blue4);
-   colors.add(Color::brown);
-   colors.add(Color::brown1);
-   colors.add(Color::brown2);
-   colors.add(Color::brown3);
-   colors.add(Color::brown4);
-   colors.add(Color::brown5);
-   colors.add(Color::green1);
-   colors.add(Color::green2);  
+   vector<COLOR> colors;
+   colors.push_back(Color::white);
+   colors.push_back(Color::white);
+   colors.push_back(Color::blue1);
+   colors.push_back(Color::blue2);
+   colors.push_back(Color::blue3);
+   colors.push_back(Color::blue4);
+   colors.push_back(Color::brown);
+   colors.push_back(Color::brown1);
+   colors.push_back(Color::brown2);
+   colors.push_back(Color::brown3);
+   colors.push_back(Color::brown4);
+   colors.push_back(Color::brown5);
+   colors.push_back(Color::green1);
+   colors.push_back(Color::green2);
    apply_color(colors);
 
    switch_color_mode(_rgb);
@@ -221,18 +221,34 @@ ColorUI::load_preset()
 {
    const char* f = _presets_ui->get_filename().c_str();
    ifstream fin(f, ifstream::in);
+   bool result = true;
 
    if (!fin)    {
       err_msg("ColorUI::load_preset() - Error! Could not open file: '%s'", f);
       return false;
    }
-   ARRAY<COLOR> c;
-  
-   fin >> c; 
-   apply_color(c);  
+
+   vector<COLOR> c;
+   vector<COLOR>::size_type count;
+   fin >> count;
+
+   for (vector<COLOR>::size_type i = 0; i < count; i++) {
+      char open, close;
+      float r, g, b;
+
+      if (fin >> open >> r >> g >> b >> close) {
+         c.push_back(COLOR(r, g, b));
+      } else {
+         result = false;
+         break;
+      }
+   }
+
+   if (result)
+      apply_color(c);
 
    fin.close();
-   return true;
+   return result;
 }
 
 bool         
@@ -248,17 +264,18 @@ ColorUI::save_preset()
       err_msg("ColorUI::save_preset - Error! Could not open file: '%s'", f);         
       return false;
    }
-   
-   ARRAY<COLOR> c;
+
+   fout << BUT_NUM << endl;
+
    for (int i=0; i<BUT_NUM; ++i){
       float *col = _button[i]->glui->bkgd_color_f;
-      c.add(COLOR(col[0], col[1], col[2]));
+      fout << "< " << col[0] << ' ' << col[1] << ' ' << col[2] << " >" << endl;
    }
-   fout << c;
 
    fout.close();
    return true;
 }
+
 void         
 ColorUI::set_alpha(float a)
 {
@@ -363,17 +380,16 @@ ColorUI::switch_color_mode(bool rgb)
 }
 
 void
-ColorUI::apply_color(CARRAY<COLOR>& colors)
+ColorUI::apply_color(const vector<COLOR>& colors)
 {
    //We get a list of 2 + 12 colors max and 2 min
-   if(colors.num() < 2){
+   if (colors.size() < 2){
       cerr << "ColorUI::apply_color: Less then 2 colors given" << endl;
       return;
    }
 
-   for(int i=0; i < BUT_NUM; ++i)
-   {
-      if (i < colors.num()) {
+   for (int i=0; i < BUT_NUM; ++i) {
+      if (i < (int)colors.size()) {
          for (int j=0; j < 3; j++) {
             _button[i]->glui->bkgd_color_f[j] = colors[i][j];
             _button[i]->glui->bkgd_color[j] = (unsigned char)(colors[i][j] * 255.0);
@@ -385,7 +401,6 @@ ColorUI::apply_color(CARRAY<COLOR>& colors)
          }
       }
    }
-  
 }
 
 
