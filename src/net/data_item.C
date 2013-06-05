@@ -23,7 +23,7 @@
 using mlib::Wpt;
 using mlib::Wvec;
 
-HASH *DATA_ITEM::_hash = 0;
+map<string,DATA_ITEM*> *DATA_ITEM::_hash = 0;
 DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, const string&, DATA_ITEM*) = 0;
 
 const string NAME_INT    ("int");
@@ -62,8 +62,8 @@ DATA_ITEM::add_decoder(
    )
 {
    if (!_hash) 
-      _hash = new HASH(128);
-   _hash->add(name.c_str(), (void *) di);
+      _hash = new map<string,DATA_ITEM*>();
+   (*_hash)[name] = di;
    if (copy != -1)
       di->_copy = copy;
    return 1;
@@ -226,3 +226,37 @@ DATA_ITEM::format(STDdstream &ds) const
 
    return *d;            
 }
+
+STDdstream &
+operator >> (STDdstream &ds, map<string,DATA_ITEM*> &h)
+{
+   h.clear();
+
+   int num;
+   ds >> num;
+
+   for (int i = 0; i < num; i++) {
+      string key;
+      ds >> key;
+
+      DATA_ITEM *di = DATA_ITEM::Decode(ds);
+
+      h[key] = di;
+   }
+
+   return ds;
+}
+
+STDdstream &
+operator << (STDdstream &ds, const map<string,DATA_ITEM*> &h)
+{
+   ds << h.size();
+
+   map<string,DATA_ITEM*>::const_iterator it;
+   for (it = h.begin(); it != h.end(); ++it) {
+      ds << it->first << it->second;
+   }
+
+   return ds;
+}
+

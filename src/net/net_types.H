@@ -33,9 +33,6 @@
 #include "stream.H"
 #include "net.H"
 
-STDdstream & operator >> (STDdstream &,  HASH          &);
-STDdstream & operator << (STDdstream &, CHASH          &);
-
 template <class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Vec2<V> &v) 
        { if (ds.ascii()) ds << "{" << v[0] << v[1] << "}";
@@ -223,6 +220,45 @@ inline STDdstream &operator>>(STDdstream &ds, ARRAY<T> &list) {
       } 
       return ds;
    } 
+}
+
+template <class T>
+inline STDdstream  &operator<<(STDdstream &ds, const vector<T> &list) {
+   if (ds.ascii())
+      ds << "{";
+   else
+      ds << list.size();
+   for (typename vector<T>::size_type i=0; i<list.size();i++) {
+      ds << list[i];
+   }
+   if (ds.ascii())
+      ds << "}";
+   return ds;
+}
+
+template <class T>
+inline STDdstream &operator>>(STDdstream &ds, vector<T> &list) {
+   if (ds.ascii()) {
+      char brace; ds >> brace;
+      while (ds.check_end_delim()) {
+         // Declare 'var' inside this loop (not outside) in case it is
+         // an vector type. Since the list is not being cleared before
+         // we read from the stream, we want it to start out empty
+         // each time thru this loop.
+         T var;
+         ds >> var;
+         list.push_back(var);
+      }
+      return ds >> brace;
+   } else {
+      int num;  ds >> num;
+      for (int i = 0; i < num; i++) {
+         T var;         // See comment above.
+         ds >> var;
+         list.push_back(var);
+      }
+      return ds;
+   }
 }
 
 // XXX - should move to mlib Point2.H and Vec2.H

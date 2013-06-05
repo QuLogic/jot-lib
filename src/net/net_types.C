@@ -16,40 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-//#include <sys/types.h>
-
 #include "std/support.H"
-#include "stream.H"
-#include "net.H"
 #include "net_types.H"
-#include "data_item.H"
 
-
-STDdstream &
-operator >> (STDdstream &ds, HASH &h)
-{
-   h.clear();
-   int num;
-   ds >> num;
-   string key;
-   for (int i = 0; i < num; i++) {
-      ds >> key;
-      DATA_ITEM *di = DATA_ITEM::Decode(ds);
-
-      h.add(key.c_str(), (void *) di);
-   }
-   return ds;
-}
-
-STDdstream &
-operator << (STDdstream &ds, CHASH &h)
-{
-   ARRAY<long>   keys;
-   ARRAY<void *> items;
-   h.get_items(keys, items);
-   ds << items.num();
-   for (int i = 0; i < items.num(); i++) {
-      ds << (char *) keys[i] << *((DATA_ITEM *) items[i]);
-   }
-   return ds;
-}

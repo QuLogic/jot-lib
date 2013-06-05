@@ -25,6 +25,8 @@
 
 #include "rtti.H"
 
+#include <map>
+
 #define DECODER_ADD(X) DATA_ITEM::add_decoder(X::static_name(), new X(), 1)
 
 #define DECLARE_NETWORK_TAGS(CLASS_NAME) \
@@ -207,7 +209,7 @@ TAG *TAGmeth(char *str,
  * ----------------------------------------------------------- */
 class DATA_ITEM {
    private:
-    static HASH *_hash;
+    static map<string,DATA_ITEM*> *_hash;
     static DATA_ITEM *(*_decode_unknown)(STDdstream &, const string &, DATA_ITEM *);
    protected:
       int          _copy;
@@ -235,16 +237,24 @@ class DATA_ITEM {
                                                          DATA_ITEM *))
                                                  { _decode_unknown = d; }
  static  DATA_ITEM  *Decode     (STDdstream &d, int DelayDecoding = 0);
- static  DATA_ITEM  *lookup     (const string &d) { return !_hash ? 0 :
-                                                (DATA_ITEM *) _hash->find(d.c_str());}
+ static  DATA_ITEM  *lookup     (const string &d) { if (!_hash) return 0;
+                                                    map<string,DATA_ITEM*>::iterator i;
+                                                    i = _hash->find(d);
+                                                    if (i != _hash->end())
+                                                      return i->second;
+                                                    else
+                                                      return 0;
+                                                  }
      /* -------- Static debugging functions -------- */
- static  HASH       *di_hash    ()              { return _hash; }
+ static  map<string,DATA_ITEM*> *di_hash()        { return _hash; }
 };
 
 inline STDdstream &operator<<(STDdstream &s, CDATA_ITEM &d)
          { return d.format(s); }
 inline STDdstream &operator>>(STDdstream &s, DATA_ITEM *&d)
          { d = d->Decode(s); return s; }
+STDdstream & operator >> (STDdstream &ds, map<string,DATA_ITEM*> &h);
+STDdstream & operator << (STDdstream &ds, const map<string,DATA_ITEM*> &h);
 
 /* ----------------------------------------------------------- * 
  *  TDI -  (wraps conventional objects in a DATA_ITEM format)
