@@ -112,7 +112,7 @@ IOManager::IOManager() :
    presave_obs();
    postsave_obs();
 
-   _state.add(STATE_IDLE);
+   _state.push_back(STATE_IDLE);
 
    err_mesg(ERR_LEV_SPAM, "IOManager::IOManager() - Instantiated."); 
 }
@@ -161,7 +161,7 @@ IOManager::notify_preload(
       //If we're not already doing some kind of IO, 
       //fire up the desired state...
       case STATE_IDLE:
-         _state.add((full_scene)?(STATE_SCENE_LOAD):(STATE_PARTIAL_LOAD));
+         _state.push_back(full_scene?STATE_SCENE_LOAD:STATE_PARTIAL_LOAD);
          err_mesg(ERR_LEV_INFO, "IOManager::notify_preload() - Loading '%s'... [Source: '%s']",
             full_scene?"entire scene":"scene update", s.name().c_str());
       break;
@@ -170,7 +170,7 @@ IOManager::notify_preload(
       //saving the scene update files...
       case STATE_SCENE_SAVE:
          assert(!full_scene);
-         _state.add(STATE_PARTIAL_LOAD);
+         _state.push_back(STATE_PARTIAL_LOAD);
          err_mesg(ERR_LEV_INFO,
             "IOManager::notify_preload() - Loading 'scene update' for subsequent save... [Source: '%s']",
                s.name().c_str());
@@ -395,8 +395,8 @@ IOManager::notify_postload(
             "IOManager::notify_postload() - ...failed 'scene update' load. [Source: '%s']", s.name().c_str());
       }
    }
-   _state.pop();
-   assert(_state.num() > 0);
+   _state.pop_back();
+   assert(_state.size() > 0);
 }
 
 /////////////////////////////////////
@@ -426,7 +426,7 @@ IOManager::notify_presave(
       //we only expect a full scene save...
       case STATE_IDLE:
          assert(full_scene);
-         _state.add(STATE_SCENE_SAVE);
+         _state.push_back(STATE_SCENE_SAVE);
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_presave() - Saving 'entire scene'... [Dest: '%s']",
                s.name().c_str());
@@ -436,7 +436,7 @@ IOManager::notify_presave(
       //resaving the scene update files...
       case STATE_SCENE_SAVE:
          assert(!full_scene);
-         _state.add(STATE_PARTIAL_SAVE);
+         _state.push_back(STATE_PARTIAL_SAVE);
          err_mesg(ERR_LEV_INFO, 
             "IOManager::notify_presave() - Saving 'scene update'... [Dest: '%s']",
                s.name().c_str());
@@ -665,8 +665,8 @@ IOManager::notify_postsave(
             "IOManager::notify_postsave() - ...failed 'scene update' save. [Dest: '%s']", s.name().c_str());
       }
    }
-   _state.pop();
-   assert(_state.num() > 0);
+   _state.pop_back();
+   assert(_state.size() > 0);
 }
 
 

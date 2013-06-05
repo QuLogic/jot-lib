@@ -47,7 +47,7 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
       return _instance;
    }
 
-   static void    add_state(state_t s) { instance()->_state.add(s); }
+   static void    add_state(state_t s) { instance()->_state.push_back(s); }
    static state_t state()           { return instance()->state_(); }
    static string  basename()        { return instance()->basename_(); }
    static string  cwd()             { return instance()->cwd_(); }
@@ -71,7 +71,7 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 
  protected:
    /******** MEMBER VARIABLES ********/
-   ARRAY<state_t>       _state;
+   vector<state_t>      _state;
 
    string               _basename;
    string               _cached_cwd_plus_basename;
@@ -88,7 +88,7 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 
    /******** MEMBER METHODS FOR STATIC ACCESSORS********/
 
-   state_t state_() const { assert(_state.num()>0); return _state.last(); }
+   state_t state_() const { assert(_state.size()>0); return _state.back(); }
    
    string  basename_() { return _basename; }
    
