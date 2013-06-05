@@ -1266,7 +1266,7 @@ Patch::create_dynamic_samples(const VisibilityTest& vis)
    _old_samples.clear();
 
    Bface_list sample_faces;
-   ARRAY<Wvec> sample_bc;
+   vector<Wvec> sample_bc;
    generate_samples(
       this,
       sample_faces,
@@ -1276,7 +1276,7 @@ Patch::create_dynamic_samples(const VisibilityTest& vis)
       _sps_min_dist,
       _sps_regularity
       );
-   assert(sample_faces.num() == sample_bc.num());
+   assert(sample_faces.num() == (int)sample_bc.size());
    if (0 && debug_samples) {
       cerr << "Patch::create_dynamic_samples: created "
            << sample_faces.num() << " samples, spacing: "

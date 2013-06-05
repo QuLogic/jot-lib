@@ -114,7 +114,7 @@ Collide::_update_scene()
    if (_land && BMESH::isa(_land->body())) {
       Bvert_list list;
       Bface_list fs;
-      ARRAY<Wvec> bcs;
+      vector<Wvec> bcs;
       double spacing=0;
       nodes += sps(BMESH::upcast(_land->body()),
                    _height, _regularity, _min_dist, fs, bcs, spacing);

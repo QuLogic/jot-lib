@@ -53,10 +53,10 @@ class TestSPSapp : public BaseJOTapp {
    //******** MEMBER DATA ********
 
    static TestSPSapp* _instance;
-   ARRAY<Bvert_list> _pts;
-   LIST<GEOMptr> _balls;
-   LIST<GEOMptr> _boxes;
-   ARRAY<OctreeNode*> _nodes;
+   vector<Bvert_list> _pts;
+   vector<GEOMptr> _balls;
+   vector<GEOMptr> _boxes;
+   vector<OctreeNode*> _nodes;
    bool _show_sample;
    bool _show_grid;
 };

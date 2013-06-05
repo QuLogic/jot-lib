@@ -21,6 +21,7 @@
 // comments to be added
 #include "sps.H"
 #include <queue>
+#include <list>
 
 static bool debug = Config::get_var_bool("DEBUG_SPS",false);
 
@@ -29,7 +30,7 @@ void
 generate_samples(
    BMESHptr mesh, 
    Bface_list& flist,   // output: faces that contain samples
-   ARRAY<Wvec>& blist,  // output: sample barycentric coordinates WRT faces
+   vector<Wvec>& blist,  // output: sample barycentric coordinates WRT faces
    double& spacing,
    int height,
    double min_dist,
@@ -44,7 +45,7 @@ void
 generate_samples(
    Patch* p,
    Bface_list& flist,   // output: faces that contain samples
-   ARRAY<Wvec>& blist,  // output: sample barycentric coordinates WRT faces
+   vector<Wvec>& blist,  // output: sample barycentric coordinates WRT faces
    double& spacing,
    int height,
    double min_dist,
@@ -64,7 +65,7 @@ sps_real(CBface_list& input_faces,
          double regularity,
          double min_dist,
          Bface_list& flist,
-         ARRAY<Wvec>& blist,
+         vector<Wvec>& blist,
          double& spacing
    ) 
 {
@@ -112,13 +113,14 @@ sps_real(CBface_list& input_faces,
 
 inline
 Wpt
-center (Wpt_list& pts, ARRAY<int>& N)
+center (Wpt_list& pts, list<int>& N)
 {
    Wpt ret = Wpt(0);
-   for (int i = 0; i < N.num(); i++) {
-      ret += pts[N[i]];
+   list<int>::iterator i;
+   for (i = N.begin(); i != N.end(); ++i) {
+      ret += pts[*i];
    }
-   return ret / N.num();
+   return ret / N.size();
 }
 
 class Priority{
@@ -131,9 +133,9 @@ class Priority{
 };
 
 inline Wpt_list
-get_pts(Bface_list& flist, ARRAY<Wvec>& blist)
+get_pts(Bface_list& flist, vector<Wvec>& blist)
 {
-   assert(flist.num() == blist.num());
+   assert(flist.num() == (int)blist.size());
    Wpt_list pts;
    for (int i = 0; i < flist.num(); i++) {
       Wpt pt;
@@ -144,41 +146,33 @@ get_pts(Bface_list& flist, ARRAY<Wvec>& blist)
 }
 
 void 
-remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<OctreeNode*>& t)
+remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<OctreeNode*>& t)
 {
-//    if (flist.num() != blist.num()) {
-//       return;
-//    }
-   assert(flist.num() == blist.num());
+   assert(flist.num() == (int)blist.size());
    Wpt_list pts = get_pts(flist, blist);
-   ARRAY< ARRAY<int> > N;
-   ARRAY<bool> to_remove;
-   for (int i = 0; i < pts.num(); i++) {
-      N += ARRAY<int>();
-      to_remove += false;
-   }
+   vector< list<int> > N;
+   vector<bool> to_remove;
+
+   N.resize(pts.num());
+   to_remove.resize(pts.num(), false);
 
    for (int i = 0; i < pts.num(); i++) {
-      for (int j = 0; j < t[i]->neibors().num(); j++) {
+      for (vector<OctreeNode*>::size_type j = 0; j < t[i]->neibors().size(); j++) {
          int index = t[i]->neibors()[j]->get_term_index();
          
-         if (index < pts.num())
-         {
+         if (index < pts.num()) {
             if (pts[i].dist(pts[index]) < min_dist) {
-               N[i] += index;
-               N[index] += i;
+               N[i].push_back(index);
+               N[index].push_back(i);
             }
-         }
-         else
-         {
+         } else {
             //cerr << "Sps Warning, index > pts.num()" << endl;
          }
-
       }
    }
 
    priority_queue< Priority, vector<Priority> > queue;
-   ARRAY<int> versions;
+   vector<int> versions;
    for (int i = 0; i < pts.num(); i++) {
       if (!to_remove[i] && !N[i].empty()) {
          Priority p;
@@ -187,7 +181,7 @@ remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<Octre
          p._version = 0;
          queue.push(p);
       }
-      versions += 0;
+      versions.push_back(0);
    }
 
    while (!queue.empty()) {
@@ -196,14 +190,16 @@ remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<Octre
       int r = p._index;
       if (p._version == versions[r]) {
          to_remove[r] = true;
-         for (int i = 0; i < N[r].num(); i++) {
-            N[N[r][i]] -= r;
-            versions[N[r][i]]++;
-            if (!N[N[r][i]].empty()) {
+         list<int>::iterator i;
+         for (i = N[r].begin(); i != N[r].end(); ++i) {
+            int ind = *i;
+            N[ind].remove(r);
+            versions[ind]++;
+            if (!N[ind].empty()) {
                Priority q;
-               q._priority = center(pts, N[N[r][i]]).dist(pts[N[r][i]]);
-               q._index = N[r][i];
-               q._version = versions[N[r][i]];
+               q._priority = center(pts, N[ind]).dist(pts[ind]);
+               q._index = ind;
+               q._version = versions[ind];
                queue.push(q);
             }
          }
@@ -212,14 +208,15 @@ remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<Octre
    versions.clear();
 
    Bface_list ftemp(flist);
-   ARRAY<Wvec> btemp(blist);
+   vector<Wvec> btemp(blist);
    flist.clear();
    blist.clear();
-   for (int i = 0; i < ftemp.num(); i++)
+   for (int i = 0; i < ftemp.num(); i++) {
       if (!to_remove[i]) {
          flist += ftemp[i];
-         blist += btemp[i];
+         blist.push_back(btemp[i]);
       }
+   }
 }
 
 inline
@@ -239,17 +236,18 @@ float dorand() {
 
 inline
 int
-pick (ARRAY<QuadtreeNode*>& l)
+pick (vector<QuadtreeNode*>& l)
 {
    int ret = -1;
    double total_w = 0.0;
-   for (int i = 0; i < l.num(); i++) {
+   vector<QuadtreeNode*>::size_type i;
+   for (i = 0; i < l.size(); i++) {
       total_w += l[i]->get_weight();
    }
    double r = dorand() * total_w;
    
    total_w = 0.0;
-   for (int i = 0; i < l.num(); i++) {
+   for (i = 0; i < l.size(); i++) {
       total_w += l[i]->get_weight();
       if (total_w >= r) {
          ret = i;
@@ -260,14 +258,16 @@ pick (ARRAY<QuadtreeNode*>& l)
 }
 
 void
-assign_weights(ARRAY<QuadtreeNode*>& fs, double regularity, CWpt& pt)
+assign_weights(vector<QuadtreeNode*>& fs, double regularity, CWpt& pt)
 {
    double weight, d;
    QuadtreeNode* leaf;
-   for (int i = 0; i < fs.num(); i++) {
+   vector<QuadtreeNode*>::size_type i;
+   for (i = 0; i < fs.size(); i++) {
       weight = 0.0;
-      for (int j = 0; j < fs[i]->terms().num(); j++) {
-         leaf = fs[i]->terms()[j];
+      vector<QuadtreeNode*>::iterator j;
+      for (j = fs[i]->terms().begin(); j != fs[i]->terms().end(); ++j) {
+         leaf = *j;
          d = pt.dist(leaf->centroid());
          leaf->set_weight(distr_func(regularity, d) * leaf->area());
          weight += leaf->get_weight();
@@ -278,19 +278,19 @@ assign_weights(ARRAY<QuadtreeNode*>& fs, double regularity, CWpt& pt)
 
 void 
 visit(OctreeNode* node,  
-      double regularity, Bface_list& flist, ARRAY<Wvec>& blist)
+      double regularity, Bface_list& flist, vector<Wvec>& blist)
 {
    if (node->get_leaf()) {
       if (node->get_disp()) {
          // subdivision
-         ARRAY<QuadtreeNode*> fs;
+         vector<QuadtreeNode*> fs;
          Bface_list temp;
          for (int i = 0; i < node->intersects().num(); i++) {
             Bface* f = node->intersects()[i];
             temp += f;
-            fs += new QuadtreeNode(f->v1()->loc(), f->v2()->loc(), f->v3()->loc());
-            fs.last()->build_quadtree(node, regularity);
-            fs.last()->set_terms();
+            fs.push_back(new QuadtreeNode(f->v1()->loc(), f->v2()->loc(), f->v3()->loc()));
+            fs.back()->build_quadtree(node, regularity);
+            fs.back()->set_terms();
          }
 
          // assign weights
@@ -298,9 +298,6 @@ visit(OctreeNode* node,
          
          // pick a triangle
          int t = pick(fs);
-
-         // moved below; want to ensure flist and blist stay in sync:
-//         flist += temp[t];
 
          //set node face
          Bface_list ftemp;
@@ -312,12 +309,12 @@ visit(OctreeNode* node,
          if (p != -1) {
             Wvec bc;
             temp[t]->project_barycentric(fs[t]->terms()[p]->urand_pick(), bc);
-            blist += bc;
-            flist += temp[t]; // moved from above
+            blist.push_back(bc);
+            flist += temp[t];
             node->set_point(bc);
          }
 
-         for (int i = 0; i < fs.num(); i++)
+         for (vector<QuadtreeNode*>::size_type i = 0; i < fs.size(); i++)
             delete fs[i];
          fs.clear();
       }
@@ -337,21 +334,19 @@ OctreeNode::set_neibors()
       for (int i = 0; i < 8; i++) {
          n = _parent->get_children()[i];
          if (n != this && (!n->get_leaf() || n->get_disp())) {
-            _neibors += n;
+            _neibors.push_back(n);
          }
       }
 
-      _parent->neibors().num();
-
-      for (int i = 0; i < _parent->neibors().num(); i++) {
-         n = _parent->neibors()[i];
+      for (vector<OctreeNode*>::iterator i = _parent->neibors().begin(); i != _parent->neibors().end(); ++i) {
+         n = *i;
          if (!n->get_leaf()) {
             for (int j = 0; j < 8; j++) {
                if (n->get_children()[j]->overlaps(test_box) &&
                    (!n->get_children()[j]->get_leaf() || 
                     n->get_children()[j]->get_disp())) {
                   //XXX - crashing here...
-                  _neibors += n->get_children()[j];
+                  _neibors.push_back(n->get_children()[j]);
                }
             }
          }
@@ -367,11 +362,11 @@ OctreeNode::set_neibors()
 }
 
 void 
-OctreeNode::set_terms(ARRAY<OctreeNode*>& terms, int& count)
+OctreeNode::set_terms(vector<OctreeNode*>& terms, int& count)
 {
    if (_leaf) {
       if (_display) {
-         terms += this;
+         terms.push_back(this);
          _term_index = count;
          count++;
       }
@@ -390,11 +385,11 @@ OctreeNode::set_terms()
 }
 
 void 
-QuadtreeNode::set_terms(ARRAY<QuadtreeNode*>& terms)
+QuadtreeNode::set_terms(vector<QuadtreeNode*>& terms)
 {
    if (_leaf) {
       if (_in_cell) {
-         terms += this;
+         terms.push_back(this);
       }
    } else {
       for (int i = 0; i < 4; i++)

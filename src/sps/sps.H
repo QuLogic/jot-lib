@@ -65,15 +65,15 @@ class OctreeNode : public BBOX {
    Wvec get_point()       { return _pt; }
    OctreeNode** get_children() { return _children; }
    OctreeNode* parent() { return _parent; }
-   ARRAY<OctreeNode*>& neibors() { return _neibors; }
-   ARRAY<OctreeNode*>& terms() { return _terms; };
+   vector<OctreeNode*>& neibors() { return _neibors; }
+   vector<OctreeNode*>& terms() { return _terms; };
    void set_neibors();
    void set_terms();
    int get_term_index() { return _term_index; }
    Bface_list& intersects() { return _intersects; }
 
  protected:
-   void set_terms(ARRAY<OctreeNode*>& terms, int& count);
+   void set_terms(vector<OctreeNode*>& terms, int& count);
 
    //******** MEMBER DATA ********
 
@@ -84,8 +84,8 @@ class OctreeNode : public BBOX {
    Bface_list _face;
    Wvec		  _pt;
    OctreeNode* _parent;
-   ARRAY<OctreeNode*> _neibors;
-   ARRAY<OctreeNode*> _terms;
+   vector<OctreeNode*> _neibors;
+   vector<OctreeNode*> _terms;
    OctreeNode* _children[8];
    Bface_list _intersects;
 };
@@ -175,14 +175,14 @@ class QuadtreeNode {
    Wpt farthest_pt(Wpt& p);
    Wpt nearest_pt(Wpt& p);
    void set_terms(); // find all leaves in cell for root node
-   ARRAY<QuadtreeNode*>& terms() { return _terms; } // get leaves in cell
+   vector<QuadtreeNode*>& terms() { return _terms; } // get leaves in cell
    double get_weight() { return _weight; };
    void set_weight(double weight) { _weight = weight; }
    Wpt urand_pick();
 
  protected:
    void subdivide(OctreeNode* o, double regularity);
-   void set_terms(ARRAY<QuadtreeNode*>& terms);
+   void set_terms(vector<QuadtreeNode*>& terms);
 
    //******** MEMBER DATA ********
 
@@ -191,7 +191,7 @@ class QuadtreeNode {
    double _weight;
    Wpt _v1, _v2, _v3;
    QuadtreeNode* _children[4];
-   ARRAY<QuadtreeNode*> _terms;
+   vector<QuadtreeNode*> _terms;
 };
 
 // Recommended method to call for sampling points on a surface
@@ -220,7 +220,7 @@ void
 generate_samples(
    BMESHptr mesh, 
    Bface_list& flist, // faces
-   ARRAY<Wvec>& blist, // barycentric coordinates
+   vector<Wvec>& blist, // barycentric coordinates
    double& spacing,
    int height = 6,
    double min_dist = 0.35,
@@ -232,7 +232,7 @@ void
 generate_samples(
    Patch* p,
    Bface_list& flist, // faces
-   ARRAY<Wvec>& blist, // barycentric coordinates
+   vector<Wvec>& blist, // barycentric coordinates
    double& spacing,
    int height = 6,
    double min_dist = 0.35,
@@ -249,7 +249,7 @@ sps_real(CBface_list& input_faces,
          double regularity,
          double min_dist,
          Bface_list& flist,
-         ARRAY<Wvec>& blist,
+         vector<Wvec>& blist,
          double& spacing
    );
 
@@ -260,7 +260,7 @@ sps(CBface_list& input_faces,
     double regularity,
     double min_dist,
     Bface_list& flist, // faces
-    ARRAY<Wvec>& blist, // barycentric coordinates
+    vector<Wvec>& blist, // barycentric coordinates
     double& spacing
    )
 {
@@ -283,7 +283,7 @@ sps(BMESHptr mesh,
     double regularity,
     double min_dist,
     Bface_list& flist, // faces
-    ARRAY<Wvec>& blist, // barycentric coordinates
+    vector<Wvec>& blist, // barycentric coordinates
     double& spacing
    )
 {
@@ -301,16 +301,16 @@ sps(BMESHptr mesh,
 
 void 
 visit(OctreeNode* node,  
-   double regularity, Bface_list& flist, ARRAY<Wvec>& blist);
+   double regularity, Bface_list& flist, vector<Wvec>& blist);
 
 void 
-remove_nodes(Bface_list& flist, ARRAY<Wvec>& blist, double min_dist, ARRAY<OctreeNode*>& t);
+remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<OctreeNode*>& t);
 
 void
-assign_weights(ARRAY<QuadtreeNode*>& fs, double regularity, Wpt& pt);
+assign_weights(vector<QuadtreeNode*>& fs, double regularity, Wpt& pt);
 
 int
-pick_triangle(ARRAY<QuadtreeNode*>& fs);
+pick_triangle(vector<QuadtreeNode*>& fs);
 
 #endif // SPS_H_IS_INCLUDED
 // end of file sps.H

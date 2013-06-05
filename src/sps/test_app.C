@@ -109,8 +109,8 @@ TestSPSapp* TestSPSapp::_instance = 0;
 void
 TestSPSapp::create_grid(Wtransf ff)
 {
-      _boxes += new GRIDwidget_anchor(ff);
-      GEOMptr _anchor = _boxes.last();
+      _boxes.push_back(new GRIDwidget_anchor(ff));
+      GEOMptr _anchor = _boxes.back();
       _anchor->set_pickable(0); // Don't allow picking of anchor
       NETWORK.set(_anchor, 0);// Don't network the anchor
       CONSTRAINT.set(_anchor, GEOM::SCREEN_WIDGET);
@@ -142,32 +142,33 @@ TestSPSapp::load_scene()
       if (geom && BMESH::isa(geom->body())) {
          Bvert_list list;
          Bface_list fs;
-         ARRAY<Wvec> bcs;
+         vector<Wvec> bcs;
          double spacing;
          //generate_samples(BMESH::upcast(geom->body()), 1.0, fs, bcs);
          //generate_samples(BMESH::upcast(geom->body()), fs, bcs, HEIGHT, MIN_DIST);
-         _nodes += sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing);
+         _nodes.push_back(sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing));
          for (int i = 0; i < fs.num(); i++) {
             Wpt pt;
             fs[i]->bc2pos(bcs[i], pt);
             list += new Bvert(pt);
          }
-         _pts += list;
+         _pts.push_back(list);
       }
    }
 
-   for (int i = 0; i < _nodes.num(); i++)
-      visit(_nodes[i]);
+   for (vector<OctreeNode*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
+      visit(*i);
 
-   for (int i = 0; i < _pts.num(); i++)
-      for (int j = 0; j < _pts[i].num(); j++) {        
-      _balls += new BALLwidget_anchor;
-      GEOMptr _anchor = _balls.last();
-      _anchor->set_pickable(0); // Don't allow picking of anchor
-      NETWORK.set(_anchor, 0);// Don't network the anchor
-      CONSTRAINT.set(_anchor, GEOM::SCREEN_WIDGET);
-      WORLD::create   (_anchor, false); 
-      WORLD::undisplay(_anchor, false);
+   for (vector<Bvert_list>::iterator i = _pts.begin(); i != _pts.end(); ++i) {
+      for (int j = 0; j < (*i).num(); j++) {
+         _balls.push_back(new BALLwidget_anchor);
+         GEOMptr _anchor = _balls.back();
+         _anchor->set_pickable(0); // Don't allow picking of anchor
+         NETWORK.set(_anchor, 0);// Don't network the anchor
+         CONSTRAINT.set(_anchor, GEOM::SCREEN_WIDGET);
+         WORLD::create   (_anchor, false);
+         WORLD::undisplay(_anchor, false);
+      }
    }
 }
 
@@ -191,19 +192,23 @@ TestSPSapp::toggle_sample_cb(const Event&, State *&)
    assert(_instance);
    _instance->_show_sample = !_instance->_show_sample;
    if (_instance->_show_sample) {
-      for (int i = 0, k = 0; i < _instance->_pts.num(); i++)
-         for (int j = 0; j < _instance->_pts[i].num(); j++, k++) {
-            WORLD::display(_instance->_balls[k], false);  
+      vector<Bvert_list>::size_type i;
+      vector<GEOMptr>::iterator k;
+      for (i = 0, k = _instance->_balls.begin(); i < _instance->_pts.size(); i++) {
+         for (int j = 0; j < _instance->_pts[i].num(); j++, ++k) {
+            WORLD::display(*k, false);
             Wpt p = _instance->_pts[i][j]->loc();
             Wvec    delt(p-Wpt(XYpt(p)+XYvec(VEXEL(3,3)), p));
             Wtransf ff = Wtransf(p) * Wtransf::scaling(1.5*delt.length()); 
-            _instance->_balls[k]->set_xform(ff); 
+            (*k)->set_xform(ff);
          }
+      }
       err_msg("showing sample");
    }
    else {
-      for (int i = 0; i < _instance->_balls.num(); i++)
-         WORLD::undisplay(_instance->_balls[i], false);
+      vector<GEOMptr>::iterator i;
+      for (i = _instance->_balls.begin(); i != _instance->_balls.end(); ++i)
+         WORLD::undisplay(*i, false);
       err_msg("samples not shown");
    }
 
@@ -213,18 +218,19 @@ TestSPSapp::toggle_sample_cb(const Event&, State *&)
 int
 TestSPSapp::toggle_grid_cb(const Event&, State *&)
 {
+   vector<GEOMptr>::iterator i;
    // Switch between showing and hiding grid
 
    assert(_instance);
    _instance->_show_grid = !_instance->_show_grid;
    if (_instance->_show_grid) {
-      for (int i = 0; i < _instance->_boxes.num(); i++) 
-         WORLD::display(_instance->_boxes[i], false);  
+      for (i = _instance->_boxes.begin(); i != _instance->_boxes.end(); ++i)
+         WORLD::display(*i, false);
       err_msg("showing grid");
    }
    else {
-      for (int i = 0; i < _instance->_boxes.num(); i++)
-         WORLD::undisplay(_instance->_boxes[i], false);
+      for (i = _instance->_boxes.begin(); i != _instance->_boxes.end(); ++i)
+         WORLD::undisplay(*i, false);
       err_msg("grid not shown");
    }
 
