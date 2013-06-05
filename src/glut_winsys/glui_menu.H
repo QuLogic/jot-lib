@@ -21,6 +21,8 @@
 #include "widgets/menu.H"
 #include "std/support.H"
 
+#include <vector>
+
 class GLUI;
 class GLUIMoveMenu : public MoveMenu {
   public:
@@ -49,7 +51,7 @@ class GLUIMoveMenu : public MoveMenu {
    bool        _menu_created;
    int         _main_window_id;    // id of parent window
    int         _id;                // id of menu window
-   ARRAY<int>  _item_ids;    // XXX -- Hack:  keep track of this menu's mapped
+   vector<int> _item_ids;    // XXX -- Hack:  keep track of this menu's mapped
                              // item id's (used for unmapping items when the
                              // menu is recreated).       
 };

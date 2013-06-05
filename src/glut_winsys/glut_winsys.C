@@ -47,7 +47,7 @@ static bool debug = Config::get_var_bool("DEBUG_GLUT_WINSSYS", false);
 // Static Variables Initialization
 //////////////////////////////////////////////////////
 
-ARRAY<GLUT_WINSYS*>  GLUT_WINSYS::_windows(1);
+vector<GLUT_WINSYS*>  GLUT_WINSYS::_windows(1);
 
 //////////////////////////////////////////////////////
 // WINSYS Factory
@@ -142,8 +142,7 @@ GLUT_WINSYS::setup(CVIEWptr &v)
            << endl;
    }
 
-   while (_windows.num() <= _id)
-      _windows += (GLUT_WINSYS*) 0; // XXX - Must cast or += ARRAY is used
+   _windows.resize(_id + 1, 0);
    _windows[_id] = this;
 
    // Set callbacks for 'current' window

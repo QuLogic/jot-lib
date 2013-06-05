@@ -213,7 +213,7 @@ wacom_motion_callback(
 
 #endif
 
-ARRAY<GLUT_MOUSE *> GLUT_MOUSE::_mice(1);
+vector<GLUT_MOUSE *> GLUT_MOUSE::_mice(1);
 
 extern "C"
 void 
@@ -333,11 +333,7 @@ mouse_button_callback(
 GLUT_MOUSE::GLUT_MOUSE(GLUT_WINSYS *winsys) :
    _winsys(winsys)
 {
-   while (_mice.num() <= winsys->id()) {
-      // XXX - Must cast or += ARRAY is used,
-      // which makes this an infinite loop
-      _mice += (GLUT_MOUSE *) 0;
-   }
+   _mice.resize(winsys->id() + 1, 0);
    _mice[winsys->id()] = this;
 
 #ifdef USE_GLUT_WACOM

@@ -54,7 +54,7 @@
 //////////////////////////////////////////////////////
 // Static Variables Initialization
 //////////////////////////////////////////////////////
-ARRAY<GLUIPopUp*>    GLUIPopUp::_ui;
+vector<GLUIPopUp*>    GLUIPopUp::_ui;
 
 //////////////////////////////////////////////////////
 // Constructor
@@ -64,8 +64,8 @@ GLUIPopUp::GLUIPopUp(GLUT_WINSYS *w) :
    _glui(NULL),
    _blocking(true)
 {
-   _ui += this;
-   _id = (_ui.num()-1);
+   _ui.push_back(this);
+   _id = ((int)_ui.size()-1);
 }
 
 //////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ GLUIPopUp::hide_glui()
 void
 GLUIPopUp::slider_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->slider_cb(id&ID_MASK);
 }
 
@@ -199,7 +199,7 @@ GLUIPopUp::slider_cbs(int id)
 void
 GLUIPopUp::button_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->button_cb(id&ID_MASK);
 }
 
@@ -209,7 +209,7 @@ GLUIPopUp::button_cbs(int id)
 void
 GLUIPopUp::activetext_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->activetext_cb(id&ID_MASK);
 }
 
@@ -219,7 +219,7 @@ GLUIPopUp::activetext_cbs(int id)
 void
 GLUIPopUp::listbox_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->listbox_cb(id&ID_MASK);
 }
 
@@ -229,7 +229,7 @@ GLUIPopUp::listbox_cbs(int id)
 void
 GLUIPopUp::edittext_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->edittext_cb(id&ID_MASK);
 }
 
@@ -239,7 +239,7 @@ GLUIPopUp::edittext_cbs(int id)
 void
 GLUIPopUp::checkbox_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->checkbox_cb(id&ID_MASK);
 }
 
@@ -249,7 +249,7 @@ GLUIPopUp::checkbox_cbs(int id)
 void
 GLUIPopUp::bitmapbox_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->bitmapbox_cb(id&ID_MASK);
 }
 
@@ -259,7 +259,7 @@ GLUIPopUp::bitmapbox_cbs(int id)
 void
 GLUIPopUp::radiogroup_cbs(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    _ui[id >> ID_SHIFT]->radiogroup_cb(id&ID_MASK);
 }
 
@@ -400,18 +400,16 @@ GLUIAlertBox::build_glui()
 {
    GLUIPopUp::build_glui();
 
-   int i;
    vector<string>::size_type j;
 
    int id = _id << ID_SHIFT;
 
    _glui->rename(_title);
 
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)          _panel.add(0);
-   assert(_bitmapbox.num()==0);    for (i=0; i<BITMAPBOX_NUM; i++)      _bitmapbox.add(0);
-   assert(_button.num()==0);       for (j=0; j<_buttons.size(); j++)    _button.add(0);
-   assert(_statictext.num()==0);
-      _statictext.add(0);          for (j=1; j<_text.size(); j++)       _statictext.add(0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, 0);
+   assert(_button.empty());       _button.resize(_buttons.size(), 0);
+   assert(_statictext.empty());   _statictext.resize(_text.size() ? _text.size() : 1, 0);
    
    if ((_icon != NO_ICON) || !_text.empty())
    {
@@ -492,7 +490,7 @@ GLUIAlertBox::build_glui()
    //Set default button
    if (_default >= 0)
    {
-      assert(_default < _button.num());
+      assert(_default < (int)_button.size());
       _glui->activate_control(_button[_default],GLUI_ACTIVATE_TAB);
    }
 }
@@ -712,14 +710,14 @@ GLUIFileSelect::build_glui()
 
    _glui->rename(_title);
 
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)       _panel.add(0);
-   assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)         _button.add(0);
-   assert(_edittext.num()==0);     for (i=0; i<EDITTEXT_NUM; i++)    _edittext.add(0);
-   assert(_checkbox.num()==0);     for (i=0; i<CHECKBOX_NUM; i++)    _checkbox.add(0);
-   assert(_listbox.num()==0);      for (i=0; i<LIST_NUM; i++)        _listbox.add(0);
-   assert(_bitmapbox.num()==0);    for (i=0; i<BITMAPBOX_NUM  +   GLUI_FILE_SELECT_NUM_FILES; i++)   _bitmapbox.add(0);
-   assert(_statictext.num()==0);   for (i=0; i<STATICTEXT_NUM + 2*GLUI_FILE_SELECT_NUM_FILES; i++)  _statictext.add(0);
-   assert(_activetext.num()==0);   for (i=0; i<ACTIVETEXT_NUM +   GLUI_FILE_SELECT_NUM_FILES; i++)  _activetext.add(0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECKBOX_NUM, 0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM   +   GLUI_FILE_SELECT_NUM_FILES, 0);
+   assert(_statictext.empty());   _statictext.resize(STATICTEXT_NUM + 2*GLUI_FILE_SELECT_NUM_FILES, 0);
+   assert(_activetext.empty());   _activetext.resize(ACTIVETEXT_NUM +   GLUI_FILE_SELECT_NUM_FILES, 0);
 
    //Controls
 
@@ -1592,7 +1590,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
          if (  (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
                (e->_type == DIR_ENTRY::DIR_ENTRY_FILE) )
          {
-            dir->_contents += e;
+            dir->_contents.push_back(e);
          }
          else if (e->_type == DIR_ENTRY::DIR_ENTRY_UNKNOWN)
          {
@@ -1619,14 +1617,14 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
             string drv((char)('A'+i));
             e = generate_dir_entry(drv + ":\\", drv + ": ");
             assert((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
-            dir->_contents += e;
+            dir->_contents.push_back(e);
          }
       }
 #else
       // XXX - Should this be more forgiving under failure? Nah
       e = generate_dir_entry("/", "/ ");
       assert( (e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
-      dir->_contents += e;
+      dir->_contents.push_back(e);
 #endif
 
       //Verify this path... 
@@ -1637,7 +1635,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
          if ((jotroot_cwd = getcwd_()) != "") {
             e = generate_dir_entry(jotroot_cwd, "");
             if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
-               dir->_contents += e;
+               dir->_contents.push_back(e);
             }
          }
       }
@@ -1648,7 +1646,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
       for (i=0; i<_current_recent_paths.size(); i++) {
          e = generate_dir_entry(_current_recent_paths[i], "");
          if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
-            dir->_contents += e;
+            dir->_contents.push_back(e);
          }
       }
    }
@@ -1713,7 +1711,7 @@ GLUIFileSelect::sort_dir_contents(DIR_ENTRYptr &dir, sort_t sort)
 
    if (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
    {
-      dir->_contents.sort(func);
+      std::sort(dir->_contents.begin(), dir->_contents.end(), func);
    }
 }
 
@@ -1726,7 +1724,7 @@ GLUIFileSelect::get_selected_entry()
    if (_current_selection == -1) return NULL;
 
    assert(_current_path != NULL);
-   assert( (_current_scroll + _current_selection) < _current_path->_contents.num());
+   assert( (_current_scroll + _current_selection) < (int)_current_path->_contents.size());
 
    return _current_path->_contents[_current_scroll + _current_selection];
 }
@@ -1745,9 +1743,11 @@ GLUIFileSelect::set_selected_entry(DIR_ENTRYptr e)
    {
       assert(_current_path != NULL);
 
-      int ind = _current_path->_contents.get_index(e);
+      DIR_ENTRYlist::iterator it = std::find(_current_path->_contents.begin(), _current_path->_contents.end(), e);
 
-      assert(ind != BAD_IND);
+      assert(it != _current_path->_contents.end());
+
+      int ind = it - _current_path->_contents.begin();
 
       ind -= _current_scroll;
 
@@ -1779,7 +1779,7 @@ GLUIFileSelect::do_scroll_set(int scroll)
 {
    assert(_current_path != NULL);
    assert((_current_scroll >= 0) &&
-          (_current_scroll <= max(0,_current_path->_contents.num() - GLUI_FILE_SELECT_NUM_FILES + 1)));
+          (_current_scroll <= max(0,(int)_current_path->_contents.size() - GLUI_FILE_SELECT_NUM_FILES + 1)));
 
    DIR_ENTRYptr selected_entry = get_selected_entry();
 
@@ -1787,7 +1787,7 @@ GLUIFileSelect::do_scroll_set(int scroll)
 
    _current_scroll = max(_current_scroll,0);
 
-   _current_scroll = min(_current_scroll,max(0,_current_path->_contents.num() - GLUI_FILE_SELECT_NUM_FILES + 1));
+   _current_scroll = min(_current_scroll,max(0,(int)_current_path->_contents.size() - GLUI_FILE_SELECT_NUM_FILES + 1));
 
    set_selected_entry(selected_entry);
    
@@ -2241,23 +2241,23 @@ GLUIFileSelect::do_path_listbox()
       //Compile recursion of current path
       while (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
       {
-         dirs.add(dir);
+         dirs.push_back(dir);
          dir = dir->_parent;
       }
 
       DIR_ENTRYptr chosen_dir;
 
-      if (chosen_ind < dirs.num())
+      if (chosen_ind < (int)dirs.size())
       {
          chosen_dir = dirs[chosen_ind];
       }
-      else if (chosen_ind == dirs.num())
+      else if (chosen_ind == (int)dirs.size())
       {
          chosen_dir = dir;
       }
       else
       {
-         chosen_dir = dir->_contents[chosen_ind - 1 - dirs.num()];
+         chosen_dir = dir->_contents[chosen_ind - 1 - dirs.size()];
       }
       do_directory_change(chosen_dir->_full_path);
    }
@@ -2481,7 +2481,7 @@ GLUIFileSelect::do_sort_toggle(int button)
    
    set_selected_entry(selected_entry);
 
-   assert(_current_scroll < _current_path->_contents.num());
+   assert(_current_scroll < (int)_current_path->_contents.size());
 
    update();
 }
@@ -2716,7 +2716,7 @@ GLUIFileSelect::update_pathlist()
       //Compile recursion of current path
       while (dir->_type != DIR_ENTRY::DIR_ENTRY_ROOT)
       {
-         dirs.add(dir);
+         dirs.push_back(dir);
          dir = dir->_parent;
       }
 
@@ -2734,9 +2734,9 @@ GLUIFileSelect::update_pathlist()
       _listbox[LIST_PATH]->add_item(-1,         "--File Systems----------------");
       foo = dir->_name; 
       bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
-      _listbox[LIST_PATH]->add_item(dirs.num(), bar.c_str());
+      _listbox[LIST_PATH]->add_item(dirs.size(), bar.c_str());
 
-      assert(dir->_contents.num() > 0); //At least holds JOT_ROOT and drives (WIN32) or root directoy (Unix)
+      assert(dir->_contents.size() > 0); //At least holds JOT_ROOT and drives (WIN32) or root directoy (Unix)
 
       i = 0;
 
@@ -2744,11 +2744,11 @@ GLUIFileSelect::update_pathlist()
       if (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DRIVE)
       {
          _listbox[LIST_PATH]->add_item(-1,         "--Drives-----------------------");
-         while ( (i < dir->_contents.num()) && (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DRIVE))
+         while ( (i < (int)dir->_contents.size()) && (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DRIVE))
          {
             foo = dir->_contents[i]->_name; 
             bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
-            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, bar.c_str());
+            _listbox[LIST_PATH]->add_item(dirs.size() + 1 + i, bar.c_str());
             i++;
          }
       }
@@ -2757,24 +2757,23 @@ GLUIFileSelect::update_pathlist()
       if (dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)
       {
          _listbox[LIST_PATH]->add_item(-1,         "--Recent-----------------------");
-         while (i < dir->_contents.num())
-         {
+         while (i < (int)dir->_contents.size()) {
             assert(dir->_contents[i]->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY);
             foo = dir->_contents[i]->_name; 
             bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
-            _listbox[LIST_PATH]->add_item(dirs.num() + 1 + i, bar.c_str());
+            _listbox[LIST_PATH]->add_item(dirs.size() + 1 + i, bar.c_str());
             i++;
          }
       }
 
-      assert(i == dir->_contents.num());
+      assert(i == (int)dir->_contents.size());
 
       //Current
-      if (dirs.num() > 0)
+      if (dirs.size() > 0)
       {
          _listbox[LIST_PATH]->add_item(-1,         "--Current---------------------");
 
-         for (i=dirs.num()-1; i>=0 ; i--)
+         for (i=dirs.size()-1; i>=0 ; i--)
          {
             foo = dirs[i]->_name; 
             bar=foo;j=foo.length();while(!jot_check_glui_fit(_listbox[LIST_PATH], bar.c_str())) bar=shorten_string(--j,foo);
@@ -2985,15 +2984,13 @@ GLUIFileSelect::update_listing()
       for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
       {
          if ( (_current_path != NULL) && 
-              (_current_scroll+i < _current_path->_contents.num()) )
+              (_current_scroll+i < (int)_current_path->_contents.size()) )
          {
             int         ret;
             char        chr_buf[CHR_BUF_SIZE];
             string      foo, bar;
             IconBitmap  *bm;
             DIR_ENTRYptr e = _current_path->_contents[_current_scroll+i]; assert(e != NULL);
-
-
 
             switch(e->_type)
             {
@@ -3049,7 +3046,7 @@ GLUIFileSelect::update_listing()
          {
             IconBitmap *bm = &_bitmaps[BITMAP_BLANK];
             
-            if ( (_current_path->_contents.num() == 0) && (i==0) )
+            if ( (_current_path->_contents.size() == 0) && (i==0) )
             {
                _bitmapbox[BITMAPBOX_NUM + i]->enable();
                _bitmapbox[BITMAPBOX_NUM + i]->set_img_size(bm->_width, bm->_height);
@@ -3203,9 +3200,9 @@ GLUIFileSelect::compute_scroll_geometry(int h, int &pix_below, int &pix_showing,
 {
    assert(_current_path != NULL);
    assert((_current_scroll >= 0) &&
-          (_current_scroll <= max(0,_current_path->_contents.num() - GLUI_FILE_SELECT_NUM_FILES + 1)));
+          (_current_scroll <= max(0,(int)_current_path->_contents.size() - GLUI_FILE_SELECT_NUM_FILES + 1)));
 
-   double n = _current_path->_contents.num();
+   double n = _current_path->_contents.size();
 
    double n_above    = _current_scroll;
    double n_showing  = min(n - n_above , GLUI_FILE_SELECT_NUM_FILES - 1.0);

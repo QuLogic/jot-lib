@@ -26,7 +26,7 @@ GLUIMoveMenu::GLUIMoveMenu(const string &name, int main_window_id) :
    _menu_created(false),
    _main_window_id(main_window_id),
    _id(-1),
-   _item_ids(8)
+   _item_ids()
 {
 }
 
@@ -92,7 +92,7 @@ GLUIMoveMenu::create_menu()
    }
 
    // If we're recreating the menu, must unmap previously mapped item ids
-   for (int k=0; k < _item_ids.num(); k++) {
+   for (vector<int>::size_type k=0; k < _item_ids.size(); k++) {
       unmap_menu_item(_item_ids[k]);
    }
    
@@ -129,7 +129,7 @@ GLUIMoveMenu::create_menu()
          // set the menu item in the global list used for callbacks
          int item_id = map_menu_item(items[i]);
          // record this menu's item id's
-         _item_ids += item_id;
+         _item_ids.push_back(item_id);
 
          // create the button
          new GLUI_Button(_glui, label, item_id, GLUIMoveMenu::btn_callback);

@@ -21,6 +21,8 @@
 #include "widgets/file_select.H"
 #include "widgets/alert_box.H" 
 
+#include <set>
+#include <vector>
 
 class GLUI;
 class GLUI_Panel;
@@ -105,7 +107,7 @@ class GLUIPopUp {
 
  protected:
    /******** STATIC MEMBER VARIABLES ********/
-   static ARRAY<GLUIPopUp*>      _ui;
+   static vector<GLUIPopUp*>     _ui;
 
  public :    
    /******** STATIC MEMBER METHODS ********/
@@ -128,18 +130,18 @@ class GLUIPopUp {
 
    int                           _id;
 
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_Listbox*>          _listbox;
-   ARRAY<GLUI_EditText*>         _edittext;
-   ARRAY<GLUI_Checkbox*>         _checkbox;
-   ARRAY<GLUI_BitmapBox*>        _bitmapbox;
-   ARRAY<GLUI_StaticText*>       _statictext;
-   ARRAY<GLUI_ActiveText*>       _activetext;
-   ARRAY<GLUI_RadioGroup*>       _radiogroup;
-   ARRAY<GLUI_RadioButton*>      _radiobutton;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_Listbox*>         _listbox;
+   vector<GLUI_EditText*>        _edittext;
+   vector<GLUI_Checkbox*>        _checkbox;
+   vector<GLUI_BitmapBox*>       _bitmapbox;
+   vector<GLUI_StaticText*>      _statictext;
+   vector<GLUI_ActiveText*>      _activetext;
+   vector<GLUI_RadioGroup*>      _radiogroup;
+   vector<GLUI_RadioButton*>     _radiobutton;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
  public  :
@@ -232,10 +234,10 @@ MAKE_PTR_BASEC(DIR_ENTRY);
 
 #define CDIR_ENTRYlist const DIR_ENTRYlist
 
-class DIR_ENTRYlist : public LIST<DIR_ENTRYptr> 
+class DIR_ENTRYlist : public vector<DIR_ENTRYptr>
 { 
  public :
-   DIR_ENTRYlist(int num=8) : LIST<DIR_ENTRYptr>(num)  { }
+   DIR_ENTRYlist(int num=8) : vector<DIR_ENTRYptr>()  { reserve(num); }
 };
 
 #define CDIR_ENTRYptr const DIR_ENTRYptr

@@ -21,11 +21,13 @@
 #include "std/support.H"
 #include "dev/dev.H"
 
+#include <vector>
+
 class GLUT_WINSYS;
 class GLUT_MOUSE : public Mouse {
    protected:
-      GLUT_WINSYS               *_winsys;
-      static ARRAY<GLUT_MOUSE *> _mice;
+      GLUT_WINSYS                *_winsys;
+      static vector<GLUT_MOUSE *> _mice;
 
    public:
       GLUT_MOUSE(GLUT_WINSYS *);

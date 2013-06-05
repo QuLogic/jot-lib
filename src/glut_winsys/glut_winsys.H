@@ -22,6 +22,8 @@
 #include "std/support.H"
 #include "geom/winsys.H"
 
+#include <vector>
+
 #include <GL/glut.h>
 
 class GLUT_MOUSE;
@@ -35,7 +37,7 @@ class GLUIAlertBox;
 class GLUT_WINSYS : public WINSYS {
    /******** STATIC MEMBER VARIABLES ********/
  protected:
-   static ARRAY<GLUT_WINSYS*>   _windows;
+   static vector<GLUT_WINSYS*>   _windows;
 
    /******** STATIC MEMBER METHODS ********/
  public:

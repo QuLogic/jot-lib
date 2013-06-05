@@ -21,11 +21,14 @@
 
 #include "std/support.H"
 #include "dev/dev.H"
+
+#include <vector>
+
 class GLUT_WINSYS;
 class GLUT_KBD {
  protected:
    GLUT_WINSYS *_winsys;
-   static ARRAY<GLUT_KBD *> _kbds;
+   static vector<GLUT_KBD *> _kbds;
    bool _shift;
    bool _ctrl;
  public:

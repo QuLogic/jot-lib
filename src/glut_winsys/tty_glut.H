@@ -23,6 +23,9 @@
 #include "std/config.H"
 #include "dev/tty.H"
 
+#include <set>
+#include <vector>
+
 #include <GL/glut.h>
 
 class GLUT_WINSYS;
@@ -77,7 +80,7 @@ class GLUT_MANAGER : public FD_MANAGER {
 
  protected:
    /******** MEMBER VARIABLES ********/
-   ARRAY<tty_to_id>  _ids;
+   vector<tty_to_id> _ids;
    stop_watch        _frame_timer;
    GLUT_WINSYS*      _blocker;
 
@@ -99,11 +102,12 @@ class GLUT_MANAGER : public FD_MANAGER {
       static bool debug = Config::get_var_bool("DEBUG_JOT_GLUT_IDLE_CB", false);
       stop_watch clock;
       if (!_blocker) {
+         vector<tty_to_id>::iterator i;
 #ifdef WIN32
-         for (int i=0; i<_ids.num(); i++) {
-            if (_ids[i].ready()) {
+         for (i=_ids.begin(); i!=_ids.end(); ++i) {
+            if ((*i).ready()) {
                readyFDs++;
-               ((FD_EVENT*)_ids[i]._fd)->sample();
+               ((FD_EVENT*)(*i)._fd)->sample();
             }
          }
 #else
@@ -121,17 +125,19 @@ class GLUT_MANAGER : public FD_MANAGER {
          fd_set exceptFDs; FD_ZERO(&exceptFDs);
 
          int max = -1, fd, num = 0, readyFDs;
-         for (int i = _ids.num() - 1; i >= 0; i--) {
-            fd = _ids[i]._fd->fd();
+         i = _ids.begin();
+         while (i != _ids.end()) {
+            fd = (*i)._fd->fd();
             if (fd >= 0) {
                FD_SET(fd, &selectFDs);
                FD_SET(fd, &exceptFDs);
                if (fd > max)
                   max = fd;
+               ++i;
             } else {
                cerr << "GLUT_MANAGER::do_idle: removing bad FD_EVENT"
                     << endl;
-               rem(_ids[i]._fd);
+               i = _ids.erase(i);
             }
          }
          // from the man page for select:
@@ -144,7 +150,7 @@ class GLUT_MANAGER : public FD_MANAGER {
          struct timeval t = tval;
          readyFDs = select(max + 1, &selectFDs, 0, &exceptFDs, &t);
 
-         for (int i = 0; i < _ids.num() && (num < readyFDs); i++) {
+         for (vector<tty_to_id>::size_type i = 0; i < _ids.size() && (num < readyFDs); i++) {
             if (FD_ISSET(_ids[i]._fd->fd(), &selectFDs)) {
                _ids[i]._fd->sample();  num++;
             }   
@@ -231,8 +237,8 @@ class GLUT_MANAGER : public FD_MANAGER {
    }
 
    //******** FD_MANAGER METHODS ********
-   virtual void add(FD_EVENT *fd)   { _ids += tty_to_id(fd); }
-   virtual void rem(FD_EVENT *fd)   { _ids -= tty_to_id(fd); }
+   virtual void add(FD_EVENT *fd)   { _ids.push_back(tty_to_id(fd)); }
+   virtual void rem(FD_EVENT *fd)   { _ids.erase(std::find(_ids.begin(), _ids.end(), tty_to_id(fd))); }
    virtual void loop(int infinite)  { assert(infinite); glutMainLoop(); }
 };
 

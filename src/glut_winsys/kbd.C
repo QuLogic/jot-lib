@@ -28,7 +28,7 @@
 using mlib::PIXEL;
 using mlib::CXYpt;
 
-ARRAY<GLUT_KBD *> GLUT_KBD::_kbds(1);
+vector<GLUT_KBD *> GLUT_KBD::_kbds(1);
 
 extern "C" void
 normal_keydown_callback(unsigned char k, int x, int y)
@@ -100,10 +100,7 @@ GLUT_KBD::update_mods(CXYpt &/*cur*/) {
 GLUT_KBD::GLUT_KBD(GLUT_WINSYS *winsys)
    : _winsys(winsys), _shift(false), _ctrl(false)
 {
-   while (_kbds.num() <= winsys->id()) {
-      // XXX - Must cast or += ARRAY is used, which makes this an infinite loop
-      _kbds += (GLUT_KBD *) 0;
-   }
+   _kbds.resize(winsys->id() + 1, 0);
    _kbds[winsys->id()] = this;
    glutKeyboardFunc(normal_keydown_callback);
    glutKeyboardUpFunc(normal_keyup_callback);
