@@ -30,7 +30,6 @@
 #include <vector>
 #include <map>
 
-#include "std/hash.H"
 #include "disp/view.H"
 
 class CurvatureUI;

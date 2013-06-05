@@ -18,7 +18,6 @@
 #ifndef JOT_DATA_ITEM_H_IS_INCLUDED
 #define JOT_DATA_ITEM_H_IS_INCLUDED
 
-#include "std/hash.H"
 #include "mlib/points.H"
 #include "net/stream.H"
 #include "net/net_types.H"

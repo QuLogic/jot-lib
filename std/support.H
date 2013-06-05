@@ -19,11 +19,11 @@
 #define SUPPORT_H
 
 #include "platform.H"
+#include <stdint.h>
 #include <string>
 #include <vector>
 #include "error.H"
 #include "ref.H"
-#include "hash.H"
 
 #define REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr; class FOO
 #define FD_REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr
