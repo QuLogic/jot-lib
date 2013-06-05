@@ -43,6 +43,8 @@
 #include "stream.H"
 #include "dev/tty.H"
 
+#include <set>
+
 enum NETenum { 
      NETadd_connection, 
      NETquit, 
@@ -174,7 +176,7 @@ class Network: public FD_EVENT {
    virtual void accept_stream(void);
    NetStream    *wait_for_connect();
 
-   ARRAY<Network_obs *>  _obs_list;
+   set<Network_obs *>  _obs_list;
    int           _at_barrier;
 
  public:
@@ -199,11 +201,12 @@ class Network: public FD_EVENT {
 
    #undef barrier
    void       barrier    ();
-   void       add_net_obs(Network_obs *o)  { _obs_list += o; }
-   void       rem_net_obs(Network_obs *o)  { _obs_list -= o; }
+   void       add_net_obs(Network_obs *o)  { _obs_list.insert(o); }
+   void       rem_net_obs(Network_obs *o)  { _obs_list.erase(o); }
    void       notify_net (Network_obs::event e,
-                          NetStream *s) { for(int i=0;i<_obs_list.num();i++)
-                                             _obs_list[i]->notify_net(e,s); }
+                          NetStream *s) { set<Network_obs *>::iterator i;
+                                          for (i=_obs_list.begin(); i!=_obs_list.end(); ++i)
+                                             (*i)->notify_net(e,s); }
 };
 
 
