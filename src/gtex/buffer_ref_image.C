@@ -23,7 +23,7 @@
  * BufferRefImage:
  **********************************************************************/
 
-HASH    BufferRefImage::_hash(16);
+map<VIEWimpl*,BufferRefImage*> BufferRefImage::_hash;
 
 BufferRefImage* 
 BufferRefImage::lookup(CVIEWptr& v) 
@@ -38,10 +38,15 @@ BufferRefImage::lookup(CVIEWptr& v)
    }
 
    // hash on the view implementation rather than the view itself
-   long key = (long)v->impl();
-   BufferRefImage* ret = (BufferRefImage*) _hash.find(key);
-   if (!ret && (ret = new BufferRefImage(v)))
-      _hash.add(key, (void *)ret);
+   VIEWimpl *key = v->impl();
+   map<VIEWimpl*,BufferRefImage*>::iterator it;
+   it = _hash.find(key);
+   BufferRefImage *ret = 0;
+   if (it != _hash.end())
+      ret = it->second;
+   else if ((ret = new BufferRefImage(v)))
+      _hash[key] = ret;
+
    return ret;
 }
 

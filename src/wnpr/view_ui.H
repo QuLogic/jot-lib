@@ -24,6 +24,8 @@
 
 #include "disp/view.H"
 
+#include <map>
+
 class GLUI;
 class GLUI_Listbox;
 class GLUI_EditText;
@@ -169,7 +171,7 @@ class ViewUI {
 
  protected:
    /******** STATIC MEMBERS VARS ********/
-   static HASH             _hash; 
+   static map<VIEWimpl*,ViewUI*> _hash;
    static ARRAY<ViewUI*>   _ui;
  
  public:

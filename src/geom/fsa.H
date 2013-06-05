@@ -33,6 +33,8 @@
 #include "disp/view.H"
 #include "dev/dev.H"
 
+#include <map>
+
 template <class EVENT>
 class State_t;
 
@@ -690,18 +692,29 @@ class VIEWint : public DEVhandler {
 
 class VIEWint_list {
    protected:
-     static HASH *_dhash; // hash map from VIEW to VIEWint
+     static map<CVIEWptr,VIEWint*> *_dhash;
 
-     static HASH    *dhash()  { return _dhash ? _dhash : (_dhash=new HASH(16));}
+     static map<CVIEWptr,VIEWint*> *dhash()  { return _dhash ? _dhash : (_dhash=new map<CVIEWptr,VIEWint*>);}
 
-     static VIEWint *find(CVIEWptr &v)             { return (VIEWint *)
-                                                     dhash()->find((long) &*v);}
-     static void     add (CVIEWptr &v, VIEWint *d) { dhash()->add((long)&*v,d);}
-     static VIEWint *make(CVIEWptr &v)             { if(find(v)) return find(v);
-                                                     VIEWint *x=new VIEWint(v);
-                                                     add(v, x); return x; }
-     static void     del (CVIEWptr &v)             { if (find(v))
-                                                     dhash()->del((long) &*v); }
+     static VIEWint *find(CVIEWptr &v)             { map<CVIEWptr,VIEWint*>::iterator it;
+                                                     it = dhash()->find(v);
+                                                     if (it != dhash()->end())
+                                                        return it->second;
+                                                     else
+                                                        return 0;
+                                                   }
+     static void     add (CVIEWptr &v, VIEWint *d) { (*dhash())[v] = d;}
+     static VIEWint *make(CVIEWptr &v)             { VIEWint *x = find(v);
+                                                     if (x) return x;
+                                                     x = new VIEWint(v);
+                                                     add(v, x);
+                                                     return x;
+                                                   }
+     static void     del (CVIEWptr &v)             { map<CVIEWptr,VIEWint*>::iterator it;
+                                                     it = dhash()->find(v);
+                                                     if (it != dhash()->end())
+                                                        dhash()->erase(it);
+                                                   }
    public:
      static VIEWint *get(CVIEWptr &v)            { return make(v); }
      static void     set(CVIEWptr &v, VIEWint *d){ del(v); add(v, d); }

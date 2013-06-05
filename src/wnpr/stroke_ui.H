@@ -33,6 +33,8 @@
 #include "gtex/paper_effect.H"
 #include "stroke/base_stroke.H"
 
+#include <map>
+
 #define	GESTURE_SMOOTHING_PASSES	3
 #define	GESTURE_PIXEL_RESOLUTION	15.0
 
@@ -245,7 +247,7 @@ class StrokeUI : public PaperEffectObs {
          
    /******** STATIC MEMBERS VARS ********/
 
-   static HASH             _hash; 
+   static map<VIEWimpl*,StrokeUI*> _hash;
    static ARRAY<StrokeUI*> _ui;
 
  public:

@@ -23,7 +23,7 @@ static bool use_fbos = false;
 // The halo reference image, winter 2007 by KS
 
 static bool debug = Config::get_var_bool("DEBUG_REF_IMAGES",false);
-HASH HaloRefImage::_hash(16);
+map<VIEWimpl*,HaloRefImage*> HaloRefImage::_hash;
 
 HaloRefImage::HaloRefImage(CVIEWptr& v) : RefImage(v)
 {
@@ -80,10 +80,15 @@ HaloRefImage::lookup(CVIEWptr& v)
    }
 
    // hash on the view implementation rather than the view itself
-   long key = (long)v->impl();
-   HaloRefImage* ret = (HaloRefImage*) _hash.find(key);
-   if (!ret && (ret = new HaloRefImage(v)))
-      _hash.add(key, (void *)ret);
+   VIEWimpl *key = v->impl();
+   map<VIEWimpl*,HaloRefImage*>::iterator it;
+   it = _hash.find(key);
+   HaloRefImage *ret = 0;
+   if (it != _hash.end())
+      ret = it->second;
+   else if ((ret = new HaloRefImage(v)))
+      _hash[key] = ret;
+
    return ret;
 }
 

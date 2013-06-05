@@ -416,7 +416,7 @@ RefImage::view_resize(VIEWptr v)
 /**********************************************************************
  * ColorRefImage:
  **********************************************************************/
-HASH ColorRefImage::_hash(16);
+map<VIEWimpl*,ColorRefImage::ColorRefImage_list*> ColorRefImage::_hash;
 
 ColorRefImage::ColorRefImage(CVIEWptr& v, int i) :
    RefImage(v),
@@ -437,10 +437,15 @@ ColorRefImage::get_list(CVIEWptr& v)
    }
 
    // hash on the view implementation rather than the view itself
-   long key = (long)v->impl();
-   ColorRefImage_list* ret = (ColorRefImage_list*) _hash.find(key);
-   if (!ret && (ret = new ColorRefImage_list()))
-      _hash.add(key, (void*)ret);
+   VIEWimpl *key = v->impl();
+   map<VIEWimpl*,ColorRefImage_list*>::iterator it;
+   it = _hash.find(key);
+   ColorRefImage_list *ret = 0;
+   if (it != _hash.end())
+      ret = it->second;
+   else if ((ret = new ColorRefImage_list()))
+      _hash[key] = ret;
+
    return ret;
 }
 
@@ -636,7 +641,7 @@ ColorRefImage::draw_objects(CGELlist& drawn) const
 /**********************************************************************
  * IDRefImage:
  **********************************************************************/
-HASH IDRefImage::_hash(16);
+map<VIEWimpl*,IDRefImage*> IDRefImage::_hash;
 uint IDRefImage::_red_bits   = 0;
 uint IDRefImage::_green_bits = 0;
 uint IDRefImage::_blue_bits  = 0;
@@ -659,10 +664,15 @@ IDRefImage::lookup(CVIEWptr& v)
    }
 
    // hash on the view implementation rather than the view itself
-   long key = (long)v->impl();
-   IDRefImage* ret = (IDRefImage*) _hash.find(key);
-   if (!ret && (ret = new IDRefImage(v)))
-      _hash.add(key, (void *)ret);
+   VIEWimpl *key = v->impl();
+   map<VIEWimpl*,IDRefImage*>::iterator it;
+   it = _hash.find(key);
+   IDRefImage* ret = 0;
+   if (it != _hash.end())
+      ret = it->second;
+   else if ((ret = new IDRefImage(v)))
+      _hash[key] = ret;
+
    return ret;
 }
 

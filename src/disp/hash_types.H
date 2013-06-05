@@ -19,6 +19,7 @@
 #ifndef HASH_TYPES_H_INCLUDED
 #define HASH_TYPES_H_INCLUDED
 
+#include <map>
 #include <set>
 
 /* ------------------- Hash table variables ----------------------------- */
@@ -50,24 +51,27 @@ class hashdist : public DATA_ITEM, public GELdistobs,
    protected:
       string    _str;  // name of the hash variable
       const int _dist; // whether this hash variable should be distributed
-      HASH      _dhash;// hash table of objects that have non-default value
+      map<CGELptr,void *> _dhash;// hash table of objects that have non-default value
       const int _dup;  // ... should be copied on object duplication
       TAGlist   _tags;
-              void *find(CGELptr &g)  const   { return _dhash.find((long) &*g);}
-              void  add (CGELptr &g, void *v) { _dhash.add((long) &*g, v); }
+              void *find(CGELptr &g)  const   { map<CGELptr,void *>::const_iterator it;
+                                                it = _dhash.find(g);
+                                                if (it != _dhash.end())
+                                                   return it->second;
+                                                else
+                                                   return 0;
+                                              }
+              void  add (CGELptr &g, void *v) { _dhash[g] = v; }
       virtual void  del_item(void *) = 0;
-              void  del_hash_items()          { ARRAY<long  > keys;
-                                                ARRAY<void *> items;
-                                                _dhash.get_items(keys, items);
-                                                for (int i=0; i<keys.num();i++){
-                                                   _dhash.del(keys[i]);
-                                                   del_item(items[i]);
-                                                }
+              void  del_hash_items()          { map<CGELptr,void *>::iterator it;
+                                                for (it = _dhash.begin(); it != _dhash.end(); ++it)
+                                                   del_item(it->second);
+                                                _dhash.clear();
                                               }
    public:
       virtual        ~hashdist()   { }
                       hashdist(const string &str, int dist, int dup=1):_str(str),
-                                       _dist(dist), _dhash(16), _dup(dup) {
+                                       _dist(dist), _dup(dup) {
                          if (_dist)   // if hash is distributed, we watch
                             distrib_obs(); // when any GEL is distributed
                          DATA_ITEM::add_decoder(_str, this);
@@ -77,13 +81,15 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                          _tags.push_back(new TAG_meth<hashdist>("",
                                &hashdist::put_dummy, &hashdist::get_var, 1));
                        }
-             void      del(CGELptr &g)              { void *ret = 0;
-                                                      if ((ret=find(g))) {
-                                                         _dhash.del((long) &*g);
-                                                         del_item(ret); }
+             void      del(CGELptr &g)              { map<CGELptr,void *>::iterator it;
+                                                      it = _dhash.find(g);
+                                                      if (it != _dhash.end()) {
+                                                         del_item(it->second);
+                                                         _dhash.erase(it);
+                                                      }
                                                     }
               int       is_default(CGELptr &g)const { return find(g)==0; }
-              CHASH    &hash()                const { return _dhash; }
+      const map<CGELptr,void*> &hash()        const { return _dhash; }
       virtual CTAGlist &tags()                const { return _tags; }
       virtual DATA_ITEM *dup()                const { return  0; }
       virtual STAT_STR_RET class_name ()      const { return _str; }

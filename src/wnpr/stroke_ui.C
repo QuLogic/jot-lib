@@ -120,7 +120,7 @@ STROKE_UI_JOB::updated()
 /////////////////////////////////////
 
 ARRAY<StrokeUI*>        StrokeUI::_ui;
-HASH                    StrokeUI::_hash(16);
+map<VIEWimpl*,StrokeUI*> StrokeUI::_hash;
 
 /////////////////////////////////////
 // Constructor
@@ -268,17 +268,17 @@ StrokeUI::fetch(CVIEWptr& v)
 
    // hash on the view implementation rather than the view itself
 
-   StrokeUI* sui = (StrokeUI*)_hash.find((long)v->impl());
+   map<VIEWimpl*,StrokeUI*>::iterator it;
+   it = _hash.find(v->impl());
 
-   if (!sui)
-      {
-         sui = new StrokeUI(v); 
-         assert(sui); 
-         _hash.add((long)v->impl(), (void *)sui);
-
-      }
-
-   return sui;
+   if (it != _hash.end()) {
+      return it->second;
+   } else {
+      StrokeUI *sui = new StrokeUI(v);
+      assert(sui);
+      _hash[v->impl()] = sui;
+      return sui;
+   }
 }
 
 /////////////////////////////////////

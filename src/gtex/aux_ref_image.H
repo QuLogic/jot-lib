@@ -25,6 +25,8 @@
 #include "geom/image.H"
 #include "gtex/ref_image.H"
 
+#include <map>
+
 /**********************************************************************
  * AUX_JOB:
  *
@@ -89,7 +91,7 @@ class AuxRefImage : public RefImage {
 
  protected:
 
-   static HASH          _hash; 
+   static map<VIEWimpl*,AuxRefImage*> _hash;
         
    AUX_JOBlist          _list;
    CAMptr               _cam;

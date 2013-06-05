@@ -108,7 +108,7 @@ WORLD::_default_decoder(
 // WORLD
 //
 //
-WORLD::WORLD() : _hash(10)
+WORLD::WORLD()
 {
    // Set up the clean up routine
    atexit(WORLD::Clean_On_Exit);

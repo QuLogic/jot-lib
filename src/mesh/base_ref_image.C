@@ -20,8 +20,8 @@
  **********************************************************************/
 #include "base_ref_image.H"
 
-HASH                     BaseVisRefImage::_hash(32);
-BaseVisRefImageFactory*  BaseVisRefImage::_factory = 0;
+map<VIEWimpl*,BaseVisRefImage*> BaseVisRefImage::_hash;
+BaseVisRefImageFactory*         BaseVisRefImage::_factory = 0;
 
 BaseVisRefImage* 
 BaseVisRefImage::lookup(CVIEWptr& v) 
@@ -36,10 +36,15 @@ BaseVisRefImage::lookup(CVIEWptr& v)
    }
 
    // hash on the view implementation rather than the view itself
-   long key = (long)v->impl();
-   BaseVisRefImage* ret = (BaseVisRefImage*) _hash.find(key);
-   if (!ret && _factory && (ret = _factory->produce(v)))
-      _hash.add(key, (void *)ret);
+   map<VIEWimpl*,BaseVisRefImage*>::iterator it;
+   VIEWimpl *key = v->impl();
+   it = _hash.find(key);
+   BaseVisRefImage *ret = 0;
+   if (it != _hash.end())
+      ret = it->second;
+   else if (_factory && (ret = _factory->produce(v)))
+      _hash[key] = ret;
+
    return ret;
 }
 

@@ -24,6 +24,8 @@
 #include "std/support.H"
 #include "gtex/ref_image.H"
 
+#include <map>
+
 /**********************************************************************
  * BufferRefImage:
  *
@@ -85,7 +87,7 @@ class BufferRefImage : public RefImage,
  protected:
    BufferRefImage(CVIEWptr& v);
 
-   static  HASH  _hash; // associates a BufferRefImage with a VIEW
+   static map<VIEWimpl*,BufferRefImage*> _hash;
 
    //******** DATA ********
    int          _dirty;             // flag set when change occurred

@@ -28,6 +28,7 @@
 #include "patch_selection_ui.H"
 #include "gtex/glsl_toon.H"
 
+#include <map>
 #include <vector>
 
 class ToneShaderUI;
@@ -160,8 +161,8 @@ class ImageLineUI : public BaseUI {
    };
    /******** STATIC MEMBERS VARS ********/
    // This is so that we can support multiple instances of this ui
-   static std::vector<ImageLineUI*>  _ui;       
-   static HASH             _hash; 
+   static std::vector<ImageLineUI*>   _ui;
+   static map<VIEWimpl*,ImageLineUI*> _hash;
   
  public:
     //******** RUN-TIME TYPE ID ********

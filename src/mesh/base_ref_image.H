@@ -23,6 +23,8 @@
 
 #include "disp/view.H"
 
+#include <map>
+
 using namespace mlib;
 
 
@@ -72,8 +74,7 @@ class BaseVisRefImage {
    // BaseVisRefImage:
    static  BaseVisRefImageFactory* _factory;
 
-   // associates a BaseVisRefImage with a view:
-   static HASH _hash;
+   static map<VIEWimpl*,BaseVisRefImage*> _hash;
 };
 
 #endif // _JOT_MESH_BASE_VIS_REF_IMAGE_H

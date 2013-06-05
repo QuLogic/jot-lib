@@ -54,7 +54,7 @@
 
 TAGlist*                SilUI::_sui_tags = 0;
 ARRAY<SilUI*>           SilUI::_ui;
-HASH                    SilUI::_hash(16);
+map<VIEWimpl*,SilUI*>   SilUI::_hash;
 
 /////////////////////////////////////
 // tags()
@@ -501,17 +501,17 @@ SilUI::fetch(CVIEWptr& v)
 
    // hash on the view implementation rather than the view itself
 
-   SilUI* sui = (SilUI*)_hash.find((long)v->impl());
+   map<VIEWimpl*,SilUI*>::iterator it;
+   it = _hash.find(v->impl());
 
-   if (!sui)
-      {
-         sui = new SilUI(v); 
-         assert(sui); 
-         _hash.add((long)v->impl(), (void *)sui);
-
-      }
-
-   return sui;
+   if (it != _hash.end()) {
+      return it->second;
+   } else {
+      SilUI *sui = new SilUI(v);
+      assert(sui);
+      _hash[v->impl()] = sui;
+      return sui;
+   }
 }
 
 /////////////////////////////////////

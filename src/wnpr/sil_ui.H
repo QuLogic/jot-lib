@@ -26,6 +26,8 @@
 #include "mesh/patch.H"
 #include "npr/sil_and_crease_texture.H"
 
+#include <map>
+
 class GLUI;
 class GLUI_Listbox;
 class GLUI_EditText;
@@ -168,7 +170,7 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
  private:
    static TAGlist*         _sui_tags;
  protected:
-   static HASH             _hash; 
+   static map<VIEWimpl*,SilUI*> _hash;
    static ARRAY<SilUI*>    _ui;
 
  public:

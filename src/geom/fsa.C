@@ -28,7 +28,7 @@
 
 #include "fsa.H"
 
-HASH *VIEWint_list::_dhash = 0;
+map<CVIEWptr,VIEWint*> *VIEWint_list::_dhash = 0;
 
 void 
 VIEWint::rem_interactor(State *s)

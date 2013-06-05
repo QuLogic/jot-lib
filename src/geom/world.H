@@ -53,8 +53,6 @@ class REF_CLASS(WORLD) : public SCHEDULER {
    LIST<COMMANDptr> _undoable;
    LIST<COMMANDptr> _redoable;
 
-   HASH             _hash;
-
    static bool _is_over; // set to true during program exit cleanup
 
 #ifdef USE_PTHREAD

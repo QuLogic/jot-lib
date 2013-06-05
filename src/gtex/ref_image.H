@@ -37,6 +37,8 @@
 
 #include "gtex/util.H"
 
+#include <map>
+
 /**********************************************************************
  * CoordSystem2d:
  *
@@ -414,9 +416,10 @@ class ColorRefImage : public RefImage {
    }
 
  protected:
+   typedef ARRAY<ColorRefImage*> ColorRefImage_list;
    //******** MEMBER DATA ********
    int           _index;                // index in main list
-   static  HASH  _hash;
+   static map<VIEWimpl*,ColorRefImage_list*> _hash;
 
    //******** MANAGERS ********
 
@@ -425,7 +428,6 @@ class ColorRefImage : public RefImage {
    //******** UTILITIES ********
 
    // get list of color ref images for given view:
-   typedef ARRAY<ColorRefImage*> ColorRefImage_list;
    static ColorRefImage_list* get_list(CVIEWptr& v);
 
 
@@ -690,7 +692,7 @@ class IDRefImage : public RefImage {
    static bool _nonstandard_bits;
 
    // associates an IDRefImage with a VIEW:
-   static HASH _hash; 
+   static map<VIEWimpl*,IDRefImage*> _hash;
 
    // global instance 
    // XXX - bogus, should remove:

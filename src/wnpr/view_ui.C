@@ -50,7 +50,7 @@ using namespace mlib;
 /////////////////////////////////////
 
 ARRAY<ViewUI*>          ViewUI::_ui;
-HASH                    ViewUI::_hash(16);
+map<VIEWimpl*,ViewUI*>  ViewUI::_hash;
 
 /////////////////////////////////////
 // Constructor
@@ -110,16 +110,17 @@ ViewUI::fetch(CVIEWptr& v)
 
    // hash on the view implementation rather than the view itself
 
-   ViewUI* vui = (ViewUI*)_hash.find((long)v->impl());
+   map<VIEWimpl*,ViewUI*>::iterator it;
+   it = _hash.find(v->impl());
 
-   if (!vui) {
-      vui = new ViewUI(v);
+   if (it != _hash.end()) {
+      return it->second;
+   } else {
+      ViewUI *vui = new ViewUI(v);
       assert(vui);
-      _hash.add((long)v->impl(), (void *)vui);
-
+      _hash[v->impl()] = vui;
+      return vui;
    }
-
-   return vui;
 }
 
 /////////////////////////////////////

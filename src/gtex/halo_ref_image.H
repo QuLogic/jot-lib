@@ -22,6 +22,8 @@
 #include "halo_blur_shader.H"
 #include "util.H"
 
+#include <map>
+
 /*****************************************************************
  * HaloRefImage:
  *
@@ -88,8 +90,7 @@ class HaloRefImage :  public RefImage {
    void copy_to_tex_aux();
    void draw_scratch();
 
-   // associates an HaloRefImage with a VIEW:
-   static HASH _hash; 
+   static map<VIEWimpl*,HaloRefImage*> _hash;
 
    COLOR _pass_color;
    TEXTUREglptr _scratch_tex; //objects are rendered here in order for the GLSL blur to work

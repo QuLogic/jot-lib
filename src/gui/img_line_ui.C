@@ -48,7 +48,7 @@ using namespace mlib;
 *****************************************************************/
 
 vector<ImageLineUI*> ImageLineUI::_ui;
-HASH                 ImageLineUI::_hash(16);
+map<VIEWimpl*,ImageLineUI*> ImageLineUI::_hash;
 
 const static int WIN_WIDTH=300; 
 const static int MAX_LAYERS = 4;
@@ -749,16 +749,17 @@ ImageLineUI::fetch(CVIEWptr& v)
 
    // hash on the view implementation rather than the view itself
 
-   ImageLineUI* vui = (ImageLineUI*)_hash.find((long)v->impl());
+   map<VIEWimpl*,ImageLineUI*>::iterator it;
+   it = _hash.find(v->impl());
 
-   if (!vui) {
-      vui = new ImageLineUI();
+   if (it != _hash.end()) {
+      return it->second;
+   } else {
+      ImageLineUI *vui = new ImageLineUI();
       assert(vui);
-      _hash.add((long)v->impl(), (void *)vui);
-
+      _hash[v->impl()] = vui;
+      return vui;
    }
-
-   return vui;
 }
 
 /////////////////////////////////////
