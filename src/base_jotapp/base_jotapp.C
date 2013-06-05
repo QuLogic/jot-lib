@@ -1125,10 +1125,6 @@ BaseJOTapp::viewall(const Event&, State *&)
 int
 BaseJOTapp::keymenu_quit_cb(const Event&, State *&)
 {
-   
-   if(Config::get_var_bool("DEBUG_STRPOOL",false))
-      err_msg("strpool load factor: %f", STR::load_factor());
-
    WORLD::Quit();
 
    return 0;

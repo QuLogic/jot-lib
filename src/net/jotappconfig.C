@@ -882,7 +882,6 @@ JOTappConfig::tags() const
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_SPS"));
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_SSUBRAMA"));
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_STROKE_CB"));
-      _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_STRPOOL"));
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_SUBDIV_UPDATER"));
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_SURF_CURVE_MAP_CONSTRUCTOR"));
       _ja_tags->push_back(new BOOL_VARIABLE(JOTappConfig, "DEBUG_SURF_CURVE_MAP_RECOMPUTE"));

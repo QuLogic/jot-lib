@@ -887,7 +887,6 @@ Patch::read_texture(istream &is, vector<string> &leftover)
    int texnum = get_tex_index(name);
    if (texnum < 0) {
       // Clear spaces at end
-      // XXX - this should be in str_ptr
       while (strrchr(name, ' ') == name + strlen(name) - 1) {
          name[strlen(name) - 1] = '\0';
       }

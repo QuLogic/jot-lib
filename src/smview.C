@@ -1209,9 +1209,6 @@ undo_redo(const Event &e, State *&)
 int
 quit(const Event&, State *&)
 {
-   if (Config::get_var_bool("DEBUG_STRPOOL",false))
-      err_msg("strpool load factor: %f", STR::load_factor());
-
    WORLD::Quit();
 
    return 0;

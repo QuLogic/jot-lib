@@ -27,94 +27,17 @@
 
 #define REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr; class FOO
 #define FD_REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr
-#define CSTR const STR
 #define brcase    break; case
 #define brdefault break; default
 
 // Helpful debugging statement
 #define PRINT_VAR(v) cerr << # v << " = '" << v << "'" << endl
 
-/* ------------------ class definitions --------------------- */
-class STR : public REFcounter {
- protected:
-   char *_s;
-   static HASH *strpool;
- public:
-   static STR *null;
-
-   STR()                    { _s = 0; }
-   STR(const char *s)       { if (!strpool) strpool = new HASH(1024); 
-   if (!s) s = "";
-   strpool->add(s, _s); }
-   STR(char        s)       { char str[2]; str[0]=s; str[1] = '\0'; 
-   if (!strpool) strpool = new HASH(1024); 
-   strpool->add(str, _s); }
-   STR(const STR  &s)       { _s = s._s; }
-   STR(int         x)       { char buff[1024];sprintf(buff,"%d", x);
-   if (!strpool) strpool = new HASH(1024);
-   strpool->add(buff, _s); }
-   STR(double      d)       { char buff[1024];sprintf(buff,"%g", d);
-   if (!strpool) strpool = new HASH(1024);
-   strpool->add(buff, _s); }
-   ~STR()                    { /* if (strpool) strpool->del(_s); */ }
-   size_t len()               const { return strlen(_s); }
-   STR  &operator = (CSTR &s)       { _s = s._s; return *this;}
-   char *operator * ()        const { return _s; }
-   char  operator [](int   i) const { return _s[i]; }
-   bool  operator ==(CSTR &s) const { return _s == s._s; }
-   STR*  operator + (CSTR &s) const { char buff[1024];
-   sprintf(buff,"%s%s",_s,s._s);
-   return new STR(buff); }
-   bool  contains   (CSTR &s) const { return strstr(_s, s._s) != 0; }
-   static double load_factor() { return strpool?strpool->load_factor():0.0; }
-   friend inline ostream &operator<<(ostream &os, CSTR *s) { return os<< s->_s;}
-};
-
-#define Cstr_ptr const str_ptr
-#define Cstr_list const str_list
-class str_ptr;
-template <class T>
-#if defined(sgi) || defined(WIN32) || defined(_AIX) || defined(__GNUC__) || defined(__KCC) || (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x510)
-class LIST;
-#else
-class LIST<T>;
-#endif
-
-typedef LIST<str_ptr> str_list;
-class str_ptr : public REFptr<STR> {
- public :
-   static Cstr_ptr null;
-   static Cstr_ptr &null_str() { if (null.p_ == 0) ((str_ptr &) null) = (STR::null = new STR("")); return null; }
-
-   str_ptr()              : REFptr<STR>(new STR("")){ }
-   str_ptr(Cstr_ptr   &p) : REFptr<STR>(p)          { }
-   str_ptr(STR        *s) : REFptr<STR>(s?s:null.p_){ }
-   str_ptr(const char *s) : REFptr<STR>(new STR(s)) { }
-   str_ptr(char        c) : REFptr<STR>(new STR(c)) { }
-   str_ptr(int         x) : REFptr<STR>(new STR(x)) { }
-   str_ptr(double      d) : REFptr<STR>(new STR(d)) { }
-   size_t  len        ()            const { return   p_->len(); }
-   char    operator [](int i)       const { return   (*p_)[i];  }
-   bool    operator ==(Cstr_ptr &s) const { return   *s.p_ == *p_;  }
-   bool    operator !=(Cstr_ptr &s) const { return !(*s.p_ == *p_); }
-   bool    operator !  ()           const { return (!p_ || !**p_ || !***p_) ; }
-   operator STR*()          const { return (!*this) ? 0 : p_; }
-   str_ptr operator + (Cstr_ptr &s) const { return str_ptr(*p_ + *s.p_); }
-   str_ptr to_upper   () const;
-   str_ptr to_lower    () const;
-   bool    contains   (Cstr_ptr &s) const {return p_->contains(*s.p_);}
-   // Does this string contain any of the strings in str_list s?
-   bool    contains   (Cstr_list &s) const;
-};
-
 #ifdef JOT_AVOID_STATIC_LOCAL_INLINE_VAR
 #define RET_STAT_STR(s)  return string(s)
 #else
 #define RET_STAT_STR(s)  static string st(s); return st
 #endif
-
-// useful string constants:
-#define NULL_STR str_ptr::null_str()
 
 extern "C" {
    typedef int (* compare_func_t) (const void *, const void *);
@@ -583,7 +506,6 @@ operator>> (istream &is, ARRAY<T> &array)
    return is;
 }
 
-str_list tokenize(Cstr_ptr &str, char delim=' ');
 vector<string> dir_list(const string &directory);
 
 // None of jot's code checks if select() was interrupted by a

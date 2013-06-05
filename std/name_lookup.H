@@ -18,8 +18,6 @@
 #ifndef NAME_LOOKUP_H_IS_INCLUDED
 #define NAME_LOOKUP_H_IS_INCLUDED
 
-#include "std/support.H" // XXX - for str_ptr, should be removed
-
 #include <string>
 #include <map>
 
