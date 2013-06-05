@@ -19,6 +19,7 @@
 #define FILE_H_IN_DA_HAUS
 
 #include "support.H" 
+#include <vector>
 
 bool     rename_(const string &, const string &);
 bool     remove_(const string &);
@@ -26,5 +27,6 @@ bool     rmdir_(const string &);
 bool     mkdir_(const string &);
 bool     chdir_(const string &);
 string   getcwd_();
+vector<string> dir_list(const string &path);
 
 #endif //FILE_H_IN_DA_HAUS

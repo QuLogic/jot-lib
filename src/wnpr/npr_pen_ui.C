@@ -20,6 +20,7 @@
 ////////////////////////////////////////////
 
 #include "std/support.H"
+#include "std/file.H"
 #include <GL/glew.h>
 
 #include "geom/winsys.H"

@@ -24,6 +24,7 @@
 #include <GL/glew.h>
 #include "glui/glui_jot.H"
 #include "std/support.H"
+#include "std/file.H"
 #include "base_ui.H"
 
 

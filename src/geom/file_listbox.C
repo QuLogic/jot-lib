@@ -17,6 +17,7 @@
  *****************************************************************/
 
 #include "std/support.H"
+#include "std/file.H"
 #include "disp/view.H"
 #include "geom/winsys.H"
 #include "glui/glui_jot.H"

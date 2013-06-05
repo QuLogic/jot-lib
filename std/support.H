@@ -506,8 +506,6 @@ operator>> (istream &is, ARRAY<T> &array)
    return is;
 }
 
-vector<string> dir_list(const string &directory);
-
 // None of jot's code checks if select() was interrupted by a
 // signal (for example, SIGALRM used by IBM's MPI
 // implementation).  This should probably be fixed, but for now

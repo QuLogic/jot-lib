@@ -18,6 +18,11 @@
 
 #include "file.H" 
 
+#ifndef WIN32
+#include <dirent.h>
+#include <sys/stat.h>
+#endif
+
 //////////////////////////////////////////////////////
 // rename_()
 //////////////////////////////////////////////////////
@@ -170,5 +175,51 @@ getcwd_()
    {
       return cwd;
    }
+}
+
+//
+// Gets a list of files in a certain directory
+//
+vector<string> dir_list(const string &path)
+{
+   vector<string> list;
+#ifdef WIN32
+   WIN32_FIND_DATA file;
+   HANDLE hFile;
+
+   const string dot(".");
+   const string dotdot("..");
+   string current = path+"*";
+
+   if ((hFile = FindFirstFile(current.c_str(), &file)) != INVALID_HANDLE_VALUE) {
+      while (true) {
+         string fname(file.cFileName);
+         if ((fname != dot) && (fname != dotdot)) list.push_back(fname);
+         if (!FindNextFile(hFile, &file)) break;
+      }
+      FindClose(hFile);
+   }
+#else
+   DIR *dir = 0;
+   struct dirent *direntry;
+   if (!path.empty() && (dir = opendir(path.c_str()))) {
+      const string dot(".");
+      const string dotdot("..");
+      struct stat statbuf;
+      while ((direntry = readdir(dir))) {
+         string file(direntry->d_name);
+         if (file != dot && file != dotdot) {
+            string path_to_file = path + "/" + file;
+            if (!stat(path_to_file.c_str(), &statbuf) && (statbuf.st_mode & S_IFMT) == S_IFREG) {
+               list.push_back(file);
+            }
+         }
+      }
+      closedir(dir);
+   }
+#endif
+
+   std::sort(list.begin(), list.end());
+   return list;
 }
 
