@@ -1363,51 +1363,50 @@ CTAGlist &
 NPRSolidTexture::tags() const
 {
    if (!_nst_tags) {
-      _nst_tags = new TAGlist;
-      *_nst_tags += OGLTexture::tags();
+      _nst_tags = new TAGlist(OGLTexture::tags());
 
-      *_nst_tags += new TAG_val<NPRSolidTexture,int>(
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,int>(
          "use_paper",
-         &NPRSolidTexture::use_paper_);
-      *_nst_tags += new TAG_val<NPRSolidTexture,int>(
+         &NPRSolidTexture::use_paper_));
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,int>(
          "travel_paper",
-         &NPRSolidTexture::travel_paper_);
-      *_nst_tags += new TAG_val<NPRSolidTexture,int>(
+         &NPRSolidTexture::travel_paper_));
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,int>(
          "use_lighting",
-         &NPRSolidTexture::use_lighting_);
-      *_nst_tags += new TAG_val<NPRSolidTexture,int>(
+         &NPRSolidTexture::use_lighting_));
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,int>(
          "light_specular",
-         &NPRSolidTexture::light_specular_);
-      *_nst_tags += new TAG_val<NPRSolidTexture,COLOR>(
+         &NPRSolidTexture::light_specular_));
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,COLOR>(
          "COLOR",
-         &NPRSolidTexture::color_);
-      *_nst_tags += new TAG_val<NPRSolidTexture,double>(
+         &NPRSolidTexture::color_));
+      _nst_tags->push_back(new TAG_val<NPRSolidTexture,double>(
          "alpha",
-         &NPRSolidTexture::alpha_);
+         &NPRSolidTexture::alpha_));
 
-      *_nst_tags += new TAG_meth<NPRSolidTexture>(
+      _nst_tags->push_back(new TAG_meth<NPRSolidTexture>(
          "texture",
          &NPRSolidTexture::put_tex_name,
          &NPRSolidTexture::get_tex_name,
-         1);
-      *_nst_tags += new TAG_meth<NPRSolidTexture>(
+         1));
+      _nst_tags->push_back(new TAG_meth<NPRSolidTexture>(
          "layer_name",
          &NPRSolidTexture::put_layer_name,
          &NPRSolidTexture::get_layer_name,
-         1);
+         1));
 
-
-      *_nst_tags += new TAG_meth<NPRSolidTexture>(
+      _nst_tags->push_back(new TAG_meth<NPRSolidTexture>(
          "transparent",
          &NPRSolidTexture::put_transparent,
          &NPRSolidTexture::get_transparent,
-         0);
-      *_nst_tags += new TAG_meth<NPRSolidTexture>(
+         0));
+      _nst_tags->push_back(new TAG_meth<NPRSolidTexture>(
          "annotate",
          &NPRSolidTexture::put_annotate,
          &NPRSolidTexture::get_annotate,
-         0);
+         0));
    }
+
    return *_nst_tags;
 }
 

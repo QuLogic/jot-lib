@@ -333,22 +333,20 @@ CTAGlist &
 Painterly::tags() const
 {
    if (!_painterly_tags) {
-      _painterly_tags = new TAGlist;
-     
-      // start with base class tags
-      *_painterly_tags = GLSLShader_Layer_Base::tags();
+      _painterly_tags = new TAGlist(GLSLShader_Layer_Base::tags());
 
-      *_painterly_tags += new TAG_meth<Painterly>(
+      _painterly_tags->push_back(new TAG_meth<Painterly>(
          "paper_name",
          &Painterly::put_paper_name,
          &Painterly::get_paper_name,
-         1);
-      *_painterly_tags += new TAG_meth<Painterly>(
+         1));
+      _painterly_tags->push_back(new TAG_meth<Painterly>(
          "layer",
          &GLSLShader_Layer_Base::put_layer, // base class puts layers
          &Painterly::get_layer,
-         1);
+         1));
    }
+
    return *_painterly_tags;
 }
 
@@ -466,26 +464,26 @@ CTAGlist &
 layer_paint_t::tags() const
 {
    if (!_lh_tags) {
-      _lh_tags = new TAGlist;
-      *_lh_tags += layer_base_t::tags();
-     
-      *_lh_tags += new TAG_val<layer_paint_t,float>(
+      _lh_tags = new TAGlist(layer_base_t::tags());
+
+      _lh_tags->push_back(new TAG_val<layer_paint_t,float>(
          "angle",
          &layer_paint_t::angle
-         );
-      *_lh_tags += new TAG_val<layer_paint_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_paint_t,float>(
          "paper_contrast",
          &layer_paint_t::paper_contrast
-         );
-      *_lh_tags += new TAG_val<layer_paint_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_paint_t,float>(
          "paper_scale",
          &layer_paint_t::paper_scale
-         );    
-      *_lh_tags += new TAG_val<layer_paint_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_paint_t,float>(
          "tone_push",
          &layer_paint_t::tone_push
-         );    
+         ));
    }
+
    return *_lh_tags;
 }
 

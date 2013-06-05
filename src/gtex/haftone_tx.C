@@ -88,17 +88,17 @@ CTAGlist&
 halftone_layer_t::tags() const
 {
    if (!_lh_tags) {
-      _lh_tags = new TAGlist;
-      *_lh_tags += layer_base_t::tags();
-      *_lh_tags += new TAG_val<halftone_layer_t,bool>(
+      _lh_tags = new TAGlist(layer_base_t::tags());
+      _lh_tags->push_back(new TAG_val<halftone_layer_t,bool>(
          "_use_tone_correction",
          &halftone_layer_t::use_tone_correction
-         );
-      *_lh_tags += new TAG_val<halftone_layer_t,bool>(
+         ));
+      _lh_tags->push_back(new TAG_val<halftone_layer_t,bool>(
          "_use_lod_only",
          &halftone_layer_t::use_lod_only
-         );
+         ));
    }
+
    return *_lh_tags;
 }
 
@@ -1207,17 +1207,15 @@ CTAGlist&
 Halftone_TX::tags() const
 {
    if (!_halftone_tags) {
-      _halftone_tags = new TAGlist;
-     
-      // start with base class tags
-      *_halftone_tags = GLSLShader_Layer_Base::tags();
+      _halftone_tags = new TAGlist(GLSLShader_Layer_Base::tags());
 
-      *_halftone_tags += new TAG_meth<Halftone_TX>(
+      _halftone_tags->push_back(new TAG_meth<Halftone_TX>(
          "halftone_layer",
          &GLSLShader_Layer_Base::put_layer, // base class puts layers
          &Halftone_TX::get_layer,
-         1);
+         1));
    }
+
    return *_halftone_tags;
 }
 

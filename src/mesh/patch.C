@@ -955,51 +955,52 @@ Patch::tags() const
 {
    if (!_patch_tags) {
       _patch_tags = new TAGlist(0);
-      *_patch_tags += new TAG_meth<Patch>(
+      _patch_tags->push_back(new TAG_meth<Patch>(
          "faces", &Patch::put_faces, &Patch::get_faces,  1
-         );
+         ));
 
-      *_patch_tags += new TAG_val<Patch,int>("cur_tex", &Patch::cur_tex_i_);
-      *_patch_tags += new TAG_val<Patch,string>("patchname", &Patch::name_);
-      *_patch_tags += new TAG_meth<Patch>(
+      _patch_tags->push_back(new TAG_val<Patch,int>("cur_tex", &Patch::cur_tex_i_));
+      _patch_tags->push_back(new TAG_val<Patch,string>("patchname", &Patch::name_));
+      _patch_tags->push_back(new TAG_meth<Patch>(
          "color",  &Patch::put_color, &Patch::get_color, 0
-         );
+         ));
 
-      *_patch_tags += new TAG_meth<Patch>(
+      _patch_tags->push_back(new TAG_meth<Patch>(
          "texture", &Patch::put_textures, &Patch::get_texture, 1
-         );
+         ));
 
       // XXX - should fix so it can always read in this info,
       //       but only writes it out when non-default values are used:
-      if (patch_d2d){
-         *_patch_tags +=
-            new TAG_val<Patch,int>("sps_height",&Patch::sps_height);   
-         *_patch_tags +=
-            new TAG_val<Patch,double>("sps_min_dist",&Patch::sps_min_dist); 
-         *_patch_tags +=
-            new TAG_val<Patch,double>("sps_regularity",&Patch::sps_regularity);
-         *_patch_tags +=
-            new TAG_val<Patch,bool>("do_dynamic_stuff",&Patch::do_dynamic_stuff);
-         *_patch_tags += new TAG_val<Patch,bool>("do_lod",&Patch::do_lod);
-         *_patch_tags +=
-            new TAG_val<Patch,bool>("do_rotation",&Patch::do_rotation);
-         *_patch_tags += new TAG_val<Patch,bool>(
+      if (patch_d2d) {
+         _patch_tags->push_back(
+            new TAG_val<Patch,int>("sps_height",&Patch::sps_height));
+         _patch_tags->push_back(
+            new TAG_val<Patch,double>("sps_min_dist",&Patch::sps_min_dist));
+         _patch_tags->push_back(
+            new TAG_val<Patch,double>("sps_regularity",&Patch::sps_regularity));
+         _patch_tags->push_back(
+            new TAG_val<Patch,bool>("do_dynamic_stuff",&Patch::do_dynamic_stuff));
+         _patch_tags->push_back(new TAG_val<Patch,bool>("do_lod",&Patch::do_lod));
+         _patch_tags->push_back(
+            new TAG_val<Patch,bool>("do_rotation",&Patch::do_rotation));
+         _patch_tags->push_back(new TAG_val<Patch,bool>(
             "use_timed_lod_transitions",&Patch::use_timed_lod_transitions
-            );
-         *_patch_tags += new TAG_val<Patch,bool>(
+            ));
+         _patch_tags->push_back(new TAG_val<Patch,bool>(
             "use_direction_vec",&Patch::use_direction_vec
-            );
-         *_patch_tags += new TAG_val<Patch,Wpt_list>(
+            ));
+         _patch_tags->push_back(new TAG_val<Patch,Wpt_list>(
             "direction_stroke",&Patch::direction_stroke
-            );
-         *_patch_tags += new TAG_val<Patch,bool>(
+            ));
+         _patch_tags->push_back(new TAG_val<Patch,bool>(
             "use_weighted_ls",&Patch::use_weighted_ls
-            );
-         *_patch_tags += new TAG_val<Patch,bool>(
+            ));
+         _patch_tags->push_back(new TAG_val<Patch,bool>(
             "use_visibility_test",&Patch::use_visibility_test
-            );
+            ));
       }
    }
+
    return *_patch_tags;
 }
 

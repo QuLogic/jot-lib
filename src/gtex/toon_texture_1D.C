@@ -755,62 +755,62 @@ CTAGlist &
 ToonTexture_1D::tags() const
 {
    if (!_ntt_tags) {
-      _ntt_tags = new TAGlist;
-      *_ntt_tags += OGLTexture::tags();
+      _ntt_tags = new TAGlist(OGLTexture::tags());
 
-      *_ntt_tags += new TAG_val<ToonTexture_1D,int>(
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,int>(
          "use_paper",
-         &ToonTexture_1D::use_paper_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,int>(
+         &ToonTexture_1D::use_paper_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,int>(
          "travel_paper",
-         &ToonTexture_1D::travel_paper_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,COLOR>(
+         &ToonTexture_1D::travel_paper_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,COLOR>(
          "COLOR",
-         &ToonTexture_1D::color_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,double>(
+         &ToonTexture_1D::color_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,double>(
          "alpha",
-         &ToonTexture_1D::alpha_);
+         &ToonTexture_1D::alpha_));
 
-      *_ntt_tags += new TAG_val<ToonTexture_1D,int>(
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,int>(
          "light_index",
-         &ToonTexture_1D::light_index_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,int>(
+         &ToonTexture_1D::light_index_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,int>(
          "light_dir",
-         &ToonTexture_1D::light_dir_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,int>(
+         &ToonTexture_1D::light_dir_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,int>(
          "light_cam",
-         &ToonTexture_1D::light_cam_);
-      *_ntt_tags += new TAG_val<ToonTexture_1D,Wvec>(
+         &ToonTexture_1D::light_cam_));
+      _ntt_tags->push_back(new TAG_val<ToonTexture_1D,Wvec>(
          "light_coords",
-         &ToonTexture_1D::light_coords_);
+         &ToonTexture_1D::light_coords_));
 
 
-      *_ntt_tags += new TAG_meth<ToonTexture_1D>(
+      _ntt_tags->push_back(new TAG_meth<ToonTexture_1D>(
          "texture",
          &ToonTexture_1D::put_tex_name,
          &ToonTexture_1D::get_tex_name,
-         1);
-      *_ntt_tags += new TAG_meth<ToonTexture_1D>(
+         1));
+      _ntt_tags->push_back(new TAG_meth<ToonTexture_1D>(
          "layer_name",
          &ToonTexture_1D::put_layer_name,
          &ToonTexture_1D::get_layer_name,
-         1);
+         1));
 
 
-      *_ntt_tags += new TAG_meth<ToonTexture_1D>(
+      _ntt_tags->push_back(new TAG_meth<ToonTexture_1D>(
          "transparent",
          &ToonTexture_1D::put_transparent,
          &ToonTexture_1D::get_transparent,
-         0);
-      *_ntt_tags += new TAG_meth<ToonTexture_1D>(
+         0));
+      _ntt_tags->push_back(new TAG_meth<ToonTexture_1D>(
          "annotate",
          &ToonTexture_1D::put_annotate,
          &ToonTexture_1D::get_annotate,
-         0);
-
+         0));
    }
+
    return *_ntt_tags;
 }
+
 ////////////////////////////////////
 // put_layer_name()
 /////////////////////////////////////

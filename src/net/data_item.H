@@ -102,7 +102,7 @@ class TAG {
      virtual STDdstream   &decode(CDATA_ITEM *me, STDdstream &d) = 0;
      virtual const string &name() const = 0;
 };
-typedef ARRAY<TAG *> TAGlist;
+typedef vector<TAG *> TAGlist;
 #define CTAGlist const TAGlist
 
 /* -----------------------------------------------------------------------
@@ -263,7 +263,7 @@ class TDI : public DATA_ITEM {
          void        get_val(TAGformat &d)       { *d >> _x; }
   public:
                      TDI(const T &x): _x(x)
-     { _tags+=new TAG_meth<TDI<T> >("", &TDI<T>::put_val, &TDI<T>::get_val, 1);}
+     { _tags.push_back(new TAG_meth<TDI<T> >("", &TDI<T>::put_val, &TDI<T>::get_val, 1));}
                  T   &get()                  { return _x; }
          const   T   &get()            const { return _x; }
  virtual DATA_ITEM   *dup()            const { return new TDI<T>(_x); }
@@ -284,9 +284,9 @@ class FUNC_ITEM : public DATA_ITEM {
    FUNC_ITEM(const string &n): _name(n) {
       if (!lookup(n)) 
          add_decoder(_name,this);
-      _tags += new TAG_meth<FUNC_ITEM>(
+      _tags.push_back(new TAG_meth<FUNC_ITEM>(
          string(), &FUNC_ITEM::put, &FUNC_ITEM::get, 1
-         );
+         ));
    }
 
    CTAGlist&            tags()            const { return _tags; }

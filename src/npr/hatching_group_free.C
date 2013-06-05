@@ -52,34 +52,34 @@ CTAGlist &
 HatchingGroupFree::tags() const
 {
    if (!_hgfr_tags) {
-      _hgfr_tags = new TAGlist;
-      *_hgfr_tags += HatchingGroup::tags();
-      *_hgfr_tags += new TAG_meth<HatchingGroupFree>(
+      _hgfr_tags = new TAGlist(HatchingGroup::tags());
+      _hgfr_tags->push_back(new TAG_meth<HatchingGroupFree>(
          "mapping",
          &HatchingGroupFree::put_mapping,
          &HatchingGroupFree::get_mapping,
-         0);
-      *_hgfr_tags += new TAG_meth<HatchingGroupFree>(
+         0));
+      _hgfr_tags->push_back(new TAG_meth<HatchingGroupFree>(
          "position",
          &HatchingGroupFree::put_position,
          &HatchingGroupFree::get_position,
-         0);
-      *_hgfr_tags += new TAG_meth<HatchingGroupFree>(
+         0));
+      _hgfr_tags->push_back(new TAG_meth<HatchingGroupFree>(
          "backbone",
          &HatchingGroupFree::put_backbone,
          &HatchingGroupFree::get_backbone,
-         0);
-      *_hgfr_tags += new TAG_meth<HatchingGroupFree>(
+         0));
+      _hgfr_tags->push_back(new TAG_meth<HatchingGroupFree>(
          "level",
          &HatchingGroupFree::put_levels,
          &HatchingGroupFree::get_level,
-         1);
-      *_hgfr_tags += new TAG_meth<HatchingGroupFree>(
+         1));
+      _hgfr_tags->push_back(new TAG_meth<HatchingGroupFree>(
          "hatch",
          &HatchingGroupFree::put_hatchs,
          &HatchingGroupFree::get_hatch,
-         1);
+         1));
    }
+
    return *_hgfr_tags;
 }
 
@@ -1712,13 +1712,12 @@ CTAGlist &
 HatchingHatchFree::tags() const
 {
    if (!_hhfr_tags) {
-      _hhfr_tags = new TAGlist;
-      *_hhfr_tags += HatchingHatchBase::tags();
-      *_hhfr_tags += new TAG_val<HatchingHatchFree,UVpt_list>(
+      _hhfr_tags = new TAGlist(HatchingHatchBase::tags());
+      _hhfr_tags->push_back(new TAG_val<HatchingHatchFree,UVpt_list>(
          "uvpts",
-         &HatchingHatchFree::uvs_);
-
+         &HatchingHatchFree::uvs_));
    }
+
    return *_hhfr_tags;
 }
 
@@ -1961,20 +1960,19 @@ CTAGlist &
 HatchingBackboneFree::tags() const 
 {
    if (!_hbfr_tags) {
-      _hbfr_tags = new TAGlist;
-      *_hbfr_tags += HatchingBackboneBase::tags();
-      *_hbfr_tags += new TAG_meth<HatchingBackboneFree>( 
+      _hbfr_tags = new TAGlist(HatchingBackboneBase::tags());
+      _hbfr_tags->push_back(new TAG_meth<HatchingBackboneFree>(
          "uvpts1",
          &HatchingBackboneFree::put_uvpts1,
          &HatchingBackboneFree::get_uvpts1,
-         0);
-      *_hbfr_tags += new TAG_meth<HatchingBackboneFree>(
+         0));
+      _hbfr_tags->push_back(new TAG_meth<HatchingBackboneFree>(
          "uvpts2",
          &HatchingBackboneFree::put_uvpts2,
          &HatchingBackboneFree::get_uvpts2,
-         0);
-
+         0));
    }
+
    return *_hbfr_tags;
 }
 
@@ -2310,25 +2308,26 @@ HatchingPositionFree::tags() const
 {
    if (!_hpfr_tags) {
       _hpfr_tags = new TAGlist;
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,UVpt>(
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,UVpt>(
          "lower_left",
-         &HatchingPositionFree::lower_left_);
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,UVpt>(
+         &HatchingPositionFree::lower_left_));
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,UVpt>(
          "upper_right",
-         &HatchingPositionFree::upper_right_);
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,UVpt>(
+         &HatchingPositionFree::upper_right_));
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,UVpt>(
          "center",
-         &HatchingPositionFree::center_);
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,Wvec>(
+         &HatchingPositionFree::center_));
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,Wvec>(
          "direction",
-         &HatchingPositionFree::direction_);
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,double>(
+         &HatchingPositionFree::direction_));
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,double>(
          "left_dot",
-         &HatchingPositionFree::left_dot_);
-      *_hpfr_tags += new TAG_val<HatchingPositionFree,double>(
+         &HatchingPositionFree::left_dot_));
+      _hpfr_tags->push_back(new TAG_val<HatchingPositionFree,double>(
          "right_dot",
-         &HatchingPositionFree::right_dot_);
+         &HatchingPositionFree::right_dot_));
    }
+
    return *_hpfr_tags;
 }
 

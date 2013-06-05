@@ -193,33 +193,33 @@ SilAndCreaseTexture::tags() const
 {
    if (!_sct_tags) {
       _sct_tags = new TAGlist;
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,double>(
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,double>(
                        "crease_max_bend_angle",
-                       &SilAndCreaseTexture::crease_max_bend_angle_);
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,double>(
+                       &SilAndCreaseTexture::crease_max_bend_angle_));
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,double>(
                        "crease_thresh",
-                       &SilAndCreaseTexture::crease_thresh_);
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,float>(
+                       &SilAndCreaseTexture::crease_thresh_));
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,float>(
                        "noise_frequency",
-                       &SilAndCreaseTexture::noise_frequency_);
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,float>(
+                       &SilAndCreaseTexture::noise_frequency_));
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,float>(
                        "noise_order",
-                       &SilAndCreaseTexture::noise_order_);
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,float>(
+                       &SilAndCreaseTexture::noise_order_));
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,float>(
                        "noise_duration",
-                       &SilAndCreaseTexture::noise_duration_);
-      *_sct_tags += new TAG_val<SilAndCreaseTexture,bool>(
+                       &SilAndCreaseTexture::noise_duration_));
+      _sct_tags->push_back(new TAG_val<SilAndCreaseTexture,bool>(
                        "noise_motion",
-                       &SilAndCreaseTexture::noise_motion_);
+                       &SilAndCreaseTexture::noise_motion_));
 
-      *_sct_tags += new TAG_meth<SilAndCreaseTexture>(
+      _sct_tags->push_back(new TAG_meth<SilAndCreaseTexture>(
                        "sil_pool",
                        &SilAndCreaseTexture::put_sil_pools,
-                       &SilAndCreaseTexture::get_sil_pool,  1);
-      *_sct_tags += new TAG_meth<SilAndCreaseTexture>(
+                       &SilAndCreaseTexture::get_sil_pool,  1));
+      _sct_tags->push_back(new TAG_meth<SilAndCreaseTexture>(
                        "crease_pool",
                        &SilAndCreaseTexture::put_crease_pools,
-                       &SilAndCreaseTexture::get_crease_pool,  1);
+                       &SilAndCreaseTexture::get_crease_pool,  1));
    }
 
    return *_sct_tags;

@@ -55,31 +55,29 @@ CTAGlist &
 HatchingGroupFixed::tags() const
 {
    if (!_hgf_tags) {
-      _hgf_tags = new TAGlist;
-      *_hgf_tags += HatchingGroup::tags();
-      *_hgf_tags += new TAG_meth<HatchingGroupFixed>(
+      _hgf_tags = new TAGlist(HatchingGroup::tags());
+      _hgf_tags->push_back(new TAG_meth<HatchingGroupFixed>(
          "level",
          &HatchingGroupFixed::put_levels,
          &HatchingGroupFixed::get_level,
-         1);
-      *_hgf_tags += new TAG_meth<HatchingGroupFixed>(
+         1));
+      _hgf_tags->push_back(new TAG_meth<HatchingGroupFixed>(
          "visibility",
          &HatchingGroupFixed::put_visibility,
          &HatchingGroupFixed::get_visibility,
-         0);
-      *_hgf_tags += new TAG_meth<HatchingGroupFixed>(
+         0));
+      _hgf_tags->push_back(new TAG_meth<HatchingGroupFixed>(
          "backbone",
          &HatchingGroupFixed::put_backbone,
          &HatchingGroupFixed::get_backbone,
-         1);
-      *_hgf_tags += new TAG_meth<HatchingGroupFixed>(
+         1));
+      _hgf_tags->push_back(new TAG_meth<HatchingGroupFixed>(
          "hatch",
          &HatchingGroupFixed::put_hatchs,
          &HatchingGroupFixed::get_hatch,
-         1);
-
-
+         1));
    }
+
    return *_hgf_tags;
 }
 
@@ -1496,15 +1494,14 @@ CTAGlist &
 HatchingHatchFixed::tags() const
 {
    if (!_hhf_tags) {
-      _hhf_tags = new TAGlist;
-      *_hhf_tags += HatchingHatchBase::tags();
-      *_hhf_tags += new TAG_meth<HatchingHatchFixed>(
+      _hhf_tags = new TAGlist(HatchingHatchBase::tags());
+      _hhf_tags->push_back(new TAG_meth<HatchingHatchFixed>(
          "verts",
          &HatchingHatchFixed::put_verts,
          &HatchingHatchFixed::get_verts,
-         1);
-
+         1));
    }
+
    return *_hhf_tags;
 }
 /////////////////////////////////////
@@ -1648,9 +1645,9 @@ CTAGlist &
 HatchingBackboneFixed::tags() const
 {
    if (!_hbf_tags) {
-      _hbf_tags = new TAGlist;
-      *_hbf_tags += HatchingBackboneBase::tags();
+      _hbf_tags = new TAGlist(HatchingBackboneBase::tags());
    }
+
    return *_hbf_tags;
 }
 

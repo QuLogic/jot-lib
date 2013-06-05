@@ -72,18 +72,18 @@ BaseStrokeOffset::tags() const
 {
    if (!_bso_tags) {
       _bso_tags = new TAGlist;
-      *_bso_tags += new TAG_val<BaseStrokeOffset,double>(
+      _bso_tags->push_back(new TAG_val<BaseStrokeOffset,double>(
          "pos",
-         &BaseStrokeOffset::pos_);
-      *_bso_tags += new TAG_val<BaseStrokeOffset,double>(
+         &BaseStrokeOffset::pos_));
+      _bso_tags->push_back(new TAG_val<BaseStrokeOffset,double>(
          "len",
-         &BaseStrokeOffset::len_);
-      *_bso_tags += new TAG_val<BaseStrokeOffset,double>(
+         &BaseStrokeOffset::len_));
+      _bso_tags->push_back(new TAG_val<BaseStrokeOffset,double>(
          "press",
-         &BaseStrokeOffset::press_);
-      *_bso_tags += new TAG_val<BaseStrokeOffset,int>(
+         &BaseStrokeOffset::press_));
+      _bso_tags->push_back(new TAG_val<BaseStrokeOffset,int>(
          "type",
-         &BaseStrokeOffset::type_);
+         &BaseStrokeOffset::type_));
    }
 
    return *_bso_tags;
@@ -110,31 +110,30 @@ BaseStrokeOffsetLIST::tags() const
 {
    if (!_bsol_tags) {
       _bsol_tags = new TAGlist;
-      *_bsol_tags += new TAG_val<BaseStrokeOffsetLIST,double>(
+      _bsol_tags->push_back(new TAG_val<BaseStrokeOffsetLIST,double>(
          "pix_len",
-         &BaseStrokeOffsetLIST::pix_len_);
-      *_bsol_tags += new TAG_val<BaseStrokeOffsetLIST,int>(
+         &BaseStrokeOffsetLIST::pix_len_));
+      _bsol_tags->push_back(new TAG_val<BaseStrokeOffsetLIST,int>(
          "replicate",
-         &BaseStrokeOffsetLIST::replicate_);
-      *_bsol_tags += new TAG_val<BaseStrokeOffsetLIST,int>(
+         &BaseStrokeOffsetLIST::replicate_));
+      _bsol_tags->push_back(new TAG_val<BaseStrokeOffsetLIST,int>(
          "hangover",
-         &BaseStrokeOffsetLIST::hangover_);
-      *_bsol_tags += new TAG_val<BaseStrokeOffsetLIST,int>(
+         &BaseStrokeOffsetLIST::hangover_));
+      _bsol_tags->push_back(new TAG_val<BaseStrokeOffsetLIST,int>(
          "manual_t",
-         &BaseStrokeOffsetLIST::manual_t_);
+         &BaseStrokeOffsetLIST::manual_t_));
 
-      *_bsol_tags += new TAG_meth<BaseStrokeOffsetLIST>(
+      _bsol_tags->push_back(new TAG_meth<BaseStrokeOffsetLIST>(
          "offset",
          &BaseStrokeOffsetLIST::put_offsets,
          &BaseStrokeOffsetLIST::get_offset,
-         1);
+         1));
 
-      *_bsol_tags += new TAG_meth<BaseStrokeOffsetLIST>(
+      _bsol_tags->push_back(new TAG_meth<BaseStrokeOffsetLIST>(
          "offsets",
          &BaseStrokeOffsetLIST::put_all_offsets,
          &BaseStrokeOffsetLIST::get_all_offsets,
-         1);
-
+         1));
    }
 
    return *_bsol_tags;
@@ -535,75 +534,75 @@ BaseStroke::tags() const
 {
    if (!_bs_tags) {
       _bs_tags = new TAGlist;
-      *_bs_tags += new TAG_val<BaseStroke,COLOR>(
+      _bs_tags->push_back(new TAG_val<BaseStroke,COLOR>(
          "color",
-         &BaseStroke::color_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::color_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "alpha",
-         &BaseStroke::alpha_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::alpha_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "width",
-         &BaseStroke::width_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::width_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "halo",
-         &BaseStroke::halo_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::halo_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "taper",
-         &BaseStroke::taper_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::taper_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "flare",
-         &BaseStroke::flare_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::flare_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "aflare",
-         &BaseStroke::aflare_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::aflare_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "fade",
-         &BaseStroke::fade_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::fade_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "angle",
-         &BaseStroke::angle_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::angle_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "contrast",
-         &BaseStroke::contrast_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::contrast_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "brightness",
-         &BaseStroke::brightness_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::brightness_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "offset_stretch",
-         &BaseStroke::offset_stretch_);
-      *_bs_tags += new TAG_val<BaseStroke,float>(
+         &BaseStroke::offset_stretch_));
+      _bs_tags->push_back(new TAG_val<BaseStroke,float>(
          "offset_phase",
-         &BaseStroke::offset_phase_);
+         &BaseStroke::offset_phase_));
 
-      *_bs_tags += new TAG_val<BaseStroke,int>(
+      _bs_tags->push_back(new TAG_val<BaseStroke,int>(
          "press_vary_width",
-         &BaseStroke::press_vary_width_);
+         &BaseStroke::press_vary_width_));
 
-      *_bs_tags += new TAG_val<BaseStroke,int>(
+      _bs_tags->push_back(new TAG_val<BaseStroke,int>(
          "press_vary_alpha",
-         &BaseStroke::press_vary_alpha_);
+         &BaseStroke::press_vary_alpha_));
         
-      *_bs_tags += new TAG_meth<BaseStroke>(
+      _bs_tags->push_back(new TAG_meth<BaseStroke>(
          "stroke_texture_file",
          &BaseStroke::put_texture_file,
          &BaseStroke::get_texture_file,
-         1);
+         1));
 
       if(_use_paper){
-         *_bs_tags += new TAG_meth<BaseStroke>(
+         _bs_tags->push_back(new TAG_meth<BaseStroke>(
          "paper_texture_file",
          &BaseStroke::put_paper_file,
          &BaseStroke::get_paper_file,
-         1);
+         1));
       }
 
-      *_bs_tags += new TAG_meth<BaseStroke>(
+      _bs_tags->push_back(new TAG_meth<BaseStroke>(
          "offsets",
          &BaseStroke::put_offsets,
          &BaseStroke::get_offsets,
-         1);
-
+         1));
    }
+
    return *_bs_tags;
 }
 

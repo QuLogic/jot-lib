@@ -43,18 +43,18 @@ BStrokePool::tags() const
 {
    if (!_bsp_tags) {
       _bsp_tags = new TAGlist;
-      *_bsp_tags += new TAG_meth<BStrokePool>(
+      _bsp_tags->push_back(new TAG_meth<BStrokePool>(
          "base_prototype",
          &BStrokePool::put_base_prototype,
-         &BStrokePool::get_base_prototype,  1);
-      *_bsp_tags += new TAG_meth<BStrokePool>(
+         &BStrokePool::get_base_prototype,  1));
+      _bsp_tags->push_back(new TAG_meth<BStrokePool>(
          "prototype",
          &BStrokePool::put_prototypes,
-         &BStrokePool::get_prototype,  1);
-      *_bsp_tags += new TAG_meth<BStrokePool>(
+         &BStrokePool::get_prototype,  1));
+      _bsp_tags->push_back(new TAG_meth<BStrokePool>(
          "stroke",
          &BStrokePool::put_strokes,
-         &BStrokePool::get_stroke,  1);
+         &BStrokePool::get_stroke,  1));
    }
 
    return *_bsp_tags;

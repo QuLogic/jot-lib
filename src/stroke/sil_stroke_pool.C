@@ -53,53 +53,52 @@ CTAGlist &
 SilStrokePool::tags() const
 {
    if (!_ssp_tags) {
-      _ssp_tags = new TAGlist;
-      *_ssp_tags += BStrokePool::tags();    
+      _ssp_tags = new TAGlist(BStrokePool::tags());
 
-      *_ssp_tags += new TAG_val<SilStrokePool,bool>(
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,bool>(
          "coher_global",
-         &SilStrokePool::coher_global_);
-      *_ssp_tags += new TAG_val<SilStrokePool,bool>(
+         &SilStrokePool::coher_global_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,bool>(
          "coher_sigma_one",
-         &SilStrokePool::coher_sigma_one_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_sigma_one_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_fit_type",
-         &SilStrokePool::coher_fit_type_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_fit_type_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_cover_type",
-         &SilStrokePool::coher_cover_type_);
-      *_ssp_tags += new TAG_val<SilStrokePool,float>(
+         &SilStrokePool::coher_cover_type_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,float>(
          "coher_pix",
-         &SilStrokePool::coher_pix_);
-      *_ssp_tags += new TAG_val<SilStrokePool,float>(
+         &SilStrokePool::coher_pix_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,float>(
          "coher_wf",
-         &SilStrokePool::coher_wf_);
-      *_ssp_tags += new TAG_val<SilStrokePool,float>(
+         &SilStrokePool::coher_wf_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,float>(
          "coher_ws",
-         &SilStrokePool::coher_ws_);
-      *_ssp_tags += new TAG_val<SilStrokePool,float>(
+         &SilStrokePool::coher_ws_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,float>(
          "coher_wb",
-         &SilStrokePool::coher_wb_);
-      *_ssp_tags += new TAG_val<SilStrokePool,float>(
+         &SilStrokePool::coher_wb_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,float>(
          "coher_wh",
-         &SilStrokePool::coher_wh_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_wh_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_mv",
-         &SilStrokePool::coher_mv_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_mv_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_mp",
-         &SilStrokePool::coher_mp_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_mp_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_m5",
-         &SilStrokePool::coher_m5_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_m5_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_hj",
-         &SilStrokePool::coher_hj_);
-      *_ssp_tags += new TAG_val<SilStrokePool,int>(
+         &SilStrokePool::coher_hj_));
+      _ssp_tags->push_back(new TAG_val<SilStrokePool,int>(
          "coher_ht",
-         &SilStrokePool::coher_ht_);
-
+         &SilStrokePool::coher_ht_));
    }
+
    return *_ssp_tags;
 }
 

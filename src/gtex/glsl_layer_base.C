@@ -140,34 +140,35 @@ layer_base_t::tags() const
 {
    if (!_lb_tags) {
       _lb_tags = new TAGlist;
-      
-      *_lb_tags += new TAG_meth<layer_base_t>(
+
+      _lb_tags->push_back(new TAG_meth<layer_base_t>(
          "pattern_name",
          &layer_base_t::put_pattern_name,
          &layer_base_t::get_pattern_name,
-         1);
+         1));
 
-      *_lb_tags += new TAG_val<layer_base_t,int>(
+      _lb_tags->push_back(new TAG_val<layer_base_t,int>(
          "mode",
          &layer_base_t::mode
-         );
-      *_lb_tags += new TAG_val<layer_base_t,bool>(
+         ));
+      _lb_tags->push_back(new TAG_val<layer_base_t,bool>(
          "highlight",
          &layer_base_t::highlight
-         );
-      *_lb_tags += new TAG_val<layer_base_t,float>(
+         ));
+      _lb_tags->push_back(new TAG_val<layer_base_t,float>(
          "pattern_scale",
          &layer_base_t::pattern_scale
-         );
-      *_lb_tags += new TAG_val<layer_base_t,COLOR>(
+         ));
+      _lb_tags->push_back(new TAG_val<layer_base_t,COLOR>(
          "ink_color",
          &layer_base_t::ink_color
-         );
-      *_lb_tags += new TAG_val<layer_base_t,GLint>(
+         ));
+      _lb_tags->push_back(new TAG_val<layer_base_t,GLint>(
          "channel",
          &layer_base_t::channel
-         );
+         ));
    }
+
    return *_lb_tags;
 }
 
@@ -408,22 +409,21 @@ GLSLShader_Layer_Base::tags() const
 {
    if (!_tags) {
       // start with base class tags
-      _tags = new TAGlist;
-      *_tags = GLSLShader::tags();
-     
-      *_tags += new TAG_meth<GLSLShader_Layer_Base>(
+      _tags = new TAGlist(GLSLShader::tags());
+
+      _tags->push_back(new TAG_meth<GLSLShader_Layer_Base>(
          "tone_shader",
          &GLSLShader_Layer_Base::put_tone_shader,
          &GLSLShader_Layer_Base::get_tone_shader,
-         1);
+         1));
 
-      *_tags += new TAG_meth<GLSLShader_Layer_Base>(
+      _tags->push_back(new TAG_meth<GLSLShader_Layer_Base>(
          "base_shader",
          &GLSLShader_Layer_Base::put_base_shader,
          &GLSLShader_Layer_Base::get_base_shader,
-         1);        
-  
+         1));
    }
+
    return *_tags;
 }
 

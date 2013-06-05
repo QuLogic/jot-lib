@@ -93,9 +93,9 @@ CTAGlist &
 HatchingStroke::tags() const
 {
    if (!_hs_tags) {
-      _hs_tags = new TAGlist;
-      *_hs_tags += BaseStroke::tags();      
-	}
+      _hs_tags = new TAGlist(BaseStroke::tags());
+   }
+
    return *_hs_tags;
 }
 

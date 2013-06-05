@@ -3574,13 +3574,13 @@ LuboPathList::tags() const
    if (!_lpl_tags) {
       _lpl_tags = new TAGlist;
 
-      *_lpl_tags += new TAG_meth<LuboPathList>(
+      _lpl_tags->push_back(new TAG_meth<LuboPathList>(
                        "path",
                        &LuboPathList::put_paths,
                        &LuboPathList::get_path,
-                       1);
-
+                       1));
    }
+
    return *_lpl_tags;
 }
 
@@ -3751,67 +3751,68 @@ LuboPath::tags() const
    if (!_lp_tags) {
       _lp_tags = new TAGlist;
 
-      *_lp_tags += new TAG_val<LuboPath,double>(
+      _lp_tags->push_back(new TAG_val<LuboPath,double>(
                       "stretch",
-                      &LuboPath::stretch_);
-      *_lp_tags += new TAG_val<LuboPath,double>(
+                      &LuboPath::stretch_));
+      _lp_tags->push_back(new TAG_val<LuboPath,double>(
                       "pix_to_ndc_scale_",
-                      &LuboPath::pix_to_ndc_scale_);
-      *_lp_tags += new TAG_val<LuboPath,double>(
+                      &LuboPath::pix_to_ndc_scale_));
+      _lp_tags->push_back(new TAG_val<LuboPath,double>(
                       "offset_pix_len",
-                      &LuboPath::offset_pix_len_);
+                      &LuboPath::offset_pix_len_));
 
-      *_lp_tags += new TAG_meth<LuboPath>(
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "pts",
                       &LuboPath::put_pts,
                       &LuboPath::get_pts,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "path_id",
                       &LuboPath::put_path_id,
                       &LuboPath::get_path_id,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "bcs",
                       &LuboPath::put_bcs,
                       &LuboPath::get_bcs,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "faces",
                       &LuboPath::put_faces,
                       &LuboPath::get_faces,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "len",
                       &LuboPath::put_len,
                       &LuboPath::get_len,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "id_set",
                       &LuboPath::put_id_set,
                       &LuboPath::get_id_set,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "id_offsets",
                       &LuboPath::put_id_offsets,
                       &LuboPath::get_id_offsets,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "ffseg_lengths",
                       &LuboPath::put_ffseg_lengths,
                       &LuboPath::get_ffseg_lengths,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "vote",
                       &LuboPath::put_votes,
                       &LuboPath::get_vote,
-                      1);
-      *_lp_tags += new TAG_meth<LuboPath>(
+                      1));
+      _lp_tags->push_back(new TAG_meth<LuboPath>(
                       "group",
                       &LuboPath::put_groups,
                       &LuboPath::get_group,
-                      1);
+                      1));
    }
+
    return *_lp_tags;
 }
 
@@ -4680,41 +4681,41 @@ VoteGroup::tags() const
    if (!_vg_tags) {
       _vg_tags = new TAGlist;
 
-      *_vg_tags += new TAG_val<VoteGroup,unsigned int>(
+      _vg_tags->push_back(new TAG_val<VoteGroup,unsigned int>(
                       "base_id",
-                      &VoteGroup::base_id_);
-      *_vg_tags += new TAG_val<VoteGroup,double>(
+                      &VoteGroup::base_id_));
+      _vg_tags->push_back(new TAG_val<VoteGroup,double>(
                       "confidence",
-                      &VoteGroup::confidence_);
-      *_vg_tags += new TAG_val<VoteGroup,double>(
+                      &VoteGroup::confidence_));
+      _vg_tags->push_back(new TAG_val<VoteGroup,double>(
                       "begin",
-                      &VoteGroup::begin_);
-      *_vg_tags += new TAG_val<VoteGroup,double>(
+                      &VoteGroup::begin_));
+      _vg_tags->push_back(new TAG_val<VoteGroup,double>(
                       "end",
-                      &VoteGroup::end_);
+                      &VoteGroup::end_));
 
-      *_vg_tags += new TAG_meth<VoteGroup>(
+      _vg_tags->push_back(new TAG_meth<VoteGroup>(
                       "status",
                       &VoteGroup::put_status,
                       &VoteGroup::get_status,
-                      1);
-      *_vg_tags += new TAG_meth<VoteGroup>(
+                      1));
+      _vg_tags->push_back(new TAG_meth<VoteGroup>(
                       "fstatus",
                       &VoteGroup::put_fstatus,
                       &VoteGroup::get_fstatus,
-                      1);
-      *_vg_tags += new TAG_meth<VoteGroup>(
+                      1));
+      _vg_tags->push_back(new TAG_meth<VoteGroup>(
                       "fit",
                       &VoteGroup::put_fits,
                       &VoteGroup::get_fits,
-                      1);
-      *_vg_tags += new TAG_meth<VoteGroup>(
+                      1));
+      _vg_tags->push_back(new TAG_meth<VoteGroup>(
                       "vote",
                       &VoteGroup::put_votes,
                       &VoteGroup::get_vote,
-                      1);
-
+                      1));
    }
+
    return *_vg_tags;
 
 }

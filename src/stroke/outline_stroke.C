@@ -29,13 +29,13 @@ CTAGlist &
 OutlineStroke::tags() const
 {
    if (!_os_tags) {
-      _os_tags = new TAGlist;
-      *_os_tags += BaseStroke::tags();    
+      _os_tags = new TAGlist(BaseStroke::tags());
 
-      *_os_tags += new TAG_val<OutlineStroke,double>(
+      _os_tags->push_back(new TAG_val<OutlineStroke,double>(
          "orig_mesh_size",
-         &OutlineStroke::original_mesh_size_);
+         &OutlineStroke::original_mesh_size_));
    }
+
    return *_os_tags;
 }
 

@@ -74,8 +74,8 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                          exist_obs(); // deleted objects must be uhashed
                          if (_dup)    // If 1-to-1 mapping, we don't want to
                             dup_obs();// copy information when object is dup'ed
-                         _tags += new TAG_meth<hashdist>("",
-                               &hashdist::put_dummy, &hashdist::get_var, 1);
+                         _tags.push_back(new TAG_meth<hashdist>("",
+                               &hashdist::put_dummy, &hashdist::get_var, 1));
                        }
              void      del(CGELptr &g)              { void *ret = 0;
                                                       if ((ret=find(g))) {

@@ -34,39 +34,40 @@ tone_layer_t::tags() const
    if (!_tl_tags) {
       _tl_tags = new TAGlist;         
 
-      *_tl_tags += new TAG_val<tone_layer_t,GLint>(
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLint>(
          "is_enabled",
          &tone_layer_t::is_enabled
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLint>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLint>(
          "remap_nl",
          &tone_layer_t::remap_nl
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLint>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLint>(
          "remap",
          &tone_layer_t::remap
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLint>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLint>(
          "backlight",
          &tone_layer_t::backlight
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLfloat>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLfloat>(
          "e0",
          &tone_layer_t::e0
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLfloat>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLfloat>(
          "e1",
          &tone_layer_t::e1
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLfloat>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLfloat>(
          "s0",
          &tone_layer_t::s0
-         );
-      *_tl_tags += new TAG_val<tone_layer_t,GLfloat>(
+         ));
+      _tl_tags->push_back(new TAG_val<tone_layer_t,GLfloat>(
          "s1",
          &tone_layer_t::s1
-         );
+         ));
    }
+
    return *_tl_tags;
 }
 
@@ -498,15 +499,15 @@ CTAGlist &
 ToneShader::tags() const
 {
    if (!_tags) {
-      _tags = new TAGlist;
-      *_tags += GLSLShader::tags();
-      *_tags += new TAG_meth<ToneShader>(
+      _tags = new TAGlist(GLSLShader::tags());
+
+      _tags->push_back(new TAG_meth<ToneShader>(
          "layer",
          &ToneShader::put_layer,
          &ToneShader::get_layer,
-         1);
-      
+         1));
    }
+
    return *_tags;
 }
 

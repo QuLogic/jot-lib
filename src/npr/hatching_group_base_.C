@@ -1222,16 +1222,16 @@ HatchingLevelBase::tags() const
 {
    if (!_hlb_tags) {
       _hlb_tags = new TAGlist;
-      *_hlb_tags += new TAG_val<HatchingLevelBase,double>(
+      _hlb_tags->push_back(new TAG_val<HatchingLevelBase,double>(
          "pix_size",
-         &HatchingLevelBase::pix_size_);
-      *_hlb_tags += new TAG_meth<HatchingLevelBase>(
+         &HatchingLevelBase::pix_size_));
+      _hlb_tags->push_back(new TAG_meth<HatchingLevelBase>(
          "hatch",
          &HatchingLevelBase::put_hatchs,
          &HatchingLevelBase::get_hatch,
-         1);
-
+         1));
    }
+
    return *_hlb_tags;
 }
 
@@ -1460,37 +1460,37 @@ HatchingHatchBase::tags() const
 {
    if (!_hhb_tags) {
       _hhb_tags = new TAGlist;
-      *_hhb_tags += new TAG_val<HatchingHatchBase,double>(
+      _hhb_tags->push_back(new TAG_val<HatchingHatchBase,double>(
          "screen_length",
-         &HatchingHatchBase::pix_size_);
-      *_hhb_tags += new TAG_meth<HatchingHatchBase>(
+         &HatchingHatchBase::pix_size_));
+      _hhb_tags->push_back(new TAG_meth<HatchingHatchBase>(
          "wpts",
          &HatchingHatchBase::put_pts,
          &HatchingHatchBase::get_pts,
-         0);
-      *_hhb_tags += new TAG_meth<HatchingHatchBase>(
+         0));
+      _hhb_tags->push_back(new TAG_meth<HatchingHatchBase>(
          "norms",
          &HatchingHatchBase::put_norms,
          &HatchingHatchBase::get_norms,
-         0);
-      *_hhb_tags += new TAG_meth<HatchingHatchBase>(
+         0));
+      _hhb_tags->push_back(new TAG_meth<HatchingHatchBase>(
          "offsetlist",
          &HatchingHatchBase::put_offsetlist,
          &HatchingHatchBase::get_offsetlist,
-         0);
+         0));
       //Legacy stuff
-      *_hhb_tags += new TAG_meth<HatchingHatchBase>(
+      _hhb_tags->push_back(new TAG_meth<HatchingHatchBase>(
          "pressures",
          &HatchingHatchBase::put_pressures,
          &HatchingHatchBase::get_pressures,
-         0);
-      *_hhb_tags += new TAG_meth<HatchingHatchBase>(
+         0));
+      _hhb_tags->push_back(new TAG_meth<HatchingHatchBase>(
          "offsets",
          &HatchingHatchBase::put_offsets,
          &HatchingHatchBase::get_offsets,
-         0);
-
+         0));
    }
+
    return *_hhb_tags;
 }
 /////////////////////////////////////
@@ -2014,30 +2014,31 @@ HatchingBackboneBase::tags() const
 {
    if (!_hbb_tags) {
       _hbb_tags = new TAGlist;
-      *_hbb_tags += new TAG_meth<HatchingBackboneBase>(
+      _hbb_tags->push_back(new TAG_meth<HatchingBackboneBase>(
          "num",
          &HatchingBackboneBase::put_num,
          &HatchingBackboneBase::get_num,
-         0);
-      *_hbb_tags += new TAG_val<HatchingBackboneBase,double>(
+         0));
+      _hbb_tags->push_back(new TAG_val<HatchingBackboneBase,double>(
          "length",
-         &HatchingBackboneBase::len_);
-      *_hbb_tags += new TAG_meth<HatchingBackboneBase>(
+         &HatchingBackboneBase::len_));
+      _hbb_tags->push_back(new TAG_meth<HatchingBackboneBase>(
          "wpts1",
          &HatchingBackboneBase::put_wpts1,
          &HatchingBackboneBase::get_wpts1,
-         0);
-      *_hbb_tags += new TAG_meth<HatchingBackboneBase>(
+         0));
+      _hbb_tags->push_back(new TAG_meth<HatchingBackboneBase>(
          "wpts2",
          &HatchingBackboneBase::put_wpts2,
          &HatchingBackboneBase::get_wpts2,
-         0);
-      *_hbb_tags += new TAG_meth<HatchingBackboneBase>(
+         0));
+      _hbb_tags->push_back(new TAG_meth<HatchingBackboneBase>(
          "lengths",
          &HatchingBackboneBase::put_lengths,
          &HatchingBackboneBase::get_lengths,
-         0);
+         0));
    }
+
    return *_hbb_tags;
 }
 

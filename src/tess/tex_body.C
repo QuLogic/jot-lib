@@ -635,50 +635,50 @@ CTAGlist &
 TEXBODY::tags() const
 {
    if (!_texbody_tags) {
-      _texbody_tags = new TAGlist;
-      *_texbody_tags += GEOM::tags();
+      _texbody_tags = new TAGlist(GEOM::tags());
 
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_data",
          &TEXBODY::put_mesh_data,
-         &TEXBODY::get_mesh_data, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh_data, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_data_file",
          &TEXBODY::put_mesh_data_file,
-         &TEXBODY::get_mesh_data_file, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh_data_file, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_data_update",
          &TEXBODY::put_mesh_data_update,
-         &TEXBODY::get_mesh_data_update, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh_data_update, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_data_update_file",
          &TEXBODY::put_mesh_data_update_file,
-         &TEXBODY::get_mesh_data_update_file, 1);
+         &TEXBODY::get_mesh_data_update_file, 1));
 
       //XXX - Next 4 tags are deprected in favor
       //of new file format... Will vanish one day...
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh",
          &TEXBODY::put_mesh,
-         &TEXBODY::get_mesh, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_file",
          &TEXBODY::put_mesh_file,
-         &TEXBODY::get_mesh_file, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh_file, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_update",
          &TEXBODY::put_mesh_update,
-         &TEXBODY::get_mesh_update, 1);
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+         &TEXBODY::get_mesh_update, 1));
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "mesh_update_file",
          &TEXBODY::put_mesh_update_file,
-         &TEXBODY::get_mesh_update_file, 1);
+         &TEXBODY::get_mesh_update_file, 1));
 
-      *_texbody_tags += new TAG_meth<TEXBODY>(
+      _texbody_tags->push_back(new TAG_meth<TEXBODY>(
          "script",
          &TEXBODY::put_script,
-         &TEXBODY::get_script, 1);
+         &TEXBODY::get_script, 1));
    }
+
    return *_texbody_tags;
 }
 

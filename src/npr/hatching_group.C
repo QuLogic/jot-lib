@@ -49,43 +49,42 @@ HatchingGroupParams::tags() const
 {
    if (!_hp_tags) {
       _hp_tags = new TAGlist;
-   
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_lo_thresh",
-         &HatchingGroupParams::anim_lo_thresh_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_hi_thresh",
-         &HatchingGroupParams::anim_hi_thresh_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_lo_width",
-         &HatchingGroupParams::anim_lo_width_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_hi_width",
-         &HatchingGroupParams::anim_hi_width_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_global_scale",
-         &HatchingGroupParams::anim_global_scale_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_limit_scale",
-         &HatchingGroupParams::anim_limit_scale_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_trans_time",
-         &HatchingGroupParams::anim_trans_time_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,float>(
-         "anim_max_lod",
-         &HatchingGroupParams::anim_max_lod_);
-      *_hp_tags += new TAG_val<HatchingGroupParams,int>(
-         "anim_style",
-         &HatchingGroupParams::anim_style_);
 
-      *_hp_tags += new TAG_meth<HatchingGroupParams>(
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_lo_thresh",
+         &HatchingGroupParams::anim_lo_thresh_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_hi_thresh",
+         &HatchingGroupParams::anim_hi_thresh_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_lo_width",
+         &HatchingGroupParams::anim_lo_width_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_hi_width",
+         &HatchingGroupParams::anim_hi_width_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_global_scale",
+         &HatchingGroupParams::anim_global_scale_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_limit_scale",
+         &HatchingGroupParams::anim_limit_scale_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_trans_time",
+         &HatchingGroupParams::anim_trans_time_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,float>(
+         "anim_max_lod",
+         &HatchingGroupParams::anim_max_lod_));
+      _hp_tags->push_back(new TAG_val<HatchingGroupParams,int>(
+         "anim_style",
+         &HatchingGroupParams::anim_style_));
+
+      _hp_tags->push_back(new TAG_meth<HatchingGroupParams>(
          "hatching_stroke",
          &HatchingGroupParams::put_base_stroke,
          &HatchingGroupParams::get_base_stroke,
-         1);
-      
-        
+         1));
    }
+
    return *_hp_tags;
 }
 
@@ -147,11 +146,11 @@ HatchingGroup::tags() const
 {
    if (!_hg_tags) {
       _hg_tags = new TAGlist;
-      *_hg_tags += new TAG_meth<HatchingGroup>(
+      _hg_tags->push_back(new TAG_meth<HatchingGroup>(
          "params",
          &HatchingGroup::put_hatching_group_params,
          &HatchingGroup::get_hatching_group_params,
-         0);
+         0));
    }
 
    return *_hg_tags;

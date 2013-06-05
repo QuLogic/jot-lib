@@ -48,11 +48,12 @@ DEFINER::tags() const
 {
    if (!_def_tags) {
       _def_tags  = new TAGlist;
-      *_def_tags += new TAG_meth<DEFINER>("out_mask",
-            &DEFINER::put_outmask,&DEFINER::get_outmask, 0);
-      *_def_tags += new TAG_meth<DEFINER>("inputs",
-            &DEFINER::put_inputs, &DEFINER::get_inputs, 1);
+      _def_tags->push_back(new TAG_meth<DEFINER>("out_mask",
+            &DEFINER::put_outmask,&DEFINER::get_outmask, 0));
+      _def_tags->push_back(new TAG_meth<DEFINER>("inputs",
+            &DEFINER::put_inputs, &DEFINER::get_inputs, 1));
    }
+
    return *_def_tags;
 }
 

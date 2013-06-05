@@ -66,64 +66,64 @@ SilUI::tags() const
    if (!_sui_tags) {
       _sui_tags = new TAGlist;
         
-      *_sui_tags += new TAG_meth<SilUI>(
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "path",
          &SilUI::put_paths,
          &SilUI::get_paths,
-         1);
-      *_sui_tags += new TAG_meth<SilUI>(
+         1));
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "selected_gel",
          &SilUI::put_selected_gel,
          &SilUI::get_selected_gel,
-         1);
-      *_sui_tags += new TAG_meth<SilUI>(
+         1));
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "selected_patch",
          &SilUI::put_selected_patch,
          &SilUI::get_selected_patch,
-         1);
-      *_sui_tags += new TAG_meth<SilUI>(
+         1));
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "vote_path_index",
          &SilUI::put_vote_path_index,
          &SilUI::get_vote_path_index,
-         1);
-      *_sui_tags += new TAG_meth<SilUI>(
+         1));
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "stroke_path_index",
          &SilUI::put_stroke_path_index,
          &SilUI::get_stroke_path_index,
-         1);
-      *_sui_tags += new TAG_meth<SilUI>(
+         1));
+      _sui_tags->push_back(new TAG_meth<SilUI>(
          "vote_index",
          &SilUI::put_vote_index,
          &SilUI::get_vote_index,
-         1);
+         1));
 
-      *_sui_tags += new TAG_val<SilUI,int>(
+      _sui_tags->push_back(new TAG_val<SilUI,int>(
          "always_update",
-         &SilUI::always_update_);
-      *_sui_tags += new TAG_val<SilUI,int>(
+         &SilUI::always_update_));
+      _sui_tags->push_back(new TAG_val<SilUI,int>(
          "sigma_one",
-         &SilUI::sigma_one_);
-      *_sui_tags += new TAG_val<SilUI,int>(
+         &SilUI::sigma_one_));
+      _sui_tags->push_back(new TAG_val<SilUI,int>(
          "fit_type",
-         &SilUI::fit_type_);
-      *_sui_tags += new TAG_val<SilUI,int>(
+         &SilUI::fit_type_));
+      _sui_tags->push_back(new TAG_val<SilUI,int>(
          "cover_type",
-         &SilUI::cover_type_);
-      *_sui_tags += new TAG_val<SilUI,float>(
+         &SilUI::cover_type_));
+      _sui_tags->push_back(new TAG_val<SilUI,float>(
          "fit_pix",
-         &SilUI::fit_pix_);
-      *_sui_tags += new TAG_val<SilUI,float>(
+         &SilUI::fit_pix_));
+      _sui_tags->push_back(new TAG_val<SilUI,float>(
          "weight_fit",
-         &SilUI::weight_fit_);
-      *_sui_tags += new TAG_val<SilUI,float>(
+         &SilUI::weight_fit_));
+      _sui_tags->push_back(new TAG_val<SilUI,float>(
          "weight_scale",
-         &SilUI::weight_scale_);
-      *_sui_tags += new TAG_val<SilUI,float>(
+         &SilUI::weight_scale_));
+      _sui_tags->push_back(new TAG_val<SilUI,float>(
          "weight_distort",
-         &SilUI::weight_distort_);
-      *_sui_tags += new TAG_val<SilUI,float>(
+         &SilUI::weight_distort_));
+      _sui_tags->push_back(new TAG_val<SilUI,float>(
          "weight_heal",
-         &SilUI::weight_heal_);
+         &SilUI::weight_heal_));
 
    }
    return *_sui_tags;

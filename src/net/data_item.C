@@ -166,21 +166,21 @@ DATA_ITEM::decode(STDdstream &ds)
    
    d.read_id();                                 // read the start delimiter
 
-   if (tags().num() == 1 && tags()[0]->name() == "") {
+   if (tags().size() == 1 && tags()[0]->name() == "") {
       // if object only has 1 unnamed tag, then just call its decoder
       tags()[0]->decode(this, *d);
    } else {
       while (d) {
          string tag_name;
          *d >> tag_name;
-         int j;
-         for (j = 0; j < tags().num(); j++) {
+         TAGlist::size_type j;
+         for (j = 0; j < tags().size(); j++) {
             if (tags()[j]->name() == tag_name) {
                tags()[j]->decode(this, *d);
                break;
             }
          }
-         if (j == tags().num()) {
+         if (j == tags().size()) {
             if (comment.name() == tag_name) {
                comment.decode(this, *d);
             } else { // skip over tag's data section
@@ -219,7 +219,7 @@ DATA_ITEM::format(STDdstream &ds) const
       cerr << "Formatting " << class_name() << endl;
 
    d.id();                          // write OBJECT_NAME start_delimiter
-   for (int i=0; i<tags().num(); i++)
+   for (TAGlist::size_type i=0; i<tags().size(); i++)
       tags()[i]->format(this, *d);  // write name value pair
    ds.write_newline();              // add carriage return
    d.end_id();                      // write end_delimiter

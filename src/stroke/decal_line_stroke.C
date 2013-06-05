@@ -46,21 +46,20 @@ CTAGlist &
 DecalLineStroke::tags() const
 {
    if (!_dls_tags) {
-      _dls_tags = new TAGlist;
-      *_dls_tags += OutlineStroke::tags();    
+      _dls_tags = new TAGlist(OutlineStroke::tags());
 
-      *_dls_tags += new TAG_meth<DecalLineStroke>(
+      _dls_tags->push_back(new TAG_meth<DecalLineStroke>(
          "locs",
          &DecalLineStroke::put_vert_locs,
          &DecalLineStroke::get_vert_locs,
-         1);
-      *_dls_tags += new TAG_meth<DecalLineStroke>(
+         1));
+      _dls_tags->push_back(new TAG_meth<DecalLineStroke>(
          "vertex_loc",
          &DecalLineStroke::put_vertex_locs,
          &DecalLineStroke::get_vertex_loc,
-         1);
-
+         1));
    }
+
    return *_dls_tags;
 }
 

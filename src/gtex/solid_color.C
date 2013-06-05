@@ -55,16 +55,16 @@ CTAGlist &
 SolidColorTexture::tags() const
 {
    if (!_solid_color_texture_tags) {
-      _solid_color_texture_tags  = new TAGlist;
+      _solid_color_texture_tags = new TAGlist(OGLTexture::tags());
 
-      *_solid_color_texture_tags += OGLTexture::tags();
-
-      *_solid_color_texture_tags += new TAG_val<SolidColorTexture,COLOR>(
+      _solid_color_texture_tags->push_back(new TAG_val<SolidColorTexture,COLOR>(
          "color",
-         &SolidColorTexture::color_);
+         &SolidColorTexture::color_));
    }
+
    return *_solid_color_texture_tags;
 }
+
 int
 SolidColorTexture::draw(CVIEWptr& v)
 {

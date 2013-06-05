@@ -603,184 +603,182 @@ CTAGlist &
 NPRTexture::tags() const
 {
    if (!_nt_tags) {
-      _nt_tags = new TAGlist;
-      *_nt_tags += OGLTexture::tags();
+      _nt_tags = new TAGlist(OGLTexture::tags());
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "npr_data_file",
          &NPRTexture::put_npr_data_file,
          &NPRTexture::get_npr_data_file,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "collection",
          &NPRTexture::put_collection,
          &NPRTexture::get_collection,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "line_stroke_texture",
          &NPRTexture::put_line_stroke_texture,
          &NPRTexture::get_line_stroke_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "feature_stroke_texture",
          &NPRTexture::put_feature_stroke_texture,
          &NPRTexture::get_feature_stroke_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "transparent",
          &NPRTexture::put_transparent,
          &NPRTexture::get_transparent,
-         0);
-      *_nt_tags += new TAG_meth<NPRTexture>(
+         0));
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "annotate",
          &NPRTexture::put_annotate,
          &NPRTexture::get_annotate,
-         0);
-      *_nt_tags += new TAG_meth<NPRTexture>(
+         0));
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "polygon_offset_factor",
          &NPRTexture::put_polygon_offset_factor,
          &NPRTexture::get_polygon_offset_factor,
-         0);
-      *_nt_tags += new TAG_meth<NPRTexture>(
+         0));
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "polygon_offset_units",
          &NPRTexture::put_polygon_offset_units,
          &NPRTexture::get_polygon_offset_units,
-         0);
+         0));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "see_thru",
          &NPRTexture::put_see_thru,
          &NPRTexture::get_see_thru,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "see_thru_flags",
          &NPRTexture::put_see_thru_flags,
          &NPRTexture::get_see_thru_flags,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "basecoat",
          &NPRTexture::put_basecoats,
          &NPRTexture::get_basecoat,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "texture_id",
          &NPRTexture::put_basecoat_id,
          &NPRTexture::get_basecoat_id,
-         0);
+         0));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "bkg_texture",
          &NPRTexture::put_bkg_texture,
          &NPRTexture::get_bkg_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "solid_texture",
          &NPRTexture::put_solid_texture,
          &NPRTexture::get_solid_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "toon_texture",
          &NPRTexture::put_toon_texture,
          &NPRTexture::get_toon_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "xtoon_texture",
          &NPRTexture::put_xtoon_texture,
          &NPRTexture::get_xtoon_texture,
-         1);
+         1));
 
       //View stuff
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_color",
          &NPRTexture::put_view_color,
          &NPRTexture::get_view_color,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_alpha",
          &NPRTexture::put_view_alpha,
          &NPRTexture::get_view_alpha,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_paper_use",
          &NPRTexture::put_view_paper_use,
          &NPRTexture::get_view_paper_use,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_paper_name",
          &NPRTexture::put_view_paper_name,
          &NPRTexture::get_view_paper_name,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_paper_active",
          &NPRTexture::put_view_paper_active,
          &NPRTexture::get_view_paper_active,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_texture",
          &NPRTexture::put_view_texture,
          &NPRTexture::get_view_texture,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_coords",
          &NPRTexture::put_view_light_coords,
          &NPRTexture::get_view_light_coords,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_positional",
          &NPRTexture::put_view_light_positional,
          &NPRTexture::get_view_light_positional,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_cam_space",
          &NPRTexture::put_view_light_cam_space,
          &NPRTexture::get_view_light_cam_space,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_color_diff",
          &NPRTexture::put_view_light_color_diff,
          &NPRTexture::get_view_light_color_diff,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_color_amb",
          &NPRTexture::put_view_light_color_amb,
          &NPRTexture::get_view_light_color_amb,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_global",
          &NPRTexture::put_view_light_color_global,
          &NPRTexture::get_view_light_color_global,
-         1);
+         1));
 
-      *_nt_tags += new TAG_meth<NPRTexture>(
+      _nt_tags->push_back(new TAG_meth<NPRTexture>(
          "view_light_enable",
          &NPRTexture::put_view_light_enable,
          &NPRTexture::get_view_light_enable,
-         1);
-
-
+         1));
    }
+
    return *_nt_tags;
 }
 
@@ -804,7 +802,7 @@ NPRTexture::old_format(STDdstream &ds) const
    (*d).write_open_delim();
 
    // the rest is the same
-   for (int i=0; i<tags().num(); i++)
+   for (TAGlist::size_type i=0; i<tags().size(); i++)
       tags()[i]->format(this, *d);  // write name value pair
    ds.write_newline();         // add carriage return
    d.end_id();            // write end_delimiter

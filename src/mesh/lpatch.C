@@ -223,14 +223,13 @@ CTAGlist &
 Lpatch::tags() const
 {
    return Patch::tags();
-   
-   if (!_lpatch_tags) 
-   {
-      _lpatch_tags = new TAGlist;
-	  *_lpatch_tags += Patch::tags();
-      *_lpatch_tags += new TAG_meth<Lpatch> ("parent_patch",    
-											&Lpatch::put_parent_patch, &Lpatch::get_parent_patch,  1);
+
+   if (!_lpatch_tags) {
+      _lpatch_tags = new TAGlist(Patch::tags());
+      _lpatch_tags->push_back(new TAG_meth<Lpatch>("parent_patch",
+                                                   &Lpatch::put_parent_patch, &Lpatch::get_parent_patch, 1));
    }
+
    return *_lpatch_tags;
 }
 

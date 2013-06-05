@@ -226,13 +226,13 @@ CTAGlist &
 Script::tags() const
 {
    if (!_tags) {
-      _tags  = new TAGlist;
-      *_tags += Action::tags();
-      *_tags += new TAG_meth<Script>(
+      _tags = new TAGlist(Action::tags());
+      _tags->push_back(new TAG_meth<Script>(
          "actions",
          &Script::put_actions,
-         &Script::get_actions, 1);
+         &Script::get_actions, 1));
    }
+
    return *_tags;
 }
 
@@ -392,30 +392,29 @@ CTAGlist &
 BpointAction::tags() const
 {
    if (!_tags) {
-      _tags  = new TAGlist;
-      *_tags += Action::tags();
-      *_tags += new TAG_val<BpointAction,int>(
+      _tags = new TAGlist(Action::tags());
+      _tags->push_back(new TAG_val<BpointAction,int>(
          "mesh",
          &BpointAction::mesh_num
-         );
-      *_tags += new TAG_val<BpointAction,Wpt>(
+         ));
+      _tags->push_back(new TAG_val<BpointAction,Wpt>(
          "o",
          &BpointAction::origin
-         );
-      *_tags += new TAG_val<BpointAction,Wvec>(
+         ));
+      _tags->push_back(new TAG_val<BpointAction,Wvec>(
          "n",
          &BpointAction::n_vec
-         );
-      *_tags += new TAG_val<BpointAction,Wvec>(
+         ));
+      _tags->push_back(new TAG_val<BpointAction,Wvec>(
          "t",
          &BpointAction::t_vec
-         );
-      *_tags += new TAG_val<BpointAction,int>(
+         ));
+      _tags->push_back(new TAG_val<BpointAction,int>(
          "r",
          &BpointAction::r_lev
-         );
-
+         ));
    }
+
    return *_tags;
 }
 
@@ -669,38 +668,37 @@ CTAGlist &
 BcurveAction::tags() const
 {
    if (!_tags) {
-      _tags  = new TAGlist;
-      *_tags += Action::tags();
-      *_tags += new TAG_val<BcurveAction,int>(
+      _tags = new TAGlist(Action::tags());
+      _tags->push_back(new TAG_val<BcurveAction,int>(
          "mesh",
          &BcurveAction::mesh_num
-         );
-      *_tags += new TAG_val<BcurveAction,int>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,int>(
          "b1",
          &BcurveAction::i1
-         );
-      *_tags += new TAG_val<BcurveAction,int>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,int>(
          "b2",
          &BcurveAction::i2
-         );
-      *_tags += new TAG_val<BcurveAction,Wpt_list>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,Wpt_list>(
          "pts",
          &BcurveAction::pts
-         );
-      *_tags += new TAG_val<BcurveAction,Wvec>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,Wvec>(
          "n",
          &BcurveAction::n_vec
-         );
-      *_tags += new TAG_val<BcurveAction,int>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,int>(
          "num_e",
          &BcurveAction::n_edge
-         );
-      *_tags += new TAG_val<BcurveAction,int>(
+         ));
+      _tags->push_back(new TAG_val<BcurveAction,int>(
          "r",
          &BcurveAction::r_lev
-         );
-
+         ));
    }
+
    return *_tags;
 }
 
@@ -901,13 +899,13 @@ CTAGlist &
 PanelAction::tags() const
 {
    if (!_tags) {
-      _tags  = new TAGlist;
-      *_tags += Action::tags();
-      *_tags += new TAG_val<PanelAction,ARRAY<int> >(
+      _tags = new TAGlist(Action::tags());
+      _tags->push_back(new TAG_val<PanelAction,ARRAY<int> >(
          "indices",
          &PanelAction::indices
-         );
+         ));
    }
+
    return *_tags;
 }
 

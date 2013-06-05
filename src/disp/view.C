@@ -148,157 +148,155 @@ VIEW::tags() const
    if (!_v_tags) {
       _v_tags = new TAGlist;
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_animator",
          &VIEW::put_view_animator,
          &VIEW::get_view_animator,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_data_file",
          &VIEW::put_view_data_file,
          &VIEW::get_view_data_file,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_color",
          &VIEW::put_view_color,
          &VIEW::get_view_color,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_alpha",
          &VIEW::put_view_alpha,
          &VIEW::get_view_alpha,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_paper_use",
          &VIEW::put_view_paper_use,
          &VIEW::get_view_paper_use,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_paper_name",
          &VIEW::put_view_paper_name,
          &VIEW::get_view_paper_name,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_paper_active",
          &VIEW::put_view_paper_active,
          &VIEW::get_view_paper_active,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_paper_brig",
          &VIEW::put_view_paper_brig,
          &VIEW::get_view_paper_brig,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_paper_cont",
          &VIEW::put_view_paper_cont,
          &VIEW::get_view_paper_cont,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_texture",
          &VIEW::put_view_texture,
          &VIEW::get_view_texture,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_coords",
          &VIEW::put_view_light_coords,
          &VIEW::get_view_light_coords,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_positional",
          &VIEW::put_view_light_positional,
          &VIEW::get_view_light_positional,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_cam_space",
          &VIEW::put_view_light_cam_space,
          &VIEW::get_view_light_cam_space,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_color_diff",
          &VIEW::put_view_light_color_diff,
          &VIEW::get_view_light_color_diff,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_color_amb",
          &VIEW::put_view_light_color_amb,
          &VIEW::get_view_light_color_amb,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_global",
          &VIEW::put_view_light_color_global,
          &VIEW::get_view_light_color_global,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_enable",
          &VIEW::put_view_light_enable,
          &VIEW::get_view_light_enable,
-         1);
-      
-      *_v_tags += new TAG_meth<VIEW>(
+         1));
+
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_spot_direction",
          &VIEW::put_view_light_spot_direction,
          &VIEW::get_view_light_spot_direction,
-         1);
-      
-      *_v_tags += new TAG_meth<VIEW>(
+         1));
+
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_spot_exponent",
          &VIEW::put_view_light_spot_exponent,
          &VIEW::get_view_light_spot_exponent,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_spot_cutoff",
          &VIEW::put_view_light_spot_cutoff,
          &VIEW::get_view_light_spot_cutoff,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_constant_attenuationt",
          &VIEW::put_view_light_constant_attenuation,
          &VIEW::get_view_light_constant_attenuation,
-         1);
-      *_v_tags += new TAG_meth<VIEW>(
+         1));
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_linear_attenuation",
          &VIEW::put_view_light_linear_attenuation,
          &VIEW::get_view_light_linear_attenuation,
-         1);
-      *_v_tags += new TAG_meth<VIEW>(
+         1));
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_light_quadratic_attenuation",
          &VIEW::put_view_light_quadratic_attenuation,
          &VIEW::get_view_light_quadratic_attenuation,
-         1);
-   
-     
-      *_v_tags += new TAG_meth<VIEW>(
+         1));
+
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_antialias_enable",
          &VIEW::put_view_antialias_enable,
          &VIEW::get_view_antialias_enable,
-         1);
+         1));
 
-      *_v_tags += new TAG_meth<VIEW>(
+      _v_tags->push_back(new TAG_meth<VIEW>(
          "view_antialias_mode",
          &VIEW::put_view_antialias_mode,
          &VIEW::get_view_antialias_mode,
-         1);
-
-
+         1));
    }
+
    return *_v_tags;
 }
 

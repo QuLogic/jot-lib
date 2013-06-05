@@ -471,19 +471,19 @@ CTAGlist &
 NPRBkgTexture::tags() const
 {
    if (!_nbt_tags) {
-      _nbt_tags = new TAGlist;
-      *_nbt_tags += OGLTexture::tags();
-      *_nbt_tags += new TAG_meth<NPRBkgTexture>(
+      _nbt_tags = new TAGlist(OGLTexture::tags());
+      _nbt_tags->push_back(new TAG_meth<NPRBkgTexture>(
          "transparent",
          &NPRBkgTexture::put_transparent,
          &NPRBkgTexture::get_transparent,
-         0);
-      *_nbt_tags += new TAG_meth<NPRBkgTexture>(
+         0));
+      _nbt_tags->push_back(new TAG_meth<NPRBkgTexture>(
          "annotatable",
          &NPRBkgTexture::put_annotate,
          &NPRBkgTexture::get_annotate,
-         0);
+         0));
    }
+
    return *_nbt_tags;
 }
 

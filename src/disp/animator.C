@@ -386,23 +386,23 @@ Animator::tags() const
    if (!_a_tags) {
       _a_tags = new TAGlist;
 
-      *_a_tags += new TAG_val<Animator,int>(
+      _a_tags->push_back(new TAG_val<Animator,int>(
          "fps",
-         &Animator::fps_);
-      *_a_tags += new TAG_val<Animator,int>(
+         &Animator::fps_));
+      _a_tags->push_back(new TAG_val<Animator,int>(
          "start_frame",
-         &Animator::start_frame_);
-      *_a_tags += new TAG_val<Animator,int>(
+         &Animator::start_frame_));
+      _a_tags->push_back(new TAG_val<Animator,int>(
          "end_frame",
-         &Animator::end_frame_);
+         &Animator::end_frame_));
 
-
-      *_a_tags += new TAG_meth<Animator>(
+      _a_tags->push_back(new TAG_meth<Animator>(
          "name",
          &Animator::put_name,
          &Animator::get_name,
-         1);
+         1));
    }
+
    return *_a_tags;
 }
 /////////////////////////////////////

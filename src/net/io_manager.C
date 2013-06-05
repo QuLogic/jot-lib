@@ -39,12 +39,13 @@ IOManager::tags() const
    if (!_io_tags) {
       _io_tags = new TAGlist;
  
-      *_io_tags += new TAG_meth<IOManager>(
+      _io_tags->push_back(new TAG_meth<IOManager>(
          "basename",
          &IOManager::put_basename,
          &IOManager::get_basename,
-         1);
+         1));
    }
+
    return *_io_tags;
 }
 

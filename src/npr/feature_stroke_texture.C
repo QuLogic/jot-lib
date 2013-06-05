@@ -37,8 +37,7 @@ CTAGlist &
 FeatureStrokeTexture::tags() const
 {
    if (!_fst_tags) {
-      _fst_tags = new TAGlist;
-      *_fst_tags += OGLTexture::tags();
+      _fst_tags = new TAGlist(OGLTexture::tags());
 
       // XXX - Wrap the nasty old read/write_stream
       // stuff into a single tag -- so we can achieve
@@ -57,27 +56,25 @@ FeatureStrokeTexture::tags() const
       // Once we convert all our stuff over to tags,
       // we can read old files, write the new format,
       // and trash all the old read/write streaming...
-      *_fst_tags += new TAG_meth<FeatureStrokeTexture>(
+      _fst_tags->push_back(new TAG_meth<FeatureStrokeTexture>(
                        "legacy_stream",
                        &FeatureStrokeTexture::put_legacy_stream,
                        &FeatureStrokeTexture::get_legacy_stream,
-                       1);
+                       1));
 
       //New tags!
-      *_fst_tags += new TAG_meth<FeatureStrokeTexture>(
+      _fst_tags->push_back(new TAG_meth<FeatureStrokeTexture>(
                        "decal_pool",
                        &FeatureStrokeTexture::put_decal_pool,
                        &FeatureStrokeTexture::get_decal_pool,
-                       1);
-      *_fst_tags += new TAG_meth<FeatureStrokeTexture>(
+                       1));
+      _fst_tags->push_back(new TAG_meth<FeatureStrokeTexture>(
                        "sil_and_crease_texture",
                        &FeatureStrokeTexture::put_sil_and_crease_texture,
                        &FeatureStrokeTexture::get_sil_and_crease_texture,
-                       1);
-
-
-
+                       1));
    }
+
    return *_fst_tags;
 }
 

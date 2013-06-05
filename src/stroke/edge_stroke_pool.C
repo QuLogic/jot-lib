@@ -47,12 +47,11 @@ CTAGlist &
 EdgeStrokePool::tags() const
 {
    if (!_esp_tags) {
-      _esp_tags = new TAGlist;
-      *_esp_tags += BStrokePool::tags();    
-      *_esp_tags += new TAG_meth<EdgeStrokePool>(
+      _esp_tags = new TAGlist(BStrokePool::tags());
+      _esp_tags->push_back(new TAG_meth<EdgeStrokePool>(
          "edge_strip",
          &EdgeStrokePool::put_edge_strip,
-         &EdgeStrokePool::get_edge_strip,  1);
+         &EdgeStrokePool::get_edge_strip,  1));
    }
 
    return *_esp_tags;

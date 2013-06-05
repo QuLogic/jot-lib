@@ -53,11 +53,11 @@ HatchingCollection::tags() const
 {
    if (!_hc_tags) {
       _hc_tags = new TAGlist;
-      *_hc_tags += new TAG_meth<HatchingCollection>(
+      _hc_tags->push_back(new TAG_meth<HatchingCollection>(
          "hatching_group",
          &HatchingCollection::put_hatching_groups,
          &HatchingCollection::get_hatching_group,
-         1);
+         1));
    }
    return *_hc_tags;
 }

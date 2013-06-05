@@ -225,19 +225,19 @@ CTAGlist &
 GEOM::tags() const
 {
    if (!_geom_tags) {
-      _geom_tags = new TAGlist;
-      *_geom_tags += GEL::tags();
-      *_geom_tags += new TAG_meth<GEOM>("name",  &GEOM::put_name,
-                                        &GEOM::get_name, 0);
-      *_geom_tags += new TAG_meth<GEOM>("xform", &GEOM::put_xf,
-                                        &GEOM::get_xf, 0);
-      *_geom_tags += new TAG_meth<GEOM>("color", &GEOM::put_color,
-                                        &GEOM::get_color);
-      *_geom_tags += new TAG_meth<GEOM>("texture",&GEOM::put_texture,
-                                        &GEOM::get_texture,1);
-      *_geom_tags += new TAG_meth<GEOM>("transp",&GEOM::put_transp,
-                                        &GEOM::get_transp);
+      _geom_tags = new TAGlist(GEL::tags());
+      _geom_tags->push_back(new TAG_meth<GEOM>("name",  &GEOM::put_name,
+                                               &GEOM::get_name, 0));
+      _geom_tags->push_back(new TAG_meth<GEOM>("xform", &GEOM::put_xf,
+                                               &GEOM::get_xf, 0));
+      _geom_tags->push_back(new TAG_meth<GEOM>("color", &GEOM::put_color,
+                                               &GEOM::get_color));
+      _geom_tags->push_back(new TAG_meth<GEOM>("texture",&GEOM::put_texture,
+                                               &GEOM::get_texture,1));
+      _geom_tags->push_back(new TAG_meth<GEOM>("transp",&GEOM::put_transp,
+                                               &GEOM::get_transp));
    }
+
    return *_geom_tags;
 }
 

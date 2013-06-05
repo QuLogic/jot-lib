@@ -35,6 +35,7 @@ GTexture::tags() const
    if (!basic_tags) {
       basic_tags = new TAGlist(0);
    }
+
    return *basic_tags;
 }
 

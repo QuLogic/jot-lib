@@ -3353,76 +3353,73 @@ BMESH::tags() const
    if  ( (IOManager::state() == IOManager::STATE_PARTIAL_LOAD) ||
          (IOManager::state() == IOManager::STATE_PARTIAL_SAVE) ) {
       if (!_bmesh_update_tags) {
-         _bmesh_update_tags  = new TAGlist;
+         _bmesh_update_tags  = new TAGlist(BODY::tags());
 
-         *_bmesh_update_tags += BODY::tags();
-
-         *_bmesh_update_tags += new TAG_meth<BMESH>(
+         _bmesh_update_tags->push_back(new TAG_meth<BMESH>(
             "vertices", &BMESH::put_vertices, &BMESH::get_vertices, 1
-            );
+            ));
       }
+
       return *_bmesh_update_tags;
    }
 
    // Full set of tags used in all other circumstances...
    if (!_bmesh_tags) {
-        
-      _bmesh_tags  = new TAGlist;
-
-      *_bmesh_tags += BODY::tags();
+      _bmesh_tags  = new TAGlist(BODY::tags());
 
       // XXX - vertices & faces must be written/read first
-      *_bmesh_tags += new TAG_meth<BMESH>(
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "vertices", &BMESH::put_vertices, &BMESH::get_vertices, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "faces", &BMESH::put_faces, &BMESH::get_faces, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "uvfaces", &BMESH::put_uvfaces, &BMESH::get_uvfaces, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "creases", &BMESH::put_creases, &BMESH::get_creases, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "polylines", &BMESH::put_polylines, &BMESH::get_polylines, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "weak_edges", &BMESH::put_weak_edges, &BMESH::get_weak_edges, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "secondary_faces", &BMESH::put_sec_faces, &BMESH::get_sec_faces, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "colors", &BMESH::put_colors, &BMESH::get_colors, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "texcoords2", &BMESH::put_texcoords2, &BMESH::get_texcoords2, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "patch", &BMESH::put_patches, &BMESH::get_patches, 1
-         );
-      *_bmesh_tags += new TAG_meth<BMESH>(
+         ));
+      _bmesh_tags->push_back(new TAG_meth<BMESH>(
          "render_style", &BMESH::put_render_style, &BMESH::get_render_style, 1
-         );
+         ));
 
       // SHADOW TAGS
-      *_bmesh_tags += new TAG_val<BMESH,bool>("Shadow_Occluder",&BMESH::occluder);
+      _bmesh_tags->push_back(new TAG_val<BMESH,bool>("Shadow_Occluder",&BMESH::occluder));
 
-      *_bmesh_tags += new TAG_val<BMESH,bool>("Shadow_Reciever",&BMESH::reciever);
+      _bmesh_tags->push_back(new TAG_val<BMESH,bool>("Shadow_Reciever",&BMESH::reciever));
 
-      *_bmesh_tags += new TAG_val<BMESH,double>(
+      _bmesh_tags->push_back(new TAG_val<BMESH,double>(
          "Shadow_Scale",&BMESH::shadow_scale
-         );
+         ));
 
-      *_bmesh_tags += new TAG_val<BMESH,double>(
+      _bmesh_tags->push_back(new TAG_val<BMESH,double>(
          "Shadow_Softness",&BMESH::shadow_softness
-         );
+         ));
 
-      *_bmesh_tags += new TAG_val<BMESH,double>(
+      _bmesh_tags->push_back(new TAG_val<BMESH,double>(
          "Shadow_Offset",&BMESH::shadow_offset
-         );
+         ));
    }
+
    return *_bmesh_tags;
 }
 

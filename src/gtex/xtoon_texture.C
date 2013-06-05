@@ -1910,62 +1910,62 @@ CTAGlist &
 XToonTexture::tags() const
 {
    if (!_ntt_tags) {
-      _ntt_tags = new TAGlist;
-      *_ntt_tags += OGLTexture::tags();
+      _ntt_tags = new TAGlist(OGLTexture::tags());
 
-      *_ntt_tags += new TAG_val<XToonTexture,int>(
+      _ntt_tags->push_back(new TAG_val<XToonTexture,int>(
          "use_paper",
-         &XToonTexture::use_paper_);
-      *_ntt_tags += new TAG_val<XToonTexture,int>(
+         &XToonTexture::use_paper_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,int>(
          "travel_paper",
-         &XToonTexture::travel_paper_);
-      *_ntt_tags += new TAG_val<XToonTexture,COLOR>(
+         &XToonTexture::travel_paper_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,COLOR>(
          "COLOR",
-         &XToonTexture::color_);
-      *_ntt_tags += new TAG_val<XToonTexture,double>(
+         &XToonTexture::color_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,double>(
          "alpha",
-         &XToonTexture::alpha_);
+         &XToonTexture::alpha_));
 
-      *_ntt_tags += new TAG_val<XToonTexture,int>(
+      _ntt_tags->push_back(new TAG_val<XToonTexture,int>(
          "light_index",
-         &XToonTexture::light_index_);
-      *_ntt_tags += new TAG_val<XToonTexture,int>(
+         &XToonTexture::light_index_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,int>(
          "light_dir",
-         &XToonTexture::light_dir_);
-      *_ntt_tags += new TAG_val<XToonTexture,int>(
+         &XToonTexture::light_dir_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,int>(
          "light_cam",
-         &XToonTexture::light_cam_);
-      *_ntt_tags += new TAG_val<XToonTexture,Wvec>(
+         &XToonTexture::light_cam_));
+      _ntt_tags->push_back(new TAG_val<XToonTexture,Wvec>(
          "light_coords",
-         &XToonTexture::light_coords_);
+         &XToonTexture::light_coords_));
 
 
-      *_ntt_tags += new TAG_meth<XToonTexture>(
+      _ntt_tags->push_back(new TAG_meth<XToonTexture>(
          "texture",
          &XToonTexture::put_tex_name,
          &XToonTexture::get_tex_name,
-         1);
-      *_ntt_tags += new TAG_meth<XToonTexture>(
+         1));
+      _ntt_tags->push_back(new TAG_meth<XToonTexture>(
          "layer_name",
          &XToonTexture::put_layer_name,
          &XToonTexture::get_layer_name,
-         1);
+         1));
 
 
-      *_ntt_tags += new TAG_meth<XToonTexture>(
+      _ntt_tags->push_back(new TAG_meth<XToonTexture>(
          "transparent",
          &XToonTexture::put_transparent,
          &XToonTexture::get_transparent,
-         0);
-      *_ntt_tags += new TAG_meth<XToonTexture>(
+         0));
+      _ntt_tags->push_back(new TAG_meth<XToonTexture>(
          "annotate",
          &XToonTexture::put_annotate,
          &XToonTexture::get_annotate,
-         0);
-
+         0));
    }
+
    return *_ntt_tags;
 }
+
 ////////////////////////////////////
 // put_layer_name()
 /////////////////////////////////////

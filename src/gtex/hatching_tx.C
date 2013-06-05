@@ -361,17 +361,15 @@ CTAGlist &
 HatchingTX::tags() const
 {
    if (!_hatching_tags) {
-      _hatching_tags = new TAGlist;
+      _hatching_tags = new TAGlist(GLSLShader_Layer_Base::tags());
 
-      // start with base class tags
-      *_hatching_tags = GLSLShader_Layer_Base::tags();
-
-      *_hatching_tags += new TAG_meth<HatchingTX>(
+      _hatching_tags->push_back(new TAG_meth<HatchingTX>(
          "layer",
          &GLSLShader_Layer_Base::put_layer, // base class puts layers
          &HatchingTX::get_layer,
-         1);
+         1));
    }
+
    return *_hatching_tags;
 }
 
@@ -414,32 +412,32 @@ CTAGlist &
 layer_hatching_t::tags() const
 {
    if (!_lh_tags) {
-      _lh_tags = new TAGlist;
-      *_lh_tags += layer_base_t::tags();
-     
-      *_lh_tags += new TAG_meth<layer_hatching_t>(
+      _lh_tags = new TAGlist(layer_base_t::tags());
+
+      _lh_tags->push_back(new TAG_meth<layer_hatching_t>(
          "paper_name",
          &layer_hatching_t::put_paper_name,
          &layer_hatching_t::get_paper_name,
-         1);
+         1));
 
-      *_lh_tags += new TAG_val<layer_hatching_t,float>(
+      _lh_tags->push_back(new TAG_val<layer_hatching_t,float>(
          "angle",
          &layer_hatching_t::angle
-         );
-      *_lh_tags += new TAG_val<layer_hatching_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_hatching_t,float>(
          "paper_contrast",
          &layer_hatching_t::paper_contrast
-         );
-      *_lh_tags += new TAG_val<layer_hatching_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_hatching_t,float>(
          "paper_scale",
          &layer_hatching_t::paper_scale
-         );    
-      *_lh_tags += new TAG_val<layer_hatching_t,float>(
+         ));
+      _lh_tags->push_back(new TAG_val<layer_hatching_t,float>(
          "tone_push",
          &layer_hatching_t::tone_push
-         );    
+         ));
    }
+
    return *_lh_tags;
 }
 
