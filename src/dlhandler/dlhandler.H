@@ -52,8 +52,8 @@ class DLhandler {
       void close_dl(CVIEWptr &v);
       
    protected:
-      ARRAY<int> _dl_array;
-      ARRAY<int> _dl_stamp_array;
+      vector<int> _dl_array;
+      vector<int> _dl_stamp_array;
       void make_dl_big_enough(int i);
       void make_dl_stamp_big_enough(int i);
       ThreadMutex _dl_stamp_mutex;

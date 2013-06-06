@@ -85,7 +85,7 @@ DLhandler::valid(CVIEWptr &v, int cmp_stamp) const
 void
 DLhandler::invalidate() 
 {
-   for (int i = 0; i< _dl_stamp_array.num(); i++) {
+   for (vector<int>::size_type i = 0; i< _dl_stamp_array.size(); i++) {
       _dl_stamp_array[i] = -1;
    }
 }
@@ -141,7 +141,7 @@ void
 DLhandler::delete_dl(CVIEWptr &v)
 {
    const int view_id = dl_per_view ? v->view_id() : 0;
-   if (_dl_array.valid_index(view_id)) {
+   if (0 <= view_id && view_id < (int)_dl_array.size()) {
       if (_dl_array[view_id]) {
          glDeleteLists(_dl_array[view_id], 1);
          _dl_array[view_id] = 0;
@@ -154,8 +154,8 @@ DLhandler::delete_dl(CVIEWptr &v)
 void
 DLhandler::delete_all_dl()
 {
-   for (int i = 0; i< _dl_array.num(); i++) {
-      if (_dl_array[i]) {
+   for (vector<int>::size_type i = 0; i < _dl_array.size(); i++) {
+      if (_dl_array[i] != 0) {
          glDeleteLists(_dl_array[i], 1);
          _dl_array[i] = 0;
       }
@@ -168,22 +168,12 @@ void
 DLhandler::make_dl_big_enough(int i)
 {
    CriticalSection cs(&_dl_mutex);
-   while (!_dl_array.valid_index(i)) {
-      if (dl_per_view && debug_threads) {
-         cerr << "Adding _dl_array entry" << endl;
-      }
-      _dl_array += 0;
-   }
+   _dl_array.resize(i + 1, 0);
 }
 
 void
 DLhandler::make_dl_stamp_big_enough(int i)
 {
    CriticalSection cs(&_dl_stamp_mutex);
-   while (!_dl_stamp_array.valid_index(i)) {
-      if (dl_per_view && debug_threads) {
-         cerr << "Adding _dl_stamp_array entry" << endl;
-      }
-      _dl_stamp_array += -1;
-   }
+   _dl_stamp_array.resize(i + 1, -1);
 }
