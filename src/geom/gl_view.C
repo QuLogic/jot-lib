@@ -166,7 +166,7 @@ GL_VIEW::draw_setup()
    clear_draw_buffer();
 
    // initialize stencil mask for each registered stencil cb
-   if (_view->stencil_cbs().num())
+   if (!_view->stencil_cbs().empty())
       setup_stencil();
    else
       glDisable(GL_STENCIL_TEST);
@@ -191,9 +191,11 @@ GL_VIEW::draw_frame(
 {
    int tris = draw_objects(_view->drawn(), e);
 
-   if (_view->stencil_cbs().num())
-      for (int i = 0; i < _view->stencil_cbs().num(); i++)
+   if (!_view->stencil_cbs().empty()) {
+      vector<STENCILCB*>::size_type i;
+      for (i = 0; i < _view->stencil_cbs().size(); i++)
          tris += _view->stencil_cbs()[i]->stencil_cb();
+   }
 
    PRINT_GL_ERRORS("");
 
@@ -274,7 +276,8 @@ GL_VIEW::setup_stencil()
    glLoadIdentity();
 
    XYpt_list pts;
-   for (int i = 0; i < _view->stencil_cbs().num(); i++) {
+   vector<STENCILCB*>::size_type i;
+   for (i = 0; i < _view->stencil_cbs().size(); i++) {
       // Get bounds of the requested stencil buffer
       _view->stencil_cbs()[i]->stencil_bounds(pts);
 
@@ -494,9 +497,10 @@ GL_VIEW::stencil_draw(
    GELlist   *objs
    )
 {
-   const int num = _view->stencil_cbs().get_index(cb);
-   if (num != BAD_IND) {
-      glStencilFunc(GL_EQUAL, (GLint) num + 1, 0x127);
+   vector<STENCILCB*>::iterator it;
+   it = std::find(_view->stencil_cbs().begin(), _view->stencil_cbs().end(), cb);
+   if (it != _view->stencil_cbs().end()) {
+      glStencilFunc(GL_EQUAL, (GLint) (it - _view->stencil_cbs().begin()) + 1, 0x127);
       glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
       return draw_objects(objs ? *objs : _view->drawn());
    } else {

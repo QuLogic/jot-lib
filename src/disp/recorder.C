@@ -24,8 +24,9 @@ int
 CameraPath::write_stream( iostream& os ) { 
 
    STDdstream out(&os);
-   out << state_list.num();
-   for ( int i = 0 ; i < state_list.num() ; i++ ) { 
+   out << state_list.size();
+   vector<CamState*>::size_type i;
+   for ( i = 0 ; i < state_list.size() ; i++ ) {
       out << state_list[i]->t();
       out << state_list[i]->cam()->data();
    }
@@ -45,7 +46,7 @@ CameraPath::read_stream ( iostream& is ) {
       in >> ftime;
       CAMdataptr cd = cptr->data(); // XXX - temp variable to avoid warnings
       in >> cd;                 //          here
-      state_list += new CamState ( ftime, cptr );
+      state_list.push_back(new CamState ( ftime, cptr ));
    }
    return 1;
 }
@@ -73,8 +74,9 @@ Recorder::Recorder(VIEWptr view) :
 
 Recorder::~Recorder() 
 { 
-   delete _ui; 
-   for ( int i=0; i < _campaths.num() ; i++ )
+   delete _ui;
+   vector<CameraPath*>::size_type i;
+   for ( i=0; i < _campaths.size() ; i++ )
       delete _campaths[i];
    _view = 0;
 }
@@ -119,7 +121,6 @@ Recorder::rec_record()
 
    if ( _paused && _play_on ) {    //stop during playback to overwrite
       _swatch->set(_start_time);
-      // ARRAY < CamState *> tmp = _cur_path->state_list;
       _paused = false;
    } 
 
@@ -136,7 +137,7 @@ Recorder::rec_play()
 
    _play_on     = true;
    _record_on   = false;
-   _target_frame = _cur_path->state_list.num()-1;
+   _target_frame = _cur_path->state_list.size()-1;
    _swatch->set();
   
    _paused      = false;
@@ -187,7 +188,7 @@ Recorder::step_fwd()
   
    _play_on     = true;
    _paused      = false;
-   _target_frame = min ( _path_pos+1 , _cur_path->state_list.num()-1 );
+   _target_frame = min ( _path_pos+1 , (int)_cur_path->state_list.size()-1 );
    _path_pos = _target_frame;
    _ui->set_frame_num ( _path_pos );
    _path_time   = _cur_path->state_list[_path_pos]->t();
@@ -231,7 +232,7 @@ Recorder::rec_stop()
    _paused         = false;
    _path_pos       = 0;
    _path_time      = 0;
-   _target_frame   = _cur_path->state_list.num()-1 ;
+   _target_frame   = _cur_path->state_list.size()-1 ;
    cerr << "\nstop\n";
 } 
 
@@ -268,8 +269,8 @@ Recorder::new_path()
 { 
 
    string filename = ( _name_buf != "" ) ? _name_buf : "path";
-   _campaths.add ( new CameraPath( filename ));
-   int id       = _campaths.num()-1;
+   _campaths.push_back ( new CameraPath( filename ));
+   int id       = _campaths.size()-1;
    _ui->add_path_entry ( id, filename.c_str() );
    _cur_path_num = id;
    _cur_path    = _campaths[_cur_path_num];
@@ -297,7 +298,7 @@ Recorder::del_path(int k)
 int 
 Recorder::save_path ( int pathnum ) { 
   
-   if ( _campaths.num() == 0 || pathnum < 0 || pathnum >= _campaths.num() ) return 0;
+   if ( _campaths.size() == 0 || pathnum < 0 || pathnum >= (int)_campaths.size() ) return 0;
  
    CameraPath * cpath = _campaths[pathnum];
    fstream fout;
@@ -329,11 +330,11 @@ Recorder::open_path ( const char * filename ) {
    CameraPath * tmp = new CameraPath ( filename );
    if ( !tmp->read_stream (fin )) return 0;
    fin.close();
-   _campaths.add ( tmp );
-   _ui->add_path_entry ( _campaths.num()-1, filename );
+   _campaths.push_back ( tmp );
+   _ui->add_path_entry ( _campaths.size()-1, filename );
    //set the opened path to be the current path
-   cerr << "num is " << _campaths.num() << endl;
-   set_path ( _campaths.num()-1 ) ;
+   cerr << "num is " << _campaths.size() << endl;
+   set_path ( _campaths.size()-1 ) ;
    cerr << "end open " << endl;
 
    return 1;
@@ -344,13 +345,13 @@ Recorder::open_path ( const char * filename ) {
 int 
 Recorder::num_paths() 
 { 
-   return _campaths.num(); 
+   return _campaths.size();
 }
   
 int 
 Recorder::set_path( int pathnum ) 
 { 
-   if ( pathnum < 0 || pathnum >= _campaths.num() ) {
+   if ( pathnum < 0 || pathnum >= (int)_campaths.size() ) {
       cerr << "illegal path value:" << pathnum  ;
       _cur_path = NULL;
       _cur_path_num = -1;
@@ -390,10 +391,10 @@ int Recorder::set_fps(int fps) { return (_fps = fps); }
 void
 Recorder::set_pos(int pos) 
 { 
-   if ( pos > 0 &&  pos <  _cur_path->state_list.num() ) { 
+   if ( pos > 0 && pos < (int)_cur_path->state_list.size() ) {
       //setting pos enables play all frames
       _play_all_frames     = true;
-         
+
       if ( _sync ) { 
          if ( pos > _path_pos) { 
             target_frame()      = pos ;  
@@ -430,16 +431,15 @@ Recorder::pre_draw_CB()
       double ttime = _swatch->elapsed_time();
       
       if ( _play_on )  { 
-         
+
          //forward to closest path after current time
-         if ( _path_pos >= _cur_path->state_list.num() ||
-              _cur_path->state_list.num() == 0 ) { 
+         if ( _path_pos >= (int)_cur_path->state_list.size() ||
+              _cur_path->state_list.empty() ) {
             cerr << "end of state list reached::camera stop" << endl;
             rec_stop() ; 
             return; 
          } 
-         
-         
+
          if ( _render_on || _play_all_frames ) {
 
             CAMptr mine = (_cur_path->state_list[_path_pos]->cam());          
@@ -464,14 +464,14 @@ Recorder::pre_draw_CB()
                   replay(); 
                } else _path_pos++;
             } else { 
-               if ( _path_pos >= _cur_path->state_list.num() -1 ) rec_stop();
+               if ( _path_pos >= (int)_cur_path->state_list.size() -1 ) rec_stop();
                else if ( _path_pos >= _target_frame ) rec_pause();
                else _path_pos++;
             }   
          } else {                
             while ( _cur_path->state_list[_path_pos]->t() < ttime ) { 
                _path_pos++;
-               if ( _path_pos >= _cur_path->state_list.num()) { 
+               if ( _path_pos >= (int)_cur_path->state_list.size()) {
                   rec_stop(); 
                   return;
                }
@@ -493,7 +493,7 @@ Recorder::pre_draw_CB()
       } else if ( _record_on ) { 
          while ( ttime >= _next_time ) {
             _cur_path->add( _next_time, _view->cam()); //always adds to end of list
-            _path_pos = _cur_path->state_list.num()-1; 
+            _path_pos = _cur_path->state_list.size()-1;
             _next_time += 1.0/_fps; //set next time to get data
             
          }       
@@ -505,8 +505,8 @@ Recorder::pre_draw_CB()
       }
       
       if ( _path_pos < 0 ||
-           _path_pos >= _cur_path->state_list.num() ||
-           _cur_path->state_list.num() == 0 ) {
+           _path_pos >= (int)_cur_path->state_list.size() ||
+           _cur_path->state_list.empty() ) {
          rec_stop();
          return;
       }

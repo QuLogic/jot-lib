@@ -255,10 +255,10 @@ BBOX::ndcz_bounding_box(
    points(point_list);
 
    // convert to ndcz points
-   ARRAY<NDCZpt> ndcz_list;
-   int         i;
-   for (i = 0; i < point_list.num(); i++) {
-      ndcz_list += NDCZpt(point_list[i], obj_to_ndc);
+   vector<NDCZpt> ndcz_list;
+   vector<NDCZpt>::size_type j;
+   for (int i = 0; i < point_list.num(); i++) {
+      ndcz_list.push_back(NDCZpt(point_list[i], obj_to_ndc));
    }
 
    // init min and max to sentinel values
@@ -269,12 +269,12 @@ BBOX::ndcz_bounding_box(
    }
 
    // find min and max for each coordinate
-   for (i = 0; i < ndcz_list.num(); i++) {
+   for (j = 0; j < ndcz_list.size(); j++) {
       for (coord = 0; coord < 3; coord++) {
-         if (ndcz_list[i][coord] < min_pt[coord])
-            min_pt[coord] = ndcz_list[i][coord];
-         else if (ndcz_list[i][coord] > max_pt[coord])
-            max_pt[coord] = ndcz_list[i][coord];
+         if (ndcz_list[j][coord] < min_pt[coord])
+            min_pt[coord] = ndcz_list[j][coord];
+         else if (ndcz_list[j][coord] > max_pt[coord])
+            max_pt[coord] = ndcz_list[j][coord];
       }
    }
 }

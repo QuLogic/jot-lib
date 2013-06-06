@@ -41,7 +41,7 @@ CAMdata::CAMdata(CAM* c) :
    _film_normal(0,0,1),
    _film_normal_flag(false),
    _loaded_from_file(false),
-   _cblist(0),
+   _cblist(),
    _cached(0),
    _stamp(0)
 {
@@ -78,24 +78,27 @@ CAMdata::changed()
 
    ++_stamp;
 
-   for (i=0; i<_cblist.num(); i++)
-      _cblist[i]->notify(this);
+   set<CAMobs *>::iterator it;
+   for (it=_cblist.begin(); it!=_cblist.end(); ++it)
+      (*it)->notify(this);
 }
 
 void      
 CAMdata::start_manip()
 {
-   for (int i=0; i<_cblist.num(); ++i)
-      _cblist[i]->notify_manip_start(this);   
+   set<CAMobs *>::iterator it;
+   for (it=_cblist.begin(); it!=_cblist.end(); ++it)
+      (*it)->notify_manip_start(this);
 }
    
 void
 CAMdata::end_manip()
 {
-   for (int i=0; i<_cblist.num(); ++i)
-      _cblist[i]->notify_manip_end(this);
-   
+   set<CAMobs *>::iterator it;
+   for (it=_cblist.begin(); it!=_cblist.end(); ++it)
+      (*it)->notify_manip_end(this);
 }
+
 /* -------------------------------------------------------------------------
  * DESCR   :    finds the (unit length) film plane normal vector.  It prints
  *              an error message and returns FALSE if anything goes wrong.

@@ -20,7 +20,7 @@
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-ARRAY<PaperEffectObs*>  PaperEffectBase::_obs;
+set<PaperEffectObs*>    PaperEffectBase::_obs;
 
 string                  PaperEffectBase::_paper_tex;
 string                  PaperEffectBase::_paper_filename = "";
@@ -45,8 +45,9 @@ float                   PaperEffectBase::_cont = 0.5f;
 void
 PaperEffectBase::notify_paper_changed()
 {
-   for (int i=0; i<_obs.num(); i++)
-      _obs[i]->paper_changed();
+   set<PaperEffectObs*>::iterator it;
+   for (it=_obs.begin(); it!=_obs.end(); ++it)
+      (*it)->paper_changed();
 }
 
 /////////////////////////////////////
@@ -56,8 +57,9 @@ PaperEffectBase::notify_paper_changed()
 void
 PaperEffectBase::notify_usage_toggled()
 {
-   for (int i=0; i<_obs.num(); i++)
-      _obs[i]->usage_changed();
+   set<PaperEffectObs*>::iterator it;
+   for (it=_obs.begin(); it!=_obs.end(); ++it)
+      (*it)->usage_changed();
 }
 
 /* end of file paper_effect_base.C */

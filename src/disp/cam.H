@@ -26,6 +26,8 @@
 #include "disp/bbox.H"
 #include "std/stop_watch.H"
 
+#include <set>
+
 using namespace mlib;
 
 #ifdef WIN32
@@ -82,7 +84,7 @@ class REF_CLASS(CAMdata) : public REFcounter {
    bool         _loaded_from_file; 
 
    // Auxiliary members
-   ARRAY<CAMobs *> _cblist;
+   set<CAMobs *>   _cblist;
 
    bool            _changed, _cached;
    bool            _proj_mat_dirty;
@@ -103,8 +105,8 @@ class REF_CLASS(CAMdata) : public REFcounter {
 
   public : 
    CAMdata(CAM* = 0);
-   void      add_cb(CAMobs *cb)         { _cblist.add(cb);}
-   void      rem_cb(CAMobs *cb)         { _cblist.rem(cb);}
+   void      add_cb(CAMobs *cb)         { _cblist.insert(cb);}
+   void      rem_cb(CAMobs *cb)         { _cblist.erase(cb);}
  
    mlib::CWpt&from()            const   { return _from; }
    mlib::CWpt&at()              const   { return _at  ; }

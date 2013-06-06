@@ -317,7 +317,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    static        int _num_views;
    const         int _view_id;
 
-   ARRAY<STENCILCB*> _stencil_cbs;// Stencil buffers!
+   vector<STENCILCB*> _stencil_cbs; // Stencil buffers!
 
    string        _name;          // view's name
    CAMptr        _cam;           // camera definition for view
@@ -361,7 +361,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    Light        _lights[MAX_LIGHTS];    // individual lights
    COLOR        _light_global_ambient;  // global ambient light
 
-   static ARRAY<ARRAY<mlib::VEXEL>*> _jitters;
+   static vector<vector<mlib::VEXEL>*> _jitters;
 
    //Used in constructor to setup defaults
    void              init_lights();
@@ -387,8 +387,9 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    void              set_focus()                            { if (_impl) _impl->set_focus();  }
 
    void              set_jitter(int n, int i); //n==-1 resets to identity
-   static int        get_jitter_num(int n)                  { assert(_jitters.valid_index(n)); return (*(_jitters[n])).num(); }
-   static int        get_jitter_mode_num()                  { return _jitters.num(); }
+   static int        get_jitter_num(int n)                  { assert(0 <= n && n < (int)_jitters.size());
+                                                              return _jitters[n]->size(); }
+   static int        get_jitter_mode_num()                  { return _jitters.size(); }
 
    int               get_antialias_enable() const           { return _antialias_enable; }
    void              set_antialias_enable(bool a)           
@@ -636,7 +637,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
  public:
    VIEW (const string &s, WINSYS *win, VIEWimpl *i);
-   virtual              ~VIEW () { while (_jitters.num() > 0) delete _jitters.pop(); }
+   virtual              ~VIEW () { for (size_t i = 0; i < _jitters.size(); i++) delete _jitters[i]; }
 
    static int           stack_size()               { return _views.num(); }
    static void          push(CVIEWptr &view)       { _views += view; }
@@ -725,9 +726,12 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    mlib::CWplane    &clip_plane ()        const { return _clip_plane;}
    CCOLOR&     color()              const { return _bkgnd_col; }
 
-   ARRAY<STENCILCB*> &stencil_cbs()       { return _stencil_cbs; }
-   void        add_stencil (STENCILCB *cb){ _stencil_cbs += cb; }
-   void        rem_stencil (STENCILCB *cb){ _stencil_cbs -= cb; }
+   vector<STENCILCB*> &stencil_cbs()      { return _stencil_cbs; }
+   void        add_stencil (STENCILCB *cb){ _stencil_cbs.push_back(cb); }
+   void        rem_stencil (STENCILCB *cb){ vector<STENCILCB*>::iterator it;
+                                            it = std::find(_stencil_cbs.begin(), _stencil_cbs.end(), cb);
+                                            _stencil_cbs.erase(it);
+                                          }
    void        set_color(CCOLOR &c);
    void        set_lens(mlib::CWtransf &l)      { _lens = l; }
    mlib::Wtransf     get_lens() { return _lens; }

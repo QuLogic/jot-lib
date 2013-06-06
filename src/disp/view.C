@@ -137,7 +137,7 @@ ThreadToView *ThreadToView::_instance = 0;
 
 TAGlist *            VIEW::_v_tags = 0;
 
-ARRAY<ARRAY<VEXEL>*> VIEW::_jitters;
+vector<vector<VEXEL>*> VIEW::_jitters;
 
 /////////////////////////////////////
 // tags()
@@ -765,10 +765,10 @@ VIEW::get_view_light_coords (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<Wvec> c;
+   vector<Wvec> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<Wvec>::size_type i=0; i<c.size(); i++)
       light_set_coordinates_v(i,c[i]);
    
 }
@@ -782,10 +782,10 @@ VIEW::put_view_light_coords (TAGformat &d) const
    if ((!_in_data_file) && (_data_file != ""))
       return;
 
-   ARRAY<Wvec> c;
+   vector<Wvec> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_coordinates_v(i));
-    d.id();
+      c.push_back(light_get_coordinates_v(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -800,11 +800,11 @@ VIEW::get_view_light_positional (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<int> p;
+   vector<int> p;
    *d >> p;
-   assert(p.num() <= MAX_LIGHTS);
+   assert(p.size() <= MAX_LIGHTS);
    for (int i=0; i<MAX_LIGHTS; i++)
-      light_set_positional(i,(p[i]==1)?(true):(false));
+      light_set_positional(i, (p[i]==1)?true:false);
 }
 
 /////////////////////////////////////
@@ -816,13 +816,12 @@ VIEW::put_view_light_positional (TAGformat &d) const
    if ((!_in_data_file) && (_data_file != ""))
       return;
 
-   ARRAY<int> p;
+   vector<int> p;
    for (int i=0; i<MAX_LIGHTS; i++)
-      p.add((light_get_positional(i))?(1):(0));
+      p.push_back(light_get_positional(i)?1:0);
    d.id();
    *d << p;
    d.end_id();
-  
 }
 
 /////////////////////////////////////
@@ -835,12 +834,11 @@ VIEW::get_view_light_cam_space (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<int> c;
+   vector<int> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
+   assert(c.size() <= MAX_LIGHTS);
    for (int i=0; i<MAX_LIGHTS; i++)
-      light_set_in_cam_space(i,((c[i]==1)?(true):(false)));
-   
+      light_set_in_cam_space(i, (c[i]==1)?true:false);
 }
 
 /////////////////////////////////////
@@ -853,13 +851,12 @@ VIEW::put_view_light_cam_space (TAGformat &d) const
    //Sanity checl
    assert(!(_in_data_file && _data_file == ""));
 
-   ARRAY<int> c;
+   vector<int> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add((light_get_in_cam_space(i))?(1):(0));
-    d.id();
+      c.push_back(light_get_in_cam_space(i)?1:0);
+   d.id();
    *d << c;
    d.end_id();
-      
 }
 
 /////////////////////////////////////
@@ -872,11 +869,11 @@ VIEW::get_view_light_color_diff (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<COLOR> c;
+   vector<COLOR> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
+   assert(c.size() <= MAX_LIGHTS);
    for (int i=0; i<MAX_LIGHTS; i++)
-      light_set_diffuse(i,c[i]);
+      light_set_diffuse(i, c[i]);
 }
 
 /////////////////////////////////////
@@ -889,13 +886,12 @@ VIEW::put_view_light_color_diff (TAGformat &d) const
    //Sanity checl
    assert(!(_in_data_file && _data_file == ""));
 
-   ARRAY<COLOR> c;
+   vector<COLOR> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_diffuse(i));
+      c.push_back(light_get_diffuse(i));
    d.id();
    *d << c;
    d.end_id();   
-   
 }
 
 /////////////////////////////////////
@@ -908,12 +904,11 @@ VIEW::get_view_light_color_amb (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<COLOR> a;
+   vector<COLOR> a;
    *d >> a;
-   assert(a.num() <= MAX_LIGHTS);
+   assert(a.size() <= MAX_LIGHTS);
    for (int i=0; i<MAX_LIGHTS; i++)
-      light_set_ambient(i,a[i]);
-   
+      light_set_ambient(i, a[i]);
 }
 
 /////////////////////////////////////
@@ -926,14 +921,13 @@ VIEW::put_view_light_color_amb (TAGformat &d) const
    //Sanity checl
    assert(!(_in_data_file && _data_file == ""));
 
-   ARRAY<COLOR> a;
+   vector<COLOR> a;
    for (int i=0; i<MAX_LIGHTS; i++)
-      a.add(light_get_ambient(i));
+      a.push_back(light_get_ambient(i));
 
    d.id();
    *d << a;
-   d.end_id();   
-   
+   d.end_id();
 }
 
 /////////////////////////////////////
@@ -978,12 +972,11 @@ VIEW::get_view_light_enable (TAGformat &d)
    assert( ( _in_data_file && (_data_file != "")) ||
            (!_in_data_file && (_data_file == ""))    );
 
-   ARRAY<int> e;
+   vector<int> e;
    *d >> e;
-   assert(e.num() <= MAX_LIGHTS);
+   assert(e.size() <= MAX_LIGHTS);
    for (int i=0; i<MAX_LIGHTS; i++)
-      light_set_enable(i,(e[i]==1)?(true):(false));
-  
+      light_set_enable(i, (e[i]==1)?true:false);
 }
 
 /////////////////////////////////////
@@ -996,13 +989,12 @@ VIEW::put_view_light_enable (TAGformat &d) const
    //Sanity checl
    assert(!(_in_data_file && _data_file == ""));
 
-   ARRAY<int> e;
+   vector<int> e;
    for (int i=0; i<MAX_LIGHTS; i++)
-      e.add((light_get_enable(i))?(1):(0));
+      e.push_back(light_get_enable(i)?1:0);
    d.id();
    *d << e;
    d.end_id();
-   
 }
 
 void     
@@ -1011,10 +1003,10 @@ VIEW::put_view_light_spot_direction(TAGformat &d) const
    if ((!_in_data_file) && (_data_file != ""))
       return;
 
-   ARRAY<Wvec> c;
+   vector<Wvec> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_spot_direction(i));
-    d.id();
+      c.push_back(light_get_spot_direction(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -1022,19 +1014,19 @@ VIEW::put_view_light_spot_direction(TAGformat &d) const
 void     
 VIEW::get_view_light_spot_direction(TAGformat &d) 
 {
-   ARRAY<Wvec> c;
+   vector<Wvec> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<Wvec>::size_type i=0; i<c.size(); i++)
       light_set_spot_direction(i,c[i]);
 }
 
 void     
 VIEW::put_view_light_spot_exponent(TAGformat &d) const
 {
-   ARRAY<float> c;
+   vector<float> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_spot_exponent(i));
+      c.push_back(light_get_spot_exponent(i));
     d.id();
    *d << c;
    d.end_id();
@@ -1043,20 +1035,20 @@ VIEW::put_view_light_spot_exponent(TAGformat &d) const
 void
 VIEW::get_view_light_spot_exponent(TAGformat &d) 
 {
-   ARRAY<float> c;
+   vector<float> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
-      light_set_spot_exponent(i,c[i]);
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<float>::size_type i=0; i<c.size(); i++)
+      light_set_spot_exponent(i, c[i]);
 }
 
 void     
 VIEW::put_view_light_spot_cutoff(TAGformat &d) const
 {
-   ARRAY<float> c;
+   vector<float> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_spot_cutoff(i));
-    d.id();
+      c.push_back(light_get_spot_cutoff(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -1064,20 +1056,20 @@ VIEW::put_view_light_spot_cutoff(TAGformat &d) const
 void     
 VIEW::get_view_light_spot_cutoff(TAGformat &d) 
 {
-   ARRAY<float> c;
+   vector<float> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
-      light_set_spot_cutoff(i,c[i]);
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<float>::size_type i=0; i<c.size(); i++)
+      light_set_spot_cutoff(i, c[i]);
 }
 
 void     
 VIEW::put_view_light_constant_attenuation(TAGformat &d) const
 {
-   ARRAY<float> c;
+   vector<float> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_constant_attenuation(i));
-    d.id();
+      c.push_back(light_get_constant_attenuation(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -1085,20 +1077,20 @@ VIEW::put_view_light_constant_attenuation(TAGformat &d) const
 void
 VIEW::get_view_light_constant_attenuation(TAGformat &d) 
 {
-   ARRAY<float> c;
+   vector<float> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
-      light_set_constant_attenuation(i,c[i]);
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<float>::size_type i=0; i<c.size(); i++)
+      light_set_constant_attenuation(i, c[i]);
 }
 
 void     
 VIEW::put_view_light_linear_attenuation(TAGformat &d) const
 {
-   ARRAY<float> c;
+   vector<float> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_linear_attenuation(i));
-    d.id();
+      c.push_back(light_get_linear_attenuation(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -1106,20 +1098,20 @@ VIEW::put_view_light_linear_attenuation(TAGformat &d) const
 void     
 VIEW::get_view_light_linear_attenuation(TAGformat &d) 
 {
-   ARRAY<float> c;
+   vector<float> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<float>::size_type i=0; i<c.size(); i++)
       light_set_linear_attenuation(i,c[i]);
 }
 
 void     
 VIEW::put_view_light_quadratic_attenuation(TAGformat &d) const
 {
-   ARRAY<float> c;
+   vector<float> c;
    for (int i=0; i<MAX_LIGHTS; i++)
-      c.add(light_get_quadratic_attenuation(i));
-    d.id();
+      c.push_back(light_get_quadratic_attenuation(i));
+   d.id();
    *d << c;
    d.end_id();
 }
@@ -1127,11 +1119,11 @@ VIEW::put_view_light_quadratic_attenuation(TAGformat &d) const
 void     
 VIEW::get_view_light_quadratic_attenuation(TAGformat &d) 
 {
-   ARRAY<float> c;
+   vector<float> c;
    *d >> c;
-   assert(c.num() <= MAX_LIGHTS);
-   for (int i=0; i<c.num(); i++)
-      light_set_quadratic_attenuation(i,c[i]);
+   assert(c.size() <= MAX_LIGHTS);
+   for (vector<float>::size_type i=0; i<c.size(); i++)
+      light_set_quadratic_attenuation(i, c[i]);
 }
 
 /////////////////////////////////////
@@ -1309,9 +1301,9 @@ VIEW::set_jitter(
    }
    else
    {
-      assert(_jitters.valid_index(n));
-      assert((*(_jitters[n])).valid_index(i));
-      XYvec jit((*(_jitters[n]))[i]);
+      assert(0 <= n && n < (int)_jitters.size());
+      assert(0 <= i && i < (int)_jitters[n]->size());
+      XYvec jit(_jitters[n]->at(i));
 
       _jitter(0,3) = -jit[0];
       _jitter(1,3) = -jit[1];
@@ -1322,16 +1314,13 @@ VIEW::set_jitter(
 void
 VIEW::init_jitter()
 {
-   
-   for(int n=0; n<JITTER_NUM; n++)
-   {
-      ARRAY<VEXEL>* jits = new ARRAY<VEXEL>(jnum[n]);
-      _jitters.add(jits);
+   for(int n=0; n<JITTER_NUM; n++) {
+      vector<VEXEL>* jits = new vector<VEXEL>(jnum[n]);
+      _jitters.push_back(jits);
 
       for (int i=0; i<jnum[n]; i++)
-         jits->add(VEXEL(j[n][i].x,j[n][i].y));
+         jits->push_back(VEXEL(j[n][i].x,j[n][i].y));
    }
-
 }
 
 void
@@ -1506,13 +1495,13 @@ VIEW::intersect(
 
    // Only add default GELFILTpickable filter if no such filter already exists
    bool has_pickable = false;
-   for (int f = 0; !has_pickable && f < filter_list.num(); f++)
+   for (GELFILTlist::size_type f = 0; !has_pickable && f < filter_list.size(); f++)
       has_pickable = 
          filter_list[f]->class_name() == GELFILTpickable::static_name();
 
    GELFILTpickable pick(0);  // The default filter
    if (!has_pickable)
-      filter_list += &pick;
+      filter_list.push_back(&pick);
 
    for (int i = 0; i < _drawn.num(); i++ ) {
       if (filter_list.accept(_drawn[i]))
@@ -1545,12 +1534,12 @@ VIEW::intersect_others(
    //   but can't reference geom/text2d.H
    GELFILTclass_desc_excl no_text("TEXT2D");    
 
-   filter_list += &others;
+   filter_list.push_back(&others);
 
    if ((filter & H_TEXT) == 0)
-      filter_list += &no_text; 
+      filter_list.push_back(&no_text);
    if (filter & H_UNPICKABLE) 
-      filter_list += &pick;
+      filter_list.push_back(&pick);
       
    return intersect(r, filter_list);
 }
@@ -1588,9 +1577,9 @@ VIEW::intersect(
    GELFILTclass_desc_excl no_text("TEXT2D");    
 
    if ((filter & H_TEXT) == 0)
-      filter_list += &no_text;
+      filter_list.push_back(&no_text);
    if (filter & H_UNPICKABLE)
-      filter_list += &pick;
+      filter_list.push_back(&pick);
 
    return intersect(r, filter_list);
 }

@@ -241,7 +241,7 @@ DrawnList::add(
 {
    if (g) {
       if (buffering())
-         _dispq += DispOp(g, true); // Displayed
+         _dispq.push_back(DispOp(g, true)); // Displayed
       else {
          GELlist::add_uniquely(g);
          DISPobs::notify_disp_obs(g, 1);
@@ -256,7 +256,7 @@ DrawnList::rem(
 {
    if (g) {
       if (buffering())
-         _dispq += DispOp(g, 0); // Undisplay
+         _dispq.push_back(DispOp(g, 0)); // Undisplay
       else {
          GELlist::rem(g);
          DISPobs::notify_disp_obs(g, 0);
@@ -279,8 +279,8 @@ void
 DrawnList::flush()
 {
    _buffering = 0;
-   int i;
-   for (i = 0; i < _dispq.num(); i++) {
+   vector<DispOp>::size_type i;
+   for (i = 0; i < _dispq.size(); i++) {
       if (_dispq[i]._op) add(_dispq[i]._gel);
       else               rem(_dispq[i]._gel);
    }

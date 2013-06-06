@@ -177,17 +177,17 @@ class GELFILTwidget3d : public GELFILTtdi<int> {
 /*****************************************************************
  * A list of filters.  The GEL must be accepted by all filters
  *****************************************************************/
-class GELFILTlist : public GELFILT, public ARRAY<GELFILT*> {
+class GELFILTlist : public GELFILT, public vector<GELFILT*> {
  public:
    //******** MANAGERS ********
-   GELFILTlist(int num=16)           : ARRAY<GELFILT *>(num) {}
-   GELFILTlist(const GELFILTlist &l) : ARRAY<GELFILT *>(l)   {}
-   GELFILTlist(GELFILT *filt) { *this += filt;}
+   GELFILTlist(int num=16)           : vector<GELFILT *>()  { reserve(num); }
+   GELFILTlist(const GELFILTlist &l) : vector<GELFILT *>(l) {}
+   GELFILTlist(GELFILT *filt) { this->push_back(filt); }
 
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &gel) {
-      for (int i=0; i<_num; i++)
-         if (!_array[i]->accept(gel))
+      for (vector<GELFILT*>::size_type i=0; i<size(); i++)
+         if (!this->at(i)->accept(gel))
             return 0;
       return true;
    }

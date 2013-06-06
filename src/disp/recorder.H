@@ -18,6 +18,7 @@
 #ifndef _RECORDER_H_IS_INCLUDED_
 #define _RECORDER_H_IS_INCLUDED_
 
+#include <vector>
 
 #include "disp/cam.H"
 #include "disp/view.H"
@@ -58,14 +59,15 @@ class CameraPath {
    int write_stream(iostream& fout);
    int read_stream( iostream& fin);
 
-   ARRAY <CamState*> state_list;
+   vector<CamState*> state_list;
 
    CameraPath() { 
       _name = "path";
 
    }
    ~CameraPath () { 
-      for ( int i=0; i < state_list.num() ; i++ ) delete state_list[i];
+      for ( vector<CamState*>::size_type i=0; i < state_list.size() ; i++ )
+         delete state_list[i];
    }
 
    CameraPath(const string &name) {
@@ -76,11 +78,8 @@ class CameraPath {
 
 
    void add(double time, CCAMptr& ncam) { 
-      state_list += new CamState (time, ncam);
-    
+      state_list.push_back(new CamState (time, ncam));
    }
-
-
 };
 
 class Recorder { 
@@ -89,7 +88,7 @@ class Recorder {
 
    VIEWptr _view;
    stop_watch* _swatch;
-   ARRAY <CameraPath*> _campaths;
+   vector<CameraPath*> _campaths;
    CameraPath* _cur_path;
 
    int       _cur_path_num;  

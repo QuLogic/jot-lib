@@ -244,8 +244,8 @@ class DrawnList : public GELlist {
               return _gel == c._gel && _op == c._op;
            }
      };
-     ARRAY<DispOp> _dispq;
-     bool          _buffering;
+     vector<DispOp> _dispq;
+     bool           _buffering;
    public :
             DrawnList() { }
     void    add   (CGELptr &g);

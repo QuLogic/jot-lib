@@ -21,6 +21,8 @@
 #include "std/support.H"
 #include "mlib/global.H" // for bool
 
+#include <set>
+
 /*****************************************************************
  * PaperEffectObs
  *
@@ -52,7 +54,7 @@ class PaperEffectObs {
 class PaperEffectBase {
  protected:
    /******** STATIC MEMBER VARIABLES ********/
-   static ARRAY<PaperEffectObs*>    _obs;
+   static set<PaperEffectObs*>    _obs;
 
    static string     _paper_tex;
    static string     _paper_filename;
@@ -76,8 +78,8 @@ class PaperEffectBase {
    virtual ~PaperEffectBase()   {}
 
    /******** INTERFACE METHODS ********/
-   static void    rem_obs(PaperEffectObs* p)    { if (p) _obs -= p; }
-   static void    add_obs(PaperEffectObs* p)    { if (p) _obs += p; }
+   static void    rem_obs(PaperEffectObs* p)    { if (p) _obs.erase(p); }
+   static void    add_obs(PaperEffectObs* p)    { if (p) _obs.insert(p); }
 
    static string  get_paper_tex()               { return _paper_tex; }
    static void    set_paper_tex(const string&p) { _paper_tex = p; notify_paper_changed(); }
