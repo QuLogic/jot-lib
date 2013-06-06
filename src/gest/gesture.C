@@ -43,8 +43,8 @@ GESTURE::add(CPIXEL& p, double min_dist, double pressure)
 {
    if (_pts.empty() || _pts.last().dist(p) >= min_dist) {
       _pts       += p;
-      _pressures += pressure;
-      _times     += stop_watch::sys_time();
+      _pressures.push_back(pressure);
+      _times.push_back(stop_watch::sys_time());
 
       _bbox.update(Wpt(XYpt(p)));
       _pix_bbox.update(p);
@@ -87,7 +87,7 @@ void
 GESTURE::complete(CPIXEL& p, CEvent& up) 
 {
    if (_pts.num() < 2)
-      add(p,0,_pressures.last());
+      add(p, 0, _pressures.back());
    _up = up;
 
    // get rid of jagged tips:
@@ -146,8 +146,8 @@ GESTURE::trim()
       err_adv(debug, "GESTURE::trim: clipping at %d", trim_i);
       clip_tip(_pts,       trim_i);
       _pts.update_length();
-      clip_tip(_times,     trim_i);
-      clip_tip(_pressures, trim_i);
+      _times.erase(_times.begin(), _times.begin() + trim_i);
+      _pressures.erase(_pressures.begin(), _pressures.begin() + trim_i);
    }
       
    // Do the end of the stroke:
@@ -165,8 +165,8 @@ GESTURE::trim()
       // truncated array.
       _pts.      truncate(trim_i + 1);
       _pts.update_length();
-      _times.    truncate(trim_i + 1);
-      _pressures.truncate(trim_i + 1);
+      _times.    resize(trim_i + 1);
+      _pressures.resize(trim_i + 1);
       err_adv(debug, "GESTURE::trim: trimming at %d", trim_i);
    }
 }
@@ -208,10 +208,10 @@ GESTURE::startup_time(double dist_thresh) const
    // Find last index i within the distance threshold:
    int i = -1;
    _pts.interpolate(dist_thresh/length(), 0, &i);
-   if (!_times.valid_index(i)) {
+   if (i < 0 || i >= (int)_times.size()) {
       err_msg("GESTURE::startup_time: Error: PIXEL_list::interpolate failed");
       return 0;
-   } else if (_times.valid_index(i+1)) {
+   } else if (0 <= (i+1) && (i+1) < (int)_times.size()) {
       // Advance the index to the first slot outside the startup region:
       i++;
    }
@@ -328,13 +328,13 @@ GESTURE::is_corner(int i) const
    return rad2deg(fabs(angle(i))) > MIN_ANGLE;
 }
 
-ARRAY<int>
+vector<int>
 GESTURE::corners() const
 {
-   ARRAY<int> ret;
+   vector<int> ret;
    for (int i=0;i < _pts.num(); i++)
       if (is_corner(i))
-         ret += i;
+         ret.push_back(i);
    return ret;
 }
 
@@ -434,8 +434,8 @@ GESTURE::is_zip_zap() const
       return false;
 
    // should have 1 corner
-   ARRAY<int> corn = corners();
-   if (corn.num() != 3)
+   vector<int> corn = corners();
+   if (corn.size() != 3)
       return false;
 
    // stroke should be straight to corner and back:
@@ -1128,7 +1128,7 @@ GESTURE::is_ellipse(
    // Step 2.
    //
    // Change of coordinates -- put origin at center
-   ARRAY<VEXEL> P(n); // transformed points
+   vector<VEXEL> P(n); // transformed points
    for (k=0; k<n; k++)
       P[k] += (_pts[k] - center);
 
@@ -1354,7 +1354,7 @@ GestureDrawer::draw(const GESTURE* gest, CVIEWptr& v)
 
    // draw the line strip
    const PIXEL_list&    pts   = gest->pts();
-   const ARRAY<double>& press = gest->pressures();
+   const vector<double>& press = gest->pressures();
    glBegin(GL_LINE_STRIP);
    for (int k=0; k< pts.num(); k++) {
       double grey = pressure_to_grey(press[k]);

@@ -31,16 +31,13 @@ GEST_INT::GEST_INT(
    CEvent &d2, CEvent &u2) :
    Simple_int(d,m,u),
    _view(view),
-   _obs(0),
+   _obs(),
    _stack(16),
    _drawer(new GestureDrawer()),
    _fsa(&_entry)
 {
    // turn on indexing:
    _stack.begin_index();
-
-   // for safety, no observers can get listed twice:
-   _obs.set_unique();
 
    // If button 2 is pressed, jump to a useless state until button 2
    // is released. That way if button 1 gets pressed *while* button 2
@@ -67,7 +64,7 @@ GEST_INT::~GEST_INT()
 void 
 GEST_INT::rem_obs(GestObs* g) 
 {
-   _obs -= g;
+   _obs.erase(g);
    if (_obs.empty())
       deactivate();
 }
@@ -75,7 +72,7 @@ GEST_INT::rem_obs(GestObs* g)
 void 
 GEST_INT::add_obs(GestObs* g)
 {
-   _obs += g;
+   _obs.insert(g);
    activate();
 }
 

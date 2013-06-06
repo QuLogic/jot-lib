@@ -1253,11 +1253,10 @@ get_offsets(
       for (int j=0; j<gest_list.num(); j++) 
       {
          CPIXEL_list   &pix_pts = gest_list[j]->pts();         assert(pix_pts.num() >= 2);
-         CARRAY<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == presses.num());
+         const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == (int)presses.size());
 
          NDCZpt_list pts;
          for (int i=0; i<pix_pts.num(); i++) pts += NDCZpt(pix_pts[i]); 
-         
 
          BaseStrokeOffsetLISTptr os = s->generate_offsets(pts, presses); 
 
@@ -1272,7 +1271,7 @@ get_offsets(
          if (!ret->get_pix_len()) ret->set_pix_len(os->get_pix_len());
       }
    }
-   //Otherwise, use the virutal baseline
+   //Otherwise, use the virtual baseline
    else
    {
       PIXEL start_p;
@@ -1296,7 +1295,7 @@ get_offsets(
          {
 
             CPIXEL_list   &pix_pts = gest_list[j]->pts();         assert(pix_pts.num() >= 2);
-            CARRAY<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == presses.num());
+            const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == (int)presses.size());
 
             BaseStrokeOffset prev_o;  // for comparing distances
                                       // between successive offsets
@@ -1469,12 +1468,12 @@ LinePen::button_edit_offset_apply()
    for (int i=0; i<_gestures.num(); i++) 
    {
       const  PIXEL_list&   pix   = _gestures[i]->pts();
-      const ARRAY<double>& press = _gestures[i]->pressures();
+      const vector<double>& press = _gestures[i]->pressures();
   
       PIXEL_list   filtered_pix;
       ARRAY<double> filtered_press;
 
-      assert(pix.num() == press.num());
+      assert(pix.num() == (int)press.size());
 
       // No duplicate pixels at all, damn it!
       for (int l=0; l<pix.num(); l++) 

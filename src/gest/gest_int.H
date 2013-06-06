@@ -25,6 +25,8 @@
 #include "manip/manip.H"
 #include "std/stop_watch.H"
 
+#include <set>
+
 #include "gesture.H"
 
 // gesture observer class (defined below)
@@ -33,10 +35,10 @@ class GestObs;
 /*****************************************************************
  * GestObs_list:
  *****************************************************************/
-class GestObs_list : public ARRAY<GestObs*> {
+class GestObs_list : public set<GestObs*> {
  public:
-   GestObs_list(int n=0)                  : ARRAY<GestObs*>(n)    {}
-   GestObs_list(const GestObs_list& list) : ARRAY<GestObs*>(list) {}
+   GestObs_list()                         : set<GestObs*>()     {}
+   GestObs_list(const GestObs_list& list) : set<GestObs*>(list) {}
    
    //******** CONVENIENCE ********
 
@@ -167,8 +169,8 @@ class GestObs {
 inline void 
 GestObs_list::notify_gesture(GEST_INT* gi, CGESTUREptr& g)
 {
-   for (int i=0; i<num(); i++) {
-      (*this)[i]->notify_gesture(gi,g);
+   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
+      (*i)->notify_gesture(gi, g);
    }
 }
 
@@ -176,8 +178,8 @@ inline int
 GestObs_list::handle_event(CEvent& e, State*& s)
 {
    // first one to volunteer gets it:
-   for (int i=0; i<num(); i++) {
-      if ((*this)[i]->handle_event(e,s))
+   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
+      if ((*i)->handle_event(e, s))
          return 1;
    }
    return 0;
@@ -186,24 +188,24 @@ GestObs_list::handle_event(CEvent& e, State*& s)
 inline void 
 GestObs_list::notify_down()
 {
-   for (int i=0; i<num(); i++) {
-      (*this)[i]->notify_down();
+   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
+      (*i)->notify_down();
    }
 }
 
 inline void 
 GestObs_list::notify_move()
 {
-   for (int i=0; i<num(); i++) {
-      (*this)[i]->notify_move();
+   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
+      (*i)->notify_move();
    }
 }
 
 inline void 
 GestObs_list::notify_up()
 {
-   for (int i=0; i<num(); i++) {
-      (*this)[i]->notify_up();
+   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
+      (*i)->notify_up();
    }
 }
 

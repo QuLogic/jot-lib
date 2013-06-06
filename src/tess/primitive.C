@@ -692,7 +692,7 @@ Primitive::is_roof() const
 Primitive*
 Primitive::build_roof(
    PIXEL_list pixels,   //!< pixel trail we're working with (passed by copy)
-   ARRAY<int> corners,  //!< should produce creases at corners (passed by copy)
+   vector<int> corners, //!< should produce creases at corners (passed by copy)
    CWvec& n,            //!< normal of plane to project into
    CBface_list& bases,  //!< rectangular base of the roof
    CEdgeStrip& side,    //!< one side of the rect base
@@ -724,7 +724,7 @@ Primitive::build_roof(
    // Stroke must start near the start of the strip:
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
       pixels.reverse(); // This is why 'pixels' is passed by copy
-      for (int i = 0; i < corners.num(); i++)
+      for (vector<int>::size_type i = 0; i < corners.size(); i++)
          corners[i] = pixels.num() - 1 - corners[i];
    }
 
@@ -1565,7 +1565,7 @@ set_creases(CBedge_list& edges)
 bool
 Primitive::extend(
    CPIXEL_list& pixels,
-   ARRAY<int>& corners,
+   vector<int>& corners,
    CBface_list& bases,
    CEdgeStrip& side,
    CWvec& n,
@@ -1604,9 +1604,9 @@ Primitive::extend(
    // (and ends) at the ends of the side strip.
    pts.push(side.first()->loc());
    pts += side.last()->loc();
-   for (int i = 1; i < corners.num(); i++)
+   for (vector<int>::size_type i = 1; i < corners.size(); i++)
       corners[i]++;
-   corners[corners.num()-1]++;
+   corners[corners.size()-1]++;
    pts.update_length();
 
    // Decide spacing of the verts on the wpt_listmap
@@ -1653,8 +1653,8 @@ Primitive::extend(
 
    // create vertices of based on wpt_listmap:
    v1 += side.first();
-   assert(corners.first() == 0 && corners.last() == pts.num()-1);
-   for (int i = 1; i < corners.num(); i++) {
+   assert(corners.front() == 0 && corners.back() == pts.num()-1);
+   for (vector<int>::size_type i = 1; i < corners.size(); i++) {
       double p_start = pts.partial_length(corners[i-1]);
       double p_end = pts.partial_length(corners[i]);
       int num_edges = ((int)((p_end-p_start)/w))+1;
@@ -1662,13 +1662,13 @@ Primitive::extend(
       double t_start = p_start/pts.length();
       double t_end = p_end/pts.length();
       double delta_t = (t_end-t_start)/num_edges;
-      int end = (i==corners.num()-1)?(num_edges-1):num_edges;
+      int end = (i==corners.size()-1)?(num_edges-1):num_edges;
       for (int j = 1; j <= end; j++) {
          v1 += _mesh->add_vertex(map->map(t_start+j*delta_t));
          add_edge(v1[v1.num()-2], v1.last());
          create_xf_meme((Lvert*)v1.last(), f1);
       }
-      if (i!=corners.num()-1) crease_locs += (v1.num()-1);
+      if (i!=corners.size()-1) crease_locs += (v1.num()-1);
    }
    add_edge(v1.last(), side.last());
    v1 += side.last();

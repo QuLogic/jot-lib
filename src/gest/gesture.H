@@ -30,6 +30,8 @@
 #include "std/stop_watch.H"
 #include "std/config.H"
 
+#include <vector>
+
 extern const double MIN_GESTURE_LENGTH;
 extern const double MIN_GESTURE_SPREAD;
 
@@ -163,11 +165,11 @@ class GESTURE : public GEL {
    bool below_min_spread() const { return length() < MIN_GESTURE_SPREAD; }
 
    // timing:
-   CARRAY<double>& timing()     const { return _times; }
+   const vector<double>& timing() const { return _times; }
   /// time at which first pixel was drawn
    double start_time()          const { return _times[0]; }
   /// time at which last pixel was drawn
-   double end_time()            const { return _times.last(); }
+   double end_time()            const { return _times.back(); }
   /// time that elapsed between first and last pixels drawn
    double elapsed_time()        const { return end_time() - start_time(); }
   /// time that elapsed between the drawing of the first pixel and pixel whose index is given
@@ -184,8 +186,8 @@ class GESTURE : public GEL {
    double age() const { return stop_watch::sys_time() - end_time(); }
 
    // pressure:
-   CARRAY<double>& pressures()  const  { return _pressures; }
-   void  set_pressure(int i, double p) { if (i>0 && i<_pressures.num()) _pressures[i] = p; }
+   const vector<double>& pressures() const { return _pressures; }
+   void  set_pressure(int i, double p) { if (i>0 && i<(int)_pressures.size()) _pressures[i] = p; }
 
    // measurements
    double radius()              const; ///< avg distance to center
@@ -222,8 +224,8 @@ class GESTURE : public GEL {
    // Returns true if pts[i] is an endpoint, or an internal
    // point where exterior angle is large:
    bool is_corner(int i)  const;
-   int  num_corners()     const  { return corners().num(); }
-   ARRAY<int> corners()   const;
+   int  num_corners()     const  { return corners().size(); }
+   vector<int> corners()  const;
 
    virtual bool is_stroke()      const; // anything formed by down/up events
 
@@ -315,8 +317,8 @@ class GESTURE : public GEL {
    GEST_INT*            _gest_int;      ///< owner of this
    int                  _index;         ///< index of this in owner's list
    mlib::PIXEL_list           _pts;     ///< pixel trail
-   ARRAY<double>        _times;         ///< times for each pixel added
-   ARRAY<double>        _pressures;     ///< pressures recorded for each pixel
+   vector<double>       _times;         ///< times for each pixel added
+   vector<double>       _pressures;     ///< pressures recorded for each pixel
    int                  _start_frame;   ///< frame number of down event
    double               _end_frame;     ///< frame number of up event
    Event                _down, _up;     ///< down and up events

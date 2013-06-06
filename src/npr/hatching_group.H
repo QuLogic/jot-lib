@@ -292,7 +292,7 @@ class HatchingGroup : public DATA_ITEM, public BMESHobs {
 
    virtual bool         query_pick(mlib::CNDCpt & /* pt */) { return false; }
 
-   virtual bool         add(mlib::CNDCpt_list &, const ARRAY<double>&, int) { return false; }
+   virtual bool         add(mlib::CNDCpt_list &, const vector<double>&, int) { return false; }
 
    virtual void         kill_animation() {}
 

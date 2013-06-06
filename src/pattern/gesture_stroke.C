@@ -26,10 +26,10 @@ using namespace mlib;
 ///////////////
 
 void 
-GestureStroke::copy(GestureCell* target_cell, const UVpt& offset, bool stretch) const{
-
+GestureStroke::copy(GestureCell* target_cell, const UVpt& offset, bool stretch) const
+{
   const PIXEL_list& src_pts = _gesture->pts();
-  CARRAY<double>& src_press = _gesture->pressures();
+  const vector<double>& src_press = _gesture->pressures();
   int nb_pts = src_pts.num();
   if (nb_pts==0) return;
   
@@ -63,10 +63,10 @@ GestureStroke::copy(GestureCell* target_cell, const UVpt& offset, bool stretch) 
 
 void 
 GestureStroke::synthesize(GestureCell* target_cell, double target_pressure, double ref_angle, CUVpt& ref_pos, 
-			  CUVvec& target_scale, double target_angle, CUVpt& target_pos) const{
-
+			  CUVvec& target_scale, double target_angle, CUVpt& target_pos) const
+{
   const PIXEL_list& ref_pts = _gesture->pts();
-  CARRAY<double>& ref_press = _gesture->pressures();
+  const vector<double>& ref_press = _gesture->pressures();
   int nb_pts = ref_pts.num();
   if (nb_pts==0) return;
   

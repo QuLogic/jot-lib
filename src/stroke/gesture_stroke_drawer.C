@@ -75,10 +75,9 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
    }
 
    const PIXEL_list&    pts   = gest->pts();
-   const ARRAY<double>& press = gest->pressures();
+   const vector<double>& press = gest->pressures();
 
-   assert(pts.num() == press.num());
-
+   assert(pts.num() == (int)press.size());
 
    const StrokeVertexArray& verts 
       = _base_stroke_proto->get_verts();

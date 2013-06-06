@@ -144,7 +144,7 @@ StrokePaths::get_stroke_pts(const GestureStroke& stroke){
     }
 
     CPIXEL_list& gest_pts = stroke.gesture()->pts();
-    CARRAY<double>& gest_press = stroke.gesture()->pressures();
+    const vector<double>& gest_press = stroke.gesture()->pressures();
     int nb_gest_pts = gest_pts.num();
     for (int i=0 ; i<nb_gest_pts-1 ; i++){
       VEXEL pts_dir = gest_pts[i+1]-gest_pts[i];

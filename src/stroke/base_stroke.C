@@ -4516,11 +4516,11 @@ BaseStroke::find_closest_i(
 BaseStrokeOffsetLISTptr
 BaseStroke::generate_offsets(
    CNDCZpt_list& pts,
-   const ARRAY<double>& press)
+   const vector<double>& press)
 {
    assert(_verts.num()>1);
 
-   assert(pts.num() == press.num());
+   assert(pts.num() == (int)press.size());
 
    int j,i;
    double t_guess, t_closest;

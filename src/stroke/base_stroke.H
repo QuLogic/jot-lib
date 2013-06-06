@@ -19,6 +19,7 @@
 #define _BASE_STROKE_HEADER
 
 #include <map>
+#include <vector>
 
 #include "disp/color.H"
 #include "disp/view.H"
@@ -918,7 +919,7 @@ class BaseStroke : public DATA_ITEM {
 
 //Public?   
  public:
-   BaseStrokeOffsetLISTptr generate_offsets(mlib::CNDCZpt_list&, CARRAY<double>&);
+   BaseStrokeOffsetLISTptr generate_offsets(mlib::CNDCZpt_list&, const vector<double>&);
    void                    closest(const mlib::NDCpt &, mlib::NDCpt &, double &);
 
    /******** DATA_ITEM METHODS ********/

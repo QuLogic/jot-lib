@@ -40,7 +40,7 @@ Stroke::Stroke(const Stroke& ref_stroke, CBBOXpix& ref_bbox, CBBOXpix& target_bb
 
 
   // then build new gesture
-  CARRAY<double>& ref_pressures = ref_stroke.gesture()->pressures();
+  const vector<double>& ref_pressures = ref_stroke.gesture()->pressures();
   _gesture = new GESTURE(0, 0, target_pixels[0], ref_pressures[0]);
   for (int i=1 ; i<nb_ref_pixels ; i++){
     _gesture->add(target_pixels[i], -1.0, ref_pressures[i]);

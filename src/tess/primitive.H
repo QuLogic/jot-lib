@@ -36,6 +36,8 @@
 
 #include "tess/bsurface.H"
 
+#include <vector>
+
 class XFMeme;
 class Pcalc;
 /*******************************************************
@@ -66,7 +68,7 @@ class Primitive :  public Bsurface {
    //! to create a roof based on the input parameters
    static Primitive* build_roof(
       PIXEL_list,
-      ARRAY<int>,
+      vector<int>,
       CWvec&,
       CBface_list&,
       CEdgeStrip&,
@@ -203,7 +205,7 @@ class Primitive :  public Bsurface {
 
    bool extend(
       CPIXEL_list&      pixels,
-      ARRAY<int>&       corners,
+      vector<int>&      corners,
       CBface_list&      bases,
       CEdgeStrip&       side,
       CWvec&            n,
