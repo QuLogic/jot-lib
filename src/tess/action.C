@@ -121,6 +121,7 @@ bool
 Action_list::can_invoke() const 
 {
    bool ret = true;
+
    for (int i=0; i<num(); i++) {
       if (!_array[i]->can_invoke()) {
          if (debug)
@@ -128,10 +129,9 @@ Action_list::can_invoke() const
                  << _array[i]->class_name()
                  << endl;
          ret = false;
+         break;
       }
    }
-   if (!ret)
-      return false;
 
    return ret;
 }
