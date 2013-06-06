@@ -23,6 +23,7 @@
 #include "manip/cam_pz.H"
 #include "base_jotapp/base_jotapp.H"
 
+#include <set>
 
 /*****************************************************************
  * Cam_int_edit:
@@ -53,14 +54,14 @@ class Cam_int_edit : public Interactor<Cam_int_edit,Event,State>,
 
    State         _entry2, _but_trans, _but_rot, _but_zoom, _but_drag, _phys;
 
-   ARRAY<UPobs*> _up_obs;
+   set<UPobs*>   _up_obs;
    int           _do_reset;
    GEOMptr       _geom;
    bool          _resizing;
 
 
  public:
-   void add_up_obs(UPobs *o)   { _up_obs += o; }
+   void add_up_obs(UPobs *o)   { _up_obs.insert(o); }
    virtual int  predown(CEvent &e,State *&s);
    virtual int  down   (CEvent &e,State *&s);
    virtual int  down2  (CEvent &e,State *&s);

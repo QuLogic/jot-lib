@@ -26,7 +26,7 @@
 #include "base_jotapp/base_jotapp.H"
 #include "widgets/collide.H"
 
-
+#include <set>
 
 
 /*****************************************************************
@@ -76,7 +76,7 @@ private:
 
    State         _entry2, _but_trans, _but_rot, _but_zoom, _but_drag;
 
-   ARRAY<UPobs*> _up_obs;
+   set<UPobs*>   _up_obs;
    int           _do_reset;
    GEOMptr       _geom;
    bool          _resizing, _breathing;
@@ -92,7 +92,7 @@ private:
    
 
   public:
-           void add_up_obs(UPobs *o)   { _up_obs += o; }
+           void add_up_obs(UPobs *o)   { _up_obs.insert(o); }
    virtual int  predown(CEvent &e,State *&s);
    virtual int  down   (CEvent &e,State *&s);
    virtual int  down2   (CEvent &e,State *&s);

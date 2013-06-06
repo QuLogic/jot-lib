@@ -29,13 +29,13 @@ static bool debug_fsa = Config::get_var_bool("DEBUG_CAM_FSA",false);
 
 static double DOT_DIST = 0.012; // cheesy XY-space distance threshold
 
-ARRAY<CamIcon*> CamIcon::_icons;
+vector<CamIcon*> CamIcon::_icons;
 CamIcon*        CamIcon::_orig_icon;
 
 CamIcon*
 CamIcon::intersect_all(CXYpt &pt)
 {
-   for (int i=0; i<_icons.num(); i++)
+   for (vector<CamIcon*>::size_type i=0; i<_icons.size(); i++)
       if (_icons[i]->intersect_icon(pt)) 
          return _icons[i];
    return 0;
@@ -636,8 +636,9 @@ Cam_int::moveup(
       cerr << "Cam_int::moveup"
            << endl;
 
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
    _geom = 0;
    _icon = 0;
    return 0;
@@ -715,8 +716,9 @@ Cam_int::dragup(
    
    reset(1);
 
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
 
    if ((curpt - _start_pix).length() > 20 &&
        (curpt - _start_pix).normalized() * VEXEL(-1,0).normalized() > 0.5)
@@ -756,8 +758,9 @@ Cam_int::up(
    VIEWptr         view(e.view());
    CAMptr          cam (view->cam());
 
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
 
    if (_camwidg.anchor_displayed()) {
       if (ptr->cur().dist(_camwidg.anchor_pos()) < DOT_DIST)

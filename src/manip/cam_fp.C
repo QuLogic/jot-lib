@@ -1065,8 +1065,9 @@ Cam_int_fp::moveup(
    State *&
    )
 {
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
    _geom = 0;
    _icon = 0;
    return 0;
@@ -1132,8 +1133,9 @@ Cam_int_fp::dragup(
    
    reset(1);
 
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
 
    if ((curpt - _start_pix).length() > 20 &&
        (curpt - _start_pix).normalized() * VEXEL(-1,0).normalized() > 0.5)
@@ -1178,8 +1180,9 @@ Cam_int_fp::up(
    VIEWptr         view(e.view());
    CAMptr          cam (view->cam());
 
-   for (int i = 0; i < _up_obs.num(); i++) 
-      _up_obs[i]->reset(_do_reset);  // reset everyone watching us
+   set<UPobs*>::iterator i;
+   for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
+      (*i)->reset(_do_reset);  // reset everyone watching us
    if (_camwidg.anchor_displayed()) {
       if (ptr->cur().dist(_camwidg.anchor_pos()) < DOT_DIST)
          {

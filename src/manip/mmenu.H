@@ -104,10 +104,10 @@ class MMENU : public FRAMEobs, public Simple_int
          }
      };
 
-  ARRAY<MMENUMenuItem> _items;
+  vector<MMENUMenuItem> _items;
  public:
   void add(CGEOMptr &g, MenuCb_t *o=0) {
-      _items.add(MMENUMenuItem(g, o));
+      _items.push_back(MMENUMenuItem(g, o));
   }
   void add(const string &n, MenuCb_t *o=0){
       add(new TEXT2D("",n), o);

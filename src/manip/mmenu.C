@@ -79,20 +79,19 @@ MMENU::move(
    CXYpt       p   = ptr->cur();
 //  Find if cursor is touching any geoms
    _sel = -1;
-   for(int i=0;i<_items.num();i++){
+   for (vector<MMENUMenuItem>::size_type i=0; i<_items.size(); i++) {
       GEOMptr gp(_items[i]._g);
-      if(gp){
+      if (gp) {
          if (TEXT2D::isa(gp)) {
             TEXT2Dptr  t2d  = (TEXT2D *)&*gp;
 
             t2d->set_is2d(1); // Make sure it is screen space text
-       
+
             BBOX2D bbox = t2d->bbox2d(0, 0, 1);
             if ( bbox.contains(p) ){
                _sel = i;
                gp->set_color(_highlight_col);
             }
-
          }
       }
    }
@@ -121,7 +120,7 @@ MMENU::move(
 }
 
 void MMENU::call(int sel){
-   assert( (sel>=0) && (sel<_items.num()) );
+   assert( (sel>=0) && (sel<(int)_items.size()) );
    if( _items[sel]._f )
        _items[sel]._f->exec();
 }
@@ -133,8 +132,8 @@ MMENU::up(
    )
 {
 //   DEVice_buttons *btns = (DEVice_buttons *)e._d;
-   for(int i=0;i<_items.num();i++){
-      if(GEOMptr gp = _items[i]._g)
+   for (vector<MMENUMenuItem>::size_type i=0; i<_items.size(); i++) {
+      if (GEOMptr gp = _items[i]._g)
          WORLD::undisplay(gp, false);
    }
 
@@ -154,12 +153,12 @@ MMENU::tick() {
 
    mlib::XYpt curloc(_d);
 
-   for(int i=0;i<_items.num();i++){
+   for (vector<MMENUMenuItem>::size_type i=0; i<_items.size(); i++) {
       GEOMptr gp(_items[i]._g);
-      if(gp){
+      if (gp) {
          WORLD::display(gp, false);
 
-         if(i != _sel)
+         if ((int)i != _sel)
             gp->set_color(_nhighlight_col);
 
          // this is fairly absurd... why isn't bbox2d a virtual method?
