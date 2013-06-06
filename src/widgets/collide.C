@@ -110,14 +110,14 @@ Collide::_update_scene()
       return false;
    }
    //create a octree from the "land" model of the scene
-   ARRAY<OctreeNode*> nodes;
+   vector<OctreeNode*> nodes;
    if (_land && BMESH::isa(_land->body())) {
       Bvert_list list;
       Bface_list fs;
       vector<Wvec> bcs;
       double spacing=0;
-      nodes += sps(BMESH::upcast(_land->body()),
-                   _height, _regularity, _min_dist, fs, bcs, spacing);
+      nodes.push_back(sps(BMESH::upcast(_land->body()),
+                   _height, _regularity, _min_dist, fs, bcs, spacing));
       _RootNode = nodes[0];
       _objs += 1;
    }

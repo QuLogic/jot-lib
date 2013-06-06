@@ -115,19 +115,18 @@ GLUIMoveMenu::create_menu()
    _id = _glui->get_glut_window_id();
 
    // create a button for every menu item
-   if(_item_list.num()>0) {
-      MenuItem **items = _item_list.array();
-      for (int i = 0; i < _item_list.num(); i++) {
+   if (!_item_list.empty()) {
+      for (MenuList::size_type i = 0; i < _item_list.size(); i++) {
          // Tell the menu item which menu it belongs to
-         items[i]->menu(this);
+         _item_list[i]->menu(this);
          const char *label = 0;
          // Make default label if one doesn't exist
-         if (items[i]->label().empty()) {
+         if (_item_list[i]->label().empty()) {
             label = "----";
-         } else label = items[i]->label().c_str();
+         } else label = _item_list[i]->label().c_str();
 
          // set the menu item in the global list used for callbacks
-         int item_id = map_menu_item(items[i]);
+         int item_id = map_menu_item(_item_list[i]);
          // record this menu's item id's
          _item_ids.push_back(item_id);
 

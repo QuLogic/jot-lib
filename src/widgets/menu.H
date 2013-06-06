@@ -21,6 +21,8 @@
 #include "std/support.H"
 #include "mlib/points.H"
 
+#include <vector>
+
 class MoveMenu;
 class MenuItem {
   public :
@@ -39,7 +41,7 @@ class MenuItem {
      MoveMenu *_menu;
 };
 
-typedef ARRAY<MenuItem *> MenuList;
+typedef vector<MenuItem *> MenuList;
 
 class MoveMenu
 {

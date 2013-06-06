@@ -745,7 +745,7 @@ add_render_styles(CVIEWptr& view, MoveMenu* menu)
 {
    vector<string> rend_modes = view->rend_list();
    for (vector<string>::size_type i = 0; i < rend_modes.size(); i++) {
-      menu->items() += new RenderSet(view, rend_modes[i]); 
+      menu->items().push_back( new RenderSet(view, rend_modes[i]) );
    }
 }
 
