@@ -52,17 +52,19 @@ CRSpline::clear(int all)
       _pts.clear();
       _u.clear();
    }
-   while (!_H.empty())
-      delete _H.pop();
+   vector<HSpline*>::iterator it;
+   for (it = _H.begin(); it != _H.end(); ++it)
+      delete (*it);
+   _H.clear();
    _valid = 0;
 }
 
 void 
-CRSpline::set(CWpt_list& p, CARRAY<double> &u)
+CRSpline::set(CWpt_list& p, const vector<double> &u)
 {
    clear();
 
-   if (p.num() != u.num()) {
+   if (p.num() != (int)u.size()) {
       err_msg("CRSpline::set: points and parameter vals don't match");
       return;
    }
@@ -74,7 +76,7 @@ void
 CRSpline::add(CWpt& p, double u)
 {
    _pts += p;
-   _u   += u;
+   _u.push_back(u);
 
    clear(0);
 }
@@ -97,7 +99,7 @@ CRSpline::_update()
    Wvec   m1 = m(1);
    double di = delt(0);
    Wvec   m0 = (_pts[1] - _pts[0])*(2/di) - m1;
-   _H += new HSpline(_pts[0], _pts[1], di*m0, di*m1);
+   _H.push_back(new HSpline(_pts[0], _pts[1], di*m0, di*m1));
 
    // middle pieces
    int i;
@@ -105,14 +107,14 @@ CRSpline::_update()
       m0 = m1;
       m1 = m(i+1);
       di = delt(i);
-      _H += new HSpline(_pts[i], _pts[i+1], di*m0, di*m1);
+      _H.push_back(new HSpline(_pts[i], _pts[i+1], di*m0, di*m1));
    }
 
    // last piece
    m0 = m1;
    di = delt(i);
    m1 = (_pts[i+1] - _pts[i])*(2/di) - m0;
-   _H += new HSpline(_pts[i], _pts[i+1], di*m0, di*m1);
+   _H.push_back(new HSpline(_pts[i], _pts[i+1], di*m0, di*m1));
 
    _valid = 1;
    return 1;
@@ -130,7 +132,7 @@ CRSpline::get_seg(double u, int& seg, double& t) const
       t   = 0; 
       return; 
    }
-   if (u >= _u.last()) {
+   if (u >= _u.back()) {
       seg = num()-2; 
       t = 1; 
       return; 

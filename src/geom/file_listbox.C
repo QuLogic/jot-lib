@@ -24,7 +24,7 @@
 
 #include "file_listbox.H"
 
-ARRAY<FileListbox*> FileListbox::_file_list_boxes;
+vector<FileListbox*> FileListbox::_file_list_boxes;
 
 FileListbox::FileListbox(
    const string &label,
@@ -32,7 +32,7 @@ FileListbox::FileListbox(
    const string &button_name
    ) : _glui(0), _listbox(0), _selected(0), _shown(false)
 {
-  _file_list_boxes += this;
+  _file_list_boxes.push_back(this);
   init(label, listbox_name, button_name);
 }
 
@@ -58,7 +58,7 @@ FileListbox::init(
    // Create the texture list box
    _listbox = new GLUI_Listbox(_glui, listbox_name.c_str(),
                                NULL, // not using live var
-                               _file_list_boxes.num()-1,
+                               _file_list_boxes.size()-1,
                                FileListbox::listbox_cb
                                // registering the callback func
                                );
@@ -68,11 +68,11 @@ FileListbox::init(
    new GLUI_Separator(_glui);
 
    // Add a button for setting the attributes to the stroke
-   new GLUI_Button(_glui, button_name.c_str(), _file_list_boxes.num()-1,
+   new GLUI_Button(_glui, button_name.c_str(), _file_list_boxes.size()-1,
                    FileListbox::set_cb);
 
    // Add a button for setting the attributes to the stroke
-   new GLUI_Button(_glui, "Hide", _file_list_boxes.num()-1,
+   new GLUI_Button(_glui, "Hide", _file_list_boxes.size()-1,
                    FileListbox::hide_cb);
 
    _glui->hide();

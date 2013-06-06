@@ -154,7 +154,7 @@ class GL_VIEW: public VIEWimpl {
    // do_stipple is set to true, the lines are drawn stippled. Assumes
    // projection and modelview matrices have been set as needed.
    static void draw_lines(
-      CARRAY<mlib::Wline>& lines,      // lines to draw
+      const vector<mlib::Wline>& lines,      // lines to draw
       CCOLOR&        color,      // color to use
       double         alpha,      // transparency
       double         width,      // width of points

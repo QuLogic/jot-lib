@@ -1026,7 +1026,7 @@ BaseJOTapp::cam_switch(const Event&, State *&)
       cerr << "BaseJOTapp::cam_switch: before switch: start: "
            << "(" << get_name(start) << ")"
            << endl;
-      for (int i=0; i<start->arcs().num(); i++) {
+      for (size_t i=0; i<start->arcs().size(); i++) {
          cerr << "  " << get_name(start->arcs()[i].next()) << endl;
       }
       cerr << endl;
@@ -1071,7 +1071,7 @@ BaseJOTapp::cam_switch(const Event&, State *&)
       cerr << "BaseJOTapp::cam_switch: after switch: start: "
            << "(" << get_name(start) << ")"
            << endl;
-      for (int i=0; i<start->arcs().num(); i++) {
+      for (size_t i=0; i<start->arcs().size(); i++) {
          cerr << "  " << get_name(start->arcs()[i].next()) << endl;
       }
       cerr << endl;

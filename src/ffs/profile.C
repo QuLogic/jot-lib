@@ -1131,9 +1131,9 @@ PROFILE::try_extend_boundary(CPIXEL_list& pts)
 inline void
 show_yardstick(CBvert_list& verts, double yardstick)
 {
-   ARRAY<Wline> lines(verts.num());
+   vector<Wline> lines(verts.num());
    for (int i=0; i<verts.num(); i++)
-      lines += Wline(verts[i]->loc(), verts[i]->norm()*yardstick);
+      lines[i] = Wline(verts[i]->loc(), verts[i]->norm()*yardstick);
    GL_VIEW::draw_lines(lines, Color::yellow, 0.8, 1, false);
 }
 

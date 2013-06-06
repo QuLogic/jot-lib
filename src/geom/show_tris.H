@@ -22,6 +22,8 @@
 #include "geom/gl_view.H"
 #include "geom/gl_util.H"
 
+#include <vector>
+
 /*******************************************************
  * SHOW_TRIS:
  * 
@@ -45,7 +47,7 @@ class SHOW_TRIS : public GEL {
       mlib::Wvec norm() const { return cross(_b - _a, _c - _a).normalized(); }
    };
    typedef const Triangle CTriangle;
-   typedef ARRAY<Triangle> Triangle_list;
+   typedef vector<Triangle> Triangle_list;
    typedef const Triangle_list CTriangle_list;
 
    //******** MANAGERS ********
@@ -80,9 +82,9 @@ class SHOW_TRIS : public GEL {
    void set_do_fill(bool b=true)        { _do_fill = b; }
    void set_do_lines(bool b=true)       { _do_fill = b; }
 
-   void add(CTriangle& tri)             { _tris += tri; }
+   void add(CTriangle& tri)             { _tris.push_back(tri); }
    void clear()                         { _tris.clear(); }
-   int  num()                   const   { return _tris.num(); }
+   int  num()                   const   { return _tris.size(); }
    
    //******** RefImageClient METHODS ********
 
@@ -117,7 +119,7 @@ class SHOW_TRIS : public GEL {
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);  // GL_LIGHTING_BIT
       GL_COL(_fill_color, _alpha);                      // GL_CURRENT_BIT
       glBegin(GL_TRIANGLES);
-      for (int i=0; i<_tris.num(); i++) {
+      for (Triangle_list::size_type i=0; i<_tris.size(); i++) {
          draw_flat_tri(_tris[i]);
       }
       glEnd();
@@ -136,7 +138,7 @@ class SHOW_TRIS : public GEL {
       glDisable(GL_LIGHTING);           // GL_ENABLE_BIT
       GL_COL(_line_color, _alpha);      // GL_CURRENT_BIT
       glBegin(GL_LINES);
-      for (int i=0; i<_tris.num(); i++) {
+      for (Triangle_list::size_type i=0; i<_tris.size(); i++) {
          draw_wire_tri(_tris[i]);
       }
       glEnd();

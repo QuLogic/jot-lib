@@ -1590,15 +1590,15 @@ BMESH::triangulate(Wpt_list &verts, FACElist &faces)
    if (nverts() > 0)
       verts.realloc(_verts.num());
    if (nfaces() > 0)
-      faces.realloc(_faces.num());
+      faces.resize(_faces.num());
 
    int i;
    for (i=0; i<nverts(); i++)
       verts += bv(i)->loc();
    for (i=0; i<nfaces(); i++)
-      faces += Point3i(bf(i)->v(1)->index(),
-                       bf(i)->v(2)->index(),
-                       bf(i)->v(3)->index());
+      faces[i] = Point3i(bf(i)->v(1)->index(),
+                         bf(i)->v(2)->index(),
+                         bf(i)->v(3)->index());
 }
 
 BMESHptr
@@ -2391,17 +2391,17 @@ BMESH::operator =(BODY& body)
    delete_elements();
 
    Wpt_list pts;
-   FACElist     tris;
+   FACElist tris;
    body.triangulate(pts, tris);
-   if (pts.num() && tris.num()) {
+   if (pts.num() && !tris.empty()) {
       _verts.realloc(pts.num());
-      _faces.realloc(tris.num());
-      _edges.realloc(tris.num()*3/2+10);
+      _faces.realloc(tris.size());
+      _edges.realloc(tris.size()*3/2+10);
       int i;
       for (i = 0; i < pts.num(); i++)
          add_vertex(pts[i]);
       Patch* p = new_patch();
-      for (i = 0; i < tris.num(); i++)
+      for (i = 0; i < tris.size(); i++)
          add_face(tris[i][0], tris[i][1], tris[i][2], p);
 
       // Set normals etc.

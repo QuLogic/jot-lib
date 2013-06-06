@@ -33,6 +33,8 @@
 #include "net/stream.H"
 #include "std/config.H"
 
+#include <vector>
+
 /*!
  *  \brief Generic class representing appearance properties associated
  *  with a piece of surface.
@@ -189,59 +191,59 @@ class APPEAR_list;
 typedef const APPEAR_list CAPPEAR_list;
 
 /*!
- *  \brief An ARRAY of APPEAR pointers that conveniently lets you call
+ *  \brief A vector of APPEAR pointers that conveniently lets you call
  *  selected methods of APPEAR on a whole bunch of APPEARs in just
  *  a single line of code!
  *
  */
-class APPEAR_list : public ARRAY<APPEAR*> {
+class APPEAR_list : public vector<APPEAR*> {
    
  public:
  
-   APPEAR_list(int num=0) : ARRAY<APPEAR*>(num) {}
-   APPEAR_list(APPEAR* a) : ARRAY<APPEAR*>(1)   { add(a); }
+   APPEAR_list(int num=0) : vector<APPEAR*>() { reserve(num); }
+   APPEAR_list(APPEAR* a) : vector<APPEAR*>() { push_back(a); }
       
    //******** COLOR ********
    void set_color(CCOLOR &c) {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->set_color(c);
    }
    void unset_color() {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->unset_color();
    }
       
    //******** TEXTURE ********
    void set_texture(CTEXTUREptr& t) {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->set_texture(t);
    }
    void unset_texture() {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->unset_texture();
    }
       
    //******** TEXTURE TRANSFORM ********
    void set_tex_xform(mlib::CWtransf &t) {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->set_tex_xform(t);
    }
       
    //******** TRANSPARENCY ********
    void set_transp(double t) {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->set_transp(t);
    }
    void unset_transp() {
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          (*this)[k]->unset_transp();
    }
    bool has_transp() {
       // if any of them have transparency, return true
-      for (int k=0; k<num(); k++)
+      for (vector<APPEAR*>::size_type k=0; k<size(); k++)
          if ((*this)[k]->has_transp())
-            return 1;
-      return 0;
+            return true;
+      return false;
    }
 };
 

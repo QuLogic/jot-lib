@@ -37,9 +37,9 @@ class TEXTURE;
 class GEOM;
 
 #define CFACElist const FACElist
-class FACElist : public ARRAY<mlib::Point3i> {
+class FACElist : public vector<mlib::Point3i> {
    public:
-      FACElist(int num=16) : ARRAY<mlib::Point3i>(num) {}
+      FACElist(int num=16) : vector<mlib::Point3i>() { reserve(num); }
 };
 
 #define CBODYptr const BODYptr

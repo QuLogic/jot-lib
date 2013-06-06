@@ -27,6 +27,8 @@
 
 #include "mlib/points.H"
 
+#include <vector>
+
 /****************************************************************/
 /* CLASS NAME :  HSpline                                        */
 /*                                                              */
@@ -107,9 +109,9 @@ public:
  ************************************************************/
 class CRSpline {
  protected:
-   ARRAY<mlib::Wpt>           _pts;   // interpolated points
-   ARRAY<double>        _u;     // parameter values
-   ARRAY<HSpline*>      _H;     // splines between adjacent points
+   mlib::Wpt_list       _pts;   // interpolated points
+   vector<double>       _u;     // parameter values
+   vector<HSpline*>     _H;     // splines between adjacent points
    bool                 _valid; // tells if _H is up-to-date
 
    int _update();
@@ -123,11 +125,11 @@ class CRSpline {
    mlib::Wvec   m(int i)    const { return (_pts[i+1]-_pts[i-1])/(_u[i+1]-_u[i-1]); }
 
  public:
-   CRSpline() : _pts(0), _u(0), _H(0), _valid(0) {}
+   CRSpline() : _pts(0), _u(), _H(), _valid(false) {}
    ~CRSpline() { clear(); }
 
    void clear(int all=1);
-   void set(mlib::CWpt_list& p, CARRAY<double> &u);
+   void set(mlib::CWpt_list& p, const vector<double> &u);
    void add(mlib::CWpt& p, double u);
 
    ////////////////////////////////////////////////////
@@ -181,6 +183,6 @@ class CRSpline {
 };
 
 #define CCRSpline_list const CRSpline_list
-typedef ARRAY<CRSpline*> CRSpline_list;
+typedef vector<CRSpline*> CRSpline_list;
 
 #endif // __HSPLINE_HEADER

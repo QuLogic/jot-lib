@@ -27,6 +27,8 @@
 #include "mesh/vert_frame.H"
 #include "tess/bpoint.H"
 
+#include <vector>
+
 class WpathStroke;
 class CurveMeme;        // defined below
 /*****************************************************************
@@ -638,7 +640,7 @@ class Bcurve : public Bbase{
    //! along the curve and their associated normals.  If get_binormals
    //! is true, then the vertex binormals (instead of the normals) are
    //! used for the line directions.
-   bool get_reshape_constraint_lines(ARRAY<Wline>& ret_lines,
+   bool get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
                                      reshape_mode_t mode,
                                      double len=1.0 // desired world length
                                      );

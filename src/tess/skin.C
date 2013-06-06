@@ -1449,13 +1449,13 @@ Skin::track_points(CBvert_list& verts) const
    return ret;
 }
 
-inline ARRAY<Wline>
+inline vector<Wline>
 bundle_lines(CWpt_list& a, CWpt_list& b)
 {
    assert(a.num() == b.num());
-   ARRAY<Wline> ret(a.num());
+   vector<Wline> ret(a.num());
    for (int i=0; i<a.num(); i++)
-      ret += Wline(a[i], b[i]);
+      ret[i] = Wline(a[i], b[i]);
    return ret;
 }
 

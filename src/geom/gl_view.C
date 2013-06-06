@@ -985,7 +985,7 @@ GL_VIEW::draw_wpt_list(
 
 void 
 GL_VIEW::draw_lines(
-   CARRAY<Wline>&  lines,      // lines to draw
+   const vector<Wline>&lines,  // lines to draw
    CCOLOR&         color,      // color to use
    double          alpha,      // transparency
    double          width,      // width of points
@@ -1013,7 +1013,7 @@ GL_VIEW::draw_lines(
 
    glBegin(GL_LINES);
 
-   for (int i=0; i<lines.num(); i++) {
+   for (vector<Wline>::size_type i=0; i<lines.size(); i++) {
       glVertex3dv(lines[i].point().data());
       glVertex3dv(lines[i].endpt().data());
    }

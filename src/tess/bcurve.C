@@ -1863,7 +1863,7 @@ Bcurve::get_map_normal_lines(
 }
 
 bool
-Bcurve::get_reshape_constraint_lines(ARRAY<Wline>& ret_lines, 
+Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
                                      reshape_mode_t mode,
                                      double len  )
 {
@@ -1886,7 +1886,7 @@ Bcurve::get_reshape_constraint_lines(ARRAY<Wline>& ret_lines,
        for ( int i=0; i<verts.num(); i++ ) {
           Wpt start = verts[i]->loc();
           Wpt end = start + (len * verts[i]->norm());
-          ret_lines +=  Wline(start, end);
+          ret_lines.push_back(Wline(start, end));
        }
        return true;
        break;
@@ -1941,7 +1941,7 @@ Bcurve::get_reshape_constraint_lines(ARRAY<Wline>& ret_lines,
           }
 
           Wpt end = start + (len * bi_norm);
-          ret_lines +=  Wline(start, end);
+          ret_lines.push_back(Wline(start, end));
        }
        return total_success;
 
@@ -2031,7 +2031,7 @@ Bcurve::get_reshape_constraint_lines(ARRAY<Wline>& ret_lines,
           }
 
           Wpt end = start + (len * side_face_tan);
-          ret_lines +=  Wline(start, end);
+          ret_lines.push_back(Wline(start, end));
        }
        return total_success;
 
@@ -2060,7 +2060,7 @@ Bcurve::draw_normals(double len,
       return;
 
    // create a line along the normal through each point on the map
-   ARRAY<Wline> norm_lines;
+   std::vector<Wline> norm_lines;
    //get_map_normal_lines(norm_lines, len, draw_binormals);
    get_reshape_constraint_lines(norm_lines, 
                                 //RESHAPE_MESH_NORMALS,
@@ -3415,7 +3415,7 @@ intersect_line_polyline(const PIXELline&  line,
 //! in out_new_pts.  If a line does not intersect the screen curve,
 //! the line's base point is returned instead.
 void
-intersect_lines_with_curve(CARRAY<Wline>& lines,
+intersect_lines_with_curve(const vector<Wline>& lines,
                            CPIXEL_list& pix_curve,
                            Wpt_list& out_new_pts)
 {
@@ -3426,11 +3426,11 @@ intersect_lines_with_curve(CARRAY<Wline>& lines,
       return;
   
    // Convert the world lines to pixel space.
-   ARRAY<PIXELline> pix_lines(lines.num());
+   ARRAY<PIXELline> pix_lines(lines.size());
 
    int i=0; // loop index
 
-   for (i=0; i<lines.num(); i++) {
+   for (i=0; i<(int)lines.size(); i++) {
       pix_lines += PIXELline(PIXEL(lines[i].point()),
                              PIXEL(lines[i].endpt()) );
    }
@@ -3441,7 +3441,7 @@ intersect_lines_with_curve(CARRAY<Wline>& lines,
 
    // For what follows, there must be a one-to-one correspondence
    // between lines and pix_lines
-   assert(pix_lines.num() == lines.num());
+   assert(pix_lines.num() == (int)lines.size());
 
    PIXEL_list intersect_pixels;
 
@@ -3476,7 +3476,7 @@ intersect_lines_with_curve(CARRAY<Wline>& lines,
    }
 
    // we guarantee that we provide one point for every line
-   assert(out_new_pts.num() == lines.num());
+   assert(out_new_pts.num() == (int)lines.size());
 }
 
 
@@ -3492,7 +3492,7 @@ Bcurve::reshape_along_normals(const PIXEL_list &new_curve)
       return false;
    }
 
-   ARRAY<Wline> lines;  
+   std::vector<Wline> lines;
 
    if ( !get_reshape_constraint_lines(lines, _cur_reshape_mode) ) {
       cerr << "Bcurve::reshape_along_normals(): WARNING: "
@@ -3500,11 +3500,11 @@ Bcurve::reshape_along_normals(const PIXEL_list &new_curve)
            << endl;      
    }
 
-   cerr << "num norm lines " << lines.num() << endl;
+   cerr << "num norm lines " << lines.size() << endl;
 
    // set new world points in the curve map
 
-   Wpt_list new_pts(lines.num());
+   Wpt_list new_pts(lines.size());
 
    intersect_lines_with_curve(lines, new_curve, new_pts);
 

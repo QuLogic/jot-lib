@@ -25,6 +25,8 @@
 #include "mod.H"
 #include "body.H"
 
+#include <vector>
+
 class GEOM;
 class BODY;
 
@@ -109,13 +111,13 @@ class DEFINER : public DATA_ITEM {
    data_mask           _out_mask;
    BASIC_DATA<mlib::Wtransf> _xf_delt;
    BASIC_DATA<int>     _ob_delt;
-   ARRAY<GEOM*>        _inputs;
-   ARRAY<GEOM*>        _outputs;
+   vector<GEOM*>       _inputs;
+   vector<GEOM*>       _outputs;
    static TAGlist     *_def_tags;
   public :
            DEFINER();
-           DEFINER(CDEFINER *d, GEOM *g): _reached(0), _out_mask(d->_out_mask),
-                                          _inputs(d->_inputs) { set_geom(g); }
+           DEFINER(CDEFINER *d, GEOM *g): _reached(0), _out_mask(d->_out_mask)
+                                                { set_geom(g); _inputs.reserve(d->inputs); }
    virtual~DEFINER();
    virtual DEFINER  *copy     (GEOM *g) const   { return new DEFINER(this,g); }
 
@@ -127,11 +129,13 @@ class DEFINER : public DATA_ITEM {
    virtual GEOM     *feat_geom()          const { return 0; }
      const GEOM     *geom     (int i = 0) const { return _outputs[i]; }
            GEOM     *geom     (int i = 0)       { return _outputs[i]; }
-   virtual void      rem_geom (GEOM *g)         { _outputs -= g; }
-   virtual void      add_geom (GEOM *g)         { _outputs += g; }
+   virtual void      rem_geom (GEOM *g)         { vector<GEOM*>::iterator it;
+                                                  it = std::find(_outputs.begin(), _outputs.end(), g);
+                                                  _outputs.erase(it); }
+   virtual void      add_geom (GEOM *g)         { _outputs.push_back(g); }
    // for backward compatibility
    virtual void      clear_geom()               { _outputs.clear(); }
-   virtual void      set_geom (GEOM *g)         { _outputs += g; }
+   virtual void      set_geom (GEOM *g)         { _outputs.push_back(g); }
 
            void      clear_deltas()             { _xf_delt.data() = mlib::Identity;}
            void      set_delta(GEOM *g, CBODYptr&, CMOD&m)
@@ -148,11 +152,11 @@ CBASIC_DATA<mlib::Wtransf> &xf_delt () const          { return _xf_delt;}
            int       reached  ()                { return _reached; }
            int       mask     (data_mask d)     { return (int)_out_mask&(int)d;}
 
-           int       num_outputs()   const      { return _outputs.num(); }
-           int       num_inputs()    const      { return _inputs.num(); }
+           int       num_outputs()   const      { return _outputs.size(); }
+           int       num_inputs()    const      { return _inputs.size(); }
            data_mask out_mask()      const      { return _out_mask; }
            GEOM     *operator[](int i)          { return _inputs[i]; }
-   virtual ARRAY<GEOM *> required()  const      { return ARRAY<GEOM *>(); }
+   virtual vector<GEOM *> required() const      { return vector<GEOM *>(); }
 
    virtual void      visit     (MOD &mod);
    virtual void      print     (ostream &os)    { os << class_name(); }
@@ -172,24 +176,26 @@ inline STDdstream &operator<<(STDdstream &ds, CDEFINER *p)
 #define CDATA const DATA
 template<class T>
 class DATA : public BASIC_DATA<T> {
-   ARRAY<DEFINER*> _outputs;
+   vector<DEFINER*> _outputs;
 
    public :
          DATA()                                   {}
          // Don't copy _outputs because inputs corresponding to _outputs
          DATA(const DATA<T> &d):BASIC_DATA<T>(d)    {}
-         ARRAY<DEFINER*> *operator->()           { return &_outputs; }
-   const ARRAY<DEFINER*> *operator->()  const    { return &_outputs; }
-         ARRAY<DEFINER*> &operator *()           { return  _outputs; }
-   const ARRAY<DEFINER*> &operator *()  const    { return  _outputs; }
-   void                   operator+=(DEFINER *d) { _outputs += d; }
-   void                   operator-=(DEFINER *d) { _outputs -= d; }
+         vector<DEFINER*> *operator->()          { return &_outputs; }
+   const vector<DEFINER*> *operator->()  const   { return &_outputs; }
+         vector<DEFINER*> &operator *()          { return  _outputs; }
+   const vector<DEFINER*> &operator *()  const   { return  _outputs; }
+   void                   operator+=(DEFINER *d) { _outputs.push_back(d); }
+   void                   operator-=(DEFINER *d) { vector<GEOM*>::iterator it;
+                                                   it = std::find(_outputs.begin(), _outputs.end(), g);
+                                                   _outputs.erase(it); }
    DEFINER               *operator[](int i)      { return  _outputs[i]; }
 
    void                   write(T d)             { data()  = d; }
    void                   write(GEOM *g, T d, MOD m)      { write(g,d,d,m); }
    void                   write(GEOM *g, T x, T d, MOD m) { data() = x; id() = m;
-                                            for (int i=0; i<_outputs.num(); i++)
+                                            for (vector<DEFINER*>::size_type i=0; i<_outputs.size(); i++)
                                                _outputs[i]->set_delta(g,d,m); }
 friend
 ostream &operator << (ostream &os, const DATA<T> &d) { return os<<d.data(); }

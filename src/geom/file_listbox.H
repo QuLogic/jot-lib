@@ -17,7 +17,11 @@
  *****************************************************************/
 #ifndef _FILE_LISTBOX_H_IS_INCLUDED_
 #define _FILE_LISTBOX_H_IS_INCLUDED_
+
 #include "std/support.H"
+
+#include <vector>
+
 /*****************************************************************
  * FileListbox
  *****************************************************************/
@@ -38,7 +42,7 @@ class FileListbox {
    bool               _shown;
    vector<string>     _files;
 
-   static ARRAY<FileListbox *> _file_list_boxes;
+   static vector<FileListbox *> _file_list_boxes;
 
    //******** MEMBERS ********
    virtual void button_press_cb() = 0;

@@ -228,14 +228,12 @@ ProxyTexture::draw_final(CVIEWptr& v)
       Wpt w_e = Wpt(XYpt(end));
       Wpt w_e2 = Wpt(XYpt(end2));
       
+      vector<Wline> lines;
 
-      ARRAY<Wline>  lines;
-      
       Wline line(w_s, w_e);
       Wline line2(w_s, w_e2);
 
-      //lines += line;
-      lines += line2;
+      lines.push_back(line2);
 
       GL_VIEW::draw_lines(lines,Color::red2,0.5,2.0,false);
    }

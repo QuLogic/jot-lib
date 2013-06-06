@@ -23,6 +23,8 @@
 #include "geom/geom.H"
 #include "geom/command.H"
 
+#include <vector>
+
 class LOADER {
    protected:
       static LOADER *_all;
@@ -48,7 +50,7 @@ class ThreadSync;
 class REF_CLASS(WORLD) : public SCHEDULER {
  protected :
    static WORLD    *_w;
-   ARRAY<TTYfd *>   _fds;
+   vector<TTYfd *>  _fds;
 
    LIST<COMMANDptr> _undoable;
    LIST<COMMANDptr> _redoable;
@@ -159,7 +161,7 @@ virtual void      clean_on_exit () const;    // pre-quit cleanup
 virtual void      quit() const;              // quits program
 
    //!METHS: objects that are "active"
-   virtual   void    add_fd  (TTYfd *f)       { _fds.add(f); }
+   virtual   void    add_fd  (TTYfd *f)       { _fds.push_back(f); }
 
    //!METHS: access all the world's lists
           FRAMEobslist &scheduled ()          { return _scheduled; }

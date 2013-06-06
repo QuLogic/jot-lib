@@ -34,6 +34,7 @@
 #include "dev/dev.H"
 
 #include <map>
+#include <vector>
 
 template <class EVENT>
 class State_t;
@@ -268,18 +269,22 @@ class State_t {
       State_t()                         { }
       State_t(const string &n):_name(n) { }
       
-      int is_empty() { return !_arcs.num(); }
+      int is_empty() { return _arcs.empty(); }
       
       void operator+=(const State_t<EVENT> &s);
       void operator-=(const State_t<EVENT> &s);
       
       void operator+=(const Arc_t<EVENT> &a)
-         { if (a.guarded()) _arcs.push(a);    // first for priority
-           else _arcs += a; }
-      void operator -=(const Arc_t<EVENT> &a) { _arcs -= a; }
+         { if (a.guarded()) _arcs.insert(_arcs.begin(), a);    // first for priority
+           else _arcs.push_back(a); }
+      void operator -=(const Arc_t<EVENT> &a) { typename vector<arc_type>::iterator it;
+                                                it = std::find(_arcs.begin(), _arcs.end(), a);
+                                                _arcs.erase(it); }
       
       int consumes(const EVENT   &e) const
-         { for(int i = 0; i < _arcs.num(); ++i) if(_arcs[i].match(e)) return 1;
+         { for (typename vector<arc_type>::size_type i = 0; i < _arcs.size(); ++i)
+              if (_arcs[i].match(e))
+                 return 1;
            return 0; }
 
       //! \brief Process the event, returning the next state. If
@@ -289,8 +294,8 @@ class State_t {
 
       void clear() { _arcs.clear(); }
       
-      const ARRAY<arc_type> &arcs() const { return _arcs; }
-      ARRAY<arc_type> &arcs()             { return _arcs; }
+      const vector<arc_type> &arcs() const { return _arcs; }
+      vector<arc_type> &arcs()             { return _arcs; }
       
       const string &name() const     { return _name; }
       void set_name(const string &n) { _name = n; }
@@ -300,7 +305,7 @@ class State_t {
 
    private:
    
-      ARRAY<arc_type> _arcs;
+      vector<arc_type> _arcs;
       string          _name;
 
 };
@@ -309,87 +314,59 @@ template <class EVENT>
 void
 State_t<EVENT>::operator+=(const State_t<EVENT>&s)
 {
-   
-   for(int i = 0; i < s._arcs.num(); ++i){
-      
-      int j = 0;
-      
-      for(; j < _arcs.num(); ++j){
-         
-         if(_arcs[j].match(s._arcs[i].event())){
-            
-            _arcs[j] = s._arcs[i]; 
+   for (typename vector<arc_type>::size_type i = 0; i < s._arcs.size(); ++i) {
+      typename vector<arc_type>::size_type j = 0;
+
+      for (; j < _arcs.size(); ++j) {
+         if (_arcs[j].match(s._arcs[i].event())) {
+            _arcs[j] = s._arcs[i];
             break;
-         
          }
-         
       }
-      
-      if(j == _arcs.num()){
-         
-         if(!s._arcs[i].guarded()) {
-            
-            _arcs += s._arcs[i];
-            
+
+      if (j == _arcs.size()) {
+         if (!s._arcs[i].guarded()) {
+            _arcs.push_back(s._arcs[i]);
          } else {
-            
             // arcs w/guards come first for priority
             // over more general arcs
-            _arcs.push(s._arcs[i]); 
-            
+            _arcs.insert(_arcs.begin(), s._arcs[i]);
          }
-         
       }
-      
    }
-   
 }
 
 template <class EVENT>
 void
 State_t<EVENT>::operator-=(const State_t<EVENT>&s)
 {
+   for (typename vector<arc_type>::size_type i = 0; i < s._arcs.size(); i++) {
+      typename vector<arc_type>::reverse_iterator j;
 
-   for(int i = 0; i < s._arcs.num(); i++){
-      
-      int j = _arcs.num() - 1;
-      
-      for(; j >= 0; j--){
-         
-         if(_arcs[j].match(s._arcs[i].event())){
-            
-            _arcs.remove(j);
+      for (j = _arcs.rbegin(); j != _arcs.rend(); ++j) {
+         if (j->match(s._arcs[i].event())) {
+            _arcs.erase(j.base());
             break;
-            
          }
-         
       }
-      
    }
-      
 }
 
 template <class EVENT>
 State_t<EVENT>*
 State_t<EVENT>::event(const EVENT& e, State_t<EVENT>* start, int* ret) const
 {
-   
    State_t<EVENT> *next = (State_t<EVENT>*)this;
-   
-   for(int i = 0; i < _arcs.num(); i++){
-      
-      if(_arcs[i].match(e)){
-         
+
+   for (typename vector<arc_type>::size_type i = 0; i < _arcs.size(); i++) {
+      if (_arcs[i].match(e)) {
          int k = _arcs[i].execute(next, e, start);
          if (ret) *ret = k;
          break;
-         
       }
-      
    }
-   
-   return next;
 
+   return next;
 }
 
 /*!
@@ -670,8 +647,8 @@ typedef FSAT<Event> FSA;
 class VIEWint : public DEVhandler {
    protected:
      VIEWptr      _view;
-     ARRAY<Evd>   _events;        // events posted by application
-     ARRAY<FSA*>  _cur_states;    // interactors listening to events on view
+     vector<Evd>  _events;        // events posted by application
+     vector<FSA*> _cur_states;    // interactors listening to events on view
 
    public:
               VIEWint(CVIEWptr &v)          { _view = v; }
@@ -680,10 +657,12 @@ class VIEWint : public DEVhandler {
      VIEWptr  view()                        { return _view;} 
 
      void     handle_event(CEvd &e);
-     void     post_event  (CEvd &e)         { _events += e; }
+     void     post_event  (CEvd &e)         { _events.push_back(e); }
 
-     void     add_interactor(FSA* fsa)      { _cur_states += fsa; }
-     void     rem_interactor(FSA* fsa)      { _cur_states -= fsa; }
+     void     add_interactor(FSA* fsa)      { _cur_states.push_back(fsa); }
+     void     rem_interactor(FSA* fsa)      { vector<FSA*>::iterator it;
+                                              it = std::find(_cur_states.begin(), _cur_states.end(), fsa);
+                                              _cur_states.erase(it); }
 
      void     add_interactor(State *s)      { add_interactor(new FSA(s)); }
      void     rem_interactor(State *s);

@@ -237,10 +237,9 @@ WORLD::clean_on_exit() const
       destroy(g, false);
    }
 
-   int i;
-   for (i = 0; i<_fds.num(); i++)
+   for (vector<TTYfd*>::size_type i = 0; i<_fds.size(); i++)
       _fds[i]->deactivate();
-   for (i = 0; i < VIEWS.num(); i++)
+   for (int i = 0; i < VIEWS.num(); i++)
       VIEWS[i]->stereo(VIEWimpl::NONE);
 }
 

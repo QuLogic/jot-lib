@@ -34,9 +34,11 @@ void
 VIEWint::rem_interactor(State *s)
 {
    FSA* fsa = 0;
-   for (int i=0; i < _cur_states.num(); i++) {
-      if ((fsa = _cur_states[i])->start() == s) {
-         _cur_states.remove(i);
+   vector<FSA*>::iterator it;
+   for (it=_cur_states.begin(); it!=_cur_states.end(); ++it) {
+      fsa = *it;
+      if (fsa->start() == s) {
+         _cur_states.erase(it);
          // XXX - following line assumes interactor was
          //  added via
          //     VIEWint::add_interactor(State *s),
@@ -58,13 +60,14 @@ VIEWint::handle_event(
 {
    VIEW::push(_view);
    Event  ev(_view, e);
-   for (int i=0; i < _cur_states.num(); i++) {
+   for (vector<FSA*>::size_type i=0; i < _cur_states.size(); i++) {
       _cur_states[i]->handle_event(ev);
    }
 
    while (!_events.empty()) {
-      ev = Event(_view, _events.pop());
-      for (int t=0; t < _cur_states.num(); t++) {
+      ev = Event(_view, _events.back());
+      _events.pop_back();
+      for (vector<FSA*>::size_type t=0; t < _cur_states.size(); t++) {
          _cur_states[t]->handle_event(ev);
       }
    }
