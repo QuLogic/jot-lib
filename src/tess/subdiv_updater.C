@@ -36,7 +36,7 @@ SubdivUpdater::SubdivUpdater(LMESHptr m, CBvert_list& verts) :
       cerr << "  "; print_dependencies();
       err_msg("  level %d, %d verts, %d boss memes",
               m->subdiv_level(), verts.num(),
-              Bbase::find_boss_vmemes(verts).num());
+              Bbase::find_boss_vmemes(verts).size());
    }
 
    // If not covered, create parent

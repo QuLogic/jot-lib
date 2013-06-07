@@ -531,7 +531,7 @@ FIT_VERTS_CMD::FIT_VERTS_CMD(CBvert_list& verts, CWpt_list& new_locs)
       return;
    }
    _verts    = verts;
-   _old_lists += verts.pts();
+   _old_lists.push_back(verts.pts());
    _new_locs = new_locs;
 }
 
@@ -540,7 +540,7 @@ FIT_VERTS_CMD::is_good() const
 {
    return (
       _verts.num() == _new_locs.num() &&
-      _verts.num() == _old_lists.last().num() &&
+      _verts.num() == _old_lists.back().num() &&
       (is_empty() || LMESH::isa(_verts.mesh()))
       );
 }
@@ -600,7 +600,7 @@ FIT_VERTS_CMD::fit_verts(CBvert_list& verts, CWpt_list& new_locs, int lev)
    Wpt_list   parent_locs;
    get_parents(verts, new_locs, parents, parent_locs);
    if (!parents.empty()) {
-      if (!is_done()) _old_lists.push(parents.pts());
+      if (!is_done()) _old_lists.insert(_old_lists.begin(), parents.pts());
       fit_verts(parents, parent_locs, lev-1);
    }
 
@@ -651,7 +651,7 @@ FIT_VERTS_CMD::undoit()
 
    assert(is_good());
 
-   fit_verts(_verts, _old_lists.last(), _old_lists.num()-1);
+   fit_verts(_verts, _old_lists.back(), _old_lists.size()-1);
 
    return COMMAND::undoit();
 }
@@ -731,15 +731,15 @@ MOVE_VERT_CMD::undoit()
 /*****************************************************************
  * SUBDIV_OFFSET_CMD
  *****************************************************************/
-inline ARRAY<double>
+inline vector<double>
 get_offsets(CBvert_list& verts)
 {
    if (!LMESH::isa(verts.mesh()))
-      return ARRAY<double>(0);
+      return vector<double>(0);
 
-   ARRAY<double> ret(verts.num());
+   vector<double> ret(verts.num());
    for (int i=0; i<verts.num(); i++)
-      ret += ((Lvert*)verts[i])->offset();
+      ret[i] = ((Lvert*)verts[i])->offset();
    return ret;
 }
 
@@ -747,12 +747,12 @@ get_offsets(CBvert_list& verts)
 inline void
 get_parents(
    CBvert_list&         children,
-   CARRAY<double>&      child_offsets,
+   const vector<double>&child_offsets,
    Bvert_list&          parents,        // return val
-   ARRAY<double>&       parent_offsets  // return val
+   vector<double>&      parent_offsets  // return val
    )
 {
-   assert(children.num() == child_offsets.num());
+   assert(children.num() == (int)child_offsets.size());
    parents.clear();
    parent_offsets.clear();
    if (!LMESH::isa(children.mesh()))
@@ -761,19 +761,19 @@ get_parents(
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
          parents += p;
-         parent_offsets += child_offsets[i];
+         parent_offsets.push_back(child_offsets[i]);
       }
    }
 }
 
 SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD(
    CBvert_list&    verts,
-   CARRAY<double>& offsets
+   const vector<double>& offsets
    )
 {
-   if (verts.num() != offsets.num()) {
+   if (verts.num() != (int)offsets.size()) {
       err_msg("SUBDIV_OFFSET_CMD: error: lists not equal: %d vs. %d",
-              verts.num(), offsets.num());
+              verts.num(), offsets.size());
       return;
    }
    if (!LMESH::isa(verts.mesh())) {
@@ -784,7 +784,7 @@ SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD(
    _offsets = offsets;
 
    Bvert_list    parents;
-   ARRAY<double> parent_offsets;
+   vector<double> parent_offsets;
    get_parents(verts, offsets, parents, parent_offsets);
    if (!parents.empty())
       _parent_cmd  = new SUBDIV_OFFSET_CMD(parents, parent_offsets);
@@ -795,7 +795,7 @@ bool
 SUBDIV_OFFSET_CMD::is_good() const
 {
    return (
-      _verts.num() == _offsets.num() &&
+      _verts.num() == (int)_offsets.size() &&
       (is_empty() || LMESH::isa(_verts.mesh()))
       );
 }
@@ -812,15 +812,15 @@ get_smooth_locs(CBvert_list& verts)
    return ret;
 }
 
-inline ARRAY<Wvec>
+inline vector<Wvec>
 get_parent_norms(CBvert_list& verts)
 {
    if (!LMESH::isa(verts.mesh()))
-      return ARRAY<Wvec>();
+      return vector<Wvec>();
 
-   ARRAY<Wvec> ret(verts.num());
+   vector<Wvec> ret(verts.num());
    for (int i=0; i<verts.num(); i++)
-      ret += get_norm(((Lvert*)verts[i])->parent());
+      ret[i] = get_norm(((Lvert*)verts[i])->parent());
    return ret;
 }
 
@@ -850,8 +850,8 @@ SUBDIV_OFFSET_CMD::doit()
    if (is_clear()) {
       Wpt_list old_base = get_smooth_locs(_verts);
       if (_parent_cmd) _parent_cmd->doit();
-      Wpt_list    new_base  = get_smooth_locs(_verts);
-      ARRAY<Wvec> new_norms = get_parent_norms(_verts);
+      Wpt_list     new_base  = get_smooth_locs(_verts);
+      vector<Wvec> new_norms = get_parent_norms(_verts);
       for (int i=0; i<_verts.num(); i++) {
          if (((Lvert*)_verts[i])->parent()) {
             double dh = (new_base[i] - old_base[i])*new_norms[i];
@@ -937,7 +937,7 @@ add_offset(Skin* skin, double offset)
    if (!skin) return;
 
    VertMemeList memes = skin->vmemes();
-   for (int i = 0; i < memes.num(); i++) {
+   for (VertMemeList::size_type i = 0; i < memes.size(); i++) {
       SkinMeme::upcast(memes[i])->add_offset(offset);
    }
 

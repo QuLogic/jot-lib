@@ -899,7 +899,7 @@ get_parents(
    CBvert_list&         children,
    CARRAY<double>&      child_offsets,
    Bvert_list&          parents,        // return val
-   ARRAY<double>&       parent_offsets  // return val
+   vector<double>&      parent_offsets  // return val
    )
 {
    assert(children.num() == child_offsets.num());
@@ -911,7 +911,7 @@ get_parents(
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
          parents += p;
-         parent_offsets += child_offsets[i];
+         parent_offsets.push_back(child_offsets[i]);
       }
    }
 }
@@ -954,7 +954,7 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
    }
 
    Bvert_list parent_verts;
-   ARRAY<double> parent_offsets;
+   vector<double> parent_offsets;
    get_parents(region_verts, offsets, parent_verts, parent_offsets);
 
    SUBDIV_OFFSET_CMDptr cmd = new SUBDIV_OFFSET_CMD(parent_verts, parent_offsets);

@@ -410,7 +410,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    err_adv(_debug, "CREATE_RIBBONS_CMD::gen_ribbon: using %d vertical segments",
            n);
 
-   ARRAY<double> uvals = make_params(a.num() - 1);
+   vector<double> uvals = make_params(a.num() - 1);
    UVpt_list  prev_uvs = make_uvpt_list(uvals, 0);
    Bvert_list prev_row = b;
 

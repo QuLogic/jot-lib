@@ -511,9 +511,9 @@ get_c_verts(Bvert_list& b_verts)
 }
 
 inline Skin*
-get_skin(CARRAY<Skin*>& skins, Bface_list& region)
+get_skin(const vector<Skin*>& skins, Bface_list& region)
 {
-   for (int i = 0; i < skins.num(); i++) {
+   for (vector<Skin*>::size_type i = 0; i < skins.size(); i++) {
       if (skins[i]->skel_faces().contains_all(region))
          return skins[i];
    }
@@ -829,7 +829,7 @@ try_punch(CBface_list& region, bool debug)
    ARRAY<Bface_list> regions = get_regions(check_inf_region(region));
    if (debug) cerr << "   num of regions: " << regions.num() << endl; 
    ARRAY<Bvert_list> b_verts_lists;
-   ARRAY<Skin*> skins;
+   vector<Skin*> skins;
 
    for (int i = 0; i < regions.num(); i++) {
       regions[i].get_boundary().get_chains(b_verts_lists);
@@ -902,7 +902,7 @@ try_punch(CBface_list& region, bool debug)
          Skin* c_skin = Skin::create_cover_skin(l_region, cmd);
 
          if (c_skin) {
-            skins += c_skin;
+            skins.push_back(c_skin);
 
             push(map_skel_to_skin(c_skin, regions[i]), cmd);
             cov_inf_punch(c_skin, map_skel_to_skin(c_skin, regions[i]), cmd);

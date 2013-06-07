@@ -376,19 +376,19 @@ VertMeme::nbr(int k) const
 }
 
 void 
-VertMeme::get_nbrs(ARRAY<VertMeme*>& ret) const 
+VertMeme::get_nbrs(vector<VertMeme*>& ret) const
 {
    assert(vert());
    ret.clear();
    for (int i=0; i<vert()->degree(); i++) {
       VertMeme* n = nbr(i);
       if (n)
-         ret += n;
+         ret.push_back(n);
    }
 }
 
 void
-VertMeme::get_nbrs(ARRAY<EdgeMeme*>& ret) const
+VertMeme::get_nbrs(vector<EdgeMeme*>& ret) const
 {
    // Return adjacent EdgeMemes that have the same owner as this.
 
@@ -397,12 +397,12 @@ VertMeme::get_nbrs(ARRAY<EdgeMeme*>& ret) const
       EdgeMeme* m;
       for (int i=0; i<vert()->degree(); i++)
          if ((m = _owner->find_edge_meme(vert()->e(i))))
-            ret += m;
+            ret.push_back(m);
    }
 }
 
 void
-VertMeme::get_nbrs(ARRAY<FaceMeme*>& ret) const
+VertMeme::get_nbrs(vector<FaceMeme*>& ret) const
 {
    // Return adjacent FaceMemes that have the same owner as this.
 
@@ -413,7 +413,7 @@ VertMeme::get_nbrs(ARRAY<FaceMeme*>& ret) const
       FaceMeme* m;
       for (int i=0; i<faces.num(); i++)
          if ((m = _owner->find_face_meme(faces[i])))
-            ret += m;
+            ret.push_back(m);
    }
 }
 
@@ -1159,8 +1159,8 @@ int
 VertMemeList::meme_count(const string& class_name)
 {
    int ret = 0;
-   for (int i=0; i<_num; i++)
-      if (_array[i]->is_of_type(class_name))
+   for (VertMemeList::size_type i=0; i<size(); i++)
+      if (at(i)->is_of_type(class_name))
          ret++;
    return ret;
 }

@@ -148,7 +148,7 @@ UVmeme::lookup_uv()
       return _uv_valid = true;
 
    // Try it heavyweight:
-   static ARRAY<FaceMeme*> nbrs;
+   static vector<FaceMeme*> nbrs;
    get_nbrs(nbrs);
    if (nbrs.empty())
       return 0;
@@ -564,7 +564,7 @@ joined_at_top(TubeMap* tube, Wpt& top)
    param_list_t params = make_params(steps);
 
    // remove last one (1.0):
-   params.pop();
+   params.pop_back();
 
    // map samples to world space
    Wpt_list pts = tube->c1()->map_all(params);
@@ -664,8 +664,8 @@ UVsurface::build_revolve(
    // Create tube map and uv grid to use for mesh
    TubeMap* tube_map = new TubeMap(axis, bot_map, spts);
    // XXX - should fix to compute the real uv coords properly:
-   ARRAY<double> uvals = make_params(bcurve->num_edges() * (1 << k));
-   ARRAY<double> vvals;
+   param_list_t uvals = make_params(bcurve->num_edges() * (1 << k));
+   vector<double> vvals;
    double aspect = Config::get_var_dbl("TUBE_ASPECT", 1.0,true);
    tube_map->get_min_distortion_v_vals(uvals, vvals, aspect);
 
@@ -721,21 +721,21 @@ UVsurface::build_revolve(
    surfs += ret;
 
    int ncols = bot_sub_verts.num();
-   int nrows = vvals.num();
+   int nrows = vvals.size();
 
    // Make a 2D array of vertices and their uv-coords:
-   ARRAY<Bvert_list> verts(nrows);
-   ARRAY<UVpt_list>  uvpts(nrows);
+   vector<Bvert_list> verts(nrows);
+   vector<UVpt_list>  uvpts(nrows);
 
    // First row:
-   uvpts += make_uvpt_list(uvals, vvals[0]);
-   verts += bot_sub_verts;
+   uvpts.push_back(make_uvpt_list(uvals, vvals[0]));
+   verts.push_back(bot_sub_verts);
    ret->add_memes(verts[0], uvpts[0]);
 
    // Remaining rows:
    for (int j=1; j<nrows; j++) {
-      verts += ((j == nrows-1) ? top_sub_verts : Bvert_list());
-      uvpts +=  UVpt_list();
+      verts.push_back((j == nrows-1) ? top_sub_verts : Bvert_list());
+      uvpts.push_back(UVpt_list());
       if (verts[j].num() == 1) {
          // cone top
          assert(j == nrows-1 && is_cone_top);
@@ -874,10 +874,10 @@ UVsurface::build_coons_patch(
 
   // Done validating ... from here on, we shall surely succeed!!! 
 
-  ARRAY<double> c1_uvals = ab->tvals();
-  ARRAY<double> c2_uvals = cd->tvals();
-  ARRAY<double> d1_vvals = da->tvals();
-  ARRAY<double> d2_vvals = bc->tvals();
+  vector<double> c1_uvals = ab->tvals();
+  vector<double> c2_uvals = cd->tvals();
+  vector<double> d1_vvals = da->tvals();
+  vector<double> d2_vvals = bc->tvals();
 
   Bvert_list c1_verts = ab->verts();
   Bvert_list c2_verts = cd->verts();
@@ -913,13 +913,13 @@ UVsurface::build_coons_patch(
    int nrows = d1_verts.num();
 
    // Make a 2D array of vertices and their uv-coords:
-   ARRAY<Bvert_list> verts(nrows);
-   ARRAY<UVpt_list>  uvpts(nrows);
+   vector<Bvert_list> verts(nrows);
+   vector<UVpt_list>  uvpts(nrows);
 
    // First row:
    // XXX - should fix to compute the real uv coords properly
-   uvpts += make_uvpt_list(c1_uvals, d1_vvals[0]);
-   verts += c1_verts;
+   uvpts.push_back(make_uvpt_list(c1_uvals, d1_vvals[0]));
+   verts.push_back(c1_verts);
    ret->add_memes(verts[0], uvpts[0]);
 
    // Remaining rows:
@@ -927,13 +927,13 @@ UVsurface::build_coons_patch(
       if (j == nrows-1) {
          // last row
          // XXX - should fix to compute the real uv coords properly
-         uvpts += make_uvpt_list(c2_uvals, d1_vvals.last());
-         verts += c2_verts;
-         ret->add_memes(verts.last(), uvpts.last());
+         uvpts.push_back(make_uvpt_list(c2_uvals, d1_vvals.back()));
+         verts.push_back(c2_verts);
+         ret->add_memes(verts.back(), uvpts.back());
       } else {
          // middle rows
-         verts += Bvert_list();
-         uvpts +=  UVpt_list();
+         verts.push_back(Bvert_list());
+         uvpts.push_back(UVpt_list());
          // XXX - use uvals
          ret->build_row(d1_vvals[j], ncols, verts[j], uvpts[j],
                      d1_verts[j], d2_verts[j]);
@@ -1010,11 +1010,11 @@ UVsurface::tessellate_rect(int rows, int cols, bool do_cap)
    double dv = 1.0 / (rows - 1);
 
    // Make a 2D array of vertices and their uv-coords:
-   ARRAY<Bvert_list> verts(rows);
-   ARRAY<UVpt_list>  uvpts(rows);
+   vector<Bvert_list> verts(rows);
+   vector<UVpt_list>  uvpts(rows);
    for (int j=0; j<rows; j++) {
-      verts += Bvert_list();
-      uvpts +=  UVpt_list();
+      verts[j] = Bvert_list();
+      uvpts[j] = UVpt_list();
       if (_map->wrap_v() && j == rows - 1) {
          // Copy first row of vertices:
          verts[j] = verts[0];
@@ -1032,10 +1032,10 @@ UVsurface::tessellate_rect(int rows, int cols, bool do_cap)
    }
 
    if (do_cap && _map->wrap_u()) {
-      CBvert_list& r1 = verts.first();
-      CBvert_list& r2 = verts.last();
-      CUVpt_list&  u1 = uvpts.first();
-      CUVpt_list&  u2 = uvpts.last();
+      CBvert_list& r1 = verts.front();
+      CBvert_list& r2 = verts.back();
+      CUVpt_list&  u1 = uvpts.front();
+      CUVpt_list&  u2 = uvpts.back();
       if (cols == 5) {
          // 5 total, 4 unique
          // Cap off both ends with quads:

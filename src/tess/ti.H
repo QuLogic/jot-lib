@@ -185,13 +185,13 @@ class InflateCreaseFilter : public SimplexFilter {
 //
 // XXX - move to bvert.H
 //
-inline ARRAY<Wvec>
+inline vector<Wvec>
 get_norms(CBvert* v, CSimplexFilter& filter)
 {
-   ARRAY<Wvec> ret;
+   vector<Wvec> ret;
    Bface_list leaders = leading_faces(v, filter); // empty if v == 0
    for (int i=0; i<leaders.num(); i++)
-      ret += vert_normal(v, leaders[i], filter);
+      ret.push_back(vert_normal(v, leaders[i], filter));
    return ret;
 }
 
@@ -212,14 +212,14 @@ offset_scale(CBvert* v, CSimplexFilter& filter)
 
    // get distinct normals separated by edges
    // accepted by the filter
-   ARRAY<Wvec> norms = get_norms(v, filter);
-   assert(norms.num() > 0);
+   vector<Wvec> norms = get_norms(v, filter);
+   assert(norms.size() > 0);
 
    // return the average of 1/cos(theta_i), where theta_i is
    // the angle between n and norms[i]. but don't let the
    // cosine term get smaller than 0.5:
    RunningAvg<double> ret(0);
-   for (int i=0; i<norms.num(); i++)
+   for (vector<Wvec>::size_type i=0; i<norms.size(); i++)
       ret.add(1/max(n * norms[i], 0.5));
    return ret.val();
 }

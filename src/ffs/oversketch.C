@@ -380,7 +380,7 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
 
    Bvert_list region_verts = region.get_verts();
    Wpt_list   new_locs     = region_verts.pts();
-   ARRAY<double> offsets(region_verts.num());
+   vector<double> offsets;
    for (int i=0; i<region_verts.num(); i++) {
       Wpt foo;
       int k = -1;
@@ -392,7 +392,7 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
       double s = swell_profile(d/R);
       double h = sil_offsets[k] * s;
 //      err_adv(debug, "  d: %f, d/R: %f, s: %f", d, d/R, s);
-      offsets += h;
+      offsets.push_back(h);
       new_locs[i] += region_verts[i]->norm()*h;
 //       WORLD::show(region_verts[i]->loc(), new_locs[i], 1);
    }

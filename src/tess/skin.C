@@ -224,11 +224,11 @@ Skin::create_cover_skin(
 
    for (int i = 0; i < Bsurface::get_surfaces(region).num(); i++) {
       if (Skin::isa(Bsurface::get_surfaces(region)[i]))
-         ((Skin*)Bsurface::get_surfaces(region)[i])->_covers += ret;
+         ((Skin*)Bsurface::get_surfaces(region)[i])->_covers.push_back(ret);
    }
    // XXX - only work for faces(region) on the same skin
    if (region.num()>0 && Skin::find_controller(region[0])) {
-      Skin::find_controller(region[0])->_covers += ret;
+      Skin::find_controller(region[0])->_covers.push_back(ret);
    }
 
    return ret;
@@ -1052,12 +1052,12 @@ scale_offset(SkinMeme* m, double s)
       m->scale_offset(s);
 }
 
-inline ARRAY<double>
+inline vector<double>
 get_offset_scales(CBvert_list& skels, CSimplexFilter& filter)
 {
-   ARRAY<double> ret(skels.num());
+   vector<double> ret(skels.num());
    for (int i=0; i<skels.num(); i++)
-      ret += offset_scale(skels[i], filter);
+      ret[i] = offset_scale(skels[i], filter);
    return ret;
 }
 
@@ -1066,7 +1066,7 @@ Skin::adjust_crease_offsets() const
 {
    Bvert_list crease_skel_verts =
       skel_edges().filter(ProblemEdgeFilter()).get_verts();
-   ARRAY<double> scales = get_offset_scales(
+   vector<double> scales = get_offset_scales(
       crease_skel_verts, ProblemEdgeFilter()
       );
    Bvert_list crease_skin_verts = _mapper.a_to_b(crease_skel_verts);
@@ -1122,7 +1122,7 @@ Skin::track_deeper(CBvert_list& verts, int R) const
 inline void
 compute_smoothing(CVertMemeList& memes)
 {
-   for (int i=0; i<memes.num(); i++)
+   for (VertMemeList::size_type i=0; i<memes.size(); i++)
       memes[i]->compute_delt();
 }
 
@@ -1130,7 +1130,7 @@ inline bool
 apply_smoothing(CVertMemeList& memes)
 {
    bool ret = false;
-   for (int i=0; i<memes.num(); i++) {
+   for (VertMemeList::size_type i=0; i<memes.size(); i++) {
       if (memes[i]->apply_delt())
          ret = true;
    }
@@ -1521,7 +1521,7 @@ get_param( CWpt_list& pts, int k )
 
 SkinCurveMap::SkinCurveMap(
    Bsimplex_list& simps,
-   ARRAY<Wvec>& bcs,
+   vector<Wvec>& bcs,
    Skin* skin,
    Map0D3D* p0,
    Map0D3D* p1
@@ -1530,11 +1530,11 @@ SkinCurveMap::SkinCurveMap(
        _bcs(bcs),
        _skin(skin)
 {
-   assert(_simps.num() == _bcs.num());
+   assert(_simps.num() == (int)_bcs.size());
 
    
    if (!p0 && !p1)
-      assert(_simps.first() == _simps.last() && _bcs.first() == _bcs.last());
+      assert(_simps.first() == _simps.last() && _bcs.front() == _bcs.back());
 
    hookup();
    
@@ -1659,9 +1659,9 @@ SkinCurveMap::hlen() const
 }
 
 void
-SkinCurveMap::set_pts(CBsimplex_list& simps, ARRAY<Wvec>& bcs)
+SkinCurveMap::set_pts(CBsimplex_list& simps, vector<Wvec>& bcs)
 {
-   assert(simps.num() == bcs.num());
+   assert(simps.num() == (int)bcs.size());
    
    _simps = simps;
    _bcs = bcs;

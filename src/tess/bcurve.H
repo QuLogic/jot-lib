@@ -66,7 +66,7 @@ class Bcurve : public Bbase{
    Bcurve(CLMESHptr&      mesh,         //!< mesh to use
           CWpt_list&      pts,          //!< hi-res point trail
           CWvec&          n,            //!< the curve's "plane normal"
-          CARRAY<double>& t,            //!< t-values at which to sample curve
+          const vector<double>& t,      //!< t-values at which to sample curve
           int             res_lev = -1, //!< num subdiv levels to override
           Bpoint*         b1 = 0,       //!< optional
           Bpoint*         b2 = 0);      //!< endpoints
@@ -75,7 +75,7 @@ class Bcurve : public Bbase{
    //! instead of a Wpt_list
    Bcurve(CLMESHptr&      mesh,
           Map1D3D*        map,
-          CARRAY<double>& t,
+          const vector<double>& t,
           int             res_lev = -1,
           Bpoint*         b1 = 0,
           Bpoint*         b2 = 0);
@@ -85,7 +85,7 @@ class Bcurve : public Bbase{
    Bcurve(CUVpt_list&, 
           Map2D3D*, 
           CLMESHptr&, 
-          CARRAY<double>&t,
+          const vector<double>&t,
           int res_level = -1,
           Bpoint*         b1 = 0,
           Bpoint*         b2 = 0);
@@ -118,7 +118,7 @@ class Bcurve : public Bbase{
 
    //! Returns the t-values for the curve memes
    //! (one for each vertex, in order, no duplicates):
-   ARRAY<double> tvals()        const;
+   vector<double> tvals()       const;
 
    //! Convenience: meme number i:
    CurveMeme* cm(int i) const;
@@ -321,7 +321,7 @@ class Bcurve : public Bbase{
    
    //! Non-uniform resampling
    //! (resample at given t values):
-   bool resample(CARRAY<double>& t) { return resample(t, NULL, NULL); }
+   bool resample(const std::vector<double>& t) { return resample(t, NULL, NULL); }
 
    //! Checks preconditions:
    bool can_resample() const;
@@ -341,7 +341,7 @@ class Bcurve : public Bbase{
    //! when the user drew this curve.
    Wpt_list get_wpts() const;
    //! gets the tvals corresponding to the wpts above;
-   ARRAY<double> get_map_tvals() const;
+   std::vector<double> get_map_tvals() const;
 
    bool get_pixels(PIXEL_list& list) const;
 
@@ -488,7 +488,7 @@ class Bcurve : public Bbase{
 
    virtual bool oversketch(CPIXEL_list& sketch_pixels);
    void    rebuild_seg(Wpt_list& newpts, int base_start, int base_end,
-                       ARRAY<Lvert*>& affected, ARRAY<int>& indices);
+                       std::vector<Lvert*>& affected, std::vector<int>& indices);
 
    //! cycles to the next reshape mode 
    void    cycle_reshape_mode();
@@ -571,7 +571,7 @@ class Bcurve : public Bbase{
 
    // XXX - to be replaced by memes:
    // used by curves that have a shadow:
-   ARRAY<double> _heights;      //!< heights of control points above shadow
+   std::vector<double>_heights; //!< heights of control points above shadow
    double        _max_height;   //!< used to see if they're all zero
 
    //! Drawing info
@@ -608,11 +608,11 @@ class Bcurve : public Bbase{
    //******** BUILDING ********
 
    //! Resampling at prescribed t-values
-   bool resample(CARRAY<double>& t, const Bpoint* bpt1, const Bpoint* bpt2);
+   bool resample(const std::vector<double>& t, const Bpoint* bpt1, const Bpoint* bpt2);
 
    //! Internal resampling that does actual work.
    //! Assumes this bcurve can be resampled.
-   void _resample(CARRAY<double>& t, const Bpoint* bpt1, const Bpoint* bpt2);
+   void _resample(const std::vector<double>& t, const Bpoint* bpt1, const Bpoint* bpt2);
 
    //! Builds the edge strip, generating interior vertices
    //! and edges:
@@ -632,7 +632,7 @@ class Bcurve : public Bbase{
    //! points and their associated normals.  If get_binormals is true,
    //! then the binormals (instead of the normals) are used for the line
    //! directions.
-   bool get_map_normal_lines(ARRAY<Wline>& out_vecs, 
+   bool get_map_normal_lines(std::vector<Wline>& out_vecs,
                              double len=1.0, // desired world length
                              bool get_binormals=false);
 
@@ -746,7 +746,7 @@ class Bcurve_list : public _Bbase_list<Bcurve_list,Bcurve> {
 
    //! Similar to above, but the control vertices of each Bcurve are
    //! returned in a separate list (1 for each Bcurve):
-   bool extract_boundary(ARRAY<Bvert_list>& ret) const;
+   bool extract_boundary(vector<Bvert_list>& ret) const;
 
    //! Convenience form of above
    Bvert_list boundary_verts() const {
@@ -759,7 +759,7 @@ class Bcurve_list : public _Bbase_list<Bcurve_list,Bcurve> {
    //! the returned boundary is ordered so that running forward through
    //! the list corresponds to winding CCW around the interior:
    bool extract_boundary_ccw(Bvert_list& ret)           const;
-   bool extract_boundary_ccw(ARRAY<Bvert_list>& ret)    const;
+   bool extract_boundary_ccw(vector<Bvert_list>& ret)   const;
 
    void replace_endpt(Map0D3D* old_pt,
                       Map0D3D* new_pt) {

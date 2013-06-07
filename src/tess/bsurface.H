@@ -123,7 +123,7 @@ class Bsurface : public Bbase {
    bool punch(Lface* f);
    
    //******** TESSELLATION ********
-   void tessellate(CARRAY<Bvert_list>& contours);
+   void tessellate(const vector<Bvert_list>& contours);
 
    // XXX - need regular tessellation too
 

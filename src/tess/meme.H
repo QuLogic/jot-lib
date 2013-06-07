@@ -23,6 +23,8 @@
 
 #include "mesh/lface.H"
 
+#include <vector>
+
 class Bbase;    // controller for a region of mesh -- owns memes
 class VertMeme; // meme controlling a vertex
 class EdgeMeme; // meme controlling an edge
@@ -147,13 +149,13 @@ class VertMeme : public Meme {
 
    // Lookup adjacent vert memes from same Bbase:
    VertMeme* nbr(int k)                         const;
-   void get_nbrs(ARRAY<VertMeme*>& ret)    const;
+   void get_nbrs(vector<VertMeme*>& ret)    const;
 
    // Return adjacent EdgeMemes that have the same owner as this.
-   void get_nbrs(ARRAY<EdgeMeme*>& ret)    const;
+   void get_nbrs(vector<EdgeMeme*>& ret)    const;
 
    // Return adjacent FaceMemes that have the same owner as this.
-   void get_nbrs(ARRAY<FaceMeme*>& ret)    const;
+   void get_nbrs(vector<FaceMeme*>& ret)    const;
 
    //******** BOSS STATUS ********
 
@@ -544,14 +546,14 @@ class FaceMeme : public Meme {
 template <class T>
 void _compute_update(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->compute_update();
 }
 template <class T>
 bool _compute_boss_update(const T& L)
 {
    bool ret = false;
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       ret = L[i]->compute_boss_update() || ret;
    return ret;
 }
@@ -559,7 +561,7 @@ template <class T>
 bool _apply_update(const T& L, double thresh)
 {
    bool ret = false;
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       ret = L[i]->apply_update(thresh) || ret;
    return ret;
 }
@@ -567,7 +569,7 @@ template <class T>
 bool _compute_delt(const T& L)
 {
    bool ret = false;
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       ret = L[i]->compute_delt() || ret;
    return ret;
 }
@@ -575,7 +577,7 @@ template <class T>
 bool _apply_delt(const T& L)
 {
    bool ret = false;
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       ret = L[i]->apply_delt() || ret;
    return ret;
 }
@@ -583,7 +585,7 @@ template <class T>
 bool _tick(const T& L)
 {
    bool ret = false;
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       ret = L[i]->tick() || ret;
    return ret;
 }
@@ -597,37 +599,37 @@ bool _do_relax(const T& L)
 template <class T>
 void _sterilize(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->sterilize();
 }
 template <class T>
 void _unsterilize(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->unsterilize();
 }
 template <class T>
 void _pin(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->pin();
 }
 template <class T>
 void _unpin(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->unpin();
 }
 template <class T>
 void _set_hot(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       L[i]->set_hot();
 }
 template <class T>
 bool _is_any_warm(const T& L)
 {
-   for (int i=0; i<L.num(); i++)
+   for (size_t i=0; i<L.size(); i++)
       if (L[i]->is_warm())
          return true;
    return false;
@@ -639,29 +641,29 @@ bool _is_any_warm(const T& L)
  *   List of Memes with convenience methods.
  *****************************************************************/
 template <class T>
-class MemeList : public ARRAY<T*> {
+class MemeList : public vector<T*> {
  public:
 
    //******** MANAGERS ********
 
-   MemeList(int n=0)              : ARRAY<T*>(n)    {}
-   MemeList(const MemeList& list) : ARRAY<T*>(list) {}
+   MemeList(int n=0)              : vector<T*>()     { vector<T*>::reserve(n); }
+   MemeList(const MemeList& list) : vector<T*>(list) {}
 
    //******** CONVENIENCE ********
 
    void delete_all() {
-      for (int k=0; k<num(); k++)
+      for (typename MemeList::size_type k=0; k<size(); k++)
          delete (*this)[k];
       clear();
    }
 
    void notify_subdiv_gen() const {
-      for (int k=0; k<num(); k++)
+      for (typename MemeList::size_type k=0; k<size(); k++)
          (*this)[k]->notify_subdiv_gen();
    }
 
-   using ARRAY<T*>::num;
-   using ARRAY<T*>::clear;
+   using vector<T*>::size;
+   using vector<T*>::clear;
 };
 
 /*****************************************************************
@@ -699,8 +701,8 @@ class VertMemeList : public MemeList<VertMeme> {
 
    // Bvert_list methods
    Bvert_list verts() const {
-      Bvert_list ret(num());
-      for (int i=0; i<num(); i++)
+      Bvert_list ret(size());
+      for (VertMemeList::size_type i=0; i<size(); i++)
          ret += (*this)[i]->vert();
       return ret;
    }

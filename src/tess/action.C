@@ -70,7 +70,9 @@ get_action(Bbase* b)
 inline Action*
 get_action(int i, const Action_list& list)
 {
-   return list.valid_index(i) ? list[i] : 0;
+   if (0 <= i && i < (int)list.size())
+      return list[i];
+   return 0;
 }
 
 /*****************************************************************
@@ -79,41 +81,54 @@ get_action(int i, const Action_list& list)
 void
 Action_list::delete_all()
 {
-   while (!empty()) {
-      delete pop();
+   for (Action_list::size_type i=0; i<size(); i++) {
+      delete at(i);
    }
+   clear();
 }
 
 void
 Action_list::prepare_writing() const 
 {
-   for (int i=0; i<num(); i++)
-      _array[i]->prepare_writing(*this);
+   for (Action_list::size_type i=0; i<size(); i++)
+      at(i)->prepare_writing(*this);
 }
 
 void
 Action_list::apply_indices() const 
 {
-   for (int i=0; i<num(); i++)
-      _array[i]->apply_indices(*this);
+   for (Action_list::size_type i=0; i<size(); i++)
+      at(i)->apply_indices(*this);
 }
 
 Action_list 
 Action_list::predecessors() const
 {
    Action_list ret;
-   ret.set_unique(); // prevent the same action from being added twice
-   for (int i=0; i<num(); i++)
-      ret += _array[i]->predecessors();
-   return ret; // 'unique' flag is not set in the copied list
+   set<Action*> unique;
+
+   for (Action_list::size_type i=0; i<size(); i++) {
+      Action_list tmp = at(i)->predecessors();
+      for (Action_list::size_type j=0; j<tmp.size(); j++) {
+         pair<set<Action*>::iterator,bool> result;
+         result = unique.insert(tmp[j]);
+         if (result.second)
+            ret.push_back(tmp[j]);
+      }
+   }
+
+   return ret;
 }
 
 bool 
 Action_list::contains(const Action_list& list) const 
 {
-   for (int i=0; i<list.num(); i++)
-      if (!ARRAY<Action*>::contains(list[i]))
+   for (Action_list::size_type i=0; i<list.size(); i++) {
+      Action_list::const_iterator it;
+      it = std::find(begin(), end(), list[i]);
+      if (it == end())
          return false;
+   }
    return true;
 }
 
@@ -122,11 +137,11 @@ Action_list::can_invoke() const
 {
    bool ret = true;
 
-   for (int i=0; i<num(); i++) {
-      if (!_array[i]->can_invoke()) {
+   for (Action_list::size_type i=0; i<size(); i++) {
+      if (!at(i)->can_invoke()) {
          if (debug)
             cerr << "Action_list::can_invoke: can't invoke "
-                 << _array[i]->class_name()
+                 << at(i)->class_name()
                  << endl;
          ret = false;
          break;
@@ -148,8 +163,8 @@ Action_list::invoke() const
    // even though we checked, we're still keeping track of
    // whether they do in fact report success:
    bool ret = true;
-   for (int i=0; i<num(); i++)
-      ret = _array[i]->invoke() && ret;
+   for (Action_list::size_type i=0; i<size(); i++)
+      ret = at(i)->invoke() && ret;
    assert(ret == true);
    return ret;
 }
@@ -157,8 +172,8 @@ Action_list::invoke() const
 bool 
 Action_list::was_invoked() const 
 {
-   for (int i=0; i<num(); i++)
-      if (!_array[i]->was_invoked())
+   for (Action_list::size_type i=0; i<size(); i++)
+      if (!at(i)->was_invoked())
          return false;
    return true;
 }
@@ -170,7 +185,7 @@ operator<<(STDdstream& ds, const Action_list& al)
    assert(ds.ascii());
    al.prepare_writing();
    ds << "{ ";
-   for (int i=0; i < al.num(); i++)
+   for (Action_list::size_type i=0; i<al.size(); i++)
       al[i]->format(ds);
    ds << " }";
    return ds;
@@ -187,7 +202,7 @@ operator>>(STDdstream& ds, Action_list& al)
       Action* a = Action::upcast(DATA_ITEM::Decode(ds, false));
       if (a) {
          err_adv(debug, "Action_list::decode:  read %s", a->class_name().c_str());
-         al.add(a);
+         al.push_back(a);
       } else {
          err_adv(debug, "Action_list::decode: error reading action");
       }
@@ -218,7 +233,7 @@ Script::add(Action* a)
    }
 
    // add the action to the list:
-   _actions += a;
+   _actions.push_back(a);
    return true;
 }
 
@@ -241,7 +256,7 @@ Script::put_actions(TAGformat &d) const
 {
    if (debug) {
       cerr << "Script::put_actions: writing "
-           << _actions.num() << " actions" << endl;
+           << _actions.size() << " actions" << endl;
    }
    d.id();
    *d << _actions << "\n";
@@ -258,8 +273,8 @@ Script::get_actions(TAGformat &d)
    *d >> _actions;
    if (debug) {
       cerr << "Script::get_actions: read "
-           << _actions.num() << " actions: " << endl;
-      print_names<Action_list>(cerr, _actions);
+           << _actions.size() << " actions: " << endl;
+      //print_names<Action_list>(cerr, _actions);
    }
 
 }
@@ -534,7 +549,7 @@ BcurveAction::c2a(CBcurve_list& c)
    for (int i=0; i<c.num(); i++) {
       Action* a = get_action(c[i]);
       if (!a) return Action_list(); // if any fail, all fail
-      else    ret += a;
+      else    ret[i] = a;
    }
    return ret;
 }
@@ -542,8 +557,8 @@ BcurveAction::c2a(CBcurve_list& c)
 Bcurve_list 
 BcurveAction::a2c(CAction_list& a)
 {
-   Bcurve_list ret(a.num());
-   for (int i=0; i<a.num(); i++) {
+   Bcurve_list ret(a.size());
+   for (Action_list::size_type i=0; i<a.size(); i++) {
       Bcurve* c = get_curve(a[i]);
       if (!c) return Bcurve_list(); // if any fail, all fail
       else    ret += c;
@@ -559,9 +574,12 @@ BcurveAction::prepare_writing(const Action_list& list)
    if (!_c) {
       err_msg("BcurveAction::prepare_writing: curve was not created yet");
    } else {
+      Action_list::const_iterator it;
       _mesh_num = get_mesh_num(_c->mesh());
-      _i1 = list.get_index(get_action(_c->b1()));
-      _i2 = list.get_index(get_action(_c->b2()));
+      it = std::find(list.begin(), list.end(), get_action(_c->b1()));
+      _i1 = (it != list.end()) ? (it - list.begin()) : -1;
+      it = std::find(list.begin(), list.end(), get_action(_c->b2()));
+      _i2 = (it != list.end()) ? (it - list.begin()) : -1;
 
       _pts = _c->get_wpts();
       _n = _c->normal();
@@ -595,8 +613,8 @@ Action_list
 BcurveAction::predecessors() const
 {
    Action_list ret;
-   if (_b1) ret += _b1;
-   if (_b2) ret += _b2;
+   if (_b1) ret.push_back(_b1);
+   if (_b2) ret.push_back(_b2);
    return ret;
 }
 
@@ -718,7 +736,7 @@ PanelAction::PanelAction(CBcurve_list& contour) :
    _actions(BcurveAction::c2a(contour)),
    _p(0)
 {
-   if (_actions.num() != contour.num()) {
+   if ((int)_actions.size() != contour.num()) {
       err_msg("PanelAction::PanelAction: error converting curves to actions");
    }
 }
@@ -791,13 +809,20 @@ PanelAction::prepare_writing(const Action_list& list)
       err_adv(debug, "PanelAction::prepare_writing: panel was not created yet");
    }
 
+   if (debug)
+      cerr << "PanelAction::prepare_writing: ";
+
    _indices.clear();
-   for (int i=0; i<_actions.num(); i++) {
-      _indices.add(list.get_index(_actions[i]));
+   for (Action_list::size_type i=0; i<_actions.size(); i++) {
+      Action_list::const_iterator it;
+      it = std::find(list.begin(), list.end(), _actions[i]);
+      _indices.push_back((it != list.end()) ? (it - list.begin()) : -1);
+      if (debug)
+         cerr << _indices.back() << " ";
    }
-   if (debug) {
-      cerr << "PanelAction::prepare_writing: " << _indices << endl;
-   }
+
+   if (debug)
+      cerr << endl;
 }
 
 void 
@@ -811,10 +836,10 @@ PanelAction::apply_indices(const Action_list& list)
       _actions.clear();
    }
    bool err=false;
-   for (int i=0; i<_indices.num(); i++) {
+   for (vector<int>::size_type i=0; i<_indices.size(); i++) {
       Action* a = get_action(_indices[i], list);
       if (a) {
-         _actions.add(a);
+         _actions.push_back(a);
       } else {
          err = true;
          cerr << "PanelAction::apply_indices: error looking up action "
@@ -876,13 +901,13 @@ PanelAction::invoke()
 
    // if they've been invoked, we can get the curves:
    _contour = BcurveAction::a2c(_actions);
-   assert(_contour.num() == _actions.num());
+   assert(_contour.num() == (int)_actions.size());
    assert(_contour.mesh());
 
    err_adv(debug, "PanelAction::invoke: creating panel...");
-   ARRAY<int> ns;
+   vector<int> ns;
    for (int i = 0; i < _contour.num(); i++)
-      ns += _contour[i]->num_edges();
+      ns.push_back(_contour[i]->num_edges());
    _p = _creating ? Panel::create(_contour) : Panel::create(_contour, ns);
    err_adv(debug, "...done");
 
@@ -900,7 +925,7 @@ PanelAction::tags() const
 {
    if (!_tags) {
       _tags = new TAGlist(Action::tags());
-      _tags->push_back(new TAG_val<PanelAction,ARRAY<int> >(
+      _tags->push_back(new TAG_val<PanelAction,vector<int> >(
          "indices",
          &PanelAction::indices
          ));

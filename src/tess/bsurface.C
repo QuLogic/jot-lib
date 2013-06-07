@@ -71,7 +71,7 @@ Bsurface::~Bsurface()
    // We have to remove our edge and face memes.
    static bool debug = Config::get_var_bool("DEBUG_BNODE_DESTRUCTOR",false);
    err_adv(debug, "Bsurface::~Bsurface: deleting %d edge, %d face memes",
-           _ememes.num(), _fmemes.num());
+           _ememes.size(), _fmemes.size());
    _fmemes.delete_all();
    _ememes.delete_all();
 
@@ -133,7 +133,7 @@ Bsurface::delete_elements()
    // find verts controlled by this bbase:
    //Bvert_list mine = find_boss_vmemes(_vmemes.verts()).verts();
    Bvert_list mine;
-   for (int i = 0; i < _vmemes.num(); i++)
+   for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++)
       if (_vmemes[i]->is_boss())
          mine += _vmemes[i]->vert();
 
@@ -145,7 +145,7 @@ Bsurface::delete_elements()
 
    // remove remaining edges and faces
    Bedge_list mine_e;
-   for (int i = 0; i < _ememes.num(); i++)
+   for (EdgeMemeList::size_type i = 0; i < _ememes.size(); i++)
       if (_ememes[i]->is_boss())
          mine_e += _ememes[i]->edge();
    _ememes.delete_all();
@@ -232,7 +232,7 @@ EdgeMeme*
 Bsurface::add_edge_meme(EdgeMeme* e)
 {
    if (e && e->bbase() == this) {
-      _ememes += e;
+      _ememes.push_back(e);
       return e;
    }
    return 0;
@@ -257,7 +257,7 @@ FaceMeme*
 Bsurface::add_face_meme(FaceMeme* f) 
 {
    if (f && f->bbase() == this) {
-      _fmemes += f;
+      _fmemes.push_back(f);
       return f;
    }
    return 0;
@@ -405,14 +405,20 @@ Bsurface::rem_edge_meme(EdgeMeme* e)
    else if (e->bbase() != this)
       err_msg("Bsurface::rem_edge_meme: Error: meme owner not this");
    else {
-      _ememes -= e;
-      delete e;
-      err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
-         "%s::rem_edge_meme: %d left at level %d",
-         class_name().c_str(),
-         _ememes.num(),
-         bbase_level()
-         );
+      EdgeMemeList::iterator it;
+      it = std::find(_ememes.begin(), _ememes.end(), e);
+      if (it == _ememes.end())
+         err_msg("Bsurface::rem_edge_meme: Error: meme not in owner list");
+      else {
+         _ememes.erase(it);
+         delete e;
+         err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
+            "%s::rem_edge_meme: %d left at level %d",
+            class_name().c_str(),
+            _ememes.size(),
+            bbase_level()
+            );
+      }
    }
 }
 
@@ -424,14 +430,20 @@ Bsurface::rem_face_meme(FaceMeme* f)
    else if (f->bbase() != this)
       err_msg("Bsurface::rem_face_meme: Error: meme owner not this");
    else {
-      _fmemes -= f;
-      delete f;
-      err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
-         "%s::rem_face_meme: %d left at level %d",
-         class_name().c_str(),
-         _fmemes.num(),
-         bbase_level()
-         );
+      FaceMemeList::iterator it;
+      it = std::find(_fmemes.begin(), _fmemes.end(), f);
+      if (it == _fmemes.end())
+         err_msg("Bsurface::rem_face_meme: Error: meme not in owner list");
+      else {
+         _fmemes.erase(it);
+         delete f;
+         err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
+            "%s::rem_face_meme: %d left at level %d",
+            class_name().c_str(),
+            _fmemes.size(),
+            bbase_level()
+            );
+      }
    }
 }
 
@@ -736,18 +748,19 @@ TessellatorData::TessellatorData() :
 }
 
 void
-Bsurface::tessellate(CARRAY<Bvert_list>& contours) 
+Bsurface::tessellate(const vector<Bvert_list>& contours)
 {
    tess_data.clear();
    tess_data.set_surface(this);
 
-   int i, j;
+   vector<Bvert_list>::size_type i;
+   int j;
 
    //----------------------------------------------------------------
    // XXX - hack to tell GLU the plane so it won't crash like a ninny
    Wplane   P;
    Wpt_list pts;
-   for (i=0; i<contours.num(); i++)
+   for (i=0; i<contours.size(); i++)
       for (j=0; j<contours[i].num(); j++)
          pts += contours[i][j]->loc();
    // calculate the plane
@@ -761,7 +774,7 @@ Bsurface::tessellate(CARRAY<Bvert_list>& contours)
    
    gluTessBeginPolygon(tess_data.tess(), this);
    
-   for (i=0; i<contours.num(); i++) {
+   for (i=0; i<contours.size(); i++) {
       gluTessBeginContour(tess_data.tess());
       for (j=0; j<contours[i].num(); j++) {
          Bvert* bv = contours[i][j];
@@ -898,7 +911,7 @@ Bsurface::recompute()
    //    then tell about it.
    if (_update_stamp == VIEW::stamp())
       err_msg("Bsurface::recompute: WARNING: frame %d, re-updating %d verts",
-              VIEW::stamp(), _vmemes.num());
+              VIEW::stamp(), _vmemes.size());
 
    // update vert positions:
    Bbase::recompute();

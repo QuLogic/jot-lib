@@ -208,8 +208,8 @@ quad_cell_end_edges(PCell* cell)
    assert(cell && cell->num_corners() == 4);
 
    PCell_list nbrs = cell->nbrs();
-   if (nbrs.num() != 1) {
-      err_adv(debug, "quad_cell_end_edges: neighbors: %d != 1", nbrs.num());
+   if (nbrs.size() != 1) {
+      err_adv(debug, "quad_cell_end_edges: neighbors: %d != 1", nbrs.size());
       return Bedge_list();
    }
    // find an edge of the shared boundary.
@@ -271,7 +271,7 @@ compute_h(Bvert* v)
    assert(v);
    PCell_list cells = Panel::find_cells(v->get_faces());
 
-   if (cells.num() == 2) {
+   if (cells.size() == 2) {
       // common case: vertex in a tube ring (2 neighboring cells)
       if (Bpoint::find_controller(v) || Bcurve::find_controller(v))
          return cells[0]->shared_boundary(cells[1]).avg_len()/2;
@@ -284,21 +284,21 @@ compute_h(Bvert* v)
       double h = (compute_h(verts.first()) + compute_h(verts.last())) / 2;
       return h * (1 + min(index/num, 1-index/num));
 
-   } else if (cells.num() > 2) {
+   } else if (cells.size() > 2) {
       // multiple adjacent cells
       return PCell::shared_edges(cells).avg_len()/2;
-   } else if (cells.num() == 1) {
+   } else if (cells.size() == 1) {
       // just one cell, e.g. tip of a tube, or part of a disk
       if (cells[0]->num_corners() == 3) {
-         if (cells[0]->nbrs().num() != 1) {
+         if (cells[0]->nbrs().size() != 1) {
             return cells[0]->boundary_edges().avg_len()/2;
          }
-         assert(cells[0]->nbrs().num() == 1);
+         assert(cells[0]->nbrs().size() == 1);
          return 0; // it's the tip of the triangle
       } else if (cells[0]->num_corners() == 4) {
-         if (cells[0]->nbrs().num() == 0) {
+         if (cells[0]->nbrs().size() == 0) {
             return cells[0]->boundary_edges().avg_len()/2;
-         } else if (cells[0]->nbrs().num() == 1) {
+         } else if (cells[0]->nbrs().size() == 1) {
             // or maybe should do same rule as next case
             Bedge_list end_edges = quad_cell_end_edges(cells[0]);
             err_adv(debug, "found %d end edges", end_edges.num());
@@ -315,7 +315,7 @@ compute_h(Bvert* v)
       return 1.5 * compute_h(nbrs[0]);
    } 
 
-   err_adv(debug, "compute_h: unexpected number of cells: %d", cells.num());
+   err_adv(debug, "compute_h: unexpected number of cells: %d", cells.size());
    return -1;
 }
 

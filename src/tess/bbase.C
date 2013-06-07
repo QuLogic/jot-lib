@@ -111,7 +111,7 @@ Bbase::delete_elements()
    // find verts controlled by this bbase:
    //Bvert_list mine = find_boss_vmemes(_vmemes.verts()).verts();
    Bvert_list mine;
-   for (int i = 0; i < _vmemes.num(); i++)
+   for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++)
       if (_vmemes[i]->is_boss())
          mine += _vmemes[i]->vert();
 
@@ -343,15 +343,15 @@ Bbase::tick()
    // Before recomputing, update upstream nodes
    inputs().update();
 
-   VertMemeList active_memes(_vmemes.num());
-   for (int i=0; i<_vmemes.num(); i++) {
+   VertMemeList active_memes;
+   for (VertMemeList::size_type i=0; i<_vmemes.size(); i++) {
       VertMeme* v = _vmemes[i];
       if (v && v->is_boss() && v->is_warm())
-         active_memes += v;
+         active_memes.push_back(v);
    }
    if (debug) {
       cerr << class_name() << "::tick: called for " << identifier()
-           << ", with " << active_memes.num() << " active memes" << endl;
+           << ", with " << active_memes.size() << " active memes" << endl;
    }
    if (!active_memes.do_relax()) {
       return active_memes.is_any_warm();
@@ -452,11 +452,11 @@ Bbase::find_boss_vmemes(CBvert_list& verts)
 {
    // Convenience: lookup boss memes for a whole list of vertices
 
-   VertMemeList ret(verts.num());
+   VertMemeList ret;
    for (int i=0; i<verts.num(); i++) {
       VertMeme* vm = find_boss_vmeme(verts[i]);
       if (vm)
-         ret += vm;
+         ret.push_back(vm);
    }
    return ret;
 }
@@ -466,11 +466,11 @@ Bbase::find_boss_ememes(CBedge_list& edges)
 {
    // Convenience: lookup boss memes for a whole list of edges
 
-   EdgeMemeList ret(edges.num());
+   EdgeMemeList ret;
    for (int i=0; i<edges.num(); i++) {
       EdgeMeme* vm = find_boss_ememe(edges[i]);
       if (vm)
-         ret += vm;
+         ret.push_back(vm);
    }
    return ret;
 }
@@ -557,7 +557,7 @@ VertMeme*
 Bbase::add_vert_meme(VertMeme* v) 
 {
    if (v && v->bbase() == this) {
-      _vmemes += v;
+      _vmemes.push_back(v);
       return v;
    }
    return 0;
@@ -571,14 +571,20 @@ Bbase::rem_vert_meme(VertMeme* v)
    else if (v->bbase() != this)
       err_msg("Bbase::rem_vert_meme: Error: meme owner not this");
    else {
-      _vmemes -= v;
-      delete v;
-      err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
-         "%s::rem_vert_meme: %d left at level %d",
-         identifier().c_str(),
-         _vmemes.num(),
-         bbase_level()
-         );
+      VertMemeList::iterator it;
+      it = std::find(_vmemes.begin(), _vmemes.end(), v);
+      if (it == _vmemes.end())
+         err_msg("Bbase::rem_ver_meme: Error: meme not in owner list");
+      else {
+         _vmemes.erase(it);
+         delete v;
+         err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
+            "%s::rem_vert_meme: %d left at level %d",
+            identifier().c_str(),
+            _vmemes.size(),
+            bbase_level()
+            );
+      }
    }
 }
 
@@ -631,7 +637,7 @@ Bbase::show_memes(CCOLOR& hot_color, CCOLOR& cold_color, float point_size)
    GL_VIEW::init_point_smooth(point_size, GL_CURRENT_BIT);
    glDisable(GL_LIGHTING);           // GL_ENABLE_BIT
    glBegin(GL_POINTS);
-   for (int i=0; i<vam.num(); i++) {
+   for (VertMemeList::size_type i=0; i<vam.size(); i++) {
       if (vam[i]->is_boss()) {
          // GL_CURRENT_BIT
          glColor4fv(float4(meme_color(vam[i], hot_color, cold_color)));
@@ -756,7 +762,7 @@ Bbase::notify_merge(BMESH* joined, BMESH* removed)
 }
 
 void 
-Bbase::notify_split(BMESH*, CARRAY<BMESH*>&) 
+Bbase::notify_split(BMESH*, const vector<BMESH*>&)
 {
    err_msg("Bbase::notify_split: not implemented");
 }
@@ -875,7 +881,7 @@ VertMemeList::print_debug(int iter)
    n = meme_count(UVmeme::static_name());
    if (n > 0)
       cerr << n << " uv, ";
-   err_msg("%3d total", _num);
+   err_msg("%3d total", size());
 }
 
 // end of file bbase.C

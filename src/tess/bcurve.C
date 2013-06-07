@@ -161,7 +161,7 @@ CurveMeme::smooth_target() const
    assert(v);
    static EdgeMemeList nbrs;
    get_nbrs(nbrs);
-   if (nbrs.num() != 2)
+   if (nbrs.size() != 2)
       return loc();
    return (nbrs[0]->edge()->other_vertex(v)->loc() +
            nbrs[1]->edge()->other_vertex(v)->loc())/2;
@@ -372,7 +372,7 @@ Bcurve::Bcurve(
    CLMESHptr& mesh,
    CWpt_list&      pts,          
    CWvec&          n,          
-   CARRAY<double>& t,          
+   const std::vector<double>& t,
    int             res_lev,
    Bpoint*         b1,      
    Bpoint*         b2 
@@ -425,7 +425,7 @@ Bcurve::Bcurve(
 
    if (Config::get_var_bool("DEBUG_BCURVE_CONSTRUCTOR",false))
       err_msg("Bcurve::Bcurve: %d non-uniform samples, res level %d, %s",
-              t.num()-1, _res_level, is_closed() ? " closed" : "not closed");  
+              t.size()-1, _res_level, is_closed() ? " closed" : "not closed");
    _stroke_3d = new WpathStroke(mesh);
    _got_style = false;
 }
@@ -433,7 +433,7 @@ Bcurve::Bcurve(
 Bcurve::Bcurve(
    CLMESHptr&           mesh,
    Map1D3D*             map,
-   CARRAY<double>&      t,          
+   const std::vector<double>&t,
    int                  res_lev,
    Bpoint*              b1,      
    Bpoint*              b2 
@@ -454,8 +454,8 @@ Bcurve::Bcurve(
 
    if (debug) {
       cerr << " -- in map constructor with t vals: " << endl;
-      int i;
-      for (i = 0; i < t.num(); i++) {
+      std::vector<double>::size_type i;
+      for (i = 0; i < t.size(); i++) {
          cerr << t[i] << " ";
       }
       cerr << endl;
@@ -504,7 +504,7 @@ Bcurve::Bcurve(
 
    if (Config::get_var_bool("DEBUG_BCURVE_CONSTRUCTOR",false))
       err_msg("Bcurve::Bcurve: %d non-uniform samples, res level %d, %s",
-              t.num()-1, _res_level, is_closed() ? " closed" : "not closed");    
+              t.size()-1, _res_level, is_closed() ? " closed" : "not closed");
    _stroke_3d = new WpathStroke(mesh);
    _got_style = false;
 }
@@ -515,7 +515,7 @@ Bcurve::Bcurve(
    CUVpt_list& uvpts,
    Map2D3D* surf,
    CLMESHptr& mesh,
-   CARRAY<double>& t,
+   const std::vector<double>& t,
    int res_lev,
    Bpoint* b1,
    Bpoint* b2
@@ -535,16 +535,14 @@ Bcurve::Bcurve(
    set_mesh(mesh);
 
    bool debug = Config::get_var_bool("DEBUG_BCURVE_EMBEDDED",false);
-   if (debug) 
-      {
-         iostream i(cerr.rdbuf()); STDdstream e(&i); 
-         //STDdstream e(&cerr);
-         cerr << " -- in embedded bcurve constructor with uvpts: " << endl;
-         e << uvpts;
-         cerr << endl << " and t vals" << endl;
-         e << t;
-         cerr << endl;
-      }
+   if (debug) {
+      iostream i(cerr.rdbuf()); STDdstream e(&i);
+      cerr << " -- in embedded bcurve constructor with uvpts: " << endl;
+      e << uvpts;
+      cerr << endl << " and t vals" << endl;
+      e << t;
+      cerr << endl;
+   }
 
    // If the endpoints are not given to us and uvpts does not
    // represent a closed curve, then we need to create bpoints that
@@ -738,12 +736,12 @@ Bcurve::Bcurve(
    }
 
    Bsimplex_list simps;
-   ARRAY<Wvec> bcs;
+   std::vector<Wvec> bcs;
    for (int i = !is_closed; i < s_verts.num()-!is_closed; i++) {
       assert(SkinMeme::isa(Bbase::find_boss_meme(s_verts[i])));
       SkinMeme* meme = (SkinMeme*)Bbase::find_boss_meme(s_verts[i]);
       simps += (meme->track_simplex());
-      bcs += meme->get_bc();
+      bcs.push_back(meme->get_bc());
    }
    _map = new SkinCurveMap(simps, bcs, skin,
       b1 ? b1->map() : NULL,
@@ -966,14 +964,14 @@ Bcurve::~Bcurve()
    // Bbase destructor removes vert memes.
    // We have to remove our edge memes.
    static bool debug = Config::get_var_bool("DEBUG_BNODE_DESTRUCTOR",false);
-   err_adv(debug, "Bcurve::~Bcurve: deleting %d edge memes", _ememes.num());
+   err_adv(debug, "Bcurve::~Bcurve: deleting %d edge memes", _ememes.size());
    _ememes.delete_all();
 }
 
 bool
 Bcurve::apply_update()
 {
-   for (int i = 0; i < _vmemes.num(); i++) {
+   for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++) {
       if (CurveMeme::isa(_vmemes[i]))
          ((CurveMeme*)_vmemes[i])->reset_count();
    }
@@ -1034,12 +1032,12 @@ Bcurve::set_res_level(int r)
    }
 }
 
-ARRAY<double> 
+vector<double>
 Bcurve::tvals() const
 {
-   ARRAY<double> ret(_vmemes.num());
-   for (int i=0; i<_vmemes.num(); i++)
-      ret += ((CurveMeme*)_vmemes[i])->t();
+   std::vector<double> ret(_vmemes.size());
+   for (VertMemeList::size_type i=0; i<_vmemes.size(); i++)
+      ret[i] = ((CurveMeme*)_vmemes[i])->t();
    return ret;
 }
 
@@ -1075,7 +1073,7 @@ Bcurve::surfaces() const
 
    Bsurface* surf=0;
    Bsurface_list ret;
-   CARRAY<Bedge*>& edges = _strip.edges();
+   CBedge_list &edges = _strip.edges();
    for (int k=0; k<edges.num(); k++) {
       if ((surf = Bsurface::find_controller(edges[k]->f1())))
          ret.add_uniquely(surf);
@@ -1443,26 +1441,25 @@ Bcurve::resample(int n)
    return resample(make_params(n), NULL, NULL);
 }
 
-bool 
-Bcurve::resample(CARRAY<double>& t, CBpoint* bpt1, CBpoint* bpt2)
+bool
+Bcurve::resample(const std::vector<double>& t, CBpoint* bpt1, CBpoint* bpt2)
 {
    // Check preconditions
    if (!can_resample()   ||
        !is_increasing(t) ||
        t[0]     != 0.0   ||
-       t.last() != 1.0)
+       t.back() != 1.0)
       return false;
 
    this->_resample(t, bpt1, bpt2);
    return true;
 }
 
-
 //! Internal resampling that does actual work.
 //! Assumes this bcurve can be resampled.
 void
-Bcurve::_resample(CARRAY<double>& t, CBpoint* bpt1, CBpoint* bpt2) 
-{   
+Bcurve::_resample(const std::vector<double>& t, CBpoint* bpt1, CBpoint* bpt2)
+{
    if (_map->is_closed()) {
       if (bpt1 || bpt2) {
          err_msg("Bcurve::_resample: Unexpected Bpoints for a closed curve");
@@ -1472,8 +1469,8 @@ Bcurve::_resample(CARRAY<double>& t, CBpoint* bpt1, CBpoint* bpt2)
       if (bpt1 == NULL && bpt2 == NULL) {
          bpt1 = b1();
          bpt2 = b2();
-      } 
-        
+      }
+
       // we don't want one to be NULL and not the other
       assert(bpt1 != NULL);
       assert(bpt2 != NULL);
@@ -1490,16 +1487,15 @@ Bcurve::_resample(CARRAY<double>& t, CBpoint* bpt1, CBpoint* bpt2)
    new CurveMeme(this, v, t[0], bpt1 == NULL);
 
    // Interior vertices: 2nd param to second to last
-   for (int k=1; k<t.num() - 1; k++) {
+   for (std::vector<double>::size_type k=1; k<t.size() - 1; k++) {
       v = (Lvert*)_mesh->add_vertex(_map->map(t[k]));
       new CurveMeme(this, v, t[k], true);
    }
 
-
    // Last one: for closed curves we're done. Otherwise put
    // a non-boss meme on the Bpoint's vertex:
    if (bpt2)
-      new CurveMeme(this, bpt2->vert(), t.last(), false);
+      new CurveMeme(this, bpt2->vert(), t.back(), false);
 
    build_strip();
 }
@@ -1518,7 +1514,7 @@ Bcurve::build_strip()
    _strip.reset();
 
    // Create the edges and build the strip
-   for (int k=0; k<_vmemes.num()-1; k++) {
+   for (VertMemeList::size_type k=0; k<_vmemes.size()-1; k++) {
       // Create the edge and slap an edge meme on it:
       EdgeMeme* e = add_edge(_vmemes[k]->vert(),_vmemes[k+1]->vert());
       assert(e);
@@ -1527,9 +1523,9 @@ Bcurve::build_strip()
       _strip.add(_vmemes[k]->vert(), e->edge());
    }
    if (_map->is_closed()) {
-      EdgeMeme* e = add_edge(_vmemes.last()->vert(),_vmemes[0]->vert());
+      EdgeMeme* e = add_edge(_vmemes.back()->vert(),_vmemes[0]->vert());
       assert(e);
-      _strip.add(_vmemes.last()->vert(), e->edge());
+      _strip.add(_vmemes.back()->vert(), e->edge());
    }
 }
 
@@ -1558,20 +1554,26 @@ Bcurve::rem_edge_meme(EdgeMeme* e)
    else if (e->bbase() != this)
       err_msg("Bcurve::rem_edge_meme: Error: meme owner not this");
    else {
-      _ememes -= e;
-      delete e;
-      err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
-              "%s::rem_edge_meme: %d left at level %d",
-              class_name().c_str(),
-              _ememes.num(),
-              bbase_level()
-         );
+      EdgeMemeList::iterator it;
+      it = std::find(_ememes.begin(), _ememes.end(), e);
+      if (it == _ememes.end())
+         err_msg("Bcurve::rem_edge_meme: Error: meme not in owner list");
+      else {
+         _ememes.erase(it);
+         delete e;
+         err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR",false),
+                 "%s::rem_edge_meme: %d left at level %d",
+                 class_name().c_str(),
+                 _ememes.size(),
+                 bbase_level()
+            );
 
-      // The curve should not be drawn now:
-      // XXX - necessary?
-      if (is_control() && !_strip.empty()) {
-         _strip.reset();
-         _mesh->drawables() -= this;
+         // The curve should not be drawn now:
+         // XXX - necessary?
+         if (is_control() && !_strip.empty()) {
+            _strip.reset();
+            _mesh->drawables() -= this;
+         }
       }
    }
 }
@@ -1580,7 +1582,7 @@ EdgeMeme*
 Bcurve::add_edge_meme(EdgeMeme* e)
 {
    if (e && e->bbase() == this) {
-      _ememes += e;
+      _ememes.push_back(e);
       return e;
    }
    return 0;
@@ -1828,7 +1830,7 @@ t_val(CWpt_list& pts, int i, double& ret_t)
 //! directions.
 bool
 Bcurve::get_map_normal_lines(
-   ARRAY<Wline>& ret_lines, 
+   std::vector<Wline>& ret_lines,
    double len, // desired world length
    bool get_binormals)
 {
@@ -1856,7 +1858,7 @@ Bcurve::get_map_normal_lines(
       Wvec dir = ( get_binormals ? _map->binorm(t) : _map->norm(t) );
       Wpt end = start + (len * dir);
 
-      ret_lines +=  Wline(start, end);
+      ret_lines.push_back(Wline(start, end));
    }
 
    return total_success;
@@ -2062,7 +2064,7 @@ Bcurve::draw_normals(double len,
    // create a line along the normal through each point on the map
    std::vector<Wline> norm_lines;
    //get_map_normal_lines(norm_lines, len, draw_binormals);
-   get_reshape_constraint_lines(norm_lines, 
+   get_reshape_constraint_lines(norm_lines,
                                 //RESHAPE_MESH_NORMALS,
                                 //RESHAPE_MESH_BINORMALS,
                                 //RESHAPE_MESH_RIGHT_FACE_TAN,
@@ -2474,7 +2476,6 @@ Bcurve_list::can_resample() const
 bool
 Bcurve_list::extract_boundary(Bvert_list& ret) const
 {
-
    ret.clear();
 
    if (empty())
@@ -2525,9 +2526,8 @@ Bcurve_list::extract_boundary(Bvert_list& ret) const
 //! Similar to above, but the control vertices of each Bcurve are
 //! returned in a separate list (1 for each Bcurve):
 bool
-Bcurve_list::extract_boundary(ARRAY<Bvert_list>& ret) const
+Bcurve_list::extract_boundary(vector<Bvert_list>& ret) const
 {
-
    ret.clear();
 
    if (empty())
@@ -2540,13 +2540,13 @@ Bcurve_list::extract_boundary(ARRAY<Bvert_list>& ret) const
       Bvert_list v = _array[i]->verts();
       if (v.num() < 2)
          return false;
-      if (ret.num() > 0) {
+      if (ret.size() > 0) {
          // If it's not the first time thru the loop,
          // this curve must connect to the previous one...
          // is it oriented forward or backward?
-         if (v.first() == ret.last().last()) {
+         if (v.first() == ret.back().last()) {
             // It's in the right order (oriented forward)
-         } else if (v.last() == ret.last().last()) {
+         } else if (v.last() == ret.back().last()) {
             // It's backwards -- fix it
             v.reverse();
          } else {
@@ -2554,7 +2554,7 @@ Bcurve_list::extract_boundary(ARRAY<Bvert_list>& ret) const
             return false;
          }
       }
-      ret += v;
+      ret.push_back(v);
    }
 
    return true;
@@ -2592,12 +2592,12 @@ can_fill_ccw(CBvert_list& verts)
 }
 
 inline bool
-can_fill_ccw(ARRAY<Bvert_list>& contour)
+can_fill_ccw(vector<Bvert_list>& contour)
 {
    // assumes the contour is legitimate
    // (it forms a closed chain of vertices).
 
-   for (int i=0; i<contour.num(); i++)
+   for (vector<Bvert_list>::size_type i=0; i<contour.size(); i++)
       if (!can_fill_ccw(contour[i]))
          return false;
    return true;
@@ -2618,7 +2618,7 @@ do_reverse(Bvert_list& ret)
 }
 
 inline void
-do_reverse(ARRAY<Bvert_list>& ret)
+do_reverse(vector<Bvert_list>& ret)
 {
    // reverses order in a special way so:
    //   0 1 2 3 4 
@@ -2626,11 +2626,9 @@ do_reverse(ARRAY<Bvert_list>& ret)
    //   0 4 3 2 1
    // and each Bvert_list is also reversed
 
-   assert(ret.num() > 0);
-   ret += ret.first();
-   ret.reverse();
-   ret.pop();
-   for (int i=0; i<ret.num(); i++)
+   assert(ret.size() > 0);
+   std::reverse(ret.begin() + 1, ret.end());
+   for (vector<Bvert_list>::size_type i=0; i<ret.size(); i++)
       ret[i].reverse();
 }
 
@@ -2666,7 +2664,7 @@ Bcurve_list::extract_boundary_ccw(Bvert_list& ret) const
 }
 
 bool
-Bcurve_list::extract_boundary_ccw(ARRAY<Bvert_list>& ret) const
+Bcurve_list::extract_boundary_ccw(vector<Bvert_list>& ret) const
 {
    if (!extract_boundary(ret))
       return false;
@@ -2720,8 +2718,8 @@ Bcurve::rebuild_seg(
    Wpt_list&      new_pts,
    int            base_start,
    int            base_end,
-   ARRAY<Lvert*>& affected,
-   ARRAY<int>&    indices
+   std::vector<Lvert*>& affected,
+   std::vector<int>&    indices
    )
 {
 
@@ -2734,21 +2732,22 @@ Bcurve::rebuild_seg(
 
    // Build list of affected vertices and their indices in the
    // control verts list:
-   int k;
+   int i;
+   std::vector<Lvert*>::size_type k;
    affected.clear();
-   for (k = base_start; k <= base_end; k++) {
+   for (i = base_start; i <= base_end; i++) {
       // If there are endpoints, skip over them. I.e.,
       // endpoint verts are not put in the "affected" list.
       // (Probably because the Bcurve doesn't control them.)
-      if (!is_closed() && (k%n == 0 || k%n == n-1))
+      if (!is_closed() && (i%n == 0 || i%n == n-1))
          continue;
-      affected += (Lvert*)vertices[k%n];
-      indices  += k%n;
+      affected.push_back((Lvert*)vertices[i%n]);
+      indices.push_back(i%n);
    }
 
    // Build a Wpt_list from the affected vertex locations:
-   Wpt_list orig_arc(affected.num());
-   for (k=0; k<affected.num(); k++)
+   Wpt_list orig_arc(affected.size());
+   for (k=0; k<affected.size(); k++)
       orig_arc += affected[k]->loc();
    orig_arc.update_length();
 
@@ -2763,7 +2762,7 @@ Bcurve::rebuild_seg(
    // uniformly resample the new_pts list to get the new
    // locations for the affected vertices.
    //
-   for (k=0; k<affected.num(); k++) { 
+   for (k=0; k<affected.size(); k++) {
       double t = orig_arc.partial_length(k)/orig_arc.length();
       if (debug) cerr << "k=" << indices[k] << ", t=" << t <<endl;
       affected[k]->set_loc(new_pts.interpolate(t));
@@ -3276,7 +3275,7 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
 
    Bface_list skel_faces = ((Skin*)_skin)->skel_faces();
    Bsimplex_list faces;
-   ARRAY<Wvec> bcs;
+   std::vector<Wvec> bcs;
    for (int i = 0; i < new_curve.num(); i++) {
       int inter_face = -1;
       double inter_depth = 1e+10;
@@ -3292,16 +3291,16 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
          hit = skel_faces[0]->plane_intersect(new_curve[i]);
          skel_faces[0]->project_barycentric(hit, bc);
          faces += skel_faces[0];
-         bcs += bc;
+         bcs.push_back(bc);
       } else {
          faces += skel_faces[inter_face];
-         bcs += bc;
+         bcs.push_back(bc);
       }
    }
 
    if (is_closed()) {
       faces += faces.first();
-      bcs += bcs.first();
+      bcs.push_back(bcs.front());
    }
    ((SkinCurveMap*)_map)->set_pts(faces, bcs);
   
@@ -3419,20 +3418,19 @@ intersect_lines_with_curve(const vector<Wline>& lines,
                            CPIXEL_list& pix_curve,
                            Wpt_list& out_new_pts)
 {
-
    out_new_pts.clear();
 
    if (lines.empty() || pix_curve.empty())
       return;
   
    // Convert the world lines to pixel space.
-   ARRAY<PIXELline> pix_lines(lines.size());
+   vector<PIXELline> pix_lines(lines.size());
 
-   int i=0; // loop index
+   size_t i=0; // loop index
 
-   for (i=0; i<(int)lines.size(); i++) {
-      pix_lines += PIXELline(PIXEL(lines[i].point()),
-                             PIXEL(lines[i].endpt()) );
+   for (i=0; i<lines.size(); i++) {
+      pix_lines[i] = PIXELline(PIXEL(lines[i].point()),
+                               PIXEL(lines[i].endpt()) );
    }
 
    // For each pixel line, determine if the line intersects any segment
@@ -3441,11 +3439,11 @@ intersect_lines_with_curve(const vector<Wline>& lines,
 
    // For what follows, there must be a one-to-one correspondence
    // between lines and pix_lines
-   assert(pix_lines.num() == (int)lines.size());
+   assert(pix_lines.size() == lines.size());
 
    PIXEL_list intersect_pixels;
 
-   for (i=0; i<pix_lines.num(); i++) {
+   for (i=0; i<pix_lines.size(); i++) {
       intersect_pixels.clear();
       intersect_line_polyline(pix_lines[i], pix_curve, intersect_pixels);
     
@@ -3608,10 +3606,10 @@ Bcurve::get_wpts() const
    return Wpt_list();
 }
 
-ARRAY<double> 
-Bcurve::get_map_tvals() const {
-
-   ARRAY<double> ret;
+vector<double>
+Bcurve::get_map_tvals() const
+{
+   std::vector<double> ret;
    
    // for now, we need to handle Wpt basd Maps and UV based maps
    // this is sort of undefined for RayMaps
@@ -3620,12 +3618,12 @@ Bcurve::get_map_tvals() const {
    if (Wpt_listMap::isa(_map)) {
       Wpt_list wpts = ((Wpt_listMap*)_map)->pts();
       for (i = 0; i < wpts.num(); i++) {
-         ret += wpts.partial_length(i) / wpts.length();
+         ret.push_back(wpts.partial_length(i) / wpts.length());
       }
    } else if (SurfaceCurveMap::isa(_map)) {
       UVpt_list uvs = ((SurfaceCurveMap*)_map)->uvs();
       for (i = 0; i < uvs.num(); i++) {
-         ret += uvs.partial_length(i) / uvs.length();
+         ret.push_back(uvs.partial_length(i) / uvs.length());
       }
    } else {
       cerr << "Bcurve::get_map_tvals() : TODO : Handle other types of maps";

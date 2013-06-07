@@ -28,6 +28,9 @@
 #include "blending_meme.H"
 #include "geom/command.H"
 
+#include <set>
+#include <vector>
+
 /*******************************************************
  * PCellCornerVertFilter:
  *
@@ -52,7 +55,7 @@ class PCellCornerVertFilter: public SimplexFilter {
  *******************************************************/
 class Panel;
 class PCell;
-typedef ARRAY<PCell*> PCell_list;
+typedef vector<PCell*> PCell_list;
 class PCell {
  public:
    PCell(Panel* p, CBface_list& f) : _panel(p), _faces(f) {
@@ -123,11 +126,11 @@ class Panel:  public Bsurface {
    //******** CREATION ********
 
    // Create a Panel to fill a simple closed boundary:
-   static Panel* create(CBcurve_list& contour, CARRAY<int> ns = ARRAY<int>());
+   static Panel* create(CBcurve_list& contour, const vector<int> ns = vector<int>());
    static Panel* create(CBvert_list& verts);
 
    // Create a Panel to fill multiple boundaries:
-   static Panel* create(CARRAY<Bcurve_list>& contours);
+   static Panel* create(const vector<Bcurve_list>& contours);
 
    //******** MANAGERS ********
 
@@ -158,7 +161,7 @@ class Panel:  public Bsurface {
    static PCell* find_cell(Bface* f) {
       Panel* p = Panel::find_owner(f);
       if (!p) return 0;
-      for (int i=0; i<p->_cells.num(); i++)
+      for (PCell_list::size_type i=0; i<p->_cells.size(); i++)
          if (p->_cells[i]->contains(f))
             return p->_cells[i];
       return 0;
@@ -166,17 +169,22 @@ class Panel:  public Bsurface {
 
    static PCell_list find_cells(CBface_list& faces) {
       PCell_list ret;
+      set<PCell*> unique;
       for (int i=0; i<faces.num(); i++) {
          PCell* c = find_cell(faces[i]);
-         if (c)
-            ret.add_uniquely(c);
+         if (c) {
+            pair<set<PCell*>::iterator,bool> result;
+            result = unique.insert(c);
+            if (result.second)
+               ret.push_back(c);
+         }
       }
       return ret;
    }
 
    //********* re-tessellation ******
    bool re_tess               (PIXEL_list pts, bool scribble = false);
-   bool re_tess               (CBcurve_list& cs, CARRAY<int>& ns);
+   bool re_tess               (CBcurve_list& cs, const vector<int>& ns);
 
    //********* oversketch *****
 
@@ -226,7 +234,7 @@ class Panel:  public Bsurface {
    // map_locs - maps verts on the boundaries to new locations
    // cmd - for undo and redo
    // default_old_t, default_new_t - useful only when panel has a single cell
-   bool apply_skel(CWpt_list& new_centers, ARRAY<Panel*>& visited, 
+   bool apply_skel(CWpt_list& new_centers, set<Panel*>& visited,
       map<Bvert*, Wpt>& map_locs, MULTI_CMDptr cmd, 
       Wvec default_old_t, Wvec default_new_t);
 
@@ -241,11 +249,11 @@ class Panel:  public Bsurface {
    bool prepare_tessellation(LMESH* m);
 
    bool tessellate_disk       (CBvert_list&  verts, bool create_mode = true);
-   bool tessellate_disk       (CBcurve_list& contour, CARRAY<int> ns = ARRAY<int>());
+   bool tessellate_disk       (CBcurve_list& contour, const vector<int> ns = vector<int>());
    bool tessellate_banded_disk(CBcurve_list& contour);
-   bool tessellate_quad       (CBcurve_list& contour, CARRAY<int> ns = ARRAY<int>());
-   bool tessellate_tri        ( Bcurve_list  contour, ARRAY<int> ns = ARRAY<int>());
-   bool tessellate_multi      (CARRAY<Bcurve_list>& contours);
+   bool tessellate_quad       (CBcurve_list& contour, const vector<int> ns = vector<int>());
+   bool tessellate_tri        ( Bcurve_list  contour, vector<int> ns = vector<int>());
+   bool tessellate_multi      (const vector<Bcurve_list>& contours);
 
    bool inc_sec_tri           (Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble);
    bool inc_sec_quad          (Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble);
@@ -286,7 +294,7 @@ class PNL_RETESS_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   PNL_RETESS_CMD(Panel* p, CBcurve_list& cs, CARRAY<int>& ns);
+   PNL_RETESS_CMD(Panel* p, CBcurve_list& cs, const vector<int>& ns);
 
    //******** RUN-TIME TYPE ID ********
 
@@ -300,7 +308,7 @@ class PNL_RETESS_CMD : public COMMAND {
  protected:
    Panel*   _p;
    Bcurve_list    _old_cs, _new_cs;
-   ARRAY<int>     _old_ns, _new_ns;
+   vector<int>    _old_ns, _new_ns;
 };
 
 #endif // PANEL_H_IS_INCLUDED

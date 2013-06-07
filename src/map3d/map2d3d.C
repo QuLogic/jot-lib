@@ -21,6 +21,8 @@
 #include "map2d3d.H"
 #include "std/config.H"
 
+#include <iterator>
+
 using namespace mlib;
 
 /*****************************************************************
@@ -250,20 +252,20 @@ Map2D3D::invert_ndc(CNDCpt& p, CUVpt& uv, UVpt &ret, int max_iters) const
 }
 
 Wpt_list
-Map2D3D::ucurve(CARRAY<double>& uvals, double v) const
+Map2D3D::ucurve(const vector<double>& uvals, double v) const
 {
-   Wpt_list ret(uvals.num());
-   for (int i=0; i<uvals.num(); i++)
+   Wpt_list ret(uvals.size());
+   for (vector<double>::size_type i=0; i<uvals.size(); i++)
       ret += map(UVpt(uvals[i], v));
    ret.update_length();
    return ret;
 }
 
 Wpt_list
-Map2D3D::vcurve(double u, CARRAY<double>& vvals) const
+Map2D3D::vcurve(double u, const vector<double>& vvals) const
 {
-   Wpt_list ret(vvals.num());
-   for (int j=0; j<vvals.num(); j++)
+   Wpt_list ret(vvals.size());
+   for (vector<double>::size_type j=0; j<vvals.size(); j++)
       ret += map(UVpt(u, vvals[j]));
    ret.update_length();
    return ret;
@@ -285,14 +287,14 @@ dist(CWpt_list& p, CWpt_list& q)
 
 void
 Map2D3D::get_min_distortion_v_vals(
-   CARRAY<double>& uvals,       // input u-vals
-   ARRAY<double>& vvals,        // output v-vals
+   const vector<double>& uvals, // input u-vals
+   vector<double>& vvals,       // output v-vals
    double aspect                // desired ratio of v-length / u-length
    ) const
 {
    vvals.clear();
 
-   int n = uvals.num();
+   vector<double>::size_type n = uvals.size();
 
    static bool debug = Config::get_var_bool("DEBUG_MIN_DISTORT",false,true);
    if (n < 2) {
@@ -321,7 +323,7 @@ Map2D3D::get_min_distortion_v_vals(
    double cur_v=0;
    while (cur_v < max_v) {
       
-      vvals += cur_v;                           // record the current v
+      vvals.push_back(cur_v);                   // record the current v
       ucurve1 = ucurve(uvals, cur_v);           // u-curve at current v
       double avg_u_len = ucurve1.avg_len();     // its avg length:
 
@@ -345,29 +347,34 @@ Map2D3D::get_min_distortion_v_vals(
    }
 
    // Do correction so it ends at 1.0.
-   if (vvals.num() < 2) {
-      vvals += 1.0;
+   if (vvals.size() < 2) {
+      vvals.push_back(1.0);
    } else {
       // If we were getting close to matching the aspect ratio,
       // add a last v-param past 1.0. Then, in any case, rescale
       // all the v-params to end at 1.0:
 
       if (r >= 1.0)
-         vvals += cur_v;        // doh! it can happen
+         vvals.push_back(cur_v);        // doh! it can happen
       else if (r > 0.5)
-         vvals += interp(vvals.last(), 1.0, 1/r);
+         vvals.push_back(interp(vvals.back(), 1.0, 1/r));
 
       if (debug) {
          err_msg("last ratio: %f", r);
          err_msg("v-params before correction:");
-         cerr << vvals << endl;
+         std::ostream_iterator<double> err_it (std::cerr, ", ");
+         std::copy(vvals.begin(), vvals.end(), err_it);
+         cerr << endl;
       }
 
-      vvals /= vvals.last();
+      vvals /= vvals.back();
    }
 
    if (debug) {
-      cerr << "Output v-params:" << endl << vvals << endl;
+      cerr << "Output v-params:" << endl;
+      std::ostream_iterator<double> err_it (std::cerr, ", ");
+      std::copy(vvals.begin(), vvals.end(), err_it);
+      cerr << endl;
    }
 }
 

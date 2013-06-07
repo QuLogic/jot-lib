@@ -26,6 +26,9 @@
 #include "tess/bsurface.H"
 #include "tess/vert_mapper.H"
 #include "tess/ti.H"
+
+#include <vector>
+
 using namespace tess;
 
 class SkinMeme;
@@ -139,7 +142,7 @@ class Skin:  public Bsurface {
    void set_inf_mapper(VertMapper m) { _inf_mapper = m; }
    SubdivUpdater* get_updater() { return _updater; }
    Skin* get_partner()          { return _partner; }
-   ARRAY<Skin*> get_covers()    { return _covers;   }
+   vector<Skin*> get_covers()   { return _covers;  }
    bool is_inflate()            { return _inflate; }
 
    void add_offsets(double dist);
@@ -169,7 +172,7 @@ class Skin:  public Bsurface {
    VertMapper           _mapper;        // maps skel verts to skin verts
    VertMapper           _inf_mapper;    // auxilary mapper for inflation
    Skin*                _partner;       // inflate partner
-   ARRAY<Skin*>         _covers;        // cover skins
+   vector<Skin*>        _covers;        // cover skins
    bool                 _reverse;       // if true, normals are reversed from skels
    bool                 _inflate;       // if true, this is an inflation
 
@@ -273,7 +276,7 @@ class SkinCurveMap : public Map1D3D {
 
    // Constructor only takes an array of simplices and bcs
    // if the curve is not closed, p0 and p1 have to be not null
-   SkinCurveMap(Bsimplex_list& simps, ARRAY<Wvec>& bcs, Skin* skin,
+   SkinCurveMap(Bsimplex_list& simps, vector<Wvec>& bcs, Skin* skin,
       Map0D3D* p0 = 0, Map0D3D* p1 = 0);
 
    virtual ~SkinCurveMap() { unhook(); } // undo dependencies
@@ -283,7 +286,7 @@ class SkinCurveMap : public Map1D3D {
 
    //******** ACCESSORS ********
    
-   void          set_pts(CBsimplex_list& simps, ARRAY<Wvec>& bcs);
+   void          set_pts(CBsimplex_list& simps, vector<Wvec>& bcs);
 
    //******** Map1D3D VIRTUAL METHODS ********
 
@@ -341,7 +344,7 @@ class SkinCurveMap : public Map1D3D {
 
  protected:
    Bsimplex_list  _simps;  // simplices that the curve lives in
-   ARRAY<Wvec>    _bcs;   // barycentric coordinates
+   vector<Wvec>   _bcs;   // barycentric coordinates
    Skin*          _skin;
 
    //******** PROTECTED METHODS ********

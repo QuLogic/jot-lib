@@ -29,6 +29,8 @@
 #include "skin.H"
 #include "skin_meme.H"
 
+#include <vector>
+
 /*****************************************************************
  * JOIN_SEAM_CMD
  *
@@ -97,7 +99,7 @@ class FIT_VERTS_CMD : public COMMAND {
 
  protected:
    Bvert_list   _verts;
-   ARRAY<Wpt_list>     _old_lists;
+   vector<Wpt_list> _old_lists;
    Wpt_list     _new_locs;
 
    //******** UTILITIES ********
@@ -126,7 +128,7 @@ class SUBDIV_OFFSET_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   SUBDIV_OFFSET_CMD(CBvert_list& verts, CARRAY<double>& offsets);
+   SUBDIV_OFFSET_CMD(CBvert_list& verts, const vector<double>& offsets);
 
    //******** RUN-TIME TYPE ID ********
 
@@ -140,7 +142,7 @@ class SUBDIV_OFFSET_CMD : public COMMAND {
 
  protected:
    Bvert_list           _verts;
-   ARRAY<double>        _offsets;
+   vector<double>       _offsets;
    SUBDIV_OFFSET_CMDptr _parent_cmd;
    MULTI_CMDptr         _ctrl_vert_cmds;
 
@@ -155,7 +157,7 @@ class SUBDIV_OFFSET_CMD : public COMMAND {
    // First assigns offsets to parent level (recursively), then
    // assigns offsets at this level, minus the effects of the new
    // offsets at the parent level.
-   void fit_verts(CBvert_list& verts, CARRAY<double>& offsets);
+   void fit_verts(CBvert_list& verts, const vector<double>& offsets);
 };
 
 /*****************************************************************

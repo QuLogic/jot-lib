@@ -58,7 +58,7 @@ BvertGrid::build(
 
    // Build the new...
    //   bottom row:
-   _grid += bottom;
+   _grid.push_back(bottom);
 
    BMESH* m = bottom.mesh();    assert(m);
 
@@ -69,11 +69,11 @@ BvertGrid::build(
       for (int i=1; i<bottom.num()-1; i++)
          row += m->add_vertex();        // add internal vertices
       row += right[j];                  // add last vertex for row j
-      _grid += row;
+      _grid.push_back(row);
    }
 
    // top row:
-   _grid += top;
+   _grid.push_back(top);
 
    // Now compute cached values:
    cache();

@@ -328,7 +328,7 @@ gen_flip_side(CBface_list& top, Patch* p, VertMapper& vmap)
 }
 
 inline void
-displace(CBvert_list& verts, CARRAY<Wvec>& delt)
+displace(CBvert_list& verts, const vector<Wvec>& delt)
 {
    for (int i=0; i<verts.num(); i++)
       verts[i]->offset_loc(delt[i]);
@@ -337,9 +337,9 @@ displace(CBvert_list& verts, CARRAY<Wvec>& delt)
 inline void
 displace(CBvert_list& verts, CWvec&n)
 {
-   ARRAY<Wvec> delt(verts.num());
+   vector<Wvec> delt(verts.num());
    for (int i=0; i<verts.num(); i++)
-      delt += (n * (verts[i]->avg_strong_len()/2));
+      delt[i] = (n * (verts[i]->avg_strong_len()/2));
    displace(verts, delt);
 }
 
@@ -1284,12 +1284,12 @@ Primitive::create_skel_curve(
    tvals.clear();
    // Compute t-vals for Bcurve control vertices WRT chopped curve
    for (int i=0; i<pcalc.N(); i++)
-      tvals += pcalc.d(i);
+      tvals.push_back(pcalc.d(i));
    if (tvals[0] != 0.0) {
       tvals[0] = 0;
    }
-   if (tvals.last() != 1.0) {
-      tvals.last() = 1.0;
+   if (tvals.back() != 1.0) {
+      tvals.back() = 1.0;
    }
    skel_curve =
       ::create_skel_curve(_skel_mesh, pts, n, tvals, bp1, bp2, name(), cmd);
@@ -1640,7 +1640,7 @@ Primitive::extend(
 
    Bvert_list v1;   // list of vertices on the starting cross section
    Wpt_list   u1;   // Corresponding local coordinates
-   ARRAY<int> crease_locs; // crease locations, indexed into v1
+   vector<int> crease_locs; // crease locations, indexed into v1
 
    // get simplex frame
    SimplexFrame* f1;
@@ -1668,12 +1668,12 @@ Primitive::extend(
          add_edge(v1[v1.num()-2], v1.last());
          create_xf_meme((Lvert*)v1.last(), f1);
       }
-      if (i!=corners.size()-1) crease_locs += (v1.num()-1);
+      if (i!=corners.size()-1) crease_locs.push_back(v1.num()-1);
    }
    add_edge(v1.last(), side.last());
    v1 += side.last();
    v1.reverse();
-   for (int i = 0; i < crease_locs.num(); i++)
+   for (vector<int>::size_type i = 0; i < crease_locs.size(); i++)
       crease_locs[i] = v1.num() - 1 - crease_locs[i];
 
    // Compute local coords
@@ -1742,7 +1742,7 @@ Primitive::extend(
          double uj = ui + 1;       // u coordinate for p[j], c[j]
          add_quad(cur[i], cur[j], prev[j], prev[i],
                   UVpt(ui,vc), UVpt(uj,vc), UVpt(uj,vp), UVpt(ui,vp));
-         if (crease_locs.contains(i))
+         if (std::find(crease_locs.begin(), crease_locs.end(), i) != crease_locs.end())
             lookup_edge(cur[i], prev[i])->set_crease();
       }
 

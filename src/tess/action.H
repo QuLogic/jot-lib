@@ -25,6 +25,8 @@
 #include "tess/tess_cmd.H"
 #include "tess/bsurface.H"
 
+#include <vector>
+
 class Action;
 class Script;
 class TEXBODY;
@@ -36,13 +38,13 @@ class Panel;
  *  List of actions, with convenience methods.
  *
  *****************************************************************/
-class Action_list : public ARRAY<Action*> {
+class Action_list : public vector<Action*> {
  public:
 
    //******** MANAGERS ********
 
-   Action_list(int n=0)                 : ARRAY<Action*>(n) {}
-   Action_list(const ARRAY<Action*>& l) : ARRAY<Action*>(l) {}
+   Action_list(int n=0)                  : vector<Action*>() { reserve(n); }
+   Action_list(const vector<Action*>& l) : vector<Action*>(l) {}
 
    // delete the actions and reset list to empty:
    void delete_all();
@@ -60,7 +62,6 @@ class Action_list : public ARRAY<Action*> {
    //******** QUERIES ********
 
    // returns true if all actions in given list are in this script:
-   // XXX - should probably be added to ARRAY subclass:
    bool contains(const Action_list& list) const;
 
    // returns true if every predecessor of an action in the list
@@ -183,7 +184,9 @@ class Script : public Action {
 
    // returns true if the action is in this script:
    bool contains(Action* a) const {
-      return _actions.ARRAY<Action*>::contains(a);
+      Action_list::const_iterator it;
+      it = std::find(_actions.begin(), _actions.end(), a);
+      return it != _actions.end();
    }
 
    // returns true if all actions in given list are in this script:
@@ -196,7 +199,7 @@ class Script : public Action {
    bool self_contained() const { return _actions.self_contained(); }
 
    bool empty() const { return _actions.empty(); }
-   int  num()   const { return _actions.num(); }
+   int  num()   const { return _actions.size(); }
 
    //******** BUILDING ********
 
@@ -490,7 +493,7 @@ class PanelAction : public Action {
    //******** I/O ********
 
    // used by TAG_val for I/O:
-   ARRAY<int>&  indices() { return _indices; }
+   vector<int>&  indices() { return _indices; }
 
  protected:
    //******** MEMBER DATA ********
@@ -500,7 +503,7 @@ class PanelAction : public Action {
    // before being invoked:
 
    // "indices" used in apply_indices():
-   ARRAY<int>   _indices; // curve indices
+   vector<int>  _indices; // curve indices
 
    // pointers that result after apply_indices():
    Action_list  _actions; // actions that define boundary curve

@@ -58,7 +58,7 @@ PCellCornerVertFilter::accept(CBsimplex* s) const
    Bvert* v = (Bvert*)s;
 
    return (Bpoint::find_controller(v) != NULL ||
-           Panel::find_cells(v->get_faces()).num() > 1);
+           Panel::find_cells(v->get_faces()).size() > 1);
 }
 
 /************************************************************
@@ -88,9 +88,12 @@ PCell_list
 PCell::internal_nbrs() const 
 {
    PCell_list ret = nbrs();
-   for (int i=ret.num()-1; i >= 0; --i) {
-      if (!same_panel(ret[i]))
-         ret.remove(i);
+   PCell_list::iterator it = ret.begin();
+   while (it != ret.end()) {
+      if (!same_panel(*it))
+         it = ret.erase(it);
+      else
+         ++it;
    }
    return ret;
 }
@@ -99,43 +102,43 @@ PCell_list
 PCell::external_nbrs() const 
 {
    PCell_list ret = nbrs();
-   for (int i=ret.num()-1; i >= 0; --i) {
-      if (same_panel(ret[i]))
-         ret.remove(i);
+   PCell_list::iterator it = ret.begin();
+   while (it != ret.end()) {
+      if (same_panel(*it))
+         it = ret.erase(it);
+      else
+         ++it;
    }
    return ret;
 }
 
-inline ARRAY<Bedge_list>
+inline vector<Bedge_list>
 get_boundaries(const PCell_list& cells)
 {
-   ARRAY<Bedge_list> ret(cells.num());
-   for (int i=0; i<cells.num(); i++)
-      ret += cells[i]->boundary_edges();
+   vector<Bedge_list> ret(cells.size());
+   for (PCell_list::size_type i=0; i<cells.size(); i++)
+      ret[i] = cells[i]->boundary_edges();
    return ret;
 }
 
 Bedge_list
 PCell::shared_edges(const PCell_list& cells)
 {
-   ARRAY<Bedge_list> boundaries = get_boundaries(cells);
+   vector<Bedge_list> boundaries = get_boundaries(cells);
 
-   {
-      // clear all flags
-      for (int i=0; i<boundaries.num(); i++)
-         boundaries[i].clear_flags();
-   }
-   {
-      // increment all edge flags
-      for (int i=0; i<boundaries.num(); i++)
-         boundaries[i].inc_flags();
-   }
+   // clear all flags
+   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
+      boundaries[i].clear_flags();
+
+   // increment all edge flags
+   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
+      boundaries[i].inc_flags();
+
    // the shared ones will have flag value = 2
    Bedge_list ret;
-   {
-      for (int i=0; i<boundaries.num(); i++)
-         ret += boundaries[i].filter(SimplexFlagFilter(2));
-   }
+   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
+      ret += boundaries[i].filter(SimplexFlagFilter(2));
+
    return ret;
 }
 
@@ -171,7 +174,7 @@ Panel::add_cell(CBface_list& faces)
       if (!find_cell(faces[i]))
          new_faces += faces[i];
    }
-   _cells += new PCell(this, new_faces);
+   _cells.push_back(new PCell(this, new_faces));
 }
 
 void
@@ -199,7 +202,7 @@ Panel::draw_skeleton() const
       glDisable(GL_LIGHTING);                              // GL_ENABLE_BIT
       glBegin(GL_POINTS);
       glColor4fv(float4(Color::blue_pencil_d, 0.8));       // GL_CURRENT_BIT
-      for (int i=0; i<_cells.num(); i++) {
+      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
          if (!_cells[i]->is_empty()) {
             glVertex3dv(_cells[i]->center().data());
          }
@@ -215,9 +218,9 @@ Panel::draw_skeleton() const
       glBegin(GL_LINES);
       // use medium blue for internal edges
       glColor4fv(float4(Color::blue_pencil_m, 0.8));    // GL_CURRENT_BIT
-      for (int i=0; i<_cells.num(); i++) {
+      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
          PCell_list nbrs = _cells[i]->internal_nbrs();
-         for (int j=0; j<nbrs.num(); j++) {
+         for (PCell_list::size_type j=0; j<nbrs.size(); j++) {
             glVertex3dv(_cells[i]->center().data());
             glVertex3dv(  nbrs[j]->center().data());
          }
@@ -233,9 +236,9 @@ Panel::draw_skeleton() const
       glBegin(GL_LINES);
       // use light orange for internal edges
       glColor4fv(float4(Color::orange_pencil_l, 0.8));  // GL_CURRENT_BIT
-      for (int i=0; i<_cells.num(); i++) {
+      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
          PCell_list nbrs = _cells[i]->external_nbrs();
-         for (int j=0; j<nbrs.num(); j++) {
+         for (PCell_list::size_type j=0; j<nbrs.size(); j++) {
             glVertex3dv(_cells[i]->center().data());
             glVertex3dv(  nbrs[j]->center().data());
          }
@@ -263,7 +266,7 @@ Panel::inputs()  const
 }
 
 Panel*
-Panel::create(CBcurve_list& contour, CARRAY<int> ns)
+Panel::create(CBcurve_list& contour, const vector<int> ns)
 {
    // Create a Panel to fill a simple closed boundary:
 
@@ -277,8 +280,7 @@ Panel::create(CBcurve_list& contour, CARRAY<int> ns)
        ret->tessellate_disk (contour, ns))          // go for disk
       return ret;
 
-   ARRAY<Bcurve_list> multi;
-   multi += contour;
+   vector<Bcurve_list> multi(1, contour);
    if (ret->tessellate_multi(multi))            // fall back on basics
       return ret;
 
@@ -305,14 +307,14 @@ Panel::create(CBvert_list& verts)
 }
 
 Panel*
-Panel::create(CARRAY<Bcurve_list>& contours)
+Panel::create(const vector<Bcurve_list>& contours)
 {
    if (contours.empty()) {
       err_adv(debug, "Panel::create: empty contour list");
       return 0;
    }
-   if (contours.num() == 1)
-      return create(contours.first());
+   if (contours.size() == 1)
+      return create(contours.front());
 
    // Multiple contours, e.g. enclosed surface has holes or
    // consists of disconnected pieces.
@@ -410,7 +412,7 @@ Panel::finish_tessellation()
    if (0 && debug) {
       for (Panel* p = this; p; p = upcast(p->child())) {
          cerr << p->identifier() << ": "
-              << p->vmemes().num() << " memes / "
+              << p->vmemes().size() << " memes / "
               << p->bverts().num() << " verts" << endl;
       }
    }
@@ -432,13 +434,13 @@ Panel::finish_tessellation()
 }
 
 bool
-Panel::tessellate_disk(CBcurve_list& contour, CARRAY<int> ns)
+Panel::tessellate_disk(CBcurve_list& contour, const vector<int> ns)
 {
-   if (ns.num()!=0 && ns.num()!=contour.num())
+   if (ns.size()!=0 && (int)ns.size()!=contour.num())
       return false;
-   for (int i = 0; i < ns.num(); i++)
+   for (vector<int>::size_type i = 0; i < ns.size(); i++)
       if (ns[i]<=0) return false;
-   bool create_mode = (ns.num()==0);
+   bool create_mode = ns.empty();
 
    // For "disk" tessellation we accept a closed chain of
    // curves that hopefully winds around its center
@@ -573,12 +575,12 @@ Panel::split_tri(Bpoint* bp, Bcurve* bc, CPIXEL_list& pts, bool scribble)
    Bcurve_list c = _bcurves;
    if (c[0] == bc)
       c.shift(1);
-   ARRAY<int> ns;
+   vector<int> ns(4);
    for (int i = 0; i < 3; i++) {
       if (c[i]!=bc || scribble)
-         ns += 1;
+         ns[i] = 1;
       else
-         ns += 2;
+         ns[i] = 2;
    }
 
    PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, c, ns);
@@ -601,12 +603,13 @@ Panel::inc_sec_disk(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
    if (scribble && bc->num_edges()==1)
       return false;
    
-   ARRAY<int> ns;
-   for (int i = 0; i < _bcurves.num(); i++)
+   vector<int> ns(_bcurves.num());
+   for (int i = 0; i < _bcurves.num(); i++) {
       if (_bcurves[i] != bc)
-         ns += _bcurves[i]->num_edges();
+         ns[i] = _bcurves[i]->num_edges();
       else
-         ns += bc->num_edges() + (scribble ? -1 : 1);
+         ns[i] = bc->num_edges() + (scribble ? -1 : 1);
+   }
    PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, _bcurves, ns);
    WORLD::add_command(cmd);
    return true;
@@ -637,10 +640,10 @@ Panel::inc_sec_tri(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
    // XXX - can add code here to restrict the stroke to be parallel to bc0
    //     - I choose to let the condition be more relax
 
-   ARRAY<int> ns;
-   ns += 1;
-   ns += bc1->num_edges()+(scribble ? -1 : 1);
-   ns += bc2->num_edges()+(scribble ? -1 : 1);
+   vector<int> ns(3);
+   ns[0] = 1;
+   ns[1] = bc1->num_edges()+(scribble ? -1 : 1);
+   ns[2] = bc2->num_edges()+(scribble ? -1 : 1);
    PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, c, ns);
    WORLD::add_command(cmd);
    return true;
@@ -667,12 +670,12 @@ Panel::inc_sec_quad(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
    // XXX - can add code here to restrict the stroke to be perpendicular to bc1
    //     - I choose to let the condition be more relax
 
-   ARRAY<int> ns;
+   vector<int> ns(4);
    for (int i = 0; i < 4; i++)
       if (_bcurves[i]!=bc1 && _bcurves[i]!=bc2)
-         ns += _bcurves[i]->num_edges();
+         ns[i] = _bcurves[i]->num_edges();
       else
-         ns += _bcurves[i]->num_edges()+(scribble ? -1 : 1);
+         ns[i] = _bcurves[i]->num_edges()+(scribble ? -1 : 1);
    PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, _bcurves, ns);
    WORLD::add_command(cmd);
    return true;
@@ -717,13 +720,13 @@ Panel::oversketch(CPIXEL_list& sketch_pixels)
    Wplane P = bfaces()[0]->plane(); // XXX- this assumes that the panel is in 2D
    Wpt_list pts;
    new_skel.project_to_plane(P, pts);
-   pts.resample(_cells.num()-1); // XXX- uniform sampling
+   pts.resample(_cells.size()-1); // XXX- uniform sampling
    
    // Now reshape the skel to the new desired pixel path.
-   ARRAY<Panel*> visited;
+   set<Panel*> visited;
    map<Bvert*, Wpt> map_locs;
    MULTI_CMDptr cmd = new MULTI_CMD();
-   if(apply_skel(pts, visited, map_locs, cmd, Wvec::X(), Wvec::X())) {
+   if (apply_skel(pts, visited, map_locs, cmd, Wvec::X(), Wvec::X())) {
       WORLD::add_command(cmd);
       return true;
    }
@@ -796,13 +799,13 @@ Wpt_list
 Panel::skel_pts()
 {
    Wpt_list ret;
-   for (int i = 0; i < _cells.num(); i++)
+   for (PCell_list::size_type i = 0; i < _cells.size(); i++)
       ret += _cells[i]->center();
    return ret;
 }
 
 bool
-Panel::apply_skel(CWpt_list& new_skel, ARRAY<Panel*>& visited, 
+Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
                   map<Bvert*, Wpt>& map_locs, MULTI_CMDptr cmd, 
                   Wvec default_old_t, Wvec default_new_t)
 {
@@ -820,9 +823,9 @@ Panel::apply_skel(CWpt_list& new_skel, ARRAY<Panel*>& visited,
    Wpt_list pts;
    
    // find the new positions for boundary vertices
-   for (int i = 0; i < _cells.num(); i++) {
+   for (PCell_list::size_type i = 0; i < _cells.size(); i++) {
       // identify different kinds of verts in a cell
-      shared_verts_up = (i==_cells.num()-1) ? Bvert_list() :
+      shared_verts_up = (i==_cells.size()-1) ? Bvert_list() :
           _cells[i]->shared_boundary(_cells[i+1]).get_verts();
       shared_verts_down = (i==0) ? Bvert_list() :
           _cells[i]->shared_boundary(_cells[i-1]).get_verts();
@@ -876,12 +879,12 @@ Panel::apply_skel(CWpt_list& new_skel, ARRAY<Panel*>& visited,
    }
 
    // mark this panel as visited
-   visited += this;
+   visited.insert(this);
 
    // recursively call the apply_skel method of neighboring panels
    for (int i = 0; i < _bcurves.num(); i++) {      
       Panel* nbr = nbr_panel(_bcurves[i]);
-      if (nbr && !visited.contains(nbr)) {
+      if (nbr && visited.find(nbr) == visited.end()) {
          Bvert* first = _bcurves[i]->verts().first();
          Bvert* last = _bcurves[i]->verts().last();
          o =  (first->loc() + last->loc()) / 2;
@@ -946,9 +949,9 @@ Panel::re_tess(PIXEL_list pts, bool scribble) // pass by copy
 }
 
 bool
-Panel::re_tess(CBcurve_list& cs, CARRAY<int>& ns)
+Panel::re_tess(CBcurve_list& cs, const vector<int>& ns)
 {
-   if (cs.num() != ns.num())
+   if (cs.num() != (int)ns.size())
       return false;
 
    bool result = false;
@@ -987,12 +990,12 @@ Panel::try_re_tess_adj(Bcurve* bc, int n)
       return false;
 
    Bcurve_list cs = adj->curves();
-   ARRAY<int> ns;
+   vector<int> ns(cs.num());
    for (int i = 0; i < cs.num(); i++) {
       if (cs[i] == bc)
-         ns += n;
+         ns[i] = n;
       else
-         ns += cs[i]->num_edges();
+         ns[i] = cs[i]->num_edges();
    }
 
    // special treatment for quad panels
@@ -1006,14 +1009,14 @@ Panel::try_re_tess_adj(Bcurve* bc, int n)
 }
 
 bool
-Panel::tessellate_tri(Bcurve_list c, ARRAY<int> ns)
+Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
 {
-   if(ns.num()!=0 && ns.num()!=3)
+   if (ns.size()!=0 && ns.size()!=3)
       return false;
-   for (int i = 0; i < ns.num(); i++)
+   for (vector<int>::size_type i = 0; i < ns.size(); i++)
       if (ns[i]<=0) return false;
    bool create_mode = ns.empty();
-   if (!create_mode && !ns.contains(1))
+   if (!create_mode && !(ns[0] == 1 || ns[1] == 1 || ns[2] == 1))
       return false;
 
    if (c.num() != 3) {
@@ -1035,15 +1038,14 @@ Panel::tessellate_tri(Bcurve_list c, ARRAY<int> ns)
       if (s < c[0]->length())
          c.shift(1);
       assert(s == c[0]->length()); // first must be shortest now
-   } else {
+   } else if (ns[0] != 1) {
       // cycle the curves until ns[0] is 1
-      if (ns[0] != 1) {
+      if (ns[1] == 1) {
          c.shift(1);
-         ns.shift(1);
-      }
-      if (ns[0] != 1) {
-         c.shift(1);
-         ns.shift(1);
+         std::rotate(ns.begin(), ns.begin() + 1, ns.end());
+      } else if (ns[2] == 1) {
+         c.shift(2);
+         std::rotate(ns.begin(), ns.begin() + 2, ns.end());
       }
       assert(ns[0] == 1);
    }
@@ -1159,12 +1161,12 @@ Panel::tessellate_tri(Bcurve_list c, ARRAY<int> ns)
            n0, n1, n2);
 
    // Now extract vertices in 3 lists:
-   ARRAY<Bvert_list> v(3);
+   vector<Bvert_list> v;
    if (!c.extract_boundary_ccw(v)) {
       err_adv(debug, "  can't extract boundary w/ CCW orientation");
       return false;
    }
-   assert(v.num() == 3);
+   assert(v.size() == 3);
 
    // Now reverse direction of c2 so
    // c2 and c1 both run bottom to top:
@@ -1289,11 +1291,11 @@ Panel::choose_quad_resolution(
 }
 
 bool
-Panel::tessellate_quad(CBcurve_list& c, CARRAY<int> ns)
+Panel::tessellate_quad(CBcurve_list& c, const vector<int> ns)
 {
-   if(ns.num()!=0 && ns.num()!=4)
+   if (ns.size()!=0 && ns.size()!=4)
       return false;
-   for (int i = 0; i < ns.num(); i++)
+   for (vector<int>::size_type i = 0; i < ns.size(); i++)
       if (ns[i]<=0) return false;
    bool debug = Config::get_var_bool("DEBUG_QUAD_PANEL",false);
    err_adv(debug, "Panel::tessellate_quad: starting...");
@@ -1319,7 +1321,7 @@ Panel::tessellate_quad(CBcurve_list& c, CARRAY<int> ns)
    //
    // The 4 curves are ordered CCW around the region
 
-   if (ns.num() == 0)   {
+   if (ns.size() == 0) {
       // Resample curves to get regular grid with good aspect ratios:
       bool ok=false;
       if ((c[0]->length() + c[2]->length()) > (c[1]->length() + c[3]->length()))
@@ -1342,12 +1344,12 @@ Panel::tessellate_quad(CBcurve_list& c, CARRAY<int> ns)
            c[0]->num_edges(), c[1]->num_edges());
    
    // Now extract vertices in 4 lists:
-   ARRAY<Bvert_list> v(4);
+   vector<Bvert_list> v;
    if (!c.extract_boundary_ccw(v)) {
       err_adv(debug, "  can't extract CCW boundary");
       return false;
    }
-   assert(v.num() == 4);
+   assert(v.size() == 4);
 
    // Now we have to reverse the direction of the top and
    // left vertex lists, so they look like the following,
@@ -1438,7 +1440,7 @@ Panel::tessellate_quad(CBcurve_list& c, CARRAY<int> ns)
 }
 
 bool
-Panel::tessellate_multi(CARRAY<Bcurve_list>& contours)
+Panel::tessellate_multi(const vector<Bcurve_list>& contours)
 {
    // Curves in a single contour are assumed to be in one mesh already
 
@@ -1446,19 +1448,19 @@ Panel::tessellate_multi(CARRAY<Bcurve_list>& contours)
    // boundary vertices. Does not introduce internal vertices.
 
    if (debug_tess)
-      err_msg("Panel::tessellate_multi: using %d contours", contours.num());
+      err_msg("Panel::tessellate_multi: using %d contours", contours.size());
 
    if (contours.empty())
       return false;
 
-   if (!prepare_tessellation(contours.first()))
+   if (!prepare_tessellation(contours.front()))
       return false;
 
    // need this to pass to Bsurface::tessellate():
-   ARRAY<Bvert_list> contour_vert_lists;
+   vector<Bvert_list> contour_vert_lists;
 
-   for(int i=0; i<contours.num(); i++) {
-      Bcurve_list& contour = contours[i];
+   for (vector<Bcurve_list>::size_type i=0; i<contours.size(); i++) {
+      CBcurve_list& contour = contours[i];
 
       if (debug_tess)
          err_msg("Panel::tessellate_multi: %d curves in contour %d",
@@ -1477,7 +1479,7 @@ Panel::tessellate_multi(CARRAY<Bcurve_list>& contours)
          absorb(contour);
       }
 
-      contour_vert_lists += contour.boundary_verts();
+      contour_vert_lists.push_back(contour.boundary_verts());
    }
 
    // Reset mesh to subdivision level 0 (control mesh):
@@ -1541,13 +1543,13 @@ Panel::add_vert_memes(CBvert_list& verts)
 /*****************************************************************
  * PNL_RETESS_CMD
  *****************************************************************/
-PNL_RETESS_CMD::PNL_RETESS_CMD(Panel* p, CBcurve_list& cs, CARRAY<int>& ns)
+PNL_RETESS_CMD::PNL_RETESS_CMD(Panel* p, CBcurve_list& cs, const vector<int>& ns)
 {
-   if (cs.num() != ns.num() || p->curves().num() != ns.num()) {
+   if (cs.num() != (int)ns.size() || p->curves().num() != (int)ns.size()) {
       err_msg("PNL_RETESS_CMD::PNL_RETESS_CMD: error: lists not equal");
       return;
    }
-   for (int i = 0; i < ns.num(); i++) {
+   for (vector<int>::size_type i = 0; i < ns.size(); i++) {
       if (ns[i] <= 0) {
          err_msg("PNL_RETESS_CMD:PNL_RETESS_CMD: error: list contains non-positive number");
          return;
@@ -1563,8 +1565,8 @@ PNL_RETESS_CMD::PNL_RETESS_CMD(Panel* p, CBcurve_list& cs, CARRAY<int>& ns)
    _new_cs = cs;
    _new_ns = ns;
    _old_ns.clear();
-   for (int i = 0; i < ns.num(); i++)
-      _old_ns += p->curves()[i]->num_edges();
+   for (vector<int>::size_type i = 0; i < ns.size(); i++)
+      _old_ns.push_back(p->curves()[i]->num_edges());
 }
 
 bool

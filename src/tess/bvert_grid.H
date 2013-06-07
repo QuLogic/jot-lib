@@ -23,6 +23,8 @@
 
 #include "mesh/bmesh.H"
 
+#include <vector>
+
 /*****************************************************************
  * BvertGrid
  *
@@ -37,7 +39,7 @@ class BvertGrid {
    //******** ACCESSORS ********
 
    // dimensions
-   int nrows() const { return _grid.num(); }
+   int nrows() const { return _grid.size(); }
    int ncols() const { return _grid.empty() ? 0 : bottom().num(); }
 
    // Vertex (i,j), where i designates the column and j
@@ -50,8 +52,8 @@ class BvertGrid {
 
    // rows
    CBvert_list& row(int j) const { return _grid[j]; }
-   CBvert_list& bottom()   const { return _grid.first(); }
-   CBvert_list& top()      const { return _grid.last(); }
+   CBvert_list& bottom()   const { return _grid.front(); }
+   CBvert_list& top()      const { return _grid.back(); }
 
    // columns
    Bvert_list   col(int i) const;
@@ -106,7 +108,7 @@ class BvertGrid {
  protected:
 
    // vertex grid:
-   ARRAY<Bvert_list>    _grid;
+   vector<Bvert_list>    _grid;
 
    // cached values (after grid is built):
    int          _RowsCache;     // numrows - 1

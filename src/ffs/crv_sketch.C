@@ -467,8 +467,8 @@ CRV_SKETCH::specify_upper(CWpt_list& list)
    assert (list.num() == _shadow_pts.num());
    _shadow_pts.update_length();
 
-   ARRAY<double> shadow_tvals = _curve->get_map_tvals();
-   assert(shadow_tvals.num() == _shadow_pts.num());
+   vector<double> shadow_tvals = _curve->get_map_tvals();
+   assert((int)shadow_tvals.size() == _shadow_pts.num());
    
    for (int i = 0; i < list.num(); i++) {
       double t = shadow_tvals[i];

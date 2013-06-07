@@ -20,6 +20,9 @@
 
 #include "map1d3d.H"
 #include "mlib/points.H"
+
+#include <vector>
+
 /*****************************************************************
  * Map2D3D:
  *
@@ -76,16 +79,16 @@ class Map2D3D : public Map {
    bool is_topological_torus()    const { return wrap_u() && wrap_v();    }
 
    // Returns indicated iso-parameter curve:
-   Wpt_list ucurve(CARRAY<double>& uvals, double v) const;
-   Wpt_list vcurve(double u, CARRAY<double>& vvals) const;
+   Wpt_list ucurve(const vector<double>& uvals, double v) const;
+   Wpt_list vcurve(double u, const vector<double>& vvals) const;
 
    // Given a set of u-values, returns a list of v-values which
    // approximately preserve the given aspect ratio of the quads
    // created when tessellating the surface in a regular grid:
    void get_min_distortion_v_vals(
-      CARRAY<double>& uvals,    // given u-values
-      ARRAY<double>& vvals,     // returned v-values
-      double aspect = 1.0       // desired ratio of v-length / u-length
+      const vector<double>& uvals, // given u-values
+      vector<double>& vvals,       // returned v-values
+      double aspect = 1.0          // desired ratio of v-length / u-length
       ) const;
 
    //******** COMPUTATION (NOT VIRTUAL) ********

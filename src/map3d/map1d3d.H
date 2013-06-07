@@ -24,6 +24,8 @@
 #include "map0d3d.H"
 #include "param_list.H"
 
+#include <vector>
+
 /*****************************************************************
  * Map1D3D:
  *
@@ -167,9 +169,9 @@ class Map1D3D : public Map {
    // after the given maximum number of iterations.
    bool invert(mlib::CWpt &p, double t, double &ret, int max_iters=15) const;
 
-   mlib::Wpt_list map_all(CARRAY<double>& tvals) {
-      mlib::Wpt_list ret(tvals.num());
-      for (int k=0; k<tvals.num(); k++)
+   mlib::Wpt_list map_all(const vector<double>& tvals) {
+      mlib::Wpt_list ret(tvals.size());
+      for (vector<double>::size_type k=0; k<tvals.size(); k++)
          ret += map(tvals[k]);
       ret.update_length();
       return ret;
@@ -214,9 +216,9 @@ class ReverseMap1D3D : public Map1D3D {
          return new ReverseMap1D3D(m);
    }
 
-   static void reverse_tvals(ARRAY<double>& tvals) {
-      tvals.reverse();
-      for (int k=0; k<tvals.num(); k++)
+   static void reverse_tvals(vector<double>& tvals) {
+      std::reverse(tvals.begin(), tvals.end());
+      for (vector<double>::size_type k=0; k<tvals.size(); k++)
          tvals[k] = (1 - tvals[k]);
    }
 

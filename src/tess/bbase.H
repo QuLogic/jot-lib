@@ -28,6 +28,8 @@
 
 #include "meme.H"
 
+#include <vector>
+
 class TEXBODY;
 class Bpoint;
 class Bcurve;
@@ -157,7 +159,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Return true if every vertex is under meme control
    static bool is_covered(CBvert_list& verts) {
-      return find_boss_vmemes(verts).num() == verts.num();
+      return (int)find_boss_vmemes(verts).size() == verts.num();
    }
 
    // Returns the Bbase that owns the boss meme on the simplex:
@@ -424,7 +426,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    virtual void notify_change    (BMESH*, BMESH::change_t)  {}
    virtual void notify_xform     (BMESH*, CWtransf&, CMOD&) {}
    virtual void notify_merge     (BMESH*, BMESH*);
-   virtual void notify_split     (BMESH*, CARRAY<BMESH*>&);
+   virtual void notify_split     (BMESH*, const vector<BMESH*>&);
    virtual void notify_delete    (BMESH*);
    virtual void notify_sub_delete(BMESH*);
 

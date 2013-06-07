@@ -21,14 +21,16 @@
 #include "mlib/points.H"
 #include "std/support.H"
 
+#include <vector>
+
 /*****************************************************************
  *
  *   Convenience methods for working with parameter lists,
- *   either ARRAYs of doubles or UVpt_lists.
+ *   either vectors of doubles or UVpt_lists.
  *
  *****************************************************************/
 
-typedef ARRAY<double> param_list_t;
+typedef vector<double> param_list_t;
 typedef const param_list_t Cparam_list_t;
 
 inline param_list_t&
@@ -36,7 +38,7 @@ operator*=(param_list_t& params, double t)
 {
    // Multiply each value in the list by scalar t.
 
-   for (int i=0; i<params.num(); i++)
+   for (param_list_t::size_type i=0; i<params.size(); i++)
       params[i] *= t;
    return params;
 }
@@ -76,11 +78,11 @@ is_increasing(Cparam_list_t& params)
    // Return true if the given list of doubles is strictly increasing.
 
    // Need 2 or more to register an increase:
-   if (params.num() < 2)
+   if (params.size() < 2)
       return false;
 
    // Check 'em all:
-   for (int i=1; i<params.num(); i++)
+   for (param_list_t::size_type i=1; i<params.size(); i++)
       if (params[i] <= params[i-1])
          return false;
 
@@ -101,10 +103,10 @@ make_params(int n)
 
    // Generate array of evenly spaced t-values:
    param_list_t params(n + 1);
-   params += 0.0;                    // first
+   params.push_back(0.0);            // first
    for (int i=1; i<n; i++)
-      params += (dt*i);              // interior
-   params += 1.0;                    // last
+      params.push_back(dt*i);        // interior
+   params.push_back(1.0);            // last
    return params;
 }
 
@@ -120,8 +122,8 @@ make_uvpt_list(Cparam_list_t& uvals, double v)
    // Return a UVpt_list whose u-values are copied from the
    // given list and whose v-values all take the given value v.
 
-   mlib::UVpt_list ret(uvals.num());
-   for (int i=0; i<uvals.num(); i++)
+   mlib::UVpt_list ret(uvals.size());
+   for (param_list_t::size_type i=0; i<uvals.size(); i++)
       ret += mlib::UVpt(uvals[i], v);
    ret.update_length();
    return ret;
@@ -133,8 +135,8 @@ make_uvpt_list(double u, Cparam_list_t& vvals)
    // Return a UVpt_list whose v-values are copied from the
    // given list and whose u-values all take the given value u.
 
-   mlib::UVpt_list ret(vvals.num());
-   for (int i=0; i<vvals.num(); i++)
+   mlib::UVpt_list ret(vvals.size());
+   for (param_list_t::size_type i=0; i<vvals.size(); i++)
       ret += mlib::UVpt(u, vvals[i]);
    ret.update_length();
    return ret;

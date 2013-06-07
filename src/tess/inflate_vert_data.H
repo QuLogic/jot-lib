@@ -23,6 +23,8 @@
 
 #include "mesh/lface.H"
 
+#include <vector>
+
 /*****************************************************************
  * InflateVertData:
  *
@@ -93,7 +95,7 @@ class InflateVertData : public SimplexData {
       }
    };
 
-   ARRAY<OffsetVert> _verts;
+   vector<OffsetVert> _verts;
 
    // The unique ID used to lookup InflateVertData:
    static uintptr_t key() {
