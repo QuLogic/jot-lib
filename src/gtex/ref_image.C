@@ -27,7 +27,6 @@ static bool debug = Config::get_var_bool("DEBUG_REF_IMAGES",false);
 /**********************************************************************
  * RefImage:
  **********************************************************************/
-ARRAY<RefImage*> RefImage::_update_list;
 
 RefImage::RefImage(CVIEWptr& v) :
    _view(v),

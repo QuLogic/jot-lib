@@ -331,13 +331,7 @@ class RefImage : public Array2d<GLuint> {
    bool          _update_tex_mem;  // need image in texture memory?
    TEXTUREglptr  _texture;         // texture (if using texture memory)
    
-   // list of images that need to be updated
-   // for the upcoming frame:
-   static ARRAY<RefImage*> _update_list;
-
    //******** UTILITIES ********
-  
- 
 
    // tell if the image needs updating:
    bool need_update() const { return _update_main_mem || _update_tex_mem; }

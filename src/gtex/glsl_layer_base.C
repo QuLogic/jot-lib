@@ -184,22 +184,24 @@ GLSLShader_Layer_Base::GLSLShader_Layer_Base(Patch* p, StripCB* cb) :
 
 GLSLShader_Layer_Base::~GLSLShader_Layer_Base()
 {
-   while(!_layers.empty())
-      delete _layers.pop();
+   while (!_layers.empty()) {
+      delete _layers.back();
+      _layers.pop_back();
+   }
    gtextures().delete_all();
 }
 
 void
 GLSLShader_Layer_Base::get_layers_variable_names()
 {
-   for (int i=0; i<_layers.num(); i++)
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++)
       _layers[i]->get_var_locs(i, program());
 }
 
 void
 GLSLShader_Layer_Base::send_layers_variables() const
 {
-   for (int i=0; i<_layers.num(); i++)
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++)
       _layers[i]->send_to_glsl();
 }
 
@@ -272,7 +274,7 @@ GLSLShader_Layer_Base::free_tex_stage(int tex_stage)
 void
 GLSLShader_Layer_Base::activate_layer_textures()
 {
-   for (int i=0; i<_layers.num(); i++)
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++)
       if ((_layers[i]->_mode == 1) && (_layers[i]->_pattern_tex_stage!=-1))
          if (!activate_texture(_patterns[_layers[i]->_pattern_tex_stage]))
             cerr << "Unable to activate pattern texture for layer "
@@ -287,7 +289,7 @@ GLSLShader_Layer_Base::set_texture_pattern(
    )
 {
    // screen out the crazies
-   assert(_layers.valid_index(layer_num));
+   assert(0 <= layer_num && layer_num < (int)_layers.size());
    layer_base_t* layer = _layers[layer_num];
    assert(layer);
 
@@ -310,9 +312,9 @@ GLSLShader_Layer_Base::set_texture_pattern(
       return;
 
    // see if this texture is already loaded by another layer
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       assert(_layers[i]);
-      if (_layers[i]->_mode==1)
+      if (_layers[i]->_mode==1) {
          if (_layers[i]->_pattern_name == file_name) {
             // found one already in use
             layer->_pattern_tex_stage = _layers[i]->_pattern_tex_stage;
@@ -320,6 +322,7 @@ GLSLShader_Layer_Base::set_texture_pattern(
             layer->_pattern_name = file_name;
             return;
          }
+      }
    }
 
    // get here if texture is not already loaded
@@ -367,7 +370,7 @@ GLSLShader_Layer_Base::cleanup_unused_textures(int tex_stage)
       return;
 
    // cleanup unused textures
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       if (_layers[i]->_pattern_tex_stage == tex_stage) {
          // something else is still using this texture stage
          return;
@@ -381,7 +384,7 @@ GLSLShader_Layer_Base::cleanup_unused_textures(int tex_stage)
 void
 GLSLShader_Layer_Base::disable_layer(int layer)
 {
-   assert(_layers.valid_index(layer));
+   assert(0 <= layer && layer < (int)_layers.size());
    _layers[layer]->_mode = 0;
    _layers[layer]->_pattern_name = "";
    GLint tex_stage =  _layers[layer]->_pattern_tex_stage;
@@ -393,7 +396,7 @@ void
 GLSLShader_Layer_Base::set_procedural_pattern(int layer, int pattern_id)
 {
    // must asign layer object in the derived constructor
-   assert(_layers.valid_index(layer) && _layers[layer]);
+   assert(0 <= layer && layer < (int)_layers.size() && _layers[layer]);
 
    _layers[layer]->_mode = 2 + pattern_id;
    _layers[layer]->_pattern_name = "";
@@ -430,7 +433,7 @@ GLSLShader_Layer_Base::tags() const
 void
 GLSLShader_Layer_Base::put_layer(TAGformat &d) const
 {   
-   for(int i=0; i<_layers.num(); ++i) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       assert(_layers[i]);
       // skip disabled layers:
       if (_layers[i]->_mode != 0) {

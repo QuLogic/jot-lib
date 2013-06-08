@@ -48,7 +48,7 @@ HatchingTX::HatchingTX(Patch* p) :
    GLSLShader_Layer_Base(p, new StripOpCB())
 {
    for (int i=0; i<MAX_LAYERS; i++)
-      _layers += new layer_hatching_t();
+      _layers.push_back(new layer_hatching_t());
 }
 
 HatchingTX::~HatchingTX()
@@ -67,7 +67,7 @@ HatchingTX::init_default(int layer)
    // sets the hatching and paper textures for the given layer,
    // but only if they are currently not assigned textures.
 
-   assert(_layers.valid_index(layer));
+   assert(0 <= layer && layer < (int)_layers.size());
    string pat = get_name(_layers[layer]->_pattern_name, "hatch1.png");
    assert(get_layer(layer));
    string pap = get_name(get_layer(layer)->_paper_name, "basic_paper.png");
@@ -85,7 +85,7 @@ void
 HatchingTX::set_paper_texture(int layer_num, string file_name)
 {
    // screen out the crazies
-   assert(_layers.valid_index(layer_num));
+   assert(0 <= layer_num && layer_num < (int)_layers.size());
    layer_hatching_t* layer = get_layer(layer_num);
    assert(layer);
 
@@ -108,7 +108,7 @@ HatchingTX::set_paper_texture(int layer_num, string file_name)
       return;
 
    // see if this texture is already loaded by another layer
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       layer_hatching_t* layer_i = get_layer(i);
       assert(layer_i);
       if (layer_i->_mode==1)
@@ -265,7 +265,7 @@ HatchingTX::activate_layer_textures()
 {
    GLSLShader_Layer_Base::activate_layer_textures();
 
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       layer_hatching_t* layer = get_layer(i);
       if ((layer->_mode == 1) &&
           (layer->_paper_tex != -1) &&
@@ -301,7 +301,7 @@ HatchingTX::cleanup_unused_paper_textures(int tex_stage)
       return;
 
    // cleanup unused textures
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       if (get_layer(i)->_paper_tex == tex_stage) {
          return; // texture is still in use
       }

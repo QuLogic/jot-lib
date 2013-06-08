@@ -28,6 +28,8 @@
 #include "gtex/tone_shader.H"
 #include "gtex/util.H"
 
+#include <vector>
+
 /*****************************************************************
  * layer_base_t:
  *
@@ -208,7 +210,7 @@ class GLSLShader_Layer_Base : public GLSLShader {
    // base coat:
    SolidColorTexture* _solid;
 
-   ARRAY<layer_base_t*> _layers;
+   vector<layer_base_t*> _layers;
 
    // keeps track of used texture stages
    // the lowest free stage is determined by TexUnit::PATTERN_TEX

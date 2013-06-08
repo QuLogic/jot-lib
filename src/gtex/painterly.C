@@ -52,7 +52,7 @@ Painterly::Painterly(Patch* p) :
    _paper_name("")
 {
    for (int i=0; i<MAX_LAYERS; i++)
-      _layers += new layer_paint_t();
+      _layers.push_back(new layer_paint_t());
 
    set_draw_sils(true);
    set_sil_width(3.0f);
@@ -74,7 +74,7 @@ Painterly::init_default(int layer)
    // sets the hatching and paper textures for the given layer,
    // but only if they are currently not assigned textures.
 
-   assert(_layers.valid_index(layer));
+   assert(0 <= layer && layer < (int)_layers.size());
    string pat = get_name(_layers[layer]->_pattern_name, "paint1.png");
    assert(get_layer(layer));
    string pap = get_name(_paper_name, "basic_paper.png");

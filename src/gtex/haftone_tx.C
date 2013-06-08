@@ -128,7 +128,7 @@ Halftone_TX::Halftone_TX(Patch* p) :
    _use_alpha_transitions(false)
 {
    for (int i=0; i<MAX_LAYERS; i++)
-      _layers += new halftone_layer_t();
+      _layers.push_back(new halftone_layer_t());
 
    // setup a default style here
    _layers[0]->_mode = 2; //procedural dots;
@@ -144,7 +144,7 @@ Halftone_TX::~Halftone_TX()
 halftone_layer_t*
 Halftone_TX::get_layer(int l) const
 {
-   assert(_layers.valid_index(l));
+   assert(0 <= l && l < (int)_layers.size());
    return dynamic_cast<halftone_layer_t*>(_layers[l]);
 }
 
@@ -332,7 +332,7 @@ Halftone_TX::activate_layer_textures()
 {
    GLSLShader_Layer_Base::activate_layer_textures();
 
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       //main tone correction map
       halftone_layer_t* layer = get_layer(i);
       if (layer->_use_tone_correction) {
@@ -984,8 +984,8 @@ Halftone_TX::enable_tone_correction(int layer_num)
    // look if the tone correction map has been already created for
    // this layer's texture stage somewhere else
    bool used = false;
-   for (int i=0; i<_layers.num(); i++) {
-      if (i == layer_num)
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
+      if ((int)i == layer_num)
          continue;
       halftone_layer_t* layer_i = get_layer(i);
       assert(layer_i);
@@ -1068,7 +1068,7 @@ Halftone_TX::enable_lod_only_correction(int layer_num)
    // look if the r function map has been already creaed for
    // this layer's texture stage somewhere else
    bool used = false;
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       halftone_layer_t* layer_i = get_layer(layer_num);
       if (layer_i->_use_lod_only &&
           layer_i->_pattern_tex_stage == layer->_pattern_tex_stage) {
@@ -1123,7 +1123,7 @@ Halftone_TX::disable_tone_correction(int layer_num)
    GLint tex_stage = layer->_tone_correction_tex_stage;
 
    bool used = false;
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       halftone_layer_t* layer_i = get_layer(i);
       if (layer_i->_use_tone_correction &&
           layer_i->_tone_correction_tex_stage == tex_stage)
@@ -1160,7 +1160,7 @@ Halftone_TX::disable_lod_only_correction(int layer_num)
    GLint tex_stage = layer->_r_function_tex_stage;
 
    bool used = false;
-   for (int i=0; i<_layers.num(); i++) {
+   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
       halftone_layer_t* layer_i = get_layer(i);
       if (layer_i->_use_lod_only &&
           layer_i->_r_function_tex_stage == tex_stage)

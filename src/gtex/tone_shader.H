@@ -256,7 +256,7 @@ class ToneShader : public GLSLShader {
    float        _ratio_scale;
    float        _global_edge_len;
 
-   ARRAY<OccluderData> _occluders;
+   vector<OccluderData> _occluders;
 
  public:
    tone_layer_t _layer[4];

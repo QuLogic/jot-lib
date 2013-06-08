@@ -310,9 +310,9 @@ ToneShader::get_variable_locs()
       get_uniform_loc(p + "].s1",         _s1_loc        [i]);
    }
 
-   for (int i=0; i<_occluders.num(); i++) {
+   for (vector<OccluderData>::size_type i=0; i<_occluders.size(); i++) {
       char tmp[50];
-      sprintf(tmp, "occluder[%d", i);
+      sprintf(tmp, "occluder[%zu", i);
       string p = tmp;
       get_uniform_loc(p+"].is_active",_occluders[i]._is_active_loc);
       get_uniform_loc(p+"].xf",       _occluders[i]._xf_loc);
@@ -342,7 +342,7 @@ ToneShader::populate_occluders()
              
       // populate the occluder array
       BMESH_list meshes = BMESH_list(DRAWN);
-      for (int i=0; i<meshes.num() && _occluders.num() < MAX_OCCLUDERS; i++) {
+      for (int i=0; i<meshes.num() && _occluders.size() < MAX_OCCLUDERS; i++) {
          BMESHptr m = meshes[i];
          if (mesh() == m || ! m->occluder())
             continue;
@@ -372,12 +372,12 @@ ToneShader::populate_occluders()
          Wvec bbdim = bb.dim();
          o._softness =
             m->shadow_softness() * max(max(bbdim[0],bbdim[1]),bbdim[2]);
-         _occluders += o;
+         _occluders.push_back(o);
       }
    }
    // fill out the rest of the array w/ disabled occluders:
-   while (_occluders.num() < MAX_OCCLUDERS)
-      _occluders += OccluderData();
+   while (_occluders.size() < MAX_OCCLUDERS)
+      _occluders.push_back(OccluderData());
 }
 
 bool
@@ -418,7 +418,7 @@ ToneShader::set_uniform_variables() const
    glUniform1i(_is_reciever_loc, mesh()->reciever());
 
    // send occluder data
-   for (int i=0; i<_occluders.num(); i++) {
+   for (vector<OccluderData>::size_type i=0; i<_occluders.size(); i++) {
       glUniform1i(_occluders[i]._is_active_loc,
                   _occluders[i]._is_active);
       glUniformMatrix4fv(_occluders[i]._xf_loc,

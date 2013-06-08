@@ -173,9 +173,6 @@ VertUVTexture::draw(CVIEWptr& v)
    //   (expensive, but OK in a display list):
    Bvert_list verts = _patch->cur_verts().filter(PrimaryVertFilter());
 
-   ARRAY<Wvec> norms;
-   UV_attrib attr;
-
    glBegin(GL_LINES);
    for (int i=0; i<verts.num(); i++) {
       CBvert* bv = verts[i];
