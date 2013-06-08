@@ -42,19 +42,19 @@ BBOX::points(
 {
    pts.clear();
    if (_valid) {
-      pts.realloc(8);
+      pts.resize(8);
       Wvec d = dim();
       Wvec dx(d[0],    0,    0);
       Wvec dy(   0, d[1],    0);
       Wvec dz(   0,    0, d[2]);
-      pts += _min;
-      pts += (_min + dx);
-      pts += (_min + dy);
-      pts += (_min + dz);
-      pts += (_max - dx);
-      pts += (_max - dy);
-      pts += (_max - dz);
-      pts += _max;
+      pts[0] = _min;
+      pts[1] = (_min + dx);
+      pts[2] = (_min + dy);
+      pts[3] = (_min + dz);
+      pts[4] = (_max - dx);
+      pts[5] = (_max - dy);
+      pts[6] = (_max - dz);
+      pts[7] = _max;
    }
    return _valid;
 }
@@ -239,7 +239,7 @@ BBOX::update(
    CWpt_list &pts
    )
 {
-   for (int j = 0; j < pts.num(); j++)
+   for (Wpt_list::size_type j = 0; j < pts.size(); j++)
       update(pts[j]);
    return *this;
 }
@@ -257,7 +257,7 @@ BBOX::ndcz_bounding_box(
    // convert to ndcz points
    vector<NDCZpt> ndcz_list;
    vector<NDCZpt>::size_type j;
-   for (int i = 0; i < point_list.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < point_list.size(); i++) {
       ndcz_list.push_back(NDCZpt(point_list[i], obj_to_ndc));
    }
 
@@ -291,7 +291,7 @@ BBOX2D::BBOX2D(
    GELptr gel((GEL *)&*g);// sigh.. get_bb isn't const cuz it caches
    Wpt_list pts;
    gel->bbox(recurse).points(pts);
-   for (int i = 0; i < pts.num(); i++)
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++)
       update(pts[i]);
 }
 
@@ -413,7 +413,7 @@ BBOX2D::dist(
 BBOX2D &
 BBOX2D::operator+=(CXYpt_list &pts)
 {
-   for (int i = 0; i < pts.num(); i++)
+   for (XYpt_list::size_type i = 0; i < pts.size(); i++)
       (void) update(pts[i]);
    return *this;
 }
@@ -427,7 +427,8 @@ BBOX2D::operator+=(CXYpt_list &pts)
 //
 
 BBOXpix &
-BBOXpix::update(CPIXEL &p) {
+BBOXpix::update(CPIXEL &p)
+{
   if (!_valid) {
     _min = p;
     _max = p;
@@ -443,7 +444,8 @@ BBOXpix::update(CPIXEL &p) {
 }
 
 bool
-BBOXpix::contains(CPIXEL &p) const { 
+BBOXpix::contains(CPIXEL &p) const
+{
   if (!_valid) {
     return false;
   } else {
@@ -453,7 +455,8 @@ BBOXpix::contains(CPIXEL &p) const {
 }
 
 bool
-BBOXpix::overlaps(CBBOXpix &bbox) const { 
+BBOXpix::overlaps(CBBOXpix &bbox) const
+{
   if (!_valid){
     return false;
   } else {
@@ -463,9 +466,9 @@ BBOXpix::overlaps(CBBOXpix &bbox) const {
 }
 
 double
-BBOXpix::dist(CPIXEL   &p) const {
+BBOXpix::dist(CPIXEL   &p) const
+{
   if (!_valid) return -1;
-
 
   double dist = 1e9;
   
@@ -505,8 +508,9 @@ BBOXpix::dist(CPIXEL   &p) const {
 
 
 BBOXpix &
-BBOXpix::operator+=(CPIXEL_list &pts) {
-  for (int i = 0; i < pts.num(); i++)
+BBOXpix::operator+=(CPIXEL_list &pts)
+{
+  for (PIXEL_list::size_type i = 0; i < pts.size(); i++)
     (void) update(pts[i]);
   return *this;
 }

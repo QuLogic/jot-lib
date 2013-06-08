@@ -382,12 +382,11 @@ mlib::normal_to_ndcz(CWpt& p, CWvec& world_normal)
 NDCZvec
 mlib::NDCZpt_list::tan(int i) const 
 {
-   NDCZpt *ar = _array;
-   const int n=num()-1;
+   const int n=size()-1;
    if (i<0 || i>n || n<1) return NDCZvec();
-   if (i==0) return (ar[1]-ar[  0]).normalized();
-   if (i==n) return (ar[n]-ar[n-1]).normalized();
-   return ((ar[i+1]-ar[i]).normalized() + (ar[i]-ar[i-1]).normalized()).normalized();
+   if (i==0) return (at(1)-at(  0)).normalized();
+   if (i==n) return (at(n)-at(n-1)).normalized();
+   return ((at(i+1)-at(i)).normalized() + (at(i)-at(i-1)).normalized()).normalized();
 }
 
 
@@ -397,12 +396,12 @@ mlib::NDCZpt_list::interpolate(double s, NDCZvec *tan, int*segp, double*tp) cons
    int seg;
    double t;
    interpolate_length(s, seg, t);
-   const NDCZvec v = _array[seg+1]-_array[seg];
+   const NDCZvec v = at(seg+1) - at(seg);
    if (tan)  *tan  = v.normalized();
    if (segp) *segp = seg;
    if (tp)   *tp   = t;
 
-   return _array[seg]+v*t;
+   return at(seg) + v * t;
 }
 
 void         
@@ -419,7 +418,7 @@ mlib::NDCZpt_list::interpolate_length(double s, int &seg, double &t) const
    // here. This check will not catch all cases where the
    // partial length array is out of date, but it will catch
    // many of them
-   if (_partial_length.num() != _num) {
+   if (_partial_length.size() != size()) {
       cerr << "NDCZpt_list::interpolate_length: "
            << "Warning: partial lengths are out of date."
            << endl;
@@ -434,12 +433,12 @@ mlib::NDCZpt_list::interpolate_length(double s, int &seg, double &t) const
       return; 
    }
    if (val >= length()) { 
-      seg = _num-2; 
+      seg = size()-2;
       t = 1; 
       return; 
    }
 
-   int l=0, r=_num-1, m;
+   int l=0, r=size()-1, m;
    while ((m = (l+r) >> 1) != l) {
       if (val < _partial_length[m])       
          r = m;
@@ -453,8 +452,8 @@ NDCpt_list&
 mlib::NDCpt_list::operator=(CPIXEL_list& P) 
 {
    clear();
-   for (int i=0; i<P.num(); i++)
-      add(NDCpt(P[i]));
+   for (PIXEL_list::size_type i=0; i<P.size(); i++)
+      push_back(NDCpt(P[i]));
    update_length();
    return *this;
 }
@@ -463,8 +462,8 @@ NDCpt_list&
 mlib::NDCpt_list::operator=(CXYpt_list& X) 
 {
    clear();
-   for (int i=0; i<X.num(); i++)
-      add(NDCpt(X[i]));
+   for (XYpt_list::size_type i=0; i<X.size(); i++)
+      push_back(NDCpt(X[i]));
    update_length();
    return *this;
 }
@@ -473,8 +472,8 @@ NDCpt_list&
 mlib::NDCpt_list::operator=(CNDCZpt_list& N) 
 {
    clear();
-   for (int i=0; i<N.num(); i++)
-      add(NDCpt(N[i]));
+   for (NDCZpt_list::size_type i=0; i<N.size(); i++)
+      push_back(NDCpt(N[i]));
    update_length();
    return *this;
 }
@@ -530,8 +529,8 @@ PIXEL_list&
 mlib::PIXEL_list::operator=(CWpt_list& X) 
 {
    clear();
-   for (int i=0; i<X.num(); i++)
-      add(PIXEL(X[i]));
+   for (Wpt_list::size_type i=0; i<X.size(); i++)
+      push_back(PIXEL(X[i]));
    update_length();
    return *this;
 }
@@ -540,8 +539,8 @@ PIXEL_list&
 mlib::PIXEL_list::operator=(CXYpt_list& X) 
 {
    clear();
-   for (int i=0; i<X.num(); i++)
-      add(PIXEL(X[i]));
+   for (XYpt_list::size_type i=0; i<X.size(); i++)
+      push_back(PIXEL(X[i]));
    update_length();
    return *this;
 }
@@ -550,8 +549,8 @@ PIXEL_list&
 mlib::PIXEL_list::operator=(CNDCpt_list& N) 
 {
    clear();
-   for (int i=0; i<N.num(); i++)
-      add(PIXEL(N[i]));
+   for (NDCpt_list::size_type i=0; i<N.size(); i++)
+      push_back(PIXEL(N[i]));
    update_length();
    return *this;
 }
@@ -560,8 +559,8 @@ PIXEL_list&
 mlib::PIXEL_list::operator=(CNDCZpt_list& N) 
 {
    clear();
-   for (int i=0; i<N.num(); i++)
-      add(PIXEL(N[i]));
+   for (NDCZpt_list::size_type i=0; i<N.size(); i++)
+      push_back(PIXEL(N[i]));
    update_length();
    return *this;
 }
@@ -580,18 +579,18 @@ mlib::Wpt_list::project(XYpt_list& ret) const
    if (empty())
       return 1; // "success"
 
-   // Resize the output list now (Note: _num != 0):
-   ret.realloc(_num);
+   // Resize the output list now (Note: size() != 0):
+   ret.reserve(size());
 
    // Fill it up w/ projected points, 
    // ensuring all points lie in the frustum:
-   for (int k=0; k<_num; k++) {
-      NDCZpt ndcz = NDCZpt(_array[k]);
+   for (Wpt_list::size_type k=0; k<size(); k++) {
+      NDCZpt ndcz = NDCZpt(at(k));
       if (!ndcz.in_frustum()) {
          ret.clear();
          return 0;      // failure
       }
-      ret.add(NDCpt(ndcz));
+      ret.push_back(NDCpt(ndcz));
    }
    return 1;    // success
 }
@@ -620,10 +619,10 @@ mlib::Wpt_list::closest_vertex(CPIXEL& p) const
 
    int ret = -1; // return value: index of closest vertex
    double min_d=0;
-   for (int i=0; i<_num; i++) {
+   for (Wpt_list::size_type i=0; i<size(); i++) {
       // skip points not in the view frustum
-      if (_array[i].in_frustum()) {
-         double d = PIXEL(_array[i]).dist(p);
+      if (at(i).in_frustum()) {
+         double d = PIXEL(at(i)).dist(p);
          if (ret < 0 || d < min_d) {
             min_d = d;
             ret = i;
@@ -643,14 +642,14 @@ mlib::Wpt_list::get_best_fit_plane(Wplane& P) const
    //    Vol. 5, pp 231-232
 
    // If less than 3 points let the caller deal with it:
-   if (_num < 3)
+   if (size() < 3)
       return 0;
 
    // Find vector N, normal of "best-fit" plane
    Wvec N;
-   for (int k=0; k<_num; k++) {
-      Wpt i = _array[k];
-      Wpt j = _array[(k+1)%_num];
+   for (Wpt_list::size_type k=0; k<size(); k++) {
+      Wpt i = at(k);
+      Wpt j = at((k+1)%size());
       N += Wvec(
          (i[1] - j[1])*(i[2] + j[2]),
          (i[2] - j[2])*(i[0] + j[0]),
@@ -690,13 +689,13 @@ mlib::Wpt_list::get_plane(Wplane &P, double len_scale) const
    //
    // "Close" is defined relative to the length of the
    // polyline. We need the partial lengths to be updated.
-   if (_num != _partial_length.num()) {
+   if (size() != _partial_length.size()) {
       cerr << "Wpt_list::get_plane: Error: lengths are not updated" << endl;
       return 0;
    }
    double thresh = length()*len_scale;
-   for (int k=0; k<_num; k++)
-      if (ret.dist(_array[k]) > thresh)
+   for (Wpt_list::size_type k=0; k<size(); k++)
+      if (ret.dist(at(k)) > thresh)
          return 0;
 
    // It's good. Now record the plane:

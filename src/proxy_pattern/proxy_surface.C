@@ -145,7 +145,7 @@ get_pixels(CBvert_list& verts, ProxySurface* p)
 {
    PIXEL_list ret(verts.num());
    for (int i=0; i<verts.num(); i++) {
-      ret += PixelsData::get_pix(verts[i], p);
+      ret.push_back(PixelsData::get_pix(verts[i], p));
    }
    return ret;
 }
@@ -644,10 +644,10 @@ ProxySurface::baseUVpt(Bface* f)
    UVpt uva, uvb, uvc, uvd;
    UVdata::get_quad_uvs(f, uva, uvb, uvc, uvd);
    UVpt_list uvpts;
-   uvpts += uva;
-   uvpts += uvb;
-   uvpts += uvc;
-   uvpts += uvd;
+   uvpts.push_back(uva);
+   uvpts.push_back(uvb);
+   uvpts.push_back(uvc);
+   uvpts.push_back(uvd);
    return UVpt(uvpts.min_val(0),uvpts.min_val(1));
 }
 
@@ -662,10 +662,10 @@ ProxySurface::baseUVpt(Bface* f, UVpt& uv)
          UVpt uva, uvb, uvc, uvd;
          UVdata::get_quad_uvs(f, uva, uvb, uvc, uvd);
          UVpt_list uvpts;
-         uvpts += uva;
-         uvpts += uvb;
-         uvpts += uvc;
-         uvpts += uvd;
+         uvpts.push_back(uva);
+         uvpts.push_back(uvb);
+         uvpts.push_back(uvc);
+         uvpts.push_back(uvd);
          uv[0] = uvpts.min_val(0);
          uv[1] = uvpts.min_val(1);
          return true;

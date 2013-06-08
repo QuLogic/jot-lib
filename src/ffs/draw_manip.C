@@ -186,7 +186,7 @@ DrawManip::down(CEvent& e, State*& s)
       if (pix[0].dist(_down_pix) < 8) {
          _down = true;
          _first = true;
-      } else if (pix.last().dist(_down_pix) < 8) {
+      } else if (pix.back().dist(_down_pix) < 8) {
          _down = true;
          _first = false;
       }

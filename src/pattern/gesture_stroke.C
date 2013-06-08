@@ -30,7 +30,7 @@ GestureStroke::copy(GestureCell* target_cell, const UVpt& offset, bool stretch) 
 {
   const PIXEL_list& src_pts = _gesture->pts();
   const vector<double>& src_press = _gesture->pressures();
-  int nb_pts = src_pts.num();
+  PIXEL_list::size_type nb_pts = src_pts.size();
   if (nb_pts==0) return;
   
   if (!_bbox.valid()) return;
@@ -47,7 +47,7 @@ GestureStroke::copy(GestureCell* target_cell, const UVpt& offset, bool stretch) 
     inv_width = 1.0/target_cell->scale();
     inv_height = 1.0/target_cell->scale();
   }
-  for (int i=0 ; i<nb_pts ; i++){
+  for (PIXEL_list::size_type i=0; i<nb_pts; i++) {
     VEXEL src_vec (src_pts[i]-_bbox.min());
     UVpt src_uv_pt (src_vec[0]*inv_width, src_vec[1]*inv_height);
     
@@ -67,7 +67,7 @@ GestureStroke::synthesize(GestureCell* target_cell, double target_pressure, doub
 {
   const PIXEL_list& ref_pts = _gesture->pts();
   const vector<double>& ref_press = _gesture->pressures();
-  int nb_pts = ref_pts.num();
+  PIXEL_list::size_type nb_pts = ref_pts.size();
   if (nb_pts==0) return;
   
   if (!_bbox.valid()) return;
@@ -76,7 +76,7 @@ GestureStroke::synthesize(GestureCell* target_cell, double target_pressure, doub
   vector<double> target_pressures;
 
   double inv_scale = 1.0/target_cell->scale();
-  for (int i=0 ; i<nb_pts ; i++){
+  for (PIXEL_list::size_type i=0; i<nb_pts; i++) {
     // first express the stroke point in the reference path's frame
     UVpt ref_pt ((ref_pts[i][0]-ref_pos[0]), 
  		 (ref_pts[i][1]-ref_pos[1]));

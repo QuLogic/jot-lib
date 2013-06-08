@@ -32,6 +32,8 @@
 #include "mlib/nearest_pt.H"
 #include "std/support.H"
 
+#include <vector>
+
 namespace mlib {
 
 /*!
@@ -223,13 +225,13 @@ class Point3list : public Pointlist<L,P,V,S> {
       //! points.
       Point3list(int max=16) : Pointlist<L,P,V,S>(max) { }
       
-      //! \brief Constructor that creates a list containing the points in ARRAY
+      //! \brief Constructor that creates a list containing the points in vector
       //! p.
-      Point3list(const ARRAY<P>& p) : Pointlist<L,P,V,S>(p) { }
+      Point3list(const vector<P>& p) : Pointlist<L,P,V,S>(p) { }
       
-      //! \brief Constructor that creates a list containing the points in ARRAY
+      //! \brief Constructor that creates a list containing the points in vector
       //! p transformed by matrix t.
-      Point3list(const ARRAY<P>& p, const M& t) : Pointlist<L,P,V,S>(p) {
+      Point3list(const vector<P>& p, const M& t) : Pointlist<L,P,V,S>(p) {
          xform(t);
       }
       
@@ -265,8 +267,8 @@ class Point3list : public Pointlist<L,P,V,S> {
       
       //@}
 
-      using Pointlist<L,P,V,S>::num;
-      using Pointlist<L,P,V,S>::last;
+      using Pointlist<L,P,V,S>::size;
+      using Pointlist<L,P,V,S>::back;
       using Pointlist<L,P,V,S>::pt;
       using Pointlist<L,P,V,S>::update_length;
    

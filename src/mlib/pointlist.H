@@ -27,6 +27,8 @@
 
 #include "std/support.H"
 
+#include <vector>
+
 namespace mlib {
 
 /*!
@@ -45,11 +47,11 @@ namespace mlib {
  *
  */
 template <class L,class P,class V,class S>
-class Pointlist : public ARRAY<P> {
+class Pointlist : public vector<P> {
    
    protected:
    
-      ARRAY<double>    _partial_length;
+      vector<double>    _partial_length;
 
    public:
    
@@ -57,10 +59,10 @@ class Pointlist : public ARRAY<P> {
       //@{
  
       //! \brief Construct a list with no points but space for m points.
-      Pointlist(int m=16) : ARRAY<P>(m), _partial_length(0) { }
+      Pointlist(int m=16) : vector<P>(), _partial_length(0) { vector<P>::reserve(m); }
       
       //! \brief Construct a list using the passed in array of points.
-      Pointlist(const ARRAY<P> &p) : ARRAY<P>(p), _partial_length(0) {
+      Pointlist(const vector<P> &p) : vector<P>(p), _partial_length(0) {
          update_length();
       }
       
@@ -87,7 +89,7 @@ class Pointlist : public ARRAY<P> {
       //! segment.  At internal vertices it is the average of
       //! the two segment directions.
       V tan(int i) const {
-         const int n = num()-1;
+         const int n = (int)size()-1;
          if (i<0 || i>n || n<1)
             return V::null();
          if (i==0) return (vec(0))  .normalized();
@@ -103,7 +105,7 @@ class Pointlist : public ARRAY<P> {
       //! \brief It's considered a closed loop if the first and last point
       //! are the same.
       bool is_closed() const {
-         return (num() > 2 && ((*this)[0] == last()));
+         return (size() > 2 && ((*this)[0] == back()));
       }
       
       //! \brief Returns true if the points fall in a straight line.
@@ -144,7 +146,7 @@ class Pointlist : public ARRAY<P> {
       P sum() const;
       
       //! \brief Computes the average of all the point sin the list.
-      P average () const { return empty() ? P::Origin() : sum()/num(); }
+      P average () const { return empty() ? P::Origin() : sum()/size(); }
       
       //! \brief Computes the distance from point p to the nearest point on
       //! segment k in the list.
@@ -179,13 +181,13 @@ class Pointlist : public ARRAY<P> {
       
       //! \brief Net length along the polyline at vertex i.
       double  partial_length(int i) const {
-         return _partial_length.valid_index(i) ? _partial_length[i] : 0;
+         return (0 <= i && i < (int)_partial_length.size()) ? _partial_length[i] : 0;
       }
       
-      double  length() const { return _partial_length.last(); }
+      double  length() const { return _partial_length.back(); }
       
       double avg_len() const
-         { return (num() > 1) ? length()/(num()-1) : 0; }
+         { return (size() > 1) ? length()/(size()-1) : 0; }
       
       //@}
        
@@ -220,7 +222,8 @@ class Pointlist : public ARRAY<P> {
       //! \brief Translate all points in polyline by given vector.
       //! \param[in] vec Vector that represents translation to be applied.
       void  translate   (const V& vec) {
-         for (int i = 0; i < num(); i++) (*this)[i] = (*this)[i] + vec;
+         for (typename vector<P>::size_type i = 0; i < size(); i++)
+            (*this)[i] = (*this)[i] + vec;
       }
       
       //! \brief Resample with the desired number of segments:
@@ -238,29 +241,39 @@ class Pointlist : public ARRAY<P> {
       void    append          (Pointlist<L,P,V,S> *poly);
       //! \brief Prepends all the points in \p poly onto the list.
       void    prepend         (Pointlist<L,P,V,S> *poly);
-      
+
+      //! \brief Add an element if it doesn't already exist in the list.
+      bool add_uniquely(const P& val) {
+         typename vector<P>::iterator it;
+         it = std::find(vector<P>::begin(), vector<P>::end(), val);
+         if (it != vector<P>::end()) {
+            vector<P>::push_back(val);
+            return true;
+         } else {
+            return false;
+         }
+      }
+
       //@}
       
-      //! \name Overriden ARRAY Class Virtual Methods
+      //! \name Overriden vector Class Virtual Methods
       //@{
          
       virtual void clear() {
-         ARRAY<P>::clear();
+         vector<P>::clear();
          _partial_length.clear();
       }
          
       virtual void shift(int p) {
-         ARRAY<P>::shift(p);
+         std::rotate(vector<P>::begin(), vector<P>::begin() + p, vector<P>::end());
          update_length();
       }
       
       //@}
 
-      using ARRAY<P>::num;
-      using ARRAY<P>::empty;
-      using ARRAY<P>::last;
-      using ARRAY<P>::valid_index;
-
+      using vector<P>::size;
+      using vector<P>::empty;
+      using vector<P>::back;
 };
 
 } // namespace mlib

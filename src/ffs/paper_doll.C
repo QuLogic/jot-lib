@@ -489,8 +489,8 @@ PAPER_DOLL::init(CBcurve_list& contour)
       return false;
    }
    Wpt_list pts = contour.get_chain().get_verts().pts();
-   if (!(pts.num() == 4 || pts.num() == 5)) {
-      err_adv(debug, "PAPER_DOLL::init: can't do %d-gon", pts.num());
+   if (!(pts.size() == 4 || pts.size() == 5)) {
+      err_adv(debug, "PAPER_DOLL::init: can't do %d-gon", pts.size());
       return false;
    }
 
@@ -511,7 +511,7 @@ PAPER_DOLL::init(CBcurve_list& contour)
    // around plane normal:
    err_adv(debug, "contour winding number: %f", pts.winding_number(o, n));
    if (pts.winding_number(o, n) > 1) {
-      pts.reverse();
+      std::reverse(pts.begin(), pts.end());
    }
 
    // create the primitive

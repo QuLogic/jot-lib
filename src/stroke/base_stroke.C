@@ -1543,21 +1543,18 @@ BaseStroke::compute_overdraw()
 
    _overdraw_stroke->clear();
 
-
    NDCZpt_list pts(_verts.num());
 
-   for (i=0; i < _verts.num(); i++) 
-   {
+   for (i=0; i < _verts.num(); i++) {
       assert(_verts[i]._good == true);
-      pts += _verts[i]._base_loc;
+      pts.push_back(_verts[i]._base_loc);
    }
 
    pts.update_length();
    double factor = (_scale*max(_overdraw_stroke->get_angle(),1.0f));
    _overdraw_stroke->set_max_t(pts.length()/factor);
    _overdraw_stroke->set_min_t(0);
-   for (i=0; i < pts.num(); i++) 
-   {  
+   for (NDCZpt_list::size_type i=0; i < pts.size(); i++) {
       _overdraw_stroke->add(pts.partial_length(i)/factor, pts[i]);
    }
 }
@@ -4520,9 +4517,10 @@ BaseStroke::generate_offsets(
 {
    assert(_verts.num()>1);
 
-   assert(pts.num() == (int)press.size());
+   assert(pts.size() == press.size());
 
-   int j,i;
+   int i;
+   NDCZpt_list::size_type j;
    double t_guess, t_closest;
    BaseStrokeVertex v;
    BaseStrokeOffsetLISTptr ol = new BaseStrokeOffsetLIST;
@@ -4544,8 +4542,7 @@ BaseStroke::generate_offsets(
    double prev_o_pos = 0.0;  // for comparing distances
                              // between successive offsets
 
-   for (j=0; j<pts.num(); j++)
-   {
+   for (j=0; j<pts.size(); j++) {
       if (j>0 && prev_p == pts[j])
       {
          err_mesg(ERR_LEV_WARN, "BaseStroke::generate_offsets() - **Duplicate input pts** Dropping offset!");
@@ -4636,10 +4633,9 @@ BaseStroke::closest(
          pts.clear();
       }
 
-      pts += NDCpt(v._loc);
+      pts.push_back(NDCpt(v._loc));
 
-      if ((pts.num()>0) && (transition) && (v._trans_type == BaseStrokeVertex::TRANS_CLIPPED))
-      {
+      if (!pts.empty() && transition && (v._trans_type == BaseStrokeVertex::TRANS_CLIPPED)) {
          NDCpt new_pt;
          double new_dist;
          int foo;

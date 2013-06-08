@@ -156,9 +156,9 @@ avg_dist(CWpt_list& p, mlib::CWpt& o)
 {
    if (p.empty()) return 0;
    double ret = 0;
-   for (int i=0; i<p.num(); i++)
+   for (Wpt_list::size_type i=0; i<p.size(); i++)
       ret += o.dist(p[i]);
-   return ret/p.num();
+   return ret/p.size();
 }
 
 inline double 

@@ -114,7 +114,7 @@ ProxyTexture::draw_samples(CVIEWptr& v)
    Wpt_list pts;
    for (uint i=0; i < samples.size(); ++i) {
       if (samples[i].get_weight() > 0.0)
-         pts += samples[i].get_pos();
+         pts.push_back(samples[i].get_pos());
    }
    GL_VIEW::draw_pts(pts,Color::red,1.0,10);
 }
@@ -198,15 +198,13 @@ ProxyTexture::draw_final(CVIEWptr& v)
                _animation_on = false;
             }
          }
+
          Wpt_list tmp;
-
-
-
          for (uint i=0; i < _old_samples.size(); ++i) {
             if (_old_samples[i].get_weight() > 0.0)
-               tmp += (!_tmp_debug_sample.empty()) ?
+               tmp.push_back(!_tmp_debug_sample.empty() ?
                   Wpt(XYpt(_tmp_debug_sample[i])) :
-                  Wpt(XYpt(_old_samples[i].get_pix()));
+                  Wpt(XYpt(_old_samples[i].get_pix())));
          }
          GL_VIEW::draw_pts(tmp,Color::blue1,1.0,10);
       }
@@ -324,10 +322,9 @@ void
 ProxyTexture::move_old_samples(double pos)
 {
    _tmp_debug_sample.clear();   
-   for(uint i=0; i < _old_samples.size(); ++i)
-      {        
-         _tmp_debug_sample += get_new_pixel(_old_samples[i].get_pix(), pos);
-      }
+   for (vector<DynamicSample>::size_type i=0; i < _old_samples.size(); ++i) {
+      _tmp_debug_sample.push_back(get_new_pixel(_old_samples[i].get_pix(), pos));
+   }
 }
 
 /* end of file proxy_texture.C */

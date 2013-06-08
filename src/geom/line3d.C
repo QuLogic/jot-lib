@@ -55,14 +55,14 @@ LINE3D::~LINE3D()
 void
 LINE3D::add(CWpt& p)
 {
-   _pts += p;
+   _pts.push_back(p);
    _pts.update_length();
 }
 
 void 
 LINE3D::set(int i, CWpt& p)
 {
-   assert(_pts.valid_index(i));
+   assert(0 <= i && i < (int)_pts.size());
    _pts[i] = p;
    _pts.update_length();
 }
@@ -70,7 +70,7 @@ LINE3D::set(int i, CWpt& p)
 void
 LINE3D::add(CWpt_list& pts)
 {
-   _pts.operator+=(pts);
+   _pts.insert(_pts.end(), pts.begin(), pts.end());
    _pts.update_length();
 }
 
@@ -188,7 +188,7 @@ LINE3D::draw_pts()
       return;
 
    glBegin(num()==1 ? GL_POINTS : GL_LINE_STRIP);
-   for (int k=0; k<_pts.num(); k++)
+   for (Wpt_list::size_type k=0; k<_pts.size(); k++)
       glVertex3dv(_pts[k].data());
    glEnd();
 }

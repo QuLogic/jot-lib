@@ -35,7 +35,7 @@ public:
   virtual ~PathCell(){}
   
   // derived accessors
-  virtual bool valid () { return (_path && _path->pts().num()>=2 && _thickness>0.0); } 
+  virtual bool valid () { return (_path && _path->pts().size()>=2 && _thickness>0.0); }
   virtual double scale() const { return _scale * _global_scale; }
   virtual int nb_strokes()                  { return _strokes.size(); }
   virtual CGESTUREptr& gesture(int i) const { return _strokes[i].gesture(); }

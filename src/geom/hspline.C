@@ -64,7 +64,7 @@ CRSpline::set(CWpt_list& p, const vector<double> &u)
 {
    clear();
 
-   if (p.num() != (int)u.size()) {
+   if (p.size() != u.size()) {
       err_msg("CRSpline::set: points and parameter vals don't match");
       return;
    }
@@ -75,7 +75,7 @@ CRSpline::set(CWpt_list& p, const vector<double> &u)
 void 
 CRSpline::add(CWpt& p, double u)
 {
-   _pts += p;
+   _pts.push_back(p);
    _u.push_back(u);
 
    clear(0);

@@ -59,7 +59,7 @@ FFS::get_draw_plane(CPIXEL_list& p, Wvec& t, Wvec& b)
    err_adv(debug, "FFS::get_draw_plane: no axis");
 
    VIEWptr view = VIEW::peek();
-   for (int i=0; i<p.num(); i++) {
+   for (PIXEL_list::size_type i=0; i<p.size(); i++) {
       BMESHray ray(p[i]);
       view->intersect(ray);
       if (ray.success() && ray_geom(ray, FLOOR::null)) {

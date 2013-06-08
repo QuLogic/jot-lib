@@ -109,7 +109,7 @@ class GESTURE : public GEL {
   /// first pixel in the gesture
    mlib::PIXEL  start()               const { return _pts[0]; }
   /// last pixel in the gesture
-   mlib::PIXEL  end()                 const { return _pts.last(); }
+   mlib::PIXEL  end()                 const { return _pts.back(); }
   /// centroid of the gesture computed as the average
    mlib::PIXEL  center()              const { return _pts.average(); }
   /// vector from starting point to endpoint
@@ -142,7 +142,7 @@ class GESTURE : public GEL {
 
    mlib::PIXELline  endpt_line() const { return mlib::PIXELline(start(), end()); }
    mlib::PIXEL_list endpt_seg()  const {
-      mlib::PIXEL_list ret; ret += start(); ret += end(); return ret;
+      mlib::PIXEL_list ret; ret.push_back(start()); ret.push_back(end()); return ret;
    }
 
   /// does gesture intersect itself?

@@ -396,9 +396,9 @@ Bcurve::Bcurve(
       p1 = b2->map();
       assert(p0 && p1);
    } else {
-      assert(pts.num() > 1);
-      p0 = new WptMap(pts.first(),n);
-      p1 = new WptMap(pts.last(), n);
+      assert(pts.size() > 1);
+      p0 = new WptMap(pts.front(),n);
+      p1 = new WptMap(pts.back(), n);
       b1 = new Bpoint(mesh, p0);
       b2 = new Bpoint(mesh, p1);
    }
@@ -530,7 +530,7 @@ Bcurve::Bcurve(
 {
 
    assert(mesh);
-   assert(uvpts.num() > 1);
+   assert(uvpts.size() > 1);
 
    set_mesh(mesh);
 
@@ -554,10 +554,10 @@ Bcurve::Bcurve(
             cerr << "Warning: bcurve endpoint 1 doesn't live in "
                  << "the same surface.." << endl;
       } else {
-         b1 = new Bpoint(mesh, surf, uvpts.first());
+         b1 = new Bpoint(mesh, surf, uvpts.front());
          if (debug)
             cerr << "Created new endpoint b1 with uvpt"
-                 << uvpts.first() << endl;
+                 << uvpts.front() << endl;
       }
       
       // same thing for b2
@@ -568,10 +568,10 @@ Bcurve::Bcurve(
                     << "the same surface.." << endl;
          //assert(surf == b2->constraining_surface());
       } else {
-         b2 = new Bpoint(mesh, surf, uvpts.last());
+         b2 = new Bpoint(mesh, surf, uvpts.back());
          if (debug)
             cerr << "Created new endpoint b2 with uvpt "
-                 << uvpts.last() << endl;
+                 << uvpts.back() << endl;
       }
 
       assert(b1->constraining_surface() == b2->constraining_surface());
@@ -813,15 +813,15 @@ Bcurve::Bcurve(
    assert(m);
    set_mesh(m);
 
-   assert(verts.num()>1 && verts.num()==uvpts.num());
+   assert(verts.num()>1 && verts.num()==(int)uvpts.size());
    bool is_closed = (verts.last()==verts.first());
 
    if (is_closed) {
       err_adv(debug, "vert list is closed");
-      if (uvpts.last() == uvpts.first()) {
+      if (uvpts.back() == uvpts.front()) {
          err_adv(debug, "uv pt list is closed");
       }
-      assert(uvpts.last() == uvpts.first());
+      assert(uvpts.back() == uvpts.front());
    }
 
    // if the endpoints are not given to us and uvpts does not
@@ -844,9 +844,9 @@ Bcurve::Bcurve(
          //assert(surf == b1->constraining_surface());
       } else {
          // XXX -- here and below, is cast to Lvert* definitely safe?
-         b1 = new Bpoint((Lvert*)verts.first(), uvpts.first(), surf, res_lev);
+         b1 = new Bpoint((Lvert*)verts.first(), uvpts.front(), surf, res_lev);
          if (debug)
-            cerr << "Created new endpoint b1 with uvpt" << uvpts.first() << endl;
+            cerr << "Created new endpoint b1 with uvpt" << uvpts.front() << endl;
       }
       
       // same thing for b2
@@ -855,10 +855,10 @@ Bcurve::Bcurve(
             err_adv(debug, "Warning: bcurve endpoint 2 doesn't live in the same surface..");
          //assert(surf == b2->constraining_surface());
       } else {
-         b2 = new Bpoint((Lvert*)verts.last(), uvpts.last(), surf, res_lev);
+         b2 = new Bpoint((Lvert*)verts.last(), uvpts.back(), surf, res_lev);
          if (debug)
             cerr << "Created new endpoint b2 with uvpt "
-                 << uvpts.last() << endl;
+                 << uvpts.back() << endl;
       }
 
       //assert(b1->constraining_surface() == b2->constraining_surface());
@@ -1364,22 +1364,22 @@ sample(const Wpt_list& pts, double max_err, bool closed)
    Wpt_list   orig = pts;
    orig.update_length();
    
-   for (int num = closed ? 4 : 1; num < orig.num(); num *= 2) {
+   for (Wpt_list::size_type num = closed ? 4 : 1; num < orig.size(); num *= 2) {
 
       double dt = 1.0/num;
       
       // resample the polyline with num samples
-      int i;
+      Wpt_list::size_type i;
       result.clear();
       for (i=0; i<num; i++)
-         result += orig.interpolate(i*dt);
-      result += orig.last();
+         result.push_back(orig.interpolate(i*dt));
+      result.push_back(orig.back());
 
       // find the average error
       double error = 0;
-      for (i=0; i<orig.num(); i++)
+      for (i=0; i<orig.size(); i++)
          error += result.closest(orig[i]).dist(orig[i]);
-      error /= orig.num();
+      error /= orig.size();
 
       // if error is acceptable, return this result.
       // otherwise we'll double the number of samples and try again.
@@ -1804,7 +1804,7 @@ Bcurve::cycle_reshape_mode()
 bool
 t_val(CWpt_list& pts, int i, double& ret_t)
 {
-   if (!pts.valid_index(i)) {
+   if (i < 0 || i >= (int)pts.size()) {
       cerr << "t_val(), invalid index" << endl;
       return false;
    }
@@ -1846,7 +1846,7 @@ Bcurve::get_map_normal_lines(
 
    bool total_success = true;
 
-   for ( int i=0; i<pts.num(); i++ ) {
+   for ( Wpt_list::size_type i=0; i<pts.size(); i++ ) {
       double t = 0.0;
       if ( !t_val(pts, i, t) ) {
          cerr << "Bcurve::draw_normals(), WARNING: failed to get t val for pt " 
@@ -2748,7 +2748,7 @@ Bcurve::rebuild_seg(
    // Build a Wpt_list from the affected vertex locations:
    Wpt_list orig_arc(affected.size());
    for (k=0; k<affected.size(); k++)
-      orig_arc += affected[k]->loc();
+      orig_arc.push_back(affected[k]->loc());
    orig_arc.update_length();
 
    // Find the parameter value of each affected vertex WRT the
@@ -2778,25 +2778,25 @@ direction_of_curve(
    int point_b) //!< the closest point in b to this point in a
 {
 
-   if ( !(crv_a.num() > 1 && crv_b.num() > 1) ) {
+   if ( !(crv_a.size() > 1 && crv_b.size() > 1) ) {
       cerr << "direction asked with too short curves, returning 0" << endl;
       return 0;
    }
 
-   if (    point_a < 0 || point_a >= crv_a.num()
-           || point_b < 0 || point_b >= crv_b.num() ) {
+   if (point_a < 0 || point_a >= (int)crv_a.size()
+    || point_b < 0 || point_b >= (int)crv_b.size() ) {
       cerr << "direction asked at wrong place, returning 0" << endl;
       return 0;
    }
 
    VEXEL v_a;
-   if (point_a < crv_a.num() - 1)
+   if (point_a < (int)crv_a.size() - 1)
       v_a = (crv_a[point_a + 1] - crv_a[point_a]).normalized();
    else
       v_a = (crv_a[point_a] - crv_a[point_a - 1]).normalized();
 
    double pos_amt;
-   if (point_b + 1 < crv_b.num())
+   if (point_b + 1 < (int)crv_b.size())
       pos_amt = (crv_b[point_b + 1] - crv_b[point_b]).normalized() * v_a;
    else
       pos_amt = (crv_b[point_b] - crv_b[point_b - 1]).normalized() * v_a;
@@ -2826,7 +2826,7 @@ Bcurve::splice_curves(
    bool debug = false;
 
    // Check that curves are sufficiently long
-   if (crv_a.num() < 2 || crv_b.num() < 2) {
+   if (crv_a.size() < 2 || crv_b.size() < 2) {
       if (debug) cerr << "splice_curves(): curves are not both sufficiently long" << endl;
       return false;
    }
@@ -2839,7 +2839,7 @@ Bcurve::splice_curves(
    double dist_start, dist_end; // distances of crv_a start and end points to crv_b
    PIXEL dummy;
    crv_b.closest(crv_a[0],     dummy,   dist_start, start_i);
-   crv_b.closest(crv_a.last(), dummy,   dist_end,   end_i);
+   crv_b.closest(crv_a.back(), dummy,   dist_end,   end_i);
 
    if (dist_start > thresh && dist_end > thresh) {
       if (debug) cerr << "splice_curves(): curves too far apart, aborting" << endl;
@@ -2852,13 +2852,13 @@ Bcurve::splice_curves(
 // the distaces that were too far get are set to the proper endpoint:
    double DIR_THRESH = Config::get_var_dbl("SPLICE_DIR_THRESH", 0.75);
    if (dist_start > thresh) {
-      int end_dir = direction_of_curve(crv_a, crv_b, DIR_THRESH, crv_a.num() - 1, end_i);
+      int end_dir = direction_of_curve(crv_a, crv_b, DIR_THRESH, crv_a.size() - 1, end_i);
       if (end_dir == 0) {
          if (debug) cerr << "direction for end not defined, bailing" << endl;
          return false;
       }
-      start_i = (end_dir == 1)?(0):(crv_b.num()-1);
-      before_start_i = (end_dir == 1)?(-1):(crv_b.num());
+      start_i = (end_dir == 1) ? 0 : (crv_b.size()-1);
+      before_start_i = (end_dir == 1) ? -1 : crv_b.size();
    }
 
    if (dist_end > thresh) {
@@ -2867,8 +2867,8 @@ Bcurve::splice_curves(
          if (debug) cerr << "direction for start not defined, bailing" << endl;
          return false;
       }
-      end_i = (start_dir == 1)?(crv_b.num()-1):(0);
-      after_end_i = (start_dir == 1)?(crv_b.num()):(-1);
+      end_i = (start_dir == 1) ? (crv_b.size()-1) : 0;
+      after_end_i = (start_dir == 1) ? (crv_b.size()) : -1;
    }
 
    //now a pass to clean up before_start and after_end
@@ -2877,16 +2877,16 @@ Bcurve::splice_curves(
          before_start_i += (start_i > end_i)?(1):(-1);
 
    if (dist_end <= thresh)
-      if ( (crv_b[end_i] - crv_a.last()) * (crv_a[crv_a.num() - 2] - crv_a.last()) > 0 )
+      if ( (crv_b[end_i] - crv_a.back()) * (crv_a[crv_a.size() - 2] - crv_a.back()) > 0 )
          after_end_i += (start_i > end_i)?(-1):(1);
 
    // sanity check
-   assert(start_i >= 0 && start_i < crv_b.num());
-   assert(end_i >= 0 && end_i < crv_b.num());
+   assert(start_i >= 0 && start_i < (int)crv_b.size());
+   assert(end_i >= 0 && end_i < (int)crv_b.size());
 
    // Find direction
    if (start_i > end_i) {
-      crv_a.reverse();
+      std::reverse(crv_a.begin(), crv_a.end());
       swap(start_i, end_i);
       swap(before_start_i, after_end_i);
    }
@@ -2896,27 +2896,26 @@ Bcurve::splice_curves(
 
    bool added = false;
 
-   for (int i = 0; i < crv_b.num(); i++) {
-      if (i < before_start_i) {
+   for (PIXEL_list::size_type i = 0; i < crv_b.size(); i++) {
+      if ((int)i < before_start_i) {
          // keep original crv_b pixels before the splice start point
-         new_crv += crv_b[i];
-      } else if (i > after_end_i) {
+         new_crv.push_back(crv_b[i]);
+      } else if ((int)i > after_end_i) {
          // keep original crv_b pixels past the splice end point
-         new_crv += crv_b[i];
+         new_crv.push_back(crv_b[i]);
       } else {
-         if (i == before_start_i) new_crv += crv_b[i];
+         if ((int)i == before_start_i) new_crv.push_back(crv_b[i]);
          if (!added) {
             // insert crv_a pixels
-            int k;
-            for (k = 0; k < crv_a.num(); k++) {
-               new_crv += crv_a[k];
+            PIXEL_list::size_type k;
+            for (k = 0; k < crv_a.size(); k++) {
+               new_crv.push_back(crv_a[k]);
             }
             added = true;
          }
-         if (i != before_start_i && i == after_end_i) new_crv += crv_b[i];
+         if ((int)i != before_start_i && (int)i == after_end_i) new_crv.push_back(crv_b[i]);
       }
    }
-
 
    return true;
 }
@@ -2935,21 +2934,21 @@ Bcurve::splice_curve_on_closed(
 
    if (debug) cerr << "splice_curve_on_closed()" << endl;
 
-   if (debug) cerr << "crv_a num: " << crv_a.num() << endl;
-   if (debug) cerr << "crv_b num: " << crv_b.num() << endl;
+   if (debug) cerr << "crv_a num: " << crv_a.size() << endl;
+   if (debug) cerr << "crv_b num: " << crv_b.size() << endl;
 
    new_crv.clear();
 
    // record original starting point of crv_b to help 
    // "ushifting" the result curve below
-   CPIXEL crv_b_orig_start = crv_b.first();
+   CPIXEL crv_b_orig_start = crv_b.front();
 
    // Splice crv_a into crv_b, but only if endpoints of crv_a are
    // within thresh distance of crv_b.  If splicing is successful,
    // store the result in new_crv and return true.
 
    // Check that curves are sufficiently long
-   if (crv_a.num() < 2 || crv_b.num() < 2) {
+   if (crv_a.size() < 2 || crv_b.size() < 2) {
       if (debug) cerr << "splice_curve_on_closed(): curves are not both sufficiently long"
            << endl;
       return false;
@@ -2965,8 +2964,7 @@ Bcurve::splice_curve_on_closed(
    double dist_start, dist_end; // distances of crv_a start and end points to crv_b
    PIXEL dummy;
    crv_b.closest(crv_a[0],     dummy,   dist_start, start_i);
-   crv_b.closest(crv_a.last(), dummy,   dist_end,   end_i);
-
+   crv_b.closest(crv_a.back(), dummy,   dist_end,   end_i);
 
    if (debug) cerr << "start_i: " << start_i << endl;
    if (debug) cerr << "end_i: " << end_i << endl;
@@ -2986,26 +2984,26 @@ Bcurve::splice_curve_on_closed(
          if (debug) cerr << "Degenerate curve start" << endl;
          return false;
       }
-      double pos_amt =   (crv_b[(start_i + 1) % crv_b.num()] - crv_b[start_i]).normalized()
-         * (crv_a[1] - crv_a[0]).normalized();
-      double neg_amt =   (crv_b[(start_i + crv_b.num() - 1) % crv_b.num()] - crv_b[start_i]).normalized()
-         * (crv_a[1] - crv_a[0]).normalized();
+      double pos_amt = (crv_b[(start_i + 1) % crv_b.size()] - crv_b[start_i]).normalized()
+                     * (crv_a[1] - crv_a[0]).normalized();
+      double neg_amt = (crv_b[(start_i + crv_b.size() - 1) % crv_b.size()] - crv_b[start_i]).normalized()
+                     * (crv_a[1] - crv_a[0]).normalized();
       if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && DIR_THRESH > 0.75) ) {
          if (debug) cerr << " start is too close to call, will have to wait for end..." << endl;
       } else {
-          start_dir = (pos_amt > DIR_THRESH)?( 1 ):( -1 );
+          start_dir = (pos_amt > DIR_THRESH) ? 1 : -1;
       }
    }
 
    { //determine end_dir:
-      if (crv_a[crv_a.num() - 2] == crv_a.last()) {
+      if (crv_a[crv_a.size() - 2] == crv_a.back()) {
          if (debug) cerr << "Degenerate curve end" << endl;
          return false;
       }
-      double pos_amt =   (crv_b[(end_i + 1) % crv_b.num()] - crv_b[end_i]).normalized()
-         * (crv_a[crv_a.num() - 2] - crv_a.last()).normalized();
-      double neg_amt =   (crv_b[(end_i + crv_b.num() - 1) % crv_b.num()] - crv_b[end_i]).normalized()
-         * (crv_a[crv_a.num() - 2] - crv_a.last()).normalized();
+      double pos_amt = (crv_b[(end_i + 1) % crv_b.size()] - crv_b[end_i]).normalized()
+                     * (crv_a[crv_a.size() - 2] - crv_a.back()).normalized();
+      double neg_amt = (crv_b[(end_i + crv_b.size() - 1) % crv_b.size()] - crv_b[end_i]).normalized()
+                     * (crv_a[crv_a.size() - 2] - crv_a.back()).normalized();
       if ( (pos_amt < DIR_THRESH && neg_amt < DIR_THRESH) || (pos_amt > DIR_THRESH && neg_amt > DIR_THRESH) ) {
          if (start_dir == 0) {
             if (debug) cerr << "both start and end too close to call, aborting" << endl;
@@ -3015,7 +3013,7 @@ Bcurve::splice_curve_on_closed(
             end_dir = -start_dir;
          }
       } else {
-         end_dir = (pos_amt > DIR_THRESH)?( 1 ):( -1 );
+         end_dir = (pos_amt > DIR_THRESH) ? 1 : -1;
          if (start_dir == 0) {
             start_dir = -end_dir;
             if (debug) cerr << "guessing start direction from end direction" << endl;
@@ -3030,15 +3028,15 @@ Bcurve::splice_curve_on_closed(
 //end of added code chunk --Jim
 
    // sanity check
-   assert(start_i >= 0 && start_i < crv_b.num());
-   assert(end_i >= 0 && end_i < crv_b.num());
+   assert(start_i >= 0 && start_i < (int)crv_b.size());
+   assert(end_i >= 0 && end_i < (int)crv_b.size());
 
    // fix the direction of crv_a, if necessary
    //if (start_i > end_i) {
    if (start_dir == -1) { // We should always start heading in the
                           // positive direction --Jim
       if (debug) cerr << "reversing crv_a" << endl;
-      crv_a.reverse();
+      std::reverse(crv_a.begin(), crv_a.end());
       swap(start_i, end_i);
       swap(start_dir, end_dir); //--Jim
       if (debug) cerr << "start_i: " << start_i << endl;
@@ -3050,20 +3048,20 @@ Bcurve::splice_curve_on_closed(
 
    bool added = false;
 
-   for (int i = 0; i < crv_b.num(); i++) {
+   for (PIXEL_list::size_type i = 0; i < crv_b.size(); i++) {
       //if (i < start_i) {
-      if ((start_i <= end_i) && ((i < start_i) || (i > end_i))) { //--Jim
+      if ((start_i <= end_i) && (((int)i < start_i) || ((int)i > end_i))) { //--Jim
          // keep original crv_b pixels before the splice start point
-         new_crv += crv_b[i];
+         new_crv.push_back(crv_b[i]);
          //} else if (i > end_i) {
-      } else if ((start_i >= end_i) && ((i < start_i) && (i > end_i))) { //--Jim
+      } else if ((start_i >= end_i) && (((int)i < start_i) && ((int)i > end_i))) { //--Jim
          // keep original crv_b pixels past the splice end point
-         new_crv += crv_b[i];
+         new_crv.push_back(crv_b[i]);
       } else {
          if (!added) {
             // insert crv_a pixels
-            for (int k = 0; k < crv_a.num(); k++) {
-               new_crv += crv_a[k];
+            for (PIXEL_list::size_type k = 0; k < crv_a.size(); k++) {
+               new_crv.push_back(crv_a[k]);
             }
             added = true;
          }
@@ -3091,7 +3089,7 @@ Bcurve::splice_curve_on_closed(
    new_crv.shift(-closest_i);
 
 
-   new_crv += new_crv[0]; //make it closed. --Jim
+   new_crv.push_back(new_crv[0]); //make it closed. --Jim
 
    return true;
 }
@@ -3105,7 +3103,7 @@ Bcurve::oversketch(CPIXEL_list& sketch_pixels)
 
    // First, check parameters 
 
-   if (sketch_pixels.num() < 2) {
+   if (sketch_pixels.size() < 2) {
       cerr << "Bcurve::oversketch(): too few sketch pixels" << endl;
       return false;
    }
@@ -3124,11 +3122,11 @@ Bcurve::oversketch(CPIXEL_list& sketch_pixels)
       // subdivision level to pixel space
       Bvert_list verts = cur_subdiv_verts();     
       for (int i=0; i<verts.num(); i++) {
-         curve_pixels += PIXEL(verts[i]->loc());
+         curve_pixels.push_back(PIXEL(verts[i]->loc()));
       } 
    }
 
-   if (curve_pixels.num()<2) {
+   if (curve_pixels.size()<2) {
       cerr << "Bcurve::oversketch(): insufficient number of curve pixel points"
            << endl;
       return false;
@@ -3192,7 +3190,7 @@ intersect_surface(CPIXEL_list& pixels,
    }
    UVpt latest_guess = first_guess;
 
-   for ( int i=0; i<pixels.num(); i++ ) {
+   for ( PIXEL_list::size_type i=0; i<pixels.size(); i++ ) {
       UVpt result_uv;
       int num_attempts = 0;
 
@@ -3209,7 +3207,7 @@ intersect_surface(CPIXEL_list& pixels,
       }
 
       // if we got here, we succeded 
-      out_list += result_uv;
+      out_list.push_back(result_uv);
       latest_guess = result_uv;
    }
 
@@ -3260,7 +3258,7 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
    bool debug = Config::get_var_bool("RESHAPE_ON_SKIN_DEBUG", true);
    err_adv(debug, "Bcurve::reshape_on_skin()");
 
-   if (new_curve.num() < 2) {
+   if (new_curve.size() < 2) {
       cerr << "Bcurve::reshape_on_skin(): insufficient number of pix in new curve"
            << endl;
       return false;
@@ -3276,7 +3274,7 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
    Bface_list skel_faces = ((Skin*)_skin)->skel_faces();
    Bsimplex_list faces;
    std::vector<Wvec> bcs;
-   for (int i = 0; i < new_curve.num(); i++) {
+   for (PIXEL_list::size_type i = 0; i < new_curve.size(); i++) {
       int inter_face = -1;
       double inter_depth = 1e+10;
       Wvec bc; double depth; Wpt hit;
@@ -3316,7 +3314,7 @@ Bcurve::reshape_on_surface(const PIXEL_list &new_curve)
    err_adv(debug, "Bcurve::reshape_on_surface()");
 
   
-   if (new_curve.num() < 2) {
+   if (new_curve.size() < 2) {
       cerr << "Bcurve::reshape_on_surface(): insufficient number of pix in new curve"
            << endl;
       return false;
@@ -3367,7 +3365,7 @@ Bcurve::reshape_on_surface(const PIXEL_list &new_curve)
 
    // if the curve is closed, we must provide a closed uv list
    if (is_closed()) {
-      new_uvs += new_uvs.first();
+      new_uvs.push_back(new_uvs.front());
    }
 
    assert(SurfaceCurveMap::isa(_map));
@@ -3388,20 +3386,19 @@ intersect_line_polyline(const PIXELline&  line,
                         PIXEL_list& out_pts // the result
    )
 {
-
-   if (polyline.num() < 2)
+   if (polyline.size() < 2)
       return false;
 
    bool success = false;
 
-   for (int i=0; i<polyline.num()-1; i++) {
+   for (PIXEL_list::size_type i=0; i<polyline.size()-1; i++) {
       // create the current polyline segment
       PIXELline seg(polyline[i], polyline[i+1]);
       PIXEL intersect_pt;
       // attempt to intersect segment with the line
       if (seg.intersect_seg_line(line, intersect_pt)) {
          success = true;
-         out_pts += intersect_pt;  // return the result
+         out_pts.push_back(intersect_pt);  // return the result
       }
    }
 
@@ -3450,7 +3447,7 @@ intersect_lines_with_curve(const vector<Wline>& lines,
       // find intersect pixel that's closest to the line base point
       double closest_dist = DBL_MAX;  // closest distance so far
       int closest_i = 0;              // index of closest pix
-      for (int j=0; j<intersect_pixels.num(); j++) {
+      for (PIXEL_list::size_type j=0; j<intersect_pixels.size(); j++) {
          double cur_dist = pix_lines[i].point().dist(intersect_pixels[j]);
          if ( cur_dist < closest_dist ) {
             closest_dist = cur_dist;
@@ -3466,15 +3463,15 @@ intersect_lines_with_curve(const vector<Wline>& lines,
          Wline view_line(VIEW::eye(), wp);
          Wpt closest(lines[i], view_line);
 
-         out_new_pts += closest;
+         out_new_pts.push_back(closest);
       } else {
          // no itersections, so use the line's original base point
-         out_new_pts += lines[i].point();
+         out_new_pts.push_back(lines[i].point());
       }
    }
 
    // we guarantee that we provide one point for every line
-   assert(out_new_pts.num() == (int)lines.size());
+   assert(out_new_pts.size() == lines.size());
 }
 
 
@@ -3516,9 +3513,9 @@ Bcurve::reshape_along_normals(const PIXEL_list &new_curve)
 
    // set the endpoints
    if (b1())
-      b1()->move_to(new_pts.first());
+      b1()->move_to(new_pts.front());
    if (b2())
-      b2()->move_to(new_pts.last());
+      b2()->move_to(new_pts.back());
 
 
 /*   if (b1() && b1()->map()) */
@@ -3589,7 +3586,7 @@ interp_uvpts(CUVpt& uv1, CUVpt& uv2, int num_verts)
    double delt = 1.0/(num_verts-1);
 
    for (int i=0; i<num_verts; i++)
-      ret += interp(uv1, uv2, i*delt);
+      ret.push_back(interp(uv1, uv2, i*delt));
    ret.update_length();
    return ret;
 }
@@ -3613,16 +3610,16 @@ Bcurve::get_map_tvals() const
    
    // for now, we need to handle Wpt basd Maps and UV based maps
    // this is sort of undefined for RayMaps
-   int i;
+   size_t i;
 
    if (Wpt_listMap::isa(_map)) {
       Wpt_list wpts = ((Wpt_listMap*)_map)->pts();
-      for (i = 0; i < wpts.num(); i++) {
+      for (i = 0; i < wpts.size(); i++) {
          ret.push_back(wpts.partial_length(i) / wpts.length());
       }
    } else if (SurfaceCurveMap::isa(_map)) {
       UVpt_list uvs = ((SurfaceCurveMap*)_map)->uvs();
-      for (i = 0; i < uvs.num(); i++) {
+      for (i = 0; i < uvs.size(); i++) {
          ret.push_back(uvs.partial_length(i) / uvs.length());
       }
    } else {
@@ -3634,21 +3631,20 @@ Bcurve::get_map_tvals() const
 
 
 bool
-Bcurve::get_pixels(PIXEL_list& list) const {
-
+Bcurve::get_pixels(PIXEL_list& list) const
+{
    Wpt_list wpl = get_wpts();
    
    list.clear();
 
-   int i;
-   for (i = 0; i < wpl.num(); i++) {
-      list.add(PIXEL(wpl[i]));
+   Wpt_list::size_type i;
+   for (i = 0; i < wpl.size(); i++) {
+      list.push_back(PIXEL(wpl[i]));
    }
 
    list.update_length();
 
    return true;
-
 }
 
 //! This function attempts to resample the curves so they

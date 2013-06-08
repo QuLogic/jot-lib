@@ -161,7 +161,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
 {
    err_adv(debug, "PROFILE:find_matching_xsec");
 
-   if (!(g && g->pts().num() >= MIN_GEST_PTS))
+   if (!(g && g->pts().size() >= MIN_GEST_PTS))
       return false;
 
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
@@ -179,15 +179,15 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    BMESH* mesh = 0;
 
    // find all the sections
-   for (int i=0; i<pts.num(); i++) {
+   for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Primitive* temp_p = Primitive::find_controller(vis_ref->intersect(pts[i]));
       if (temp_p == p && recording) {
-         temp_list += pts[i];
-         if (i == pts.num()-1) pt_lists += temp_list;
+         temp_list.push_back(pts[i]);
+         if (i == pts.size()-1) pt_lists += temp_list;
       } else if (temp_p && temp_p != p && !recording) { // start
          recording = true;
          temp_list.clear();
-         temp_list += pts[i];
+         temp_list.push_back(pts[i]);
       } else if (temp_p != p && recording) { // end
          recording = false; 
          pt_lists += temp_list;
@@ -346,7 +346,7 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
 bool
 PROFILE::do_xsec_match(PIXEL_list& pts)
 {
-   if (pts.num() < max(MIN_GEST_PTS, 1)) {
+   if ((int)pts.size() < max(MIN_GEST_PTS, 1)) {
       err_adv(debug, "   too few points");
       return false;
    }
@@ -374,7 +374,7 @@ PROFILE::do_xsec_match(PIXEL_list& pts)
 
    // the pixel trail should not be too far away from the cross section
    PIXEL_list ring_wpts = xsec_ring.wpts();
-   for (int i = 0; i < pts.num(); i++)
+   for (PIXEL_list::size_type i = 0; i < pts.size(); i++)
       if (ring_wpts.dist(pts[i]) > SIL_SEARCH_RAD)
          return false;
    
@@ -391,7 +391,7 @@ PROFILE::find_matching_sil(CGESTUREptr& g)
 {
    err_adv(debug, "PROFILE::find_matching_sil");
 
-   if (!(g && g->pts().num() >= MIN_GEST_PTS))
+   if (!(g && g->pts().size() >= MIN_GEST_PTS))
       return false;
 
    if (BMESH::_freeze_sils)
@@ -407,7 +407,7 @@ PROFILE::find_matching_sil(CGESTUREptr& g)
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
    BMESH* mesh = 0;
-   for (int i=0; i<pts.num(); i++) {
+   for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
       if (!(e && e->mesh())) {
@@ -678,9 +678,9 @@ inline double
 avg_dist(PIXEL_list& l1, PIXEL_list& l2)
 {
    double sum = 0.0;
-   for (int i = 0; i < l2.num(); i++)
+   for (PIXEL_list::size_type i = 0; i < l2.size(); i++)
       sum += l1.dist(l2[i]);
-   return sum / l2.num();
+   return sum / l2.size();
 }
 
 inline void
@@ -726,8 +726,8 @@ PROFILE::match_substrip(CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& strip)
 
    PIXEL_list chain_path(chain.wpts());
 
-   int k0 = get_near_index(chain_path, pts.first(), MAX_DIST);
-   int k1 = get_near_index(chain_path, pts.last(),  MAX_DIST);
+   int k0 = get_near_index(chain_path, pts.front(), MAX_DIST);
+   int k1 = get_near_index(chain_path, pts.back(),  MAX_DIST);
 
    if (!(chain.valid_index(k0) && chain.valid_index(k1))) {
       err_adv(debug, "  bad k0/k1: %d/%d", k0, k1);
@@ -854,7 +854,7 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
 
    // set up the target locs for cap ring verts
    for (int i = 0; i < verts.num(); i++)
-      new_locs += target0;
+      new_locs.push_back(target0);
 
    // find the area of influence
    _mode = 1;
@@ -873,7 +873,7 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
       Bface_list::reachable_faces(f, !CapFaceBoundaryEdgeFilter()).interior_verts();
    verts += interior_verts;
    for (int i = 0; i < interior_verts.num(); i++)
-      new_locs += target0;
+      new_locs.push_back(target0);
 
    // define target locs for verts influenced by the xform
    _mode= 0;
@@ -884,7 +884,7 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
       verts += ring;
       for (int j = 0; j < ring.num(); j++) {
          Wvec dir = ring[j]->loc() - target;
-         new_locs += target + dir*(((double)i+1)/(affected_rings.num()+1));
+         new_locs.push_back(target + dir*(((double)i+1)/(affected_rings.num()+1)));
       }
    }
 
@@ -1072,7 +1072,7 @@ find_nearest_edge(EdgeStrip& strip, PIXEL pt, double& dist)
 inline bool
 find_intersects(CPIXEL_list& pts, Bface_list& faces)
 {
-   for (int i = 0; i < pts.num(); i++) {
+   for (PIXEL_list::size_type i = 0; i < pts.size(); i++) {
       Bface* f = VisRefImage::Intersect(pts[i]);
       if (!f) return false;
       faces += f;

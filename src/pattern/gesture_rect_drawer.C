@@ -61,7 +61,7 @@ GestureRectDrawer::draw_skeleton(const GESTURE* gest, CVIEWptr& v) {
   
   // draw the line
   const PIXEL_list& pts = gest->pts();
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
   if (nb_pts<2) return;
 
   glBegin(GL_LINES);
@@ -78,7 +78,6 @@ GestureRectDrawer::draw_skeleton(const GESTURE* gest, CVIEWptr& v) {
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-  
 }
 
 
@@ -104,7 +103,7 @@ GestureRectDrawer::draw_rect(const GESTURE* gest, CVIEWptr& v) {
   glColor3d(grey, grey, grey);      // GL_CURRENT_BIT
 
   // compute the thickness of the rect
-  if (gest->pts().num()<2) return;
+  if (gest->pts().size()<2) return;
   double thickness = 0.5 * gest->endpoint_dist();
 //  const PIXEL_list& pts = _axis_gesture->pts();
 
@@ -139,18 +138,17 @@ GestureRectDrawer::draw_rect(const GESTURE* gest, CVIEWptr& v) {
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-  
 }
 
 
 
 void
 GestureRectDrawer::compute_rect_pt(const PIXEL_list& pts, int k, double thickness, PIXEL& pt) {
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
   VEXEL normal;
   if (k==0){
     normal = (pts[1]-pts[0]).perpend().normalized();
-  } else if (k==nb_pts-1){
+  } else if (k==(int)nb_pts-1){
     normal = (pts[nb_pts-1]-pts[nb_pts-2]).perpend().normalized();    
   } else {
     normal = (pts[k+1]-pts[k-1]).perpend().normalized();

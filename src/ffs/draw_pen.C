@@ -854,7 +854,7 @@ try_punch(CBface_list& region, bool debug)
             uvpts.clear();
             for (int k = 0; k < curve_verts_lists[j].num(); k++) {
                surf->get_uv(curve_verts_lists[j][k], pt);
-               uvpts += pt;
+               uvpts.push_back(pt);
             }
             uvpts.update_length();
             Bcurve* new_curve =
@@ -1663,7 +1663,7 @@ DrawPen::create_rect(GESTUREptr line)
 
    Wpt_list stroke;
    line->endpt_seg().project_to_plane(P, stroke);
-   assert(stroke.num() == 2);
+   assert(stroke.size() == 2);
    Wvec u = b2->loc() - b1->loc();      // vector along existing straight line
    Wvec v = stroke[1] - stroke[0];      // vector along input stroke
    double a = rad2deg(line_angle(u, v));
@@ -1727,15 +1727,15 @@ DrawPen::create_rect(GESTUREptr line)
    contour += bcurve;
 
    // Bottom curve
-   side.clear(); side += p2; side += p3;
+   side.clear(); side.push_back(p2); side.push_back(p3);
    contour += BcurveAction::create(m, side, n, num_h, res_lev, b2, b3, cmd);
 
    // Right curve
-   side.clear(); side += p3; side += p4;
+   side.clear(); side.push_back(p3); side.push_back(p4);
    contour += BcurveAction::create(m, side, n, num_v, res_lev, b3, b4, cmd);
 
    // Top curve
-   side.clear(); side += p4; side += p1;
+   side.clear(); side.push_back(p4); side.push_back(p1);
    contour += BcurveAction::create(m, side, n, num_h, res_lev, b4, b1, cmd);
 
    // Interior
@@ -1828,9 +1828,9 @@ DrawPen::create_curve(GESTUREptr gest)
       t = b1 ? b1->t() : b2 ? b2->t() : P.normal().perpend();
    }
    if (!wpts.is_closed() && !b1)
-      b1 = BpointAction::create(mesh, wpts.first(), P.normal(), t, r, cmd);
+      b1 = BpointAction::create(mesh, wpts.front(), P.normal(), t, r, cmd);
    if (!wpts.is_closed() && !b2)
-      b2 = BpointAction::create(mesh, wpts.last(),  P.normal(), t, r, cmd);
+      b2 = BpointAction::create(mesh, wpts.back(),  P.normal(), t, r, cmd);
 
    // Create the curve
    
@@ -1873,8 +1873,8 @@ DrawPen::project_to_plane(
    if (gest->is_line(.991, 12)) {
       if (debug) 
          cerr << "gesture interpreted as line" << endl;
-      ret += P.intersect(Wline(XYpt(gest->start())));
-      ret += P.intersect(Wline(XYpt(gest->end  ())));
+      ret.push_back(P.intersect(Wline(XYpt(gest->start()))));
+      ret.push_back(P.intersect(Wline(XYpt(gest->end  ()))));
       ret.update_length();
       return;
    }
@@ -1883,13 +1883,17 @@ DrawPen::project_to_plane(
 
    if (gest->is_closed()) {
       // If closed, remove the final few points to prevent jagginess
-      for (int i = ret.num()-1;i>=0;i--)
-         if (PIXEL(ret[0]).dist(PIXEL(ret[i])) < 15)
-            ret.remove(i);
-         else break;    
+      Wpt_list::iterator it;
+      it = ret.end() - 1;
+      while (!ret.empty()) {
+         if (PIXEL(ret[0]).dist(PIXEL(*it)) < 15)
+            it = ret.erase(it);
+         else break;
+         --it;
+      }
 
       // add the first point as the last point
-      ret += ret[0];
+      ret.push_back(ret[0]);
        
       ret.update_length();
    } 

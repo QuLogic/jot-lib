@@ -62,7 +62,7 @@ GesturePathDrawer::draw_skeleton(const GESTURE* gest, CVIEWptr& v) {
   // draw the line strip
   const PIXEL_list&    pts   = gest->pts();
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts.size(); k++) {
       glVertex2dv(pts[k].data());
   }
   glEnd();
@@ -102,14 +102,14 @@ GesturePathDrawer::draw_path(const GESTURE* gest, CVIEWptr& v) {
   glColor3d(grey, grey, grey);      // GL_CURRENT_BIT
 
   // compute the thickness of the path
-  if (gest->pts().num()<2) return;
+  if (gest->pts().size()<2) return;
   double thickness = 0.5 * gest->endpoint_dist();
   const PIXEL_list& pts = _path_gesture->pts();
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
 
   // draw the upper line strip
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts.size(); k++) {
     PIXEL rect_pt;
     compute_path_pt(pts, k, thickness, rect_pt);
     glVertex2dv(rect_pt.data());
@@ -118,7 +118,7 @@ GesturePathDrawer::draw_path(const GESTURE* gest, CVIEWptr& v) {
 
   // draw the lower line strip
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts.size(); k++) {
     PIXEL rect_pt;
     compute_path_pt(pts, k, -thickness, rect_pt);
     glVertex2dv(rect_pt.data());
@@ -135,7 +135,7 @@ GesturePathDrawer::draw_path(const GESTURE* gest, CVIEWptr& v) {
 
   compute_path_pt(pts, nb_pts-1, thickness, path_pt);
   glVertex2dv(path_pt.data());
-   compute_path_pt(pts, nb_pts-1, -thickness, path_pt);
+  compute_path_pt(pts, nb_pts-1, -thickness, path_pt);
   glVertex2dv(path_pt.data());
   glEnd(); 
    
@@ -160,11 +160,11 @@ GesturePathDrawer::draw_path(const GESTURE* gest, CVIEWptr& v) {
 
 void
 GesturePathDrawer::compute_path_pt(const PIXEL_list& pts, int k, double thickness, PIXEL& pt) {
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
   VEXEL normal;
-  if (k==0){
+  if (k==0) {
     normal = (pts[1]-pts[0]).perpend().normalized();
-  } else if (k==nb_pts-1){
+  } else if (k==(int)nb_pts-1) {
     normal = (pts[nb_pts-1]-pts[nb_pts-2]).perpend().normalized();    
   } else {
     normal = (pts[k+1]-pts[k-1]).perpend().normalized();

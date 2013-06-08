@@ -31,6 +31,8 @@
 #include "std/support.H"
 #include "mlib/vec2.H"
 
+#include <vector>
+
 namespace mlib {
 
 /*!
@@ -221,7 +223,7 @@ class Point2list : public Pointlist<L,P,V,S> {
       Point2list(int m=16) : Pointlist<L,P,V,S>(m) { }
       
       //! \brief Construct a list using the passed in array of points
-      Point2list(const ARRAY<P> &p) : Pointlist<L,P,V,S>(p) { }
+      Point2list(const vector<P> &p) : Pointlist<L,P,V,S>(p) { }
       
       //@}
       
@@ -250,8 +252,8 @@ class Point2list : public Pointlist<L,P,V,S> {
       //! the given line segment.
       bool intersects_seg(const S& segment) const;
       
-      int     contains(const Point2list<L,P,V,S> &list)             const;
-      int     contains(const P &p)                                  const;
+      bool    contains(const Point2list<L,P,V,S> &list)             const;
+      bool    contains(const P &p)                                  const;
       bool    ray_intersect(const P &p,const V &d,P &hit,int loop=0)const;
       bool    ray_intersect(const P &p,const V &d,L &hit,int loop=0)const;
       P       ray_intersect(const P &p,const V &d,int k0,int k1)    const;
@@ -267,9 +269,9 @@ class Point2list : public Pointlist<L,P,V,S> {
       
       //@}
 
-      using Pointlist<L,P,V,S>::num;
-      using Pointlist<L,P,V,S>::first;
-      using Pointlist<L,P,V,S>::last;
+      using Pointlist<L,P,V,S>::size;
+      using Pointlist<L,P,V,S>::front;
+      using Pointlist<L,P,V,S>::back;
       using Pointlist<L,P,V,S>::pt;
       using Pointlist<L,P,V,S>::seg;
 

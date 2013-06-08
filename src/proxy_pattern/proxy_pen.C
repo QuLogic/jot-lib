@@ -29,6 +29,7 @@
 
 #include "proxy_pen.H"
 #include "proxy_pen_ui.H"
+#include <iterator>
 #include <list>
 #include <stack>
 
@@ -105,7 +106,7 @@ int
 ProxyPen::stroke_cb(CGESTUREptr& gest, DrawState*&)
 {
    err_msg("ProxyPen::stroke_cb()");   
-   if (gest->pts().num() < 2) {
+   if (gest->pts().size() < 2) {
        WORLD::message("Failed to generate hatch stroke (too few samples)...");
        return 0;
    }
@@ -135,14 +136,18 @@ ProxyPen::add_direcction_stroke(Patch* p, NDCpt_list& pts)
       return false;
    }
    Wpt_list wp_list;   
-   for(int i=0; i < pts.num(); ++i){
+   for (NDCpt_list::size_type i=0; i < pts.size(); ++i) {
       Wpt wp;
       VisRefImage::Intersect(pts[i],wp);
-      wp_list += wp;
+      wp_list.push_back(wp);
    }
    
    p->set_direction_stroke(wp_list);
-   cerr << "and the stroke is " << p->get_direction_stroke();
+   cerr << "and the stroke is ";
+   wp_list = p->get_direction_stroke();
+   std::ostream_iterator<Wpt> err_it (std::cerr, ", ");
+   std::copy(wp_list.begin(), wp_list.end(), err_it);
+
    return true;
 }
 

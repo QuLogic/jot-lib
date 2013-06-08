@@ -72,7 +72,7 @@ class BASELINE_GEL : public GEL {
       _stroke.set_max_t(_pts.length()*VIEW::peek()->ndc2pix_scale()/
                                             (max(_stroke.get_angle(),1.0f)));
 
-      for (i=0;i<_pts.num();i++) _stroke.add(_pts[i]);
+      for (mlib::NDCZpt_list::size_type i=0;i<_pts.size();i++) _stroke.add(_pts[i]);
 
       _stroke.draw_start(); 
 		i = _stroke.draw(v); 

@@ -28,16 +28,17 @@ const double RectCell::FADE_WIDTH = 0.1;
 
 void 
 RectCell::add_stroke(const vector<UVpt>& pts,
-		     const vector<double>& pressures){
-  int nb_rect_pts = _rect->pts().num();
+		     const vector<double>& pressures)
+{
+  PIXEL_list::size_type nb_rect_pts = _rect->pts().size();
   BBOXpix dummy_bbox (_rect->pts()[0], _rect->pts()[nb_rect_pts-1]);
   GestureStroke stroke (dummy_bbox);
   
   PIXEL start = _rect->start();
   PIXEL end = _rect->end();
   VEXEL normal = (end-start).perpend().normalized();
-  unsigned int nb_pts = pts.size();
-  for (unsigned int i=0 ; i<nb_pts ; i++){
+  vector<UVpt>::size_type nb_pts = pts.size();
+  for (vector<UVpt>::size_type i=0; i<nb_pts; i++) {
     PIXEL pixel_on_axis = (1.0-pts[i][0])*start + pts[i][0]*end;
     PIXEL cur_pix = pixel_on_axis + normal*(pts[i][1]-0.5)*_scale;
 

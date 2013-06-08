@@ -120,7 +120,7 @@ class CRSpline {
    }
 
    // for internal convenience:
-   int    num()       const { return _pts.num(); }
+   int    num()       const { return _pts.size(); }
    double delt(int i) const { return _u[i+1] - _u[i]; }
    mlib::Wvec   m(int i)    const { return (_pts[i+1]-_pts[i-1])/(_u[i+1]-_u[i-1]); }
 

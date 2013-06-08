@@ -666,7 +666,7 @@ HatchingGroupBase::smooth_gesture(
    else
       spline_spacing = HATCH_SPLINE_MULTIPLE_LOW; 
 
-   int k, num;
+   NDCpt_list::size_type k, num;
    double dlen,dave;
 
    int seg;
@@ -678,26 +678,23 @@ HatchingGroupBase::smooth_gesture(
 
    dlen = pts.segment_length(0);
    dave = pts.segment_length(0);
-   for (k=1; k<pts.num()-1; k++)
-   {
+   for (k=1; k<pts.size()-1; k++) {
       dave += pts.segment_length(k);
       if (pts.segment_length(k) < dlen) dlen = pts.segment_length(k);
    }
-   dave /= (double)pts.num();
+   dave /= (double)pts.size();
 
    num = (int)ceil(pts.length()/dlen);
 
    dlen = 1.0/(double)num;
 
-   for (k=0; k<=num; k++) 
-   {
-      spts += pts.interpolate((double)k*dlen,0,&seg,&frac);
+   for (k=0; k<=num; k++) {
+      spts.push_back(pts.interpolate((double)k*dlen,0,&seg,&frac));
       sprl += prl[seg]*(1.0-frac) + prl[seg+1]*frac;
    }
    spts.update_length();
 
-   if (spts.empty()) 
-   {
+   if (spts.empty()) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::smooth_gesture() - Warning: Smoothed point list is empty.");
       return false;
    }
@@ -709,33 +706,30 @@ HatchingGroupBase::smooth_gesture(
    //just pick off multiples, but we'll spline instead
    //using a desired subsampling as control pts
 
-   //int cnt = (int)ceil(VIEW::peek()->ndc2pix_scale() * spts.length() / spline_spacing);
-   int cnt = (int)ceil((spts.length() / dave)/spline_spacing);
+   //NDCpt_list::size_type cnt = (int)ceil(VIEW::peek()->ndc2pix_scale() * spts.length() / spline_spacing);
+   NDCpt_list::size_type cnt = (int)ceil((spts.length() / dave)/spline_spacing);
    
    // But we'll not sample fewer than some arbitrary
    // amount in case the fps is low and we've few pts.
-   cnt = max(cnt, HATCH_MIN_SPLINE_SAMPLES);
+   cnt = max((int)cnt, HATCH_MIN_SPLINE_SAMPLES);
 
    dlen = 1.0/(double)(cnt-1);
    
-   for (k=0 ; k<cnt ; k++) 
-   {
+   for (k=0; k<cnt; k++) {
       spline.add(Wpt(XYpt(spts.interpolate((double)k*dlen,0,&seg,&frac))),k);
       double p = sprl[seg]*(1.0-frac) + sprl[seg+1]*frac;
       pspline.add(Wpt(p,p,p),k);
    }
         
-   int pix_len = (int)ceil(spts.length() *
-                           VIEW::peek()->ndc2pix_scale() / sample_spacing);
+   NDCpt_list::size_type pix_len = (int)ceil(spts.length() * VIEW::peek()->ndc2pix_scale() / sample_spacing);
    if (pix_len < 2) pix_len = 2;
 
    dlen = (double)(cnt-1)/(double)(pix_len - 1);
 
    spts.clear();
    sprl.clear();
-   for (k=0 ; k<pix_len ; k++) 
-   {
-      spts += NDCpt(spline.pt((double)k*dlen));
+   for (k=0 ; k<pix_len ; k++) {
+      spts.push_back(NDCpt(spline.pt((double)k*dlen)));
       sprl += (pspline.pt((double)k*dlen))[0];
    }
    spts.update_length();
@@ -760,9 +754,8 @@ HatchingGroupBase::is_gesture_silly(
       return true;
    }
       
-   if (pts.num() < 3)
-   {
-      err_mesg(ERR_LEV_WARN, "HatchingGroupBase::is_gesture_silly() - Too few points: %d", pts.num());
+   if (pts.size() < 3) {
+      err_mesg(ERR_LEV_WARN, "HatchingGroupBase::is_gesture_silly() - Too few points: %d", pts.size());
       return true;
    }
    
@@ -778,8 +771,8 @@ HatchingGroupBase::is_gesture_silly(
    }
 
    double wind=0.0, awind = 0.0;
-   int k;
-   for (k = 1; k < pts.num()-1; k++) {
+   NDCpt_list::size_type k;
+   for (k = 1; k < pts.size()-1; k++) {
       NDCvec v1 = (pts[k]   - pts[k-1]).normalized();
       NDCvec v2 = (pts[k+1] - pts[k]).normalized();
       double  a = Sign(det(v1,v2)) * acos(max(-0.999,min(v1*v2, 0.999)));
@@ -791,7 +784,7 @@ HatchingGroupBase::is_gesture_silly(
    wind = fabs(wind);
    awind /= (M_PI*2);   
 
-   double straight = pts[pts.num()-1].dist(pts[0]) / pts.length();
+   double straight = pts[pts.size()-1].dist(pts[0]) / pts.length();
 
    if (wind > HATCH_MAX_WINDING)
    { 
@@ -816,8 +809,7 @@ HatchingGroupBase::is_gesture_silly(
    minx = maxx = pts[0][0];
    miny = maxy = pts[0][1];
 
-   for (k=1 ; k<pts.num(); k++)
-   {
+   for (k=1 ; k<pts.size(); k++) {
       if (pts[k][0] > maxx) maxx = pts[k][0];
       if (pts[k][0] < minx) minx = pts[k][0];
       if (pts[k][1] > maxy) maxy = pts[k][1];
@@ -834,8 +826,8 @@ HatchingGroupBase::is_gesture_silly(
       return true;
    }
 
-   if (!((pts[pts.num()-1][0] == minx) || (pts[pts.num()-1][0] == maxx) ||
-         (pts[pts.num()-1][1] == miny) || (pts[pts.num()-1][1] == maxy) ))
+   if (!((pts[pts.size()-1][0] == minx) || (pts[pts.size()-1][0] == maxx) ||
+         (pts[pts.size()-1][1] == miny) || (pts[pts.size()-1][1] == maxy) ))
    {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::is_gesture_silly() - Last point not on stroke bounding box.");
       return true;
@@ -850,41 +842,32 @@ HatchingGroupBase::is_gesture_silly(
 // fit_line() - y=a*x+b 
 /////////////////////////////////////
 bool 
-HatchingGroupBase::fit_line(CNDCpt_list &pts, double &a, double &b ) {
-
-
+HatchingGroupBase::fit_line(CNDCpt_list &pts, double &a, double &b )
+{
    double sumX = 0.0, sumY = 0.0, sumXY = 0.0, sumX2 = 0.0, denom;
-   int i;
+   NDCpt_list::size_type i;
 
-
-   if (pts.num() < 2) 
-   {
+   if (pts.size() < 2) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::fit_line() - Can't do linear fit to < 2 points...");
       return false;
    }
 
-
-   for (i=0;i<pts.num();i++) {
+   for (i=0; i<pts.size(); i++) {
       sumX += pts[i][0];
       sumY += pts[i][1];
       sumXY += pts[i][0]*pts[i][1];
       sumX2 += pts[i][0]*pts[i][0];
    }
 
+   denom = pts.size()*sumX2 - sumX*sumX;
 
-   denom = pts.num()*sumX2 - sumX*sumX;
-
-
-   if (denom == 0.0) 
-   {
+   if (denom == 0.0) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::fit_line() - Can't do linear fit with denom=0...");
       return false;
    }
 
-
-   a = ( pts.num()*sumXY - sumX*sumY )/denom;
+   a = ( pts.size()*sumXY - sumX*sumY )/denom;
    b = ( sumX2*sumY - sumXY*sumX )/denom;
-
 
    return true;
 }
@@ -975,71 +958,62 @@ HatchingGroupBase::clip_curve_to_stroke(
    CWpt_list &allpts, 
    Wpt_list &clippts)
 {
-   int k, i1, i2;
-
+   Wpt_list::size_type k;
+   int i1, i2;
 
    NDCpt_list ndclList;
-   for (k=0;k<allpts.num();k++){
-      ndclList += NDCpt(pat->xform()*allpts[k]);
+   for (k=0; k<allpts.size(); k++) {
+      ndclList.push_back(NDCpt(pat->xform()*allpts[k]));
    }
-
 
    NDCpt ndcEnd1;
    NDCpt ndcEnd2;
    
    double foo;
-   ndclList.closest(gestpts[0],              ndcEnd1, foo, i1);
-   ndclList.closest(gestpts[gestpts.num()-1],ndcEnd2, foo, i2);
+   ndclList.closest(gestpts[0],               ndcEnd1, foo, i1);
+   ndclList.closest(gestpts[gestpts.size()-1],ndcEnd2, foo, i2);
 
    Wpt wEnd1;
    Wpt wEnd2;
 
-
-   if (i1 < allpts.num() -1) {
+   if (i1 < (int)allpts.size() -1) {
       double del = (ndclList[i1+1] - ndclList[i1]).length();
       double d =          (ndcEnd1 - ndclList[i1]).length();
-      if (del>0)
-      {
+      if (del>0) {
          double frac = d/del;
          if (frac>1) frac=1;
          wEnd1 = allpts[i1]*(1.0-frac) + allpts[i1+1]*frac;
-      }
-      else
+      } else
          wEnd1 = allpts[i1];
+   } else {
+      wEnd1 = allpts[allpts.size()-1];
    }
-   else {
-      wEnd1 = allpts[allpts.num()-1];
-   }
-   if (i2 < allpts.num() -1) {
+
+   if (i2 < (int)allpts.size() -1) {
       double del = (ndclList[i2+1] - ndclList[i2]).length();
       double d =          (ndcEnd2 - ndclList[i2]).length();
-      if (del>0)
-      {
+      if (del>0) {
          double frac = d/del;
          if (frac>1) frac=1;
          wEnd2 = allpts[i2]*(1.0-frac) + allpts[i2+1]*frac;
-      }
-      else
+      } else
          wEnd2 = allpts[i2];
+   } else {
+      wEnd2 = allpts[allpts.size()-1];
    }
-   else {
-      wEnd2 = allpts[allpts.num()-1];
-   }
-
 
    if (i1 <= i2) {
-      clippts += wEnd1;
-      for (k=i1+1 ; k<=i2 ; k++) {
-         clippts += allpts[k];
+      clippts.push_back(wEnd1);
+      for (k=i1+1; (int)k<=i2; k++) {
+         clippts.push_back(allpts[k]);
       }
-      clippts += wEnd2;
-   }
-   else {
-      clippts += wEnd1;
-      for (k=i1 ; k>i2 ; k--) {
-         clippts += allpts[k];
+      clippts.push_back(wEnd2);
+   } else {
+      clippts.push_back(wEnd1);
+      for (k=i1; (int)k>i2; k--) {
+         clippts.push_back(allpts[k]);
       }
-      clippts += wEnd2;
+      clippts.push_back(wEnd2);
    }
 }
 
@@ -1549,8 +1523,7 @@ HatchingHatchBase::get_norms(TAGformat &d)
 {
    *d >> _norms;
 
-   assert(_pts.num() == _norms.num());
-
+   assert((int)_pts.size() == _norms.num());
 }
 
 /////////////////////////////////////
@@ -1562,7 +1535,6 @@ HatchingHatchBase::put_offsetlist(TAGformat &d) const
    d.id();
    _offsets->format(*d);
    d.end_id();
-
 }
 
 /////////////////////////////////////
@@ -1643,10 +1615,10 @@ HatchingHatchBase::HatchingHatchBase(
 {
    assert(_level);
 
-   assert(pl.num() == nl.num());
+   assert((int)pl.size() == nl.num());
 
    _pts.clear();   
-   _pts.operator+=(pl);
+   _pts.insert(_pts.end(), pl.begin(), pl.end());
 
    _norms.clear();   
    _norms.operator+=(nl);
@@ -1670,10 +1642,9 @@ HatchingHatchBase::HatchingHatchBase(
 void
 HatchingHatchBase::init()
 {
-
    assert(_level);
 
-   assert(_pts.num() == _norms.num());
+   assert((int)_pts.size() == _norms.num());
         
    _pts.update_length();
 
@@ -1775,25 +1746,22 @@ HatchingHatchBase::stroke_real_setup()
    //set, and this is in fact sufficient for 
    //fixed hatches...
 
-   int i;
+   Wpt_list::size_type i;
 
    //XXX - Might make this always happen and
    //apply the current obj->world xform...
 
-   if (_real_pts.num() == 0)
-   {
-      assert(_real_pts.num() == _real_norms.num());
+   if (_real_pts.empty()) {
+      assert((int)_real_pts.size() == _real_norms.num());
 
-      for (i=0; i<_pts.num(); i++)
-      {
-         _real_pts.add(_pts[i]);
+      for (i=0; i<_pts.size(); i++) {
+         _real_pts.push_back(_pts[i]);
          _real_norms.add(_norms[i]);
          _real_good.add(true);
       }
 
       _real_pix_size = _pix_size;
    }
-
 }
 
 
@@ -1825,13 +1793,12 @@ HatchingHatchBase::stroke_pts_setup()
    double num = pix_len/pix_spacing;
 
    //Spacing
-   double gap = max((double)_real_pts.num() / num, 1.0);
+   double gap = max((double)_real_pts.size() / num, 1.0);
 
    double i=0;  int j = 0;
 
-   int n = _real_pts.num()-1;
-   while (j<n)
-   {
+   Wpt_list::size_type n = _real_pts.size()-1;
+   while (j < (int)n) {
       pt = NDCZpt(_real_pts[j],_level->group()->patch()->obj_to_ndc());
       if (select) select->update(pt);
 

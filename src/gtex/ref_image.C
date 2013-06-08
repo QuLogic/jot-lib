@@ -1356,7 +1356,7 @@ VisRefImage::get_faces(const PIXEL_list& pix, double screen_rad)
    // Call get_face() on each screen point in sequence:
 
    Bface_list ret;
-   for (int i=0; i<pix.num(); i++) {
+   for (PIXEL_list::size_type i=0; i<pix.size(); i++) {
       Bface* f = get_face(pix[i], screen_rad);
       if (f)
          ret.add_uniquely(f);

@@ -28,10 +28,11 @@ const double CarriersCell::FADE_WIDTH = 0.1;
 
 void 
 CarriersCell::add_stroke(const vector<UVpt>& pts,
-			 const vector<double>& pressures){
-  int nb_carrier1_pts = _carrier1->pts().num();
+			 const vector<double>& pressures)
+{
+  PIXEL_list::size_type nb_carrier1_pts = _carrier1->pts().size();
   BBOXpix dummy_bbox1 (_carrier1->pts()[0], _carrier1->pts()[nb_carrier1_pts-1]);
-  int nb_carrier2_pts = _carrier2->pts().num();
+  PIXEL_list::size_type nb_carrier2_pts = _carrier2->pts().size();
   BBOXpix dummy_bbox (_carrier2->pts()[0], _carrier2->pts()[nb_carrier2_pts-1]);
   dummy_bbox += dummy_bbox1;
   GestureStroke stroke (dummy_bbox);
@@ -42,8 +43,8 @@ CarriersCell::add_stroke(const vector<UVpt>& pts,
   PIXEL end2 = _carrier2->end();
   double min_thickness = min((start1-start2).length(), (end1-end2).length());
   
-  unsigned int nb_pts = pts.size();
-  for (unsigned int i=0 ; i<nb_pts ; i++){
+  vector<UVpt>::size_type nb_pts = pts.size();
+  for (vector<UVpt>::size_type i=0; i<nb_pts; i++) {
     PIXEL p, q;
     double beta = closest_pixels(pts[i][0], p, q, _carrier1, _carrier1_coords);
     PIXEL pixel_on_carrier1 = (1.0-beta)*p + beta*q;
@@ -68,15 +69,15 @@ CarriersCell::add_stroke(const vector<UVpt>& pts,
 
 double 
 CarriersCell::closest_pixels (double u, PIXEL& p, PIXEL& q, 
-			      const GESTUREptr carrier, const vector<double>& carrier_coords) const{
- 
+			      const GESTUREptr carrier, const vector<double>& carrier_coords) const
+{
   const PIXEL_list& pts = carrier->pts();
-  unsigned int nb_carrier_pixels = carrier_coords.size();
+  vector<double>::size_type nb_carrier_pixels = carrier_coords.size();
   bool found = false;
   double alpha = 0.0;
   
-  for (unsigned int i=1 ; i<nb_carrier_pixels && !found; i++){
-    if (u<=carrier_coords[i]){
+  for (vector<double>::size_type i=1; i<nb_carrier_pixels && !found; i++) {
+    if (u<=carrier_coords[i]) {
       p = pts[i-1];
       q = pts[i];
       alpha = (u-carrier_coords[i-1])/(carrier_coords[i]-carrier_coords[i-1]);
@@ -95,7 +96,8 @@ CarriersCell::closest_pixels (double u, PIXEL& p, PIXEL& q,
 
 
 void 
-CarriersCell::compute_carriers_coords (bool compute_coords1){
+CarriersCell::compute_carriers_coords (bool compute_coords1)
+{
   GESTUREptr carrier;
   vector<double>* carrier_coords;
   if (compute_coords1) {
@@ -107,14 +109,14 @@ CarriersCell::compute_carriers_coords (bool compute_coords1){
   }
 
   const PIXEL_list& pts = carrier->pts();
-  unsigned int nb_carrier_pixels = pts.num();
+  PIXEL_list::size_type nb_carrier_pixels = pts.size();
   double length = carrier->length();
   
   if (nb_carrier_pixels<2) return;
   
   double carrier_coord = 0.0;
   PIXEL last_pixel = pts[0];
-  for (unsigned int i=0;  i<nb_carrier_pixels-1 ; i++){
+  for (PIXEL_list::size_type i=0;  i<nb_carrier_pixels-1 ; i++) {
     PIXEL cur_pixel = pts[i];
     carrier_coord += cur_pixel.dist(last_pixel)/length;
     last_pixel = cur_pixel;
@@ -122,7 +124,6 @@ CarriersCell::compute_carriers_coords (bool compute_coords1){
   }
   carrier_coords->push_back(1.0);
 }
-
 
 
 double 
@@ -139,3 +140,4 @@ CarriersCell::alpha(CUVpt& pt) const{
     return 0.0;
   }
 }
+

@@ -256,7 +256,7 @@ Map2D3D::ucurve(const vector<double>& uvals, double v) const
 {
    Wpt_list ret(uvals.size());
    for (vector<double>::size_type i=0; i<uvals.size(); i++)
-      ret += map(UVpt(uvals[i], v));
+      ret.push_back(map(UVpt(uvals[i], v)));
    ret.update_length();
    return ret;
 }
@@ -266,7 +266,7 @@ Map2D3D::vcurve(double u, const vector<double>& vvals) const
 {
    Wpt_list ret(vvals.size());
    for (vector<double>::size_type j=0; j<vvals.size(); j++)
-      ret += map(UVpt(u, vvals[j]));
+      ret.push_back(map(UVpt(u, vvals[j])));
    ret.update_length();
    return ret;
 }
@@ -277,12 +277,12 @@ dist(CWpt_list& p, CWpt_list& q)
    // return average distance between the polylines
    // (that must have same number of points)
 
-   int n = p.num();
-   assert(n == q.num());
+   Wpt_list::size_type n = p.size();
+   assert(n == q.size());
    double ret = 0;
-   for (int i=0; i<n; i++)
+   for (Wpt_list::size_type i=0; i<n; i++)
       ret += p[i].dist(q[i]);
-   return ret / max(1,n);
+   return ret / max(1UL, n);
 }
 
 void
@@ -548,7 +548,7 @@ TubeMap::TubeMap(
    // but moved to the top and rescaled to match the sweep curve.
 
    // Scale factor:
-   double s = spts.last()[2]/spts.first()[2];
+   double s = spts.back()[2]/spts.front()[2];
 
    // Combined xform:
    Wtransf M = _a->F(1) * Wtransf::scaling(0,s,s) * _a->Finv(0);
@@ -588,13 +588,13 @@ TubeMap::map(CUVpt& uv) const
    //   the Wpt_list.
 
    // Choose scale factor to apply to top and bottom curves:
-   double scale0 = sv[2] / _s.first()[2];
-   double scale1 = sv[2] / _s.last ()[2];
+   double scale0 = sv[2] / _s.front()[2];
+   double scale1 = sv[2] / _s.back ()[2];
    Wtransf S0 = Wtransf::scaling(0, scale0, scale0);
    Wtransf S1 = Wtransf::scaling(0, scale1, scale1);
 
    // normalize t coord to end at 1.0
-   double t = sv[0] / _s.last()[0];
+   double t = sv[0] / _s.back()[0];
 
    // Get axis frame F at t, apply to interpolated, scaled
    // cross-sections in local coordinates of F:
@@ -608,15 +608,15 @@ TubeMap::set_pts(CWpt_list &pts)
 {
    _s = pts; 
    _s.update_length();
-   if (false && pts.num() > 0 && _c1 != NULL) {
+   if (false && !pts.empty() && _c1 != NULL) {
 
       //Wpt_listMap* axis = Wpt_listMap::upcast(_a);
       //Wpt_list apts = axis->pts();
       //assert(apts.num() == 2);
-      //axis->p1()->set_pt(Wline(apts[0], apts[1]).project(pts.last()));
+      //axis->p1()->set_pt(Wline(apts[0], apts[1]).project(pts.back()));
 
       // Scale factor:
-      double s = pts.last()[2]/pts.first()[2];
+      double s = pts.back()[2]/pts.front()[2];
 
       // Combined xform:
       Wtransf M = _a->F(1) * Wtransf::scaling(0,s,s) * _a->Finv(0);

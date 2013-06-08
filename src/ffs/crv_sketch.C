@@ -47,8 +47,8 @@ static inline void convert_to_list(Bcurve* bcurve, PIXEL_list& list)
    Wpt_list pts = bcurve->get_wpts();
    
    list.clear();
-   for (int i = 0; i<pts.num(); i++)
-      list += bcurve->shadow_plane().project(pts[i]);
+   for (Wpt_list::size_type i = 0; i<pts.size(); i++)
+      list.push_back(bcurve->shadow_plane().project(pts[i]));
    list.update_length();
 }
 
@@ -60,11 +60,11 @@ CRV_SKETCH::cache_curve(Bcurve* bcurve)
    _shadow_pts.clear();
    _shadow_normals.clear();
 
-   for (int i = 0; i<pts.num(); i++)
-      _shadow_pts += bcurve->shadow_plane().project(pts[i]);
+   for (Wpt_list::size_type i = 0; i<pts.size(); i++)
+      _shadow_pts.push_back(bcurve->shadow_plane().project(pts[i]));
    _shadow_pts.update_length();
 
-   for (int i = 0; i < _shadow_pts.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < _shadow_pts.size(); i++) {
       _shadow_normals += normal_at_shadow(i);
    }
 }
@@ -165,7 +165,7 @@ CRV_SKETCH::draw(CVIEWptr& v)
          // draw the line strip
             PIXEL_list pts = _shadow_pixels;
             glBegin(GL_LINE_STRIP);
-            for (int k=0; k< pts.num(); k++) {
+            for (PIXEL_list::size_type k=0; k< pts.size(); k++) {
                glColor3d(0.3, 0.3, 0.3);      // GL_CURRENT_BIT
                glVertex2dv(pts[k].data());
             }
@@ -210,7 +210,7 @@ CRV_SKETCH::draw(CVIEWptr& v)
          for (int i = 0; i < pl.num(); i++) {
             PIXEL_list pts = pl[i];
             glBegin(GL_LINE_STRIP);
-            for (int k=0; k< pts.num(); k++) {
+            for (PIXEL_list::size_type k=0; k< pts.size(); k++) {
                glColor3d(0.3, 0.3, 0.3);      // GL_CURRENT_BIT
                glVertex2dv(pts[k].data());
             }
@@ -410,15 +410,15 @@ CRV_SKETCH::stroke_cb(CGESTUREptr& gest , DrawState*&)
    cache_curve(_curve);
 
    SurfaceCurveMap* o = (SurfaceCurveMap*)_curve->map();
-            UVpt_list o_uvp = o->uvs();
-            UVpt_list uvp;
-            for (int i = 0; i < _shadow_pts.num(); i++) {
-               double t = _shadow_pts.partial_length(i) / _shadow_pts.length();
-               double h = (o->map(t) - _shadow_pts[i]) * _curve->shadow_plane().normal();
-               uvp += UVpt(t, h);
-               if (debug) cerr << "t, h: <" << t << ", " << h << ">" << endl;
-            }
-            uvp.update_length();
+   UVpt_list o_uvp = o->uvs();
+   UVpt_list uvp;
+   for (Wpt_list::size_type i = 0; i < _shadow_pts.size(); i++) {
+      double t = _shadow_pts.partial_length(i) / _shadow_pts.length();
+      double h = (o->map(t) - _shadow_pts[i]) * _curve->shadow_plane().normal();
+      uvp.push_back(UVpt(t, h));
+      if (debug) cerr << "t, h: <" << t << ", " << h << ">" << endl;
+   }
+   uvp.update_length();
    o->set_uvs(uvp);
 
    PIXEL_list upperc;
@@ -464,19 +464,19 @@ CRV_SKETCH::specify_upper(CWpt_list& list)
    // make sure list from has the same number of points as the shadow
    // curve.
    
-   assert (list.num() == _shadow_pts.num());
+   assert(list.size() == _shadow_pts.size());
    _shadow_pts.update_length();
 
    vector<double> shadow_tvals = _curve->get_map_tvals();
-   assert((int)shadow_tvals.size() == _shadow_pts.num());
+   assert(shadow_tvals.size() == _shadow_pts.size());
    
-   for (int i = 0; i < list.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < list.size(); i++) {
       double t = shadow_tvals[i];
       double h = (list[i] - _shadow_pts[i]) * _curve->shadow_plane().normal();
       if (debug) {
          cerr << "got t,h pair " <<t << ",  " << h << " wpt = " << list[i] << endl;
       }
-      uvp += UVpt(t, h);
+      uvp.push_back(UVpt(t, h));
    }
    
    uvp.update_length();
@@ -495,7 +495,7 @@ CRV_SKETCH::specify_upper(CWpt_list& list)
 
    // then set the new uv point list
    assert(SurfaceCurveMap::isa(upp->map()));
-   CRV_SKETCH_CMDptr  cmd= new CRV_SKETCH_CMD(upp,uvp, list.first(), list.last());
+   CRV_SKETCH_CMDptr  cmd= new CRV_SKETCH_CMD(upp,uvp, list.front(), list.back());
    WORLD::add_command(cmd);
    //((SurfaceCurveMap*)(upp->map()))->set_uvs(uvp);
    
@@ -610,10 +610,10 @@ CRV_SKETCH::init(CGESTUREptr& g)
 
             Map2D3D* surface = new RuledSurfCurveVec(me->_shadow_map);
             UVpt_list uvp;
-            for (int i = 0; i < me->_shadow_pts.num(); i++) {
+            for (Wpt_list::size_type i = 0; i < me->_shadow_pts.size(); i++) {
                double t = me->_shadow_pts.partial_length(i) / me->_shadow_pts.length();
                double h = 0.0;
-               uvp += UVpt(t, h);
+               uvp.push_back(UVpt(t, h));
                //if (debug) cerr << "norm: " << me->_curve->map()->norm(t) << endl;
             }
             uvp.update_length();
@@ -687,13 +687,13 @@ CRV_SKETCH::set_shadow_map()
 {
    _shadow_pts.clear();
    Wpt_list wpts = _curve->get_wpts();
-   for (int i = 0; i < wpts.num(); i++)
-      _shadow_pts += _curve->shadow_plane().project(wpts[i]);
+   for (Wpt_list::size_type i = 0; i < wpts.size(); i++)
+      _shadow_pts.push_back(_curve->shadow_plane().project(wpts[i]));
    _shadow_pts.update_length();
 
    if (!_shadow_pts.is_closed())
       _shadow_map = new Wpt_listMap(_shadow_pts, new WptMap(_shadow_pts[0]),
-         new WptMap(_shadow_pts.last()), _curve->shadow_plane().normal());
+         new WptMap(_shadow_pts.back()), _curve->shadow_plane().normal());
    else
       _shadow_map = new Wpt_listMap(_shadow_pts, 0, 0, _curve->shadow_plane().normal());
 }
@@ -889,10 +889,9 @@ CRV_SKETCH::build_guidelines(CWpt_list& line_locs,
    guidelines.clear();
 
    // build new lines at every cusp point
-   for (int i = 0 ;i<line_locs.num();i++) {      
-
+   for (Wpt_list::size_type i = 0 ;i<line_locs.size();i++) {
       // If pool is exhausted, create a new line
-      if ( i == _line_pool.num() ) {
+      if ( (int)i == _line_pool.num() ) {
          _line_pool += create_new_guideline();
       }
       // Grab a line from the pool
@@ -912,10 +911,9 @@ CRV_SKETCH::build_guidelines(CWpt_list& line_locs,
    guidelines.clear();
 
    // build new lines at every cusp point
-   for (int i = 0 ;i<line_locs.num(); i++) {      
-
+   for (Wpt_list::size_type i = 0 ;i<line_locs.size(); i++) {
       // If pool is exhausted, create a new line
-      if ( i == _line_pool.num() ) {
+      if ( (int)i == _line_pool.num() ) {
          _line_pool += create_new_guideline();
       }
       // Grab a line from the pool
@@ -961,7 +959,7 @@ CRV_SKETCH::update(void)
       Wpt_list locs;
       //locs += _points[0]->loc();
       for (int j=0; j<_points.num(); j++) {
-         locs += _points[j]->loc();
+         locs.push_back(_points[j]->loc());
       }
 
       if ( _mode == SHADOW ) {
@@ -988,10 +986,9 @@ CRV_SKETCH::update(void)
    
       // first one is always a cusp
       _shadow_cusp_list += 0;
-      cusp_pts += shadow_pts[0];
-   
+      cusp_pts.push_back(shadow_pts[0]);
 
-      for (int i = 1 ;i<shadow_pts.num() - 1;i++) {
+      for (Wpt_list::size_type i = 1 ;i<shadow_pts.size() - 1;i++) {
          if (CRV_SKETCH::is_cusp(shadow_pts[i-1], 
                                  shadow_pts[i], 
                                  shadow_pts[i+1], 
@@ -999,9 +996,8 @@ CRV_SKETCH::update(void)
              normal_at_shadow(i))
             ) {
             _shadow_cusp_list+=i;
-            cusp_pts += shadow_pts[i];
+            cusp_pts.push_back(shadow_pts[i]);
          }
-      
       }
    
       // XXX - this procedure may find too many cusps.. there should be
@@ -1010,8 +1006,8 @@ CRV_SKETCH::update(void)
 
 
       // last one is always a cusp
-      _shadow_cusp_list += shadow_pts.num() - 1;
-      cusp_pts += shadow_pts[shadow_pts.num() - 1];
+      _shadow_cusp_list += shadow_pts.size() - 1;
+      cusp_pts.push_back(shadow_pts[shadow_pts.size() - 1]);
 
       if (debug) {
          cerr << " CRV_SKETCH::update building guidelines " << endl;
@@ -1030,7 +1026,7 @@ CRV_SKETCH::oversketch_shadow(CPIXEL_list& sketch_pixels)
 
    // First, check parameters 
 
-   if (sketch_pixels.num() < 2) {
+   if (sketch_pixels.size() < 2) {
       cerr << "CRV_SKETCH::oversketch_shadow(): too few sketch pixels" << endl;
       return false;
    }
@@ -1038,7 +1034,7 @@ CRV_SKETCH::oversketch_shadow(CPIXEL_list& sketch_pixels)
    // Attempt to slice the sketch pixels into the current screen path of the curve
    PIXEL_list& curve_pixels = _shadow_pixels;
 
-   if (curve_pixels.num()<2) {
+   if (curve_pixels.size()<2) {
       cerr << "CRV_SKETCH::oversketch_shadow(): insufficient number of shadow pixel points"
            << endl;
       return false;
@@ -1060,8 +1056,8 @@ CRV_SKETCH::oversketch_shadow(CPIXEL_list& sketch_pixels)
    }
 
    _shadow_pixels.clear();
-   for (int i = 0; i < new_curve.num(); i++)
-      _shadow_pixels += new_curve[i];
+   for (PIXEL_list::size_type i = 0; i < new_curve.size(); i++)
+      _shadow_pixels.push_back(new_curve[i]);
    _shadow_pixels.update_length();
 
    // Now reshape the curve to the new desired pixel path.
@@ -1091,7 +1087,7 @@ CRV_SKETCH::reshape_shadow(const PIXEL_list &new_curve)
    WORLD::add_command(cmd);
    //m->set_pts(_shadow_pts);
    _shadow_normals.clear();
-   for (int i = 0; i < _shadow_pts.num(); i++)
+   for (Wpt_list::size_type i = 0; i < _shadow_pts.size(); i++)
       _shadow_normals += _curve->shadow_plane().normal();
 
    //or can be represented in one line as  //   WORLD::add_command(new (WPT_LIST_RESHAPE_CMD(m,pts)));
@@ -1118,7 +1114,7 @@ CRV_SKETCH::do_match(PIXEL_list& drawnlist,
       CRV_SKETCH::normal_to_screen_line(shadow_normals[0],
                                         shadow_pts[0]));
    PIXELline last_norm(
-      CRV_SKETCH::normal_to_screen_line(shadow_normals[shadow_pts.num()-1],
+      CRV_SKETCH::normal_to_screen_line(shadow_normals[shadow_pts.size()-1],
                                         shadow_pts.last()));
 
    const float same_loc_threshold = 14.0;
@@ -1141,10 +1137,10 @@ CRV_SKETCH::do_match(PIXEL_list& drawnlist,
  
       int i = 2;
       // Go further until a vector can be built
-      while (draw_dir.length()<0.5 && i<drawnlist.num())
+      while (draw_dir.length()<0.5 && i<drawnlist.size())
          draw_dir=drawnlist[i++]-drawnlist[0];
       i = 2;
-      while (shadow_dir.length()<0.5 && i<drawnlist.num())
+      while (shadow_dir.length()<0.5 && i<drawnlist.size())
          shadow_dir=shadow_pixels[i++]-shadow_pixels[0];
 
       if (draw_dir*shadow_dir <0) {
@@ -1222,16 +1218,16 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
 
    if(debug) cerr << "-------- In CRV_SKETCH::oversketch" << endl;
 
-   assert(drawnlist.num() > 1);
-   PIXEL start = drawnlist.first(); 
-   PIXEL   end = drawnlist.last();
+   assert(drawnlist.size() > 1);
+   PIXEL start = drawnlist.front();
+   PIXEL   end = drawnlist.back();
 
    const int PIX_THRESH = 15; // max distance to be considered "close"
 
    // Find indices of points on upperlist closest to start
    // and end points, respectively:
-   int start_x = -1;
-   int   end_x = -1;
+   size_t start_x = (size_t)-1;
+   size_t end_x = (size_t)-1;
 
    // If not closed curve, allow to not intersect curve, but
    // start at the same guideline.
@@ -1240,21 +1236,21 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
       // will allow drawing starting from non-curve point
       if (shadow_pix_line(0, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
          start_x = 0;
-      else if (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
-         start_x = shadow_pts.num()-1;
+      else if (shadow_pix_line(shadow_pts.size()-1, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
+         start_x = shadow_pts.size()-1;
 
       if ((start_x != 0) && (shadow_pix_line(0, shadow_pts, shadow_normals).dist(end) < PIX_THRESH))
          end_x = 0;
-      else if ((start_x != shadow_pts.num()-1) &&
-         (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH))
-         end_x = shadow_pts.num()-1;
+      else if ((start_x != shadow_pts.size()-1) &&
+         (shadow_pix_line(shadow_pts.size()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH))
+         end_x = shadow_pts.size()-1;
    }
 
    PIXEL foo; // dummy variable
    int idx;
-   if ((start_x == -1) && (upperlist.closest(start, foo, idx) < PIX_THRESH))
+   if ((start_x == (size_t)-1) && (upperlist.closest(start, foo, idx) < PIX_THRESH))
       start_x = idx;
-   if ((end_x == -1) && (upperlist.closest(  end, foo, idx) < PIX_THRESH))
+   if ((end_x == (size_t)-1) && (upperlist.closest(  end, foo, idx) < PIX_THRESH))
       end_x   = idx;
 
    /*// If not closed curve, allow to not intersect curve, but
@@ -1262,27 +1258,27 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
    if (!shadow_pts.is_closed()) {
       // See if start from beginning/ending (open curve), which
       // will allow drawing starting from non-curve point
-      if (start_x == -1) {
+      if (start_x == (size_t)-1) {
          if (shadow_pix_line(0, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
             start_x = 0;
-         if (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
-            start_x = shadow_pts.num()-1;
+         if (shadow_pix_line(shadow_pts.size()-1, shadow_pts, shadow_normals).dist(start) < PIX_THRESH)
+            start_x = shadow_pts.size()-1;
       }
-      if (end_x == -1) {
+      if (end_x == (size_t)-1) {
          if (shadow_pix_line(0, shadow_pts, shadow_normals).dist(end) < PIX_THRESH)
             end_x = 0;
-         if (shadow_pix_line(shadow_pts.num()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH)
-            end_x = shadow_pts.num()-1;
+         if (shadow_pix_line(shadow_pts.size()-1, shadow_pts, shadow_normals).dist(end) < PIX_THRESH)
+            end_x = shadow_pts.size()-1;
       }
    }*/
 
    // If start and end points weren't found, give up
-   if (start_x == -1) {
+   if (start_x == (size_t)-1) {
       if (debug) cerr << "couldn't find start point" << endl;
       return false;
    }
 
-   if (end_x == -1) {
+   if (end_x == (size_t)-1) {
       if (debug) cerr << "couldn't find end point" << endl;
       return false;
    }
@@ -1293,7 +1289,7 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
    // If the drawn stroke is oriented in opposite direction from
    // the curve, reverse it:
    if (start_x > end_x) {
-      drawn.reverse();
+      std::reverse(drawn.begin(), drawn.end());
       swap(start_x, end_x); // switch their names
    }
 
@@ -1305,18 +1301,18 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
    // grafted into the list. Get ready:
    PIXEL_list composite;
 
-   int i;
+   PIXEL_list::size_type i;
    // Copy first (unmodified) part:
    for (i=0; i < start_x; i++)
-      composite += upperlist[i];
+      composite.push_back(upperlist[i]);
 
    // Copy the new part
-   for (i=0; i < drawn.num(); i++)
-      composite += drawn[i];
+   for (i=0; i < drawn.size(); i++)
+      composite.push_back(drawn[i]);
 
    // Copy last (unmodified) part:
-   for (i=end_x+1; i < upperlist.num(); i++)
-      composite += upperlist[i];
+   for (i=end_x+1; i < upperlist.size(); i++)
+      composite.push_back(upperlist[i]);
 
    // If it started at the guideline, make it exact:
    //if (start_x == 0)
@@ -1325,19 +1321,18 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
    composite.update_length();
 
    if (debug) {
-
       cerr << "drawn pixels list" << endl;
-      for ( i = 0; i < drawn.num(); i++) {
+      for (i = 0; i < drawn.size(); i++) {
          cerr << i << " " << drawn[i] << endl;
       }
       
       cerr << "upperlist contents" << endl;
-      for ( i = 0; i < upperlist.num(); i++) {
+      for (i = 0; i < upperlist.size(); i++) {
          cerr << i << " " << upperlist[i] << endl;
       }
       
       cerr << "combined pixels " << endl;
-      for ( i = 0; i < composite.num(); i++) {
+      for (i = 0; i < composite.size(); i++) {
          cerr << i << " " << composite[i] << endl;
       }
    }
@@ -1407,8 +1402,6 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    static bool debug = Config::get_var_bool("DEBUG_MATCH_SPANS",false);
 
-//   static const double match_dist = 35.0;
-
    // distance in pixel space that a cusp can occur away from
    // where it is supposed to happen
    static const double the_zone = 15.0;
@@ -1417,7 +1410,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    // in case of a bad match
    PIXEL_list drawn = drawnpixels;
 
-   int i;
+   PIXEL_list::size_type i;
 
    // array of indeces that represent cusps in the drawn curve
    ARRAY<int> drawn_cusp_list;
@@ -1450,10 +1443,10 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    if (debug) {
       cerr << " -- In CRV_SKETCH::match_spans() " << endl;
       cerr << "    The shadow curve has " << shadow_cusps.num() << " cusps" << endl;
-      cerr << "    The drawn pixels list has " << drawn.num() << " pixels " << endl;
+      cerr << "    The drawn pixels list has " << drawn.size() << " pixels " << endl;
    }
 
-   for (i = 0; i < drawn.num(); i++) {
+   for (i = 0; i < drawn.size(); i++) {
       if (debug) {
          cerr << "i = " << i << " approaching cusp = " << cur_shadow_cusp << endl;
          cerr << " next shadow cusp vector " << scusp << endl
@@ -1486,7 +1479,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
          // for now we just wait til the last point in the drawn list,
          // and check to see if it is of reasonable distance to the 
          // last cusp
-         if (i == (drawn.num() - 1)) {
+         if (i == (drawn.size() - 1)) {
             VEXEL line_to_i = drawn[i] - shadow_pixels[shadow_cusps[cur_shadow_cusp]];
             ortho = line_to_i.orthogonalized(scusp).normalized();
             
@@ -1623,7 +1616,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    if (debug) {
       cerr << "Found Cusps at " << endl;
-      for (i =0; i < drawn_cusp_list.num(); i++) {
+      for (i = 0; (int)i < drawn_cusp_list.num(); i++) {
          cerr << drawn_cusp_list[i] << " ";
       }
       cerr << endl;
@@ -1657,8 +1650,8 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    for (cur_span = 0; cur_span < drawn_cusp_list.num() - 1; cur_span++) {
       PIXEL_list pl;
       if (debug) cerr << " Span #" << cur_span << endl;
-      for (i = drawn_cusp_list[cur_span]; i <= drawn_cusp_list[cur_span + 1]; i++) {
-         pl += drawn[i];
+      for (i = drawn_cusp_list[cur_span]; (int)i <= drawn_cusp_list[cur_span + 1]; i++) {
+         pl.push_back(drawn[i]);
          if (debug) cerr << " " << i << " added pixel" << drawn[i] << endl;
       }
       pl.update_length();
@@ -1669,8 +1662,8 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
       // copy the pixel list out
       PIXEL_list pl = spans[cur_span];
       // figure out best endpoints
-      PIXEL firstp = pl.first();
-      PIXEL lastp = pl.last();
+      PIXEL firstp = pl.front();
+      PIXEL lastp = pl.back();
 
       PIXEL correctfirst = PIXEL( (Wline(shadow_pts[shadow_cusps[cur_span]],
                                          shadow_normals[shadow_cusps[cur_span]])
@@ -1692,15 +1685,13 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
       for (cur_span = 0; cur_span < spans.num(); cur_span++) {
          PIXEL_list pl = spans[cur_span];
          cerr << "Span #" << cur_span << endl;
-         for (i = 0; i < pl.num(); i++) {
+         for (i = 0; i < pl.size(); i++) {
             cerr << pl[i] << endl;
          }
       }
    }
-         
 
    return true;
-
 }
 
 
@@ -1731,11 +1722,10 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
       cerr << endl;
    }
 
-   int i;
+   Wpt_list::size_type i;
    int cur_span = 0;
-   for (i = 0; i < shadow_pts.num(); i++) {
-
-      if (i == shadow_cusps[cur_span + 1] && i != (shadow_pts.num() - 1)) {
+   for (i = 0; i < shadow_pts.size(); i++) {
+      if ((int)i == shadow_cusps[cur_span + 1] && i != (shadow_pts.size() - 1)) {
          // if its the last one, don't increment
          cur_span++;
       }
@@ -1743,12 +1733,12 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
       PIXEL_list& plist = spans[cur_span];
       PIXELline pline(shadow_pixels[i], VEXEL(shadow_pts[i], shadow_normals[i]));
       
-      int j;
+      PIXEL_list::size_type j;
       bool first = true;
       PIXEL best_intersection;
 
       // search through each span for the best intersection
-      for (j = 0; j < plist.num() - 1; j++) {
+      for (j = 0; j < plist.size() - 1; j++) {
          PIXELline dseg(plist[j], plist[j+1]);
          PIXEL isect;
          
@@ -1762,10 +1752,10 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
             first = false;
          }
       }
-      ret += (Wline(shadow_pts[i], shadow_normals[i])).intersect(Wline(best_intersection));
+      ret.push_back((Wline(shadow_pts[i], shadow_normals[i])).intersect(Wline(best_intersection)));
    }
 
-   assert(ret.num() == shadow_pts.num());
+   assert(ret.size() == shadow_pts.size());
    ret.update_length();
 
    return true;

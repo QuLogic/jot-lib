@@ -487,12 +487,12 @@ public:
    void   set_pix_to_ndc_scale(double s)  { _pix_to_ndc_scale = s; }
    void   set_offset_pix_len(double s)    { _offset_pix_len = s; }
 
-   int      num()                   const { return _pts.num(); }
-   int      is_closed()             const { return _pts.num() > 2 && _pts[0] == _pts.last(); }
+   int      num()                   const { return _pts.size(); }
+   int      is_closed()             const { return _pts.size() > 2 && _pts[0] == _pts.back(); }
    double   length()                const { return _pts.length(); }
 
    mlib::CNDCZpt& pt(int i)               const { return _pts[i]; }
-   mlib::CNDCZpt& last()                  const { return _pts.last(); }
+   mlib::CNDCZpt& last()                  const { return _pts.back(); }
    mlib::CNDCZpt  pt(double u)            const { return _pts.interpolate(u); }
 
    mlib::NDCvec   vec(int i)              const { return _pts[i+1] - _pts[i]; }
@@ -500,7 +500,7 @@ public:
 
    mlib::NDCvec   tan(int i) const
    {
-      const int n = _pts.num()-1;
+      const int n = _pts.size()-1;
       if (i<0 || i>n || n<1)
          return mlib::NDCvec::null();
       if (i==0)
@@ -558,7 +558,7 @@ public:
    {
       if (_pts.empty()||i<0)
          return 0;
-      if (i>=_pts.num())
+      if (i>=(int)_pts.size())
          return _pts.length();
       return _pts.partial_length(i);
    }

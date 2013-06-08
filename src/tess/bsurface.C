@@ -762,7 +762,7 @@ Bsurface::tessellate(const vector<Bvert_list>& contours)
    Wpt_list pts;
    for (i=0; i<contours.size(); i++)
       for (j=0; j<contours[i].num(); j++)
-         pts += contours[i][j]->loc();
+         pts.push_back(contours[i][j]->loc());
    // calculate the plane
    pts.update_length();
    pts.get_plane(P);

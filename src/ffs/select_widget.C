@@ -250,26 +250,26 @@ next_match(Bvert* v, CPIXEL_list& trail, int k, double thresh)
 {
 
    // Ensure various required conditions are true:
-   if (!(v && trail.valid_index(k)))
+   if (!(v && 0 <= k && k < (int)trail.size()))
       return -1;
 
    PIXEL p = v->pix();
 
    // Run forward over the pixel trail to the 1st point
    // within the threshold distance of v:
-   int i = k+1;
-   for ( ; i < trail.num() && p.dist(trail[i]) > thresh; i++)
+   PIXEL_list::size_type i = k+1;
+   for ( ; i < trail.size() && p.dist(trail[i]) > thresh; i++)
       ;
 
    // If nothing found return failure status:
-   if (!trail.valid_index(i))
+   if (i >= trail.size())
       return -1;
 
    // Index i is good enough. But look a little farther for
    // something closer to v:
    int ret = i;
    double min_dist = p.dist(trail[i]);
-   for (i++ ; i < trail.num() && p.dist(trail[i]) < min_dist; i++) {
+   for (i++ ; i < trail.size() && p.dist(trail[i]) < min_dist; i++) {
       min_dist = p.dist(trail[i]);
       ret = i;
    }
@@ -291,10 +291,9 @@ pix_len(CWpt_list& pts)
 inline double
 length(CPIXEL_list& pix, int j, int k)
 {
-
    // XXX - requires that partial lengths have been updated.
 
-   if (pix.valid_index(j) && pix.valid_index(k))
+   if (0 <= j && j < (int)pix.size() && 0 <= k && k < (int)pix.size())
       return pix.partial_length(k) - pix.partial_length(j);
    return -1;
 }
@@ -303,7 +302,7 @@ inline int
 match_span(Bvert* v, Bedge* e, CPIXEL_list& trail, int k, double thresh)
 {
    // Ensure various required conditions are true:
-   if (!(v && e && e->contains(v) && trail.valid_index(k))) {
+   if (!(v && e && e->contains(v) && 0 <= k && k < (int)trail.size())) {
       err_adv(debug, "match_span: invalid vert/edge/index");
       return -1;
    }
@@ -877,12 +876,11 @@ match_span(Bvert* v, CPIXEL_list& trail, int& k)
    static double PT_THRESH =
       Config::get_var_dbl("SELECT_EDGE_CHAIN_PT_THRESH", 7);
 
-   if (!(v && trail.valid_index(k))) {
+   if (!(v && 0 <= k && k < (int)trail.size())) {
       err_adv(debug, "match_span: bad setup");
       return 0;
    }
 
-   
    // Find next edge within front-facing surface regions;
    // unless all edges are back-facing
    Bedge_list edges = v->get_manifold_edges().filter(StrongEdgeFilter());
@@ -894,7 +892,7 @@ match_span(Bvert* v, CPIXEL_list& trail, int& k)
 
    for (int i=0; i<edges.num(); i++) {
       int next_k = match_span(v, edges[i], trail, k, PT_THRESH);
-      if (trail.valid_index(next_k)) {
+      if (0 <= next_k && next_k < (int)trail.size()) {
          k = next_k;
          return edges[i];
       }
@@ -909,8 +907,8 @@ SELECT_WIDGET::select_faces(CPIXEL_list& pts)
 {
    err_adv(debug, "SELECT_WIDGET::select_faces:");
 
-   if (pts.num() < 2) {
-      err_adv(debug, "  too few points: %d", pts.num());
+   if (pts.size() < 2) {
+      err_adv(debug, "  too few points: %d", pts.size());
       return false;
    }
 
@@ -922,13 +920,11 @@ SELECT_WIDGET::select_faces(CPIXEL_list& pts)
    
    Bface_list flist;
 
-   for(int i = 0; i < pts.num(); ++i){
-      
+   for (PIXEL_list::size_type i = 0; i < pts.size(); ++i) {
       f = find_face(pts[i], 0.1, MIN_PIX_AREA);
       if (!f || f->is_selected())
          continue;
       flist += f;
-      
    }
    
    if(flist.num() > 0){
@@ -949,8 +945,8 @@ SELECT_WIDGET::select_edges(CPIXEL_list& pts)
 {
    err_adv(debug, "SELECT_WIDGET::select_edges:");
 
-   if (pts.num() < 2) {
-      err_adv(debug, "  bad gesture: %d points", pts.num());
+   if (pts.size() < 2) {
+      err_adv(debug, "  bad gesture: %d points", pts.size());
       return false;
    }
 

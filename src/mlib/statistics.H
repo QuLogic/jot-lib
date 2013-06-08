@@ -18,6 +18,8 @@
 #ifndef STATISTICS_H_IS_INCLUDED
 #define STATISTICS_H_IS_INCLUDED
 
+#include <vector>
+
 /*!
  *  \file statistics.H
  *  \brief Statistical functions.
@@ -33,7 +35,7 @@ namespace mlib {
 //! The template parameter \p T should be some sort of numerical type for this
 //! function to work.
 //!
-//! \param[in]  list    ARRAY of values over which statistics will be computed.
+//! \param[in]  list    vector of values over which statistics will be computed.
 //! \param[in]  print   Whether or not to print results to stderr.
 //! \param[out] average Average of values in \p list.
 //! \param[out] std_d   Standard deviation of values in \p list.
@@ -47,7 +49,7 @@ namespace mlib {
 template <class T>
 void
 statistics(
-   CARRAY<T> &list,
+   const vector<T> &list,
    bool print,
    double *average,
    double* std_d,
@@ -59,18 +61,17 @@ statistics(
    T max=0;
    T min=DBL_MAX;
 
-   for(int i=0;i<list.num();i++) 
-   { 
+   for (typename vector<T>::size_type i=0;i<list.size();i++) {
       sum+=list[i]; 
       sqr_sum+=(list[i]*list[i]);
       if(list[i]>max) max=list[i];
       if(list[i]<min) min=list[i];
    }
-   double avg = sum/list.num();
-   double std = sqrt(sqr_sum/list.num() - avg*avg);
+   double avg = sum/list.size();
+   double std = sqrt(sqr_sum/list.size() - avg*avg);
 
    if(print)
-      cerr << "Statistics ------ # of samples = " << list.num()<<
+      cerr << "Statistics ------ # of samples = " << list.size()<<
       ", Average = " << avg << ", Std D= " << std<< ", Max= " << max<< ", Min= " <<min<<endl;
 
    if(average) *average=avg;

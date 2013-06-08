@@ -341,7 +341,7 @@ WORLD::show_pts(
    //       This is done in a hurry to get something that
    //       works but is not efficient.
 
-   for (int i=0; i<pts.num(); i++)
+   for (Wpt_list::size_type i=0; i<pts.size(); i++)
       show(pts[i], width, col, alpha, depth_test);
 
    return 0;

@@ -448,7 +448,7 @@ pts_dim(CWpt_list& pts)
 {
    double ret = 0;
    Wpt c = pts.average();
-   for (int i = 0; i < pts.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++) {
       if (c.dist(pts[i]) > ret)
          ret = c.dist(pts[i]);
    }

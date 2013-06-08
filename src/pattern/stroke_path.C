@@ -58,7 +58,7 @@ bool
 StrokePaths::match_point(const GestureStroke& stroke){
   CGESTUREptr& gest = stroke.gesture();
   double max_dist = gest->spread();
-  if (gest->pts().num()==1){
+  if (gest->pts().size() == 1) {
     _axis_a = VEXEL(1.0, 0.0)*max_dist;
   } else {
     _axis_a = gest->endpt_vec().normalized()*max_dist;
@@ -74,11 +74,11 @@ StrokePaths::match_line(const GestureStroke& stroke){
   PIXEL end = stroke.gesture()->end();
   VEXEL ends_vec = end-start;
   CPIXEL_list pts = stroke.gesture()->pts();
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
 
   // first compute the center and principal axis 
   double proj_min=0.0, proj_max=1.0;
-  for (int i=1 ; i<nb_pts-1 ; i++){
+  for (PIXEL_list::size_type i=1; i<nb_pts-1; i++) {
     VEXEL pt_vec = pts[i]-start;
     double proj = pt_vec.normalized()*ends_vec.normalized()*pt_vec.length()/ends_vec.length();
     if (proj<proj_min){
@@ -96,7 +96,7 @@ StrokePaths::match_line(const GestureStroke& stroke){
   double pos_dist=0.0, neg_dist=0.0;
   bool match = true;
   PIXELline line_a (_center, _axis_a);
-  for (int i=0 ; i<nb_pts && match; i++){
+  for (PIXEL_list::size_type i=0 ; i<nb_pts && match; i++) {
     VEXEL proj_vec = pts[i]-line_a.project(pts[i]);
     double sign_dist;
     if (_axis_a.normalized().perpend()*proj_vec>0){
@@ -145,13 +145,13 @@ StrokePaths::get_stroke_pts(const GestureStroke& stroke){
 
     CPIXEL_list& gest_pts = stroke.gesture()->pts();
     const vector<double>& gest_press = stroke.gesture()->pressures();
-    int nb_gest_pts = gest_pts.num();
-    for (int i=0 ; i<nb_gest_pts-1 ; i++){
+    PIXEL_list::size_type nb_gest_pts = gest_pts.size();
+    for (PIXEL_list::size_type i=0; i<nb_gest_pts-1; i++) {
       VEXEL pts_dir = gest_pts[i+1]-gest_pts[i];
-      if (pts_dir.length()!=0.0){
-	double thickness = width * ((stroke_proto->get_press_vary_width())?gest_press[i]:1.0);
-	_pts += gest_pts[i]+pts_dir.normalized().perpend()*thickness*0.5;
-	_pts += gest_pts[i]-pts_dir.normalized().perpend()*thickness*0.5;
+      if (pts_dir.length()!=0.0) {
+         double thickness = width * ((stroke_proto->get_press_vary_width())?gest_press[i]:1.0);
+         _pts.push_back(gest_pts[i]+pts_dir.normalized().perpend()*thickness*0.5);
+         _pts.push_back(gest_pts[i]-pts_dir.normalized().perpend()*thickness*0.5);
       }
     }
   } else {
@@ -159,23 +159,22 @@ StrokePaths::get_stroke_pts(const GestureStroke& stroke){
     
     // add one or two  points to deal with single point or
     // straight line singularities
-    if (_pts.num()==1){
-      _pts += _pts[0]+0.5*VEXEL(1.0, 0.0);
+    if (_pts.size()==1) {
+      _pts.push_back(_pts[0]+0.5*VEXEL(1.0, 0.0));
     }
-    VEXEL endpt_vec = (_pts[_pts.num()-1]-_pts[0]);
-    _pts += _pts[0] + endpt_vec*0.5 + endpt_vec.normalized().perpend()*0.5;
+    VEXEL endpt_vec = (_pts[_pts.size()-1]-_pts[0]);
+    _pts.push_back(_pts[0] + endpt_vec*0.5 + endpt_vec.normalized().perpend()*0.5);
   }
 }
 
-
-
 void
 StrokePaths::fit_gaussian(CPIXEL_list& pts, PIXEL& center,
-			  VEXEL& axis_a, VEXEL& axis_b){
+			  VEXEL& axis_a, VEXEL& axis_b)
+{
   // compute the mean of the points
   center = pts[0];
-  int nb_pts = pts.num();
-  for (int i = 1; i < nb_pts; i++){
+  PIXEL_list::size_type nb_pts = pts.size();
+  for (PIXEL_list::size_type i = 1; i < nb_pts; i++) {
     center += pts[i];
   }
   double fInvQuantity = 1.0/nb_pts;
@@ -183,7 +182,7 @@ StrokePaths::fit_gaussian(CPIXEL_list& pts, PIXEL& center,
 
   // compute the covariance matrix of the points
   double fSumXX = 0.0, fSumXY = 0.0, fSumYY = 0.0;
-  for (int i = 0; i < nb_pts; i++) {
+  for (PIXEL_list::size_type i = 0; i < nb_pts; i++) {
     VEXEL kDiff = pts[i] - center;
     fSumXX += kDiff[0]*kDiff[0];
     fSumXY += kDiff[0]*kDiff[1];
@@ -204,13 +203,13 @@ StrokePaths::fit_gaussian(CPIXEL_list& pts, PIXEL& center,
 
 void
 StrokePaths::adjust_bbox(CPIXEL_list& pts, PIXEL& center,
-			 VEXEL& axis_a, VEXEL& axis_b){
+			 VEXEL& axis_a, VEXEL& axis_b)
+{
   // Let C be the box center and let U0 and U1 be the box axes.  Each
   // input point is of the form X = C + y0*U0 + y1*U1.  The following code
   // computes min(y0), max(y0), min(y1), max(y1), min(y2), and max(y2).
   // The box center is then adjusted to be
   //   C' = C + 0.5*(min(y0)+max(y0))*U0 + 0.5*(min(y1)+max(y1))*U1
-
 
   double fY0Min, fY0Max;
   double fY1Min, fY1Max;
@@ -220,9 +219,9 @@ StrokePaths::adjust_bbox(CPIXEL_list& pts, PIXEL& center,
   VEXEL kDiff = pts[0] - center;
   fY0Max = fY0Min = kDiff*axis_a;
   fY1Max = fY1Min = kDiff*axis_b;
-  
-  int nb_pts = pts.num();
-  for (int i = 1; i < nb_pts; i++){
+
+  PIXEL_list::size_type nb_pts = pts.size();
+  for (PIXEL_list::size_type i = 1; i < nb_pts; i++) {
     kDiff = pts[i] - center;
     
     double fY0 = kDiff * axis_a;
@@ -244,7 +243,6 @@ StrokePaths::adjust_bbox(CPIXEL_list& pts, PIXEL& center,
   center += 0.5*(fY0Min+fY0Max)*axis_a  + 0.5*(fY1Min+fY1Max)*axis_b;
   axis_a *= (fY0Max - fY0Min);
   axis_b *= (fY1Max - fY1Min)*_style_adjust;
-  
 }
 
 
@@ -412,7 +410,7 @@ StrokePaths::cluster_free(StrokePaths* path){
 
   // 2- append pixels and strokes
   cluster_strokes(path);
-  _pts += path->pts();
+  _pts.insert(_pts.end(), path->pts().begin(), path->pts().end());
 
   // 3- Fit a gaussian distribution to the set of points
   fit_gaussian(_pts, _center, _axis_a, _axis_b);

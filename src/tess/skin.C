@@ -1441,9 +1441,9 @@ Skin::track_points(CBvert_list& verts) const
    for (int i=0; i<verts.num(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m && m->is_tracking()) {
-         ret += m->track_pt();
+         ret.push_back(m->track_pt());
       } else {
-         ret += verts[i]->loc();
+         ret.push_back(verts[i]->loc());
       }
    }
    return ret;
@@ -1452,9 +1452,9 @@ Skin::track_points(CBvert_list& verts) const
 inline vector<Wline>
 bundle_lines(CWpt_list& a, CWpt_list& b)
 {
-   assert(a.num() == b.num());
-   vector<Wline> ret(a.num());
-   for (int i=0; i<a.num(); i++)
+   assert(a.size() == b.size());
+   vector<Wline> ret(a.size());
+   for (Wpt_list::size_type i=0; i<a.size(); i++)
       ret[i] = Wline(a[i], b[i]);
    return ret;
 }
@@ -1464,7 +1464,7 @@ centroids(CBvert_list& verts)
 {
    Wpt_list ret(verts.num());
    for (int i=0; i<verts.num(); i++) {
-      ret += verts[i]->qr_centroid();
+      ret.push_back(verts[i]->qr_centroid());
    }
    return ret;
 }
@@ -1560,8 +1560,8 @@ SkinCurveMap::map(double t) const
 
    Wpt_list _pts = get_wpts();
    t = fix(t);
-   int i;
-   for (i = 0; i < _pts.num()-1; i++) {
+   Wpt_list::size_type i;
+   for (i = 0; i < _pts.size()-1; i++) {
       if (get_param(_pts, i+1) >= t)
          break;
    }
@@ -1577,13 +1577,13 @@ SkinCurveMap::get_wpts() const
 { 
   // Return a Wpt_list describing the current shape of the map
   Wpt_list ret(_simps.num()+2*!(!_p0));
-  if (!(!_p0)) ret += _p0->map();
+  if (!(!_p0)) ret.push_back(_p0->map());
   for ( int i=0; i<_simps.num(); i++ ) {
     Wpt pt;
     _simps[i]->bc2pos(_bcs[i], pt);
-    ret += pt;
+    ret.push_back(pt);
   }
-  if (!(!_p0)) ret += _p1->map();
+  if (!(!_p0)) ret.push_back(_p1->map());
   ret.update_length();
   return ret;
 }
@@ -1606,8 +1606,8 @@ SkinCurveMap::norm(double t) const
    // The local unit-length normal:
    t = fix(t);
    Wpt_list pts = get_wpts();
-   int i;
-   for (i = 0; i < pts.num()-1; i++) {
+   Wpt_list::size_type i;
+   for (i = 0; i < pts.size()-1; i++) {
       if (get_param(pts, i+1) >= t)
          break;
    }
@@ -1619,7 +1619,7 @@ SkinCurveMap::norm(double t) const
       if (i == 0) {
          norm1 = _p0->norm();
          norm2 = simplex_normal(_simps[i]);
-      } else if (i == pts.num()-2) {
+      } else if (i == pts.size()-2) {
          norm1 = simplex_normal(_simps[i-1]);
          norm2 = _p1->norm();
       } else {

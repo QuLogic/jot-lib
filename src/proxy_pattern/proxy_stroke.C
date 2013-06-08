@@ -262,7 +262,7 @@ ProxyUVStroke::stroke_setup(Bface* face, bool selected)
 
    if(_ps->baseUVpt(face, base_uv)) {
   
-      for(int i=0; i < _uv_pts.num(); ++i) {
+      for (UVpt_list::size_type i=0; i < _uv_pts.size(); ++i) {
          Wpt pt = _ps->getWptfromUV(base_uv + _uv_pts[i]);
          CNDCZpt p = NDCZpt(pt);
 

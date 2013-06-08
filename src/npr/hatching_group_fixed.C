@@ -648,21 +648,20 @@ HatchingGroupFixed::compute_convex_hull(
 
    hull.clear();
 
-   for (i=0; i<pts.num(); i++)  P.add(&(pts[i]));
+   for (i=0; i<(int)pts.size(); i++)  P.add(const_cast<NDCZpt*>(&(pts[i])));
 
    num_lower = make_chain(P, compare_xinc_ydec);
 
    if (!num_lower) return;
 
-   for (i=0; i<num_lower; i++) hull.add(*(P[i]));
+   for (i=0; i<num_lower; i++) hull.push_back(*(P[i]));
 
    for (i=num_lower; i<P.num(); i++) Q.add(P[i]);
    Q.add(P[0]);
 
    num_upper = make_chain(Q, compare_xdec_yinc);
 
-   for (i=0; i<num_upper; i++) hull.add(*(Q[i]));
-
+   for (i=0; i<num_upper; i++) hull.push_back(*(Q[i]));
 }
 
 /////////////////////////////////////
@@ -673,29 +672,27 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
 {
    assert(!_complete);
 
-   int k,j;
+   int k;
+   NDCZpt_list::size_type j;
 
    NDCZpt_list pts, hull;
 
    //One side
    for (k=0; k<hlb->num(); k++)
-      for (j=0; j<(*hlb)[k]->get_pts().num(); j++)
-         pts += NDCZpt( _patch->xform() * ((*hlb)[k]->get_pts()[j]) );
+      for (j=0; j<(*hlb)[k]->get_pts().size(); j++)
+         pts.push_back(NDCZpt( _patch->xform() * ((*hlb)[k]->get_pts()[j]) ));
 
    compute_convex_hull(pts,hull);
 
-   if (hull.num() == 0)
-   {
+   if (hull.size() == 0) {
       err_mesg(ERR_LEV_WARN, 
          "HatchingGroupFixed:store_visibility() - Error!! There were %d convex hull verts found from %d hatch verts.",
-         hull.num(), pts.num());
+         hull.size(), pts.size());
       return false;
-   }
-   else
-   {
+   } else {
       err_mesg(ERR_LEV_INFO, 
          "HatchingGroupFixed:store_visibility() - There were %d convex hull verts found from %d hatch verts.",
-         hull.num(), pts.num());
+         hull.size(), pts.size());
    }
 
    Bface *f = 0;
@@ -728,7 +725,6 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
 
    if (ctr>0) return true;
    else return false;
-
 }
 
 /////////////////////////////////////
@@ -737,7 +733,6 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
 bool
 isect(CNDCpt &pt1a, CNDCpt &pt1b, CNDCpt &pt2a, CNDCpt &pt2b)
 {
-
    if ((pt1a==pt2a)||(pt1a==pt2b)||(pt1b==pt2a)||(pt1b==pt2b)) return true;
 
    double c1a = det(pt1b - pt1a, pt2a - pt1a);
@@ -764,7 +759,8 @@ HatchingGroupFixed::recurse_visibility(Bface *f, CNDCpt_list &poly)
 
    f->set_bit(1);
 
-   int i, ctr = 0, added = 0;
+   size_t i;
+   int ctr = 0, added = 0;
 
    bool visible = false;
 
@@ -772,24 +768,25 @@ HatchingGroupFixed::recurse_visibility(Bface *f, CNDCpt_list &poly)
    if (f->front_facing())
    {
       NDCpt_list tri(3);
-      tri += f->v1()->wloc(); tri += f->v2()->wloc(); tri += f->v3()->wloc();
+      tri.push_back(f->v1()->wloc());
+      tri.push_back(f->v2()->wloc());
+      tri.push_back(f->v3()->wloc());
 
       //See if any tri vertex lands in the hull
-      for (i=0; (i<tri.num()) && (!visible); i++) 
-         if (poly.contains(tri[i])) visible = true;
+      for (i=0; i<tri.size() && !visible; i++)
+         if (poly.contains(tri[i]))
+            visible = true;
 
-      if (!visible)
-      {
+      if (!visible) {
          //See if any hull vertex lands in the tri
-         for (i=0; (i<poly.num()) && (!visible); i++) 
-            if (tri.contains(poly[i])) visible = true;
+         for (i=0; i<poly.size() && !visible; i++)
+            if (tri.contains(poly[i]))
+               visible = true;
 
-         if (!visible)
-         {
+         if (!visible) {
             //See if any edges cross
-            int num = poly.num();
-            for (i=0; (i<poly.num()) && (!visible); i++)
-            {
+            NDCpt_list::size_type num = poly.size();
+            for (i=0; i<poly.size() && !visible; i++) {
                if      (isect(poly[i],poly[(i+1)%num], tri[0],tri[1])) visible = true;
                else if (isect(poly[i],poly[(i+1)%num], tri[1],tri[2])) visible = true;            
                else if (isect(poly[i],poly[(i+1)%num], tri[2],tri[0])) visible = true;            
@@ -798,8 +795,7 @@ HatchingGroupFixed::recurse_visibility(Bface *f, CNDCpt_list &poly)
       }
    }
 
-   if (visible)
-   {
+   if (visible) {
       //Add group to face
       HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(f);
 
@@ -1017,24 +1013,22 @@ HatchingGroupFixed::add(
    int curve_type
    )
 {
-   int k;
+   size_t k;
    double a,b;
    Bface *f;
 
    // It happens:
-   if (pl.empty()) 
-   {
+   if (pl.empty()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed:add() - Error: point list is empty!");
       return false;
    }
-   if (prl.empty()) 
-   {
+
+   if (prl.empty()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed:add() - Error: pressure list is empty!");
       return false;
    }
 
-   if (pl.num() != prl.num())
-   {
+   if ((int)pl.size() != prl.num()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed:add() - gesture pixel list and pressure list are not same length.");
       return false;
    }
@@ -1107,8 +1101,7 @@ HatchingGroupFixed::add(
 
    Wpt_list wlScaledList;
 
-   if (curve_type == HatchingGroup::CURVE_MODE_PROJECT)
-   {
+   if (curve_type == HatchingGroup::CURVE_MODE_PROJECT) {
       err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed::add() - Projecting to surface.");
      
       //Okay, the user wants to get literal, projected
@@ -1117,15 +1110,11 @@ HatchingGroupFixed::add(
       Wpt_list wlProjList;
       Wpt wloc;
 
-      for (k=0; k<ndcpts.num(); k++)
-      {
+      for (k=0; k<ndcpts.size(); k++) {
          f = HatchingGroupBase::find_face_vis(NDCpt(ndcpts[k]),wloc);
-         if ((f) && (f->patch() == _patch) && (f->front_facing()))
-         {
-            wlProjList += wloc;
-         }
-         else 
-         {
+         if ((f) && (f->patch() == _patch) && (f->front_facing())) {
+            wlProjList.push_back(wloc);
+         } else {
             if (!f) 
                err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::add() - Missed while projecting: No hit on a mesh!");
             else if (!(f->patch() == _patch)) 
@@ -1136,8 +1125,7 @@ HatchingGroupFixed::add(
                err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::add() - Missed while projecting: WHAT?!?!?!?!");
          }
       }
-      if (wlProjList.num()<2)
-      {
+      if (wlProjList.size()<2) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFixed:add() - Nothing left after projection failures. Punting...");
          return false;
       }
@@ -1150,14 +1138,12 @@ HatchingGroupFixed::add(
       //will be on the order of the mesh resolution
       //unless the gesture fits into one triangle,
       //in which case we ensure a minimum sampling
-      int guess = (int)ceil(((double)wlClipList.num()*
+      int guess = (int)ceil(((double)wlClipList.size()*
                              (double)wlProjList.length())/(double)wlClipList.length());
-      int num = max(guess,5);
+      size_t num = max(guess,5);
       double step = 1.0/((double)(num-1));
-      for (k=0 ; k<num ; k++) wlScaledList += wlProjList.interpolate((double)k*step);
-   }
-   else //CURVE_MODE_PLANE
-   {
+      for (k=0 ; k<num ; k++) wlScaledList.push_back(wlProjList.interpolate((double)k*step));
+   } else { //CURVE_MODE_PLANE
       assert(curve_type == HatchingGroup::CURVE_MODE_PLANE);
 
       err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed::add() - Resampling curve.");
@@ -1166,15 +1152,15 @@ HatchingGroupFixed::add(
       //be sampled on the order of the mesh spacing but we'll
       //not allow the num of samples to drop too low in case
       //the gesture's on the scale of one triangle
-      int num = max(wlClipList.num(),5);
+      size_t num = max(wlClipList.size(), 5UL);
       double step = 1.0/((double)(num-1));
-      for (k=0 ; k<num ; k++) wlScaledList += wlClipList.interpolate((double)k*step);
+      for (k=0 ; k<num ; k++) wlScaledList.push_back(wlClipList.interpolate((double)k*step));
    }
 
    // Convert back to 2D
    err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed:add() - converting to 2D.");
    NDCZpt_list ndczlScaledList;
-   for (k=0;k<wlScaledList.num();k++) ndczlScaledList += NDCZpt(_patch->xform()*wlScaledList[k]);
+   for (k=0;k<wlScaledList.size();k++) ndczlScaledList.push_back(NDCZpt(_patch->xform()*wlScaledList[k]));
    ndczlScaledList.update_length();
 
    // Calculate pixel length of hatch
@@ -1192,8 +1178,7 @@ HatchingGroupFixed::add(
 
    err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed::add() - Final sampling.");
 
-   for (k=0; k<ndczlScaledList.num(); k++) {
-
+   for (k=0; k<ndczlScaledList.size(); k++) {
       Wpt wloc;
       f = HatchingGroupBase::find_face_vis(NDCpt(ndczlScaledList[k]),wloc);
 
@@ -1219,7 +1204,7 @@ HatchingGroupFixed::add(
          {
             verts += HatchingFixedVertex(f->index(),bc);
             f->bc2norm_blend(bc,norm);
-            pts += wloc;
+            pts.push_back(wloc);
             norms += norm;
          }
          else
@@ -1240,8 +1225,7 @@ HatchingGroupFixed::add(
       }
    }
 
-   if (pts.num()>1)
-   {
+   if (pts.size()>1) {
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
@@ -1253,7 +1237,7 @@ HatchingGroupFixed::add(
 
       ol->add(BaseStrokeOffset( 0.0, 0.0, 
             finalprl[0],                  BaseStrokeOffset::OFFSET_TYPE_BEGIN));
-      for (k=1; k< finalprl.num(); k++)
+      for (k=1; (int)k<finalprl.num(); k++)
             ol->add(BaseStrokeOffset( (double)k/(double)(finalprl.num()-1), 0.0, finalprl[k], BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
 
       ol->add(BaseStrokeOffset( 1.0, 0.0, finalprl[finalprl.num()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
@@ -1295,24 +1279,20 @@ HatchingGroupFixed::clip_to_patch(
    CNDCpt_list &pts,        NDCpt_list &cpts,
    const ARRAY<double>&prl, ARRAY<double>&cprl ) 
 {
-   int k, started = 0;
+   NDCpt_list::size_type k;
+   int started = 0;
    Bface *f;
    Wpt foo;
 
-   for (k=0; k<pts.num(); k++)
-   {
+   for (k=0; k<pts.size(); k++) {
       f = find_face_vis(pts[k], foo);
-      if ((f) && (f->patch() == _patch))
-      {
+      if (f && f->patch() == _patch) {
          started = 1;
-         cpts += pts[k];
+         cpts.push_back(pts[k]);
          cprl += prl[k];
-      }
-      else
-      {
-         if (started)
-         {
-            k=pts.num();
+      } else {
+         if (started) {
+            k=pts.size();
          }
       }
    }
@@ -1339,8 +1319,8 @@ HatchingGroupFixed::slice_mesh_with_plane(
    Wpt_list wlList1;
    Wpt_list wlList2;
 
-   wlList1 += wpPlane.intersect(nxtEdge1->line());
-   wlList2 += wpPlane.intersect(nxtEdge2->line());
+   wlList1.push_back(wpPlane.intersect(nxtEdge1->line()));
+   wlList2.push_back(wpPlane.intersect(nxtEdge2->line()));
 
    //So theres at least 2 pts in the final list...
 
@@ -1348,49 +1328,39 @@ HatchingGroupFixed::slice_mesh_with_plane(
     //where the camera is contained inside the object
     //points are checked against view volume
 
-   while (nxtFace1 && (nxtFace1->front_facing())) {
+   while (nxtFace1 && nxtFace1->front_facing()) {
       nxtFace1 = nxtFace1->plane_walk(nxtEdge1,wpPlane,nxtEdge1);
 
       if (nxtEdge1) {
-		Wpt temp_pt = wpPlane.intersect(nxtEdge1->line()); //sky box fix
-		if (!temp_pt.in_frustum())
-		{
-			break;
-		}
-         wlList1 += temp_pt;
-      }
-      else {
-		  cerr << "Slice Mesh :: assert(!nxtFace1)" << endl;
+         Wpt temp_pt = wpPlane.intersect(nxtEdge1->line()); //sky box fix
+         if (!temp_pt.in_frustum()) {
+            break;
+         }
+         wlList1.push_back(temp_pt);
+      } else {
+         cerr << "Slice Mesh :: assert(!nxtFace1)" << endl;
          assert(!nxtFace1);
       }
    }
 
-   while (nxtFace2 && (nxtFace2->front_facing())) {
+   while (nxtFace2 && nxtFace2->front_facing()) {
       nxtFace2 = nxtFace2->plane_walk(nxtEdge2,wpPlane,nxtEdge2);
 
       if (nxtEdge2) {
-		  Wpt temp_pt =wpPlane.intersect(nxtEdge2->line()); //sky box fix
-		if (!temp_pt.in_frustum())
-		{
-			break;
-		}
+         Wpt temp_pt =wpPlane.intersect(nxtEdge2->line()); //sky box fix
+         if (!temp_pt.in_frustum()) {
+            break;
+         }
 
-         wlList2 += temp_pt;
-      }
-      else {
-		 cerr << "Slice Mesh :: assert(!nxtFace2)" << endl;
+         wlList2.push_back(temp_pt);
+      } else {
+         cerr << "Slice Mesh :: assert(!nxtFace2)" << endl;
          assert(!nxtFace2);
       }
    }
 
-   int k;
-   for (k = wlList1.num()-1; k >= 0; k--) {
-      wlList += wlList1[k];
-   }
-   //wlList += wIsect;
-   for (k=0; k < wlList2.num(); k++) {
-      wlList += wlList2[k];
-   }
+   wlList.insert(wlList.end(), wlList1.rbegin(), wlList1.rend());
+   wlList.insert(wlList.end(), wlList2.begin(), wlList2.end());
 }
 
 
@@ -1423,7 +1393,7 @@ HatchingGroupFixed::interpolate(
    const BaseStrokeOffsetLISTptr &ol1 = h1->get_offsets();
    const BaseStrokeOffsetLISTptr &ol2 = h2->get_offsets();
         
-   num = max(ptl1.num(),ptl2.num());
+   num = max(ptl1.size(), ptl2.size());
    dlen = 1.0/((double)num-1.0);
 
    Wpt_list pts;
@@ -1433,9 +1403,9 @@ HatchingGroupFixed::interpolate(
    ifrac = 0.5 + (drand48() - 0.5) * INTERPOLATION_RANDOM_FACTOR;
 
    for (k=0; k<num; k++) {
-      pts +=
+      pts.push_back(
          ptl1.interpolate((double) k*dlen, 0, &seg1, &frac1)*ifrac +
-         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac);
+         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac));
 
       norms +=
          (nl1[seg1]*(1.0-frac1) + nl1[seg1+1]*frac1)*ifrac  +
@@ -1550,11 +1520,11 @@ HatchingHatchFixed::HatchingHatchFixed(
 void
 HatchingHatchFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
 {
-   int k;
+   size_t k;
 
-   for (k=0; k< _pts.num(); k++)
+   for (k=0; k<_pts.size(); k++)
       _pts[k] = t * _pts[k];
-   for (k=0; k< _norms.num(); k++)
+   for (k=0; (int)k<_norms.num(); k++)
       _norms[k] = t.inverse().transpose() * _norms[k];
 
    //Clear these so they regenerate
@@ -1573,10 +1543,9 @@ HatchingHatchFixed::notify_change(BMESH *m, BMESH::change_t chg)
 
    int k;
 
-   if (_verts.num() > 0)
-   {
+   if (_verts.num() > 0) {
       //Sanity check
-      assert(_verts.num() == _pts.num());
+      assert(_verts.num() == (int)_pts.size());
       assert(_verts.num() == _norms.num());
 
       for (k=0; k < _verts.num(); k++)
@@ -1611,8 +1580,7 @@ HatchingHatchFixed::init()
 
    //If there are _verts (tri index/bary) then
    //make sure we have the right number of them
-   assert((_verts.num() == 0) || (_pts.num() == _verts.num()));       
-
+   assert((_verts.num() == 0) || ((int)_pts.size() == _verts.num()));
 }
 
 /////////////////////////////////////
@@ -1627,8 +1595,8 @@ HatchingHatchFixed::draw_setup()
    _stroke->set_alpha( _level->group()->group()->prototype()->get_alpha());
 
    HatchingHatchBase::draw_setup();
-        
 }
+
 /*****************************************************************
  * HatchingBackboneFixed
  *****************************************************************/

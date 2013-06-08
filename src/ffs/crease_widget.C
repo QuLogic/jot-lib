@@ -98,7 +98,7 @@ avg_dist(CPIXEL_list& A, CPIXEL_list& B, double& overlap, double step = 1.0)
       PIXEL nearpt = B.closest(sample);         // near point on B
 
       // count the sample if the nearpt on B is not an endpoint:
-      if (!(nearpt.is_equal(B.first()) || nearpt.is_equal(B.last()))) {
+      if (!(nearpt.is_equal(B.front()) || nearpt.is_equal(B.back()))) {
          ret.add(nearpt.dist(sample));
       }
    }

@@ -313,14 +313,18 @@ CIRCLE_WIDGET::create_literal(GESTUREptr gest)
 
    if (gest->is_closed()) {
       // If closed, remove the final few points to prevent jagginess
-      for (int i = _literal_shape.num()-1;i>=0;i--)
-         if (PIXEL(_literal_shape[0]).dist(PIXEL(_literal_shape[i])) < 15)
-            _literal_shape.remove(i);
+      Wpt_list::iterator it;
+      it = _literal_shape.end() - 1;
+      while (!_literal_shape.empty()) {
+         if (PIXEL(_literal_shape[0]).dist(PIXEL(*it)) < 15)
+            it = _literal_shape.erase(it);
          else
             break;
+         --it;
+      }
 
       // add the first point as the last point
-      _literal_shape += _literal_shape[0];
+      _literal_shape.push_back(_literal_shape[0]);
 
       _literal_shape.update_length();
    }
@@ -393,13 +397,13 @@ CIRCLE_WIDGET::make_preview( void )
 
    // Make the hi-res circle for the curve's map1d3d:
    const int ORIG_RES = 256;
-   _preview.realloc(ORIG_RES + 1);
+   _preview.reserve(ORIG_RES + 1);
    double dt = (2*M_PI)/ORIG_RES;
    for (int i=0; i<ORIG_RES; i++) {
       double t = dt*i;
-      _preview += xf*Wpt(_radius*cos(t), _radius*sin(t), 0);
+      _preview.push_back(xf*Wpt(_radius*cos(t), _radius*sin(t), 0));
    }
-   _preview += _preview[0];       // make it closed
+   _preview.push_back(_preview[0]);       // make it closed
 
    if( _suggest_active ) {
       return;
@@ -418,7 +422,6 @@ CIRCLE_WIDGET::make_preview( void )
             map->set_pts(_preview);
       }
    }
-
 }
 
 int

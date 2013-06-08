@@ -37,8 +37,8 @@ public:
   virtual ~CarriersCell(){}
   
   // derived accessors
-  virtual bool valid () { return (_carrier1 && _carrier1->pts().num()>=2 && 
-				  _carrier2 && _carrier2->pts().num()>=2 ); } 
+  virtual bool valid () { return (_carrier1 && _carrier1->pts().size()>=2 &&
+				  _carrier2 && _carrier2->pts().size()>=2 ); }
   virtual double scale() const { return _scale*_global_scale;}
   virtual int nb_strokes()                  { return _strokes.size(); }
   virtual CGESTUREptr& gesture(int i) const { return _strokes[i].gesture(); }

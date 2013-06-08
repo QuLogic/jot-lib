@@ -149,11 +149,11 @@ template <class T>
 inline T
 pts_in_range(const T& pts, int i1, int i2)
 {
-   assert(pts.valid_index(i1) && pts.valid_index(i2));
+   assert(0 <= i1 && i1 < (int)pts.size() && 0 <= i2 && i2 < (int)pts.size());
 
    T ret;
    for (int i=i1; i<=i2; i++)
-      ret += pts[i];
+      ret.push_back(pts[i]);
    return ret;
 }
 
@@ -520,22 +520,22 @@ SWEEP_DISK::reset()
 Wpt_list
 fold_points(CWpt_list& pts, CWvec& n, bool is_closed)
 {
-   if (pts.num() < 2)
+   if (pts.size() < 2)
       return Wpt_list();
    Wpt_list ret(2);
 
    // Handle first point specially
-   if (!is_closed || is_fold(pts.last(), pts[0], pts[1], n) )
-      ret += pts.first();
+   if (!is_closed || is_fold(pts.back(), pts[0], pts[1], n) )
+      ret.push_back(pts.front());
 
    // Interior points
-   for (int i=1; i<pts.num()-1; i++)
+   for (Wpt_list::size_type i=1; i<pts.size()-1; i++)
       if (is_fold(pts[i-1], pts[i], pts[i+1], n))
-         ret += pts[i];
+         ret.push_back(pts[i]);
 
    // Handle last point specially
-   if (!is_closed || is_fold(pts[pts.num()-2], pts.last(), pts.first(), n) )
-      ret += pts.last();
+   if (!is_closed || is_fold(pts[pts.size()-2], pts.back(), pts.front(), n) )
+      ret.push_back(pts.back());
 
    return ret;
 }
@@ -619,7 +619,7 @@ SWEEP_DISK::stroke_cb(CGESTUREptr& g, DrawState*&)
    if (!hit_boundary_at_sil(gest->start(), hit)) {
       if (_profile.empty() || !Bcurve::splice_curves(gest->pts(), (PIXEL_list)_profile,
                               15.0, profile_pixels) ||
-                              !hit_boundary_at_sil(profile_pixels.first(), hit)) {
+                              !hit_boundary_at_sil(profile_pixels.front(), hit)) {
          WORLD::message("Stroke must start at a red dot or base of axis");
          return false;
       } 
@@ -631,15 +631,15 @@ SWEEP_DISK::stroke_cb(CGESTUREptr& g, DrawState*&)
 
    // If the stroke ends near the guideline, snap it to it:
    bool cone_top = false;
-   if (hits_line(profile_pixels.last())) {
-      profile_pixels.fix_endpoints(profile_pixels.first(), pix_line().project(profile_pixels.last()));
+   if (hits_line(profile_pixels.back())) {
+      profile_pixels.fix_endpoints(profile_pixels.front(), pix_line().project(profile_pixels.back()));
       cone_top = true;
    }
 
    // Don't let the stroke cross the guideline (but it can end at it)
    bool its_bad = false;
    if (cone_top)
-      its_bad = pts_in_range(profile_pixels, 0, profile_pixels.num()-2).
+      its_bad = pts_in_range(profile_pixels, 0, profile_pixels.size()-2).
          intersects_line(pix_line());
    else its_bad = profile_pixels.intersects_line(pix_line());
    if (its_bad) {
@@ -649,8 +649,8 @@ SWEEP_DISK::stroke_cb(CGESTUREptr& g, DrawState*&)
 
    // A and B are line segments joining start and end of stroke
    // (respectively) to the guideline, in screen space:
-   PIXELline A(pix_line().project(profile_pixels.first()), profile_pixels.first());
-   PIXELline B(pix_line().project(profile_pixels.last()),   profile_pixels.last());
+   PIXELline A(pix_line().project(profile_pixels.front()), profile_pixels.front());
+   PIXELline B(pix_line().project(profile_pixels.back()),   profile_pixels.back());
 
    // Segment A has to be big enough to see what's going on
    if (A.length() < DIST_THRESH_PIXELS) {
@@ -660,9 +660,9 @@ SWEEP_DISK::stroke_cb(CGESTUREptr& g, DrawState*&)
 
    // Stroke can't cross either line segment, because then the
    // surface would be self-intersecting
-   its_bad = pts_in_range(profile_pixels, 1, profile_pixels.num()-1).intersects_seg(A);
+   its_bad = pts_in_range(profile_pixels, 1, profile_pixels.size()-1).intersects_seg(A);
    its_bad = its_bad || (!cone_top &&
-      pts_in_range(profile_pixels, 0, profile_pixels.num()-2).intersects_seg(B));
+      pts_in_range(profile_pixels, 0, profile_pixels.size()-2).intersects_seg(B));
    if (its_bad) {
       WORLD::message("Please - no self-intersecting surfaces");
       return 1;
@@ -691,7 +691,7 @@ SWEEP_DISK::do_uniform_sweep(CWvec& v)
       err_adv(debug_all, "SWEEP_DISK::do_uniform_sweep: error: no fold points");
       return false;
    }
-   Wpt hit = pts.first();
+   Wpt hit = pts.front();
 
    // construct coordinate frame
    Wpt  o = sweep_origin();
@@ -701,8 +701,8 @@ SWEEP_DISK::do_uniform_sweep(CWvec& v)
 
    // construct the sweep line
    Wpt_list spts;
-   spts += hit;
-   spts += (hit + v);
+   spts.push_back(hit);
+   spts.push_back(hit + v);
 
    if (do_sweep(o, t, n, b, spts)) {
       // We're done -- start fading
@@ -734,8 +734,8 @@ SWEEP_DISK::do_sweep(CPIXEL_list& gpts, CWpt& sil_hit, bool is_line, bool from_c
    Wplane   P(o, b);
    if (is_line) {
       // ignore points other than first and last
-      spts += Wpt(P, Wline(gpts.first()));
-      spts += Wpt(P, Wline(gpts.last()));
+      spts.push_back(Wpt(P, Wline(gpts.front())));
+      spts.push_back(Wpt(P, Wline(gpts.back())));
       if (from_center) {
          // move the sweep line from the origin to sil_hit
          Wvec delt = sil_hit - o;
@@ -747,7 +747,7 @@ SWEEP_DISK::do_sweep(CPIXEL_list& gpts, CWpt& sil_hit, bool is_line, bool from_c
    }
 
    // Make sure it starts at the hit point
-   spts.fix_endpoints(sil_hit, spts.last());
+   spts.fix_endpoints(sil_hit, spts.back());
 
    return do_sweep(o, t, n, b, spts);
 }
@@ -755,7 +755,7 @@ SWEEP_DISK::do_sweep(CPIXEL_list& gpts, CWpt& sil_hit, bool is_line, bool from_c
 bool
 SWEEP_DISK::do_sweep(CWpt& o, Wvec t, Wvec n, Wvec b, Wpt_list spts)
 {
-   assert(spts.num() > 1);
+   assert(spts.size() > 1);
 
    // record before transformation
    _profile = spts;
@@ -764,7 +764,7 @@ SWEEP_DISK::do_sweep(CWpt& o, Wvec t, Wvec n, Wvec b, Wpt_list spts)
    spts.xform(Wtransf(o, t, b, n).inverse());
 
    // If ending t-val is negative, reverse orientation
-   double t1 = spts.last()[0];
+   double t1 = spts.back()[0];
    if (t1 < 0) {
       // the stroke ended lower than it started
       // (WRT guideline direction).
@@ -780,8 +780,8 @@ SWEEP_DISK::do_sweep(CWpt& o, Wvec t, Wvec n, Wvec b, Wpt_list spts)
    if ( bpts.empty() ) {
       // Create the axis map:
       Wpt_list apts(2);
-      apts += o;
-      apts += o + t*t1;
+      apts.push_back(o);
+      apts.push_back(o + t*t1);
       if (build_revolve(apts, n, spts, cmd))
          return( true );
    } else if ( bpts.num() > 2 ) {
@@ -842,7 +842,7 @@ SWEEP_DISK::build_revolve(
          cmd->add(a_cmd);
 
       // reshape the top curve
-      double s = spts.last()[2]/spts.first()[2];
+      double s = spts.back()[2]/spts.front()[2];
       Wtransf M = tmap->axis()->F(1) * Wtransf::scaling(0,s,s) * tmap->axis()->Finv(0);
       WPT_LIST_RESHAPE_CMDptr c1_cmd = new WPT_LIST_RESHAPE_CMD(((Wpt_listMap*)tmap->c1()), M*((Wpt_listMap*)tmap->c0())->get_wpts());
       if (c1_cmd->doit())
@@ -963,7 +963,7 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
          Wpt_listMap* m = Wpt_listMap::upcast(_curves[i]->map());
          cmd->add(new WPT_LIST_RESHAPE_CMD(m,cpts));
       } else {
-         top_pts += BpointAction::create(_mesh, cpts.last(), b, n, res_level, cmd);
+         top_pts += BpointAction::create(_mesh, cpts.back(), b, n, res_level, cmd);
          curves  += BcurveAction::create(_mesh, cpts, b, num_edges , res_level,
                                  bot_pts[i], top_pts[i], cmd);
       }
@@ -1048,9 +1048,9 @@ SWEEP_DISK::hit_boundary_at_sil(
       Config::get_var_bool("DEBUG_SWEEP_HIT_BOUNDARY",false) || debug_all;
 
    Wpt_list fpts = get_fold_pts();
-   if (!_profile.empty()) fpts += _profile.first();
+   if (!_profile.empty()) fpts.push_back(_profile.front());
    int k = fpts.closest_vertex(p);
-   if (fpts.valid_index(k) && p.dist(fpts[k]) < DIST_THRESH_PIXELS) {
+   if (0 <= k && k < (int)fpts.size() && p.dist(fpts[k]) < DIST_THRESH_PIXELS) {
       ret = fpts[k];
       return 1;
    }
@@ -1314,15 +1314,15 @@ SWEEP_LINE::create_rect(CWvec& v)
    contour += _curve;
 
    // Bottom curve
-   side.clear(); side += p2; side += p3;
+   side.clear(); side.push_back(p2); side.push_back(p3);
    contour += BcurveAction::create(m, side, n, num_h, res_lev, b2, b3, cmd);
 
    // Right curve
-   side.clear(); side += p3; side += p4;
+   side.clear(); side.push_back(p3); side.push_back(p4);
    contour += BcurveAction::create(m, side, n, num_v, res_lev, b3, b4, cmd);
 
    // Top curve
-   side.clear(); side += p4; side += p1;
+   side.clear(); side.push_back(p4); side.push_back(p1);
    contour += BcurveAction::create(m, side, n, num_h, res_lev, b4, b1, cmd);
 
    // Interior

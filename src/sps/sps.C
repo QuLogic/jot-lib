@@ -140,7 +140,7 @@ get_pts(Bface_list& flist, vector<Wvec>& blist)
    for (int i = 0; i < flist.num(); i++) {
       Wpt pt;
       flist[i]->bc2pos(blist[i], pt);
-      pts += pt;
+      pts.push_back(pt);
    }
    return pts;
 }
@@ -153,14 +153,14 @@ remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<Oct
    vector< list<int> > N;
    vector<bool> to_remove;
 
-   N.resize(pts.num());
-   to_remove.resize(pts.num(), false);
+   N.resize(pts.size());
+   to_remove.resize(pts.size(), false);
 
-   for (int i = 0; i < pts.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++) {
       for (vector<OctreeNode*>::size_type j = 0; j < t[i]->neibors().size(); j++) {
          int index = t[i]->neibors()[j]->get_term_index();
          
-         if (index < pts.num()) {
+         if (index < (int)pts.size()) {
             if (pts[i].dist(pts[index]) < min_dist) {
                N[i].push_back(index);
                N[index].push_back(i);
@@ -173,7 +173,7 @@ remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<Oct
 
    priority_queue< Priority, vector<Priority> > queue;
    vector<int> versions;
-   for (int i = 0; i < pts.num(); i++) {
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++) {
       if (!to_remove[i] && !N[i].empty()) {
          Priority p;
          p._priority = center(pts, N[i]).dist(pts[i]);

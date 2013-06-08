@@ -28,6 +28,8 @@
  *
  */
 
+#include <vector>
+
 namespace mlib {
 
 /*!
@@ -504,8 +506,8 @@ class Wpt_list : public Point3list<Wpt_list,Wtransf,Wpt,Wvec,Wline> {
 inline Wpt_list 
 operator *(CWtransf& x, CWpt_list& pts) {
    Wpt_list ret;
-   for (int i=0; i<pts.num(); i++)
-      ret += (x * pts[i]);
+   for (Wpt_list::size_type i=0; i<pts.size(); i++)
+      ret.push_back(x * pts[i]);
    return ret;
 }
 
@@ -514,8 +516,8 @@ operator *(CWtransf& x, CWpt_list& pts) {
 inline Wpt_list
 operator *(CWpt_list& pts, double t) {
    Wpt_list ret;
-   for (int i = 0; i < pts.num(); i++)
-      ret += (pts[i]*t);
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++)
+      ret.push_back(pts[i]*t);
    return ret;
 }
 
@@ -524,10 +526,10 @@ operator *(CWpt_list& pts, double t) {
 //! \relates Wpt_list
 inline Wpt_list
 operator +(CWpt_list& pts1, CWpt_list& pts2) {
-   assert(pts1.num() == pts2.num());
+   assert(pts1.size() == pts2.size());
    Wpt_list ret;
-   for (int i=0; i<pts1.num(); i++)
-      ret += (pts1[i] + pts2[i]);
+   for (Wpt_list::size_type i=0; i<pts1.size(); i++)
+      ret.push_back(pts1[i] + pts2[i]);
    return ret;
 }
 
@@ -679,9 +681,9 @@ class XYpt_list : public Point2list<XYpt_list,XYpt,XYvec,XYline> {
       
       void project_to_plane(CWplane& P, Wpt_list& pts) const {
          pts.clear();
-         if (!empty()) pts.realloc(num());
-         for (int i=0; i<_num; i++)
-            pts += Wpt(P, Wline(_array[i]));
+         if (!empty()) pts.reserve(size());
+         for (XYpt_list::size_type i=0; i<size(); i++)
+            pts.push_back(Wpt(P, Wline(at(i))));
          pts.update_length();
       }
       
@@ -836,19 +838,19 @@ inline NDCZpt operator *(double s, const NDCZpt& p) { return p * s;}
  *  functional from Pointlist is duplicates here.
  *
  */
-class NDCZpt_list : public ARRAY<NDCZpt> {
+class NDCZpt_list : public vector<NDCZpt> {
    
    protected:
    
-      ARRAY<double>    _partial_length;
+      vector<double>    _partial_length;
 
    public:
    
       //! \name Constructors
       //@{
    
-      NDCZpt_list(int max=0)              : ARRAY<NDCZpt>(max) {}
-      NDCZpt_list(const ARRAY<NDCZpt>& p) : ARRAY<NDCZpt>(p)   {}
+      NDCZpt_list(int max=0)               : vector<NDCZpt>()  {reserve(max);}
+      NDCZpt_list(const vector<NDCZpt>& p) : vector<NDCZpt>(p) {}
       
       //@}
       
@@ -857,7 +859,7 @@ class NDCZpt_list : public ARRAY<NDCZpt> {
    
       //! Gets a vector pointing from the start point to the end point of the
       //! \p i<sup>th</sup> segment.
-      NDCZvec segment       (int i) const { return _array[i+1]-_array[i];}
+      NDCZvec segment       (int i) const { return at(i+1) - at(i);}
       //! Gets the length of the \p i<sup>th</sup> segment.
       double  segment_length(int i) const { return segment(i).length(); }
    
@@ -899,20 +901,20 @@ class NDCZpt_list : public ARRAY<NDCZpt> {
       void update_length() {
          double len = 0;
          _partial_length.clear();
-         if (_num > 0)
-            _partial_length.realloc(_num);
-         _partial_length += 0;
-         for ( int i=1; i< _num; i++ ) {
+         if (size() > 0)
+            _partial_length.reserve(size());
+         _partial_length.push_back(0);
+         for ( NDCZpt_list::size_type i=1; i<size(); i++ ) {
             len += xy_len(i-1);
-            _partial_length += len;
+            _partial_length.push_back(len);
          }
       }
       double partial_length(int i) const {
-         return _partial_length.valid_index(i) ? _partial_length[i] : 0;
+         return (0 <= i && i < (int)_partial_length.size()) ? _partial_length[i] : 0;
       }
    
       double length() const {
-         return _partial_length.empty() ? 0 : _partial_length.last();
+         return _partial_length.empty() ? 0 : _partial_length.back();
       }
       
       //@}
@@ -924,8 +926,9 @@ class NDCZpt_list : public ARRAY<NDCZpt> {
    
       NDCZpt   average () const {
          NDCZpt sum; 
-         for(int i=0;i<num();i++) sum=sum+(*this)[i];
-         return sum/(num() ? num():1); 
+         for (NDCZpt_list::size_type i=0; i<size(); i++)
+            sum = sum + (*this)[i];
+         return sum/(size() ? size():1);
       }
       
       //@}
@@ -939,19 +942,19 @@ class NDCZpt_list : public ARRAY<NDCZpt> {
  *  \question Is _partial_length even necessary?
  *
  */
-class NDCZvec_list : public ARRAY<NDCZvec> {
+class NDCZvec_list : public vector<NDCZvec> {
    
    protected:
    
-      ARRAY<double>    _partial_length;
+      vector<double>    _partial_length;
 
    public:
    
       //! \name Constructors
       //@{
    
-      NDCZvec_list(int max=0)             :ARRAY<NDCZvec>(max) { }
-      NDCZvec_list(const ARRAY<NDCZvec>& p) :ARRAY<NDCZvec>(p) { }
+      NDCZvec_list(int max=0)                : vector<NDCZvec>()  { reserve(max); }
+      NDCZvec_list(const vector<NDCZvec>& p) : vector<NDCZvec>(p) { }
       
       //@}
       
@@ -960,8 +963,9 @@ class NDCZvec_list : public ARRAY<NDCZvec> {
       
       NDCZvec   average () const {
          NDCZvec sum;
-         for(int i=0;i<num();i++) sum=sum + (*this)[i];
-         return sum/(num() ? num():1); 
+         for (NDCZvec_list::size_type i=0; i<size(); i++)
+            sum = sum + (*this)[i];
+         return sum/(size() ? size():1);
       }
       
       //@}
@@ -1117,9 +1121,9 @@ class NDCpt_list : public Point2list<NDCpt_list,NDCpt,NDCvec,NDCline> {
       
       void project_to_plane(CWplane& P, Wpt_list& pts) const {
          pts.clear();
-         if (!empty()) pts.realloc(num());
-         for (int i=0; i<_num; i++)
-            pts += Wpt(P, Wline(_array[i]));
+         if (!empty()) pts.reserve(size());
+         for (NDCpt_list::size_type i=0; i<size(); i++)
+            pts.push_back(Wpt(P, Wline(at(i))));
          pts.update_length();
       }
       
@@ -1265,9 +1269,9 @@ class PIXEL_list : public Point2list<PIXEL_list,PIXEL,VEXEL,PIXELline> {
       
       void project_to_plane(CWplane& P, Wpt_list& pts) const {
          pts.clear();
-         if (!empty()) pts.realloc(num());
-         for (int i=0; i<_num; i++)
-            pts += Wpt(P, Wline(_array[i]));
+         if (!empty()) pts.reserve(size());
+         for (PIXEL_list::size_type i=0; i<size(); i++)
+            pts.push_back(Wpt(P, Wline(at(i))));
          pts.update_length();
       }
       
@@ -1414,8 +1418,8 @@ class EDGElist {
    protected:
    
       Wpt_list      _verts;
-      ARRAY<int>    _start;
-      ARRAY<int>    _end;
+      vector<int>   _start;
+      vector<int>   _end;
       
    public:
    
@@ -1430,7 +1434,7 @@ class EDGElist {
       //! \name Edge Accessor Functions
       //@{
       
-      void add_edge(int i, int j)      { _start += i; _end += j;}
+      void add_edge(int i, int j)      { _start.push_back(i); _end.push_back(j); }
       
       void edge(int edge, Wpt& s, Wpt& e) const
          { s = _verts[_start[edge]]; e= _verts[_end[edge]]; }
@@ -1453,7 +1457,7 @@ class EDGElist {
       //! \name EDGElist Property Queries
       //@{
          
-      int       num     () const       { return _start.num(); }
+      int       num     () const       { return _start.size(); }
       
       //@}
 

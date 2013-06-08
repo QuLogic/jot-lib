@@ -95,9 +95,9 @@ class STROKE_GEL : public GEL {
  protected:
    mlib::NDCZpt_list       make_smooth(mlib::CNDCZpt_list &l) {
       mlib::NDCZpt_list new_l;
-      if (l.num()>0)   new_l.add(l[0]);
-      for (int i=1;i<(l.num()-1);i++)  new_l.add(( l[i-1]*1.0 + l[i]*4.0 + l[i+1]*1.0 ) / (6.0));
-      if (l.num()>1)   new_l.add(l[l.num()-1]);
+      if (l.size()>0)   new_l.push_back(l[0]);
+      for (NDCZpt_list::size_type i=1;i<(l.size()-1);i++)  new_l.push_back(( l[i-1]*1.0 + l[i]*4.0 + l[i+1]*1.0 ) / (6.0));
+      if (l.size()>1)   new_l.push_back(l[l.size()-1]);
       return new_l;
    }
 
@@ -108,16 +108,15 @@ class STROKE_GEL : public GEL {
 	{ 
 		int i;
 		mlib::NDCZpt_list smooth_pts;
-		if (_pts.num()<2) smooth_pts = _pts;
-		else
-		{
-
+		if (_pts.size()<2)
+			smooth_pts = _pts;
+		else {
 			int n;
 			_pts.update_length();
 			n = (int)floor(_pts.length()*VIEW::peek()->ndc2pix_scale()/GESTURE_PIXEL_RESOLUTION);
-			smooth_pts.add(_pts[0]);
-			for (i=1;i<n;i++) smooth_pts.add(_pts.interpolate((float)i/(float)n));
-			smooth_pts.add(_pts[_pts.num()-1]);
+			smooth_pts.push_back(_pts[0]);
+			for (i=1;i<n;i++) smooth_pts.push_back(_pts.interpolate((float)i/(float)n));
+			smooth_pts.push_back(_pts[_pts.size()-1]);
 		}
 
 		for (i=0;i<GESTURE_SMOOTHING_PASSES;i++) smooth_pts = make_smooth(smooth_pts);
@@ -129,8 +128,7 @@ class STROKE_GEL : public GEL {
       _stroke.set_max_t(smooth_pts.length()*VIEW::peek()->ndc2pix_scale()/
                                                 (max(_stroke.get_angle(),1.0f)));
 
-
-      for (i=0;i<smooth_pts.num();i++) _stroke.add(smooth_pts[i]);
+      for (mlib::NDCZpt_list::size_type i=0;i<smooth_pts.size();i++) _stroke.add(smooth_pts[i]);
 
       _stroke.draw_start(); 
 		i = _stroke.draw(v); 

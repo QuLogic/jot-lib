@@ -93,7 +93,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
    err_adv(debug, "OVERSKETCH::find_matching_sil");
 
    const int MIN_GEST_PTS = 10;
-   if (!(g && g->pts().num() >= MIN_GEST_PTS))
+   if (!(g && g->pts().size() >= MIN_GEST_PTS))
       return false;
 
    if (BMESH::_freeze_sils)
@@ -109,7 +109,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
    BMESH* mesh = 0;
-   for (int i=0; i<pts.num(); i++) {
+   for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
       if (!(e && e->mesh())) {
@@ -282,8 +282,8 @@ OVERSKETCH::match_substrip(CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& stri
 
    PIXEL_list chain_path(chain.wpts());
 
-   int k0 = get_near_index(chain_path, pts.first(), MAX_DIST);
-   int k1 = get_near_index(chain_path, pts.last(),  MAX_DIST);
+   int k0 = get_near_index(chain_path, pts.front(), MAX_DIST);
+   int k1 = get_near_index(chain_path, pts.back(),  MAX_DIST);
 
    if (!(chain.valid_index(k0) && chain.valid_index(k1))) {
       err_adv(debug, "  bad k0/k1: %d/%d", k0, k1);
@@ -344,7 +344,7 @@ min_dist(CWpt_list& pts, CWpt_list& path)
    if (pts.empty())
       return 0;
    double ret = path.dist(pts[0]);
-   for (int i=1; i<pts.num(); i++)
+   for (Wpt_list::size_type i=1; i<pts.size(); i++)
       ret = min(ret, path.dist(pts[i]));
    return ret;
 }

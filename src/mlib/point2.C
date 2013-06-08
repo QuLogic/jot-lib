@@ -107,15 +107,15 @@ ray_seg_intersect(const Point2<P,V> &rayp, const Vec2<V>     &rayv,
 
 template <class L, class P, class V, class S>
 MLIB_INLINE
-int
+bool
 mlib::Point2list<L,P,V,S>::contains(const P &p) const
 {
-   if (num() < 3) return false; // must have at least 3 points
+   if (size() < 3) return false; // must have at least 3 points
    
    int cnt(0);
-   for (int i = 0;i < num(); i++) {
+   for (typename vector<P>::size_type i = 0;i < size(); i++) {
       P a((*this)[i]);
-      P b((*this)[(i+1) % num()]);
+      P b((*this)[(i+1) % size()]);
       
       if (a[1] != b[1]) {
          if ((a[1] < p[1] && b[1] >= p[1]) ||
@@ -133,11 +133,11 @@ mlib::Point2list<L,P,V,S>::contains(const P &p) const
 
 template <class L, class P, class V, class S>
 MLIB_INLINE
-int
+bool
 mlib::Point2list<L,P,V,S>::contains(const Point2list<L,P,V,S> &list) const
 {
-   int inside = 1;
-   for (int i = 0; i < list.num() && inside; i++)
+   bool inside = true;
+   for (typename vector<P>::size_type i = 0; i < list.size() && inside; i++)
       inside = inside && contains(list[i]);
 
    return inside;
@@ -153,13 +153,13 @@ mlib::Point2list<L,P,V,S>::ray_intersect(
     int loop
     ) const
 {
-    const int n = loop ? num() : num() -1;
+    const int n = loop ? size() : size() -1;
     bool intersected = false, tmp;
     for (int i = 0; i < n ; i++) {
        tmp = ray_seg_intersect(pt,
                 ray,
                 (*this)[i],
-                (*this)[(i + 1) % num()],
+                (*this)[(i + 1) % size()],
                 inter);
        if(tmp)
      intersected=true;
@@ -177,18 +177,18 @@ mlib::Point2list<L,P,V,S>::ray_intersect(
     int loop
     ) const
 {
-    const int n = loop ? num() : num() -1;
+    const int n = loop ? size() : size() -1;
     for (int i = 0; i < n ; i++) {
        P tmp;
        if(ray_seg_intersect(pt,
              ray,
              (*this)[i],
-             (*this)[(i + 1) % num()],
+             (*this)[(i + 1) % size()],
              tmp)) {
         inter += tmp;
        }
     }
-    return inter.num() > 1;
+    return inter.size() > 1;
 }
 
 //! returns the intersection of the ray with a subpart (k0 through
@@ -249,18 +249,18 @@ MLIB_INLINE
 void
 mlib::Point2list<L,P,V,S>::fix_endpoints(P a, P b)
 {
-   if (num() < 2) {
+   if (size() < 2) {
       cerr << "Point2list<>::fix_endpoints(): not enough points "
-           << "in list (num = " << num() << ")" << endl;
+           << "in list (num = " << size() << ")" << endl;
       return;
    }
 
-   if (first().is_equal(a) && last().is_equal(b)) {
+   if (front().is_equal(a) && back().is_equal(b)) {
       // if new endpoints are the same as old endpoints, no-op
       return;
    }
 
-   double old_len = first().dist(last());
+   double old_len = front().dist(back());
    
    if (old_len < epsAbsMath()) {
       cerr << "Point2list<>::fix_endpoints(): distance between "
@@ -269,12 +269,12 @@ mlib::Point2list<L,P,V,S>::fix_endpoints(P a, P b)
    }
    
    // adjustment needed to fix first point of list to a
-   const V translation = a - first();
+   const V translation = a - front();
 
-   // translate the entire curve so that now first() == a
+   // translate the entire curve so that now front() == a
    this->translate(translation); 
 
-   const V old_vec  = last() - a;
+   const V old_vec  = back() - a;
    const V new_vec  = b - a;
    double angle,scale;
 
@@ -293,12 +293,12 @@ mlib::Point2list<L,P,V,S>::fix_endpoints(P a, P b)
    // It's actually the matrix [cos -sin; sin cos]*scale
    // that do the transform
    
-   for (int k = 1; k < num() ;k++) {
-      V v = (*this)[k] - first();
+   for (typename vector<P>::size_type k = 1; k < size() ;k++) {
+      V v = (*this)[k] - front();
       V offset = V(aa*v[0]-bb*v[1], bb*v[0]+aa*v[1]);
       
       // reset to the transformed pt
-      (*this)[k] = first()+offset;
+      (*this)[k] = front()+offset;
    }
    
    this->update_length();
@@ -309,11 +309,10 @@ MLIB_INLINE
 bool
 mlib::Point2list<L,P,V,S>::intersects_line(const S& l) const
 {
-
    P o = l.point();
    V v = l.vector().perpend();
 
-   for (int i=0; i<num()-1; i++)
+   for (typename vector<P>::size_type i=0; i<size()-1; i++)
       if (((pt(i) - o) * v) * ((pt(i+1) - o) * v) <= 0)
          return true;
    return false;
@@ -324,8 +323,7 @@ MLIB_INLINE
 bool
 mlib::Point2list<L,P,V,S>::intersects_seg(const S& s) const
 {
-
-   for (int i=0; i<num()-1; i++)
+   for (typename vector<P>::size_type i=0; i<size()-1; i++)
       if (seg(i).intersect_segs(s))
          return true;
    return false;
@@ -336,9 +334,8 @@ MLIB_INLINE
 double
 mlib::Point2list<L,P,V,S>::winding_number(const P& p) const
 {
-
    double ret=0;
-   for (int i=1; i<num(); i++)
+   for (typename vector<P>::size_type i=1; i<size(); i++)
       ret += signed_angle((pt(i-1) - p), (pt(i) - p));
    return ret / TWO_PI;
 }

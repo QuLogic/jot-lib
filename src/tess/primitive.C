@@ -159,7 +159,7 @@ get_projected_span(PIXEL_list A, PIXEL_list B, double& s0, double& s1,
    // "step_size" parameter (see below) should be passed in as
    // a variable.
 
-   if (A.num() < 2 || B.num() < 2) {
+   if (A.size() < 2 || B.size() < 2) {
       err_adv(debug, "get_projected_span: incomplete inputs");
       return false;
    }
@@ -259,9 +259,9 @@ inline Bface_list
 create_polygon(CWpt_list& pts, Patch* p)
 {
    assert(p && p->mesh());
-   assert(pts.num() == 3 || pts.num() == 4);
+   assert(pts.size() == 3 || pts.size() == 4);
    Bvert_list verts = p->mesh()->add_verts(pts);
-   if (pts.num() == 3)
+   if (pts.size() == 3)
       return Bface_list(p->mesh()->add_face(verts[0], verts[1], verts[2], p));
    return Bface_list(
       p->mesh()->add_quad(
@@ -427,11 +427,11 @@ Primitive::init(LMESH* skel_mesh, Wpt_list pts, CWvec& n, MULTI_CMDptr cmd)
    assert(cmd);
    assert(pts.is_closed());
    assert(pts.is_planar());
-   assert(pts.first().is_equal(pts.last()));
+   assert(pts.front().is_equal(pts.back()));
 
-   pts.pop();
+   pts.pop_back();
    pts.update_length();
-   assert(pts.num() == 3 || pts.num() == 4);
+   assert(pts.size() == 3 || pts.size() == 4);
 
    Wpt  o = pts.average();
    Wvec t = (pts[2] - pts[1]).normalized();
@@ -708,7 +708,7 @@ Primitive::build_roof(
    }
 
    // Need > 1 point:
-   if (pixels.num() < 2) {
+   if (pixels.size() < 2) {
       err_adv(debug, "Primitive::build_roof: too few pixels");
       return 0;
    }
@@ -723,9 +723,9 @@ Primitive::build_roof(
    //
    // Stroke must start near the start of the strip:
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
-      pixels.reverse(); // This is why 'pixels' is passed by copy
+      std::reverse(pixels.begin(), pixels.end()); // This is why 'pixels' is passed by copy
       for (vector<int>::size_type i = 0; i < corners.size(); i++)
-         corners[i] = pixels.num() - 1 - corners[i];
+         corners[i] = pixels.size() - 1 - corners[i];
    }
 
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
@@ -733,7 +733,7 @@ Primitive::build_roof(
       return 0;
    }
    // stroke must end near the end of the strip:
-   if (!(pixels.last().dist(side.last()->wloc()) < 10)) {
+   if (!(pixels.back().dist(side.last()->wloc()) < 10)) {
       err_adv(debug, "Primitive::build_roof: stroke too far from the side");
       return 0;
    }
@@ -780,7 +780,7 @@ Primitive::extend_branch(
    }
 
    // Need > 1 point:
-   if (pixels.num() < 2) {
+   if (pixels.size() < 2) {
       err_adv(debug, "Primitive::extend_branch: too few pixels");
       return 0;
    }
@@ -807,14 +807,14 @@ Primitive::extend_branch(
    //
    // Stroke must start at center of first base:
    if (!near_base_center(base1, pixels[0]))
-      pixels.reverse(); // This is why 'pixels' is passed by copy
+      std::reverse(pixels.begin(), pixels.end()); // This is why 'pixels' is passed by copy
 
    if (!near_base_center(base1, pixels[0])) {
       err_adv(debug, "Primitive::extend_branch: stroke too far from base");
       return 0;
    }
    // If second base is not empty, stroke must end there:
-   if (!base2.empty() && !near_base_center(base2, pixels.last())) {
+   if (!base2.empty() && !near_base_center(base2, pixels.back())) {
       err_adv(debug, "Primitive::extend_branch: stroke too far from base");
       return 0;
    }
@@ -891,11 +891,11 @@ chop(Wpt_list& pts, double d)
    Wpt_list foo;        // temporary Wpt_list
 
    // Add 1st point
-   foo += pts.interpolate(s, 0, &seg);
+   foo.push_back(pts.interpolate(s, 0, &seg));
 
    // Add vertices following trim location
-   for (int i=seg+1; i<pts.num(); i++)
-      foo += pts[i];
+   for (Wpt_list::size_type i=seg+1; i<pts.size(); i++)
+      foo.push_back(pts[i]);
 
    // Overwrite points with trimmed point list
    pts = foo;
@@ -927,11 +927,11 @@ trim(Wpt_list& pts, double d)
    Wpt foo = pts.interpolate(1 - s, 0, &seg);
 
    // Chop off the vertices after the trim:
-   if (pts.valid_index(++seg))
-      pts.truncate(seg);
+   if (++seg < (int)pts.size())
+      pts.resize(seg);
 
    // Add the trim point
-   pts += foo;
+   pts.push_back(foo);
 
    // Restore length data for the point list
    pts.update_length();
@@ -942,16 +942,15 @@ trim(Wpt_list& pts, double d)
 inline double
 sum_dist(CWpt_list& pts1, CWpt_list& pts2, int p=0)
 {
-   //
    // Returns the summed distance between the two point
    // lists if pts2 is cycled right by amount p.
 
-   assert(pts1.num() == pts2.num());
-   int n = pts1.num();
-   assert(p >= 0 && p < n);
+   assert(pts1.size() == pts2.size());
+   Wpt_list::size_type n = pts1.size();
+   assert(p >= 0 && p < (int)n);
 
    double ret = 0;
-   for (int i=0; i<n; i++)
+   for (Wpt_list::size_type i=0; i<n; i++)
       ret += pts2[(i + n - p)%n].dist(pts1[i]);
    return ret;
 }
@@ -962,13 +961,12 @@ sum_dist(CWpt_list& pts1, CWpt_list& pts2, int p=0)
 inline int
 min_dist_permutation(CWpt_list& pts1, CWpt_list& pts2)
 {
-
-   assert(pts1.num() == pts2.num());
-   int n = pts1.num();
+   assert(pts1.size() == pts2.size());
+   Wpt_list::size_type n = pts1.size();
 
    int ret = 0;
    double min_dist = sum_dist(pts1, pts2), d;
-   for (int p=1; p<n; p++) {
+   for (Wpt_list::size_type p=1; p<n; p++) {
       if ((d = sum_dist(pts1, pts2, p)) < min_dist) {
          min_dist = d;
          ret = p;
@@ -1204,13 +1202,13 @@ remove_end_kinks(
    )
 {
    // try to remove small zig-zags at end 1
-   while (pts.num() > 2 && pts[0].dist(pts[1]) < w1 && pts.valid_index(1))
-      pts.pull_index(1);
+   while (pts.size() > 2 && pts[0].dist(pts[1]) < w1 && 1<pts.size())
+      pts.erase(pts.begin() + 1);
 
    // try to remove small zig-zags at end 2
-   while (pts.num() > 2 &&
-          pts.last().dist(pts[pts.num()-2]) < w2 && pts.valid_index(pts.num()-2))
-      pts.pull_index(pts.num()-2);
+   while (pts.size() > 2 &&
+          pts.back().dist(pts[pts.size()-2]) < w2 && 0 <= ((int)pts.size()-2))
+      pts.erase(pts.end() - 2);
    pts.update_length();
 }
 
@@ -1237,7 +1235,7 @@ process_skel_wpts(
 
    // Compute starting and ending vectors for the curve:
    tan1 = pts.tan(0);
-   tan2 = pts.tan(pts.num()-1);
+   tan2 = pts.tan(pts.size()-1);
 }
 
 //! Generate skeleton curve (undoable part happens with skel curve)
@@ -1309,26 +1307,26 @@ Primitive::build_cap(Bvert* a, Bvert* b, Bvert* c, Bvert* d, double du)
 inline Wpt_list
 recirc(CWpt_list& p, CWpt& o, double R)
 {
-   assert(p.num() > 2);
-   Wpt_list ret(p.num());
-   for (int i=0; i<p.num(); i++)
-      ret += o + ((p[i] - o).normalized()*R);
+   assert(p.size() > 2);
+   Wpt_list ret(p.size());
+   for (Wpt_list::size_type i=0; i<p.size(); i++)
+      ret.push_back(o + ((p[i] - o).normalized()*R));
    return ret;
 }
 
 inline Wpt_list
 smoothed_pts(CWpt_list& p, CWpt& o)
 {
-   int n = p.num();
+   Wpt_list::size_type n = p.size();
    assert(n > 2);
    Wpt_list ret(n);
-   for (int i=0; i<n; i++) {
+   for (Wpt_list::size_type i=0; i<n; i++) {
       Wvec v = p[i] - o;
       Wvec u0 = p[(i-1+n)%n] - p[i];
       Wvec u1 = p[(i+1  )%n] - p[i];
       Wvec t0 = (u0).orthogonalized(v).normalized()*(u0.length()*0.3);
       Wvec t1 = (u1).orthogonalized(v).normalized()*(u1.length()*0.3);
-      ret += p[i] + t0 + t1;
+      ret.push_back(p[i] + t0 + t1);
    }
    return ret;
 }
@@ -1338,8 +1336,7 @@ smoothed_pts(CWpt_list& p, CWpt& o)
 inline Wpt_list
 do_rounding(CWpt_list& pts)
 {
-
-   if (pts.num() < 3)
+   if (pts.size() < 3)
       return pts;
    Wpt      o = pts.average();
    double   R = avg_dist(pts, o);
@@ -1375,8 +1372,8 @@ Primitive::build_tube(
 {
    err_adv(debug, "Primitive::build_tube");
 
-   Bvert_list prev(u1.num());
-   Bvert_list cur (u1.num());
+   Bvert_list prev(u1.size());
+   Bvert_list cur (u1.size());
 
    Wpt_list r1 = u1;//do_rounding(u1);
    Wpt_list r2 = u2;//do_rounding(u2);
@@ -1602,8 +1599,8 @@ Primitive::extend(
 
    // Need a correction so the skel curve actually begins
    // (and ends) at the ends of the side strip.
-   pts.push(side.first()->loc());
-   pts += side.last()->loc();
+   pts.insert(pts.begin(), side.first()->loc());
+   pts.push_back(side.last()->loc());
    for (vector<int>::size_type i = 1; i < corners.size(); i++)
       corners[i]++;
    corners[corners.size()-1]++;
@@ -1653,7 +1650,7 @@ Primitive::extend(
 
    // create vertices of based on wpt_listmap:
    v1 += side.first();
-   assert(corners.front() == 0 && corners.back() == pts.num()-1);
+   assert(corners.front() == 0 && corners.back() == (int)pts.size()-1);
    for (vector<int>::size_type i = 1; i < corners.size(); i++) {
       double p_start = pts.partial_length(corners[i-1]);
       double p_end = pts.partial_length(corners[i]);
@@ -1678,12 +1675,12 @@ Primitive::extend(
 
    // Compute local coords
    for (int i = 1; i < v1.num()-1; i++)
-      u1 += f1->inv() * v1[i]->loc();
+      u1.push_back(f1->inv() * v1[i]->loc());
 
    //******** Generate xsecs and bands ********
 
-   Bvert_list prev(u1.num()+2);
-   Bvert_list cur (u1.num()+2);
+   Bvert_list prev(u1.size()+2);
+   Bvert_list cur (u1.size()+2);
    Bedge_list creases;
 
    // build 1st cross section
@@ -1725,7 +1722,7 @@ Primitive::extend(
       // Generate the cross section of verts.
       cur.clear();
       cur += side2[k];
-      for (int i=0; i<u1.num(); i++) {
+      for (Wpt_list::size_type i=0; i<u1.size(); i++) {
          cur += _mesh->add_vertex(frame->xf()*u1[i]);
          create_xf_meme((Lvert*)cur.last(), frame);
       }
@@ -1830,8 +1827,8 @@ Primitive::extend(
 
    // Need a correction so the base curve actually begins
    // (and ends) at the base center(s).
-   pts.push(b1.get_verts().center());
-   if (!b2.empty()) pts += b2.get_verts().center();
+   pts.insert(pts.begin(), b1.get_verts().center());
+   if (!b2.empty()) pts.push_back(b2.get_verts().center());
    pts.update_length();
 
    // Decide spacing of tube sections
@@ -1864,19 +1861,19 @@ Primitive::extend(
    // For short stroke, it's just a point.
    if (L < 1.4 * (w1 + w2)/2) {
       err_adv(debug, "Primitive::extend: using skeleton point");
-      skel_point = create_skel_point(_skel_mesh, _base1, n, pts.first());
+      skel_point = create_skel_point(_skel_mesh, _base1, n, pts.front());
       init_name(skel_point, name() + "-skel-point");
       absorb_skel(skel_point);
       cmd->add(new SHOW_BBASE_CMD(skel_point));
    } else {
-      Bpoint* bp1 = create_skel_point(_skel_mesh, _base1, n, pts.first());
+      Bpoint* bp1 = create_skel_point(_skel_mesh, _base1, n, pts.front());
       Bpoint* bp2 = 0;
       if (!b2.empty()) {
          // make the last bpoint relative to the base at end 2:
-         bp2 = create_skel_point(_skel_mesh, _base2, n, pts.last());
+         bp2 = create_skel_point(_skel_mesh, _base2, n, pts.back());
       } else {
          // make them both relative to the base at end 1:
-         bp2 = create_skel_point(_skel_mesh, _base1, n, pts.last());
+         bp2 = create_skel_point(_skel_mesh, _base1, n, pts.back());
       }
       create_skel_curve(pcalc, tvals, pts, bp1, bp2, n, skel_curve, edges, cmd);
    }
@@ -2044,7 +2041,7 @@ Primitive::build_simple_tube(
    }
 
    // Need a correction so the skel curve actually begins at b1
-   pts.push(b1->loc());
+   pts.insert(pts.begin(), b1->loc());
    pts.update_length();
    remove_end_kinks(pts, w, w);
 
@@ -2068,12 +2065,11 @@ Primitive::build_simple_tube(
 inline Wpt_list
 gen_4_ring(double d)
 {
-
    Wpt_list ret(4);
-   ret += Wpt(0, d, d);
-   ret += Wpt(0,-d, d);
-   ret += Wpt(0,-d,-d);
-   ret += Wpt(0, d,-d);
+   ret.push_back(Wpt(0, d, d));
+   ret.push_back(Wpt(0,-d, d));
+   ret.push_back(Wpt(0,-d,-d));
+   ret.push_back(Wpt(0, d,-d));
    return ret;
 }
 
@@ -2106,7 +2102,7 @@ Primitive::build_simple_tube(
    param_list_t tvals = make_params(num_segs);
 
    // create 2nd point
-   Bpoint* b2 = new Bpoint(_skel_mesh, pts.last(), n);
+   Bpoint* b2 = new Bpoint(_skel_mesh, pts.back(), n);
 
    // create curve
    Bcurve* skel_curve =
@@ -2117,8 +2113,8 @@ Primitive::build_simple_tube(
    // compute local coords
    Wpt_list u = gen_4_ring(w/2);
 
-   Bvert_list prev(u.num());
-   Bvert_list cur (u.num());
+   Bvert_list prev(u.size());
+   Bvert_list cur (u.size());
 
    // build 1st ring, add end cap
    CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, 0, edges.first());
@@ -2172,9 +2168,8 @@ Primitive::build_ring(
    CWpt_list& u,        //!< local coords for generating the ring
    Bvert_list& ring)    //!< return list of vertices created
 {
-
    ring.clear();
-   for (int i=0; i<u.num(); i++) {
+   for (Wpt_list::size_type i=0; i<u.size(); i++) {
       ring += _mesh->add_vertex(frame->xf()*u[i]);
       create_xf_meme((Lvert*)ring.last(), frame);
    }

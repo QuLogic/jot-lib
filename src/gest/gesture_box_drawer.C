@@ -49,7 +49,7 @@ GestureBoxDrawer::draw(const GESTURE* gest, CVIEWptr& v) {
   
   // draw the line strip
   const PIXEL_list& pts = gest->pts();
-  int nb_pts = pts.num();
+  PIXEL_list::size_type nb_pts = pts.size();
   if (nb_pts>=2){
     PIXEL pt_a = pts[0];
     PIXEL pt_b (pts[0][0], pts[nb_pts-1][1]);

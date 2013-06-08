@@ -640,7 +640,7 @@ PatternPen::compute_target_cell(CGESTUREptr& gest){
       print_target_cell();
    }
 
-   int nb_pts = gest->pts().num();
+   PIXEL_list::size_type nb_pts = gest->pts().size();
    if (nb_pts < 2) return false;
   
    if (_current_cell_type == BBOX_CELL){
@@ -871,7 +871,7 @@ PatternPen::clear_synthesized(){
 void 
 PatternPen::add_stroke_to_proxy(CGESTUREptr& gest)
 {
-   if (gest->pts().num() < 2) {
+   if (gest->pts().size() < 2) {
       WORLD::message("Failed to generate hatch stroke (too few samples)...");
       return;
    }

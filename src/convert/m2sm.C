@@ -36,8 +36,8 @@ read_vert(Wpt_list& pts)
   } else if (num > 1e6) {
     cerr << "too scared to handle large vert num " << num << endl;
   } else {
-    while(pts.num() <= num) {
-      pts += Wpt();
+    while ((int)pts.size() <= num) {
+      pts.push_back(Wpt());
     }
     pts[num] = Wpt(x,y,z);
   }
@@ -87,8 +87,7 @@ main(int argc, char *argv[])
    
    BMESHptr mesh = new BMESH;
    
-   int i=0;
-   for (i=1; i<pts.num(); i++) {
+   for (Wpt_list::size_type i=1; i<pts.size(); i++) {
      mesh->add_vertex(pts[i]);
    }
 
@@ -98,6 +97,7 @@ main(int argc, char *argv[])
                     faces[i][2]-1);
    }
 
+   int i;
    // remove any unused vertices
    for (i=mesh->nverts()-1; i>=0; i--) {
      if (mesh->bv(i)->degree() == 0) {

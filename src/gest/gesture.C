@@ -41,8 +41,8 @@ GESTURE::init(CPIXEL& p, CEvent& down, double pressure)
 void   
 GESTURE::add(CPIXEL& p, double min_dist, double pressure) 
 {
-   if (_pts.empty() || _pts.last().dist(p) >= min_dist) {
-      _pts       += p;
+   if (_pts.empty() || _pts.back().dist(p) >= min_dist) {
+      _pts.push_back(p);
       _pressures.push_back(pressure);
       _times.push_back(stop_watch::sys_time());
 
@@ -59,7 +59,7 @@ void
 GESTURE::smooth_points()
 {
    PIXEL_list s = _pts;
-   for (int i=1; i<s.num()-1; i++) {
+   for (PIXEL_list::size_type i=1; i<s.size()-1; i++) {
       // use 1-6-1 mask:
       s[i] = (_pts[i-1] + _pts[i]*6.0 + _pts[i+1])/8.0;
    }
@@ -77,8 +77,8 @@ void
 GESTURE::reflect_points(const PIXELline& l)
 {
    PIXEL_list s = _pts;
-   for (int i=0; i<s.num(); i++) {
-	s[i] = l.reflection(_pts[i]);
+   for (PIXEL_list::size_type i=0; i<s.size(); i++) {
+      s[i] = l.reflection(_pts[i]);
    }
    _pts = s;
 }
@@ -86,7 +86,7 @@ GESTURE::reflect_points(const PIXELline& l)
 void  
 GESTURE::complete(CPIXEL& p, CEvent& up) 
 {
-   if (_pts.num() < 2)
+   if (_pts.size() < 2)
       add(p, 0, _pressures.back());
    _up = up;
 
@@ -99,19 +99,6 @@ GESTURE::complete(CPIXEL& p, CEvent& up)
    _complete = true;
 }
 
-
-// XXX - move to ARRAY?
-template <class A>
-inline void
-clip_tip(A& array, int num_to_clip)
-{
-   // remove first 'num_to_clip' elements from the array
-   A tmp = array;
-   tmp.reverse();                               // turn it around
-   tmp.truncate(array.num() - num_to_clip);     // chop it off
-   tmp.reverse();                               // turn it back
-   array = tmp;
-}
 
 void  
 GESTURE::trim()
@@ -132,8 +119,8 @@ GESTURE::trim()
    if (length() <= trim_dist*2.5)
       return;
 
-   int n = _pts.num(), i;
-   int trim_i = 0;     // "Trim index" - index of new start of pixel trail
+   PIXEL_list::size_type n = _pts.size(), i;
+   PIXEL_list::size_type trim_i = 0;     // "Trim index" - index of new start of pixel trail
 
    static bool debug = Config::get_var_bool("GEST_DEBUG_TRIM",false);
 
@@ -144,16 +131,16 @@ GESTURE::trim()
    }
    if (trim_i > 0) {
       err_adv(debug, "GESTURE::trim: clipping at %d", trim_i);
-      clip_tip(_pts,       trim_i);
+      _pts.erase(_pts.begin(), _pts.begin() + trim_i);
       _pts.update_length();
       _times.erase(_times.begin(), _times.begin() + trim_i);
       _pressures.erase(_pressures.begin(), _pressures.begin() + trim_i);
    }
       
    // Do the end of the stroke:
-   n = _pts.num();
+   n = _pts.size();
    trim_i = n-1;        // Index of last element after trimming
-   for (i=n-2; (i > 0) && (_pts[i].dist(_pts.last()) < trim_dist); i--) {
+   for (i=n-2; (i > 0) && (_pts[i].dist(_pts.back()) < trim_dist); i--) {
       if (angle(i) > trim_angle)
          trim_i = i;
    }
@@ -163,7 +150,7 @@ GESTURE::trim()
       // case we want trim_i to be the index of the last element,
       // which means there should be trim_i + 1 elements in the
       // truncated array.
-      _pts.      truncate(trim_i + 1);
+      _pts.      resize(trim_i + 1);
       _pts.update_length();
       _times.    resize(trim_i + 1);
       _pressures.resize(trim_i + 1);
@@ -230,10 +217,10 @@ GESTURE::radius() const
    PIXEL c = center();
 
    double ret=0;
-   for (int k=0; k<_pts.num(); k++)
+   for (PIXEL_list::size_type k=0; k<_pts.size(); k++)
       ret += _pts[k].dist(c);
 
-   return (ret / _pts.num());
+   return (ret / _pts.size());
 }
 
 inline double
@@ -270,7 +257,7 @@ GESTURE::winding(bool do_trim, bool do_abs) const
 
    // beginning and ending indices of
    // pixel list vertices:
-   int k1=0, k2=_pts.num()-1;
+   int k1=0, k2=(int)_pts.size()-1;
 
    err_adv(debug, "GESTURE::winding");
 
@@ -298,7 +285,7 @@ GESTURE::winding(bool do_trim, bool do_abs) const
 
    }
 
-   err_adv(debug, "   %d points, k1: %d, k2: %d", _pts.num(), k1, k2);
+   err_adv(debug, "   %d points, k1: %d, k2: %d", _pts.size(), k1, k2);
 
    // add up the angles
    double ret = 0;
@@ -316,11 +303,11 @@ GESTURE::is_corner(int i) const
    // also internal points where exterior angle is large.
 
    // endpoints
-   if (i == 0 || i ==_pts.num()-1)
+   if (i == 0 || i == (int)_pts.size()-1)
       return true;
 
    // invalid points
-   if (!_pts.valid_index(i))
+   if (i < 0 || i >= (int)_pts.size())
       return false;
 
    // internal points
@@ -332,7 +319,7 @@ vector<int>
 GESTURE::corners() const
 {
    vector<int> ret;
-   for (int i=0;i < _pts.num(); i++)
+   for (PIXEL_list::size_type i=0;i < _pts.size(); i++)
       if (is_corner(i))
          ret.push_back(i);
    return ret;
@@ -341,7 +328,7 @@ GESTURE::corners() const
 bool 
 GESTURE::is_stroke() const
 {
-   return (_down._d && _up._d && _pts.num() > 1);
+   return (_down._d && _up._d && _pts.size() > 1);
 }
 
 bool 
@@ -476,7 +463,7 @@ GESTURE::is_dot() const
 
    PIXEL c = center();
 
-   for (int k=0; k<_pts.num(); k++)
+   for (PIXEL_list::size_type k=0; k<_pts.size(); k++)
       if (_pts[k].dist(c) > 25)
          return 0;
 
@@ -833,7 +820,7 @@ class ELLIPSE {
    // avg distance of each point in the given list to the ellipse
    double avg_dist(CPIXEL_list& pts) {
       RunningAvg<double> ret(0);
-      for (int i=0; i<pts.num(); i++)
+      for (PIXEL_list::size_type i=0; i<pts.size(); i++)
          ret.add(_pts.dist(pts[i]));
       return ret.val();
    }
@@ -850,12 +837,12 @@ ELLIPSE::rebuild(int res)
 
    // Prepare to rebuild pts:
    _pts.clear();
-   _pts.realloc(res);
+   _pts.reserve(res);
 
    // add points, including last point == first point
    for (int i=0; i<res; i++) {
       double t = (2*M_PI)*i/res;
-      _pts += _center + _x*(_r1*cos(t)) + _y*(_r2*sin(t));
+      _pts.push_back(_center + _x*(_r1*cos(t)) + _y*(_r2*sin(t)));
    }
 }
 
@@ -925,7 +912,7 @@ DEBUG_ELLIPSE::draw(CVIEWptr& v)
    GL_VIEW::init_line_smooth(GLfloat(v->line_scale()*2));
    GL_COL(COLOR::blue, alpha());
    glBegin(GL_LINE_STRIP);
-   for (int k=0; k<_pts.num(); k++)
+   for (PIXEL_list::size_type k=0; k<_pts.size(); k++)
       glVertex2dv(_pts[k].data());
    glEnd();
    GL_VIEW::end_line_smooth();
@@ -982,11 +969,11 @@ get_section(PIXEL_list& pts, double s0, double s1)
    VEXEL v0, v1; int k0, k1; double t0, t1;
    PIXEL p0 = pts.interpolate(s0, &v0, &k0, &t0);
    PIXEL p1 = pts.interpolate(s1, &v1, &k1, &t1);
-   ret += p0;
+   ret.push_back(p0);
    for (int k=k0+1; k<=k1; k++)
-      ret += pts[k];
+      ret.push_back(pts[k]);
    if (t1 > 0)
-      ret += p1;
+      ret.push_back(p1);
    return ret;
 }
 
@@ -1018,11 +1005,13 @@ trim_endpt_overlap(CPIXEL_list& pts)
    // Pick off the last few points that are sufficiently close to the
    // start of the polyline.
    PIXEL foo; int fum;
-   for (int k=pts.num()-1; k>last_k; k--) {
-      if (start.closest(ret[k], foo, fum) < 10.0)
-         ret.pop();
+   PIXEL_list::iterator it = ret.end() - 1;
+   while ((it - ret.begin()) > last_k) {
+      if (start.closest(*it, foo, fum) < 10.0)
+         it = ret.erase(it);
       else
          break;
+      --it;
    }
    return ret;
 }
@@ -1100,7 +1089,7 @@ GESTURE::is_ellipse(
    // Step 0.
    //
    // Trivial reject.
-   int n = _pts.num(), k;
+   PIXEL_list::size_type n = _pts.size(), k;
    if (n < 8) {
       err_adv(debug, "GESTURE::is_ellipse: too few points", n);
       return false;
@@ -1356,7 +1345,7 @@ GestureDrawer::draw(const GESTURE* gest, CVIEWptr& v)
    const PIXEL_list&    pts   = gest->pts();
    const vector<double>& press = gest->pressures();
    glBegin(GL_LINE_STRIP);
-   for (int k=0; k< pts.num(); k++) {
+   for (PIXEL_list::size_type k=0; k<pts.size(); k++) {
       double grey = pressure_to_grey(press[k]);
       glColor3d(grey, grey, grey);      // GL_CURRENT_BIT
       glVertex2dv(pts[k].data());

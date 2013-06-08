@@ -288,7 +288,7 @@ GL_VIEW::setup_stencil()
       glStencilOp  (GL_REPLACE, GL_REPLACE, GL_REPLACE);
       glDisable    (GL_LIGHTING);
       glBegin(GL_QUADS);
-	 for (int p = 0;  p < pts.num(); p++)
+	 for (XYpt_list::size_type p = 0;  p < pts.size(); p++)
 	    glVertex2dv(pts[p].data());
       glEnd();
    }
@@ -935,7 +935,7 @@ GL_VIEW::draw_pts(
       GL_COL(color, alpha);             // GL_CURRENT_BIT
       glDisable(GL_LIGHTING);           // GL_ENABLE_BIT
       glBegin(GL_POINTS);
-      for (int i=0; i<pts.num(); i++)
+      for (Wpt_list::size_type i=0; i<pts.size(); i++)
          glVertex3dv(pts[i].data());
       glEnd();
       GL_VIEW::end_point_smooth();      // pop state
@@ -958,7 +958,7 @@ GL_VIEW::draw_wpt_list(
    // drawn stippled. Assumes projection and modelview
    // matrices have been set as needed.
 
-   if (pts.num() < 2) 
+   if (pts.size() < 2)
       return;
 
    glPushAttrib(GL_ENABLE_BIT | GL_LINE_BIT | GL_CURRENT_BIT);
@@ -973,7 +973,7 @@ GL_VIEW::draw_wpt_list(
 
    // draw the polyline
    glBegin(GL_LINE_STRIP);
-   for (int i=0; i<pts.num(); i++) {
+   for (Wpt_list::size_type i=0; i<pts.size(); i++) {
       glVertex3dv(pts[i].data());
    }
    glEnd();

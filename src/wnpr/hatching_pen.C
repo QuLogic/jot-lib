@@ -478,8 +478,8 @@ HatchingPen::generate_stroke(CGESTUREptr& gest)
          return 0;
       }
 
-   if (gest->pts().num() < 2) {
-      cerr    << "HatchingPen: Can't make hatch stroke with only " << gest->pts().num() << " samples...\n";
+   if (gest->pts().size() < 2) {
+      cerr    << "HatchingPen: Can't make hatch stroke with only " << gest->pts().size() << " samples...\n";
       WORLD::message("Failed to generate hatch stroke (too few samples)...");
       return 0;
    }

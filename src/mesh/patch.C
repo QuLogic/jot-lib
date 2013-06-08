@@ -1653,7 +1653,7 @@ Patch::get_direction_vec() const
    if(_direction_stroke.empty())
       return VEXEL(0.0,0.0);
 
-   Wvec w_vec = _direction_stroke.last() - _direction_stroke.pt(0);
+   Wvec w_vec = _direction_stroke.back() - _direction_stroke.pt(0);
    return VEXEL(_direction_stroke.average(), w_vec);
 
 }

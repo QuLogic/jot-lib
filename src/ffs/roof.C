@@ -255,7 +255,7 @@ ROOF::init(CGESTUREptr& g)
    for (j = 0; j < rect_regions.num(); j++) {
       bound_strip = rect_regions[j].get_boundary();
       PIXEL_list bound_wpts = bound_strip.verts().wpts();
-      bound_wpts += bound_wpts.first();
+      bound_wpts.push_back(bound_wpts.front());
       PIXEL nearpt;
       double neardist;
       bound_wpts.closest(p, nearpt, neardist, seg_index);

@@ -161,7 +161,7 @@ get_draw_plane(CPIXEL& p, Wvec& t, Wvec& b)
 {
    // Convenience, for when you just have 1 2D point:
    PIXEL_list pix;
-   pix += p;
+   pix.push_back(p);
    return get_draw_plane(pix,t,b);
 }
 
@@ -186,7 +186,7 @@ align_line(Wpt_list& pts, Wvec t)
 {
    // pts must have 2 points.
    // rotate it around its center to be exactly parallel to t.
-   assert(pts.num() == 2);
+   assert(pts.size() == 2);
    Wvec v = pts[1] - pts[0];
    if (v*t < 0)
       t = -t;
@@ -201,7 +201,7 @@ align_line(Wpt_list& pts, Wvec t)
 inline void
 try_align_line(Wpt_list& pts, CWvec& t, CWvec& b, double thresh, bool debug)
 {
-   if (pts.num() != 2)
+   if (pts.size() != 2)
       return;
    if (t.is_null() || b.is_null())
       return;

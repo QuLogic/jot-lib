@@ -1207,7 +1207,7 @@ compute_baseline(CLIST<GESTUREptr> & gest_list,
 
       PIXEL_list pix_pts = gest_list[i]->pts();  
 
-      for (int j = 0; j < pix_pts.num(); j++) {
+      for (PIXEL_list::size_type j = 0; j < pix_pts.size(); j++) {
          if ((pix_pts[j])[0] < x_min)
             x_min = (pix_pts[j])[0];
          if ((pix_pts[j])[0] > x_max) 
@@ -1250,13 +1250,13 @@ get_offsets(
    {
       assert(s->get_verts().num() >= 2);
 
-      for (int j=0; j<gest_list.num(); j++) 
-      {
-         CPIXEL_list   &pix_pts = gest_list[j]->pts();         assert(pix_pts.num() >= 2);
-         const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == (int)presses.size());
+      for (int j=0; j<gest_list.num(); j++) {
+         CPIXEL_list   &pix_pts = gest_list[j]->pts();               assert(pix_pts.size() >= 2);
+         const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.size() == presses.size());
 
          NDCZpt_list pts;
-         for (int i=0; i<pix_pts.num(); i++) pts += NDCZpt(pix_pts[i]); 
+         for (PIXEL_list::size_type i=0; i<pix_pts.size(); i++)
+            pts.push_back(NDCZpt(pix_pts[i]));
 
          BaseStrokeOffsetLISTptr os = s->generate_offsets(pts, presses); 
 
@@ -1291,19 +1291,16 @@ get_offsets(
       }
       else
       {
-         for (int j=0; j<gest_list.num(); j++) 
-         {
-
-            CPIXEL_list   &pix_pts = gest_list[j]->pts();         assert(pix_pts.num() >= 2);
-            const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.num() == (int)presses.size());
+         for (int j=0; j<gest_list.num(); j++) {
+            CPIXEL_list   &pix_pts = gest_list[j]->pts();               assert(pix_pts.size() >= 2);
+            const vector<double> presses = gest_list[j]->pressures();   assert(pix_pts.size() == presses.size());
 
             BaseStrokeOffset prev_o;  // for comparing distances
                                       // between successive offsets
 
             bool first_offset_set = false;
       
-            for (int k = 0; k < pix_pts.num(); k++) 
-            {
+            for (PIXEL_list::size_type k = 0; k < pix_pts.size(); k++) {
                double t = ((pix_pts[k])[0] - start_p[0])/baseline_len;
                double l = (pix_pts[k])[1] - mid_y;
 
@@ -1473,14 +1470,14 @@ LinePen::button_edit_offset_apply()
       PIXEL_list   filtered_pix;
       ARRAY<double> filtered_press;
 
-      assert(pix.num() == (int)press.size());
+      assert(pix.size() == press.size());
 
       // No duplicate pixels at all, damn it!
-      for (int l=0; l<pix.num(); l++) 
+      for (PIXEL_list::size_type l=0; l<pix.size(); l++)
          if (filtered_pix.add_uniquely(pix[l])) filtered_press.add(press[l]);
 
       // must have at least 2 gesture vertices
-      if(filtered_pix.num() < 2) continue;
+      if (filtered_pix.size() < 2) continue;
 
       OutlineStroke *s = _curr_pool->get_stroke(); 
       assert(s && s->is_of_type(DecalLineStroke::static_name()));
@@ -2061,9 +2058,9 @@ LinePen::easel_update_baseline()
 
          if (baseline_vec.length() > 1)
          {
-            _baseline_gel->pts().add(start_p - 0.1 * baseline_vec);
-            _baseline_gel->pts().add(start_p + 0.5 * baseline_vec);
-            _baseline_gel->pts().add(start_p + 1.1 * baseline_vec);
+            _baseline_gel->pts().push_back(start_p - 0.1 * baseline_vec);
+            _baseline_gel->pts().push_back(start_p + 0.5 * baseline_vec);
+            _baseline_gel->pts().push_back(start_p + 1.1 * baseline_vec);
          }
       }
       else
@@ -2074,12 +2071,9 @@ LinePen::easel_update_baseline()
          _baseline_gel->pts().clear();
 
          for (int i=0; i < vs.num(); i++)
-            _baseline_gel->pts().add(vs[i]._base_loc);
-         
+            _baseline_gel->pts().push_back(vs[i]._base_loc);
       }
    }
-
-
 }
 
 /////////////////////////////////////
@@ -2320,7 +2314,7 @@ LinePen::set_decal_stroke_verts(
    DecalLineStroke* stroke)
 {
    assert(stroke);
-   assert (pix.num() == press.num());
+   assert((int)pix.size() == press.num());
 
    BaseVisRefImage *vis_ref = BaseVisRefImage::lookup(VIEW::peek()); assert(vis_ref);
 
@@ -2332,10 +2326,8 @@ LinePen::set_decal_stroke_verts(
    // given by p1 and p2 with any mesh edges of the visible portions of 
    // the mesh surface.
     
-   for(int i = 0; i < pix.num()-1; i++) 
-   {    
-      if (pix[i] == pix[i+1]) 
-      {
+   for (PIXEL_list::size_type i = 0; i < pix.size()-1; i++) {
+      if (pix[i] == pix[i+1]) {
          cerr << "LinePen::set_decal_stroke_verts() - Duplicate gesture pixels... skipping...\n";
          continue;
       }

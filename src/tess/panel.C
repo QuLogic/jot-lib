@@ -556,8 +556,8 @@ bool
 Panel::split_tri(Bpoint* bp, Bcurve* bc, CPIXEL_list& pts, bool scribble)
 {
    assert(_bcurves.num() == 3);
-   assert(Bpoint::hit_ctrl_point(pts.first(), 8) == bp);
-   assert(Bcurve::hit_ctrl_curve(pts.last(), 8) == bc);
+   assert(Bpoint::hit_ctrl_point(pts.front(), 8) == bp);
+   assert(Bcurve::hit_ctrl_curve(pts.back(), 8) == bc);
    static bool debug = ::debug || Config::get_var_bool("DEBUG_SPLIT_TRI",false);
    err_adv(debug, "Panel::split_tri");
 
@@ -592,8 +592,8 @@ bool
 Panel::inc_sec_disk(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
 {
    assert((bc1&&!bc2) || (!bc1&&bc2));
-   if (bc1) assert(Bcurve::hit_ctrl_curve(pts.first(), 8) == bc1);
-   if (bc2) assert(Bcurve::hit_ctrl_curve(pts.last(), 8) == bc2);
+   if (bc1) assert(Bcurve::hit_ctrl_curve(pts.front(), 8) == bc1);
+   if (bc2) assert(Bcurve::hit_ctrl_curve(pts.back(), 8) == bc2);
    static bool debug = ::debug || Config::get_var_bool("DEBUG_INC_SEC_DISK",false);
    err_adv(debug, "Panel::inc_sec_disk");
 
@@ -619,8 +619,8 @@ bool
 Panel::inc_sec_tri(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
 {
    assert(_bcurves.num() == 3);
-   assert(Bcurve::hit_ctrl_curve(pts.first(), 8) == bc1);
-   assert(Bcurve::hit_ctrl_curve(pts.last(), 8) == bc2);
+   assert(Bcurve::hit_ctrl_curve(pts.front(), 8) == bc1);
+   assert(Bcurve::hit_ctrl_curve(pts.back(), 8) == bc2);
    static bool debug = ::debug || Config::get_var_bool("DEBUG_INC_SEC_TRI",false);
    err_adv(debug, "Panel::inc_sec_tri");
 
@@ -653,8 +653,8 @@ bool
 Panel::inc_sec_quad(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
 {
    assert(_bcurves.num() == 4);
-   assert(Bcurve::hit_ctrl_curve(pts.first(), 8) == bc1);
-   assert(Bcurve::hit_ctrl_curve(pts.last(), 8) == bc2);
+   assert(Bcurve::hit_ctrl_curve(pts.front(), 8) == bc1);
+   assert(Bcurve::hit_ctrl_curve(pts.back(), 8) == bc2);
    static bool debug = ::debug || Config::get_var_bool("DEBUG_INC_SEC_QUAD",false);
    err_adv(debug, "Panel::inc_sec_quad");
 
@@ -689,7 +689,7 @@ Panel::oversketch(CPIXEL_list& sketch_pixels)
 
    // First, check parameters 
 
-   if (sketch_pixels.num() < 2) {
+   if (sketch_pixels.size() < 2) {
       cerr << "Panel::oversketch(): too few sketch pixels" << endl;
       return false;
    }
@@ -699,7 +699,7 @@ Panel::oversketch(CPIXEL_list& sketch_pixels)
 
    // XXX - in practice, we could loosen this condition to 
    // allow oversketch of a single point
-   if (skel_pixels.num()<2) {
+   if (skel_pixels.size()<2) {
       cerr << "Panel::oversketch(): insufficient number of skel pixel points"
            << endl;
       return false;
@@ -752,7 +752,7 @@ trim(Bvert_list in)
 inline Wpt
 get_o(CWpt_list& pts, int i, bool mode)
 {
-   if (i<0 || i>=pts.num()) return Wpt();
+   if (i<0 || i>=(int)pts.size()) return Wpt();
    if (mode) {
       if (i==0) return pts[0];
       return (pts[i]+pts[i-1])/2;
@@ -767,15 +767,15 @@ get_o(CWpt_list& pts, int i, bool mode)
 inline Wvec
 get_t(CWpt_list& pts, int i, bool mode)
 {
-   if (i<0 || i>=pts.num()) return Wvec();
+   if (i<0 || i>=(int)pts.size()) return Wvec();
    if (i==0) {
-      if (pts.num()==1)
+      if (pts.size()==1)
          return Wvec::X();
       return pts[1]-pts[0];
    }
    if (mode)
       return pts[i]-pts[i-1];
-   if (i == pts.num()-1)
+   if (i == (int)pts.size()-1)
       return pts[i]-pts[i-1];
    return pts[i+1]-pts[i-1];
 }
@@ -790,8 +790,8 @@ transform(CWpt_list& pts, Wpt o, Wpt new_o, Wvec t, Wvec new_t, Wvec n)
    Wtransf xf = Wtransf(o, t, b, n);
    Wtransf new_xf = Wtransf(new_o, new_t, new_b, n);
    Wpt_list ret;
-   for (int i = 0; i < pts.num(); i++)
-      ret += new_xf * (xf.inverse() * pts[i]);
+   for (Wpt_list::size_type i = 0; i < pts.size(); i++)
+      ret.push_back(new_xf * (xf.inverse() * pts[i]));
    return ret;
 }
 
@@ -800,7 +800,7 @@ Panel::skel_pts()
 {
    Wpt_list ret;
    for (PCell_list::size_type i = 0; i < _cells.size(); i++)
-      ret += _cells[i]->center();
+      ret.push_back(_cells[i]->center());
    return ret;
 }
 
@@ -848,8 +848,8 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       // find the new positions for verts that are not shared by cells
       o = get_o(old_skel, i, false);
       new_o = get_o(new_skel, i, false);
-      t = (old_skel.num()==1) ? default_old_t : get_t(old_skel, i, false);
-      new_t = (new_skel.num()==1) ? default_new_t : get_t(new_skel, i, false);
+      t = (old_skel.size()==1) ? default_old_t : get_t(old_skel, i, false);
+      new_t = (new_skel.size()==1) ? default_new_t : get_t(new_skel, i, false);
       pts = transform(others.pts(), o, new_o, t, new_t, n);
       for (int j = 0; j < others.num(); j++) {
          if (map_locs.find(others[j]) == map_locs.end())
@@ -865,7 +865,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       Wpt_list pts;
       for (int j = 0; j < verts.num(); j++) {
          assert(map_locs.find(verts[j]) != map_locs.end());
-         pts += map_locs[verts[j]];
+         pts.push_back(map_locs[verts[j]]);
       }
 
       // use a finer level sampling of the Wpt_list
@@ -907,23 +907,23 @@ Panel::re_tess(PIXEL_list pts, bool scribble) // pass by copy
 
    // preliminary test to eliminate some of the incorrect strokes
    // before calling specific re-tessellation methods
-   Bpoint* bp1 = Bpoint::hit_ctrl_point(pts.first(), 8);
-   Bpoint* bp2 = Bpoint::hit_ctrl_point(pts.last(), 8);
-   Bcurve* bc1 = Bcurve::hit_ctrl_curve(pts.first(), 8);
-   Bcurve* bc2 = Bcurve::hit_ctrl_curve(pts.last(), 8);
+   Bpoint* bp1 = Bpoint::hit_ctrl_point(pts.front(), 8);
+   Bpoint* bp2 = Bpoint::hit_ctrl_point(pts.back(), 8);
+   Bcurve* bc1 = Bcurve::hit_ctrl_curve(pts.front(), 8);
+   Bcurve* bc2 = Bcurve::hit_ctrl_curve(pts.back(), 8);
 
    // is it trying to retess a disk?
    bool disk = false;
    if ((!bp1 && !bp2) && ((bc1&&!bc2) || (!bc1&&bc2))) {
-      if ((bc1 && hit_ctrl_surface(pts.last())==this) ||
-         (bc2 && hit_ctrl_surface(pts.first())==this))
+      if ((bc1 && hit_ctrl_surface(pts.back())==this) ||
+         (bc2 && hit_ctrl_surface(pts.front())==this))
          disk = true;
    }
 
    if (!bp1) {
       swap(bp1, bp2);
       swap(bc1, bc2);
-      pts.reverse();
+      std::reverse(pts.begin(), pts.end());
    }
    if (bp1 && !bp2) { // a point and a curve
       if (!bc2) return false;

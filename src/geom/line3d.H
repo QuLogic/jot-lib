@@ -66,7 +66,7 @@ class LINE3D : public GEL {
    //******** POLYLINE GEOMETRY ********
 
    // Returns number of points:
-   int num()    const { return _pts.num(); }
+   int num()    const { return _pts.size(); }
 
    // Tells if the polyline is empty:
    bool empty() const { return _pts.empty(); }
@@ -90,7 +90,7 @@ class LINE3D : public GEL {
    double length() const { return _pts.length();}
 
    // It's a closed loop if the first and last point are the same:
-   bool loop() const { return (num() > 1 && (_pts[0] == _pts.last())); }
+   bool loop() const { return (num() > 1 && (_pts[0] == _pts.back())); }
 
    //******** RENDERING ATTRIBUTES ********
 

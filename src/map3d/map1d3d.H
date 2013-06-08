@@ -172,7 +172,7 @@ class Map1D3D : public Map {
    mlib::Wpt_list map_all(const vector<double>& tvals) {
       mlib::Wpt_list ret(tvals.size());
       for (vector<double>::size_type k=0; k<tvals.size(); k++)
-         ret += map(tvals[k]);
+         ret.push_back(map(tvals[k]));
       ret.update_length();
       return ret;
    }
@@ -264,7 +264,7 @@ class ReverseMap1D3D : public Map1D3D {
    // Return a Wpt_list describing the current shape of the map
    virtual mlib::Wpt_list get_wpts() const { 
      mlib::Wpt_list ret = _map1d3d->get_wpts();
-     ret.reverse();
+     std::reverse(ret.begin(), ret.end());
      return ret;
    }
 
@@ -334,14 +334,14 @@ class Wpt_listMap : public Map1D3D {
    // The "planck length" for this curve; i.e., the step size
    // below which you'd just be sampling the noise:
    virtual double hlen() const {
-      return ((_pts.num()  < 2) ?  1.0 :
-              (_pts.num() == 2) ? 1e-9 :
-              1.0/_pts.num()
+      return ((_pts.size()  < 2) ?  1.0 :
+              (_pts.size() == 2) ? 1e-9 :
+              1.0/_pts.size()
          );
    }
 
    // Tells how many "samples" are used to describe the curve.
-   virtual int nsamples()       const { return _pts.num(); }
+   virtual int nsamples()       const { return _pts.size(); }
 
    // Return a Wpt_list describing the current shape of the map
    virtual mlib::Wpt_list get_wpts() const { return _pts; }
@@ -420,7 +420,7 @@ class SurfaceCurveMap : public Map1D3D {
    virtual double hlen() const;
 
    // Tells how many "samples" are used to describe the curve.
-   virtual int nsamples()       const { return _uvs.num(); }
+   virtual int nsamples()       const { return _uvs.size(); }
 
    // Return a Wpt_list describing the current shape of the map
    virtual mlib::Wpt_list get_wpts() const;
@@ -520,8 +520,8 @@ class RayMap : public Map1D3D {
    // Return a Wpt_list describing the current shape of the map
    virtual mlib::Wpt_list get_wpts() const {
      mlib::Wpt_list ret(2);
-     ret += map(0);
-     ret += map(1);
+     ret.push_back(map(0));
+     ret.push_back(map(1));
      return ret;
    }
 

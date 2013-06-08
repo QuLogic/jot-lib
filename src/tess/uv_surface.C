@@ -592,7 +592,7 @@ UVsurface::build_revolve(
    )
 {
    // Check preconditions:
-   assert(bcurve && (bcurve->num_edges() > 2) && axis && spts.num() > 1);
+   assert(bcurve && (bcurve->num_edges() > 2) && axis && spts.size() > 1);
    assert(bcurve->mesh()->is_control_mesh());
    static bool debug = Config::get_var_bool("DEBUG_BUILD_TUBE",false);
    if (!bcurve->is_closed()) {
@@ -1088,10 +1088,10 @@ UVsurface::build_row(
       verts.realloc(n);
    }
    uvs.clear();
-   uvs.realloc(n);
+   uvs.reserve(n);
 
    for (int i=0; i<n; i++) {
-      uvs += UVpt(du*i, v);
+      uvs.push_back(UVpt(du*i, v));
       if (_map->wrap_u() && i == n - 1) {
          // Last one: no need to create a meme, just
          // copy the first vertex to the last slot:
@@ -1105,7 +1105,7 @@ UVsurface::build_row(
             else if ( i == n-1 && last_v )
                verts += last_v;
             else 
-               verts += _mesh->add_vertex(_map->map(uvs.last()));
+               verts += _mesh->add_vertex(_map->map(uvs.back()));
          }
          new UVmeme(this, (Lvert*)verts[i], uvs[i]);
       }
@@ -1118,7 +1118,7 @@ UVsurface::add_memes(CBvert_list& verts, CUVpt_list& uvs)
    if (verts.empty())
       return;
    assert(verts.mesh() == _mesh);
-   assert(verts.num() == uvs.num());
+   assert(verts.num() == (int)uvs.size());
 
    for (int i=0; i<verts.num(); i++)
       if (!find_meme(verts[i]))
@@ -1145,7 +1145,7 @@ UVsurface::build_band(
    //
    //   As shown, surface normal points toward you.
 
-   assert(p.num() == c.num() && p.num() == puv.num() && c.num() == cuv.num());
+   assert(p.num() == c.num() && p.num() == (int)puv.size() && c.num() == (int)cuv.size());
    int n = c.num();
    for (int i=0; i<n-1; i++) {
       add_quad(  p[i],   p[i+1],   c[i+1],   c[i],
@@ -1178,7 +1178,7 @@ UVsurface::build_fan(
    //   As shown, surface normal points toward you.
    */
 
-   assert(r.num() > 2 && r.first() == r.last() && r.num() == ruv.num());
+   assert(r.num() > 2 && r.first() == r.last() && r.num() == (int)ruv.size());
    int n = r.num();
    for (int i=0; i<n-1; i++) {
       add_face(  r[i],   r[i+1],   c,

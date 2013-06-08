@@ -747,13 +747,12 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add()");
 
-   int k;
+   size_t k;
    double a,b;
    Bface *f;
    UVMapping *m;
 
-   if (pl.num() != prl.num())
-   {
+   if ((int)pl.size() != prl.num()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::add() - Gesture pixel list and pressure list are not same length.");
       return false;
    }
@@ -768,28 +767,19 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    //If _mapping=0, the first hatch defines the uv region 
    //else, we just check that stroke falls in right mapping
    m = find_uv_mapping(smoothpts);
-   if (!_mapping)
-   {
-      if (m)
-      {
+   if (!_mapping) {
+      if (m) {
          err_mesg(ERR_LEV_INFO, "HatchingGroupFree::add() - No associated uv mapping yet, so we use the one we hit.");
          _mapping = m;
          _mapping->register_usage();
-      }
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - No associated uv mapping yet, and we missed a uv region, so punt this stroke.");
          return false;
       }
-   }
-   else
-   {
-      if (_mapping == m)
-      {
+   } else {
+      if (_mapping == m) {
          err_mesg(ERR_LEV_INFO, "HatchingGroupFree::add() - Stroke lands in right uv mapping. Good.");
-      }
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Stroke lands in WRONG/NO uv mapping. Punting stroke...");
          return false;
       }
@@ -801,12 +791,11 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    ARRAY<double>  finalprl;
    clip_to_uv_region(smoothpts,ndcpts,smoothprl,finalprl);
    ndcpts.update_length();
-   assert(ndcpts.num()>0);
+   assert(ndcpts.size()>0);
 
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Checking gesture silliness.");
 
-   if (HatchingGroupBase::is_gesture_silly(ndcpts,_params.anim_style()))
-   {
+   if (HatchingGroupBase::is_gesture_silly(ndcpts, _params.anim_style())) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Punting silly gesture...");
       return false;
    }
@@ -831,21 +820,17 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    Wplane wpPlane;
    f = HatchingGroupBase::compute_cutting_plane(_patch,a, b, ndcpts, wpPlane);
    if (!f) return false;
-   else
-   {
-      if (!f->front_facing())
-      {
+   else {
+      if (!f->front_facing()) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Nearest pt. on fit line hit backfacing surface.");     
          return false;
       }
+
       UVdata *uvdata = UVdata::lookup(f);
-      if (!uvdata)
-      {
+      if (!uvdata) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Nearest pt. on interp. line misses uv region.");     
          return false;
-      }
-      else if (uvdata->mapping() != _mapping)
-      {
+      } else if (uvdata->mapping() != _mapping) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Nearest pt. on interp. line misses correct uv region.");     
          return false;
       }
@@ -859,13 +844,12 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Cliping curve to gesture."); 
    //Clip end of 3D curve to match gesture
    Wpt_list wlClipList;
-   HatchingGroupBase::clip_curve_to_stroke(_patch,ndcpts, wlList, wlClipList);
+   HatchingGroupBase::clip_curve_to_stroke(_patch, ndcpts, wlList, wlClipList);
    wlClipList.update_length();
 
    Wpt_list wlScaledList;
 
-   if (curve_type == HatchingGroup::CURVE_MODE_PROJECT)
-   {
+   if (curve_type == HatchingGroup::CURVE_MODE_PROJECT) {
       err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Projecting to surface."); 
       
       //Okay, the user wants to get literal, projected
@@ -875,16 +859,13 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
       Wpt wloc;
       UVdata *uvdata;
 
-      for (k=0; k<ndcpts.num(); k++)
-      {
+      for (k=0; k<ndcpts.size(); k++) {
          f = HatchingGroupBase::find_face_vis(NDCpt(ndcpts[k]),wloc);
-         if ((f) && (f->patch() == _patch) && (f->front_facing()) &&
-             (uvdata = UVdata::lookup(f)) && (uvdata->mapping() == _mapping))
+         if (f && f->patch() == _patch && f->front_facing() &&
+             (uvdata = UVdata::lookup(f)) && uvdata->mapping() == _mapping)
          {
-            wlProjList += wloc;
-         }
-         else 
-         {
+            wlProjList.push_back(wloc);
+         } else {
             if (!f) 
                err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Missed while projecting: No hit on a mesh!");
             else if (!(f->patch() == _patch)) 
@@ -899,8 +880,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
                err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Missed while projecting: WHAT?!?!?!?!");
          }
       }
-      if (wlProjList.num()<2)
-      {
+      if (wlProjList.size()<2) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree:add() - Nothing left after projection failures. Punting...");
          return false;
       }
@@ -912,14 +892,12 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
       //will be on the order of the mesh resolution
       //unless the gesture fits into one triangle,
       //in which case we ensure a minimum sampling
-      int guess = (int)ceil(((double)wlClipList.num()*
+      int guess = (int)ceil(((double)wlClipList.size()*
                              (double)wlProjList.length())/(double)wlClipList.length());
-      int num = max(guess,5);
+      size_t num = max(guess,5);
       double step = 1.0/((double)(num-1));
-      for (k=0 ; k<num ; k++) wlScaledList += wlProjList.interpolate((double)k*step);
-   }
-   else //CURVE_MODE_PLANE
-   {
+      for (k=0; k<num; k++) wlScaledList.push_back(wlProjList.interpolate((double)k*step));
+   } else { //CURVE_MODE_PLANE
       assert(curve_type == HatchingGroup::CURVE_MODE_PLANE);
 
       err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Resampling curve."); 
@@ -927,22 +905,21 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
       //be sampled on the order of the mesh spacing but we'll
       //not allow the num of samples to drop too low in case
       //the gesture's on the scale of one triangle
-      int num = max(wlClipList.num(),5);
+      size_t num = max(wlClipList.size(), 5UL);
       double step = 1.0/((double)(num-1));
-      for (k=0 ; k<num ; k++) wlScaledList += wlClipList.interpolate((double)k*step);
+      for (k=0; k<num; k++) wlScaledList.push_back(wlClipList.interpolate((double)k*step));
    }
 
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Converting to 2D."); 
 
    NDCZpt_list ndczlScaledList;
-   for (k=0;k<wlScaledList.num();k++) ndczlScaledList += NDCZpt(_patch->xform()*wlScaledList[k]);
+   for (k=0;k<wlScaledList.size();k++) ndczlScaledList.push_back(NDCZpt(_patch->xform()*wlScaledList[k]));
    ndczlScaledList.update_length();
 
    // Calculate pixel length of hatch
    double pix_len = ndczlScaledList.length() * VIEW::peek()->ndc2pix_scale();
   
-   if (pix_len < 8.0)
-   {
+   if (pix_len < 8.0) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Stroke only %f pixels. Probably an accident. Punting...", pix_len);
       return false;
    }
@@ -952,14 +929,13 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    ARRAY<Wvec>          norms;
 
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Final sampling."); 
-   for (k=0; k<ndczlScaledList.num(); k++) {
-
+   for (k=0; k<ndczlScaledList.size(); k++) {
       Wpt wloc;
       UVdata *uvdata;
       f = HatchingGroupBase::find_face_vis(NDCpt(ndczlScaledList[k]),wloc);
 
-      if ((f) && (f->patch() == _patch) && (f->front_facing()) && 
-          (uvdata = UVdata::lookup(f)) && (uvdata->mapping() == _mapping))
+      if (f && f->patch() == _patch && f->front_facing() &&
+          (uvdata = UVdata::lookup(f)) && uvdata->mapping() == _mapping)
       {
          Wvec bc;
          Wvec norm;
@@ -972,30 +948,25 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
          Bsimplex::clamp_barycentric(bc);
          double dL = fabs(bc.length() - bc_old.length());
 
-         if (bc != bc_old)
-         {
+         if (bc != bc_old) {
             err_mesg(ERR_LEV_INFO, 
                "HatchingGroupFree::add() - Baycentric clamp modified result: (%f,%f,%f) --> (%f,%f,%f) Length Change: %f", 
                   bc_old[0], bc_old[1], bc_old[2], bc[0], bc[1], bc[2], dL);
          }
-         if (dL < 1e-3)
-         {
+
+         if (dL < 1e-3) {
             //uv
             uvdata->bc2uv(bc,uv);
             //norm
             f->bc2norm_blend(bc,norm);
 
-            uvs += uv;
-            pts += wloc;
+            uvs.push_back(uv);
+            pts.push_back(wloc);
             norms += norm;
-         }
-         else
-         {
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Change too large due to error in projection. Dumping point...");
          }
-      }
-      else 
-      {
+      } else {
          if (!f) 
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Missed in final lookup: No hit on a mesh!");
          else if (!(f->patch() == _patch)) 
@@ -1011,8 +982,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
       }
    }
 
-   if (uvs.num()>1)
-   {
+   if (uvs.size()>1) {
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
@@ -1024,15 +994,14 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
 
       ol->add(BaseStrokeOffset( 0.0, 0.0, 
             finalprl[0],                  BaseStrokeOffset::OFFSET_TYPE_BEGIN));
-      for (k=1; k< finalprl.num(); k++)
+      for (k=1; (int)k<finalprl.num(); k++)
       ol->add(BaseStrokeOffset( (double)k/(double)(finalprl.num()-1), 0.0, 
             finalprl[k],                  BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
       ol->add(BaseStrokeOffset( 1.0, 0.0, 
             finalprl[finalprl.num()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
 
 
-      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0)
-      {
+      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0) {
          assert(_params.anim_style() != HatchingGroup::STYLE_MODE_NEAT);
 
          _instances[0]->add_base_level();
@@ -1047,9 +1016,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
             _instances[0]->base_level(_instances[0]->num_base_levels()-1),
                   _patch->mesh()->pix_size(),uvs,pts,norms,ol) );
       return true;
-   }
-   else
-   {
+   } else {
       err_mesg(ERR_LEV_WARN, "HatchingGroupFree:add() - All lookups are bad. Punting...");
       return false;
    }
@@ -1067,7 +1034,7 @@ HatchingGroupFree::clip_to_uv_region(
    CARRAY<double>&prl, 
    ARRAY<double>&cprl ) 
 {
-   int k;
+   NDCpt_list::size_type k;
    Bface *f;
    UVdata *uvdata;
    Wpt foo;
@@ -1076,58 +1043,44 @@ HatchingGroupFree::clip_to_uv_region(
    NDCpt_list     tmppts1, tmppts2;
    ARRAY<double>  tmpprl1, tmpprl2;
 
-
    // Will find the longest contiguous piece that
    // falls in the right uv region. 
 
-   for (k=0; k<pts.num(); k++)
-   {
+   for (k=0; k<pts.size(); k++) {
       f = HatchingGroupBase::find_face_vis(pts[k], foo);
-      if (f)
-      {
+      if (f) {
          uvdata = UVdata::lookup(f);
-         if ((uvdata)&&(uvdata->mapping()==_mapping))
-         {
+         if (uvdata && uvdata->mapping()==_mapping) {
             if (buf == 0) buf = 1;
 
-            if (buf == 1)
-            {
-               tmppts1 += pts[k];
+            if (buf == 1) {
+               tmppts1.push_back(pts[k]);
                tmpprl1 += prl[k];
-            }
-            else //buf == 2
-            {
-               tmppts2 += pts[k];
+            } else { //buf == 2
+               tmppts2.push_back(pts[k]);
                tmpprl2 += prl[k];
             }
          }
-      }
-      else
-      {
+      } else {
          //if (buf == 0) do nothing
 
          if (buf == 1) buf = 2;
 
-         else if (buf == 2)
-         {
-            if (tmppts2.num()>0)
-            {
-               if (tmppts2.num() > tmppts1.num())
-               {
+         else if (buf == 2) {
+            if (tmppts2.size()>0) {
+               if (tmppts2.size() > tmppts1.size()) {
                   tmppts1.clear();
                   tmpprl1.clear();
-                  tmppts1.operator+=(tmppts2);
+                  tmppts1.insert(tmppts1.end(), tmppts2.begin(), tmppts2.end());
                   tmpprl1.operator+=(tmpprl2);
 
                   err_mesg(ERR_LEV_INFO, 
                               "HatchingGroupFree::clip_to_uv_region() - Keeping longer of %d and %d vertex regions (2nd).", 
-                                    tmppts1.num(), tmppts2.num());
-               }
-               else
-               {
+                                    tmppts1.size(), tmppts2.size());
+               } else {
                   err_mesg(ERR_LEV_INFO, 
                               "HatchingGroupFree::clip_to_uv_region() - Keeping longer of %d and %d vertex regions (1st).", 
-                                    tmppts1.num(), tmppts2.num());
+                                    tmppts1.size(), tmppts2.size());
                }
                tmppts2.clear();
                tmpprl2.clear();
@@ -1135,7 +1088,7 @@ HatchingGroupFree::clip_to_uv_region(
          }
       }
    }
-   cpts.operator+=(tmppts1);
+   cpts.insert(cpts.end(), tmppts1.begin(), tmppts1.end());
    cprl += tmpprl1;
 }
 
@@ -1161,45 +1114,35 @@ HatchingGroupFree::slice_mesh_with_plane(
    Wpt_list wlList1;
    Wpt_list wlList2;
 
-   wlList1 += wpPlane.intersect(nxtEdge1->line());
-   wlList2 += wpPlane.intersect(nxtEdge2->line());
+   wlList1.push_back(wpPlane.intersect(nxtEdge1->line()));
+   wlList2.push_back(wpPlane.intersect(nxtEdge2->line()));
 
    //So theres at least 2 pts in the final list...
 
    UVdata *uvdata;
 
-   while (nxtFace1 && (nxtFace1->front_facing()) &&
-          (uvdata = UVdata::lookup(nxtFace1)) && (uvdata->mapping() == _mapping) ) {
+   while (nxtFace1 && nxtFace1->front_facing() &&
+          (uvdata = UVdata::lookup(nxtFace1)) && uvdata->mapping() == _mapping) {
       nxtFace1 = nxtFace1->plane_walk(nxtEdge1,wpPlane,nxtEdge1);
       if (nxtEdge1) {
-         wlList1 += wpPlane.intersect(nxtEdge1->line());
-      }
-      else {
+         wlList1.push_back(wpPlane.intersect(nxtEdge1->line()));
+      } else {
          assert(!nxtFace1);
       }
    }
 
-   while (nxtFace2 && (nxtFace2->front_facing()) &&
-          (uvdata = UVdata::lookup(nxtFace2)) && (uvdata->mapping() == _mapping) ) {
+   while (nxtFace2 && nxtFace2->front_facing() &&
+          (uvdata = UVdata::lookup(nxtFace2)) && uvdata->mapping() == _mapping) {
       nxtFace2 = nxtFace2->plane_walk(nxtEdge2,wpPlane,nxtEdge2);
       if (nxtEdge2) {
-         wlList2 += wpPlane.intersect(nxtEdge2->line());
-      }
-      else {
+         wlList2.push_back(wpPlane.intersect(nxtEdge2->line()));
+      } else {
          assert(!nxtFace2);
       }
    }
 
-   int k;
-   for (k = wlList1.num()-1; k >= 0; k--) {
-      wlList += wlList1[k];
-   }
-   //wlList += wIsect;
-   for (k=0; k < wlList2.num(); k++) {
-      wlList += wlList2[k];
-   }
-
-
+   wlList.insert(wlList.end(), wlList1.rbegin(), wlList1.rend());
+   wlList.insert(wlList.end(), wlList2.begin(), wlList2.end());
 }
 
 /////////////////////////////////////
@@ -1521,11 +1464,11 @@ HatchingGroupFreeInst::interpolate(
    HatchingHatchBase *hhb1, 
    HatchingHatchBase *hhb2)
 {
-   int k;
+   size_t k;
    int seg1, seg2;
    double frac1, frac2;
    double ifrac;
-   int num;
+   size_t num;
    double dlen;
 
    //Random seed issues. 
@@ -1534,7 +1477,7 @@ HatchingGroupFreeInst::interpolate(
    //we seed the generator, and extract lev values...
 
    srand48(_group->random_seed());
-   for (k=0; k< lev; k++) drand48();
+   for (k=0; (int)k<lev; k++) drand48();
 
    HatchingHatchFree *             h1 = (HatchingHatchFree*)hhb1;
    HatchingHatchFree *             h2 = (HatchingHatchFree*)hhb2;
@@ -1551,7 +1494,7 @@ HatchingGroupFreeInst::interpolate(
    //XXX - Interpolated hatch will have num vertices
    //equal to greater of two interpolating hatches?
 
-   num = max(uvl1.num(),uvl2.num());
+   num = max(uvl1.size(), uvl2.size());
    dlen = 1.0/((double)num-1.0);
 
    UVpt_list   uvpts;
@@ -1569,15 +1512,14 @@ HatchingGroupFreeInst::interpolate(
    ifrac = 0.5 + (drand48() - 0.5) * INTERPOLATION_RANDOM_FACTOR;
 
    for (k=0; k<num; k++) {
-           
-      pts +=
+      pts.push_back(
          ptl1.interpolate((double) k*dlen, 0, &seg1, &frac1)*ifrac +
-         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac);
+         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac));
 
       m->interpolate( uvl1[seg1], (1.0-frac1), uvl1[seg1+1], frac1, uv1 );
       m->interpolate( uvl2[seg2], (1.0-frac2), uvl2[seg2+1], frac2, uv2 );
       m->interpolate( uv1, ifrac, uv2, (1.0-ifrac), uv );
-      uvpts += uv;
+      uvpts.push_back(uv);
 
       norms +=
          (nl1[seg1]*(1.0-frac1) + nl1[seg1+1]*frac1)*ifrac  +
@@ -1592,8 +1534,7 @@ HatchingGroupFreeInst::interpolate(
 
    num = (ol1->num() + ol2->num())/2;
    assert(num>1);
-   for (k=0; k < num; k++)
-   {
+   for (k=0; k < num; k++) {
       BaseStrokeOffset o, o1, o2;
       double t = (double)k/(double)(num-1);
 
@@ -1731,7 +1672,7 @@ HatchingHatchFree::HatchingHatchFree(
       HatchingHatchBase(hlb,len,pl,nl,ol)
 {
    _uvs.clear();   
-   _uvs.operator+=(uvl);
+   _uvs.insert(_uvs.end(), uvl.begin(), uvl.end());
 
    //XXX - Fix this... init() get called twice (in base class, too)
 
@@ -1746,14 +1687,14 @@ HatchingHatchFree::HatchingHatchFree(
    HatchingHatchFree *hhf):
    HatchingHatchBase(hlb)
 {
-   assert(hhf->get_uvs().num() == hhf->get_pts().num());
-   assert(hhf->get_uvs().num() == hhf->get_norms().num());
+   assert(hhf->get_uvs().size() == hhf->get_pts().size());
+   assert((int)hhf->get_uvs().size() == hhf->get_norms().num());
 
    _uvs.clear();   
-   _uvs.operator+=(hhf->get_uvs());
+   _uvs.insert(_uvs.end(), hhf->get_uvs().begin(), hhf->get_uvs().end());
 
    _pts.clear();   
-   _pts.operator+=(hhf->get_pts());
+   _pts.insert(_pts.end(), hhf->get_pts().begin(), hhf->get_pts().end());
 
    _norms.clear();   
    _norms.operator+=(hhf->get_norms());
@@ -1776,8 +1717,7 @@ HatchingHatchFree::init()
 {
    HatchingHatchBase::init();
 
-   assert(_pts.num() == _uvs.num());       
-
+   assert(_pts.size() == _uvs.size());
 }
 
 
@@ -1802,19 +1742,18 @@ HatchingHatchFree::draw_setup()
 void    
 HatchingHatchFree::stroke_real_setup()
 {
-   int i, good_num=0;
+   UVpt_list::size_type i;
+   int good_num=0;
 
    //First time round, copy in the original stuff to
    //alloc the arrays
-   if (_real_pts.num() == 0)
-   {
-      assert(_pts.num()   ==  _uvs.num());
-      assert(_norms.num() ==  _uvs.num());
+   if (_real_pts.size() == 0) {
+      assert(_pts.size()   ==  _uvs.size());
+      assert(_norms.num() ==  (int)_uvs.size());
 
-      for (i=0; i<_uvs.num(); i++)
-      {
-         _real_uvs.add(_uvs[i]);
-         _real_pts.add(_pts[i]);
+      for (i=0; i<_uvs.size(); i++) {
+         _real_uvs.push_back(_uvs[i]);
+         _real_pts.push_back(_pts[i]);
          _real_norms.add(_norms[i]);
          _real_good.add(true);
       }
@@ -1832,8 +1771,7 @@ HatchingHatchFree::stroke_real_setup()
    Bface *f;
    Wvec bc;
 
-   for (i=0; i<_uvs.num(); i++)
-   {
+   for (i=0; i<_uvs.size(); i++) {
       if (p)
          p->transform(_uvs[i],uv);
       else
@@ -1841,8 +1779,7 @@ HatchingHatchFree::stroke_real_setup()
              
       f = m->find_face(uv, bc);
 
-      if (f)
-      {
+      if (f) {
          //Store uv for vis checking
          _real_uvs[i] = uv;
          
@@ -1857,9 +1794,7 @@ HatchingHatchFree::stroke_real_setup()
          _real_good[i] = true;
 
          good_num++;
-      }
-      else
-      {
+      } else {
          //Store uv for vis checking (used for interpolation
          //at good to bad transition by HatchingStroke)
          _real_uvs[i] = uv;
@@ -1869,14 +1804,12 @@ HatchingHatchFree::stroke_real_setup()
          //Store uv for vis checking
          _real_good[i] = false;
       }
-
    }
    
    if (good_num)
       _visible = true;
    else
       _visible = false;
-
 }
 
 /////////////////////////////////////
@@ -1899,7 +1832,6 @@ HatchingHatchFree::stroke_pts_setup()
    
    _stroke->clear();               
 
-
    static double pix_spacing = max(Config::get_var_dbl("HATCHING_PIX_SAMPLING",5,true),0.000001);
 
    //XXX - Account for scaling
@@ -1911,13 +1843,13 @@ HatchingHatchFree::stroke_pts_setup()
    double num = pix_len/pix_spacing;
 
    //Spacing
-   double gap = max((double)_real_pts.num() / num, 1.0);
+   double gap = max((double)_real_pts.size() / num, 1.0);
 
-   double i=0;  int j = 0;
+   double i=0;
+   Wpt_list::size_type j = 0;
 
-   int n = _real_pts.num()-1;
-   while (j<n)
-   {
+   Wpt_list::size_type n = _real_pts.size()-1;
+   while (j<n) {
       pt = NDCZpt(_real_pts[j],_level->group()->patch()->obj_to_ndc());
       if (select) select->update(pt);
 
@@ -2500,7 +2432,8 @@ HatchingPositionFree::compute_bounds(
    assert(_mapping);
    assert(hgfri);
 
-   int l,h,k,k1;
+   int l,h;
+   UVpt_list::size_type k,k1;
    double umin, umax;
    double vmin, vmax;
 
@@ -2509,13 +2442,10 @@ HatchingPositionFree::compute_bounds(
 
    UVpt_list pts;
 
-   for (l=0; l< hgfri->num_base_levels(); l++)
-   {
-      for (h=0; h<hgfri->base_level(l)->num(); h++)
-      {
-         pts.operator+=(
-            ((HatchingHatchFree*)(*hgfri->base_level(l))[h])->get_uvs()
-            );
+   for (l=0; l< hgfri->num_base_levels(); l++) {
+      for (h=0; h<hgfri->base_level(l)->num(); h++) {
+         UVpt_list tmp = ((HatchingHatchFree*)(*hgfri->base_level(l))[h])->get_uvs();
+         pts.insert(pts.end(), tmp.begin(), tmp.end());
       }
    }
 
@@ -2532,8 +2462,7 @@ HatchingPositionFree::compute_bounds(
    bool discont_u = false;
    bool discont_v = false;
 
-   for (k=0; k<pts.num(); k++)
-   {
+   for (k=0; k<pts.size(); k++) {
       UVpt uv = pts[k];
 
       //Do usual min/max finding
@@ -2543,10 +2472,8 @@ HatchingPositionFree::compute_bounds(
       if (uv[1]<vmin) vmin=uv[1];
 
       //Check seam crossings in u
-      if ((!discont_u)&&(_mapping->wrap_u()))
-      {
-         for (k1=k+1; k1<pts.num(); k1++)
-         {
+      if (!discont_u && _mapping->wrap_u()) {
+         for (k1=k+1; k1<pts.size(); k1++) {
             UVpt uv1 = pts[k1];
                   
             //Assume a seam is crossed if delta u is > half the region's span
@@ -2556,31 +2483,25 @@ HatchingPositionFree::compute_bounds(
                break;
             }
          }
-
       }
 
       //Check seam crossings in v
-      if ((!discont_v)&&(_mapping->wrap_v()))
-      {
-         for (k1=k+1; k1<pts.num(); k1++)
-         {
+      if (!discont_v && _mapping->wrap_v()) {
+         for (k1=k+1; k1<pts.size(); k1++) {
             UVpt uv1 = pts[k1];
-                  
+
             //Assume a seam is crossed if delta v is > half the region's span
-            if (fabs(uv[1] - uv1[1]) > 0.5 * _mapping->span_v()) 
-            {
+            if (fabs(uv[1] - uv1[1]) > 0.5 * _mapping->span_v()) {
                discont_v = true;
                break;
             }
          }
-
       }
    }
 
    //Now we go back and fix the min/max if any seam
    //crossings were found
-   if (discont_u)
-   {
+   if (discont_u) {
       err_mesg(ERR_LEV_INFO, "HatchingPositionFree::compute_bounds() - Hatch group crosses a u seam. Fixing bounding box...");
        
       double mid = _mapping->min_u() + (0.5 * _mapping->span_u());
@@ -2588,21 +2509,16 @@ HatchingPositionFree::compute_bounds(
       umin = _mapping->max_u();
       umax = _mapping->min_u();
 
-      for (k=0; k< pts.num(); k++)
-      {
-         if (pts[k][0] > mid)
-         {
+      for (k=0; k<pts.size(); k++) {
+         if (pts[k][0] > mid) {
             if (pts[k][0]<umin) umin = pts[k][0];
-         }
-         else //right of seam
-         {
+         } else { //right of seam
             if (pts[k][0]>umax) umax = pts[k][0];
          }
       }
    }
 
-   if (discont_v)
-   {
+   if (discont_v) {
       err_mesg(ERR_LEV_INFO, "HatchingPositionFree::compute_bounds() - Hatch group crosses a v seam. Fixing bounding box...");
        
       double mid = _mapping->min_v() + (0.5 * _mapping->span_v());
@@ -2610,14 +2526,10 @@ HatchingPositionFree::compute_bounds(
       vmin = _mapping->max_v();
       vmax = _mapping->min_v();
 
-      for (k=0; k< pts.num(); k++)
-      {
-         if (pts[k][1] > mid)
-         {
+      for (k=0; k< pts.size(); k++) {
+         if (pts[k][1] > mid) {
             if (pts[k][1]<vmin) vmin = pts[k][1];
-         }
-         else //right of seam
-         {
+         } else { //right of seam
             if (pts[k][1]>vmax) vmax = pts[k][1];
          }
       }

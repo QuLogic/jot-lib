@@ -232,8 +232,8 @@ BMESH::add_vertex(CWpt& loc)
 Bvert_list 
 BMESH::add_verts(CWpt_list& pts)
 {
-   Bvert_list ret(pts.num());
-   for (int i=0; i<pts.num(); i++)
+   Bvert_list ret(pts.size());
+   for (Wpt_list::size_type i=0; i<pts.size(); i++)
       ret += add_vertex(pts[i]);
    return ret;
 }
@@ -1576,9 +1576,9 @@ BMESH::vertices()
    if (!_vert_locs.empty() || _verts.empty())
       return _vert_locs;
 
-   _vert_locs.realloc(nverts());
+   _vert_locs.reserve(nverts());
    for (int k=nverts()-1; k>=0; k--)
-      _vert_locs += _verts[k]->loc();
+      _vert_locs.push_back(_verts[k]->loc());
    return _vert_locs;
 }
 
@@ -1588,13 +1588,13 @@ BMESH::triangulate(Wpt_list &verts, FACElist &faces)
    verts.clear();
    faces.clear();
    if (nverts() > 0)
-      verts.realloc(_verts.num());
+      verts.reserve(_verts.num());
    if (nfaces() > 0)
       faces.resize(_faces.num());
 
    int i;
    for (i=0; i<nverts(); i++)
-      verts += bv(i)->loc();
+      verts.push_back(bv(i)->loc());
    for (i=0; i<nfaces(); i++)
       faces[i] = Point3i(bf(i)->v(1)->index(),
                          bf(i)->v(2)->index(),
@@ -2393,12 +2393,12 @@ BMESH::operator =(BODY& body)
    Wpt_list pts;
    FACElist tris;
    body.triangulate(pts, tris);
-   if (pts.num() && !tris.empty()) {
-      _verts.realloc(pts.num());
+   if (!pts.empty() && !tris.empty()) {
+      _verts.realloc(pts.size());
       _faces.realloc(tris.size());
       _edges.realloc(tris.size()*3/2+10);
-      int i;
-      for (i = 0; i < pts.num(); i++)
+      size_t i;
+      for (i = 0; i < pts.size(); i++)
          add_vertex(pts[i]);
       Patch* p = new_patch();
       for (i = 0; i < tris.size(); i++)
@@ -3010,7 +3010,7 @@ BMESH::split_faces(
 
    // if the first and last point are equal, and there is
    // more than two points, then treat pts as a closed curve.
-   int closed = pts.num() > 2 && pts[0] == pts.last();
+   int closed = pts.size() > 2 && pts[0] == pts.back();
 
    cerr << (closed? " It's closed " : "Open!")<<endl;
    verts.clear();
@@ -3043,7 +3043,7 @@ BMESH::split_faces(
 
    Bface_list star_faces(16);
 
-   for (int i=1; i < pts.num(); ) {
+   for (CXYpt_list::size_type i=1; i < pts.size(); ) {
       // walk from prev point to this point, splitting edges and faces along
       // the way, accumulating new vertices.
 
@@ -3051,7 +3051,7 @@ BMESH::split_faces(
       verts.last()->get_faces(star_faces);
       NDCpt last_ndc = xform() * verts.last()->loc();
 
-      if (closed && i==pts.num()-1) {
+      if (closed && i==pts.size()-1) {
          cerr << "In closed search" <<endl;
          // see if there is an adjacent vertex at the final position
          // already.  if so, declare success and we're done.
@@ -3080,7 +3080,7 @@ BMESH::split_faces(
 
             if (star_faces[j]->ndc_contains(pts[i]) ) {
 
-               if (i==pts.num()-1)
+               if (i==pts.size()-1)
                   cerr << "BMESH::split_faces: Why here" << endl;
                Wpt new_pt = star_faces[j]->plane_intersect(
                   inv_xform() * Wline(pts[i]));
@@ -3095,7 +3095,7 @@ BMESH::split_faces(
             } else if (star_faces[j]->opposite_edge(verts.last())->
                        ndc_intersect(last_ndc, pts[i], new_ndc)) {
 
-               if (i==pts.num()-1)
+               if (i==pts.size()-1)
                   cerr << "Kept going" << endl;
                Wpt new_pt = star_faces[j]->plane_intersect(
                   inv_xform() * Wline(new_ndc));
@@ -3113,7 +3113,7 @@ BMESH::split_faces(
 
       if (!success) {
          cerr << "i fail " << i << endl;
-         cerr << "pts.num() " << pts.num() <<endl;
+         cerr << "pts.num() " << pts.size() <<endl;
          return 0;
       }
    }
@@ -3430,10 +3430,10 @@ BMESH::put_vertices(TAGformat &d) const
 
    if (Config::get_var_bool("JOT_SAVE_XFORMED_MESH",false))
       for (int i = 0; i< nverts(); i++)
-         verts += bv(i)->wloc();
+         verts.push_back(bv(i)->wloc());
    else
       for (int i = 0; i< nverts(); i++)
-         verts += bv(i)->loc();
+         verts.push_back(bv(i)->loc());
 
    // XXX - copied code from net_type.H,
    //       want to avoid super long lines that may be
@@ -3442,9 +3442,9 @@ BMESH::put_vertices(TAGformat &d) const
    if ((*d).ascii()) {
       (*d) << "{";
    } else {
-      (*d) << verts.num();
+      (*d) << verts.size();
    }
-   for (int i=0; i<verts.num();i++) {
+   for (Wpt_list::size_type i=0; i<verts.size();i++) {
       (*d) << " " << verts[i];
       (*d).write_newline();
    }
@@ -3882,23 +3882,22 @@ BMESH::get_vertices(TAGformat &d)
    Wpt_list locs;
    *d >> locs;
 
-
    // If verts already exist...
    if (nverts()) {
-      if (locs.num() == nverts()) {
-         for (int i=0; i < locs.num(); i++)
+      if ((int)locs.size() == nverts()) {
+         for (Wpt_list::size_type i=0; i < locs.size(); i++)
             _verts[i]->set_loc(locs[i]);
          changed(VERT_POSITIONS_CHANGED);
       } else {
          err_msg(
             "BMESH::get_vertices() - Error! Num verts in mesh (%d) doesn't match num in update (%d)!\n",
-            nverts(), locs.num());
+            nverts(), locs.size());
       }
    } else {
-      _verts.realloc(locs.num());
-      _edges.realloc(3*locs.num());
+      _verts.realloc(locs.size());
+      _edges.realloc(3*locs.size());
 
-      for (int i=0; i < locs.num(); i++) {
+      for (Wpt_list::size_type i=0; i < locs.size(); i++) {
          // Bverts might be derived type,
          // so call this virtual method:
          Bvert* v = new_vert(locs[i]);
@@ -4624,7 +4623,7 @@ BMESH::z_span(double& zmin, double& zmax) const
 
    zmin = pts[0][2];
    zmax = zmin;
-   for (int i=1; i<pts.num(); i++) {
+   for (Wpt_list::size_type i=1; i<pts.size(); i++) {
       double z = pts[i][2];
       zmin = min(zmin, z);
       zmax = max(zmax, z);

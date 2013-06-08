@@ -521,9 +521,9 @@ JOIN_SEAM_CMD::undoit()
  *****************************************************************/
 FIT_VERTS_CMD::FIT_VERTS_CMD(CBvert_list& verts, CWpt_list& new_locs)
 {
-   if (verts.num() != new_locs.num()) {
+   if (verts.num() != (int)new_locs.size()) {
       err_msg("FIT_VERTS_CMD::FIT_VERTS_CMD: error: lists not equal: %d vs. %d",
-              verts.num(), new_locs.num());
+              verts.num(), new_locs.size());
       return;
    }
    if (!LMESH::isa(verts.mesh())) {
@@ -539,8 +539,8 @@ bool
 FIT_VERTS_CMD::is_good() const
 {
    return (
-      _verts.num() == _new_locs.num() &&
-      _verts.num() == _old_lists.back().num() &&
+      _verts.num() == (int)_new_locs.size() &&
+      _verts.num() == (int)_old_lists.back().size() &&
       (is_empty() || LMESH::isa(_verts.mesh()))
       );
 }
@@ -553,7 +553,7 @@ get_parents(
    Wpt_list&    parent_locs
    )
 {
-   assert(children.num() == child_locs.num());
+   assert(children.num() == (int)child_locs.size());
    parents.clear();
    parent_locs.clear();
    if (!LMESH::isa(children.mesh()))
@@ -562,7 +562,7 @@ get_parents(
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
          parents += p;
-         parent_locs += child_locs[i];
+         parent_locs.push_back(child_locs[i]);
       }
    }
 }
@@ -590,7 +590,7 @@ FIT_VERTS_CMD::fit_verts(CBvert_list& verts, CWpt_list& new_locs, int lev)
 
    err_adv(debug, "FIT_VERTS_CMD::fit_verts: fitting %d verts", verts.num());
 
-   assert(is_done() || verts.num() == new_locs.num());
+   assert(is_done() || verts.num() == (int)new_locs.size());
 
    if (verts.empty())
       return; // no-op
@@ -808,7 +808,7 @@ get_smooth_locs(CBvert_list& verts)
 
    Wpt_list ret(verts.num());
    for (int i=0; i<verts.num(); i++)
-      ret += ((Lvert*)verts[i])->smooth_loc_from_parent();
+      ret.push_back(((Lvert*)verts[i])->smooth_loc_from_parent());
    return ret;
 }
 

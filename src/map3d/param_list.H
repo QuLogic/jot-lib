@@ -124,7 +124,7 @@ make_uvpt_list(Cparam_list_t& uvals, double v)
 
    mlib::UVpt_list ret(uvals.size());
    for (param_list_t::size_type i=0; i<uvals.size(); i++)
-      ret += mlib::UVpt(uvals[i], v);
+      ret.push_back(mlib::UVpt(uvals[i], v));
    ret.update_length();
    return ret;
 }
@@ -137,7 +137,7 @@ make_uvpt_list(double u, Cparam_list_t& vvals)
 
    mlib::UVpt_list ret(vvals.size());
    for (param_list_t::size_type i=0; i<vvals.size(); i++)
-      ret += mlib::UVpt(u, vvals[i]);
+      ret.push_back(mlib::UVpt(u, vvals[i]));
    ret.update_length();
    return ret;
 }

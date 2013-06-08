@@ -1674,16 +1674,13 @@ ZXedgeStrokeTexture::add_polyline_to_sils()
       
    //err_adv(false, "ZXEDGE::add_polyline_to_sils: %d polilines ", _polyline->num());
  
-   for (int i=0; i < _polyline->num(); i++){  
-    if(i < _polyline->num()-1)
-       _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, false);
-    else
-       _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, true);
-       //end of the strip
+   for (Wpt_list::size_type i=0; i < _polyline->size(); i++) {
+      if (i < _polyline->size()-1)
+         _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, false);
+      else
+         _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, true);
+         //end of the strip
    }
-
- 
-
 }
          
 void
@@ -4130,22 +4127,21 @@ void
 LuboPath::add
    (CNDCZpt& p, bool vis, uint id)
 {
-   _pts.add(p);
+   _pts.push_back(p);
    _path_id.add(id);
    _id_set.add_uniquely(id);    // add each id just once
-
 }
 
 void
 LuboPath::add
    (CNDCZpt& p, bool vis, uint id, Bsimplex * s, CWvec& bc, double len)
 {
-   _pts.add(p);
+   _pts.push_back(p);
    _path_id.add(id);       //full id ( plus length )
    _simplexes.add (s);
    _bcs.add (bc);
    if (_id_set.add_uniquely(id & 0xffffff00) )
-      _id_offsets.add(_pts.num()-1);    // add each id just once
+      _id_offsets.add(_pts.size()-1);    // add each id just once
    _len.add(len);
 
 }
@@ -4310,7 +4306,7 @@ LuboPath::get_closest_point(CNDCpt &p, CNDCvec &v, NDCpt &ret_pt, int& ret_index
 
    // cur -= delt;
 
-   for (int i=0; i<_pts.num()-1; i++) {
+   for (NDCZpt_list::size_type i=0; i<_pts.size()-1; i++) {
       // XXX
       // get nearest point on seg
       // change this to a ray test
@@ -4319,15 +4315,14 @@ LuboPath::get_closest_point(CNDCpt &p, CNDCvec &v, NDCpt &ret_pt, int& ret_index
       q = seg(i).project_to_seg(p);
       double d = q.dist(p);
 
-
       if (d < min_dist) {
          min_index = i;
          min_dist = d;
-         s = get_s(i) + q.dist(pt(i)); // arc-len parameter of q
+         s = get_s(i) + q.dist(pt((int)i)); // arc-len parameter of q
          min_pt = q;
       }
-
    }
+
    if (s < 0)
       return DBL_MAX;
 
@@ -4340,8 +4335,6 @@ LuboPath::get_closest_point(CNDCpt &p, CNDCvec &v, NDCpt &ret_pt, int& ret_index
 double
 LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_pt, int& ret_index )
 {
-
-
    static bool verify_range = Config::get_var_bool("VERIFY_IDREF_RANGE",false,true);
    if (_pts.empty())
       return DBL_MAX;
@@ -4351,7 +4344,7 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
    uint id = ref_val & 0xffffff00;                 //id portion of ref_val
    double lval = (double)(ref_val & 0x000000ff);   //parameter portion of ref_val
 
-   int      n         = _pts.num();
+   NDCZpt_list::size_type n = _pts.size();
    double   min_dist  = DBL_MAX;   // distance to nearest point
    int      min_index = -1;
    double   s         = -1;               // arc-len param of nearest point
@@ -4465,8 +4458,8 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
       // get nearest point on seg
       // change this to a ray test
       // using p and v
-      i = j%(n);
-      if ( i==n-1)
+      i = j%n;
+      if (i == (int)n-1)
          continue;  //we don't check the fake segment, because if it's a loop
       //first and last points are identical
       q = seg(i).project_to_seg(p);
@@ -4495,12 +4488,11 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
       double   brute_ffs       = -1;
       NDCpt    brute_min_pt;   // for debugging
 
-      for (j=0; j < n-1; j++) {
+      for (j=0; j < (int)n-1; j++) {
          // XXX
          // get nearest point on seg
          // change this to a ray test
          // using p and v
-
 
          q = seg(j).project_to_seg(p);
          d = q.dist(p);
@@ -4516,7 +4508,7 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
       if ( brute_min_dist != min_dist && 1==2) {
          fprintf ( stderr, "********* STAMP: %d ********\n", VIEW::peek()->stamp() );
 
-         fprintf ( stderr, "measure for %f : using id %x : (%d of %d ) -  wrap=%d\nlength %f and %f of total %f delta(pix) = %f\nindex %d to %d of %d total offset %d\n",
+         fprintf ( stderr, "measure for %f : using id %x : (%d of %d ) -  wrap=%d\nlength %f and %f of total %f delta(pix) = %f\nindex %zu to %zu of %zu total offset %d\n",
                    len, id , ind, _id_set.num(), wrap ,
                    _len[lower_ind%n],   _len[upper_ind%n], _ffseg_lengths[ind], len_delta/pix_dist,
                    lower_ind%n,         upper_ind%n , n  , _id_offsets[ind] );

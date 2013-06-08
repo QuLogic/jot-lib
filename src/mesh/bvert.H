@@ -532,7 +532,7 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
    Wpt_list pts() const {
       Wpt_list ret(_num);
       for (int i=0; i<_num; i++) 
-         ret += _array[i]->loc();
+         ret.push_back(_array[i]->loc());
       ret.update_length();
       return ret;
    }
@@ -541,7 +541,7 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
    Wpt_list wpts() const {
       Wpt_list ret(_num);
       for (int i=0; i<_num; i++) 
-         ret += _array[i]->wloc();
+         ret.push_back(_array[i]->wloc());
       ret.update_length();
       return ret;
    }

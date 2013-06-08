@@ -534,9 +534,9 @@ BcurveAction::create_circle(
    double dt = (2*M_PI)/ORIG_RES;
    for (int i=0; i<ORIG_RES; i++) {
       double t = dt*i;
-      pts += xf*Wpt(r*cos(t), r*sin(t), 0);
+      pts.push_back(xf*Wpt(r*cos(t), r*sin(t), 0));
    }
-   pts += pts[0];       // make it closed
+   pts.push_back(pts[0]);       // make it closed
 
    int rlev = 2;
    return create(mesh, pts, Z, n, rlev, 0, 0, cmd);
@@ -631,7 +631,7 @@ BcurveAction::can_invoke() const
       err_adv(debug, "BcurveAction::can_invoke: null mesh");
       return false;
    }
-   if (_pts.num() < 2 || _n.is_null() || _num_edges < 1 || _res_level < 0) {
+   if (_pts.size() < 2 || _n.is_null() || _num_edges < 1 || _res_level < 0) {
       err_adv(debug, "BcurveAction::can_invoke: bad params");
       return false;
    }

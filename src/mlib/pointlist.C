@@ -36,42 +36,41 @@ MLIB_INLINE
 bool
 mlib::Pointlist<L,P,V,S>::is_straight(double len_scale) const
 {
-
    // Reject if < 2 points:
-   if (num() < 2)
-      return 0;
+   if (size() < 2)
+      return false;
 
    // Accept if exactly 2 points:
-   if (num() == 2)
-      return 1;
+   if (size() == 2)
+      return true;
 
    // Get a proposed line direction, guarding against the case
    // that some of the points are identical.
-   int k;
+   typename vector<P>::size_type k;
    V v;
-   for (k=1; k<num() && v.is_null(); k++)
+   for (k=1; k<size() && v.is_null(); k++)
       v = ((*this)[k] - (*this)[0]).normalized();
 
    if (v.is_null())
-      return 0;   // Those bastards!! Give up.
+      return false;   // Those bastards!! Give up.
 
    // We now return 'true' if the points lie close to the line.
    //
    // "Close" is defined relative to the overall length of
    // the polyline. We need the partial lengths to be
    // updated.
-   if (num() != _partial_length.num()) {
+   if (size() != _partial_length.size()) {
       cerr << "Pointlist::is_straight: Error: lengths are not updated"
            << endl;
-      return 0;
+      return false;
    }
    double thresh = length()*len_scale;
-   for (k=1; k<num(); k++)
+   for (k=1; k<size(); k++)
       if ((pt(k) - pt(0)).orthogonalized(v).length() > thresh)
-         return 0;
+         return false;
 
    // No more tests to pass...
-   return 1;
+   return true;
 }
 
 template <class L, class P, class V, class S>
@@ -79,9 +78,8 @@ MLIB_INLINE
 bool
 mlib::Pointlist<L,P,V,S>::self_intersects() const
 {
-
-   int n = num();
-   for (int i = 0; i < n-3; i++) {
+   typename vector<P>::size_type n = size();
+   for (typename vector<P>::size_type i = 0; i < n-3; i++) {
       S seg_i = seg(i);
       // first time thru, for closed polylines, don't
       // compare 1st segment w/ last segment, since they
@@ -106,7 +104,7 @@ mlib::Pointlist<L,P,V,S>::nearest_point(
    int nearest = 0;
    double min_dist = DBL_MAX; 
 
-   for ( int i = 0; i < num(); i++ ) {
+   for ( typename vector<P>::size_type i = 0; i < size(); i++ ) {
       double dist = (p - (*this)[i]).length_sqrd();
       if ( dist < min_dist ) {
          min_dist = dist;
@@ -133,10 +131,10 @@ mlib::Pointlist<L,P,V,S>::closest(
    int     &seg_index
    ) const
 {
-   if (num()>1) {
+   if (size()>1) {
       neardist = DBL_MAX;
 
-      for (int i = 0; i < num()-1; i++) {
+      for (typename vector<P>::size_type i = 0; i < size()-1; i++) {
          const P a((*this)[i]);
          const P b((*this)[i+1]);
          const P npt = nearest_pt_to_line_seg(p,a,b);
@@ -171,7 +169,7 @@ mlib::Pointlist<L,P,V,S>::closest(
    int     &pt_ind
    ) const
 {
-   if (num() == 0) 
+   if (empty())
       return DBL_MAX;
 
    double d;
@@ -208,7 +206,7 @@ P
 mlib::Pointlist<L,P,V,S>::sum() const {
 
    P ret;
-   for (int i=0; i<num(); i++)
+   for (typename vector<P>::size_type i=0; i<size(); i++)
       ret += (*this)[i];
    return ret;
 
@@ -223,7 +221,7 @@ mlib::Pointlist<L,P,V,S>::dist_to_seg(
    ) const
 {
    return (p - 
-           nearest_pt_to_line_seg(p, (*this)[k], (*this)[(k+1)%num()])).length();
+           nearest_pt_to_line_seg(p, (*this)[k], (*this)[(k+1)%size()])).length();
 }
 
 
@@ -235,7 +233,7 @@ mlib::Pointlist<L,P,V,S>::avg_dist_to_seg(
    int k
    ) const
 {
-  return ((p - (*this)[k]).length() + (p - (*this)[(k+1)%num()]).length() ) / 2.0;
+  return ((p - (*this)[k]).length() + (p - (*this)[(k+1)%size()]).length() ) / 2.0;
 }
 
 template <class L, class P, class V, class S>
@@ -251,7 +249,7 @@ mlib::Pointlist<L,P,V,S>::spread() const
    P avg = average();
 
    double ret = avg.dist((*this)[0]);
-   for (int k=1; k<num(); k++)
+   for (typename vector<P>::size_type k=1; k<size(); k++)
       ret = max(avg.dist((*this)[k]), ret);
 
    return ret;
@@ -272,7 +270,7 @@ mlib::Pointlist<L,P,V,S>::min_val(int i) const {
    }
    assert(i >= 0 && i<P::dim());
    typename P::value_type ret = pt(0)[i];
-   for (int k=1; k<num(); k++)
+   for (typename vector<P>::size_type k=1; k<size(); k++)
       ret = min(ret, pt(k)[i]);
    return ret;
 }
@@ -292,7 +290,7 @@ mlib::Pointlist<L,P,V,S>::max_val(int i) const {
    }
    assert(i >= 0 && i<P::dim());
    typename P::value_type ret = pt(0)[i];
-   for (int k=1; k<num(); k++)
+   for (typename vector<P>::size_type k=1; k<size(); k++)
       ret = max(ret, pt(k)[i]);
    return ret;
 }
@@ -305,17 +303,17 @@ void
 mlib::Pointlist<L,P,V,S>::update_length()
 {
    _partial_length.clear();
-   if (num())
-      _partial_length.realloc(num());
-   _partial_length += 0;
+   if (size())
+      _partial_length.reserve(size());
+   _partial_length.push_back(0);
    double cur_length = 0;
-   for ( int i=1; i< num(); i++ ) {
+   for ( typename vector<P>::size_type i=1; i< size(); i++ ) {
       cur_length += segment_length(i-1);
-      _partial_length += cur_length;
+      _partial_length.push_back(cur_length);
    }
    err_mesg(ERR_LEV_SPAM,
             "Pointlist<L,P,V,S>::update_length():  # of Segments = %i Total Length = %f",
-            num(), (float)_partial_length.last());
+            size(), (float)_partial_length.back());
 }
 
 /* Interpolation Functions */
@@ -397,7 +395,7 @@ mlib::Pointlist<L,P,V,S>::interpolate_length(
    // common mistake... so we check for it here. This check will
    // not catch all cases where the partial length array is out
    // of date, but it will catch many of them.
-   if (_partial_length.num() != num()) {
+   if (_partial_length.size() != size()) {
       cerr << "Pointlist::interpolate_length: "
            << "Warning: partial lengths not updated"
            << endl;
@@ -405,17 +403,17 @@ mlib::Pointlist<L,P,V,S>::interpolate_length(
       ((L*)this)->update_length();
    }
 
-   // Note if there are 0 or 1 points, _partial_length.last() will be 0, we'll
+   // Note if there are 0 or 1 points, _partial_length.back() will be 0, we'll
    // return early.
    //
    // note also, generally returns 0<=t<1,
    // except at the extreme right, returns t=1;
 
-   const double val = s*_partial_length.last();
+   const double val = s*_partial_length.back();
    if (val <= 0)       { seg = 0; t = 0; return; }
-   if (val >= _partial_length.last()) { seg = num()-2; t = 1; return; }
+   if (val >= _partial_length.back()) { seg = (int)size()-2; t = 1; return; }
 
-   int l=0, r=num()-1, m;
+   int l=0, r=(int)size()-1, m;
    while ((m = (l+r) >> 1) != l) {
       if (val < _partial_length[m])   { r = m; }
       else                            { l = m; }
@@ -432,7 +430,7 @@ mlib::Pointlist<L,P,V,S>::get_tangent(double s) const
 
    if (s == (int)s) { 
       int i = s;
-      const int n=num()-1;
+      const int n = (int)size()-1;
       if (i<0 || i>n || n<1) return V();
       if (i==0) return ((*this)[1]-(*this)[  0]).normalized();
       if (i==n) return ((*this)[n]-(*this)[n-1]).normalized();
@@ -509,8 +507,8 @@ mlib::Pointlist<L,P,V,S>::resample(
    Pointlist<L,P,V,S> result;
    double dt = 1.0 / num_segs;
    for (int k=0; k<num_segs; k++)
-      result += interpolate(k*dt);
-   result += last();
+      result.push_back(interpolate(k*dt));
+   result.push_back(back());
 
    *this = result;
 }
@@ -529,14 +527,14 @@ mlib::Pointlist<L,P,V,S>::clone_piece(
    int k1, 
    int k2) const
 {
-   if (!(valid_index(k1) && valid_index(k2)))
+   if (!(0 <= k1 && k1 < size() && 0 <= k2 && k2 < size()))
       return L();
 
-   L ret(num());
+   L ret(size());
 
    bool loop = (k2 < k1);
    if (loop) {
-      int n = num();
+      int n = (int)size();
       int end = (k2+1)%n;
       if (k1 == end) {
          ret = *this;
@@ -571,7 +569,7 @@ mlib::Pointlist<L,P,V,S>::prepend(
    )
 {
    Pointlist<L,P,V,S> pts(*poly); 
-   for ( int i = 0; i < num(); i++ ) {
+   for ( typename vector<P>::size_type i = 0; i < size(); i++ ) {
       pts += (*this)[i];
    }
    clear();   // Is this necessary?

@@ -44,7 +44,7 @@ MLIB_INLINE
 void
 mlib::Point3list<L,M,P,V,S>::xform(const M &t)
 {
-   for (int i=0; i<num(); i++)
+   for (typename vector<P>::size_type i=0; i<size(); i++)
       (*this)[i] = (t * (*this)[i]);
    update_length();
 }
@@ -56,14 +56,14 @@ mlib::Point3list<L,M,P,V,S>::fix_endpoints(P a, P b)
 {
    // Shift, rotate and scale the polyline so endpoints match a and b
 
-   if (num() < 2) {
+   if (size() < 2) {
       err_msg("_point3d_list::fix_endpoints: too few points (%d)",
-              num());
+              size());
       return 0;
    }
 
    // Do nothing if we're already golden:
-   if (a.is_equal((*this)[0]) && b.is_equal(last()))
+   if (a.is_equal((*this)[0]) && b.is_equal(back()))
       return 1;
 
    // Determine translation matrix to move 1st point to a:
@@ -71,7 +71,7 @@ mlib::Point3list<L,M,P,V,S>::fix_endpoints(P a, P b)
 
    // Matrix to scale and rotate polyline (after the tranlation)
    // so last point agrees with b:
-   M scale_rot = M::anchor_scale_rot(a, xlate*last(), b);
+   M scale_rot = M::anchor_scale_rot(a, xlate*back(), b);
 
    // Don't proceed with a singular matrix:
    if (!scale_rot.is_valid()) {
@@ -92,7 +92,7 @@ mlib::Point3list<L,M,P,V,S>::winding_number(const P& o, const V& n) const
 {
 
    double ret=0;
-   for (int i=1; i<num(); i++)
+   for (typename vector<P>::size_type i=1; i<size(); i++)
       ret += signed_angle((pt(i-1) - o).orthogonalized(n),
                           (pt(i  ) - o).orthogonalized(n),
                           n);

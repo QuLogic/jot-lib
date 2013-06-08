@@ -29,12 +29,12 @@ const double PathCell::FADE_WIDTH = 0.1;
 void 
 PathCell::add_stroke(const vector<UVpt>& pts,
 		     const vector<double>& pressures){
-  int nb_path_pts = _path->pts().num();
+  PIXEL_list::size_type nb_path_pts = _path->pts().size();
   BBOXpix dummy_bbox (_path->pts()[0], _path->pts()[nb_path_pts-1]);
   GestureStroke stroke (dummy_bbox);
   
-  unsigned int nb_pts = pts.size();
-  for (unsigned int i=0 ; i<nb_pts ; i++){
+  vector<UVpt>::size_type nb_pts = pts.size();
+  for (vector<UVpt>::size_type i=0; i<nb_pts; i++) {
     PIXEL p, q;
     double beta = closest_pixels(pts[i][0], p, q);
     PIXEL pixel_on_path = (1.0-beta)*p + beta*q;
@@ -78,14 +78,14 @@ PathCell::closest_pixels (double u, PIXEL& p, PIXEL& q){
 void 
 PathCell::compute_path_coords (){
   const PIXEL_list& pts = _path->pts();
-  unsigned int nb_path_pixels = pts.num();
+  PIXEL_list::size_type nb_path_pixels = pts.size();
   double length = _path->length();
   
   if (nb_path_pixels<2) return;
   
   double path_coord = 0.0;
   PIXEL last_pixel = pts[0];
-  for (unsigned int i=0;  i<nb_path_pixels-1 ; i++){
+  for (PIXEL_list::size_type i=0; i<nb_path_pixels-1; i++) {
     PIXEL cur_pixel = pts[i];
     path_coord += cur_pixel.dist(last_pixel)/length;
     last_pixel = cur_pixel;

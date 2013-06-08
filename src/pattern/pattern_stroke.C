@@ -44,11 +44,10 @@ PatternStroke::draw(CNDCZpt& c)
 {
    //cerr << "Stroke had " << _pts.num() << endl;
    glBegin(GL_LINE_STRIP);   
-	      for(int i=0; i < _pts.num(); ++i)
-         {
-            CNDCZpt p = c + _pts[i]; 
-            glVertex2dv(p.data());
-         }
-	glEnd();
+   for (NDCZvec_list::size_type i=0; i < _pts.size(); ++i) {
+      CNDCZpt p = c + _pts[i];
+      glVertex2dv(p.data());
+   }
+   glEnd();
 }
 

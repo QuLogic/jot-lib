@@ -222,7 +222,7 @@ StrokeUI::init()
    const int steps = 12;
 
    for (i=0; i < steps; i++)
-      _strokes[0]->pts().add(
+      _strokes[0]->pts().push_back(
             NDCZpt( -xfrac*maxx + (float)i * ((2.0 * xfrac * maxx) / (float)(steps-1)), 
                      yfrac*maxy * sin( 2.0*M_PI * (float)i/(float)(steps-1) ), 
                      0));
@@ -1787,7 +1787,7 @@ StrokeUI::handle_preview_bitmapbox()
 
          ndcz = xy_to_ndcz(x,y);
          _strokes[_curr_stroke]->pts().clear();
-         _strokes[_curr_stroke]->pts().add(ndcz);
+         _strokes[_curr_stroke]->pts().push_back(ndcz);
          update_stroke_img();
        break;
        case GLUI_BITMAPBOX_EVENT_MOUSE_MOVE:
@@ -1795,9 +1795,9 @@ StrokeUI::handle_preview_bitmapbox()
          y = _bitmapbox[BITMAPBOX_PREVIEW]->get_event_y();
 
          ndcz = xy_to_ndcz(x,y);
-         if ((_strokes[_curr_stroke]->pts().num() == 0) ||
-             (_strokes[_curr_stroke]->pts().last() != ndcz))
-            _strokes[_curr_stroke]->pts().add(ndcz);
+         if ((_strokes[_curr_stroke]->pts().size() == 0) ||
+             (_strokes[_curr_stroke]->pts().back() != ndcz))
+            _strokes[_curr_stroke]->pts().push_back(ndcz);
          update_stroke_img();
        break;
        case GLUI_BITMAPBOX_EVENT_MOUSE_UP:

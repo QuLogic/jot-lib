@@ -447,8 +447,8 @@ INFLATE::build_lines()
    }
 
    // preallocate enough lines
-   _lines.realloc(source->num());
-   draw_lines.realloc(source->num());
+   _lines.reserve(source->num());
+   draw_lines.reserve(source->num());
 
    int k=0;
    for (k=0; k<source->num(); k++) {
@@ -456,10 +456,10 @@ INFLATE::build_lines()
       // Check if this is a break in the boundry
       if ( source->has_break(k) && k ) {
          // Add the endpoint
-         _lines += (source->next_vert(k-1)->loc() +
-                    _preview_dist*(source->next_vert(k-1)->norm()));
-         draw_lines += (source->next_vert(k-1)->loc() +
-                        _preview_dist*(source->next_vert(k-1)->norm()));
+         _lines.push_back(source->next_vert(k-1)->loc() +
+                          _preview_dist*(source->next_vert(k-1)->norm()));
+         draw_lines.push_back(source->next_vert(k-1)->loc() +
+                              _preview_dist*(source->next_vert(k-1)->norm()));
          // Render the current loop
          GL_VIEW::draw_wpt_list(
             draw_lines,
@@ -474,19 +474,18 @@ INFLATE::build_lines()
 
       }
       // Add the current preview point to the line set
-      _lines += (source->vert(k)->loc() + _preview_dist*(source->vert(k)->norm()));
-      draw_lines +=
-         (source->vert(k)->loc() + _preview_dist*(source->vert(k)->norm()));
+      _lines.push_back(source->vert(k)->loc() + _preview_dist*(source->vert(k)->norm()));
+      draw_lines.push_back(source->vert(k)->loc() + _preview_dist*(source->vert(k)->norm()));
    }
 
    // If there is a loop pending
    if (!_lines.empty() && k) {
-      _lines +=
+      _lines.push_back(
          (Wpt)(source->next_vert(k-1)->loc() +
-               _preview_dist*(source->next_vert(k-1)->norm()));
-      draw_lines +=
+               _preview_dist*(source->next_vert(k-1)->norm())));
+      draw_lines.push_back(
          (Wpt)(source->next_vert(k-1)->loc() +
-               _preview_dist*(source->next_vert(k-1)->norm()));
+               _preview_dist*(source->next_vert(k-1)->norm())));
       // Draw it
       GL_VIEW::draw_wpt_list(
          draw_lines,
@@ -531,8 +530,8 @@ inline UVpt_list
 uvlist(CUVpt& uv1, CUVpt& uv2)
 {
    UVpt_list ret;
-   ret += uv1;
-   ret += uv2;
+   ret.push_back(uv1);
+   ret.push_back(uv2);
    ret.update_length();
    return ret;
 }

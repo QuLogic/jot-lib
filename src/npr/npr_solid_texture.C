@@ -1145,24 +1145,24 @@ NPRSolidTexture::draw(CVIEWptr& v)
 
    NDCZpt origin(0,0,0);
 
-   if (nst_paper_flag && _travel_paper)
-   {
+   if (nst_paper_flag && _travel_paper) {
       Wpt_list wbox;
       NDCZpt_list nbox;
       
       (_patch->xform() * _patch->mesh()->get_bb()).points(wbox);
-      while (wbox.num() > 0) nbox += wbox.pop();
+      while (wbox.size() > 0) {
+         nbox.push_back(wbox.back());
+         wbox.pop_back();
+      }
       
       static bool SCREEN_BOX = Config::get_var_bool("SCREEN_BOX",false,true);
 
-      if (SCREEN_BOX)
-      {
+      if (SCREEN_BOX) {
          double minx = nbox[0][0];
          double maxx = nbox[0][0];
          double miny = nbox[0][1];
          double maxy = nbox[0][1];
-         for (int i=1; i<nbox.num(); i++)
-         {
+         for (NDCZpt_list::size_type i=1; i<nbox.size(); i++) {
             if (nbox[i][0] < minx) minx = nbox[i][0];
             if (nbox[i][0] > maxx) maxx = nbox[i][0];
             if (nbox[i][1] < miny) miny = nbox[i][1];
@@ -1170,9 +1170,7 @@ NPRSolidTexture::draw(CVIEWptr& v)
             origin[0] = (minx + maxx)/2.0;
             origin[1] = (miny + maxy)/2.0;
          }
-      }
-      else
-      {
+      } else {
          origin = nbox.average();
       }
    }

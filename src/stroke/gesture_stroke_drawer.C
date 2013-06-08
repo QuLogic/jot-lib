@@ -77,7 +77,7 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
    const PIXEL_list&    pts   = gest->pts();
    const vector<double>& press = gest->pressures();
 
-   assert(pts.num() == (int)press.size());
+   assert(pts.size() == press.size());
 
    const StrokeVertexArray& verts 
       = _base_stroke_proto->get_verts();
@@ -89,8 +89,7 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
    static bool debug = Config::get_var_bool("DEBUG_GEST_DRAWER",false);
                                                    
 
-   for (int k=0; k< pts.num(); k++) {
-
+   for (PIXEL_list::size_type k=0; k< pts.size(); k++) {
       if (k>0 && prev_pix == pts[k]) {
          if (debug)
             cerr << "gesture drawer, dropping duplicate "
@@ -101,17 +100,16 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
       _base_stroke_proto->add(pts[k]);
 
       if ( _base_stroke_proto->get_press_vary_width() ) {
-	verts[verts.num()-1]._width = (float)press[k];
+         verts[verts.num()-1]._width = (float)press[k];
 
-	 // XXX Hack to hide antialiased lines when the width is small
-	 if ((float)press[k]<=0.1f) {
-	   verts[verts.num()-1]._alpha = 10.0f*(float)press[k];
-	 } else {
-	   verts[verts.num()-1]._alpha = 1.0f;
-	 }
+         // XXX Hack to hide antialiased lines when the width is small
+         if ((float)press[k] <= 0.1f) {
+            verts[verts.num()-1]._alpha = 10.0f*(float)press[k];
+         } else {
+            verts[verts.num()-1]._alpha = 1.0f;
+         }
       }
 
-      
       if ( _base_stroke_proto->get_press_vary_alpha() ) {
          verts[verts.num()-1]._alpha = (float)press[k];
       }
@@ -119,9 +117,8 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
       prev_pix = pts[k];
    }
 
-   if (verts.num() < 2) 
+   if (verts.num() < 2)
       return 0;
-
 
    _base_stroke_proto->draw_start();
    _base_stroke_proto->draw(v);

@@ -225,19 +225,17 @@ bool
 HatchingTexture::add_stroke(CNDCpt_list& pl, const ARRAY<double>& prl, BaseStroke * proto)
 {    
    cerr << "1 ProxySurface::add : we have " << _strokes.size() << endl;
-   //   int k;
-   //   Bface *f;
 
    // It happens:
-   if (pl.empty()){
+   if (pl.empty()) {
       err_msg("PatternGroup:add() - Error: point list is empty!");
       return false;
    }
-   if (prl.empty()){
+   if (prl.empty()) {
       err_msg("PatternGroup:add() - Error: pressure list is empty!");
       return false;
    }
-   if (pl.num() != prl.num()){
+   if ((int)pl.size() != prl.num()) {
       err_msg("PatternGroup:add() - gesture pixel list and pressure list are not same length.");
       return false;
    }
@@ -249,28 +247,23 @@ HatchingTexture::add_stroke(CNDCpt_list& pl, const ARRAY<double>& prl, BaseStrok
   
    //make uv list 
    UVpt_list uv_list;
-   for (int i=0; i < smoothpts.num(); ++i)
-   {      
-      uv_list += _proxy_texture->proxy_surface()->getUVfromNDC(smoothpts[i]);
-   }	
+   for (NDCpt_list::size_type i=0; i < smoothpts.size(); ++i) {
+      uv_list.push_back(_proxy_texture->proxy_surface()->getUVfromNDC(smoothpts[i]));
+   }
    UVpt base_uv = uv_list.average();
    base_uv[0] = (int)base_uv[0];
    base_uv[1] = (int)base_uv[1];
-   
+
    cerr << "Base uv is " << base_uv << endl;
    //now lets make the stroke relative to the face...
-   for (int i=0; i < uv_list.num(); ++i)
-   {       
+   for (UVpt_list::size_type i=0; i < uv_list.size(); ++i) {
       uv_list[i] -= base_uv;
-   }	
+   }
 
    ProxyUVStroke* new_stroke = new ProxyUVStroke(uv_list,_proxy_texture->proxy_surface(),proto);	
-   
-   
-   //StrokeData::add_stroke(f, this, new_stroke);  
+
    _strokes.push_back(new_stroke);
    cerr << "adding a stroke " << _strokes.size() << endl;
    return true;
-
 }
 

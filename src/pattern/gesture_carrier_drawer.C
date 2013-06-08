@@ -28,7 +28,8 @@
 using namespace mlib;
 
 int
-GestureCarrierDrawer::draw(const GESTURE* gest, CVIEWptr& v) {
+GestureCarrierDrawer::draw(const GESTURE* gest, CVIEWptr& v)
+{
   if (_carrier_gesture){
     draw_carriers(gest, v);
   } else {
@@ -39,7 +40,8 @@ GestureCarrierDrawer::draw(const GESTURE* gest, CVIEWptr& v) {
 
 
 void
-GestureCarrierDrawer::draw_first_carrier(const GESTURE* gest, CVIEWptr& v) {
+GestureCarrierDrawer::draw_first_carrier(const GESTURE* gest, CVIEWptr& v)
+{
   // load identity for model matrix
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
@@ -62,7 +64,7 @@ GestureCarrierDrawer::draw_first_carrier(const GESTURE* gest, CVIEWptr& v) {
   // draw the line strip
   const PIXEL_list&    pts   = gest->pts();
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts.size(); k++) {
     glVertex2dv(pts[k].data());
   }
   glEnd();
@@ -76,12 +78,12 @@ GestureCarrierDrawer::draw_first_carrier(const GESTURE* gest, CVIEWptr& v) {
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-  
 }
 
 
 void
-GestureCarrierDrawer::draw_carriers(const GESTURE* gest, CVIEWptr& v) {
+GestureCarrierDrawer::draw_carriers(const GESTURE* gest, CVIEWptr& v)
+{
   // load identity for model matrix
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
@@ -104,7 +106,7 @@ GestureCarrierDrawer::draw_carriers(const GESTURE* gest, CVIEWptr& v) {
   // draw the first carrier
   const PIXEL_list& pts1 = _carrier_gesture->pts();
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts1.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts1.size(); k++) {
     glVertex2dv(pts1[k].data());
   }
   glEnd();
@@ -112,7 +114,7 @@ GestureCarrierDrawer::draw_carriers(const GESTURE* gest, CVIEWptr& v) {
   // draw the second carrier
   const PIXEL_list& pts2 = gest->pts();
   glBegin(GL_LINE_STRIP);
-  for (int k=0; k< pts2.num(); k++) {
+  for (PIXEL_list::size_type k=0; k<pts2.size(); k++) {
     glVertex2dv(pts2[k].data());
   }
   glEnd();
@@ -137,7 +139,5 @@ GestureCarrierDrawer::draw_carriers(const GESTURE* gest, CVIEWptr& v) {
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
-  
 }
-
 

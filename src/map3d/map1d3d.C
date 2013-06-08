@@ -227,7 +227,7 @@ Wpt_listMap::Wpt_listMap(
    ) : Map1D3D(p0, p1, n),
        _pts(pts)
 {
-   assert(_pts.num() > 1);
+   assert(_pts.size() > 1);
 
    // XXX - why doesn't this happen in the constructor???
    //       the lines of code are there, what else can we do???
@@ -257,13 +257,13 @@ Wpt_listMap::map(double t) const
    if (is_closed()) {
       return _pts.interpolate(WrapCoord::N(t));
    } else if (t < 0) {
-      Wpt    p = _pts.first();
+      Wpt    p = _pts.front();
       Wvec   v = _pts.vec(0).normalized();
       double s = t*_pts.length();
       return p + (v*s);
    } else if (t > 1) {
-      Wpt    p = _pts.last();
-      Wvec   v = _pts.vec(_pts.num()-2).normalized();
+      Wpt    p = _pts.back();
+      Wvec   v = _pts.vec(_pts.size()-2).normalized();
       double s = (t - 1)*_pts.length();
       return p + (v*s);
    } else
@@ -275,10 +275,10 @@ Wpt_listMap::set_pts(CWpt_list& pts)
 {
    _pts = pts; 
    _pts.update_length();
-   if (pts.num() > 0 && _p0 != NULL && _p1 != NULL) {
+   if (pts.size() > 0 && _p0 != NULL && _p1 != NULL) {
       if (!_p0->set_pt(pts[0]))
          err_msg("Wpt_listMap::set_pts: error setting endpoint");
-      if (!_p1->set_pt(pts.last()))
+      if (!_p1->set_pt(pts.back()))
          err_msg("Wpt_listMap::set_pts: error setting endpoint");
    }
    // Notify dependents they're out of date and sign up to be
@@ -307,7 +307,7 @@ SurfaceCurveMap::SurfaceCurveMap(
        _surf(surface),
        _uvs(uvs)
 {
-   assert(_uvs.num() > 1);
+   assert(_uvs.size() > 1);
 
    if (_p0 || _p1) {
       assert(!_uvs.is_closed());
@@ -319,8 +319,8 @@ SurfaceCurveMap::SurfaceCurveMap(
    
    if (Config::get_var_bool("DEBUG_SURF_CURVE_MAP_CONSTRUCTOR",false,true)) {
       cerr << " -- in SurfaceCurveMapconstructor with uvpts: " << endl;
-      int i;
-      for (i = 0; i < _uvs.num(); i++) {
+      UVpt_list::size_type i;
+      for (i = 0; i < _uvs.size(); i++) {
          cerr << _uvs[i] << endl;
       }
       cerr << " -- end uv pts list" << endl;
@@ -342,8 +342,8 @@ SurfaceCurveMap::recompute()
       Wpt op0, op1; // old wpts for endpoints (according to the currently cached uv points)
       p0 = _p0->map();
       p1 = _p1->map();
-      op0 = _surf->map(_uvs.first());
-      op1 = _surf->map(_uvs.last());
+      op0 = _surf->map(_uvs.front());
+      op1 = _surf->map(_uvs.back());
       bool needfix = false;
 
       static bool debug =
@@ -360,7 +360,7 @@ SurfaceCurveMap::recompute()
             cerr << "SurfaceCurveMap::recompute(): warning.. could not invert endpoint" << endl;
          needfix = true;
       } else {
-         uv0 = _uvs.first();
+         uv0 = _uvs.front();
       }
 
       if (p1 != op1) {
@@ -368,7 +368,7 @@ SurfaceCurveMap::recompute()
             cerr << "SurfaceCurveMap::recompute(): warning.. could not invert endpoint" << endl;
          needfix = true;
       } else {
-         uv1 = _uvs.last();
+         uv1 = _uvs.back();
       }
 
       if (needfix) {
@@ -382,8 +382,8 @@ SurfaceCurveMap::recompute()
             UVvec delta1 = uv1 - uv(1); // the distance in uv the second endpoint moved
             delta0[0] = 0.0; // we only care about the second component
             delta1[0] = 0.0; 
-            int i;
-            for (i = 0; i < _uvs.num(); i++) {
+            UVpt_list::size_type i;
+            for (i = 0; i < _uvs.size(); i++) {
                double t = (_uvs[i])[0]; // this t should be 0 <= t <= 1
                UVvec delt = (1.0 - t) * delta0 + t * delta1; // linearly interpolate
                if (debug) cerr << "applying delta " << delta0 << delta1 << " t = " << t << endl;
@@ -412,9 +412,9 @@ Wpt_list
 SurfaceCurveMap::get_wpts() const 
 { 
   // Return a Wpt_list describing the current shape of the map
-  Wpt_list ret(_uvs.num());
-  for ( int i=0; i<_uvs.num(); i++ ) {
-    ret += _surf->map(_uvs[i]);
+  Wpt_list ret(_uvs.size());
+  for ( UVpt_list::size_type i=0; i<_uvs.size(); i++ ) {
+    ret.push_back(_surf->map(_uvs[i]));
   }
   return ret;
 }
@@ -435,7 +435,7 @@ SurfaceCurveMap::length() const
    // XXX - if this is called often should cache the info
 
    double len = 0;
-   for (int k=1; k<_uvs.num(); k++)
+   for (UVpt_list::size_type k=1; k<_uvs.size(); k++)
       len += _surf->map(_uvs[k]).dist(_surf->map(_uvs[k-1]));
    return len;
 }
@@ -449,9 +449,9 @@ SurfaceCurveMap::hlen() const
    // XXX - this isn't a good way to calculate this...
    //       but it's okay "for now."
 
-   double h = ((_uvs.num()  < 2) ?  1.0 :
-               (_uvs.num() == 2) ? 1e-9 :
-               1.0/_uvs.num());
+   double h = ((_uvs.size()  < 2) ?  1.0 :
+               (_uvs.size() == 2) ? 1e-9 :
+               1.0/_uvs.size());
    return max(h, _surf->hlen())/10.0;
 }
 
@@ -467,8 +467,8 @@ SurfaceCurveMap::set_uvs(CUVpt_list& uvs)
 
    if (debug) {
       cerr << "-- In SurfaceCurveMap::set_uvs() got hte following uv list" << endl;
-      int i;
-      for (i = 0; i < _uvs.num(); i++) {
+      UVpt_list::size_type i;
+      for (i = 0; i < _uvs.size(); i++) {
          cerr << i << " " << _uvs[i] << endl;
       }
       cerr << "-- End list" << endl;

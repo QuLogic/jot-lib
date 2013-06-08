@@ -727,14 +727,14 @@ UVMapping::add_face(Bface *f)
                box.clear();
                tri.clear();
 
-               box += UVpt( _min_u +     u *_du , _min_v +     v * _dv );
-               box += UVpt( _min_u + (u+1) *_du , _min_v +     v * _dv );
-               box += UVpt( _min_u + (u+1) *_du , _min_v + (v+1) * _dv );
-               box += UVpt( _min_u +     u *_du , _min_v + (v+1) * _dv );
+               box.push_back(UVpt( _min_u +     u *_du , _min_v +     v * _dv ));
+               box.push_back(UVpt( _min_u + (u+1) *_du , _min_v +     v * _dv ));
+               box.push_back(UVpt( _min_u + (u+1) *_du , _min_v + (v+1) * _dv ));
+               box.push_back(UVpt( _min_u +     u *_du , _min_v + (v+1) * _dv ));
 
-               tri += uvdata->uv1();
-               tri += uvdata->uv2();
-               tri += uvdata->uv3();
+               tri.push_back(uvdata->uv1());
+               tri.push_back(uvdata->uv2());
+               tri.push_back(uvdata->uv3());
 
                //isect if box holds tri or vice versa
                if (box.contains(tri)) isect = true;

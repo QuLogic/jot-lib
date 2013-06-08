@@ -126,7 +126,7 @@ read_texcoord(UVpt_list& uvs, istream& in)
    double u, v;
    in >> u >> v;
    skip_line(in);
-   uvs += UVpt(u,v);
+   uvs.push_back(UVpt(u,v));
 }
 
 class vtn {
@@ -176,6 +176,20 @@ any_valid_indices(const T& l, int i, int j, int k)
    return l.valid_index(i) || l.valid_index(j) || l.valid_index(k);
 }
 
+template <class T>
+inline bool
+all_valid_indices2(const T& l, int i, int j, int k)
+{
+   return  0 <= i && i < (int)l.size() && 0 <= j && j < (int)l.size() && 0 <= k && k < (int)l.size();
+}
+
+template <class T>
+inline bool
+any_valid_indices2(const T& l, int i, int j, int k)
+{
+   return (0 <= i && i < (int)l.size()) || (0 <= j && j < (int)l.size()) || (0 <= k && k < (int)l.size());
+}
+
 inline void
 add_tri(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v3)
 {
@@ -183,7 +197,7 @@ add_tri(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, co
    //cerr << "add_tri: " << v1._v << " "<< v2._v << " " <<  v3._v << endl;
    assert(all_valid_indices(mesh->verts(), v1._v, v2._v, v3._v));
 
-   if (all_valid_indices(uvs, v1._t, v2._t, v3._t)) {
+   if (all_valid_indices2(uvs, v1._t, v2._t, v3._t)) {
       mesh->add_face(v1._v, v2._v, v3._v, uvs[v1._t], uvs[v2._t], uvs[v3._t], p);
    } else {
       mesh->add_face(v1._v, v2._v, v3._v, p);

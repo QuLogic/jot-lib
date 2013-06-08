@@ -28,29 +28,29 @@ refine_polyline_interp(const L& poly)
    // finer polyline that interpolates the original points. This
    // function applies 1 level of subdivision.
 
-   int n = poly.num();
+   size_t n = poly.size();
    if (n < 2)
       return poly;
 
    // first generate a refined curve using linear subdivision:
    L ret(2*n - 1);
-   for (int i=0; i<n-1; i++) {
-      ret += poly[i];
-      ret += interp(poly[i], poly[i+1], 0.5);
+   for (size_t i=0; i<n-1; i++) {
+      ret.push_back(poly[i]);
+      ret.push_back(interp(poly[i], poly[i+1], 0.5));
    }
-   ret += poly.last();
+   ret.push_back(poly.back());
 
    if (n == 2)
       return ret;
 
    // correct internal midpoints:
-   for (int j = 1; j < n-2; j++) {
+   for (size_t j = 1; j < n-2; j++) {
       ret[2*j + 1] = interp(interp(poly[j-1], poly[j+2], 0.5),
                             ret[2*j + 1], 9.0/8);
    }
    // correct first and last midpoints:
    ret[1] += (-1.0/8)*(poly[2] - ret[1]).orthogonalized(poly.vec(0));
-   int m = ret.num()-2;
+   int m = ret.size()-2;
    ret[m] += (-1.0/8)*(poly[n-3] - ret[m]).orthogonalized(poly.vec(n-2));
    return ret;
 }
@@ -78,9 +78,9 @@ resample_polyline(const L& poly, int num_samples)
    L ret(num_samples);
    double dt = 1.0/(num_samples - 1);
    for (int i=0; i<num_samples - 1; i++) {
-      ret += poly.interpolate(i*dt);
+      ret.push_back(poly.interpolate(i*dt));
    }
-   ret += poly.last();
+   ret.push_back(poly.back());
    return ret;
 }
 

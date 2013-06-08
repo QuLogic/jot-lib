@@ -1041,7 +1041,7 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
 
    // do 50 iterations...
    double prev_err = 0;
-   ARRAY<double> errors;
+   vector<double> errors;
    for (int k=0; k<50; k++) {
 
       errors.clear();
@@ -1057,7 +1057,7 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
             Wpt limit;
             verts[j]->limit_loc(limit);
             Wvec delt = C[j] - limit;
-            errors+=delt.length();
+            errors.push_back(delt.length());
             err += delt.length();
             if(move_along_normal)
                delt = delt*verts[j]->norm()*verts[j]->norm();
@@ -1075,7 +1075,7 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
             Wvec delt = C[j] - L[j];
 
             err += delt.length();
-            errors+=delt.length();
+            errors.push_back(delt.length());
             if(move_along_normal)
                delt = delt*verts[j]->norm()*verts[j]->norm();
             verts[j]->offset_loc(delt);
