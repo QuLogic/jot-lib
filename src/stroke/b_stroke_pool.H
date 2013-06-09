@@ -20,6 +20,8 @@
 #define B_STROKE_POOL_HEADER
 #include "outline_stroke.H"
 
+#include <vector>
+
    // Dynamically allocated strokes are retained in the pool for
    // possible reuse from frame to frame. Thus, _num_strokes_used may be
    // less than _num, the total number of strokes being stored in the pool.
@@ -29,14 +31,14 @@
 
 #define CBStrokePool const BStrokePool
 
-class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
+class BStrokePool : protected vector<OutlineStroke*>, public DATA_ITEM {
  private:
    /******** STATIC MEMBER VARIABLES ********/
    static TAGlist          *_bsp_tags;
 
  protected:
    /******** MEMBER VARIABLES ********/
-   ARRAY<OutlineStroke*>  _prototypes;
+   vector<OutlineStroke*>  _prototypes;
 
    int         _edit_proto;
    int         _draw_proto;
@@ -85,10 +87,10 @@ class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
    virtual void            set_lock_proto(bool e);
    bool                    get_lock_proto() const     { return _lock_proto; }
 
-   int                     get_num_protos() const     { return _prototypes.num(); }
+   int                     get_num_protos() const     { return _prototypes.size(); }
 
  protected:
-   inline int              get_active_proto() const   { return (_lock_proto)?(_edit_proto):(_draw_proto); }
+   inline int              get_active_proto() const   { return _lock_proto ? _edit_proto : _draw_proto; }
 
    virtual void            apply_active_proto();
 
@@ -172,47 +174,45 @@ class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
    void drain() 
    {
       reset();
-      for (int i=0; i<_num; i++) delete _array[i];
+      for (vector<OutlineStroke*>::size_type i=0; i<size(); i++) delete at(i);
       clear();
    }
 
  protected:   
    virtual void internal_deselect()
    {
-      if (_selected_stroke > -1)
-      {
-         assert(_array[_selected_stroke]->get_is_highlighted());
-         assert(_array[_selected_stroke]->get_overdraw());
-         _array[_selected_stroke]->highlight(false);
-         _array[_selected_stroke]->set_overdraw(false);
+      if (_selected_stroke > -1) {
+         assert(at(_selected_stroke)->get_is_highlighted());
+         assert(at(_selected_stroke)->get_overdraw());
+         at(_selected_stroke)->highlight(false);
+         at(_selected_stroke)->set_overdraw(false);
          //blank path/group indices and stamp
       }
       _selected_stroke = -1;
    }
+
    virtual void internal_select(int i)
    {
       _selected_stroke = i;
-      if (_selected_stroke > -1)
-      {
+      if (_selected_stroke > -1) {
          //set path/group indices and stamp
-         _array[_selected_stroke]->highlight(true);
-         _array[_selected_stroke]->set_overdraw(true);
+         at(_selected_stroke)->highlight(true);
+         at(_selected_stroke)->set_overdraw(true);
       }
    }
 
  public:
-   //int set_selected_stroke(OutlineStroke* s)
    void set_selected_stroke(OutlineStroke* s)
    {
       int i;
 
-      if (s)
-      {
-         i = get_index(s);
-         assert((i != BAD_IND) && (i < _num_strokes_used));
-      }
-      else
-      {
+      if (s) {
+         vector<OutlineStroke*>::iterator it;
+         it = std::find(begin(), end(), s);
+         assert(it != end());
+         i = it - begin();
+         assert(i < _num_strokes_used);
+      } else {
          i = -1;
       }
 
@@ -220,7 +220,6 @@ class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
       internal_select(i);
    }
 
-   //OutlineStroke* select_stroke(int i) 
    void set_selected_stroke_index(int i) 
    {
       assert((i >= -1) && (i < _num_strokes_used));
@@ -229,14 +228,12 @@ class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
       internal_select(i);
    }
 
-   //int selected_stroke_index() 
    int get_selected_stroke_index() 
    {
       assert((_selected_stroke >= -1) && (_selected_stroke < _num_strokes_used));
       return _selected_stroke;
    }
 
-   //OutlineStroke* selected_stroke() 
    OutlineStroke* get_selected_stroke() 
    {
       assert((_selected_stroke >= -1) && (_selected_stroke < _num_strokes_used));
@@ -256,8 +253,6 @@ class BStrokePool : protected ARRAY<OutlineStroke*>, public DATA_ITEM {
                
       return get_selected_stroke();
    }
-
-
 };
 
 #endif

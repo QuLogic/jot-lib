@@ -1235,22 +1235,20 @@ HatchingGroupFixed::add(
       ol->set_hangover(1);
       ol->set_pix_len(pix_len);
 
-      ol->add(BaseStrokeOffset( 0.0, 0.0, 
-            finalprl[0],                  BaseStrokeOffset::OFFSET_TYPE_BEGIN));
+      ol->push_back(BaseStrokeOffset(0.0, 0.0, finalprl[0], BaseStrokeOffset::OFFSET_TYPE_BEGIN));
       for (k=1; (int)k<finalprl.num(); k++)
-            ol->add(BaseStrokeOffset( (double)k/(double)(finalprl.num()-1), 0.0, finalprl[k], BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
+         ol->push_back(BaseStrokeOffset((double)k / (double)(finalprl.num()-1), 0.0, finalprl[k],
+                                        BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
 
-      ol->add(BaseStrokeOffset( 1.0, 0.0, finalprl[finalprl.num()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
+      ol->push_back(BaseStrokeOffset(1.0, 0.0, finalprl[finalprl.num()-1], BaseStrokeOffset::OFFSET_TYPE_END));
 
-      if (base_level(num_base_levels()-1)->pix_size() > 0)
-      {
+      if (base_level(num_base_levels()-1)->pix_size() > 0) {
          assert(_params.anim_style() != HatchingGroup::STYLE_MODE_NEAT);
 
          add_base_level();
 
          // Make sure we can see it whil we're editing!
          base_level(num_base_levels()-1)->set_desired_frac(1.0);
-
       }
 
       base_level(num_base_levels()-1)->add_hatch(
@@ -1417,10 +1415,9 @@ HatchingGroupFixed::interpolate(
    // XXX - Here's a policy for offset interp, maybe it sucks
    // but I'll revisit...
 
-   num = (ol1->num() + ol2->num())/2;
+   num = (int)(ol1->size() + ol2->size())/2;
    assert(num>1);
-   for (k=0; k < num; k++)
-   {
+   for (k=0; k < num; k++) {
       BaseStrokeOffset o, o1, o2;
       double t = (double)k/(double)(num-1);
 
@@ -1433,7 +1430,7 @@ HatchingGroupFixed::interpolate(
       o._type =   (k==0)?     (BaseStrokeOffset::OFFSET_TYPE_BEGIN):
                   ((k==num-1)?(BaseStrokeOffset::OFFSET_TYPE_END):
                               (BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
-      offsets->add(o);
+      offsets->push_back(o);
    }
 
    offsets->set_replicate(0);

@@ -39,13 +39,13 @@ DecoratorStroke::DecoratorStroke(Patch* p, double width) :
 int
 DecoratorStroke::draw(CVIEWptr& view)
 {
-   if (_surface_pts.num() < 2)       
+   if (_surface_pts.size() < 2)
       return 0;
 
    ViewStroke::clear();  // clears all the vertices
 
    // recompute the vertex ndc locations for the current frame
-   for ( int i=0; i<_surface_pts.num(); i++) {
+   for ( vector<mlib::Wpt>::size_type i=0; i<_surface_pts.size(); i++) {
       assert(_patch);
       NDCZpt p(_surface_pts[i],_patch->mesh()->obj_to_ndc());
       add(p, _default_width);  // add vert with location p
@@ -60,7 +60,7 @@ DecoratorStroke::draw(CVIEWptr& view)
 NDCZpt
 DecoratorStroke::getNDCZpt(int i)
 {
-  assert(i < _surface_pts.num());
+  assert(i < (int)_surface_pts.size());
   assert(_patch);
   NDCZpt p(_surface_pts[i],_patch->mesh()->obj_to_ndc());
   return p;
@@ -94,12 +94,12 @@ DecoratorStroke::add_vert_loc(CBedge* e, double t)
 {
    assert(e);
    assert( t >= 0 && t <= 1.0 );
-   _edges += e;
-   _t_vals += t;
+   _edges.push_back(e);
+   _t_vals.push_back(t);
 
    // compute and cache the object space location (convenient for drawing)
    Wpt loc = e->v1()->loc() + ((e->v2()->loc() - e->v1()->loc()) * t);
-   _surface_pts += loc;
+   _surface_pts.push_back(loc);
    _dirty = true;
 }
 

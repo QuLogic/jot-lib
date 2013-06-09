@@ -169,14 +169,14 @@ ImgLineTexture::add_stroke(const uint pixel, int &bnum)
    // mark the pixel as visited by putting 0 in alpha channel:
    _col_ref->set(pix[0], pix[1], _col_ref->color(pix[0], pix[1]), 0);
 
-   if ( bnum == _bstrokes.num() ) {
+   if (bnum == (int)_bstrokes.size()) {
       // No more old strokes to re-use;
       // have to allocate a new one:
-      _bstrokes.add( _prototype.copy() );
+      _bstrokes.push_back(_prototype.copy());
       //_bstrokes[bnum]->set_color(COLOR::random());
       _bstrokes[bnum]->set_offsets(_offsets);
    }
-   assert ( bnum < _bstrokes.num() );
+   assert(bnum < (int)_bstrokes.size());
 
    Point2i neighbor_pixel;
 
@@ -232,12 +232,11 @@ ImgLineTexture::add_stroke(const uint pixel, int &bnum)
       }
    }
 
-   if(_bstrokes[bnum]->num_verts() >= 3){
+   if (_bstrokes[bnum]->num_verts() >= 3) {
       bnum++;
       return true;
-   }
-   else{
-      _bstrokes.remove(bnum);
+   } else {
+      _bstrokes.erase(_bstrokes.begin() + bnum);
       return false;
    }
 }

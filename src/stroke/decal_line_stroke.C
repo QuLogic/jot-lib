@@ -66,14 +66,14 @@ DecalLineStroke::tags() const
 int
 DecalLineStroke::draw(CVIEWptr& v)
 {
-   if (_vert_locs.num() < 2)       
+   if (_vert_locs.size() < 2)
       return 0;
 
    if (_dirty) {
       OutlineStroke::clear();  // clears all the vertices
 
       // recompute the vertex ndc locations for the current frame
-      for ( int i=0; i<_vert_locs.num(); i++) {
+      for ( vector<vert_loc>::size_type i=0; i<_vert_locs.size(); i++) {
          // A null simplex indicates that this is a "bad" vert,
          // i.e., a break in the stroke.
 
@@ -330,8 +330,7 @@ DecalLineStroke::get_vert_locs(TAGformat &d)
          s = _mesh->bf(f_index);
       }
 
-      _vert_locs += vert_loc(loc, s, pr);
-
+      _vert_locs.push_back(vert_loc(loc, s, pr));
    }
 }
 
@@ -344,12 +343,11 @@ DecalLineStroke::put_vert_locs(TAGformat &d) const
 
    d.id();
 
-   *d << _vert_locs.num() << "\n";
+   *d << _vert_locs.size() << "\n";
 
    // write out the vert locs
 
-   for (int i=0; i<_vert_locs.num(); i++) {
-
+   for (vector<vert_loc>::size_type i=0; i<_vert_locs.size(); i++) {
       Wpt write_loc = _vert_locs[i].loc;
 
       if(_patch) 
@@ -405,8 +403,7 @@ DecalLineStroke::get_vertex_loc(TAGformat &d)
       s = _mesh->bf(f_index);
    }
 
-   _vert_locs += vert_loc(loc, s, pr);
-
+   _vert_locs.push_back(vert_loc(loc, s, pr));
 }
 
 
@@ -415,8 +412,7 @@ DecalLineStroke::put_vertex_locs(TAGformat &d) const
 {
    // write out the vert locs
 
-   for (int i=0; i<_vert_locs.num(); i++) {
-
+   for (vector<vert_loc>::size_type i=0; i<_vert_locs.size(); i++) {
       Wpt write_loc = _vert_locs[i].loc;
 
       // XXX - Keep things in mesh space unless the
@@ -431,14 +427,12 @@ DecalLineStroke::put_vertex_locs(TAGformat &d) const
 
       *d << write_loc;
       *d << _vert_locs[i].press;
-      *d << ((is_edge(_vert_locs[i].sim))?(((Bedge*)_vert_locs[i].sim)->index()):(-1));
-      *d << ((is_face(_vert_locs[i].sim))?(((Bface*)_vert_locs[i].sim)->index()):(-1));
+      *d << (is_edge(_vert_locs[i].sim) ? ((Bedge*)_vert_locs[i].sim)->index() : -1);
+      *d << (is_face(_vert_locs[i].sim) ? ((Bface*)_vert_locs[i].sim)->index() : -1);
       
       d.end_id();
    }
-
 }
-
 
 // Validate vertices fanatically!
 
@@ -454,50 +448,48 @@ DecalLineStroke::add_vert_loc(CWpt loc,
               << endl;
          return 0;
       }
-      _vert_locs += vert_loc(loc, s, press);
+      _vert_locs.push_back(vert_loc(loc, s, press));
       return 1;
    }
 
-   if (loc == _vert_locs.last().loc) {
+   if (loc == _vert_locs.back().loc) {
       cerr << "DecalLineStroke::add_vert_loc: " 
            << " attempting to add vert with duplicate loc, "
            << " returning" << endl;
       return 0;
    }
 
-   if (s == 0 &&
-       _vert_locs.last().sim == 0 ) {
+   if (s == 0 && _vert_locs.back().sim == 0 ) {
       cerr << "DecalLineStroke::add_vert_loc: " 
            << " attempting to add 2 bad verts in a row, "
            << " returning" << endl;
       return 0;
    }
 
-   if (_vert_locs.num() <= 2 &&
-       _vert_locs.last().sim == 0 &&
-       _vert_locs[_vert_locs.num() - 2].loc == loc ) {
+   if (_vert_locs.size() <= 2 &&
+       _vert_locs.back().sim == 0 &&
+       _vert_locs[_vert_locs.size() - 2].loc == loc ) {
       cerr << "DecalLineStroke::add_vert_loc: " 
            << " attempting to add duplicate vert after bad vert "
            << " returning" << endl;
       return 0;
    }
 
-   if(is_edge(s) &&
-      is_edge(_vert_locs.last().sim)) {
+   if (is_edge(s) &&
+       is_edge(_vert_locs.back().sim)) {
       //cerr << "sims both edges" << endl;
-      if (s == _vert_locs.last().sim) {
+      if (s == _vert_locs.back().sim) {
          cerr << "DecalLineStroke::add_vert_loc: " 
               << "adding consecutive verts on same edge, returning" 
               << endl;
          return 0;
       }
 
-      Bface* f = ((Bedge*)s)->lookup_face((Bedge*)_vert_locs.last().sim);
+      Bface* f = ((Bedge*)s)->lookup_face((Bedge*)_vert_locs.back().sim);
 
       if (f) {
          //cerr << "looked up face successfully" << endl;
-      }
-      else {
+      } else {
          cerr << "DecalLineStroke::add_vert_loc: " 
               << "consecutive verts on edges don't share face, returning" 
               << endl;
@@ -505,10 +497,10 @@ DecalLineStroke::add_vert_loc(CWpt loc,
       }
    }
 
-   if(is_face(s) &&
-      is_face(_vert_locs.last().sim)) {
+   if (is_face(s) &&
+       is_face(_vert_locs.back().sim)) {
       //cerr << "sims both faces" << endl;
-      if (s != _vert_locs.last().sim) {
+      if (s != _vert_locs.back().sim) {
          cerr << "DecalLineStroke::add_vert_loc: " 
               << "adding consecutive verts on different faces, returning" 
               << endl;
@@ -516,12 +508,10 @@ DecalLineStroke::add_vert_loc(CWpt loc,
       }
    }
    
-   _vert_locs += vert_loc(loc, s, press);
+   _vert_locs.push_back(vert_loc(loc, s, press));
 
    return 1;
 }
-
-
 
 BaseStrokeVertex*
 DecalLineStroke::refine_vert(int i, bool left)
@@ -531,8 +521,6 @@ DecalLineStroke::refine_vert(int i, bool left)
 
    return BaseStroke::refine_vert(i, left);
 }
-
-
 
 void
 DecalLineStroke::interpolate_vert(
@@ -556,7 +544,7 @@ DecalLineStroke::interpolate_vert(
 void                
 DecalLineStroke::xform_locations(CWtransf& t)
 {
-   for ( int i=0; i < _vert_locs.num(); i++ ) {
+   for ( vector<vert_loc>::size_type i=0; i < _vert_locs.size(); i++ ) {
       _vert_locs[i].loc = t * _vert_locs[i].loc;
    }
 }

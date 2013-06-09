@@ -1266,7 +1266,7 @@ get_offsets(
             continue;
          }
 
-         for (int k=0; k<os->num(); k++) (*ret) += (*os)[k];
+         for (vector<BaseStrokeOffset>::size_type k=0; k<os->size(); k++) ret->push_back((*os)[k]);
 
          if (!ret->get_pix_len()) ret->set_pix_len(os->get_pix_len());
       }
@@ -1323,29 +1323,24 @@ get_offsets(
                      cur_o._type = BaseStrokeOffset::OFFSET_TYPE_MIDDLE;
                   }
 
-                  (*ret) += cur_o;         
+                  ret->push_back(cur_o);
                }
                prev_o = cur_o;
             }
 
-            if (ret->last()._type == BaseStrokeOffset::OFFSET_TYPE_MIDDLE)
-            {
-               ret->last()._type = BaseStrokeOffset::OFFSET_TYPE_END;
-            }
+            if (ret->back()._type == BaseStrokeOffset::OFFSET_TYPE_MIDDLE) {
+               ret->back()._type = BaseStrokeOffset::OFFSET_TYPE_END;
+
             //We skipped all the offets except the first one...
             //Add the last one back -- unless it's identical to the start...
-            else
-            {
-               assert(ret->last()._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN);
-               if (prev_o._pos - ret->last()._pos >= gEpsZeroMath)
-               {
+            } else {
+               assert(ret->back()._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN);
+               if (prev_o._pos - ret->back()._pos >= gEpsZeroMath) {
                   prev_o._type = BaseStrokeOffset::OFFSET_TYPE_END;
-                  (*ret) += prev_o;         
-               }
-               else
-               {
+                  ret->push_back(prev_o);
+               } else {
                   cerr << "LinePen::get_offsets - WARNING! NEGLIGABLE length baseline...\n";
-                  ret->pop();
+                  ret->pop_back();
                }
             }
          }
@@ -1353,8 +1348,7 @@ get_offsets(
       }
    }
 
-   if (ret->num() == 0)
-   {
+   if (ret->empty()) {
       cerr << "LinePen::get_offsets - WARNING!! No offets generated.\n";
       ret = NULL;
    }
@@ -1387,7 +1381,7 @@ LinePen::button_edit_offset_apply()
       {
          easel_clear();
       }
-      assert(os->num() >= 2);
+      assert(os->size() >= 2);
 
       os->set_replicate(true);
       os->set_hangover(false);
@@ -1430,7 +1424,7 @@ LinePen::button_edit_offset_apply()
       {
          easel_clear();
       }
-      assert(os->num() >= 2);
+      assert(os->size() >= 2);
 
       os->set_replicate(false);
       os->set_hangover(true);
@@ -2127,9 +2121,7 @@ LinePen::easel_populate()
 
    GESTUREptr g = NULL;
 
-   for (int i=0; i<ol->num(); i++)
-   {
-      
+   for (vector<BaseStrokeOffset>::size_type i=0; i<ol->size(); i++) {
       CBaseStrokeOffset &o = (*ol)[i];
 
       if (o._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN)

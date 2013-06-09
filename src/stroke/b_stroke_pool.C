@@ -67,14 +67,13 @@ BStrokePool::tags() const
 STDdstream  &
 BStrokePool::decode(STDdstream &ds)
 {
-
-   assert(_prototypes.num() == 1);
+   assert(_prototypes.size() == 1);
 
    clear();
 
-   STDdstream  &ret =  DATA_ITEM::decode(ds);
+   STDdstream &ret = DATA_ITEM::decode(ds);
 
-   _num_strokes_used=_num;
+   _num_strokes_used = size();
   
    return ret;
 }
@@ -86,7 +85,6 @@ void
 BStrokePool::get_base_prototype(TAGformat &d)
 {
 //   cerr << "BStrokePool::get_base_prototype()\n";
-
    string str;
    *d >> str;
 
@@ -107,7 +105,7 @@ BStrokePool::get_base_prototype(TAGformat &d)
    _prototypes[0]->decode(*d);
 
    assert(_edit_proto == 0);
-   assert(_prototypes.num() == 1);
+   assert(_prototypes.size() == 1);
 
    set_prototype(_prototypes[0]);
 
@@ -139,24 +137,19 @@ BStrokePool::get_prototype(TAGformat &d)
 
    add_prototype();
 
-   if (_prototypes.last()->class_name() != str)
-   {
+   if (_prototypes.back()->class_name() != str) {
       cerr << "BStrokePool::get_prototype() - Loaded class name " 
-         << str  << " not a " << _prototypes.last()->class_name() << "!!!!\n";
-      _prototypes.pop();
+         << str  << " not a " << _prototypes.back()->class_name() << "!!!!\n";
+      _prototypes.pop_back();
       return;
-   }
-//
-   else
-   {
+   } else {
 //      cerr << "BStrokePool::get_prototype() - Loaded class name " 
-//         << str  << " MATCHES " << _prototypes.last()->class_name() << "!!!!\n";
+//         << str  << " MATCHES " << _prototypes.back()->class_name() << "!!!!\n";
    }
-//
 
    assert(_edit_proto == 0);
 
-   _edit_proto = _prototypes.num()-1;
+   _edit_proto = _prototypes.size()-1;
    
    _prototypes[_edit_proto]->decode(*d);
    
@@ -172,14 +165,12 @@ BStrokePool::get_prototype(TAGformat &d)
 void
 BStrokePool::put_prototypes(TAGformat &d) const
 {
-   if (_prototypes.num() > 1)
-   {
+   if (_prototypes.size() > 1) {
       cerr << "BStrokePool::put_prototypes() - Putting " 
-            << _prototypes.num()-1 << " additional prototypes.\n";
+            << _prototypes.size()-1 << " additional prototypes.\n";
    }
 
-   for (int i=1; i< _prototypes.num(); i++)
-   {
+   for (vector<OutlineStroke*>::size_type i=1; i< _prototypes.size(); i++) {
       d.id();
       _prototypes[i]->format(*d);
       d.end_id();
@@ -222,7 +213,7 @@ BStrokePool::get_stroke(TAGformat &d)
 
    s->decode(*d);
 
-   add(s);
+   push_back(s);
 }
 
 /////////////////////////////////////
@@ -231,19 +222,15 @@ BStrokePool::get_stroke(TAGformat &d)
 void
 BStrokePool::put_strokes(TAGformat &d) const
 {
-   if (_write_strokes)
-   {
+   if (_write_strokes) {
       //cerr << "BStrokePool::put_strokes() - Putting " << _num_strokes_used << " strokes.\n";
 
-      for (int i = 0; i < _num_strokes_used; i++) 
-      {
+      for (int i = 0; i < _num_strokes_used; i++) {
          d.id();
-         _array[i]->format(*d);
+         at(i)->format(*d);
          d.end_id();
       }
-   }
-   else
-   {
+   } else {
       //cerr << "BStrokePool::put_strokes() - NOT Putting strokes for this pool.\n" ;
    }
 }
@@ -255,7 +242,7 @@ BStrokePool::put_strokes(TAGformat &d) const
 
 BStrokePool::BStrokePool(OutlineStroke* proto)
 {   
-   _prototypes += proto;
+   _prototypes.push_back(proto);
    _edit_proto = 0;
    _draw_proto = 0;
    _lock_proto = false;
@@ -275,9 +262,10 @@ BStrokePool::~BStrokePool()
    // XXX -- safe to delete proto?
    //delete _prototypes;
 
-   int i = 0;
-   while (i < _num)
-      delete _array[i++];
+   while (!empty()) {
+      delete back();
+      pop_back();
+   }
 }
 
 //***These manage _draw_proto/_edit_proto issues
@@ -285,7 +273,7 @@ BStrokePool::~BStrokePool()
 void
 BStrokePool::set_lock_proto(bool l)
 {
-   bool apply = ( (l ? _edit_proto : _draw_proto) != get_active_proto());
+   bool apply = (l ? _edit_proto : _draw_proto) != get_active_proto();
 
    _lock_proto = l;
 
@@ -296,9 +284,9 @@ BStrokePool::set_lock_proto(bool l)
 void
 BStrokePool::set_edit_proto(int i)
 {
-   assert(i<_prototypes.num());
+   assert(i<(int)_prototypes.size());
 
-   bool apply = ( (_lock_proto ? i : _draw_proto) != get_active_proto());
+   bool apply = (_lock_proto ? i : _draw_proto) != get_active_proto();
 
    _edit_proto = i;
 
@@ -308,7 +296,7 @@ BStrokePool::set_edit_proto(int i)
 void
 BStrokePool::set_draw_proto(int i)
 {
-   assert(i<_prototypes.num());
+   assert(i<(int)_prototypes.size());
 
    bool apply = ( (_lock_proto ? _edit_proto : i) != get_active_proto());
 
@@ -320,10 +308,10 @@ BStrokePool::set_draw_proto(int i)
 void
 BStrokePool::apply_active_proto()
 {
-   assert(get_active_proto() < _prototypes.num());
+   assert(get_active_proto() < (int)_prototypes.size());
 
    OutlineStroke* s = _prototypes[get_active_proto()]; assert(s);
-   for (int i=0; i<_num; i++) _array[i]->copy(*s);
+   for (vector<OutlineStroke*>::size_type i=0; i<size(); i++) at(i)->copy(*s);
    mark_dirty();
 }
 
@@ -344,19 +332,16 @@ BStrokePool::set_prototype(OutlineStroke* p)
    //i.e. all protos have the period and mesh
    //size of the 1st proto. Okay, let a virtual
    //function handle this...
-   
 
    int retval = set_prototype_internal(p);
-
 
    if(_edit_proto == get_active_proto()) apply_active_proto();
 
    OutlineStroke* s = _prototypes[0];
    _cur_mesh_size = s->get_original_mesh_size();   
-   _cur_period = (s->get_offsets())?
-                     (s->get_offsets()->get_pix_len()):
-                     ((double)max(1.0f,(s->get_angle())));
-
+   _cur_period = s->get_offsets()?
+                     s->get_offsets()->get_pix_len():
+                     (double)max(1.0f,(s->get_angle()));
 
    return retval;
 }
@@ -364,7 +349,7 @@ BStrokePool::set_prototype(OutlineStroke* p)
 int
 BStrokePool::set_prototype_internal(OutlineStroke* p)
 {
-   assert(_prototypes.num() == 1);
+   assert(_prototypes.size() == 1);
 
    _prototypes[_edit_proto] = p;
 
@@ -391,31 +376,29 @@ BStrokePool::add_prototype()
 
    assert(_prototypes[_edit_proto]->get_patch() == s->get_patch());
 
-   _prototypes += s;
+   _prototypes.push_back(s);
 }
 
 void
 BStrokePool::del_prototype()
 {
-//   assert( _edit_proto > 0 );
-   assert(_prototypes.num()>1);
+   assert(_prototypes.size()>1);
 
    bool apply = _edit_proto == get_active_proto();
 
-   if (_edit_proto == _prototypes.num()-1)
-   {
-      delete _prototypes.pop();
+   if (_edit_proto == (int)_prototypes.size()-1) {
+      delete _prototypes.back();
+      _prototypes.pop_back();
       _edit_proto--;
 
-      if (_draw_proto == _prototypes.num())
+      if (_draw_proto == (int)_prototypes.size())
          _draw_proto--;
-   }
-   else
-   {
+   } else {
       delete _prototypes[_edit_proto];
-      _prototypes[_edit_proto] = _prototypes.pop();
+      _prototypes[_edit_proto] = _prototypes.back();
+      _prototypes.pop_back();
 
-      if (_draw_proto == _prototypes.num())
+      if (_draw_proto == (int)_prototypes.size())
          _draw_proto = _edit_proto;
    }
 
@@ -438,7 +421,7 @@ BStrokePool::stroke_at(int i)
    assert((i >= -1) && (i < _num_strokes_used));
 
    if (i == -1)   return NULL;
-   else           return _array[i];
+   else           return at(i);
 }
 
 OutlineStroke* 
@@ -449,16 +432,15 @@ BStrokePool::internal_stroke_at(int i)
 
    if (i == -1) return NULL;
 
-   // If i is an index to a slot that doesn'e exist,
+   // If i is an index to a slot that doesn't exist,
    // add slots and fill them with a copy of the prototype
    // until we make a slot with index i.
-   while (_num < i+1) 
-   {
-      add((OutlineStroke*)(get_active_prototype()->copy()));
-      _num_strokes_used = _num;
+   while ((int)size() < i+1) {
+      push_back((OutlineStroke*)(get_active_prototype()->copy()));
+      _num_strokes_used = size();
    }
 
-   return _array[i];
+   return at(i);
 }
 
 void
@@ -477,7 +459,7 @@ BStrokePool::draw_flat(CVIEWptr& v)
 
    proto->draw_start();
 
-   for (i = 0; i < _num_strokes_used; i++) _array[i]->draw(v);
+   for (i = 0; i < _num_strokes_used; i++) at(i)->draw(v);
   
    proto->draw_end();
 }
@@ -486,7 +468,7 @@ void
 BStrokePool::mark_dirty()
 {
    for (int i = 0; i < _num_strokes_used; i++) {
-      _array[i]->set_dirty();
+      at(i)->set_dirty();
    }   
 }
 
@@ -498,35 +480,34 @@ BStrokePool::mark_dirty()
 int 
 BStrokePool::remove_stroke(OutlineStroke* s)
 {
-   int i = get_index(s);
+   vector<OutlineStroke*>::iterator it;
+   it = std::find(begin(), end(), s);
 
-   assert(i != BAD_IND);
-   assert(i < _num_strokes_used);
+   assert(it != end());
+   assert((it - begin()) < _num_strokes_used);
 
    OutlineStroke *ss = get_selected_stroke();
 
-   if (s == ss)
-   {
+   if (s == ss) {
       ss = NULL;
    }
    internal_deselect();
 
-   OutlineStroke* tmp = _array[i];   assert(tmp);   tmp->clear();
-   _array[i] = _array[_num_strokes_used-1];
-   _array[_num_strokes_used-1] = tmp;
+   OutlineStroke* tmp = *it;   assert(tmp);   tmp->clear();
+   (*this)[it-begin()] = at(_num_strokes_used-1);
+   (*this)[_num_strokes_used-1] = tmp;
    _num_strokes_used--;
 
-   if (ss)
-   {
-      i = get_index(ss);
+   if (ss) {
+      it = std::find(begin(), end(), ss);
 
-      assert(i != BAD_IND);
-      assert(i < _num_strokes_used);
+      assert(it != end());
+      assert((it - begin()) < _num_strokes_used);
 
-      internal_select(i);
+      internal_select(it - begin());
    }
 
-   assert (_num_strokes_used <= _num);
+   assert(_num_strokes_used <= (int)size());
 
    return 1;
 }
@@ -591,7 +572,7 @@ BStrokePool::read_stream(istream &is)
 {
 //    cerr << "BStrokePool::read_stream()" << endl;
 
-   assert(_prototypes.num()==1);
+   assert(_prototypes.size()==1);
    
    // Must read in a prototype
    read_stroke(is, _prototypes[0]);
@@ -601,35 +582,30 @@ BStrokePool::read_stream(istream &is)
    int num_strokes; 
    is >> foo; 
    
-   if (foo == -1)
-   {
+   if (foo == -1) {
       is >> num_protos;
 
-      for (int i=1; i<num_protos; i++)
-      {
+      for (int i=1; i<num_protos; i++) {
          add_prototype();
          read_stroke(is, _prototypes[i]);
       }
-      assert(_prototypes.num()==num_protos);
+      assert((int)_prototypes.size()==num_protos);
 
       is >> num_strokes; 
-   }
-   else
-   {
+   } else {
       num_strokes = foo;
    }
 
    clear(); 
-   realloc(num_strokes);
+   reserve(num_strokes);
 
    // Must read in the specified number of strokes in the pool
-   for (int i = 0; i < num_strokes; i++) 
-   {
+   for (int i = 0; i < num_strokes; i++) {
       OutlineStroke* x = 0; 
       read_stroke(is, x);
-      if (x) add(x);
+      if (x) push_back(x);
    }
-   _num_strokes_used=_num;
+   _num_strokes_used = size();
    return is;
 }
 
@@ -640,37 +616,29 @@ BStrokePool::write_stream(ostream &os) const
 
    STDdstream d(&os);
 
-   assert(_prototypes.num()>0);
+   assert(_prototypes.size()>0);
    assert(_prototypes[0]);
    (_prototypes[0])->format(d);
 
    os << -1 ;
    os << endl;
-   os << _prototypes.num(); 
+   os << _prototypes.size();
 
-   if (_prototypes.num() > 1)
-   {
-      for (int i = 1; i < _prototypes.num(); i++) 
-      {
+   if (_prototypes.size() > 1) {
+      for (vector<OutlineStroke*>::size_type i = 1; i < _prototypes.size(); i++) {
          _prototypes[i]->format(d);
       }
-   }
-   else
-   {
+   } else {
       os << endl;
    }
    
-   if (_write_strokes)
-   {
+   if (_write_strokes) {
       os << _num_strokes_used << endl; 
 
-      for (int i = 0; i < _num_strokes_used; i++) 
-      {
-         _array[i]->format(d);
+      for (int i = 0; i < _num_strokes_used; i++) {
+         at(i)->format(d);
       }
-   }
-   else
-   {
+   } else {
       os << 0 << endl; 
    }
    
@@ -691,27 +659,22 @@ BStrokePool::pick_stroke(
    double         min_dist    = DBL_MAX;
    OutlineStroke* min_stroke  = 0;
 
-   for (int i=0; i<_num_strokes_used; i++) 
-   {
+   for (int i=0; i<_num_strokes_used; i++) {
       NDCpt nearest;
       double nearest_dist;
 
-      _array[i]->closest(p, nearest, nearest_dist);
+      at(i)->closest(p, nearest, nearest_dist);
 
-      if ((nearest_dist < min_dist) && (nearest_dist < ndc_thresh)) 
-      {
+      if (nearest_dist < min_dist && nearest_dist < ndc_thresh) {
          min_dist = nearest_dist;
-         min_stroke = _array[i];
+         min_stroke = at(i);
       }
    }
 
-   if (min_stroke) 
-   {
+   if (min_stroke) {
       dist = min_dist;
       return min_stroke;
-   }
-   else
-   {
+   } else {
       return 0;
    }
 }

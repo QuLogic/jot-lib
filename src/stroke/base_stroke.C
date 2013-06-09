@@ -168,7 +168,7 @@ BaseStrokeOffsetLIST::get_offset(TAGformat &d)
 
    BaseStrokeOffset o;
    o.decode(*d);
-   add(o);
+   push_back(o);
 }
 
 /////////////////////////////////////
@@ -202,20 +202,17 @@ void
 BaseStrokeOffsetLIST::get_all_offsets(TAGformat &d)
 {
    //err_mesg(ERR_LEV_SPAM, "BaseStrokeOffsetLIST::get_all_offsets()");
-   
-   int i;
-
-   ARRAY<BaseStrokeOffset> os;
+   vector<BaseStrokeOffset>::size_type i;
+   vector<BaseStrokeOffset> os;
 
    *d >> os;
 
-   for (i=0; i<os.num(); i++)
-   {
-      add(os[i]);
+   for (i=0; i<os.size(); i++) {
+      push_back(os[i]);
    }
 }
 
-//This implements operator>> to make ARRAY::operator>> work...
+//This implements operator>> to make vector::operator>> work...
 
 STDdstream  &operator>>(STDdstream &ds, BaseStrokeOffset &o)
 {
@@ -245,19 +242,16 @@ void
 BaseStrokeOffsetLIST::put_all_offsets(TAGformat &d) const
 {
    //err_mesg(ERR_LEV_SPAM, "BaseStrokeOffsetLIST::put_all_offsets()");
-   int i;
-   
-   ARRAY<BaseStrokeOffset> os;
+   vector<BaseStrokeOffset>::size_type i;
+   vector<BaseStrokeOffset> os;
 
-   for (i=0; i<num(); i++)
-   {
-      os += ((*this)[i]);
+   for (i=0; i<size(); i++) {
+      os.push_back((*this)[i]);
    }
 
    d.id();
    *d << os;
    d.end_id();
-
 }
 
 /////////////////////////////////////
@@ -275,10 +269,10 @@ BaseStrokeOffsetLIST::copy(CBaseStrokeOffsetLIST& o)
    _hangover =    o._hangover;
    _manual_t =    o._manual_t;
    //Copy the array of offsets
-   for (int i=0; i<o.num(); i++) 
-      add(o[i]);
-
+   for (size_t i=0; i<o.size(); i++)
+      push_back(o[i]);
 }
+
 /////////////////////////////////////
 // fetch
 /////////////////////////////////////
@@ -286,9 +280,8 @@ void
 BaseStrokeOffsetLIST::fetch(int i, BaseStrokeOffset& o) 
 {
    // XXX - We Should cache this stuff
-   if (!_replicate)
-   {
-      o = _array[i];
+   if (!_replicate) {
+      o = at(i);
       return;
    }
 
@@ -297,23 +290,20 @@ BaseStrokeOffsetLIST::fetch(int i, BaseStrokeOffset& o)
    // offset number i between 0 and fetch num.
 
    //assert(i >= 0 && i < fetch_num());
-   assert(_num > 0);
+   assert(size() > 0);
 
    //Grab the right offset
-   o = _array[i % _num];
+   o = at(i % size());
 
    //Now adjust it's t value appropriately
-   if (!_manual_t)
-   {
+   if (!_manual_t) {
       double frac = _fetch_stretch * _pix_len / _fetch_len;
 
       // integer division, drop remainder
-      o._pos += (double)((int)(i / _num)) - _fetch_phase; 
+      o._pos += (double)((int)(i / size())) - _fetch_phase;
       o._pos *= frac;
-   }
-   else
-   {
-      o._pos += floor(_fetch_lower_t-_fetch_phase) + ((int)(i / _num)) + _fetch_phase;
+   } else {
+      o._pos += floor(_fetch_lower_t-_fetch_phase) + ((int)(i / size())) + _fetch_phase;
    }
 }
 
@@ -324,12 +314,10 @@ int
 BaseStrokeOffsetLIST::fetch_num()  
 {
    //XXX - We should cache this stuff
-
    if (!_replicate)
-      return num();
+      return size();
 
-   if (!_manual_t)
-   {
+   if (!_manual_t) {
       assert(_pix_len);
       assert(_fetch_len);
       assert(_fetch_stretch);
@@ -340,12 +328,9 @@ BaseStrokeOffsetLIST::fetch_num()
 
       if (_fetch_phase) factor++;
 
-      return num()*factor;
-   }
-   else
-   {
-      //return num()*(int)fabs(floor(_fetch_lower_t) - ceil(_fetch_upper_t));
-      return num()*(int)fabs(floor(_fetch_lower_t-_fetch_phase) - 
+      return size()*factor;
+   } else {
+      return size()*(int)fabs(floor(_fetch_lower_t-_fetch_phase) -
                               ceil(_fetch_upper_t-_fetch_phase)   );
    }
 }
@@ -356,46 +341,37 @@ BaseStrokeOffsetLIST::fetch_num()
 void
 BaseStrokeOffsetLIST::get_at_t(double t, BaseStrokeOffset& o) const
 { 
-
    // A hack method that'll likely vanish one day.
    // Interpolates and returns the offset
    // at t, assuming that offsets range in t
    // from 0 to 1 without breaks or doubling
    // back.
 
-   assert(num() > 1);
+   assert(size() > 1);
    assert(t >= 0.0);
    assert(t <= 1.0);
-   assert(first()._pos == 0.0);
-   assert(last()._pos  == 1.0);
-   assert(first()._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN);
-   assert(last()._type  == BaseStrokeOffset::OFFSET_TYPE_END);
+   assert(front()._pos == 0.0);
+   assert(back()._pos  == 1.0);
+   assert(front()._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN);
+   assert(back()._type  == BaseStrokeOffset::OFFSET_TYPE_END);
    
-   if (t == 0.0)
-   {
-      o = first();
-   }
-   else if (t == 1.0)
-   {
-      o = last();
-   }
-   else
-   {
+   if (t == 0.0) {
+      o = front();
+   } else if (t == 1.0) {
+      o = back();
+   } else {
       int i=1;
       while (t > (*this)[i]._pos) i++;
 
-      BaseStrokeOffset &oi_1 = (*this)[i-1];
-      BaseStrokeOffset &oi   = (*this)[i];
+      const BaseStrokeOffset &oi_1 = (*this)[i-1];
+      const BaseStrokeOffset &oi   = (*this)[i];
       double frac = (t - oi_1._pos)/(oi._pos - oi_1._pos);
 
       o._pos = t;
       o._len =    oi_1._len *    (1.0 - frac) +    oi._len *   (frac);
       o._press =  oi_1._press *  (1.0 - frac) +    oi._press * (frac);
       o._type = BaseStrokeOffset::OFFSET_TYPE_MIDDLE;
-
    }
-
-
 }
 
 
@@ -1356,52 +1332,42 @@ BaseStroke::compute_vertex_arrays()
    UVpt uv0(0.5, 0.0);
    UVpt uv1(0.5, 1.0);
 
-   if (!_repair)
-   {
-      for (int i=0; i < _draw_verts.num(); i++) 
-      {
+   if (!_repair) {
+      for (int i=0; i < _draw_verts.num(); i++) {
          const BaseStrokeVertex& v = _draw_verts[i];
          const NDCZvec bar(v._dir * (v._width * w));
          col.set(a * v._alpha);
       
          const bool transition = (v._vis_state == BaseStrokeVertex::VIS_STATE_TRANSITION);
-         if ((transition) && (v._trans_type == BaseStrokeVertex::TRANS_VISIBLE))
-         {
+         if (transition && v._trans_type == BaseStrokeVertex::TRANS_VISIBLE) {
             count = 0;
          }
 
-         _array_color.add(col);
-         _array_color.add(col);
-         if (_tex)
-         {
+         _array_color.push_back(col);
+         _array_color.push_back(col);
+         if (_tex) {
             // XXX - If no offsets, but there's an angle (period)
             // then do 2d texturing... Optimize this...
-            if (_angle && (!_offsets))
-            {
+            if (_angle && !_offsets) {
                uv1[0] = uv0[0] = v._t + _offset_phase;
             }
-            _array_tex_0.add(uv0);
-            _array_tex_0.add(uv1);
+            _array_tex_0.push_back(uv0);
+            _array_tex_0.push_back(uv1);
+         } else {
+            _array_i0.push_back(2*i);
+            _array_i1.push_back(2*i+1);
          }
-         else
-         {
-            _array_i0.add(2*i);
-            _array_i1.add(2*i+1);
-         }
-         _array_verts.add(v._loc + bar);
-         _array_verts.add(v._loc - bar);
+         _array_verts.push_back(v._loc + bar);
+         _array_verts.push_back(v._loc - bar);
 
          count += 2;
-         if ((transition) && (v._trans_type == BaseStrokeVertex::TRANS_CLIPPED))
-         {
-            _array_counts.add(count);
+         if (transition && v._trans_type == BaseStrokeVertex::TRANS_CLIPPED) {
+            _array_counts.push_back(count);
             _array_counts_total += count;
          }
       }
-   }
-   else
-   {
 
+   } else {
       NDCvec   oldd;
       NDCZpt   oldv;
       NDCZpt   oldtop;
@@ -1468,32 +1434,42 @@ BaseStroke::compute_vertex_arrays()
          }
 
          
-         if (!swap)
-         {
-                           _array_color.add(col); _array_color.add(col);
-            if (_tex)   {  if (_angle && (!_offsets)) uv1[0] = uv0[0] = v._t; 
-                           _array_tex_0.add(uv0); _array_tex_0.add(uv1);      }
-            else        {     _array_i0.add(2*i);  _array_i1.add(2*i+1);      }
-                           _array_verts.add(top); _array_verts.add(bot);
-         }
-         else
-         {
-                           _array_color.add(col);  _array_color.add(col);
-            if (_tex)   {  if (_angle && (!_offsets)) uv1[0] = uv0[0] = v._t;
-                           _array_tex_0.add(uv0);  _array_tex_0.add(uv1);     }
-            else        {     _array_i0.add(2*i);     _array_i1.add(2*i+1);   }
-                           _array_verts.add(bot);  _array_verts.add(top);
+         if (!swap) {
+            _array_color.push_back(col);
+            _array_color.push_back(col);
+            if (_tex) {
+               if (_angle && !_offsets)
+                  uv1[0] = uv0[0] = v._t;
+               _array_tex_0.push_back(uv0);
+               _array_tex_0.push_back(uv1);
+            } else {
+               _array_i0.push_back(2*i);
+               _array_i1.push_back(2*i+1);
+            }
+            _array_verts.push_back(top);
+            _array_verts.push_back(bot);
+         } else {
+            _array_color.push_back(col);
+            _array_color.push_back(col);
+            if (_tex) {
+               if (_angle && !_offsets)
+                  uv1[0] = uv0[0] = v._t;
+               _array_tex_0.push_back(uv0);
+               _array_tex_0.push_back(uv1);
+            } else {
+               _array_i0.push_back(2*i);
+               _array_i1.push_back(2*i+1);
+            }
+            _array_verts.push_back(bot);
+            _array_verts.push_back(top);
          }
 
          count += 2;
 
-         if ((transition) && (v._trans_type == BaseStrokeVertex::TRANS_CLIPPED))
-         {
-            _array_counts.add(count);
+         if (transition && v._trans_type == BaseStrokeVertex::TRANS_CLIPPED) {
+            _array_counts.push_back(count);
             _array_counts_total += count;
-         }
-         else
-         {
+         } else {
             oldd = d;
             oldv = ve;
             oldtop = top;
@@ -1501,7 +1477,6 @@ BaseStroke::compute_vertex_arrays()
          }
       }
    }
-
 }
 
 /////////////////////////////////////
@@ -1568,30 +1543,27 @@ BaseStroke::draw_body()
 {
    double a = _alpha * ((_width < 2.0)?(_width*_width/4.0):1.0);
 
-   int start,i;
+   size_t start,i;
    GL_VIEW_PRINT_GL_ERRORS("[1] - ");
-   glVertexPointer(3, GL_DOUBLE, 0, _array_verts.array());
-   glColorPointer(4, GL_DOUBLE, 0, _array_color.array());
-   if (_tex) glTexCoordPointer(2, GL_DOUBLE, 0, _array_tex_0.array());
+   glVertexPointer(3, GL_DOUBLE, 0, &_array_verts[0]);
+   glColorPointer(4, GL_DOUBLE, 0, &_array_color[0]);
+   if (_tex) glTexCoordPointer(2, GL_DOUBLE, 0, &_array_tex_0[0]);
    GL_VIEW_PRINT_GL_ERRORS("[2] - ");
-   if (GLExtensions::gl_arb_multitexture_supported())
-   {
+   if (GLExtensions::gl_arb_multitexture_supported()) {
 #ifdef GL_ARB_multitexture
       glClientActiveTextureARB(GL_TEXTURE1_ARB); 
-      glTexCoordPointer(3, GL_DOUBLE, 0, _array_verts.array());
+      glTexCoordPointer(3, GL_DOUBLE, 0, &_array_verts[0]);
       glClientActiveTextureARB(GL_TEXTURE0_ARB); 
 #endif
    }
    GL_VIEW_PRINT_GL_ERRORS("[3] - ");
-   if (GLExtensions::gl_ext_compiled_vertex_array_supported())
-   {
+   if (GLExtensions::gl_ext_compiled_vertex_array_supported()) {
 #ifdef GL_EXT_compiled_vertex_array
       glLockArraysEXT(0,_array_counts_total);
 #endif
    }
    GL_VIEW_PRINT_GL_ERRORS("[4] - ");
-   if (!_tex )
-   {
+   if (!_tex ) {
       glEnable(GL_LINE_SMOOTH);
       // find the minimum supported line width:
       static GLfloat line_widths[2] = {0};
@@ -1604,15 +1576,13 @@ BaseStroke::draw_body()
       glLineWidth(max(GLfloat(a), line_widths[0]));
       GL_VIEW_PRINT_GL_ERRORS("[5] - ");
       start = 0;
-      for (i=0; i< _array_counts.num(); i++)
-      {
-         glDrawElements(GL_LINE_STRIP, _array_counts[i]/2, GL_UNSIGNED_INT, &(_array_i0.array()[start]));
+      for (i=0; i< _array_counts.size(); i++) {
+         glDrawElements(GL_LINE_STRIP, _array_counts[i]/2, GL_UNSIGNED_INT, &_array_i0[start]);
          start += _array_counts[i]/2;
       }
       start = 0;
-      for (i=0; i< _array_counts.num(); i++)
-      {
-         glDrawElements(GL_LINE_STRIP, _array_counts[i]/2, GL_UNSIGNED_INT, &(_array_i1.array()[start]));
+      for (i=0; i< _array_counts.size(); i++) {
+         glDrawElements(GL_LINE_STRIP, _array_counts[i]/2, GL_UNSIGNED_INT, &_array_i1[start]);
          start += _array_counts[i]/2;
       }
       GL_VIEW_PRINT_GL_ERRORS("[6] - ");
@@ -1623,24 +1593,21 @@ BaseStroke::draw_body()
    // havoc when compiled arrays are used with paper... Don't
    // ask me why.  Maybe an NVidia bug (imagine that!).
    start = 0;
-   for (i=0; i< _array_counts.num(); i++)
-   {
+   for (i=0; i< _array_counts.size(); i++) {
       glDrawArrays(GL_QUAD_STRIP, start, _array_counts[i]);
       start += _array_counts[i];
    }
    GL_VIEW_PRINT_GL_ERRORS("[8] - ");
-   if (GLExtensions::gl_ext_compiled_vertex_array_supported())
-   {
+   if (GLExtensions::gl_ext_compiled_vertex_array_supported()) {
 #ifdef GL_EXT_compiled_vertex_array
       glUnlockArraysEXT();
 #endif
    }
    GL_VIEW_PRINT_GL_ERRORS("[9] - ");
    int ret;
-   ret = _array_counts_total - 2*_array_counts.num();
+   ret = _array_counts_total - 2*_array_counts.size();
    assert(ret>0);
    return ret;
-  
 }
 
 
@@ -1690,7 +1657,7 @@ BaseStroke::update()
 void
 BaseStroke::compute_length_l()
 {
-   static ARRAY<double> distances;    
+   static vector<double> distances;
 
    // Note, bad verts (_good=false) are 'placeholder' clipped verts
    // which *might* not have a valid _base_loc.  For instance,
@@ -1729,25 +1696,20 @@ BaseStroke::compute_length_l()
    else
       good_verts = 1;
 
+   distances.push_back(0.0);
 
-   distances += 0.0;    
-
-   for (i=1; i<_verts.num(); i++)
-   {
-
+   for (i=1; i<_verts.num(); i++) {
       this_vert = &(_verts[i]);
       this_vert->_vis_state = BaseStrokeVertex::VIS_STATE_VISIBLE;
-      if (this_vert->_good)
-      {
+      if (this_vert->_good) {
          good_verts++;
-         if (last_vert)
-         {
+         if (last_vert) {
             _ndc_length +=
                (this_vert->_base_loc - last_vert->_base_loc).planar_length();
          }
          last_vert = this_vert;
       }
-      distances += _ndc_length;
+      distances.push_back(_ndc_length);
    }
 
    //If there's only 1 'good' vert, then we'll have no
@@ -1760,8 +1722,8 @@ BaseStroke::compute_length_l()
    {
       _verts[i]._l = distances[i];
    }
-
 }
+
 /////////////////////////////////////
 // compute_t()
 /////////////////////////////////////
@@ -4578,30 +4540,26 @@ BaseStroke::generate_offsets(
 
       // Must enforce minimum t between successive offsets
       // (otherwise an assertion may fail in BaseStroke).
-      if (ol->empty() || fabs(o._pos - prev_o_pos) >= 0.001f) 
-      {
-         ol->add(o);
+      if (ol->empty() || fabs(o._pos - prev_o_pos) >= 0.001f) {
+         ol->push_back(o);
       }
 
       prev_o_pos = o._pos;
       prev_p = pts[j];
-
    }
 
-   if (ol->empty()) 
-   {
+   if (ol->empty()) {
       err_mesg(ERR_LEV_WARN, "BaseStroke::generate_offsets() - No offsets generated! Skipping.");
       return 0;
    }
 
-   if (ol->num() < 2) 
-   {
+   if (ol->size() < 2) {
       err_mesg(ERR_LEV_WARN, "BaseStroke::generate_offsets() - Less than 2 offsets generated! Skipping.");
       return 0;
    }
 
    (*ol)[0]._type = BaseStrokeOffset::OFFSET_TYPE_BEGIN;
-   (*ol)[ol->num()-1]._type = BaseStrokeOffset::OFFSET_TYPE_END;
+   (*ol)[ol->size()-1]._type = BaseStrokeOffset::OFFSET_TYPE_END;
  
    ol->set_pix_len(_ndc_length/VIEW::pix_to_ndc_scale());
 

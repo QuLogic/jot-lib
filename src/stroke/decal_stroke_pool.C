@@ -40,7 +40,7 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
    bool have_untextured_strokes = false;
    int i;
    for (i = 0; i < _num_strokes_used; i++) {
-      if (_array[i]->get_texture())
+      if (at(i)->get_texture())
          have_textured_strokes = true;
       else
          have_untextured_strokes = true;
@@ -62,8 +62,8 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
 
       glDepthFunc(GL_ALWAYS);
       for (i = 0; i < _num_strokes_used; i++) {
-         if (!_array[i]->get_texture())
-            _array[i]->draw(v);
+         if (!at(i)->get_texture())
+            at(i)->draw(v);
       }
          
       glDepthFunc(GL_LESS);
@@ -83,12 +83,12 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
       // XXX -- this is a little inefficient.
 
       for (int j = 0; j < _num_strokes_used; j++) {
-         if (_array[j]->get_texture()) {
-            _array[j]->draw_start();
+         if (at(j)->get_texture()) {
+            at(j)->draw_start();
             glDepthFunc(GL_ALWAYS);
-            _array[j]->draw(v);
+            at(j)->draw(v);
             glDepthFunc(GL_LESS);
-            _array[j]->draw_end();
+            at(j)->draw_end();
          }
       }
    }

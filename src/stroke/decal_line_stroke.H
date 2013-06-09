@@ -22,6 +22,8 @@
 #include "stroke/outline_stroke.H"
 #include "mlib/points.H"
 
+#include <vector>
+
 class Bsimplex;
 class BMESH;
 class Patch;
@@ -84,7 +86,7 @@ class DecalLineStroke : public OutlineStroke {
    
    class vert_loc {
     public:
-      vert_loc() {}  // need this to instantiate ARRAY<vert_loc>
+      vert_loc() {}  // need this to instantiate vector<vert_loc>
       vert_loc(mlib::CWpt pt, const Bsimplex* s=0, double pr = 1.0): 
          loc(pt), sim(s), press(pr) {}
     public:
@@ -101,7 +103,7 @@ class DecalLineStroke : public OutlineStroke {
 
  protected:
 
-   ARRAY<vert_loc>  _vert_locs;
+   vector<vert_loc> _vert_locs;
 
    // XXX hack for serialization
    static BMESH *_mesh;
@@ -136,9 +138,9 @@ class DecalLineStroke : public OutlineStroke {
                       const Bsimplex* s=0, 
                       double press = 1.0);
 
-   int   num_vert_locs() { return _vert_locs.num(); }
+   int   num_vert_locs() { return _vert_locs.size(); }
 
-   CARRAY<vert_loc>&  get_vert_locs() {
+   const vector<vert_loc>& get_vert_locs() {
       return _vert_locs;
    }
 

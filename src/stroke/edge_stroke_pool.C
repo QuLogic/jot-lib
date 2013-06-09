@@ -21,6 +21,8 @@
 #include "mesh/bmesh.H"
 #include "std/config.H"
 
+#include <iterator>
+
 using mlib::Point2i;
 
  /*****************************************************************
@@ -83,12 +85,11 @@ EdgeStrokePool::get_edge_strip(TAGformat &d)
 {
    assert(_mesh);
 
-   ARRAY<Point2i> edge_strip;
+   vector<Point2i> edge_strip;
    *d >> edge_strip;
 
-   for (int i=0; i<edge_strip.num(); i++)
+   for (vector<Point2i>::size_type i=0; i<edge_strip.size(); i++)
       add_to_strip(_mesh->bv(edge_strip[i][0]), _mesh->be(edge_strip[i][1]));
-
 }
 
 /////////////////////////////////////
@@ -98,7 +99,7 @@ EdgeStrokePool::get_edge_strip(TAGformat &d)
 void
 EdgeStrokePool::put_edge_strip(TAGformat &d) const
 {
-   ARRAY<Point2i> edge_strip;
+   vector<Point2i> edge_strip;
 
    CARRAY<Bvert*> &verts = _strip.verts();
    CARRAY<Bedge*> &edges = _strip.edges();
@@ -106,41 +107,13 @@ EdgeStrokePool::put_edge_strip(TAGformat &d) const
    assert(verts.num() == edges.num());
 
    for (int i=0; i<verts.num(); i++) 
-      edge_strip += Point2i(verts[i]->index(),edges[i]->index());
+      edge_strip.push_back(Point2i(verts[i]->index(),edges[i]->index()));
 
    d.id();
    *d << edge_strip;
    d.end_id();
 
 }
-
-/*
-
-ostream &
-EdgeStrokePool::write_stream(ostream &os) const 
-{   
-   CARRAY<Bvert*> &verts = _strip.verts();
-   CARRAY<Bedge*> &edges = _strip.edges();
-   ARRAY<int> vert_inds;
-   ARRAY<int> edge_inds;
-   int i;
-   assert(verts.num() == edges.num());
-   for (i =0;i < verts.num(); i++) {
-      vert_inds += verts[i]->index();
-      edge_inds += edges[i]->index();
-   }
-
-
-   os << vert_inds << edge_inds;
-         
-   return os;
-}
-*/
-
-
-
-
-
 
 void
 EdgeStrokePool::draw_flat(CVIEWptr& v) {
@@ -164,12 +137,11 @@ EdgeStrokePool::draw_flat(CVIEWptr& v) {
    int i;
    for (i = 0; i < _num_strokes_used; i++) 
    {
-      if (_array[i]->get_texture()) have_textured_strokes = true;
-      else                          have_untextured_strokes = true;
+      if (at(i)->get_texture()) have_textured_strokes = true;
+      else                      have_untextured_strokes = true;
    }
 
-   if (have_untextured_strokes) 
-   {
+   if (have_untextured_strokes) {
       // If proto has a texture, temporarily unset the texture so it
       // calls draw_start() appropriately for untextured strokes.
 
@@ -182,29 +154,25 @@ EdgeStrokePool::draw_flat(CVIEWptr& v) {
 
       glDepthFunc(GL_ALWAYS);
       for (i = 0; i < _num_strokes_used; i++) 
-         if (!_array[i]->get_texture()) _array[i]->draw(v);
+         if (!at(i)->get_texture()) at(i)->draw(v);
       glDepthFunc(GL_LESS);
 
       prot->draw_end();
 
       // If we saved the proto's texture, reset it now.
       if (proto_tex) prot->set_texture(proto_tex, proto_tex_file);
-
    }
    
-   if (have_textured_strokes) 
-   {
+   if (have_textured_strokes) {
       // Have each textured stroke call its own draw_begin().
       // XXX -- this is a little inefficient.
-      for (int j = 0; j < _num_strokes_used; j++) 
-      {
-         if (_array[j]->get_texture()) 
-         {
-            _array[j]->draw_start();
+      for (int j = 0; j < _num_strokes_used; j++) {
+         if (at(j)->get_texture()) {
+            at(j)->draw_start();
             glDepthFunc(GL_ALWAYS);
-            _array[j]->draw(v);
+            at(j)->draw(v);
             glDepthFunc(GL_LESS);
-            _array[j]->draw_end();
+            at(j)->draw_end();
          }
       }
    }
@@ -232,9 +200,9 @@ EdgeStrokePool::~EdgeStrokePool()
    }
 
    i = 0;
-   while (i < _num) {
-      assert( _array[i]->is_of_type(EdgeStroke::static_name()));
-      ((EdgeStroke*)_array[i++])->clear_simplex_data();
+   while (i < (int)size()) {
+      assert(at(i)->is_of_type(EdgeStroke::static_name()));
+      ((EdgeStroke*)at(i++))->clear_simplex_data();
    }
 }
 
@@ -244,12 +212,12 @@ void EdgeStrokePool::set_stroke_strips()
    assert(_draw_proto == 0);
 
    assert(get_prototype());
-   assert(get_prototype()->is_of_type(EdgeStroke::static_name()));  
+   assert(get_prototype()->is_of_type(EdgeStroke::static_name()));
    ((EdgeStroke*)get_prototype())->set_edge_strip(&_strip);
  
-   for (int i = 0; i < _num; i++) {
-      assert(_array[i]->is_of_type(EdgeStroke::static_name()));   
-      ((EdgeStroke*)_array[i])->set_edge_strip(&_strip);
+   for (vector<BaseStrokeOffset>::size_type i = 0; i < size(); i++) {
+      assert(at(i)->is_of_type(EdgeStroke::static_name()));
+      ((EdgeStroke*)at(i))->set_edge_strip(&_strip);
    }
 }
 
@@ -317,40 +285,34 @@ EdgeStrokePool::verify_offsets()
    cerr << "verifying offsets" << endl;
 
    int i=0;
-   int j=0;
+   vector<BaseStrokeOffset>::size_type j=0;
 
    for (i=0; i < _num_strokes_used; i++) {
       // see if any stroke has all 0 pressures in offsets
       BaseStrokeOffsetLISTptr o = 0;
 
-      if(_array[i]->get_offsets())
-         o = _array[i]->get_offsets();
-      else
+      o = at(i)->get_offsets();
+      if (!o)
          continue;
 
       bool good = false;
 
-      for (j=0; j < o->num(); j++) {
-         if((*o)[j]._press > 0.0) {
+      for (j=0; j < o->size(); j++) {
+         if ((*o)[j]._press > 0.0) {
             good = true;
             break;
          }
       }
        
-      if(!good) {
+      if (!good) {
          cerr << "resetting pressures" << endl;
          // set all pressures to 1.0
-         for (j=0; j < o->num(); j++) {
+         for (j=0; j < o->size(); j++) {
             (*o)[j]._press = 1.0;
          }
       }
    }
 }
-
-
-
-
-
 
 istream &
 EdgeStrokePool::read_stream(istream &is)        
@@ -363,11 +325,28 @@ EdgeStrokePool::read_stream(istream &is)
    if (fix_offsets) 
       verify_offsets();
 
-   ARRAY<int> vert_inds;
-   ARRAY<int> edge_inds;
-   is >> vert_inds >> edge_inds;
+   vector<int> vert_inds;
+   vector<int> edge_inds;
+   vector<int>::size_type i, len;
+
+   is >> len;
+   vert_inds.reserve(len);
+   for (i = 0; i < len; i++) {
+      int i;
+      is >> i;
+      vert_inds.push_back(i);
+   }
+
+   is >> len;
+   edge_inds.reserve(len);
+   for (i = 0; i < len; i++) {
+      int i;
+      is >> i;
+      edge_inds.push_back(i);
+   }
+
    if (_mesh) {
-      for (int i =0; i < vert_inds.num(); i++) {
+      for (i = 0; i < vert_inds.size(); i++) {
          add_to_strip(_mesh->bv(vert_inds[i]), _mesh->be(edge_inds[i]));
       }
    } else {
@@ -385,17 +364,21 @@ EdgeStrokePool::write_stream(ostream &os) const
 
    CARRAY<Bvert*> &verts = _strip.verts();
    CARRAY<Bedge*> &edges = _strip.edges();
-   ARRAY<int> vert_inds;
-   ARRAY<int> edge_inds;
+   vector<int> vert_inds;
+   vector<int> edge_inds;
    int i;
    assert(verts.num() == edges.num());
-   for (i =0;i < verts.num(); i++) {
-      vert_inds += verts[i]->index();
-      edge_inds += edges[i]->index();
+   for (i = 0; i < verts.num(); i++) {
+      vert_inds.push_back(verts[i]->index());
+      edge_inds.push_back(edges[i]->index());
    }
    //XXX These endl's might cause trouble...
    os << endl;
-   os << vert_inds << edge_inds;
+   std::ostream_iterator<int> os_it(os);
+   os << vert_inds.size();
+   std::copy(vert_inds.begin(), vert_inds.end(), os_it);
+   os << edge_inds.size();
+   std::copy(edge_inds.begin(), edge_inds.end(), os_it);
    os << endl;
          
    return os;

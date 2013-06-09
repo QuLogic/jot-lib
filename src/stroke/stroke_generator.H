@@ -36,15 +36,17 @@
 
 #include "base_stroke.H"
 
+#include <vector>
+
 class StrokeGenerator {
  protected:
-   ARRAY<ARRAY<double> > _examples;
+   vector<vector<double> > _examples;
 
    // Indicates that the transition table needs to be regenerated.
    bool _regen_table;
 
    // The number of past samples to consider in generating the next sample.
-   int _window_size;
+   size_t _window_size;
 
    // Controls the pixel rate at which the examples are resampled.
    double _resample_rate;
@@ -64,9 +66,9 @@ class StrokeGenerator {
    unsigned short int _rand_state[3];
 
    // Transition table.
-   ARRAY<ARRAY<int> > _table;
-   ARRAY<int>         _start_states;
-   ARRAY<double>      _state_vals;
+   vector<vector<int> > _table;
+   vector<int>          _start_states;
+   vector<double>       _state_vals;
 
    // Regenerates the transition table.
    void regenerate_table();

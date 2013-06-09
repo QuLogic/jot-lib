@@ -22,6 +22,9 @@
 #define DECORATOR_STROKE_HEADER
 
 #include "view_stroke.H"
+
+#include <vector>
+
 class Bedge;
 
 class DecoratorStroke : public ViewStroke {
@@ -31,13 +34,13 @@ class DecoratorStroke : public ViewStroke {
    // index i of each array stores info for a vertex i
    // of the stroke. 
 
-   ARRAY<CBedge*> _edges;  // edges on which vertices are located
+   vector<CBedge*>   _edges;  // edges on which vertices are located
 
-   ARRAY<double>  _t_vals; // each entry gives distance along 
+   vector<double>    _t_vals; // each entry gives distance along
    // the corressponding edge at which  vertex 
    // is located (in object space)
 
-   ARRAY<mlib::Wpt>     _surface_pts; 
+   vector<mlib::Wpt> _surface_pts;
    // object space locations of vertices (this is convenient
    // but redundant info, as it's already given by _edges
    // and _t_vals above)
@@ -62,7 +65,7 @@ class DecoratorStroke : public ViewStroke {
    void  add_vert_loc(CBedge* edge, double t);
    int   num_verts() {return _surface_pts.num();}
    mlib::NDCZpt  getNDCZpt(int);
-   ARRAY<mlib::Wpt> surface_points() {return _surface_pts;}
+   vector<mlib::Wpt> surface_points() {return _surface_pts;}
 
    /* read and write methods */
    DEFINE_RTTI_METHODS2("DecoratorStroke", ViewStroke, DATA_ITEM *);

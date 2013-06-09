@@ -114,7 +114,7 @@ STDdstream  &operator>>(STDdstream &ds, BaseStrokeOffset &o);
 MAKE_PTR_BASEC(BaseStrokeOffsetLIST);
 
 class BaseStrokeOffsetLIST : public REFcounter,
-                             protected ARRAY<BaseStrokeOffset>, 
+                             protected vector<BaseStrokeOffset>,
                              public DATA_ITEM {
 
    /******** STATIC MEMBER VARIABLES ********/   
@@ -147,7 +147,7 @@ class BaseStrokeOffsetLIST : public REFcounter,
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
    BaseStrokeOffsetLIST(int num=0)  : 
-      ARRAY<BaseStrokeOffset>(num),
+      vector<BaseStrokeOffset>(),
       _hangover(true),
       _pix_len(0), 
       _replicate(false),
@@ -156,7 +156,7 @@ class BaseStrokeOffsetLIST : public REFcounter,
       _fetch_phase(0), 
       _fetch_stretch(1.0),
       _fetch_lower_t(0.0),
-      _fetch_upper_t(1.0) {}
+      _fetch_upper_t(1.0) { reserve(num); }
 
    virtual ~BaseStrokeOffsetLIST() {}
 
@@ -197,18 +197,20 @@ class BaseStrokeOffsetLIST : public REFcounter,
    //be used by unauthorized personel...
    void                 get_at_t(double t, BaseStrokeOffset& o) const;
 
-   /******** EXPOSED ARRAY<> METHODS ********/
+   /******** EXPOSED vector<> METHODS ********/
 
    // 'Real' array accessors
-   using ARRAY<BaseStrokeOffset>::num;
-   using ARRAY<BaseStrokeOffset>::empty;
-   using ARRAY<BaseStrokeOffset>::clear;
-   using ARRAY<BaseStrokeOffset>::add;
-   using ARRAY<BaseStrokeOffset>::operator[];
-   using ARRAY<BaseStrokeOffset>::operator+=;
-   using ARRAY<BaseStrokeOffset>::last;
-   using ARRAY<BaseStrokeOffset>::first;
-   using ARRAY<BaseStrokeOffset>::pop;
+   using vector<BaseStrokeOffset>::size;
+   using vector<BaseStrokeOffset>::empty;
+   using vector<BaseStrokeOffset>::clear;
+   using vector<BaseStrokeOffset>::push_back;
+   using vector<BaseStrokeOffset>::operator[];
+   using vector<BaseStrokeOffset>::insert;
+   using vector<BaseStrokeOffset>::front;
+   using vector<BaseStrokeOffset>::back;
+   using vector<BaseStrokeOffset>::begin;
+   using vector<BaseStrokeOffset>::end;
+   using vector<BaseStrokeOffset>::pop_back;
 
    // 'Fake' array accessors 
    void                 fetch(int i,BaseStrokeOffset& o);
@@ -908,12 +910,12 @@ class BaseStroke : public DATA_ITEM {
    /******** VERTEX ARRAYS ********/
  protected:
    
-   ARRAY<mlib::NDCZpt>        _array_verts;
-   ARRAY<mlib::UVpt>          _array_tex_0;
-   ARRAY<COL4>          _array_color;
-   ARRAY<unsigned int>  _array_i0;
-   ARRAY<unsigned int>  _array_i1;
-   ARRAY<int>           _array_counts;
+   vector<mlib::NDCZpt> _array_verts;
+   vector<mlib::UVpt>   _array_tex_0;
+   vector<COL4>         _array_color;
+   vector<unsigned int> _array_i0;
+   vector<unsigned int> _array_i1;
+   vector<int>          _array_counts;
    int                  _array_counts_total;
 
 
@@ -974,41 +976,43 @@ class BaseStroke : public DATA_ITEM {
 /*****************************************************************
  * BaseStrokeArray:
  *
- *      Convenience: ARRAY of BaseStrokes w/ helper methods.
+ *      Convenience: vector of BaseStrokes w/ helper methods.
  *
  *****************************************************************/
-class BaseStrokeArray : public ARRAY<BaseStroke*> {
+class BaseStrokeArray : public vector<BaseStroke*> {
  public:
 
    //******** MANAGERS ********
 
-   BaseStrokeArray(int n=0) : ARRAY<BaseStroke*>(n) {}
+   BaseStrokeArray(int n=0) : vector<BaseStroke*>() { reserve(n); }
 
    //******** CONVENIENCE ********
 
    void delete_all() {
-      while (!empty())
-         delete pop();
+      while (!empty()) {
+         delete back();
+         pop_back();
+      }
    }
    void clear_strokes() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->clear();
+      for (vector<BaseStroke*>::size_type i=0; i<size(); i++)
+         at(i)->clear();
    }
    void copy(CBaseStroke& proto) const {
-      for (int i=0; i<_num; i++)
-         _array[i]->copy(proto);
+      for (vector<BaseStroke*>::size_type i=0; i<size(); i++)
+         at(i)->copy(proto);
    }
    void set_offsets(CBaseStrokeOffsetLISTptr& offsets) const {
-      for (int i=0; i<_num; i++)
-         _array[i]->set_offsets(offsets);
+      for (vector<BaseStroke*>::size_type i=0; i<size(); i++)
+         at(i)->set_offsets(offsets);
    }
    int draw(CVIEWptr& v) const {
       int ret = 0;
       if (!empty()) {
-         _array[0]->draw_start();
-         for (int i=0; i<_num; i++)
-            ret += _array[i]->draw(v);
-         _array[0]->draw_end();
+         at(0)->draw_start();
+         for (vector<BaseStroke*>::size_type i=0; i<size(); i++)
+            ret += at(i)->draw(v);
+         at(0)->draw_end();
       }
       return ret;
    }

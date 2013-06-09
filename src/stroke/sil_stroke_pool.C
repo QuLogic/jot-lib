@@ -152,21 +152,16 @@ SilStrokePool::draw_flat(CVIEWptr& v)
 int
 SilStrokePool::set_prototype_internal(OutlineStroke* p)
 {
-
    double new_mesh_size = p->get_original_mesh_size();
-   double new_period = (p->get_offsets())?
-                           (p->get_offsets()->get_pix_len()):
-                           ((double)max(1.0f,(p->get_angle())));
-
+   double new_period = p->get_offsets() ?
+                           p->get_offsets()->get_pix_len() :
+                           (double)max(1.0f,(p->get_angle()));
 
    _prototypes[_edit_proto] = p;
 
-   if (_edit_proto == 0)
-   {
-      if ((_cur_mesh_size != new_mesh_size) || (_cur_period != new_period))
-      {
-         for (int i=1; i<_prototypes.num(); i++)
-         {
+   if (_edit_proto == 0) {
+      if (_cur_mesh_size != new_mesh_size || _cur_period != new_period) {
+         for (vector<OutlineStroke*>::size_type i=1; i<_prototypes.size(); i++) {
             _prototypes[i]->set_original_mesh_size(new_mesh_size);
             if (_prototypes[i]->get_offsets())
                _prototypes[i]->get_offsets()->set_pix_len(new_period);
@@ -174,11 +169,9 @@ SilStrokePool::set_prototype_internal(OutlineStroke* p)
                _prototypes[i]->set_angle((float)new_period);
          }
          return BSTROKEPOOL_SET_PROTOTYPE__NEEDS_FLUSH;
-      }
-      else
-      {
-         for (int i=1; i<_prototypes.num(); i++)
-         {
+
+      } else {
+         for (vector<OutlineStroke*>::size_type i=1; i<_prototypes.size(); i++) {
             assert(_prototypes[i]->get_original_mesh_size() == _cur_mesh_size);
             if (_prototypes[i]->get_offsets())
                assert(_prototypes[i]->get_offsets()->get_pix_len() == _cur_period);
@@ -188,11 +181,9 @@ SilStrokePool::set_prototype_internal(OutlineStroke* p)
 
          return 0;
       }
-   }
-   else
-   {
-      if ((_cur_mesh_size != new_mesh_size) || (_cur_period != new_period))
-      {
+
+   } else {
+      if (_cur_mesh_size != new_mesh_size || _cur_period != new_period) {
          p->set_original_mesh_size(_cur_mesh_size);
          if (p->get_offsets())
             p->get_offsets()->set_pix_len(_cur_period);
@@ -200,9 +191,7 @@ SilStrokePool::set_prototype_internal(OutlineStroke* p)
             p->set_angle((float)_cur_period);
 
          return BSTROKEPOOL_SET_PROTOTYPE__NEEDED_ADJUSTMENT;
-      }
-      else
-      {
+      } else {
          return 0;
       }
    }

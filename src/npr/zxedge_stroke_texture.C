@@ -2542,13 +2542,11 @@ ZXedgeStrokeTexture::ndcz_to_strokes()
    // Number of points visited for each one added to a stroke:
    int samp = sample_step();
 
-   int bnum = 0;  // index to current base stroke
+   size_t bnum = 0; // index to current base stroke
    NDCZpt last;   // last point added
    int cnt=0;     // count of points added
 
    int n = _sil_segs.num();
-
-
 
    bool started=false;
    for (int i=0 ; i<n ; i++) {
@@ -2558,13 +2556,13 @@ ZXedgeStrokeTexture::ndcz_to_strokes()
          if (!started ) {
             if ( _sil_segs[i].e() ) {
 
-               if ( bnum == _bstrokes.num() ) {
+               if (bnum == _bstrokes.size()) {
                   // No more old strokes to re-use;
                   // have to allocate a new one:
-                  _bstrokes.add( _prototype.copy() );
+                  _bstrokes.push_back(_prototype.copy());
                   _bstrokes[bnum]->set_offsets(_offsets);
                }
-               assert ( bnum < _bstrokes.num() );
+               assert(bnum < _bstrokes.size());
                // bstroke = _bstrokes.next();
                _bstrokes[bnum]->add
                ( _sil_segs[i].p() );

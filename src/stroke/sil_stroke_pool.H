@@ -105,9 +105,9 @@ class SilStrokePool : public BStrokePool {
       }
       else
       {
-         assert(_selected_stroke < _num);
-         assert(_array[_selected_stroke]->get_is_highlighted());
-         assert(_array[_selected_stroke]->get_overdraw());
+         assert(_selected_stroke < (int)size());
+         assert(at(_selected_stroke)->get_is_highlighted());
+         assert(at(_selected_stroke)->get_overdraw());
 
          assert(_selected_stroke_group_index_stamp == _selected_stroke_path_index_stamp);
 
@@ -116,8 +116,8 @@ class SilStrokePool : public BStrokePool {
          if (_group_index_stamp == _selected_stroke_group_index_stamp)
          {
             assert(_selected_stroke < _num_strokes_used);
-            assert(_selected_stroke_path_index == _array[_selected_stroke]->get_path_index());
-            assert(_selected_stroke_group_index == _array[_selected_stroke]->get_group_index());
+            assert(_selected_stroke_path_index == at(_selected_stroke)->get_path_index());
+            assert(_selected_stroke_group_index == at(_selected_stroke)->get_group_index());
             
             return false;
          }
@@ -131,11 +131,9 @@ class SilStrokePool : public BStrokePool {
                uint id = pl[pi]->groups()[si].id();
                
                int ind = -1;
-               for (int i=0; i<_num_strokes_used; i++)
-               {
-                  if (_array[i]->get_group_index() == id)
-                  {
-                     assert((_array[i]->get_path_index() == (uint)pi) && (ind == -1));
+               for (int i=0; i<_num_strokes_used; i++) {
+                  if (at(i)->get_group_index() == id) {
+                     assert(at(i)->get_path_index() == (uint)pi && ind == -1);
                      ind = i;
                   }
                }
@@ -165,12 +163,11 @@ class SilStrokePool : public BStrokePool {
  protected:   
    virtual void         internal_deselect()
    {
-      if (_selected_stroke > -1)
-      {
-         assert(_array[_selected_stroke]->get_is_highlighted());
-         assert(_array[_selected_stroke]->get_overdraw());
-         _array[_selected_stroke]->highlight(false);
-         _array[_selected_stroke]->set_overdraw(false);
+      if (_selected_stroke > -1) {
+         assert(at(_selected_stroke)->get_is_highlighted());
+         assert(at(_selected_stroke)->get_overdraw());
+         at(_selected_stroke)->highlight(false);
+         at(_selected_stroke)->set_overdraw(false);
       }
       _selected_stroke_path_index = 0;
       _selected_stroke_group_index = 0;
@@ -181,18 +178,15 @@ class SilStrokePool : public BStrokePool {
    virtual void         internal_select(int i)
    {
       _selected_stroke = i;
-      if (_selected_stroke > -1)
-      {
+      if (_selected_stroke > -1) {
          assert(_path_index_stamp == _group_index_stamp);
-         _selected_stroke_path_index = _array[_selected_stroke]->get_path_index();
-         _selected_stroke_group_index = _array[_selected_stroke]->get_group_index();
+         _selected_stroke_path_index = at(_selected_stroke)->get_path_index();
+         _selected_stroke_group_index = at(_selected_stroke)->get_group_index();
          _selected_stroke_path_index_stamp = _path_index_stamp;     
          _selected_stroke_group_index_stamp = _group_index_stamp;    
-         _array[_selected_stroke]->highlight(true);
-         _array[_selected_stroke]->set_overdraw(true);
-      }
-      else
-      {
+         at(_selected_stroke)->highlight(true);
+         at(_selected_stroke)->set_overdraw(true);
+      } else {
          _selected_stroke_path_index = 0;
          _selected_stroke_group_index = 0;
          _selected_stroke_path_index_stamp = 0;     
