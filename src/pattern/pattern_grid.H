@@ -37,6 +37,8 @@
 #include "geom/command.H"
 #include "mesh/uv_data.H"
 
+#include <vector>
+
 class GridTexture;
 class LightParams;   
    
@@ -45,17 +47,17 @@ class PatternGrid :  public DATA_ITEM {
  private:
    //******** MEMBERS VARIABLES ********
    Patch *           _patch;
-   ARRAY<QuadCell*>  _cells;       // Every time we asked to get cells
+   vector<QuadCell*> _cells;       // Every time we asked to get cells
                                    // we look on a the patch and get the cells
-   ARRAY<QuadCell*>  _ref_cells;   // Works similarly to _cells only stores
+   vector<QuadCell*> _ref_cells;   // Works similarly to _cells only stores
                                    // cells that indicate cells with reference
                                    // pattern also puts all the strokes in the 
                                    // cell into the right group
-   ARRAY<Cell_List>  _sorted_cells;// Each row has a cell with identical row/col
+   vector<Cell_List> _sorted_cells;// Each row has a cell with identical row/col
     
-   ARRAY<int>        _ref_groups;  // group numbers which are reference
+   vector<int>       _ref_groups;  // group numbers which are reference
    
-   ARRAY<Group_List> _group_list;  // Each row is a list of stroke lists
+   vector<Group_List>_group_list;  // Each row is a list of stroke lists
    
    GridTexture*      _grid_lines;  // Grid border lines, cnage color as meaning
                                    // of the cell changes: no cell, cell, ref cell
@@ -149,16 +151,15 @@ class PatternGrid :  public DATA_ITEM {
    
    void                 clear_cell_markings();     //ignores cells with strokes
    void                 set_all_cell_markings();
-   void                 set_unmarked(ARRAY<QuadCell*> list);
+   void                 set_unmarked(vector<QuadCell*> list);
 
-   
-   CARRAY<QuadCell*>    get_cells(Bface_list list);
-   CARRAY<QuadCell*>    get_cells(int group, CARRAY<QuadCell*>&);    
-   CARRAY<QuadCell*>&   get_cells();     // Looks on the mesh for current cells
-   CARRAY<QuadCell*>&   get_visible_cells();     // Looks on the mesh for current cells
-   CARRAY<QuadCell*>&   get_ref_cells(); // Looks on the mesh for current ref cells
+   const vector<QuadCell*>    get_cells(Bface_list list);
+   const vector<QuadCell*>    get_cells(int group, const vector<QuadCell*>&);
+   const vector<QuadCell*>&   get_cells();     // Looks on the mesh for current cells
+   const vector<QuadCell*>&   get_visible_cells();     // Looks on the mesh for current cells
+   const vector<QuadCell*>&   get_ref_cells(); // Looks on the mesh for current ref cells
      
-   CARRAY<Cell_List>&   get_sorted_cells();
+   const vector<Cell_List>&   get_sorted_cells();
    CBface*              get_ref_cell_face(QuadCell* current_cell,CBedge* edge);
    CBface*              get_ref_cell_face_random(QuadCell* current_cell,CBedge* edge);
    
@@ -171,11 +172,11 @@ class PatternGrid :  public DATA_ITEM {
    
    // Uses get_ref_2 to get the ref cell and then for every group gets a random
    // kind of the group if more then one exist   
-   ARRAY<Stroke_List*> get_ref_3(QuadCell* cell);  
+   vector<Stroke_List*> get_ref_3(QuadCell* cell);
    
    //********** STROKE STUFF **************
    Stroke_List*   get_similar_group(int group_id);
-   Stroke_List    get_strokes(CARRAY<QuadCell*>& cells);  
+   Stroke_List    get_strokes(const vector<QuadCell*>& cells);
    // simplified version of QuadCell::difference_to_cell,
    // picking a group of groups that produce smallest diff
    void           add_to_group_of_groups(Stroke_List* list);     
@@ -183,11 +184,11 @@ class PatternGrid :  public DATA_ITEM {
    bool       project_list(mlib::Wpt_list& wlProjList,const mlib::NDCpt_list& ndcpts);
    QuadCell * get_control_cell(mlib::CNDCZpt_list& ndczlScaledList);
    bool     add(mlib::CNDCpt_list &, 
-                const ARRAY<double>&nt, 
+                const vector<double>&nt, 
                 BaseStroke * proto,
                 double winding,
                 double straightness);
-   void     clip_to_patch(mlib::CNDCpt_list &pts, mlib::NDCpt_list &cpts, const ARRAY<double>&prl, ARRAY<double>&cprl );
+   void     clip_to_patch(mlib::CNDCpt_list &pts, mlib::NDCpt_list &cpts, const vector<double>&prl, vector<double>&cprl );
    //******** Ref. image convenience methods ********
    static Bface *  find_face_vis(mlib::CNDCpt& pt, mlib::Wpt &p);
 
@@ -205,7 +206,6 @@ class PatternGrid :  public DATA_ITEM {
    /******** DATA_ITEM METHODS ********/
    DEFINE_RTTI_METHODS2("PatternGrid", DATA_ITEM, CDATA_ITEM *);
    virtual DATA_ITEM *dup() const { return new PatternGrid; }
-  
 };
 
 /**********************************************************************
@@ -248,9 +248,8 @@ protected:
       uintptr_t ret = (uintptr_t)static_name().c_str();
       return ret;
     }
-
-
 };
+
 /*****************************************************************
  * DRAW_STROKE_CMD
  *
@@ -284,6 +283,7 @@ class DRAW_STROKE_CMD : public COMMAND {
    QuadCell*        _cell;
    Pattern3dStroke* _stroke;
 };
+
 /*****************************************************************
  * MAKE_CELL_CMD
  *

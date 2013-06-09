@@ -30,6 +30,7 @@
 #endif
 
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -90,17 +91,17 @@ PatternGrid::~PatternGrid()
 {   
    delete _grid_lines;
    get_cells();      
-   for (int k=0; k < _cells.num();k++){      
-      delete _cells[k];        
+   for (vector<QuadCell*>::size_type k=0; k < _cells.size(); k++) {
+      delete _cells[k];
    } 
-  
 }
+
 bool
 PatternGrid::is_ref_group(int group)
 {
    get_ref_groups();
-   for (int i=0; i < _ref_groups.num(); ++i){
-      if(group == _ref_groups[i])
+   for (vector<int>::size_type i=0; i < _ref_groups.size(); ++i) {
+      if (group == _ref_groups[i])
          return true;
    }
    return false;   
@@ -110,131 +111,144 @@ void
 PatternGrid::get_ref_groups()
 {
    get_ref_cells();
-   for(int i =0; i < _ref_cells.num(); ++i){
-       _ref_groups.add_uniquely(_ref_cells[i]->get_group_id());
+   set<int> unique;
+   for (vector<QuadCell*>::size_type i =0; i < _ref_cells.size(); ++i) {
+       pair<set<int>::iterator,bool> it;
+       it = unique.insert(_ref_cells[i]->get_group_id());
+       if (it.second)
+          _ref_groups.push_back(_ref_cells[i]->get_group_id());
    }      
-   
 }
 
 void
 PatternGrid::clear_cell_markings()
 {
     get_cells();
-    for (int k=0; k < _cells.num();k++){
-        if(_cells[k]->is_empty())
+    for (vector<QuadCell*>::size_type k=0; k < _cells.size(); k++) {
+        if (_cells[k]->is_empty())
            _cells[k]->set_unmarked();
     }
-    
 }
+
 void
 PatternGrid::set_all_cell_markings()
 {
     get_cells();
-    for (int k=0; k < _cells.num();k++){        
-           _cells[k]->set_marked();
+    for (vector<QuadCell*>::size_type k=0; k < _cells.size(); k++) {
+       _cells[k]->set_marked();
     }
-    
 }
 
 void
-PatternGrid::set_unmarked(ARRAY<QuadCell*> list)
+PatternGrid::set_unmarked(vector<QuadCell*> list)
 {
-    for (int k=0; k < list.num();k++){
+    for (vector<QuadCell*>::size_type k=0; k < list.size(); k++) {
         if(list[k]->is_empty())
            list[k]->set_unmarked();
     }
-
 }
 
-CARRAY<QuadCell*>
+const vector<QuadCell*>
 PatternGrid::get_cells(Bface_list list)
 {
-  ARRAY<QuadCell*> cells;
+   vector<QuadCell*> cells;
    for (int k=0; k < list.num();k++){
       CellData* cd = CellData::lookup(list[k], this);
       if(cd)
          cells.add_uniquely(cd->get_cell());
    }
    return cells;
-    
 }
 
-CARRAY<QuadCell*>
-PatternGrid::get_cells(int group, CARRAY<QuadCell*>& source)
+const vector<QuadCell*>
+PatternGrid::get_cells(int group, const vector<QuadCell*>& source)
 {
-    //get_cells();
-    
-    ARRAY<QuadCell*> cells;
+    vector<QuadCell*> cells;
 
-    for (int k=0; k < source.num();k++){
+    for (vector<QuadCell*>::size_type k=0; k < source.size(); k++) {
       if(source[k]->get_group_id() == group)
          cells.add_uniquely(source[k]);
     }   
-    
+
     return cells;
-    
 }
 
-CARRAY<QuadCell*>&
+const vector<QuadCell*>&
 PatternGrid::get_cells()
 {
-    if(_cells.num() > 0)
+    if (_cells.size() > 0)
        _cells.clear();
     Bface_list fs = _patch->faces().primary_faces();
 
-    for (int k=0; k < fs.num();k++){
+    set<QuadCell*> unique;
+    for (int k=0; k < fs.num(); k++) {
       CellData* cd = CellData::lookup(fs[k], this);
-      if(cd)
-         _cells.add_uniquely(cd->get_cell());
+      if (cd) {
+         pair<set<QuadCell*>::iterator,bool> it;
+         it = unique.insert(cd->get_cell());
+         if (it.second)
+            _cells.push_back(cd->get_cell());
+      }
     }
+
     return _cells; 
 }
 
-CARRAY<QuadCell*>&
+const vector<QuadCell*>&
 PatternGrid::get_visible_cells()
 {
-    if(_cells.num() > 0)
+    if (_cells.size() > 0)
        _cells.clear();
     Bface_list fs = _patch->faces().primary_faces();
 
-    for (int k=0; k < fs.num();k++){
-      CellData* cd = CellData::lookup(fs[k], this);
-      if(cd && cd->get_cell()->is_visible())
-         _cells.add_uniquely(cd->get_cell());
+    set<QuadCell*> unique;
+    for (int k=0; k < fs.num(); k++) {
+       CellData* cd = CellData::lookup(fs[k], this);
+       if (cd && cd->get_cell()->is_visible()) {
+          pair<set<QuadCell*>::iterator,bool> it;
+          it = unique.insert(cd->get_cell());
+          if (it.second)
+             _cells.push_back(cd->get_cell());
+       }
     }
+
     return _cells; 
 }
 
-
-CARRAY<QuadCell*>&
+const vector<QuadCell*>&
 PatternGrid::get_ref_cells()
 {
     get_cells();
    
-    if(_ref_cells.num() > 0)
+    if (_ref_cells.size() > 0)
        _ref_cells.clear();
 
-    for (int k=0; k < _cells.num();k++){
-      if(_cells[k]->is_ref())
-         _ref_cells.add_uniquely(_cells[k]);
+    set<QuadCell*> unique;
+    for (vector<QuadCell*>::size_type k=0; k < _cells.size(); k++) {
+       if (_cells[k]->is_ref()) {
+          pair<set<QuadCell*>::iterator,bool> it;
+          it = unique.insert(_cells[k]);
+          if (it.second)
+             _ref_cells.push_back(_cells[k]);
+       }
     }   
-    
+
     return _ref_cells;
 }
-CARRAY<Cell_List>&   
+
+const vector<Cell_List>&
 PatternGrid::get_sorted_cells()
 {
-  
-   if(_sorted_cells.num() > 0)
+   if (_sorted_cells.size() > 0)
        _sorted_cells.clear();   
    get_cells();
   
-   //cerr << "cells has " << _cells.num() << endl;
-   for (int k=0; k < _cells.num(); ++k){
+   //cerr << "cells has " << _cells.size() << endl;
+   for (vector<QuadCell*>::size_type k=0; k < _cells.size(); ++k){
       bool added = false;
-      for(int m = 0; m < _sorted_cells.num(); ++m){
+      for (vector<Cell_List>::size_type m = 0; m < _sorted_cells.size(); ++m) {
          // Find a group of cells that we can add the cell to
-         if(_sorted_cells[m].add_cell(_cells[k])){
+         if (_sorted_cells[m].add_cell(_cells[k])) {
             _cells[k]->set_group_id(m); //tell the cell what type it is            
             added = true;
             break;     
@@ -244,8 +258,8 @@ PatternGrid::get_sorted_cells()
          // Make a new Group
          Cell_List new_list;
          new_list.add_cell(_cells[k]);         
-         _sorted_cells += new_list;
-         _cells[k]->set_group_id(_sorted_cells.num()-1);         
+         _sorted_cells.push_back(new_list);
+         _cells[k]->set_group_id(_sorted_cells.size()-1);
       }
       
    }
@@ -255,7 +269,6 @@ PatternGrid::get_sorted_cells()
 CBface*
 PatternGrid::get_ref_cell_face(QuadCell* current_cell,CBedge* edge)
 {  
-  
    get_sorted_cells();  //separate into groups and assign group_id's to cells
   
    int group_id = current_cell->get_group_id();
@@ -266,8 +279,7 @@ PatternGrid::get_ref_cell_face(QuadCell* current_cell,CBedge* edge)
       return 0;
    }
    
-   // cerr << "there are " << _sorted_cells.num() << "groups, id is " << group_id << endl;
-   // ARRAY<CBface*> candidates;
+   // cerr << "there are " << _sorted_cells.size() << "groups, id is " << group_id << endl;
    std::map<int, CBface*, std::greater<double> > candidates;
    
    for (int i =0; i < _sorted_cells[group_id].num(); ++i){
@@ -286,13 +298,9 @@ PatternGrid::get_ref_cell_face(QuadCell* current_cell,CBedge* edge)
          }            
       }      
    }
-   
-   
-   if(!candidates.empty()){
-      //cerr << "I got " << candidates.begin()->first << endl;
+
+   if (!candidates.empty()) {
       return candidates.begin()->second;
-      //int n = candidates.num()-1;
-      //return  candidates[min((int)round(drand48()*n), n)];
    } 
    return 0; 
 }
@@ -308,19 +316,19 @@ PatternGrid::get_ref_cell_face_random(QuadCell* current_cell,CBedge* edge)
    if(!current_cell->vert_uv(edge->v1(), uv) || !current_cell->vert_uv(edge->v2(), uv2))
       return 0;
    
-   //cerr << "there are " << _sorted_cells.num() << "groups, id is " << group_id << endl;
-   ARRAY<CBface*> candidates;
-   for (int i =0; i < _sorted_cells[group_id].num(); ++i){
+   //cerr << "there are " << _sorted_cells.size() << "groups, id is " << group_id << endl;
+   vector<CBface*> candidates;
+   for (vector<Cell_List>::size_type i =0; i < _sorted_cells[group_id].num(); ++i) {
       // same_config means there is no configuration controdictions     
       if(_sorted_cells[group_id][i]->is_ref()){
          CBedge* ref_edge = _sorted_cells[group_id][i]->get_edge(uv, uv2);
          if((ref_face = _sorted_cells[group_id][i]->outside_cell_face(ref_edge)))
-            candidates += ref_face;         
+            candidates.push_back(ref_face);
       }      
    }
-   if(!candidates.empty()){
-      int n = candidates.num()-1;
-      return  candidates[min((int)round(drand48()*n), n)];
+   if (!candidates.empty()) {
+      vector<CBface*>::size_type n = candidates.size()-1;
+      return candidates[min((size_t)round(drand48()*n), n)];
    }
    return 0; 
 }
@@ -334,17 +342,16 @@ PatternGrid::get_ref_1(QuadCell* cell)
    if (_ref_cells.empty()) {
       return 0;      
    } else { 
-      ARRAY<QuadCell*> the_cells = get_cells(cell->get_group_id(), _ref_cells);
-      if(the_cells.empty()){
-        int n = _ref_cells.num()-1;       
-        return  _ref_cells[min((int)(drand48()*n), n)];
-      }else{
-        int n = the_cells.num()-1;       
-        return  the_cells[min((int)(drand48()*n), n)];
+      vector<QuadCell*> the_cells = get_cells(cell->get_group_id(), _ref_cells);
+      if (the_cells.empty()) {
+        vector<QuadCell*>::size_type n = _ref_cells.size()-1;
+        return _ref_cells[min((size_t)(drand48()*n), n)];
+      } else {
+        vector<QuadCell*>::size_type n = the_cells.size()-1;
+        return the_cells[min((size_t)(drand48()*n), n)];
       }
     }
-   
-}   
+}
 
 
 QuadCell*
@@ -352,38 +359,37 @@ PatternGrid::get_ref_2(QuadCell* cell)
 {
     get_ref_cells(); // make sure _ref_cells is to date 
     //Get all the cells that have some similar neighbors
-   ARRAY<QuadCell*> candidates;
-   for(int i=0; i < _ref_cells.num(); ++i){
-      if((cell->difference_neighbors(_ref_cells[i])) < MAX_DIFF_THRESHOLD){         
-         candidates += _ref_cells[i];        
+   vector<QuadCell*> candidates;
+   for (vector<QuadCell*>::size_type i=0; i < _ref_cells.size(); ++i) {
+      if ((cell->difference_neighbors(_ref_cells[i])) < MAX_DIFF_THRESHOLD) {
+         candidates.push_back(_ref_cells[i]);
       }
    }
-   
-   //err_msg("Final list has %d",candidates.num()); 
-   if(candidates.empty()){
-      int n = _ref_cells.num()-1;
-      return _ref_cells[min((int)round(drand48()*n), n)];
+
+   if (candidates.empty()) {
+      vector<QuadCell*>::size_type n = _ref_cells.size()-1;
+      return _ref_cells[min((size_t)round(drand48()*n), n)];
    } else {
-       int n = candidates.num()-1;
-        return  candidates[min((int)round(drand48()*n), n)];
+       vector<QuadCell*>::size_type n = candidates.size()-1;
+       return candidates[min((size_t)round(drand48()*n), n)];
    }
-   
 }  
+
 /*
 Gets a random group from the row with group_id given
 */
 Stroke_List*
 PatternGrid::get_similar_group(int group_id)
 {
-  int n = _group_list[group_id].num()-1; 
-  return _group_list[group_id][min((int)round(drand48()*n), n)]; 
+  vector<Group_List>::size_type n = _group_list[group_id].size()-1;
+  return _group_list[group_id][min((size_t)round(drand48()*n), n)];
 }
 
 Stroke_List
-PatternGrid::get_strokes(CARRAY<QuadCell*>& cells)
+PatternGrid::get_strokes(const vector<QuadCell*>& cells)
 {
    Stroke_List list;
-   for(int m=0; m < cells.num(); ++m){
+   for (vector<QuadCell*>::size_type m=0; m < cells.size(); ++m) {
        list += cells[m]->get_strokes();
        // Get strokes from the group       
        for(int i=0; i < cells[m]->groups_num(); ++i){
@@ -404,7 +410,7 @@ PatternGrid::add_to_group_of_groups(Stroke_List* list)
   if(!_group_list.empty()){     
      double sd=0;
      std::map<double, int, std::less<double> > group_diffs;
-     for(int i=0; i < _group_list.num(); ++i){
+     for (vector<Group_List>::size_type i=0; i < _group_list.size(); ++i) {
         // XXX Group_List should add up all the diffs to all cells and give an 
         // avarage of the diffs
         sd = _group_list[i][0]->difference_to_group(list);
@@ -420,20 +426,19 @@ PatternGrid::add_to_group_of_groups(Stroke_List* list)
      //make a new row in the list
   }
   if(!added){  
-     
      Group_List new_list;
      new_list += list;
-     _group_list += new_list;
+     _group_list.push_back(new_list);
      err_msg("add_to_group_of_groups: creating new group");
-     list->set_group_id(_group_list.num()-1);      
+     list->set_group_id(_group_list.size()-1);
   }      
 }
 
-ARRAY<Stroke_List*>
+vector<Stroke_List*>
 PatternGrid::get_ref_3(QuadCell* new_cell)
 {
    QuadCell* ref_cell = get_ref_2(new_cell);
-   ARRAY<Stroke_List*> list;
+   vector<Stroke_List*> list;
    if (!ref_cell) {
       err_msg("SORRY could not find ref cell");
       return list;
@@ -442,36 +447,31 @@ PatternGrid::get_ref_3(QuadCell* new_cell)
    if (new_cell && ref_cell){   
         for (int m=0; m < ref_cell->groups_num(); ++m){ 
            Stroke_List* group = get_similar_group(ref_cell->get_groups_strokes(m)->get_group_id()); 
-           list += group;      
+           list.push_back(group);
         }
    }
-   return list;  
-   
+   return list;
 }  
 
 void
 PatternGrid::clip_to_patch(
                      CNDCpt_list &pts,        NDCpt_list &cpts,
-                     const ARRAY<double>&prl, ARRAY<double>&cprl )
+                     const vector<double>&prl, vector<double>&cprl )
 {
-   int k, started = 0;
+   size_t k;
+   bool started = false;
    Bface *f;
    Wpt foo;
 
-   for (k=0; k<pts.num(); k++)
-   {
+   for (k=0; k<pts.size(); k++) {
       f = find_face_vis(pts[k], foo);
-      if ((f) && (f->patch() == _patch))
-      {
-         started = 1;
-         cpts += pts[k];
-         cprl += prl[k];
-      }
-      else
-      {
-         if (started)
-         {
-            k=pts.num();
+      if (f && f->patch() == _patch) {
+         started = true;
+         cpts.push_back(pts[k]);
+         cprl.push_back(prl[k]);
+      } else {
+         if (started) {
+            k=pts.size();
          }
       }
    }
@@ -497,15 +497,11 @@ bool
 PatternGrid::project_list(Wpt_list& wlProjList,const NDCpt_list& ndcpts){
    Wpt wloc;
    Bface* f;
-   for (int k=0; k<ndcpts.num(); k++)
-   {
+   for (NDCpt_list::size_type k=0; k<ndcpts.size(); k++) {
       f = find_face_vis(NDCpt(ndcpts[k]),wloc);
-      if ((f) && (f->patch() == _patch) && (f->front_facing()))
-      {
-            wlProjList += wloc;
-      }
-      else
-      {
+      if (f && f->patch() == _patch && f->front_facing()) {
+            wlProjList.push_back(wloc);
+      } else {
             if (!f)
             err_adv(debug_grid, "PatternGroup::add() - Missed while projecting: No hit on a mesh!");
             else if (!(f->patch() == _patch))
@@ -516,8 +512,7 @@ PatternGrid::project_list(Wpt_list& wlProjList,const NDCpt_list& ndcpts){
             err_adv(debug_grid, "PatternGroup::add() - Missed while projecting: WHAT?!?!?!?!");
       }
    }
-   if (wlProjList.num()<2)
-   {
+   if (wlProjList.size()<2) {
       err_adv(debug_grid, "PatternGroup:add() - Nothing left after projection failures. Punting...");
       return false;
    }
@@ -534,8 +529,7 @@ PatternGrid::get_control_cell(CNDCZpt_list& ndczlScaledList){
    int max_count = 0;
    
    // Find the control cell for the stroke
-   for (int k=0; k < ndczlScaledList.num(); k++) {
-      
+   for (NDCZpt_list::size_type k=0; k < ndczlScaledList.size(); k++) {
        f = find_face_vis(NDCpt(ndczlScaledList[k]), wl);
        tmp_cd = CellData::lookup(f, this);
        if(!tmp_cd)          
@@ -561,7 +555,7 @@ PatternGrid::get_control_cell(CNDCZpt_list& ndczlScaledList){
 
 bool
 PatternGrid::add(CNDCpt_list &pl,
-             const ARRAY<double>&prl,
+             const vector<double>&prl,
              BaseStroke * proto,
                  double winding,
                  double straightness)
@@ -578,45 +572,42 @@ PatternGrid::add(CNDCpt_list &pl,
       err_msg("PatternGroup:add() - Error: pressure list is empty!");
       return false;
    }
-   if (pl.num() != prl.num()){
+   if (pl.size() != prl.size()){
       err_msg("PatternGroup:add() - gesture pixel list and pressure list are not same length.");
       return false;
    }
 
   
    NDCpt_list              smoothpts;
-   ARRAY<double>           smoothprl;
+   vector<double>          smoothprl;
    if (!(HatchingGroupBase::smooth_gesture(pl, smoothpts, prl, smoothprl, 99)))
       return false;
    
    // Clip to patch
    NDCpt_list              ndcpts;
-   ARRAY<double>           finalprl;
+   vector<double>          finalprl;
    clip_to_patch(smoothpts,ndcpts,smoothprl,finalprl);
    ndcpts.update_length();
  
-    
    // Project to surface
    err_adv(debug_grid, "PatternGroup:add() - Projecting points");
    Wpt_list wlProjList;
    if(!project_list(wlProjList, ndcpts)) return false;
     wlProjList.update_length();
-   
-  
+
    // Resample Points
    err_adv(debug_grid, "PatternGroup:add() - Resampling points");
    Wpt_list wlScaledList;
-   
-   
-   for (k=0 ; k<wlProjList.num(); k++) 
-         wlScaledList += wlProjList[k];
-  
+
+   for (k=0 ; k<wlProjList.size(); k++)
+         wlScaledList.push_back(wlProjList[k]);
+
    // Convert back to 2D
    err_adv(debug_grid, "PatternGroup:add() - converting to 2D.");
    NDCZpt_list ndczlScaledList;
-   for (k=0;k<wlScaledList.num();k++) ndczlScaledList += NDCZpt(_patch->xform()*wlScaledList[k]);
+   for (k=0;k<wlScaledList.size();k++) ndczlScaledList.push_back(NDCZpt(_patch->xform()*wlScaledList[k]));
    ndczlScaledList.update_length();
-   
+
    // Calculate pixel length of a stroke
    double pix_len = ndczlScaledList.length() * VIEW::peek()->ndc2pix_scale();
    if (pix_len < 8.0)   {
@@ -631,94 +622,47 @@ PatternGrid::add(CNDCpt_list &pl,
         return false;
     } 
    
-   ARRAY<CBface*>                faces;
+   vector<CBface*>               faces;
    Wpt_list                      pts;
-   ARRAY<Wvec>                   norms;
-   ARRAY<Wvec>                   bar;
-   ARRAY<double>                 alpha; 
-   ARRAY<double>                 width; 
+   vector<Wvec>                  norms;
+   vector<Wvec>                  bar;
+   vector<double>                alpha;
+   vector<double>                width;
    UVpt_list                     uv_p; 
-   //QuadCell*                     cell;
-   
-   cerr << "we have " << ndczlScaledList.num() << " and pressur " << finalprl.num() << endl;  
-   for (k=0; k<ndczlScaledList.num(); k++) {
 
-      //Wpt wloc;
-      //f = find_face_vis(NDCpt(ndczlScaledList[k]),wloc);
+   cerr << "we have " << ndczlScaledList.size() << " and pressur " << finalprl.size() << endl;
+   for (k=0; k<ndczlScaledList.size(); k++) {
       Wpt wloc(ndczlScaledList[k]);
-      //WORLD::show(wloc,3, COLOR::blue,1,true);
       f = control_cell->quad(0,0);
-      
-      if ((f) && (f->patch() == _patch) && (f->front_facing()))
-      {
+
+      if (f && f->patch() == _patch && f->front_facing()) {
          Wvec bc;
          Wvec norm;
          UVpt uv;
          
-         //f->project_barycentric(wloc,bc);
          f->project_barycentric_ndc(NDCpt(ndczlScaledList[k]),bc);
 
-         /*
-         Wvec bc_old = bc;
-         Bsimplex::clamp_barycentric(bc);
-         double dL = fabs(bc.length() - bc_old.length());
-
-         if (bc != bc_old){
-            err_adv(debug_grid,"PatternGroup::add() - Baycentric clamp modified result: (%f,%f,%f) --> (%f,%f,%f) Length Change: %f",
-                   bc_old[0], bc_old[1], bc_old[2], bc[0], bc[1], bc[2], dL);
-         }
-         if (dL < 1e-3){
-         */ 
          uv = control_cell->quad_bc_to_cellUV(bc, f);
            
-          // cerr << uv << endl;   
-/*           
-           CellData* cd = CellData::lookup(f, this);
-            if(cd) {
-               cell = cd->get_cell();               
-            } else {             
-                    WORLD::message("Need Cells to draw on");
-                    return false;     
-            }
-                // If the stroke crosses the boundary of the cell
-            if(cell != control_cell){  
-                    // Find an edge that joins the two cells
-                    CBedge* e = cell->joint_edge(control_cell);                    
-                    // If no edge existe reject the stroke
-                    if(!e) {
-                       WORLD::message("Stroke passes too many cells");
-                       return false;     
-                    }    
-                    // Change the uv point in turms of start_cell
-                    uv = cell->my_UV_to_controlCell_UV(uv, control_cell, e);                    
-            }
-  */           
-            double w_p = (_width_press) ? finalprl[k] : 1.0;
-            double a_p = (_alpha_press) ? finalprl[k] : 1.0;    
-            Wpt foo;            
-            CBface* f_tmp = find_face_vis(NDCpt(ndczlScaledList[k]), foo);
-            faces += f_tmp;
-            //faces +=f;
-           
-            alpha += a_p; 
-            width += w_p; 
-            uv_p  += uv;
-            
-            Wvec bc_t; 
-            f_tmp->project_barycentric(wloc,bc_t);            
-           
-            f_tmp->bc2norm_blend(bc_t,norm);            
-            
-            bar += bc_t;
-            // bar += bc;
-            pts += wloc;
-            norms += norm;
-         //} else {
-         //   err_mesg(ERR_LEV_WARN, "PatternGroup::add() - Change too large due to error in projection. Dumping point...");
-        // }
-      }
-      else
-      {
+         double w_p = (_width_press) ? finalprl[k] : 1.0;
+         double a_p = (_alpha_press) ? finalprl[k] : 1.0;
+         Wpt foo;
+         CBface* f_tmp = find_face_vis(NDCpt(ndczlScaledList[k]), foo);
+         faces.push_back(f_tmp);
+
+         alpha.push_back(a_p);
+         width.push_back(w_p);
+         uv_p .push_back(uv);
+
+         Wvec bc_t;
+         f_tmp->project_barycentric(wloc,bc_t);
+
+         f_tmp->bc2norm_blend(bc_t,norm);
+
+         bar.push_back(bc_t);
+         pts.push_back(wloc);
+         norms.push_back(norm);
+      } else {
          if (!f)
             err_adv(debug_grid, "PatternGroup::add() - Missed in final lookup: No hit on a mesh!");
          else if (!(f->patch() == _patch))
@@ -730,8 +674,7 @@ PatternGrid::add(CNDCpt_list &pl,
       }
    }
 
-   if (pts.num()>1)
-   {
+   if (pts.size()>1) {
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
@@ -742,24 +685,12 @@ PatternGrid::add(CNDCpt_list &pl,
       ol->set_pix_len(pix_len);
 
       ol->add(BaseStrokeOffset( 0.0, 0.0, finalprl[0], BaseStrokeOffset::OFFSET_TYPE_BEGIN));
-      for (k=1; k< finalprl.num(); k++)
-            ol->add(BaseStrokeOffset( (double)k/(double)(finalprl.num()-1), 0.0, finalprl[k], BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
+      for (k=1; k< finalprl.size(); k++)
+            ol->add(BaseStrokeOffset( (double)k/(double)(finalprl.size()-1), 0.0, finalprl[k], BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
 
-      ol->add(BaseStrokeOffset( 1.0, 0.0, finalprl[finalprl.num()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
+      ol->add(BaseStrokeOffset( 1.0, 0.0, finalprl[finalprl.size()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
 
-     /* Pattern3dStroke* stroke = new Pattern3dStroke( control_cell,                                                     
-                                                     faces,
-                                                     pts,
-                                                     norms,
-                                                     bar,
-                                                     alpha, 
-                                                     width, 
-                                                     uv_p, 
-                                                     ol, 
-                                                     proto, 
-                                                     winding,
-                                                     straightness);*/
-      DRAW_STROKE_CMDptr cmd = new DRAW_STROKE_CMD( control_cell, new Pattern3dStroke( control_cell,                                                     
+      DRAW_STROKE_CMDptr cmd = new DRAW_STROKE_CMD( control_cell, new Pattern3dStroke( control_cell,
                                                      faces,
                                                      pts,
                                                      norms,
@@ -800,23 +731,23 @@ PatternGrid::set_mask(Bvert_list list, double i)
 void
 PatternGrid::avarage_mask(Bvert_list list, int n)
 {
-    for(int i = 0; i < n; ++i){
-       for (int k=0; k < list.num();k++){
+    for (int i = 0; i < n; ++i) {
+       for (int k=0; k < list.num();k++) {
           MaskData* md = MaskData::lookup(list[k], this);
-          if(md){
+          if (md) {
             RunningAvg<double> mask_vals(0);
-            mask_vals.add(md->get_mask());
-            
-            ARRAY<Bvert*> nbrs;             
+            mask_vals.push_back(md->get_mask());
+
+            vector<Bvert*> nbrs;
             list[k]->get_p_nbrs(nbrs);
-            for(int m=0; m < nbrs.num(); ++m){
+            for (vector<Bvert*>::size_type m=0; m < nbrs.size(); ++m) {
                MaskData* md2 = MaskData::lookup(nbrs[m], this);
-               if(md2)
-                  mask_vals.add(md2->get_mask());
+               if (md2)
+                  mask_vals.push_back(md2->get_mask());
             }
             md->set_mask(min(mask_vals.val(), 1.0));
           }
-        }
+       }
     }    
 }
 

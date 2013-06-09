@@ -65,10 +65,10 @@ class QuadCell {
    //******* Neighbor Structure **********
    //Given an edge find a neighbor cell if one exists
    QuadCell*    find_neighbor_cell(CBedge* e);
-   void         get_neighbors(ARRAY<Cell_List>&);   
-   void         get_cell_boundery(ARRAY<Bedge_list>&);
+   void         get_neighbors(vector<Cell_List>&);   
+   void         get_cell_boundery(vector<Bedge_list>&);
    bool         has_unmarked_neighbor(); 
-   void         get_unmarked_neighbor_faces(ARRAY<CBface*>&);
+   void         get_unmarked_neighbor_faces(vector<CBface*>&);
    bool         same_config(QuadCell*, int& number_same);
    //*********** MESH OPERATIONS*********     
    CBface_list& faces() const { return _faces; }
@@ -116,13 +116,13 @@ class QuadCell {
    //******** Stroke Related ********  
    bool                      is_empty() { return (groups_num() > 0 || stroke_num() > 0) ? false : true; }
    void                      add_stroke(Pattern3dStroke * s)
-                                               { _3d_strokes.add(s); }
+                                               { _3d_strokes.push_back(s); }
    void                      remove_stroke(Pattern3dStroke * s);                                                                                         
-   int                       stroke_num()      { return _3d_strokes.num(); }
+   int                       stroke_num()      { return _3d_strokes.size(); }
    Pattern3dStroke*          get_stroke(int i) const{ return _3d_strokes[i]; }
-   CARRAY<Pattern3dStroke*>& get_strokes()     const{ return _3d_strokes; }
+   const vector<Pattern3dStroke*>& get_strokes()const{ return _3d_strokes; }
    // Gives all the strokes in one array, patter_texture askes this
-   int                       groups_num()      { return _groups.num(); }
+   int                       groups_num()      { return _groups.size(); }
    Stroke_List*              get_groups_strokes(int i)      
                                                const { return _groups[i]; }
    double                    current_width(double start_width, 
@@ -155,8 +155,8 @@ class QuadCell {
    
    // Vertex (i,j), where i designates the column and j designates the row:
    CBvert_list& row(int i) const { return _grid[i]; }
-   CBvert_list& bottom()   const { return _grid.first(); }
-   CBvert_list& top()      const { return _grid.last(); }
+   CBvert_list& bottom()   const { return _grid.front(); }
+   CBvert_list& top()      const { return _grid.back(); }
    Bvert_list   col(int i);
    
    double       get_du()   const { return _du;}
@@ -165,9 +165,9 @@ class QuadCell {
    // Lower left vertex of the quad, assumes it's inside the cell
    Bface*       quad (int i, int j) const;     
         
-   int          nrows() const { return _grid.num(); }
-   int          ncols() const { return _grid.empty() ? 0 : bottom().num(); }
-   Bvert*       vert(int i, int j)    const { return _grid[j][i]; }//{ return (i <= _ColsCache && j <= _RowsCache) ? _grid[j][i] : 0; }   
+   int          nrows() const { return _grid.size(); }
+   int          ncols() const { return _grid.empty() ? 0 : bottom().size(); }
+   Bvert*       vert(int i, int j)    const { return _grid[j][i]; }
    mlib::CWpt&        loc (int i, int j)    const { return _grid[j][i]->loc(); }    
    mlib::UVpt         uv  (int i, int j)    const { return mlib::UVpt(i*_du, j*_dv); }
    bool         vert_uv(Bvert*, mlib::UVpt& uv_loc);
@@ -196,10 +196,10 @@ class QuadCell {
    mlib::Wtransf      get_xf() const { return _xf; }
    mlib::Wtransf      get_inv() const { return _inv_xf; }
  private:  
-   ARRAY<Pattern3dStroke*>    _3d_strokes;    // The strokes withing the cell
-   ARRAY<Stroke_List*>        _groups;
+   vector<Pattern3dStroke*>   _3d_strokes;    // The strokes withing the cell
+   vector<Stroke_List*>       _groups;
  
-   ARRAY<Bvert_list>          _grid;      
+   vector<Bvert_list>         _grid;
    Bface_list                 _faces;
    int                        _RowsCache;     // numrows - 1
    int                        _ColsCache;     // numcols - 1
@@ -253,7 +253,7 @@ class QuadCell {
 };
 
 #define CCell_List const Cell_List   
-class Cell_List : public ARRAY<QuadCell *>
+class Cell_List : public vector<QuadCell *>
 {
  public:   
    // Do not overwrite the add function of the array so that things can bypass

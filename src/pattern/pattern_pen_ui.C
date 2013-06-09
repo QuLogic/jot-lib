@@ -58,7 +58,7 @@ bool PatternPenUI::use_image_color = 0;
 bool PatternPenUI::show_boundery_box = 1;
 PatternPenUI::lum_fun_id_t PatternPenUI::lum_function = LUM_SHADOW;
 
-ARRAY<PatternPenUI*> PatternPenUI::_ui;
+vector<PatternPenUI*> PatternPenUI::_ui;
 
 PatternPenUI::PatternPenUI(PatternPen* pen) :
    _glui(0),
@@ -67,8 +67,8 @@ PatternPenUI::PatternPenUI(PatternPen* pen) :
    _current_mode(0),
    _light(0,0,1) 
 {
-   _ui += this;
-   _id = (_ui.num()-1);
+   _ui.push_back(this);
+   _id = (_ui.size()-1);
    _stroke =  new BaseStroke();
   
 }
@@ -149,8 +149,8 @@ PatternPenUI::destroy() {
 
 
 void
-PatternPenUI::build() {
-   int i;
+PatternPenUI::build()
+{
    int id = _id << ID_SHIFT;
 
    assert(!_glui);
@@ -162,17 +162,16 @@ PatternPenUI::build() {
    _glui = GLUI_Master.create_glui("Pattern Editor", 0, root_x+root_w+10, root_y);
    _glui->set_main_gfx_window(_pen->view()->win()->id());
    
-   //Init the control arrays   
-   for (i=0; i<BUT_NUM; i++)      _button.add(0);
-   for (i=0; i<PANEL_NUM; i++)    _panel.add(0);
-   for (i=0; i<LIST_NUM; i++)     _listbox.add(0);    
-   for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
-   for (i=0; i<SLIDE_NUM; i++)    _slider.add(0);
-   for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
-   for (i=0; i<ROT_NUM; i++)      _rotation.add(0);
-   for (i=0; i<RADGROUP_NUM; i++) _radgroup.add(0);
-   for (i=0; i<RADBUT_NUM; i++)   _radbutton.add(0);
-
+   //Init the control arrays
+   _button.resize(BUT_NUM, 0);
+   _panel.resize(PANEL_NUM, 0);
+   _listbox.resize(LIST_NUM, 0);
+   _checkbox.resize(CHECK_NUM, 0);
+   _slider.resize(SLIDE_NUM, 0);
+   _rollout.resize(ROLLOUT_NUM, 0);
+   _rotation.resize(ROT_NUM, 0);
+   _radgroup.resize(RADGROUP_NUM, 0);
+   _radbutton.resize(RADBUT_NUM, 0);
 
    // Panel containing pen buttons
    _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
@@ -387,37 +386,20 @@ PatternPenUI::build() {
       id+BUT_RESYNTH, button_cb);
    assert(_button[BUT_RESYNTH]);
 
-
-   
-
    _rollout[ROLLOUT_SYNTH]->disable();
 
-
-      
    // Path mode
    _rollout[ROLLOUT_PATH] = new GLUI_Rollout(_glui, "Path", false);
    _rollout[ROLLOUT_PATH]->disable();
 
-      
    // Proxy mode
    _rollout[ROLLOUT_PROXY] = new GLUI_Rollout(_glui, "Proxy", false);
    _rollout[ROLLOUT_PROXY]->disable();
 
-      
    // Ellipses mode
    _rollout[ROLLOUT_ELLIPSE] =  new GLUI_Rollout(_glui, "Ellipses", false);
    _rollout[ROLLOUT_ELLIPSE]->disable();
-
- 
-
 }
-
-
-
-
-
-
-
 
 /////////////////////////
 // Callback functions
@@ -530,7 +512,7 @@ PatternPenUI::checkbox_cb(int id) {
 
 void 
 PatternPenUI::slider_cb(int id) {  
-  assert((id >> ID_SHIFT) < _ui.num());
+  assert((id >> ID_SHIFT) < (int)_ui.size());
 
   switch(id&ID_MASK){
   case SLIDE_EPS:
@@ -564,7 +546,7 @@ PatternPenUI::rotation_cb(int id) {
 
 void
 PatternPenUI::radiogroup_cb(int id) {
-  assert((id >> ID_SHIFT) < _ui.num());
+  assert((id >> ID_SHIFT) < (int)_ui.size());
 
 //  switch(id&ID_MASK){
 //  }

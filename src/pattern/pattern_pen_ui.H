@@ -144,7 +144,7 @@ public:
   PatternPen* pen()   const { return _pen; }
 
 protected:
-  static ARRAY<PatternPenUI*>   _ui;
+  static vector<PatternPenUI*>   _ui;
   
   void         init();   
   void         build();
@@ -160,15 +160,15 @@ protected:
   mlib::Wvec             _light;
   BaseStroke*            _stroke;
   
-  ARRAY<GLUI_Button*>    _button;
-  ARRAY<GLUI_Panel*>     _panel;
-  ARRAY<GLUI_Listbox*>   _listbox;
-  ARRAY<GLUI_Checkbox*>  _checkbox;
-  ARRAY<GLUI_Slider*>    _slider;   
-  ARRAY<GLUI_Rollout*>   _rollout;
-  ARRAY<GLUI_Rotation*>  _rotation;
-  ARRAY<GLUI_RadioGroup*>  _radgroup;
-  ARRAY<GLUI_RadioButton*> _radbutton;   
+  vector<GLUI_Button*>   _button;
+  vector<GLUI_Panel*>    _panel;
+  vector<GLUI_Listbox*>  _listbox;
+  vector<GLUI_Checkbox*> _checkbox;
+  vector<GLUI_Slider*>   _slider;
+  vector<GLUI_Rollout*>  _rollout;
+  vector<GLUI_Rotation*> _rotation;
+  vector<GLUI_RadioGroup*>  _radgroup;
+  vector<GLUI_RadioButton*> _radbutton;
    
   //void     update_non_lives();
   //void     update_from_layer_vals();

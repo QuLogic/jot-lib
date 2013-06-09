@@ -119,9 +119,9 @@ PatternPen::load_attribute_presets(){
 
    GestureStrokeDrawer* stroke_width_drawer = new GestureStrokeDrawer();
    stroke_width_drawer->set_base_stroke_proto(default_width_preset);
-   _stroke_drawers += stroke_width_drawer;
+   _stroke_drawers.push_back(stroke_width_drawer);
 
-   _attribute_presets_names += "default_width";
+   _attribute_presets_names.push_back("default_width");
 
    // test: load another default preset that varies with alpha
    BaseStroke* default_alpha_preset = new BaseStroke();
@@ -130,9 +130,9 @@ PatternPen::load_attribute_presets(){
 
    GestureStrokeDrawer* stroke_alpha_drawer = new GestureStrokeDrawer();
    stroke_alpha_drawer->set_base_stroke_proto(default_alpha_preset);
-   _stroke_drawers += stroke_alpha_drawer;
+   _stroke_drawers.push_back(stroke_alpha_drawer);
 
-   _attribute_presets_names += "default_alpha";
+   _attribute_presets_names.push_back("default_alpha");
 
    // and assign the first preset
    _current_attribute_id = 0;

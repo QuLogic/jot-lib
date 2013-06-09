@@ -53,6 +53,8 @@
 #include "tess/tex_body.H"
 #include "mlib/points.H"
 
+#include <vector>
+
 class PatternPenUI;
 class PatternGrid;
 class QuadCell;
@@ -91,7 +93,7 @@ public:
 
 
   // Stroke methods
-  CARRAY<const char*>& attribute_preset_names() {return _attribute_presets_names; }
+  const vector<const char*>& attribute_preset_names() {return _attribute_presets_names; }
   void set_epsilon(double eps);
   void set_style_adjust(double sa);
   void pop_stroke();
@@ -190,8 +192,8 @@ private:
 
   // Stroke vars
   BBOXpix                     _picture_bbox;
-  ARRAY<const char*>          _attribute_presets_names;
-  ARRAY<GestureStrokeDrawer*> _stroke_drawers; 
+  vector<const char*>         _attribute_presets_names;
+  vector<GestureStrokeDrawer*>_stroke_drawers;
   int                         _current_attribute_id;
   std::vector<GestureStroke>  _current_strokes;
   int                         _current_group_type;
