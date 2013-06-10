@@ -345,7 +345,7 @@ State_t<EVENT>::operator-=(const State_t<EVENT>&s)
 
       for (j = _arcs.rbegin(); j != _arcs.rend(); ++j) {
          if (j->match(s._arcs[i].event())) {
-            _arcs.erase(j.base());
+            _arcs.erase(j.base() - 1);
             break;
          }
       }
