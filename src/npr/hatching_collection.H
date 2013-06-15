@@ -31,6 +31,7 @@
 #include "npr/hatching_group.H"
 #include "manip/manip.H"
 
+#include <vector>
 
 /*****************************************************************
  * HatchingCollection
@@ -39,7 +40,7 @@
 #define CHatchingCollection const HatchingCollection
 
 class HatchingCollection : 
-	private ARRAY<HatchingGroup *>, public UPobs, public DATA_ITEM, protected BMESHobs {
+	private vector<HatchingGroup *>, public UPobs, public DATA_ITEM, protected BMESHobs {
  private:
 	/******** STATIC MEMBER VARIABLES ********/
 	static TAGlist		*_hc_tags;
@@ -75,7 +76,7 @@ class HatchingCollection :
    virtual void    notify_change       (BMESH*, BMESH::change_t);
    virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
    //virtual void  notify_merge        (BMESH*, BMESH*)           {}
-   //virtual void  notify_split        (BMESH*, CARRAY<BMESH*>&)  {}
+   //virtual void  notify_split        (BMESH*, const vector<BMESH*>&) {}
    //virtual void  notify_subdiv_gen   (BMESH*)                   {}
    //virtual void  notify_delete       (BMESH*)                   {}
    //virtual void  notify_sub_delete   (BMESH*)                   {}

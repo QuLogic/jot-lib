@@ -304,7 +304,7 @@ SilUI::get_vote_path_index(TAGformat &d)
       ZXedgeStrokeTexture *z = _observedTexture->stroke_tex()->sil_and_crease_tex()->zx_edge_tex();
       const LuboPathList&  pl = z->paths();
 
-      assert(index < pl.num());
+      assert(index < (int)pl.size());
 
       _votePathIndex = index;
       _votePathIndexStamp = z->path_stamp();
@@ -349,7 +349,7 @@ SilUI::get_stroke_path_index(TAGformat &d)
       ZXedgeStrokeTexture *z = _observedTexture->stroke_tex()->sil_and_crease_tex()->zx_edge_tex();
       const LuboPathList&  pl = z->paths();
 
-      assert(index < pl[_votePathIndex]->groups().num());
+      assert(index < (int)pl[_votePathIndex]->groups().size());
 
       _strokePathIndex = index;
       _strokePathId = pl[_votePathIndex]->groups()[_strokePathIndex].id();
@@ -1540,11 +1540,11 @@ SilUI::update_path()
          char tmp[128];
          string text;
          if (_votePathIndex == -1) {
-            sprintf(tmp, "Showing NONE of %d Paths", pl.num());
+            sprintf(tmp, "Showing NONE of %zu Paths", pl.size());
             text = string(tmp);
 
          } else {
-            sprintf(tmp, "Showing Path %d of %d - ", _votePathIndex + 1, pl.num());
+            sprintf(tmp, "Showing Path %d of %zu - ", _votePathIndex + 1, pl.size());
             text = string(tmp)
                      + SilAndCreaseTexture::sil_stroke_pool(
                         SilAndCreaseTexture::type_and_vis_to_sil_stroke_pool(
@@ -1610,11 +1610,11 @@ SilUI::update_seg()
             string text;
             char tmp[128];
             if (_strokePathIndex == -1) {
-               sprintf(tmp, "Showing NONE of %d Strokes", pl[_votePathIndex]->groups().num());
+               sprintf(tmp, "Showing NONE of %zu Strokes", pl[_votePathIndex]->groups().size());
                text = string(tmp);
 
             } else {
-               sprintf(tmp, "Showing Stroke %d of %d - ", _strokePathIndex + 1, pl[_votePathIndex]->groups().num());
+               sprintf(tmp, "Showing Stroke %d of %zu - ", _strokePathIndex + 1, pl[_votePathIndex]->groups().size());
                text = string(tmp)
                      + VoteGroup::vg_status(pl[_votePathIndex]->groups()[_strokePathIndex].status()) + " - " 
                      + VoteGroup::fit_status(pl[_votePathIndex]->groups()[_strokePathIndex].fstatus());
@@ -2700,7 +2700,7 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
    {
 
       LuboPath *l = pl[_votePathIndex];
-      ARRAY<VoteGroup> &gs = l->groups();
+      vector<VoteGroup> &gs = l->groups();
 
       ARRAY<unsigned int>  path_ids;
       ARRAY<int>           group_cnt;
@@ -2709,8 +2709,7 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       int seg_total = 0;
 
       int i=0;
-      for ( ; i<gs.num(); i++) 
-      {
+      for ( ; i<(int)gs.size(); i++) {
          VoteGroup &g = gs[i];
 
          if (g.num()>0)
@@ -2751,8 +2750,7 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       {
          int cnt = 0;
 
-         for (int i=0; i<gs.num(); i++) 
-         {
+         for (vector<VoteGroup>::size_type i=0; i<gs.size(); i++) {
             VoteGroup &g = gs[i];
             
             if (g.num() > 0)
@@ -3237,13 +3235,10 @@ SilUI::init_votepath_index()
 
    const LuboPathList&  pl = z->paths();
 
-   if (pl.num())
-   {
+   if (!pl.empty()) {
       _votePathIndex = 0;
       _votePathIndexStamp = z->path_stamp();
-   }
-   else
-   {
+   } else {
       _votePathIndex = -1;
       _votePathIndexStamp = 0;
    }
@@ -3269,38 +3264,30 @@ SilUI::init_strokepath_index()
 
    const LuboPathList&  pl = z->paths();
 
-   if (!pl.num())
-   {
+   if (pl.empty()) {
       assert(_votePathIndex == -1);
       _strokePathId = -1;
       _strokePathIndex = -1;
       _strokePathIndexStamp = 0;
       assert(_strokePathIndexStamp == _votePathIndexStamp);
-   }
-   else
-   {
-      if (_votePathIndex == -1)
-      {
+
+   } else {
+      if (_votePathIndex == -1) {
          _strokePathId = -1;
          _strokePathIndex = -1;
          _strokePathIndexStamp = 0;
          assert(_strokePathIndexStamp == _votePathIndexStamp);
-      }
-      else
-      {
+      } else {
          LuboPath *l = pl[_votePathIndex];
 
-         ARRAY<VoteGroup> &g = l->groups();
+         vector<VoteGroup> &g = l->groups();
 
-         if (g.num()>0)
-         {
+         if (!g.empty()) {
             _strokePathId = g[0].id();
             _strokePathIndex = 0;
             _strokePathIndexStamp = z->path_stamp();
             assert(_strokePathIndexStamp == _votePathIndexStamp);
-         }
-         else
-         {
+         } else {
             _strokePathId = -1;
             _strokePathIndex = -1;
             _strokePathIndexStamp = 0;
@@ -3328,46 +3315,34 @@ SilUI::init_vote_index()
 
    const LuboPathList&  pl = z->paths();
 
-   if (pl.num()==0)
-   {
+   if (pl.empty()) {
       assert(_votePathIndex == -1);
       assert(_strokePathIndex == -1);
       assert(_strokePathIndexStamp == 0);
       _voteIndex = -1;
-   }
-   else
-   {
-      if (_votePathIndex == -1)
-      {
+
+   } else {
+      if (_votePathIndex == -1) {
          assert(_strokePathIndex == -1);
          assert(_strokePathIndexStamp == 0);
          _voteIndex = -1;
-      }
-      else
-      {
+      } else {
          LuboPath *l = pl[_votePathIndex];
 
-         ARRAY<VoteGroup> &gs = l->groups();
+         vector<VoteGroup> &gs = l->groups();
 
-         if (gs.num()==0)
-         {
+         if (gs.empty()) {
             assert(_strokePathIndex == -1);
             assert(_strokePathIndexStamp == 0);
             _voteIndex = -1;
-         }
-         else
-         {
-            if (_strokePathIndex == -1)
-            {
+         } else {
+            if (_strokePathIndex == -1) {
                assert(_strokePathIndexStamp == 0);
                _voteIndex = -1;
-            }
-            else
-            {
+            } else {
                VoteGroup &g = gs[_strokePathIndex];
 
-               if (g.num()==0)
-               {
+               if (g.num()==0) {
                   assert(_strokePathIndexStamp == z->group_stamp());
                   _voteIndex = -1;
                }
@@ -3473,16 +3448,15 @@ SilUI::update_path_indices()
          {
             // The vote paths should change, so let's assert
             // that our current selection is kosher...
-            assert(_votePathIndex < pl.num());
+            assert(_votePathIndex < (int)pl.size());
             _votePathIndexStamp = z->path_stamp(); 
 
             // For now, just keep the same stroke path index
             // or the max index if we're now out of range
             if (_strokePathIndex != -1)
             {
-               if (_strokePathIndex >= pl[_votePathIndex]->groups().num())
-               {
-                  _strokePathIndex = pl[_votePathIndex]->groups().num() - 1;
+               if (_strokePathIndex >= (int)pl[_votePathIndex]->groups().size()) {
+                  _strokePathIndex = pl[_votePathIndex]->groups().size() - 1;
                }
                if (_strokePathIndex != -1)
                {
@@ -3602,7 +3576,7 @@ SilUI::select_votepath_next()
          //if (_checkbox[CHECK_TRACK_STROKES]->get_int_val()==0)
          //{
 
-            _votePathIndex = (_votePathIndex + 1) % pl.num();
+            _votePathIndex = (_votePathIndex + 1) % pl.size();
             assert(_votePathIndexStamp == z->path_stamp());
 
             _strokePathIndex = pl.strokepath_id_to_index(_strokePathId, _votePathIndex);
@@ -3656,7 +3630,7 @@ SilUI::select_votepath_prev()
          //if (_checkbox[CHECK_TRACK_STROKES]->get_int_val()==0)
          //{
 
-            _votePathIndex = (_votePathIndex - 1 + pl.num()) % pl.num();
+            _votePathIndex = (_votePathIndex - 1 + pl.size()) % pl.size();
             assert(_votePathIndexStamp == z->path_stamp());
 
             _strokePathIndex = pl.strokepath_id_to_index(_strokePathId, _votePathIndex);
@@ -3722,7 +3696,7 @@ SilUI::select_strokepath_next()
          //if (_checkbox[CHECK_TRACK_STROKES]->get_int_val()==0)
          //{
 
-            _strokePathIndex = (_strokePathIndex + 1) % pl[_votePathIndex]->groups().num();
+            _strokePathIndex = (_strokePathIndex + 1) % pl[_votePathIndex]->groups().size();
             assert(_votePathIndexStamp == z->path_stamp());
             assert(_strokePathIndexStamp == z->group_stamp());
             assert(_strokePathIndexStamp == _votePathIndexStamp);
@@ -3781,7 +3755,7 @@ SilUI::select_strokepath_prev()
          //if (_checkbox[CHECK_TRACK_STROKES]->get_int_val()==0)
          //{
 
-            _strokePathIndex = (_strokePathIndex - 1 + pl[_votePathIndex]->groups().num()) % pl[_votePathIndex]->groups().num();
+            _strokePathIndex = (_strokePathIndex - 1 + pl[_votePathIndex]->groups().size()) % pl[_votePathIndex]->groups().size();
             assert(_votePathIndexStamp == z->path_stamp());
             assert(_strokePathIndexStamp == z->group_stamp());
             assert(_strokePathIndexStamp == _votePathIndexStamp);

@@ -21,6 +21,8 @@
 #include "stroke/base_stroke.H"
 #include "mesh/patch.H"
 
+#include <vector>
+
 // *****************************************************************
 // * ImageLineStroke
 // *****************************************************************
@@ -74,41 +76,47 @@ class ImageLineStroke : public BaseStroke {
 /*****************************************************************
  * ImageLineStrokeArray:
  *
- *      Convenience: ARRAY of ImageLineStrokes w/ helper methods.
+ *      Convenience: vector of ImageLineStrokes w/ helper methods.
  *
  *****************************************************************/
-class ImageLineStrokeArray : public ARRAY<ImageLineStroke*> {
+class ImageLineStrokeArray : public vector<ImageLineStroke*> {
  public:
 
    //******** MANAGERS ********
 
-   ImageLineStrokeArray(int n=0) : ARRAY<ImageLineStroke*>(n) {}
+   ImageLineStrokeArray(int n=0) : vector<ImageLineStroke*>() { reserve(n); }
 
    //******** CONVENIENCE ********
 
    void delete_all() {
-      while (!empty())
-         delete pop();
+      while (!empty()) {
+         delete back();
+         pop_back();
+      }
    }
+
    void clear_strokes() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->clear();
+      for (ImageLineStrokeArray::size_type i=0; i<size(); i++)
+         at(i)->clear();
    }
+
    void copy(CBaseStroke& proto) const {
-      for (int i=0; i<_num; i++)
-         _array[i]->copy(proto);
+      for (ImageLineStrokeArray::size_type i=0; i<size(); i++)
+         at(i)->copy(proto);
    }
+
    void set_offsets(CBaseStrokeOffsetLISTptr& offsets) const {
-      for (int i=0; i<_num; i++)
-         _array[i]->set_offsets(offsets);
+      for (ImageLineStrokeArray::size_type i=0; i<size(); i++)
+         at(i)->set_offsets(offsets);
    }
+
    int draw(CVIEWptr& v) const {
       int ret = 0;
       if (!empty()) {
-         _array[0]->draw_start();
-         for (int i=0; i<_num; i++)
-            ret += _array[i]->draw(v);
-         _array[0]->draw_end();
+         at(0)->draw_start();
+         for (ImageLineStrokeArray::size_type i=0; i<size(); i++)
+            ret += at(i)->draw(v);
+         at(0)->draw_end();
       }
       return ret;
    }

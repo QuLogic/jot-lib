@@ -53,7 +53,7 @@ NPRControlFrameTexture::NPRControlFrameTexture(
          _alpha(1.0),
          _strip(0) 
 {
-   _strokes.add(new BaseStroke);
+   _strokes.push_back(new BaseStroke);
    _strokes[0]->set_texture(Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE);
    _strokes[0]->set_use_depth(true);
    _strokes[0]->set_width(4);
@@ -63,8 +63,7 @@ NPRControlFrameTexture::NPRControlFrameTexture(
    _strokes[0]->set_taper(15);
 
    for (int i=1; i<12; i++)
-      _strokes.add(_strokes[0]->copy());
-     
+      _strokes.push_back(_strokes[0]->copy());
 }
 
 /////////////////////////////////////
@@ -73,12 +72,10 @@ NPRControlFrameTexture::NPRControlFrameTexture(
 
 NPRControlFrameTexture::~NPRControlFrameTexture()
 {
-   for (int i=0; i<12; i++)
-   {
+   for (int i=0; i<12; i++) {
       assert(_strokes[i]);
       delete _strokes[i];
    }
-
 }
 
 /////////////////////////////////////
@@ -182,8 +179,7 @@ NPRControlFrameTexture::draw_final(CVIEWptr& v)
       BBOX bb = _patch->xform() * _patch->mesh()->get_bb();
       bb.points(bb_pts);
 
-      for (i=0; i<12; i++)
-      {
+      for (i=0; i<12; i++) {
          _strokes[i]->clear();
          _strokes[i]->set_color(_color); 
          _strokes[i]->set_alpha((float)(_alpha*a)); 

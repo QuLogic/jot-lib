@@ -187,14 +187,14 @@ template <class T>
 inline bool
 all_valid_indices2(const T& l, int i, int j, int k)
 {
-   return 0 <= i && i < l.size() && 0 <= j && j < l.size() && 0 <= k && k < l.size();
+   return 0 <= i && i < (int)l.size() && 0 <= j && j < (int)l.size() && 0 <= k && k < (int)l.size();
 }
 
 template <class T>
 inline bool
 any_valid_indices2(const T& l, int i, int j, int k)
 {
-   return (0 <= i && i < l.size()) || (0 <= j && j < l.size()) || (0 <= k && k < l.size());
+   return (0 <= i && i < (int)l.size()) || (0 <= j && j < (int)l.size()) || (0 <= k && k < (int)l.size());
 }
 
 inline void

@@ -31,6 +31,7 @@
 ////////////////////////////////////////////
 
 #include <set>
+#include <vector>
 
 #include "wnpr/sil_ui.H"
 #include "gtex/ref_image.H"
@@ -85,7 +86,7 @@ class NPRTexture : public OGLTexture {
    float                         _polygon_offset_units;
 
    bool                          _see_thru;
-   ARRAY<bool>                   _see_thru_flags;
+   vector<bool>                  _see_thru_flags;
 
    bool                          _selected;
 

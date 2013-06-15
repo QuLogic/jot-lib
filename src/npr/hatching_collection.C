@@ -74,18 +74,16 @@ HatchingCollection::put_hatching_groups(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingCollection::put_hatching_groups()"); 
 
-   int i;
-        
-   for (i=0;i<num();i++)
-      {
-         if ((*this)[i]->is_complete())
-            {
-               d.id();
-               *d << (*this)[i]->type();
-               (*this)[i]->format(*d);
-               d.end_id();
-            }
+   HatchingCollection::size_type i;
+
+   for (i=0; i<size(); i++) {
+      if ((*this)[i]->is_complete()) {
+         d.id();
+         *d << (*this)[i]->type();
+         (*this)[i]->format(*d);
+         d.end_id();
       }
+   }
 }
 
 /////////////////////////////////////
@@ -160,19 +158,15 @@ HatchingCollection::set_patch(Patch *p)
 
 HatchingCollection::~HatchingCollection()
 {
+   HatchingCollection::size_type k;
 
-   int k;
-
-   if (_patch)
-   {
+   if (_patch) {
       unsubscribe_mesh_notifications(_patch->mesh());
    }
 
-   for (k=0; k<num(); k++)
-   {
-      delete array()[k];
+   for (k=0; k<size(); k++) {
+      delete at(k);
    }
-   
 }
 
 /////////////////////////////////////
@@ -184,7 +178,7 @@ HatchingCollection::add_group(HatchingGroup* g)
 {
    if (!(g && g->patch() == _patch))
       return false;
-   add(g);
+   push_back(g);
    return true;
 }
 
@@ -207,7 +201,7 @@ HatchingCollection::add_group(int t)
       }
 
    if (hg)
-      add(hg);
+      push_back(hg);
 
    return hg;
 
@@ -216,7 +210,9 @@ HatchingCollection::add_group(int t)
 void
 HatchingCollection::remove_group(HatchingGroup* g)
 {
-   rem(g);
+   HatchingCollection::iterator it;
+   it = std::find(begin(), end(), g);
+   erase(it);
 }
 
 /////////////////////////////////////
@@ -226,21 +222,21 @@ HatchingCollection::remove_group(HatchingGroup* g)
 HatchingGroup * 
 HatchingCollection::next_group(CNDCpt &pt, HatchingGroup *hg)
 {
+   vector<HatchingGroup*> hit;
+   HatchingCollection::size_type k, it = (size_t)-1;
 
-   ARRAY<HatchingGroup*> hit;
-   int k;
-
-   for (k=0; k<num(); k++)
-      {
-         if (array()[k]->query_pick(pt)) hit += array()[k];
+   for (k=0; k<size(); k++) {
+      if (at(k)->query_pick(pt)) {
+         hit.push_back(at(k));
+         if (hg == at(k))
+            it = hit.size() - 1;
       }
+   }
 
-   if (hit.num()==0) return 0;
-   else if (hit.num()==1) return hit.first();
-   else if (hit.contains(hg)) return hit[(hit.get_index(hg)+1)%hit.num()];
-   else return hit.first();
-
-
+   if (hit.size()==0) return 0;
+   else if (hit.size()==1) return hit.front();
+   else if (it != (size_t)-1) return hit[(it+1)%hit.size()];
+   else return hit.front();
 }
 
 /////////////////////////////////////
@@ -250,13 +246,14 @@ HatchingCollection::next_group(CNDCpt &pt, HatchingGroup *hg)
 bool 
 HatchingCollection::delete_group(HatchingGroup *hg)
 {
-   if (rem(hg))
-   {
+   HatchingCollection::iterator it;
+   it = std::find(begin(), end(), hg);
+   if (it != end()) {
       delete hg;
+      erase(it);
       return true;
    }
    return false;
-
 }
 
 /////////////////////////////////////
@@ -265,21 +262,20 @@ HatchingCollection::delete_group(HatchingGroup *hg)
 int 
 HatchingCollection::draw(CVIEWptr& v)
 {
-   int k,cnt=0;
+   HatchingCollection::size_type k;
+   int cnt=0;
 
    static bool init = false;
 
-   if (!init) 
-   {
+   if (!init) {
       err_mesg(ERR_LEV_SPAM, "HatchingCollection::draw() - Adding collection to draw_int UPobs list."); 
       BaseJOTapp::instance()->window(0)->_cam1->add_up_obs(this);
 	  BaseJOTapp::instance()->window(0)->_cam2->add_up_obs(this);
       init = true;
    }
 
-   for (k=0;k<num();k++) 
-   {
-      cnt += array()[k]->draw(v);
+   for (k=0; k<size(); k++) {
+      cnt += at(k)->draw(v);
    }
 
    return cnt;
@@ -291,14 +287,12 @@ HatchingCollection::draw(CVIEWptr& v)
 void
 HatchingCollection::reset(int /* is_reset */)
 {
-   int k;
+   HatchingCollection::size_type k;
         
    // XXX Env. var. for this
-   for (k=0;k<num();k++) 
-   {
-      array()[k]->kill_animation();
+   for (k=0; k<size(); k++) {
+      at(k)->kill_animation();
    }
-
 }
 
 /////////////////////////////////////
@@ -315,9 +309,9 @@ HatchingCollection::notify_xform(BMESH *m, CWtransf &t, CMOD& mod)
 
    _xform_flag = true;
 
-   for (int k=0;k<num();k++) 
-      array()[k]->notify_xform(m,t, mod);
-
+   HatchingCollection::size_type k;
+   for (k=0; k<size(); k++)
+      at(k)->notify_xform(m, t, mod);
 }
 
 /////////////////////////////////////
@@ -366,7 +360,7 @@ HatchingCollection::notify_change(BMESH *m, BMESH::change_t chg)
          err_mesg(ERR_LEV_WARN, "HatchingCollection::notify_change - UNKNOWN TYPE!!!!!!!");
    };
 
-   for (int k=0;k<num();k++) 
-      array()[k]->notify_change(m,chg);
-
+   HatchingCollection::size_type k;
+   for (k=0; k<size(); k++)
+      at(k)->notify_change(m,chg);
 }

@@ -39,6 +39,8 @@
 #include "disp/view.H"
 #include "std/stop_watch.H"
 
+#include <vector>
+
 class HatchingLevelBase;
 class HatchingHatchBase;
 class HatchingSelectBase;
@@ -62,7 +64,7 @@ class HatchingGroupBase {
 
    HatchingGroup *              _group;
    HatchingSelectBase *         _select;
-   ARRAY<HatchingLevelBase*>    _level;
+   vector<HatchingLevelBase*>   _level;
    bool                         _selected;
 
    //Stored by the child class (fixed/free)
@@ -115,8 +117,9 @@ class HatchingGroupBase {
    virtual int     draw_select(CVIEWptr &v);
 
    //Level management
-   virtual void               level_sort(int (*cmp)(const void*, const void*)) 
-                                 { assert(_level.num() == _num_base_levels); _level.sort(cmp); }
+   virtual void               level_sort(bool (*cmp)(const HatchingLevelBase*, const HatchingLevelBase*))
+                                 { assert((int)_level.size() == _num_base_levels);
+                                   std::sort(_level.begin(), _level.end(), cmp); }
 
    virtual int                num_base_levels() const
                                  { return _num_base_levels; }
@@ -163,7 +166,7 @@ class HatchingGroupBase {
 
    // Gesture processing
    static bool   smooth_gesture(mlib::CNDCpt_list &pts, mlib::NDCpt_list &spts,
-                                const ARRAY<double>&prl, ARRAY<double>&sprl, int style);
+                                const vector<double>&prl, vector<double>&sprl, int style);
    static bool   is_gesture_silly(mlib::CNDCpt_list &pts, int style);
    static bool   fit_line(mlib::CNDCpt_list &pts, double &a, double &b );
    static Bface* compute_cutting_plane(Patch *pat, double a, double b, 
@@ -187,8 +190,7 @@ class HatchingGroupBase {
  * HatchingLevelBase
  *****************************************************************/
 
-
-class HatchingLevelBase : protected ARRAY<HatchingHatchBase*>, public DATA_ITEM { 
+class HatchingLevelBase : protected vector<HatchingHatchBase*>, public DATA_ITEM {
 public:
    /******** MEMBER TYPES ********/
    enum ext_t {         // Extinction types        
@@ -256,17 +258,19 @@ public:
 
  public:
 
-    inline double                pix_size()                       { return _pix_size; }
+    inline double                pix_size() const                 { return _pix_size; }
     void                         set_pix_size(double s)           { _pix_size = s; }
 
     inline HatchingGroupBase*    group()                          { return _group; }
     void                         set_group(HatchingGroupBase* g)  { _group = g; }
 
-   /******** EXPOSED ARRAY<> METHODS ********/
+   /******** EXPOSED vector<> METHODS ********/
 
-   using ARRAY<HatchingHatchBase*>::num;
-   using ARRAY<HatchingHatchBase*>::pop;
-   using ARRAY<HatchingHatchBase*>::operator[];
+   using vector<HatchingHatchBase*>::size;
+   using vector<HatchingHatchBase*>::size_type;
+   using vector<HatchingHatchBase*>::back;
+   using vector<HatchingHatchBase*>::pop_back;
+   using vector<HatchingHatchBase*>::operator[];
 
    /******** DATA_ITEM METHODS ********/
  public:
@@ -303,15 +307,15 @@ class HatchingHatchBase : public DATA_ITEM {
         
    // Basic hatch parameters
    mlib::Wpt_list             _pts;
-   ARRAY<mlib::Wvec>          _norms;
+   vector<mlib::Wvec>         _norms;
    double               _pix_size;
 
    BaseStrokeOffsetLISTptr    _offsets;
 
    mlib::Wpt_list             _real_pts;
-   ARRAY<mlib::Wvec>          _real_norms;
+   vector<mlib::Wvec>         _real_norms;
    double               _real_pix_size;
-   ARRAY<bool>          _real_good;
+   vector<bool>         _real_good;
 
    bool                 _visible;
 
@@ -319,7 +323,7 @@ class HatchingHatchBase : public DATA_ITEM {
    /******** CONSTRUCTOR/DESTRUCTOR ********/
 
    HatchingHatchBase(HatchingLevelBase *hlb, double len, 
-                     mlib::CWpt_list &pl,  const ARRAY<mlib::Wvec> &nl,
+                     mlib::CWpt_list &pl,  const vector<mlib::Wvec> &nl,
                      CBaseStrokeOffsetLISTptr &ol); 
    HatchingHatchBase(HatchingLevelBase *hlb=0) { _level = hlb; } 
    ~HatchingHatchBase();
@@ -332,7 +336,7 @@ class HatchingHatchBase : public DATA_ITEM {
    virtual void         update_prototype();
 
    mlib::CWpt_list &          get_pts()               { return _pts;          }
-   const ARRAY<mlib::Wvec>&   get_norms()             { return _norms;        }
+   const vector<mlib::Wvec>&  get_norms()             { return _norms;        }
    double               get_pix_size()          { return _pix_size;   }
 
    const BaseStrokeOffsetLISTptr& get_offsets() { return _offsets;      }
@@ -358,8 +362,8 @@ class HatchingHatchBase : public DATA_ITEM {
 
    /******** I/O Access Methods ********/
  protected:
-   mlib::Wpt_list&            pts_()                  { return _pts;       }
-   ARRAY<mlib::Wvec>          norms_()                { return _norms;     }
+   mlib::Wpt_list&      pts_()                  { return _pts;       }
+   vector<mlib::Wvec>   norms_()                { return _norms;     }
    double&              pix_size_()             { return _pix_size;}
 
    /******** I/O Methods ********/
@@ -470,7 +474,7 @@ class HatchingBackboneBase : public DATA_ITEM {
  protected:
    /******** MEMBER VARIABLES ********/
    double               _len;           // Total length
-   ARRAY<Vertebrae*>    _vertebrae;
+   vector<Vertebrae*>   _vertebrae;
    Patch *              _patch;
    bool                 _use_exist;             
    GELlist              _geoms;         // for debugging

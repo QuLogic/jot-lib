@@ -96,8 +96,7 @@ HatchingGroupFree::decode(STDdstream &ds)
 
    assert(_instances[0]->num_base_levels());
 
-   if (_instances[0]->base_level(0)->num() > 0)
-   {
+   if (_instances[0]->base_level(0)->size() > 0) {
       if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
          assert(_instances[0]->backbone());
 
@@ -163,8 +162,7 @@ HatchingGroupFree::put_levels(TAGformat &d) const
    int i;
    assert(_instances[0]->num_base_levels());
 
-   for (i=0; i<_instances[0]->num_base_levels(); i++)
-   {
+   for (i=0; i<_instances[0]->num_base_levels(); i++) {
       HatchingLevelBase *hlb = _instances[0]->base_level(i);
       assert(hlb);
       d.id();
@@ -370,7 +368,7 @@ HatchingGroupFree::HatchingGroupFree(Patch *p)  :
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::HatchingGroupFree()");
    //Add the base instance
    _instances.clear();
-   _instances.add(new HatchingGroupFreeInst(this));
+   _instances.push_back(new HatchingGroupFreeInst(this));
 }
 
 /////////////////////////////////////
@@ -381,8 +379,8 @@ HatchingGroupFree::~HatchingGroupFree()
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::~HatchingGroupFree()");
 
-   int k;
-        
+   vector<HatchingGroupFreeInst*>::size_type k;
+
    if (_complete)
    {
       assert(_position);
@@ -396,9 +394,8 @@ HatchingGroupFree::~HatchingGroupFree()
       _mapping = NULL;
    }
 
-   for (k=0;k<_instances.num();k++)  delete _instances[k];
+   for (k=0;k<_instances.size();k++)  delete _instances[k];
    _instances.clear();
-
 }
 
 /////////////////////////////////////
@@ -411,11 +408,10 @@ HatchingGroupFree::select()
 
    _selected = true;
 
-   int k;
+   vector<HatchingGroupFreeInst*>::size_type k;
 
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       _instances[k]->select();
-
 }
         
 /////////////////////////////////////
@@ -428,16 +424,16 @@ HatchingGroupFree::deselect()
 
    _selected = false;
 
-   int k;
+   vector<HatchingGroupFreeInst*>::size_type k;
 
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       _instances[k]->deselect();
-
 }
+
 /////////////////////////////////////
 // level_sorting_comparison
 /////////////////////////////////////
-extern int compare_pix_size(const void *a, const void *b) ;
+extern bool compare_pix_size(const HatchingLevelBase *a, const HatchingLevelBase *b);
 
 /////////////////////////////////////
 // complete()
@@ -453,18 +449,14 @@ HatchingGroupFree::complete()
    HatchingPositionFreeInst   *hpfri;
    HatchingBackboneFree       *hbfr;
 
-   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
-   {
+   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT) {
       assert(_instances[0]->num_base_levels() == 1);
       assert(_instances[0]->base_level(0)->pix_size() == 0.0);
 
-      if (_instances[0]->base_level(0)->num() < 2)
-      {
+      if (_instances[0]->base_level(0)->size() < 2) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::complete() - Not enough hatches (<2) to complete group.");
          return false;
-      }
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::complete() - Completing group.");
 
          hpfr = new HatchingPositionFree(this,_mapping);          assert(hpfr);
@@ -483,9 +475,7 @@ HatchingGroupFree::complete()
 
             _complete = true;
             return true;
-         }
-         else
-         {
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::complete() - Failed to complete group.");
             delete hpfr;
             delete hpfri;
@@ -493,13 +483,10 @@ HatchingGroupFree::complete()
             return false;
          }
       }
-   }
-   else //The two sloppy types
-   {
+   } else { //The two sloppy types
       assert(_instances[0]->num_base_levels() > 0);
       
-      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0.0)
-      {
+      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0.0) {
          // If the last editted level is complete, complete the group
          err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::complete() - Completing group.");
 
@@ -508,16 +495,13 @@ HatchingGroupFree::complete()
 
          //If we cannot compute this, we abort completion...
          //XXX - Change to using all base levels
-         if (hpfr->compute(_instances[0]))
-         {
+         if (hpfr->compute(_instances[0])) {
             _position = hpfr;               
             _instances[0]->set_position(hpfri);             
 
             _complete = true;
             return true;
-         }
-         else
-         {
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::complete() - Failed to complete group.");
             delete hpfr;
             delete hpfri;
@@ -529,24 +513,19 @@ HatchingGroupFree::complete()
 
          _complete = true;
          return true;
-      }
-      else
-      {
+
+      } else {
          // Else try to complete the last editted level
-         if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->num() >= 1)
-         {
+         if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->size() >= 1) {
             // XXX - Recompute ndc_length of each hatch?
             
             _instances[0]->base_level(_instances[0]->num_base_levels()-1)->
                               set_pix_size(_patch->mesh()->pix_size());
             return true;
-         }
-         else
-         {
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::complete() - Not enough hatches (<1) to complete level.");
             return false;
          }
-
       }
    }
 }
@@ -563,76 +542,63 @@ HatchingGroupFree::complete()
 bool
 HatchingGroupFree::undo_last()
 {
-
    assert(!_complete);
 
-   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
-   {
+   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT) {
       assert(_instances[0]->num_base_levels() == 1);
       assert(_instances[0]->base_level(0)->pix_size() == 0.0);
 
-      if (_instances[0]->base_level(0)->num() < 2)
-      {
-         assert(_instances[0]->base_level(0)->num() > 0);
+      if (_instances[0]->base_level(0)->size() < 2) {
+         assert(_instances[0]->base_level(0)->size() > 0);
          err_mesg(ERR_LEV_WARN, "HatchingGroupFree::undo_last() - Only 1 hatch left... can't undo.");
          //Pen should notice this failure and delete the group...
          return false;
-      }
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::undo_last() - Popping off hatch.");
          WORLD::message("Popped hatch stroke.");
-         HatchingHatchBase *hhb = _instances[0]->base_level(0)->pop();
+         HatchingHatchBase *hhb = _instances[0]->base_level(0)->back();
+         _instances[0]->base_level(0)->pop_back();
          assert(hhb);
          delete(hhb);
          return true;
       }
-   }
-   else //The two sloppy types
-   {
+   } else { //The two sloppy types
       assert(_instances[0]->num_base_levels() > 0);
       
-      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0.0)
-      {
+      if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0.0) {
          // If the last editted level is complete, un-complete it
          err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::undo_last() - Uncompleting level.");
          WORLD::message("Un-completed level.");
          _instances[0]->base_level(_instances[0]->num_base_levels()-1)->set_pix_size(0.0);
          return true;
-      }
-      else
-      {
-         if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->num() > 1)
-         {
+      } else {
+         if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->size() > 1) {
             err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::undo_last() - Popping off hatch.");
             WORLD::message("Popped hatch stroke.");
-            HatchingHatchBase *hhb = _instances[0]->base_level(_instances[0]->num_base_levels()-1)->pop();
+            HatchingHatchBase *hhb = _instances[0]->base_level(_instances[0]->num_base_levels()-1)->back();
+            _instances[0]->base_level(_instances[0]->num_base_levels()-1)->pop_back();
             assert(hhb);
             delete(hhb);
             return true;
-         }
-         else 
-         {
+         } else {
             //If there 1 hatch, pop it and the level 
             //if this isn't the bottom level. Else
             //return failure so the pen deletes the
             //remainder.
-            assert(_instances[0]->base_level(_instances[0]->num_base_levels()-1)->num() != 0);
+            assert(_instances[0]->base_level(_instances[0]->num_base_levels()-1)->size() != 0);
             
-            if (_instances[0]->num_base_levels() > 1)
-            {
+            if (_instances[0]->num_base_levels() > 1) {
                err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::undo_last() - Popping off hatch and level.");
                WORLD::message("Popped hatch level of detail.");
-               HatchingHatchBase *hhb = _instances[0]->base_level(_instances[0]->num_base_levels()-1)->pop();
+               HatchingHatchBase *hhb = _instances[0]->base_level(_instances[0]->num_base_levels()-1)->back();
+               _instances[0]->base_level(_instances[0]->num_base_levels()-1)->pop_back();
                assert(hhb);
                delete(hhb);
                HatchingLevelBase *hlb = _instances[0]->pop_base_level();
                assert(hlb);
                delete(hlb);
                return true;
-            }
-            else
-            {
+            } else {
                err_mesg(ERR_LEV_WARN, "HatchingGroupFree::undo_last() - Only 1 hatch left... can't undo.");
                //Pen should notice this failure and delete the group...
                return false;
@@ -641,6 +607,7 @@ HatchingGroupFree::undo_last()
       }
    }
 }
+
 /////////////////////////////////////
 // draw()
 /////////////////////////////////////
@@ -648,12 +615,12 @@ HatchingGroupFree::undo_last()
 int
 HatchingGroupFree::draw(CVIEWptr &v)
 {
-   int num=0, k;
+   int num=0;
+   vector<HatchingGroupFreeInst*>::size_type k;
 
    static int debug_mapping = Config::get_var_bool("HATCHING_DEBUG_MAPPING",false,true)?true:false;
 
-   if (VIEW::stamp() != _stamp)
-   {
+   if (VIEW::stamp() != _stamp) {
       if (debug_mapping)
          if (_mapping && _selected)
             _mapping->clear_debug_image();
@@ -662,15 +629,15 @@ HatchingGroupFree::draw(CVIEWptr &v)
       draw_setup();
 
       //Update levels
-      for (k=0; k<_instances.num(); k++)
+      for (k=0; k<_instances.size(); k++)
          _instances[k]->draw_setup();
 
       //Advance level animations, etc.
-      for (k=0; k<_instances.num(); k++)
+      for (k=0; k<_instances.size(); k++)
          _instances[k]->level_draw_setup();
         
       //Causes hatches to update 
-      for (k=0; k<_instances.num(); k++)
+      for (k=0; k<_instances.size(); k++)
          _instances[k]->hatch_draw_setup();
 
       _stamp = VIEW::stamp();
@@ -678,12 +645,12 @@ HatchingGroupFree::draw(CVIEWptr &v)
 
    //Draw all the hatches
    _prototype.draw_start();
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       num += _instances[k]->draw(v);
    _prototype.draw_end();
 
    //XXX - Could query _selected here
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       num += _instances[k]->draw_select(v);
 
    if (debug_mapping)
@@ -707,7 +674,6 @@ HatchingGroupFree::draw_setup()
 
         //XXX - Like this?
    _position->update();
-
 }
 
 
@@ -719,9 +685,9 @@ HatchingGroupFree::update_prototype()
 {
    HatchingGroup::update_prototype();
 
-   for (int k=0; k<_instances.num(); k++)
+   vector<HatchingGroupFreeInst*>::size_type k;
+   for (k=0; k<_instances.size(); k++)
       _instances[k]->update_prototype();
-
 }
 
 /////////////////////////////////////
@@ -730,9 +696,9 @@ HatchingGroupFree::update_prototype()
 bool
 HatchingGroupFree::query_pick(CNDCpt &pt)
 {
-   int k;
+   vector<HatchingGroupFreeInst*>::size_type k;
 
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       if (_instances[k]->query_pick(pt))
          return true;
         
@@ -743,7 +709,7 @@ HatchingGroupFree::query_pick(CNDCpt &pt)
 // add()
 /////////////////////////////////////
 bool
-HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
+HatchingGroupFree::add(CNDCpt_list &pl, const vector<double>&prl, int curve_type)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add()");
 
@@ -752,7 +718,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    Bface *f;
    UVMapping *m;
 
-   if ((int)pl.size() != prl.num()) {
+   if (pl.size() != prl.size()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFree::add() - Gesture pixel list and pressure list are not same length.");
       return false;
    }
@@ -760,7 +726,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    //Smooth the input gesture
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Smoothing gesture.");
    NDCpt_list        smoothpts;
-   ARRAY<double>     smoothprl;
+   vector<double>    smoothprl;
    HatchingGroupBase::smooth_gesture(pl,smoothpts,prl,smoothprl,_params.anim_style());
    smoothpts.update_length();
 
@@ -788,7 +754,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
    //Clip gesture to the uv region
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Clipping gesture to uv region.");
    NDCpt_list     ndcpts;
-   ARRAY<double>  finalprl;
+   vector<double> finalprl;
    clip_to_uv_region(smoothpts,ndcpts,smoothprl,finalprl);
    ndcpts.update_length();
    assert(ndcpts.size()>0);
@@ -926,7 +892,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
 
    UVpt_list            uvs;
    Wpt_list             pts;
-   ARRAY<Wvec>          norms;
+   vector<Wvec>         norms;
 
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::add() - Final sampling."); 
    for (k=0; k<ndczlScaledList.size(); k++) {
@@ -962,7 +928,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
 
             uvs.push_back(uv);
             pts.push_back(wloc);
-            norms += norm;
+            norms.push_back(norm);
          } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFree::add() - Change too large due to error in projection. Dumping point...");
          }
@@ -994,10 +960,10 @@ HatchingGroupFree::add(CNDCpt_list &pl, const ARRAY<double>&prl, int curve_type)
 
       ol->push_back(BaseStrokeOffset(0.0, 0.0, finalprl[0],
                                      BaseStrokeOffset::OFFSET_TYPE_BEGIN));
-      for (k=1; (int)k<finalprl.num(); k++)
-         ol->push_back(BaseStrokeOffset((double)k / (double)(finalprl.num() - 1), 0.0,
+      for (k=1; k<finalprl.size(); k++)
+         ol->push_back(BaseStrokeOffset((double)k / (double)(finalprl.size() - 1), 0.0,
                                         finalprl[k], BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
-      ol->push_back(BaseStrokeOffset(1.0, 0.0, finalprl[finalprl.num()-1],
+      ol->push_back(BaseStrokeOffset(1.0, 0.0, finalprl[finalprl.size()-1],
                                      BaseStrokeOffset::OFFSET_TYPE_END));
 
       if (_instances[0]->base_level(_instances[0]->num_base_levels()-1)->pix_size() > 0) {
@@ -1030,8 +996,8 @@ void
 HatchingGroupFree::clip_to_uv_region(
    CNDCpt_list &pts, 
    NDCpt_list &cpts,
-   CARRAY<double>&prl, 
-   ARRAY<double>&cprl ) 
+   const vector<double> &prl,
+   vector<double> &cprl)
 {
    NDCpt_list::size_type k;
    Bface *f;
@@ -1040,7 +1006,7 @@ HatchingGroupFree::clip_to_uv_region(
 
    int buf=0;     //1      //2
    NDCpt_list     tmppts1, tmppts2;
-   ARRAY<double>  tmpprl1, tmpprl2;
+   vector<double> tmpprl1, tmpprl2;
 
    // Will find the longest contiguous piece that
    // falls in the right uv region. 
@@ -1054,10 +1020,10 @@ HatchingGroupFree::clip_to_uv_region(
 
             if (buf == 1) {
                tmppts1.push_back(pts[k]);
-               tmpprl1 += prl[k];
+               tmpprl1.push_back(prl[k]);
             } else { //buf == 2
                tmppts2.push_back(pts[k]);
-               tmpprl2 += prl[k];
+               tmpprl2.push_back(prl[k]);
             }
          }
       } else {
@@ -1071,7 +1037,7 @@ HatchingGroupFree::clip_to_uv_region(
                   tmppts1.clear();
                   tmpprl1.clear();
                   tmppts1.insert(tmppts1.end(), tmppts2.begin(), tmppts2.end());
-                  tmpprl1.operator+=(tmpprl2);
+                  tmpprl1.insert(tmpprl1.end(), tmpprl2.begin(), tmpprl2.end());
 
                   err_mesg(ERR_LEV_INFO, 
                               "HatchingGroupFree::clip_to_uv_region() - Keeping longer of %d and %d vertex regions (2nd).", 
@@ -1088,7 +1054,7 @@ HatchingGroupFree::clip_to_uv_region(
       }
    }
    cpts.insert(cpts.end(), tmppts1.begin(), tmppts1.end());
-   cprl += tmpprl1;
+   cprl.insert(cprl.end(), tmpprl1.begin(), tmpprl1.end());
 }
 
 /////////////////////////////////////
@@ -1150,11 +1116,10 @@ HatchingGroupFree::slice_mesh_with_plane(
 void
 HatchingGroupFree::kill_animation()
 {
-   int k;
+   vector<HatchingGroupFreeInst*>::size_type k;
 
-   for (k=0; k<_instances.num(); k++)
+   for (k=0; k<_instances.size(); k++)
       _instances[k]->kill_animation();
-
 }
 
 /////////////////////////////////////
@@ -1259,11 +1224,12 @@ HatchingGroupFreeInst::~HatchingGroupFreeInst()
 HatchingGroupFreeInst*
 HatchingGroupFreeInst::clone()
 {
-   int l, h;
+   int l;
+   HatchingLevelBase::size_type h;
 
    //Assume we'll only do this when the group's complete...
    assert(_group->is_complete());
-   assert(base_level(0)->num() > 0);
+   assert(base_level(0)->size() > 0);
         
    HatchingGroupFreeInst *hgfri;
 
@@ -1272,12 +1238,10 @@ HatchingGroupFreeInst::clone()
 
    HatchingHatchFree *hhf;
 
-   for (l=0; l<num_base_levels(); l++)
-   {
+   for (l=0; l<num_base_levels(); l++) {
       if (l != 0) hgfri->add_base_level();
 
-      for (h=0; h<base_level(l)->num(); h++)
-      {
+      for (h=0; h<base_level(l)->size(); h++) {
          hhf= new HatchingHatchFree(hgfri->base_level(l),
                                     (HatchingHatchFree*)(*base_level(l))[h]);
          assert(hhf);
@@ -1295,8 +1259,7 @@ HatchingGroupFreeInst::clone()
    assert(hpfri);
    hgfri->set_position(hpfri);
 
-   if (_backbone)
-   {
+   if (_backbone) {
       assert(_group->get_params()->anim_style() == HatchingGroup::STYLE_MODE_NEAT);
       //The base instance's backbone
       hbfr = new HatchingBackboneFree(_group->patch(),hgfri, (HatchingBackboneFree*)_backbone);
@@ -1307,47 +1270,6 @@ HatchingGroupFreeInst::clone()
    if (_selected) hgfri->select();
 
    return hgfri;
-
-   /*
-
-   //Assume we'll only do this when the group's complete...
-   assert(_group->is_complete());
-   assert(base_level()->num() > 0);
-        
-   HatchingGroupFreeInst *hgfri;
-
-   hgfri = new HatchingGroupFreeInst(_group);
-   assert(hgfri);
-
-   HatchingHatchFree *hhf;
-   for (int k=0; k<base_level()->num(); k++)
-   {
-      hhf= new HatchingHatchFree(hgfri->base_level(),
-                                 (HatchingHatchFree*)(*base_level())[k]);
-      assert(hhf);
-      hgfri->base_level()->add_hatch(hhf);
-   }
-
-   HatchingPositionFreeInst  *hpfri;
-   HatchingBackboneFree  *hbfr;
-
-   //The base instance's version
-   hpfri = new HatchingPositionFreeInst(
-      ((HatchingGroupFree*)_group)->mapping(),
-      ((HatchingGroupFree*)_group)->position());
-   assert(hpfri);
-
-   //The base instance's backbone
-   hbfr = new HatchingBackboneFree(_group->patch(),hgfri, (HatchingBackboneFree*)_backbone);
-   assert(hbfr);
-
-   hgfri->set_position(hpfri);             
-   hgfri->set_backbone(hbfr);              
-
-   if (_selected) hgfri->select();
-
-   return hgfri;
-   */
 }
 
 /////////////////////////////////////
@@ -1485,8 +1407,8 @@ HatchingGroupFreeInst::interpolate(
    CUVpt_list                    &uvl2 = h2->get_uvs();
    CWpt_list                     &ptl1 = h1->get_pts();
    CWpt_list                     &ptl2 = h2->get_pts();
-   const ARRAY<Wvec>             &nl1  = h1->get_norms();
-   const ARRAY<Wvec>             &nl2  = h2->get_norms();
+   const vector<Wvec>            &nl1  = h1->get_norms();
+   const vector<Wvec>            &nl2  = h2->get_norms();
    const BaseStrokeOffsetLISTptr &ol1  = h1->get_offsets();
    const BaseStrokeOffsetLISTptr &ol2  = h2->get_offsets();
 
@@ -1498,7 +1420,7 @@ HatchingGroupFreeInst::interpolate(
 
    UVpt_list   uvpts;
    Wpt_list    pts;
-   ARRAY<Wvec> norms;
+   vector<Wvec> norms;
    BaseStrokeOffsetLISTptr offsets = new BaseStrokeOffsetLIST;
 
    UVpt uv;
@@ -1520,9 +1442,9 @@ HatchingGroupFreeInst::interpolate(
       m->interpolate( uv1, ifrac, uv2, (1.0-ifrac), uv );
       uvpts.push_back(uv);
 
-      norms +=
+      norms.push_back(
          (nl1[seg1]*(1.0-frac1) + nl1[seg1+1]*frac1)*ifrac  +
-         (nl2[seg2]*(1.0-frac2) + nl2[seg2+1]*frac2)*(1.0-ifrac);
+         (nl2[seg2]*(1.0-frac2) + nl2[seg2+1]*frac2)*(1.0-ifrac));
 
    }
 
@@ -1666,7 +1588,7 @@ HatchingHatchFree::tags() const
 /////////////////////////////////////
 HatchingHatchFree::HatchingHatchFree(
    HatchingLevelBase *hlb, double len, CUVpt_list &uvl, 
-   CWpt_list &pl,  const ARRAY<Wvec> &nl,
+   CWpt_list &pl,  const vector<Wvec> &nl,
    CBaseStrokeOffsetLISTptr &ol) :
       HatchingHatchBase(hlb,len,pl,nl,ol)
 {
@@ -1687,7 +1609,7 @@ HatchingHatchFree::HatchingHatchFree(
    HatchingHatchBase(hlb)
 {
    assert(hhf->get_uvs().size() == hhf->get_pts().size());
-   assert((int)hhf->get_uvs().size() == hhf->get_norms().num());
+   assert(hhf->get_uvs().size() == hhf->get_norms().size());
 
    _uvs.clear();   
    _uvs.insert(_uvs.end(), hhf->get_uvs().begin(), hhf->get_uvs().end());
@@ -1696,7 +1618,7 @@ HatchingHatchFree::HatchingHatchFree(
    _pts.insert(_pts.end(), hhf->get_pts().begin(), hhf->get_pts().end());
 
    _norms.clear();   
-   _norms.operator+=(hhf->get_norms());
+   _norms.insert(_norms.end(), hhf->get_norms().begin(), hhf->get_norms().end());
 
    _offsets = new BaseStrokeOffsetLIST;
    
@@ -1748,13 +1670,13 @@ HatchingHatchFree::stroke_real_setup()
    //alloc the arrays
    if (_real_pts.size() == 0) {
       assert(_pts.size()   ==  _uvs.size());
-      assert(_norms.num() ==  (int)_uvs.size());
+      assert(_norms.size() ==  _uvs.size());
 
       for (i=0; i<_uvs.size(); i++) {
          _real_uvs.push_back(_uvs[i]);
          _real_pts.push_back(_pts[i]);
-         _real_norms.add(_norms[i]);
-         _real_good.add(true);
+         _real_norms.push_back(_norms[i]);
+         _real_good.push_back(true);
       }
 
       _real_pix_size = _pix_size;
@@ -1788,11 +1710,11 @@ HatchingHatchFree::stroke_real_setup()
          //Use interpolated norm to smoth vis clipping at ends
          f->bc2norm_blend(bc,_real_norms[i]);
 
-
          //Store uv for vis checking
          _real_good[i] = true;
 
          good_num++;
+
       } else {
          //Store uv for vis checking (used for interpolation
          //at good to bad transition by HatchingStroke)
@@ -1919,8 +1841,7 @@ HatchingBackboneFree::get_num(TAGformat &d)
    *d >> num;
 
    for (i=0;i<num;i++) 
-      _vertebrae.add(new VertebraeFree);
-
+      _vertebrae.push_back(new VertebraeFree);
 }
 
 /////////////////////////////////////
@@ -1931,11 +1852,11 @@ HatchingBackboneFree::put_uvpts1(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneFree::put_uvpts1()");
 
-   int i;
-   ARRAY<UVpt> uvpts1;
+   vector<Vertebrae*>::size_type i;
+   vector<UVpt> uvpts1;
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      uvpts1.add(((VertebraeFree*)_vertebrae[i])->uvpt1);
+   for (i=0; i<_vertebrae.size(); i++)
+      uvpts1.push_back(((VertebraeFree*)_vertebrae[i])->uvpt1);
 
    d.id();
    *d << uvpts1;
@@ -1950,16 +1871,15 @@ HatchingBackboneFree::get_uvpts1(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneFree::get_uvpts1()");
 
-   int i;
-   ARRAY<UVpt> uvpts1;
+   vector<Vertebrae*>::size_type i;
+   vector<UVpt> uvpts1;
 
    *d >> uvpts1;
 
-   assert(_vertebrae.num() == uvpts1.num());
+   assert(_vertebrae.size() == uvpts1.size());
 
-   for (i=0; i<_vertebrae.num(); i++) 
+   for (i=0; i<_vertebrae.size(); i++)
       ((VertebraeFree*)_vertebrae[i])->uvpt1 = uvpts1[i];
-
 }
 
 /////////////////////////////////////
@@ -1970,11 +1890,11 @@ HatchingBackboneFree::put_uvpts2(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneFree::put_uvpts2()");
 
-   int i;
-   ARRAY<UVpt> uvpts2;
+   vector<Vertebrae*>::size_type i;
+   vector<UVpt> uvpts2;
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      uvpts2.add(((VertebraeFree*)_vertebrae[i])->uvpt2);
+   for (i=0; i<_vertebrae.size(); i++)
+      uvpts2.push_back(((VertebraeFree*)_vertebrae[i])->uvpt2);
 
    d.id();
    *d << uvpts2;
@@ -1989,19 +1909,17 @@ HatchingBackboneFree::get_uvpts2(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneFree::get_uvpts2()");
 
-   int i;
-   ARRAY<UVpt> uvpts2;
+   vector<Vertebrae*>::size_type i;
+   vector<UVpt> uvpts2;
 
    *d >> uvpts2;
 
-   assert(_vertebrae.num() == uvpts2.num());
+   assert(_vertebrae.size() == uvpts2.size());
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      {
-         ((VertebraeFree*)_vertebrae[i])->uvpt2[0] = uvpts2[i][0];
-         ((VertebraeFree*)_vertebrae[i])->uvpt2[1] = uvpts2[i][1];
-      }
-
+   for (i=0; i<_vertebrae.size(); i++) {
+      ((VertebraeFree*)_vertebrae[i])->uvpt2[0] = uvpts2[i][0];
+      ((VertebraeFree*)_vertebrae[i])->uvpt2[1] = uvpts2[i][1];
+   }
 }
 
 /////////////////////////////////////
@@ -2040,14 +1958,13 @@ HatchingBackboneFree::HatchingBackboneFree(
    _len = b->_len;
 
    VertebraeFree *vf;
-   for (int k=0; k<b->_vertebrae.num(); k++)
-      {
-         vf = new VertebraeFree;
-         assert(vf);
-         *vf = *((VertebraeFree*)b->_vertebrae[k]);
-         _vertebrae.add(vf);
-      }
-
+   vector<Vertebrae*>::size_type k;
+   for (k=0; k<b->_vertebrae.size(); k++) {
+      vf = new VertebraeFree;
+      assert(vf);
+      *vf = *((VertebraeFree*)b->_vertebrae[k]);
+      _vertebrae.push_back(vf);
+   }
 }
 
 
@@ -2065,8 +1982,7 @@ HatchingBackboneFree::~HatchingBackboneFree()
 double
 HatchingBackboneFree::get_ratio()
 {
-        
-   int i;
+   vector<Vertebrae*>::size_type i;
 //   NDCpt   n1, n2;
    Bface *f1, *f2;
    UVMapping *m;
@@ -2080,8 +1996,7 @@ HatchingBackboneFree::get_ratio()
 
    HatchingPositionFreeInst *p = _inst->position();
 
-   for (i=0;i<_vertebrae.num();i++)
-      {
+   for (i=0;i<_vertebrae.size();i++) {
          vf = (VertebraeFree*)_vertebrae[i];
 
          if (p)
@@ -2128,7 +2043,7 @@ bool
 HatchingBackboneFree::compute(
    HatchingLevelBase *hlb)
 {
-   int i;
+   HatchingLevelBase::size_type i;
    UVMapping *m;
 
    assert(hlb);
@@ -2138,16 +2053,14 @@ HatchingBackboneFree::compute(
 
    assert(m);
 
-   if (hlb->num() < 2)
-   {
+   if (hlb->size() < 2) {
       err_mesg(ERR_LEV_WARN, "HatchingBackboneFixed::compute() - Can't get backbone from less that 2 hatches!");
       return false;
    }
                 
    _len = 0;
 
-   for (i=0;i<hlb->num()-1;i++)
-   {
+   for (i=0;i<hlb->size()-1;i++) {
       int ind;
       double frac;
       double foo;
@@ -2210,12 +2123,12 @@ HatchingBackboneFree::compute(
 
       _len += len;
 
-      _vertebrae.add(vf);
+      _vertebrae.push_back(vf);
    }
 
    err_mesg(ERR_LEV_INFO, 
       "HatchingBackboneFree::compute() - Backbone is %f pixels in %d vertebrae.",
-         _len, _vertebrae.num());
+         _len, _vertebrae.size());
 
    return true;
 }
@@ -2431,7 +2344,8 @@ HatchingPositionFree::compute_bounds(
    assert(_mapping);
    assert(hgfri);
 
-   int l,h;
+   int l;
+   HatchingLevelBase::size_type h;
    UVpt_list::size_type k,k1;
    double umin, umax;
    double vmin, vmax;
@@ -2442,7 +2356,7 @@ HatchingPositionFree::compute_bounds(
    UVpt_list pts;
 
    for (l=0; l< hgfri->num_base_levels(); l++) {
-      for (h=0; h<hgfri->base_level(l)->num(); h++) {
+      for (h=0; h<hgfri->base_level(l)->size(); h++) {
          UVpt_list tmp = ((HatchingHatchFree*)(*hgfri->base_level(l))[h])->get_uvs();
          pts.insert(pts.end(), tmp.begin(), tmp.end());
       }
@@ -2570,14 +2484,13 @@ void
 HatchingPositionFree::cache_search_normals()
 {
    //XXX - This is the number of divisions in the coarse
-   //search.  It should be dynanically computed from some
+   //search.  It should be dynamically computed from some
    //measure of the number of faces crossed by a line
    //in uv space
 
    const int num = 100;
 
-   if (_search_normals.num() == 0)
-   {
+   if (_search_normals.empty()) {
       err_mesg(ERR_LEV_SPAM, "HatchingPositionFree::cache_search_normals() - Caching search normals...");
              
       Bface *f;
@@ -2586,35 +2499,29 @@ HatchingPositionFree::cache_search_normals()
       double du = _mapping->span_u()/((double)(num-1));
       int count=0;
 
-      for (int k=0;k<num;k++)
-      {
+      for (int k=0;k<num;k++) {
          query[0] = _mapping->min_u() + ((double)k)*du;
 
          f = _mapping->find_face(query,bc);
-         _search_normals += Wvec(0,0,0);
-         _search_dots += 0.0;
-         if (f)
-            {
-               f->bc2norm_blend(bc,_search_normals[k]);
-               count++;
-            }
-         else
-            {
-               _search_normals[k] = Wvec(666,666,666);
-               _search_dots[k] = 666;
-            }
+         _search_normals.push_back(Wvec(0,0,0));
+         _search_dots.push_back(0.0);
+         if (f) {
+            f->bc2norm_blend(bc,_search_normals[k]);
+            count++;
+         } else {
+            _search_normals[k] = Wvec(666,666,666);
+            _search_dots[k] = 666;
+         }
       }
       
       //err_mesg(ERR_LEV_SPAM, "Done.");
 
       //Let's assert that atleast SOME good normals are found
-      if (count==0)
-      {
+      if (count==0) {
          err_mesg(ERR_LEV_WARN, "HatchingPositionFree::cache_search_normals() - Found ZERO good normals. Bailing out.");
          assert(0);
-      }
-      else if (count < num)
-      {
+
+      } else if (count < num) {
          err_mesg(ERR_LEV_INFO, 
             "HatchingPositionFree::cache_search_normals() - WARNING!!! Only %d of the possible %d good normals was/were found.",
                count, num);
@@ -2631,13 +2538,13 @@ HatchingPositionFree::cache_search_normals()
 void
 HatchingPositionFree::smooth_search_normals()
 {
-   ARRAY<Wvec> smooth;
-   ARRAY<Wvec> swap;
+   vector<Wvec> smooth;
+   vector<Wvec> swap;
 
    bool okay;
    int i, iters;
-   int k, k_minus, k_plus;
-   int num = _search_normals.num();
+   size_t k, k_minus, k_plus;
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
 
    smooth = _search_normals;
 
@@ -2645,18 +2552,16 @@ HatchingPositionFree::smooth_search_normals()
 
    double width = _upper_right[0] - _lower_left[0];
 
-   if (_upper_right[0] < _lower_left[0])
-      {
-         assert(_mapping->wrap_u());
-         width += _mapping->span_u();
-      }
+   if (_upper_right[0] < _lower_left[0]) {
+      assert(_mapping->wrap_u());
+      width += _mapping->span_u();
+   }
 
    iters = int(ceil(width / du));
 
    err_mesg(ERR_LEV_INFO, "HatchingPositionFree::smooth_search_normals() - Smoothing %d times.", iters);
 
-   for (i=0; i<iters; i++)
-   {
+   for (i=0; i<iters; i++) {
       swap = smooth;
 
       //We don't smooth a normal if either
@@ -2669,53 +2574,42 @@ HatchingPositionFree::smooth_search_normals()
       //k-1 isn't ever smoothed, and should be
       //avoided...
 
-      for (k=0; k<(num-1); k++)
-      {
-         if (k==0)
-         {
-            if (_mapping->wrap_u())
-            {
+      for (k=0; k<(num-1); k++) {
+         if (k == 0) {
+            if (_mapping->wrap_u()) {
                okay = true;
                k_minus = num-2;
                k_plus = k+1;
-            }
-            else
-            {
+            } else {
                okay = false;
             }
-         }
-         else if (k==(num-2))
-         {
-            if (_mapping->wrap_u())
-            {
+
+         } else if (k == (num - 2)) {
+            if (_mapping->wrap_u()) {
                okay = true;
                k_minus = k-1;
                k_plus = 0;
-            }
-            else
-            {
+            } else {
                okay = true;
                k_minus = k-1;
                k_plus = k+1;
             }
-         }
-         else
-         {
+
+         } else {
             okay = true;
             k_minus = k-1;
             k_plus = k+1;
          }
                   
-         if ((okay)&&(swap[k_minus][0]==666 || swap[k][0]==666 || swap[k_plus][0]==666 ))
-         {
+         if (okay && (swap[k_minus][0] == 666 || swap[k][0] == 666 || swap[k_plus][0] == 666)) {
             okay = false;
          }
 
-         if (okay)
-         {
+         if (okay) {
             smooth[k] = (swap[k_minus] + swap[k] + swap[k_plus]).normalized();
          }
       }
+
       //The first and last point are same.
       //We never use [num-1] but it's shown in
       //the plot of the graph, so let's tidy
@@ -2728,7 +2622,6 @@ HatchingPositionFree::smooth_search_normals()
    _search_normals = smooth;
 
    generate_normal_spline();
-
 }
 
 /////////////////////////////////////
@@ -2737,12 +2630,9 @@ HatchingPositionFree::smooth_search_normals()
 void
 HatchingPositionFree::generate_normal_spline()
 {
-
    Wpt zip(0,0,0);
 
-   int k;
-
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type k, num = _search_normals.size();
 
    double du = _mapping->span_u()/((double)(num-1));
 
@@ -2759,44 +2649,34 @@ HatchingPositionFree::generate_normal_spline()
    //and then return a failure, rather than the interped value.
 
    //Wrap point for wrapping regions
-   if (_mapping->span_u())
-      {
-         if (_search_normals[num-2][0] != 666)
-            {
-               _normal_spline.add(zip+_search_normals[num-2],_mapping->min_u()-du);
-            }
+   if (_mapping->span_u()) {
+      if (_search_normals[num-2][0] != 666) {
+         _normal_spline.add(zip+_search_normals[num-2],_mapping->min_u()-du);
       }
+   }
 
    //Middle bit
-   for (k=0; k<=(num-2); k++)
-      {
-         if (_search_normals[k][0] != 666)
-            {
-               _normal_spline.add(zip+_search_normals[k],_mapping->min_u() + ((double)k)*du);
-            }
+   for (k=0; k<=(num-2); k++) {
+      if (_search_normals[k][0] != 666) {
+         _normal_spline.add(zip+_search_normals[k],_mapping->min_u() + ((double)k)*du);
       }
+   }
 
    //End bit
-   if (!_mapping->span_u())
-      {
-         if (_search_normals[num-1][0] != 666)
-            {
-               _normal_spline.add(zip+_search_normals[num-1],_mapping->max_u());
-            }
+   if (!_mapping->span_u()) {
+      if (_search_normals[num-1][0] != 666) {
+         _normal_spline.add(zip+_search_normals[num-1],_mapping->max_u());
       }
+   }
    else
-      {
-         if (_search_normals[0][0] != 666)
-            {
-               _normal_spline.add(zip+_search_normals[0],_mapping->max_u());
-            }
-         if (_search_normals[1][0] != 666)
-            {
-               _normal_spline.add(zip+_search_normals[1],_mapping->max_u()+du);
-            }
+   {
+      if (_search_normals[0][0] != 666) {
+         _normal_spline.add(zip+_search_normals[0],_mapping->max_u());
       }
-
-
+      if (_search_normals[1][0] != 666) {
+         _normal_spline.add(zip+_search_normals[1],_mapping->max_u()+du);
+      }
+   }
 }
 
 /////////////////////////////////////
@@ -2808,7 +2688,7 @@ HatchingPositionFree::query_normal_spline(double u, Wvec &n)
    assert(u>=_mapping->min_u());
    assert(u<=_mapping->max_u());
 
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
    double du = _mapping->span_u()/((double)(num-1));
 
    // XXX - two identical numbers?
@@ -2818,23 +2698,21 @@ HatchingPositionFree::query_normal_spline(double u, Wvec &n)
    //Sanity check
    assert(k_minus>=0);
    assert(k_plus>=0);
-   assert(k_minus<num);
-   assert(k_plus<num);
+   assert(k_minus<(int)num);
+   assert(k_plus<(int)num);
 
    //If the control normal at either
    //side of u is bad, then this normal
    //query is bad
 
-   if ((_search_normals[k_minus][0] == 666) || (_search_normals[k_plus][0] == 666))
-      {
-         n = Wvec(666,666,666);
-         return false;
-      }
+   if ((_search_normals[k_minus][0] == 666) || (_search_normals[k_plus][0] == 666)) {
+      n = Wvec(666,666,666);
+      return false;
+   }
 
    n = (_normal_spline.pt(u) - Wpt(0,0,0)).normalized();
 
    return true;
-
 }
 
 /////////////////////////////////////
@@ -2843,48 +2721,40 @@ HatchingPositionFree::query_normal_spline(double u, Wvec &n)
 void
 HatchingPositionFree::cache_search_dots()
 {
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
 
    static int debug_mapping = Config::get_var_bool("HATCHING_DEBUG_MAPPING",false,true)?true:false;
 
-   if (!debug_mapping)
-      {
-         for (int k=0; k<num; k++)
-            {
-               if (_search_normals[k][0] != 666)
-                  _search_dots[k] = _search_normals[k] * _curr_direction;
-               //else 
-               //              the dot's already 666
-            }
+   if (!debug_mapping) {
+      for (size_t k=0; k<num; k++) {
+         if (_search_normals[k][0] != 666)
+            _search_dots[k] = _search_normals[k] * _curr_direction;
+         //else
+         //  the dot's already 666
       }
-   else
-      {
-         double du = _mapping->span_u()/((double)(num-1));
-        
-         double u;
 
-         for (int k=0; k<num; k++)
-            {
-               u = _mapping->min_u() + du*k;
+   } else {
+      double du = _mapping->span_u()/((double)(num-1));
 
-               if (_search_normals[k][0] != 666)
-                  {
-                     //XXXX - Draw the unsmoothed too just for kicks
-                     if (_old_search_normals[k][0] != 666)
-                        _mapping->debug_dot(u,_old_search_normals[k]*_curr_direction,0x99, 0x55, 0x55);
+      double u;
 
-                     _search_dots[k] = _search_normals[k] * _curr_direction;
-                     _mapping->debug_dot(u,_search_dots[k],0xFF, 0xFF, 0xFF);
+      for (size_t k=0; k<num; k++) {
+         u = _mapping->min_u() + du*k;
 
-                  }
-               else 
-                  {
-                                //the dot's already 666
-                     _mapping->debug_dot(u,0.0,0xFF, 0x00, 0x00);
-                  }
-            }
+         if (_search_normals[k][0] != 666) {
+            //XXXX - Draw the unsmoothed too just for kicks
+            if (_old_search_normals[k][0] != 666)
+               _mapping->debug_dot(u,_old_search_normals[k]*_curr_direction,0x99, 0x55, 0x55);
 
+            _search_dots[k] = _search_normals[k] * _curr_direction;
+            _mapping->debug_dot(u,_search_dots[k],0xFF, 0xFF, 0xFF);
+
+         } else {
+            // the dot's already 666
+            _mapping->debug_dot(u,0.0,0xFF, 0x00, 0x00);
+         }
       }
+   }
 }
 
 /////////////////////////////////////
@@ -2896,10 +2766,7 @@ HatchingPositionFree::refine_placement_maximum(
    double& maxu,
    double& maxdot)
 {
-
-//   int k;
-
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
    double du = _mapping->span_u()/((double)(num-1));
 
    //Location of coarse maximum
@@ -2910,29 +2777,21 @@ HatchingPositionFree::refine_placement_maximum(
    double uplus;
    double uminus;
 
-   if (_mapping->wrap_u())
-      {
-         uminus = _mapping->min_u() + du*(double)((num-1 + maxk-1)%(num-1));
-         uplus = _mapping->min_u() + du*(double)((maxk+1)%(num-1));
+   if (_mapping->wrap_u()) {
+      uminus = _mapping->min_u() + du*(double)((num-1 + maxk-1)%(num-1));
+      uplus = _mapping->min_u() + du*(double)((maxk+1)%(num-1));
+   } else {
+      if (maxk == (int)(num-1)) {
+         uminus = _mapping->min_u() + du*(double)(maxk - 1);
+         uplus = _mapping->min_u() + du*(double)(maxk);
+      } else if (maxk == 0) {
+         uminus = _mapping->min_u() + du*(double)(maxk);
+         uplus = _mapping->min_u() + du*(double)(maxk+1);
+      } else {
+         uminus = _mapping->min_u() + du*(double)(maxk-1);
+         uplus = _mapping->min_u() + du*(double)(maxk+1);
       }
-   else
-      {
-         if (maxk == (num-1))
-            {
-               uminus = _mapping->min_u() + du*(double)(maxk - 1);
-               uplus = _mapping->min_u() + du*(double)(maxk);
-            }
-         else if (maxk == 0)
-            {
-               uminus = _mapping->min_u() + du*(double)(maxk);
-               uplus = _mapping->min_u() + du*(double)(maxk+1);
-            }
-         else
-            {
-               uminus = _mapping->min_u() + du*(double)(maxk-1);
-               uplus = _mapping->min_u() + du*(double)(maxk+1);
-            }
-      }
+   }
 
    maxu = refine(  maxu,
                    uminus, 
@@ -2972,9 +2831,9 @@ HatchingPositionFree::refine_placement_extent(
 {
    assert(maxdot>0.0);
 
-   int k;
+   size_t k;
 
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
    double du = _mapping->span_u()/((double)(num-1));
 
    //u values of neighbouring points bounding extremal
@@ -2993,8 +2852,8 @@ HatchingPositionFree::refine_placement_extent(
    double lastdot;
    bool trough;
    int rightk, leftk;
-   int startk, endk;
    int lastk;
+   size_t startk, endk;
 
    assert(maxdot > 0);
 
@@ -3003,62 +2862,46 @@ HatchingPositionFree::refine_placement_extent(
    lastk = -1;
    lastdot = 2;
    trough = false;
-   if (_mapping->wrap_u())
-   {
-      startk = ((int)ceil(maxu/du))%(num-1);
+   if (_mapping->wrap_u()) {
+      startk = ((size_t)ceil(maxu/du))%(num-1);
       endk = (num-1 + startk-1)%(num-1);
-   }
-   else
-   {
-      startk = ((int)ceil(maxu/du));
+   } else {
+      startk = ((size_t)ceil(maxu/du));
       endk = num-1;
    }
 
-   for (k =  startk; ; k++)
-   {
-
+   for (k = startk; ; k++) {
       if (_mapping->wrap_u()) 
-         k = (k<(num-1))?(k):(0);
+         k = (k<(num-1))? k : 0;
 
-      if (_search_normals[k][0] == 666)
-      {
+      if (_search_normals[k][0] == 666) {
          //XXX - laziness
-         if (rightk == -1)
-         {
+         if (rightk == -1) {
             err_mesg(ERR_LEV_WARN, "HatchingPositionFree::refine_placement() - 1st norm right of max is bad. Giving up.");
             k = endk; //stop
          }
          //else keep going to see if we pass this hole
          //and find we're still short of the goal
-      }
-      else
-      {
+         //
+      } else {
          double dot = _search_normals[k]*maxnorm;
-         if ( dot >= rightdot)
-         {
-                       //Abort out if we're climbing again
-            if (dot > lastdot)
-            {
+         if ( dot >= rightdot) {
+            // Abort out if we're climbing again
+            if (dot > lastdot) {
                trough = true;
                k = endk;
-            }
-            else
-            {
+            } else {
                rightk = k;
                lastdot=dot;
             }
-         }
-         else
-         {
-            if ( (lastk==-1) || (lastk == rightk))
-            {
+
+         } else {
+            if ( (lastk==-1) || (lastk == rightk)) {
                //The last norm was good (or this is the 1st)
                //so this point and the previous bracket the goal
                rightk = k;
                k = endk; //stop
-            }
-            else
-            {
+            } else {
                //The last norm was bad (and perhaps many
                //before it.  For now, let's just assume
                //that the we should bound at the last good pt
@@ -3073,12 +2916,9 @@ HatchingPositionFree::refine_placement_extent(
    //Now refine
    rightu = _mapping->min_u() + du*rightk;
 
-   if (rightk != -1)
-   {
-      if (!trough)
-      {
-         if (_mapping->wrap_u())
-         {
+   if (rightk != -1) {
+      if (!trough) {
+         if (_mapping->wrap_u()) {
             uplus = rightu;
                        //uminus = _mapping->min_u() + du*(double)((num-1 + rightk-1)%(num-1));
             uminus = _mapping->min_u() + du*(double)(rightk-1);
@@ -3090,19 +2930,15 @@ HatchingPositionFree::refine_placement_extent(
             uminus = max(uminus,mu);
             if (uminus < _mapping->min_u())
                uminus += _mapping->span_u();
-         }
-         else
-         {
+         } else {
             uplus = rightu;
             uminus = _mapping->min_u() + du*(double)((rightk)?(rightk-1):(0));
                        //Shouldn't bound refinement below the center
             uminus = max(maxu,uminus);
          }
-      }
-      else
-      {
-         if (_mapping->wrap_u())
-         {
+
+      } else {
+         if (_mapping->wrap_u()) {
             uplus = _mapping->min_u() + du*(double)((rightk+1)%(num-1));
                        //uminus = _mapping->min_u() + du*(double)((num-1 + rightk-1)%(num-1));
             uminus = _mapping->min_u() + du*(double)(rightk-1);
@@ -3114,24 +2950,18 @@ HatchingPositionFree::refine_placement_extent(
             uminus = max(uminus,mu);
             if (uminus < _mapping->min_u())
                uminus += _mapping->span_u();
-         }
-         else
-         {
-            if (rightk == (num-1))
-               {
-                  uminus = _mapping->min_u() + du*(double)(rightk - 1);
-                  uplus = _mapping->min_u() + du*(double)(rightk);
-               }
-            else if (rightk == 0)
-               {
-                  uminus = _mapping->min_u() + du*(double)(rightk);
-                  uplus = _mapping->min_u() + du*(double)(rightk+1);
-               }
-            else
-               {
-                  uminus = _mapping->min_u() + du*(double)(rightk-1);
-                  uplus = _mapping->min_u() + du*(double)(rightk+1);
-               }
+
+         } else {
+            if (rightk == (int)(num-1)) {
+               uminus = _mapping->min_u() + du*(double)(rightk - 1);
+               uplus = _mapping->min_u() + du*(double)(rightk);
+            } else if (rightk == 0) {
+               uminus = _mapping->min_u() + du*(double)(rightk);
+               uplus = _mapping->min_u() + du*(double)(rightk+1);
+            } else {
+               uminus = _mapping->min_u() + du*(double)(rightk-1);
+               uplus = _mapping->min_u() + du*(double)(rightk+1);
+            }
          }
       }
       rightu = refine(        rightu,
@@ -3140,9 +2970,8 @@ HatchingPositionFree::refine_placement_extent(
                               (!trough)?rightdot:(-2.0),
                               0.0001,
                               maxnorm);
-   }
-   else
-   {
+
+   } else {
       //We'll just call this placement bad for now... 
       //Don't think this happens... but maybe one day...
    }
@@ -3152,60 +2981,42 @@ HatchingPositionFree::refine_placement_extent(
    lastk = -1;
    lastdot = 2;
    trough = false;
-   if (_mapping->wrap_u())
-   {
+   if (_mapping->wrap_u()) {
       startk = ((int)floor(maxu/du))%(num-1);
       endk = (startk+1)%(num-1);
-   }
-   else
-   {
+   } else {
       startk = ((int)floor(maxu/du));
       endk = 0;
    }
-        
-   for (k = startk; ; k-- )
-   {
-      if (_mapping->wrap_u())
-         k = (k>=0)?(k):(num-2);
 
-      if (_search_normals[k][0] == 666)
-      {
-         if (leftk == -1)
-         {
+   k = startk;
+   while (true) {
+      if (_search_normals[k][0] == 666) {
+         if (leftk == -1) {
             err_mesg(ERR_LEV_WARN, "HatchingPositionFree::refine_placement() - 1st norm left of max is bad. Giving up.");
             k = endk; //stop
          }
          //else keep going to see if we pass this hole
          //and find we're still short of the goal
-      }
-      else
-      {
+      } else {
          double dot = _search_normals[k]*maxnorm;
-         if (dot >= leftdot)
-         {
-                       //Abort out if we're climbing again
-            if (dot > lastdot)
-            {
+         if (dot >= leftdot) {
+            //Abort out if we're climbing again
+            if (dot > lastdot) {
                trough = true;
                k = endk;
-            }
-            else
-            {
+            } else {
                leftk = k;
                lastdot=dot;
             }
-         }
-         else
-         {
-            if ( (lastk==-1) || (lastk == leftk) )
-            {
+
+         } else {
+            if ( (lastk==-1) || (lastk == leftk) ) {
                //The last norm was good (or this is the 1st)
                //so this point and the previous braket the goal
                leftk = k;
                k = endk; //stop
-            }
-            else
-            {
+            } else {
                //The last norm was bad (and perhaps many
                //before it.  For now, let's just assume
                //that the we should bound at the last good pt
@@ -3215,17 +3026,19 @@ HatchingPositionFree::refine_placement_extent(
       }
       lastk = k;
       if (k==endk) break;
+
+      if (_mapping->wrap_u())
+         k = (k>0) ? k-- : (num-2);
+      else
+         k--;
    }
 
    leftu = _mapping->min_u() + du*leftk;
 
    //Refine
-   if (leftk != -1)
-   {
-      if (!trough)
-      {
-         if (_mapping->wrap_u())
-         {
+   if (leftk != -1) {
+      if (!trough) {
+         if (_mapping->wrap_u()) {
             uminus = leftu;
                        //uplus = _mapping->min_u() + du*(double)((leftk+1)%(num-1));
             uplus = _mapping->min_u() + du*(double)(leftk+1);
@@ -3237,19 +3050,16 @@ HatchingPositionFree::refine_placement_extent(
             uplus = min(uplus,mu);
             if (uplus > _mapping->max_u())
                uplus -= _mapping->span_u();
-         }
-         else
-         {
+
+         } else {
             uminus = leftu;
-            uplus = _mapping->min_u() + du*(double)((leftk < (num-1))?(leftk + 1):leftk);
+            uplus = _mapping->min_u() + du*(double)((leftk < (int)(num-1)) ? (leftk + 1) : leftk);
                        //Shouldn't bound refinement above the center
             uplus = min(maxu,uplus);
          }
-      }
-      else
-      {
-         if (_mapping->wrap_u())
-         {
+
+      } else {
+         if (_mapping->wrap_u()) {
             uminus = _mapping->min_u() + du*(double)((num-1 + leftk-1)%(num-1));
                        //uplus = _mapping->min_u() + du*(double)((leftk+1)%(num-1));
             uplus = _mapping->min_u() + du*(double)(leftk+1);
@@ -3262,21 +3072,14 @@ HatchingPositionFree::refine_placement_extent(
             if (uplus > _mapping->max_u())
                uplus -= _mapping->span_u();
 
-         }
-         else
-         {
-            if (leftk == (num-1))
-            {
+         } else {
+            if (leftk == (int)(num-1)) {
                uminus = _mapping->min_u() + du*(double)(leftk - 1);
                uplus = _mapping->min_u() + du*(double)(leftk);
-            }
-            else if (leftk == 0)
-            {
+            } else if (leftk == 0) {
                uminus = _mapping->min_u() + du*(double)(leftk);
                uplus = _mapping->min_u() + du*(double)(leftk+1);
-            }
-            else
-            {
+            } else {
                uminus = _mapping->min_u() + du*(double)(leftk-1);
                uplus = _mapping->min_u() + du*(double)(leftk+1);
             }
@@ -3289,9 +3092,8 @@ HatchingPositionFree::refine_placement_extent(
                       (!trough)?leftdot:(-2.0),
                       0.0001,
                       maxnorm);
-   }
-   else
-   {
+
+   } else  {
       //We'll just call this placement bad for now... 
       //Don't think this happens... but maybe one day...
    }
@@ -3301,8 +3103,7 @@ HatchingPositionFree::refine_placement_extent(
    static bool debug_spread =
       Config::get_var_bool("HATCHING_DEBUG_PLACEMENT_SPREAD",false,true);
 
-   if (debug)
-   {
+   if (debug) {
       Wvec n;
       Wpt  p;
 
@@ -3364,7 +3165,6 @@ HatchingPositionFree::refine_placement_extent(
    if ( (leftk==-1) || (rightk==-1) )
       return false;
    else return true;
-
 }
 
 
@@ -3533,7 +3333,7 @@ HatchingPositionFree::refine(
 void
 HatchingPositionFree::update()
 {
-   int k;
+   vector<HatchingPlacement>::size_type k;
 
    cache_search_normals();
 
@@ -3545,16 +3345,16 @@ HatchingPositionFree::update()
 
    cache_search_dots();
 
-   int num = _search_normals.num();
+   vector<mlib::Wvec>::size_type num = _search_normals.size();
 
    //Swap placement array to keep old ones
    //and overwrite the old, old ones
-   ARRAY<HatchingPlacement>*       foo = _old_placements;
+   vector<HatchingPlacement>* foo = _old_placements;
    _old_placements = _curr_placements;
    _curr_placements = foo;
 
    if (!_curr_placements)
-      _curr_placements = new ARRAY<HatchingPlacement>;
+      _curr_placements = new vector<HatchingPlacement>;
    else
       _curr_placements->clear();
 
@@ -3576,7 +3376,7 @@ HatchingPositionFree::update()
                                    (_search_dots[k+1] != 666) )
                               {
                                  placement.maxk = k;
-                                 _curr_placements->add(placement);
+                                 _curr_placements->push_back(placement);
                               }
                         }
                   }
@@ -3590,7 +3390,7 @@ HatchingPositionFree::update()
                                    (_search_dots[k-1] != 666) )
                               {
                                  placement.maxk = k;
-                                 _curr_placements->add(placement);
+                                 _curr_placements->push_back(placement);
                               }
                         }
                   }
@@ -3604,7 +3404,7 @@ HatchingPositionFree::update()
                                    (_search_dots[k+1] != 666) )
                               {
                                  placement.maxk = k;
-                                 _curr_placements->add(placement);
+                                 _curr_placements->push_back(placement);
                               }
                         }
                   }
@@ -3628,7 +3428,7 @@ HatchingPositionFree::update()
                                    (_search_dots[k+2] != 666) )
                               {
                                  placement.maxk = k;
-                                 _curr_placements->add(placement);
+                                 _curr_placements->push_back(placement);
                               }
                         }
                   }
@@ -3648,7 +3448,7 @@ HatchingPositionFree::update()
                                              (_search_dots[k+2] != 666) ) ) )
                         {
                            placement.maxk = k;
-                           _curr_placements->add(placement);
+                           _curr_placements->push_back(placement);
                         }
                   }
             }
@@ -3664,7 +3464,7 @@ HatchingPositionFree::update()
    double absmax = -2.0;
 
    //Find the refined maxima
-   for (k=0; k<_curr_placements->num(); k++)
+   for (k=0; k<_curr_placements->size(); k++)
       {
          (*_curr_placements)[k].good = refine_placement_maximum((*_curr_placements)[k].maxk,
                                                                 (*_curr_placements)[k].maxu,(*_curr_placements)[k].maxdot);
@@ -3674,7 +3474,7 @@ HatchingPositionFree::update()
       }
 
    //Find the extents
-   for (k=0; k<_curr_placements->num(); k++)
+   for (k=0; k<_curr_placements->size(); k++)
       {
          if ((*_curr_placements)[k].good)
             (*_curr_placements)[k].good = refine_placement_extent(absmax,
@@ -3722,15 +3522,14 @@ HatchingPositionFree::update()
                                 }
                                 }
 */
-   while (_curr_placements->num() > _group->instances().num())
-      _group->instances().add(_group->base_instance()->clone());
+   while (_curr_placements->size() > _group->instances().size())
+      _group->instances().push_back(_group->base_instance()->clone());
 
    double leftu, rightu;
    double maxdot;
 
-   for (k=0; k < _group->instances().num(); k++)   
-      {
-         if (k >= _curr_placements->num())
+   for (k=0; k < _group->instances().size(); k++) {
+         if (k >= _curr_placements->size())
             {
                _group->instances()[k]->position()->_weight = 0;
             }

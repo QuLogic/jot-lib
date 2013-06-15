@@ -39,81 +39,45 @@ extern "C" void HACK_mouse_right_button_up();
 // Sorting comparison functions
 /////////////////////////////////////////////////////////////////
 
-static int
-arclen_compare_votes(const void* va, const void* vb)
+static bool
+arclen_compare_votes(const LuboVote &a, const LuboVote &b)
 {
-   LuboVote* a = (LuboVote*) va;
-   LuboVote* b = (LuboVote*) vb;
-   double diff = a->_s - b->_s;
-   return Sign2(diff);
+   return a._s < b._s;
 }
 
-static int
-double_comp(const void* va, const void* vb)
-
+static bool
+coverage_comp(const CoverageBoundary &a, const CoverageBoundary &b)
 {
-   double* a = (double*) va;
-   double* b = (double*) vb;
-   double diff = *a - *b;
-   return Sign2(diff);
-}
-
-static int
-double_comp_rev(const void* va, const void* vb)
-
-{
-   double* a = (double*) va;
-   double* b = (double*) vb;
-   double diff = *b - *a;
-   return Sign2(diff);
-}
-
-static int
-coverage_comp(const void* va, const void* vb)
-{
-   CoverageBoundary* a = (CoverageBoundary*) va;
-   CoverageBoundary* b = (CoverageBoundary*) vb;
-
-   if ( a->_s == b->_s ) {
-      if      ( a->_type == b->_type )
-         return 0;
-      else if ( a->_type == COVERAGE_START )
-         return -1;
+   if ( a._s == b._s ) {
+      if      ( a._type == b._type )
+         return false;
+      else if ( a._type == COVERAGE_START )
+         return true;
       else
-         return 1;
+         return false;
    }
 
-   double diff = a->_s - b->_s;
-   return Sign2( diff );
+   return a._s < b._s;
 }
 
-static ARRAY<VoteGroup> *votegroups_comp_confidence_groups = NULL;
+/* XXX: The begin() and confidence() functions are not marked const because
+ * they return references that are use a *lot*. I don't really feel like going
+ * and fixing that right now. So we'll have to const_cast instead. No need to
+ * worry, since these functions don't modify VoteGroup as long as you don't mess
+ * with the referenced variables.
+ */
 
-static int
-votegroups_comp_confidence(const void* va, const void* vb)
-
+static bool
+votegroups_comp_confidence(const VoteGroup &a, const VoteGroup &b)
 {
-   assert(votegroups_comp_confidence_groups);
-   VoteGroup &a = (*votegroups_comp_confidence_groups)[*((int*)va)];
-   VoteGroup &b = (*votegroups_comp_confidence_groups)[*((int*)vb)];
-   double diff = a.confidence() - b.confidence();
-   return Sign2((-diff));
+   return const_cast<VoteGroup&>(a).confidence() > const_cast<VoteGroup&>(b).confidence();
 }
 
-static ARRAY<VoteGroup> *votegroups_comp_begin_groups = NULL;
-
-static int
-votegroups_comp_begin(const void* va, const void* vb)
-
+static bool
+votegroups_comp_begin(const VoteGroup &a, const VoteGroup &b)
 {
-   assert(votegroups_comp_begin_groups);
-   VoteGroup &a = (*votegroups_comp_begin_groups)[*((int*)va)];
-   VoteGroup &b = (*votegroups_comp_begin_groups)[*((int*)vb)];
-   double diff = a.begin() - b.begin();
-   return Sign2((diff));
+   return const_cast<VoteGroup&>(a).begin() < const_cast<VoteGroup&>(b).begin();
 }
-
-
 
 /////////////////////////////////////////////////////////////////
 // SilAndCreaseTexture
@@ -266,8 +230,7 @@ SilAndCreaseTexture::get_sil_pool(TAGformat &d)
 void
 SilAndCreaseTexture::put_sil_pools(TAGformat &d) const
 {
-
-   for(int i=0; i<_sil_stroke_pools.num(); i++ ) {
+   for (vector<SilStrokePool*>::size_type i=0; i<_sil_stroke_pools.size(); i++) {
       d.id();
       (*d) << i << sil_stroke_pool((sil_stroke_pool_t)i);
       _sil_stroke_pools[i]->format(*d);
@@ -319,8 +282,7 @@ SilAndCreaseTexture::get_crease_pool(TAGformat &d)
 
    EdgeStrokePool::set_mesh(0);
 
-   _crease_stroke_pools += pool;
-
+   _crease_stroke_pools.push_back(pool);
 }
 
 /////////////////////////////////////
@@ -331,9 +293,9 @@ SilAndCreaseTexture::put_crease_pools(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM,
             "SilAndCreaseTexture::put_crease_pools() - Putting %d pools.",
-            _crease_stroke_pools.num());
+            _crease_stroke_pools.size());
 
-   for (int i = 0; i < _crease_stroke_pools.num(); i++) {
+   for (vector<EdgeStrokePool*>::size_type i = 0; i < _crease_stroke_pools.size(); i++) {
       d.id();
       _crease_stroke_pools[i]->format(*d);
       d.end_id();
@@ -381,10 +343,10 @@ SilAndCreaseTexture::SilAndCreaseTexture(Patch* patch)
 
       SilStrokePool *sp = new SilStrokePool(s);
       assert(sp);
-      _sil_stroke_pools.add(sp);
+      _sil_stroke_pools.push_back(sp);
    }
-
 }
+
 /////////////////////////////////////
 // set_patch()
 /////////////////////////////////////
@@ -418,12 +380,13 @@ SilAndCreaseTexture::request_ref_imgs()
 
 SilAndCreaseTexture::~SilAndCreaseTexture()
 {
-   for (int i=0; i<_crease_stroke_pools.num(); i++) {
+   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
       delete _crease_stroke_pools[i];
    }
 
-   while (_sil_stroke_pools.num() > 0) {
-      delete _sil_stroke_pools.pop();
+   while (_sil_stroke_pools.size() > 0) {
+      delete _sil_stroke_pools.back();
+      _sil_stroke_pools.pop_back();
    }
 
    unobserve();
@@ -551,7 +514,7 @@ SilAndCreaseTexture::create_crease_strokes()
             es->set_color(COLOR(.3,.3,.3));
             es->set_vis_step_pix_size(_crease_vis_step_size);
             pool = new EdgeStrokePool(es);
-            _crease_stroke_pools += pool;
+            _crease_stroke_pools.push_back(pool);
             pool->add_to_strip(cur_vert_start, cur_edge);
 
             stroke_started = 1;
@@ -694,7 +657,7 @@ SilAndCreaseTexture::read_stream(istream& is, vector<string> &leftover)
       EdgeStrokePool *pool = new EdgeStrokePool();
       assert(pool);
       pool->read_stream(is);
-      _crease_stroke_pools += pool;
+      _crease_stroke_pools.push_back(pool);
    }
    EdgeStrokePool::set_mesh(0);
 
@@ -710,7 +673,7 @@ SilAndCreaseTexture::read_stream(istream& is, vector<string> &leftover)
 int
 SilAndCreaseTexture::write_stream(ostream &os) const
 {
-   int i;
+   size_t i;
 
    cerr << "SilAndCreaseTexture::write_stream()\n";
 
@@ -749,19 +712,18 @@ SilAndCreaseTexture::write_stream(ostream &os) const
    os << _crease_thresh;
    os << endl;
 
-   os << _sil_stroke_pools.num();
+   os << _sil_stroke_pools.size();
 
    // write out all the *remaining* sil stroke pools
-   for(i=1; i<_sil_stroke_pools.num(); i++ ) {
+   for(i=1; i<_sil_stroke_pools.size(); i++ ) {
       _sil_stroke_pools[i]->write_stream(os);
    }
 
-
    // write out the number of crease stroke pools
-   os << _crease_stroke_pools.num();
+   os << _crease_stroke_pools.size();
 
    // write out all the crease stroke pools
-   for(i=0; i<_crease_stroke_pools.num(); i++ ) {
+   for(i=0; i<_crease_stroke_pools.size(); i++ ) {
       _crease_stroke_pools[i]->write_stream(os);
    }
 
@@ -780,7 +742,7 @@ SilAndCreaseTexture::recreate_creases()
    if (!_patch)
       return;
 
-   for (int i=0; i<_crease_stroke_pools.num(); i++) {
+   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
       delete _crease_stroke_pools[i];
    }
 
@@ -805,7 +767,7 @@ SilAndCreaseTexture::set_crease_vis_step_size(double s)
 {
    _crease_vis_step_size = s;
 
-   for (int i=0; i<_crease_stroke_pools.num(); i++) {
+   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
       EdgeStrokePool* cur_pool = _crease_stroke_pools[i];
 
       OutlineStroke* cur_stroke = cur_pool->get_prototype();
@@ -839,7 +801,7 @@ SilAndCreaseTexture::draw(CVIEWptr& v)
    // (This is necessary if camera or scene has changed.)
    /*
    if (_crease_strokes_need_update) {
-      for (int i=0; i<_crease_stroke_pools.num(); i++) {
+      for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
          _crease_stroke_pools[i]->mark_dirty();
       }
       _crease_strokes_need_update = false;
@@ -847,7 +809,7 @@ SilAndCreaseTexture::draw(CVIEWptr& v)
      
    if (!_crease_hide) {
       // draw the creases
-      for (int j=0; j<_crease_stroke_pools.num(); j++) {
+      for (vector<EdgeStrokePool*>::size_type j=0; j<_crease_stroke_pools.size(); j++) {
          _crease_stroke_pools[j]->draw_flat(v);
       }
    }
@@ -1048,19 +1010,18 @@ SilAndCreaseTexture::update_sil_paths(CVIEWptr &v)
 void
 SilAndCreaseTexture::cache_per_path_values()
 {
-   int k, num;
+   int k;
 
    LuboPathList& paths = _zx_edge_tex.paths();
-   num = paths.num();
+   LuboPathList::size_type num = paths.size();
 
-   ARRAY<double> offset_pix_lens(SIL_STROKE_POOL_NUM);
-   ARRAY<double> stretch_factors(SIL_STROKE_POOL_NUM);
+   vector<double> offset_pix_lens(SIL_STROKE_POOL_NUM);
+   vector<double> stretch_factors(SIL_STROKE_POOL_NUM);
 
    double pix_to_ndc_scale = _zx_edge_tex.pix_to_ndc_scale();
    double cur_size = pix_to_ndc_scale * _patch->pix_size();
 
    for (k=0; k<SIL_STROKE_POOL_NUM; k++) {
-
       OutlineStroke *s = _sil_stroke_pools[k]->get_active_prototype();
       assert(s);
 
@@ -1069,9 +1030,9 @@ SilAndCreaseTexture::cache_per_path_values()
       // Always push params around, even if period=0 (by using 1)
 
       if (s->get_offsets())
-         offset_pix_lens += s->get_offsets()->get_pix_len();
+         offset_pix_lens[k] = s->get_offsets()->get_pix_len();
       else
-         offset_pix_lens += max(1.0f,(s->get_angle()));
+         offset_pix_lens[k] = max(1.0f,(s->get_angle()));
 
       // First time round, might need to set this...
 
@@ -1085,14 +1046,13 @@ SilAndCreaseTexture::cache_per_path_values()
       if ((_sil_stroke_pools[k]->get_coher_global())?
           (SilUI::sigma_one(VIEW::peek())):
           (_sil_stroke_pools[k]->get_coher_sigma_one()))
-         stretch_factors += 1.0;
+         stretch_factors[k] = 1.0;
       else
-         stretch_factors += (cur_size < epsAbsMath()) ? 1.0 : (s->get_original_mesh_size() / cur_size);
-
+         stretch_factors[k] = (cur_size < epsAbsMath()) ? 1.0 : (s->get_original_mesh_size() / cur_size);
    }
 
 
-   for (k=0; k<num; k++) {
+   for (k=0; k<(int)num; k++) {
       LuboPath *p = paths[k];
 
       p->set_pix_to_ndc_scale(pix_to_ndc_scale);
@@ -1102,9 +1062,7 @@ SilAndCreaseTexture::cache_per_path_values()
       p->line_type() = pool_index;
       p->set_offset_pix_len(offset_pix_lens[pool_index]);
       p->set_stretch(stretch_factors[pool_index]);
-
    }
-
 }
 
 /////////////////////////////////////
@@ -1116,7 +1074,7 @@ SilAndCreaseTexture::generate_sil_groups()
 {
    static double MIN_PATH_PIX = Config::get_var_dbl("MIN_PATH_PIX",2.0,true);
 
-   int i;
+   LuboPathList::size_type i;
 
    const int   global_fit_type =   SilUI::fit_type(VIEW::peek());
    const int   global_cover_type = SilUI::cover_type(VIEW::peek());
@@ -1125,10 +1083,10 @@ SilAndCreaseTexture::generate_sil_groups()
 
    LuboPathList &paths = _zx_edge_tex.paths();
 
-   double min_ndc = (paths.num())?(paths[0]->pix_to_ndc_scale() * MIN_PATH_PIX):(0);
+   double min_ndc = (!paths.empty()) ? (paths[0]->pix_to_ndc_scale() * MIN_PATH_PIX) : 0;
 
    //Build and fit groups
-   for (i=0; i < paths.num(); i++) {
+   for (i=0; i < paths.size(); i++) {
       LuboPath* p = paths[i];
 
       if (p->length() < min_ndc )
@@ -1208,15 +1166,15 @@ SilAndCreaseTexture::generate_sil_groups()
 void
 SilAndCreaseTexture::build_groups ( LuboPath * p )
 {
-   int i,j,n;
+   size_t i,j,n;
    uint last_id=0, last_ind=0;
 
-   ARRAY<LuboVote>& votes = p->votes();
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<LuboVote>& votes = p->votes();
+   vector<VoteGroup>& groups = p->groups();
 
-   votes.sort(arclen_compare_votes);
+   std::sort(votes.begin(), votes.end(), arclen_compare_votes);
 
-   n = votes.num();
+   n = votes.size();
 
    groups.clear();
    //cerr << "Num Votes: " << n << "\n";
@@ -1228,31 +1186,30 @@ SilAndCreaseTexture::build_groups ( LuboPath * p )
          groups[last_ind].add(votes[i]);
          added = true;
       } else {
-         for (j=groups.num()-1; (j>=0) && (!added); j--) {
-            if ( groups[j].id() == votes[i]._stroke_id ) {
+         for (j=groups.size()-1; !added; j--) {
+            if (groups[j].id() == votes[i]._stroke_id) {
                groups[j].add(votes[i]);
                last_id = groups[j].id();
                last_ind = j;
                added = true;
             }
+            if (j == 0) break;
          }
       }
 
-      if ( !added ) {
-         groups += VoteGroup ( votes[i]._stroke_id, p );
+      if (!added) {
+         groups.push_back(VoteGroup(votes[i]._stroke_id, p));
          last_id = votes[i]._stroke_id;
-         last_ind = groups.num()-1;
+         last_ind = groups.size()-1;
          groups[last_ind].add( votes[i] );
       }
-
    }
 
    //Sort (also sets begin/end), and set unique id's
-   for  (i = 0 ; i < groups.num(); i++ ) {
+   for  (i = 0 ; i < groups.size(); i++ ) {
       groups[i].sort();
       groups[i].id() = p->gen_stroke_id();
    }
-
 }
 
 /////////////////////////////////////
@@ -1266,8 +1223,8 @@ SilAndCreaseTexture::cull_small_groups(LuboPath* p)
    SilStrokePool* pool = _sil_stroke_pools[p->line_type()];
    int MIN_VOTES_PER_GROUP = ((pool->get_coher_global())?(GLOBAL_MIN_VOTES_PER_GROUP):(pool->get_coher_mv()));
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -1294,8 +1251,8 @@ SilAndCreaseTexture::cull_short_groups(LuboPath* p)
    double min_length = min( MIN_PIX_PER_GROUP * p->pix_to_ndc_scale(),
                             MIN_FRAC_PER_GROUP * p->length());
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -1314,8 +1271,8 @@ SilAndCreaseTexture::cull_sparse_groups(LuboPath* p)
 {
    static double SPARSE_FACTOR = Config::get_var_dbl("SPARSE_FACTOR", 3.0,true);
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    double sample_spacing = _zx_edge_tex.get_sampling_dist() * p->pix_to_ndc_scale();
 
@@ -1335,7 +1292,6 @@ SilAndCreaseTexture::cull_sparse_groups(LuboPath* p)
 void
 SilAndCreaseTexture::split_looped_groups(LuboPath* p)
 {
-
    if (!p->is_closed())
       return;
 
@@ -1345,11 +1301,11 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
    const double DELTA_FRACTION = 0.75;
    const double DELTA_FACTOR = 4.0;
 
+   vector<VoteGroup>& groups = p->groups();
+   vector<double> gaps, sorted_gaps, deltas, sorted_deltas;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> gaps, sorted_gaps, deltas, sorted_deltas;
-
-   int j, i, nv, n = groups.num(), j0, j1;
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int j, nv, j0, j1;
    double gap_thresh, delta_thresh, cnt;
 
    for ( i=0; i<n; i++ ) {
@@ -1366,10 +1322,10 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
 
       cnt = 0.0;
       for (j=0; j<nv-1; j++) {
-         gaps += (g.vote(j+1)._s - g.vote(j)._s);
+         gaps.push_back(g.vote(j+1)._s - g.vote(j)._s);
          double d = (g.vote(j+1)._t - g.vote(j)._t);
-         deltas += d;
-         cnt += ((d<0.0)?(-1.0):(+1.0));
+         deltas.push_back(d);
+         cnt += (d<0.0) ? -1.0 : +1.0;
       }
 
       // Bail out if < 75% of the
@@ -1379,14 +1335,14 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
          continue;
       }
 
-      sorted_gaps += gaps;
-      sorted_gaps.sort(double_comp);
+      sorted_gaps.insert(sorted_gaps.end(), gaps.begin(), gaps.end());
+      std::sort(sorted_gaps.begin(), sorted_gaps.end());
 
-      sorted_deltas += deltas;
+      sorted_deltas.insert(sorted_deltas.end(), deltas.begin(), deltas.end());
       if (cnt<0.0)
-         sorted_deltas.sort(double_comp_rev);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end(), std::greater<double>());
       else
-         sorted_deltas.sort(double_comp);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end());
 
       // XXX - Hacky, but it might work:
       // Loop crossing found if there's
@@ -1407,7 +1363,9 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
          j0 = nv;
          j1 = -1;
          while (sorted_deltas[j]/delta_thresh > 1.0) {
-            int ind = deltas.get_index(sorted_deltas[j]);
+            vector<double>::iterator it;
+            it = std::find(deltas.begin(), deltas.end(), sorted_deltas[j]);
+            int ind = it - deltas.begin();
             if (ind < j0)
                j0 = ind;
             if (ind > j1)
@@ -1422,11 +1380,11 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
          }
 
 
-         if ( g.votes().first()._s > gap_thresh ) {
+         if ( g.votes().front()._s > gap_thresh ) {
             cerr << "SilAndCreaseTexture::split_looped_groups() - No votes near start of path...\n";
             continue;
          }
-         if ( g.votes().last()._s < (p->length()-gap_thresh) ) {
+         if ( g.votes().back()._s < (p->length()-gap_thresh) ) {
             cerr << "SilAndCreaseTexture::split_looped_groups() - No votes near end of path...\n";
             continue;
          }
@@ -1437,11 +1395,11 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
          // One day we'll try rejoining them
          // into a continguous group...
 
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         groups += VoteGroup ( p->gen_stroke_id(), p );
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
 
-         VoteGroup& ng1 = groups[groups.num()-2];
-         VoteGroup& ng2 = groups[groups.num()-1];
+         VoteGroup& ng1 = groups[groups.size()-2];
+         VoteGroup& ng2 = groups[groups.size()-1];
 
          VoteGroup& g = groups[i];
 
@@ -1451,7 +1409,6 @@ SilAndCreaseTexture::split_looped_groups(LuboPath* p)
             ng1.add(g.vote(j));
          ng1.begin() = g.vote(0)._s;
          ng1.end() = g.vote(j0)._s;
-
 
          for (j=j1+1; j<nv; j++)
             ng2.add(g.vote(j));
@@ -1471,10 +1428,11 @@ SilAndCreaseTexture::split_large_delta_groups(LuboPath* p)
    const double DELTA_FORWARD_FACTOR = 6.0;
    const double DELTA_REVERSE_FACTOR = 3.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> deltas, sorted_deltas;
+   vector<VoteGroup>& groups = p->groups();
+   vector<double> deltas, sorted_deltas;
 
-   int k, j, i, j0, nv, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int k, j, j0, nv;
    double cnt, delta_forward_thresh, delta_reverse_thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -1490,7 +1448,7 @@ SilAndCreaseTexture::split_large_delta_groups(LuboPath* p)
       cnt = 0.0;
       for (j=0; j<nv-1; j++) {
          double d = (g.vote(j+1)._t - g.vote(j)._t);
-         deltas += d;
+         deltas.push_back(d);
          cnt += ((d<0.0)?(-1.0):(+1.0));
       }
 
@@ -1501,11 +1459,11 @@ SilAndCreaseTexture::split_large_delta_groups(LuboPath* p)
          continue;
       }
 
-      sorted_deltas += deltas;
+      sorted_deltas.insert(sorted_deltas.end(), deltas.begin(), deltas.end());
       if (cnt<0.0)
-         sorted_deltas.sort(double_comp_rev);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end(), std::greater<double>());
       else
-         sorted_deltas.sort(double_comp);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end());
 
       delta_reverse_thresh = -1.0 * DELTA_REVERSE_FACTOR * sorted_deltas[(int)(DELTA_FRACTION * (nv-2.0))];
       delta_forward_thresh =  1.0 * DELTA_FORWARD_FACTOR * sorted_deltas[(int)(DELTA_FRACTION * (nv-2.0))];
@@ -1516,8 +1474,8 @@ SilAndCreaseTexture::split_large_delta_groups(LuboPath* p)
       j0 = 0;
       for (j=0; j<nv-1; j++) {
          if ( (deltas[j]/delta_reverse_thresh > 1.0) || (deltas[j]/delta_forward_thresh > 1.0) ) {
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
             VoteGroup& g  = groups[i];
 
             for (k=j0; k<=j; k++)
@@ -1530,8 +1488,8 @@ SilAndCreaseTexture::split_large_delta_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& g  = groups[i];
          g.status() = VoteGroup::VOTE_GROUP_SPLIT_LARGE_DELTA;
 
@@ -1552,10 +1510,11 @@ SilAndCreaseTexture::split_gapped_groups(LuboPath* p)
    const double THRESH_FRACTION = 0.75;
    const double THRESH_FACTOR = 4.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> gaps, sorted_gaps;
+   vector<VoteGroup>& groups = p->groups();
+   vector<double> gaps, sorted_gaps;
 
-   int k, j, i, j0, nv, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int k, j, j0, nv;
    double thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -1569,20 +1528,18 @@ SilAndCreaseTexture::split_gapped_groups(LuboPath* p)
       sorted_gaps.clear();
 
       for (j=0; j<nv-1; j++)
-         gaps += (g.vote(j+1)._s - g.vote(j)._s);
+         gaps.push_back(g.vote(j+1)._s - g.vote(j)._s);
 
-      sorted_gaps += gaps;
-      sorted_gaps.sort(double_comp);
+      sorted_gaps.insert(sorted_gaps.end(), gaps.begin(), gaps.end());
+      std::sort(sorted_gaps.begin(), sorted_gaps.end());
 
       thresh = THRESH_FACTOR * sorted_gaps[(int)(THRESH_FRACTION * (nv-2.0))];
 
       j0 = 0;
       for (j=0; j<nv-1; j++) {
-
          if (gaps[j] > thresh) {
-
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
             VoteGroup& g  = groups[i];
 
             for (k=j0; k<=j; k++)
@@ -1595,8 +1552,8 @@ SilAndCreaseTexture::split_gapped_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& g  = groups[i];
          g.status() = VoteGroup::VOTE_GROUP_SPLIT_GAP;
 
@@ -1614,12 +1571,12 @@ SilAndCreaseTexture::split_gapped_groups(LuboPath* p)
 void
 SilAndCreaseTexture::cull_backwards_groups(LuboPath* p)
 {
-
    const double BACK_THRESH = 0.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
 
-   int j, i, nv, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int j, nv;
    double cnt;
 
    for ( i=0; i<n; i++ ) {
@@ -1638,7 +1595,6 @@ SilAndCreaseTexture::cull_backwards_groups(LuboPath* p)
          g.status() = VoteGroup::VOTE_GROUP_CULL_BACKWARDS;
       }
    }
-
 }
 
 /////////////////////////////////////
@@ -1647,10 +1603,11 @@ SilAndCreaseTexture::cull_backwards_groups(LuboPath* p)
 void
 SilAndCreaseTexture::split_all_backtracking_groups(LuboPath* p)
 {
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> deltas;
+   vector<VoteGroup>& groups = p->groups();
+   vector<double> deltas;
 
-   int k, j, i, j0, nv, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int k, j, j0, nv;
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = groups[i];
@@ -1662,13 +1619,13 @@ SilAndCreaseTexture::split_all_backtracking_groups(LuboPath* p)
       deltas.clear();
 
       for (j=0; j<nv-1; j++)
-         deltas += (g.vote(j+1)._t - g.vote(j)._t);
+         deltas.push_back(g.vote(j+1)._t - g.vote(j)._t);
 
       j0 = 0;
       for (j=0; j<nv-1; j++) {
          if (deltas[j] < 0.0) {
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
 
             VoteGroup& g = groups[i];
 
@@ -1682,8 +1639,8 @@ SilAndCreaseTexture::split_all_backtracking_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
 
          VoteGroup& g = groups[i];
 
@@ -1708,9 +1665,9 @@ SilAndCreaseTexture::fit_initial_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
 
-   int i, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1733,9 +1690,9 @@ SilAndCreaseTexture::fit_initial_groups(
 void
 SilAndCreaseTexture::cull_bad_fit_groups(LuboPath* p)
 {
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
 
-   int i, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1751,34 +1708,33 @@ SilAndCreaseTexture::cull_bad_fit_groups(LuboPath* p)
          //XXX - Not thinkning about any other badness... yet...
          assert(g.fstatus() == VoteGroup::FIT_GOOD);
    }
-
 }
+
 /////////////////////////////////////
 // coverage_manage_groups()
 /////////////////////////////////////
 void
 SilAndCreaseTexture::coverage_manage_groups(LuboPath* p, void (SilAndCreaseTexture::*cover_func)(LuboPath*))
 {
-
    //Do common stuff...
 
    (*this.*cover_func)(p);
-
 }
+
 /////////////////////////////////////
 // cull_outliers_in_groups()
 /////////////////////////////////////
 void
 SilAndCreaseTexture::cull_outliers_in_groups(LuboPath* p)
 {
-
    const double THRESH_FRACTION = 0.75;
    const double THRESH_FACTOR = 20.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> errs, sorted_errs;
+   vector<VoteGroup>& groups = p->groups();
+   vector<double> errs, sorted_errs;
 
-   int j, i, cnt, nv, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int j, cnt, nv;
    double thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -1798,11 +1754,11 @@ SilAndCreaseTexture::cull_outliers_in_groups(LuboPath* p)
 
       for (j=0; j<nv; j++) {
          double err = (g.vote(j)._t - g.get_t(g.vote(j)._s));
-         errs += fabs(err);
+         errs.push_back(fabs(err));
       }
 
-      sorted_errs += errs;
-      sorted_errs.sort(double_comp);
+      sorted_errs.insert(sorted_errs.end(), errs.begin(), errs.end());
+      std::sort(sorted_errs.begin(), sorted_errs.end());
 
       thresh = THRESH_FACTOR * sorted_errs[(int)(THRESH_FRACTION * (nv-2.0))];
 
@@ -1818,7 +1774,6 @@ SilAndCreaseTexture::cull_outliers_in_groups(LuboPath* p)
          g.fstatus() = VoteGroup::FIT_OLD;
       }
    }
-
 }
 
 
@@ -1834,9 +1789,9 @@ SilAndCreaseTexture::fit_final_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
 
-   int i, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1854,8 +1809,8 @@ SilAndCreaseTexture::fit_final_groups(
             (*this.*fit_func)(g,freq);
       }
    }
-
 }
+
 /////////////////////////////////////
 // heal_groups()
 /////////////////////////////////////
@@ -1864,7 +1819,6 @@ SilAndCreaseTexture::heal_groups(
    LuboPath* p,
    void (SilAndCreaseTexture::*fit_func)(VoteGroup&,double))
 {
-
    static double GLOBAL_HEAL_JOIN_PIX_THRESH = Config::get_var_dbl("HEAL_JOIN_PIX_THRESH",3.0,true);
    static double GLOBAL_HEAL_DRAG_PIX_THRESH = Config::get_var_dbl("HEAL_DRAG_PIX_THRESH",15.0,true);
 
@@ -1875,10 +1829,12 @@ SilAndCreaseTexture::heal_groups(
    double pix_to_ndc = p->pix_to_ndc_scale();
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<int> final_groups;
+   vector<VoteGroup>& groups = p->groups();
+   vector<int> final_groups;
 
-   int pi, pi_1, i, i0, j, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   size_t j, i0;
+   int pi, pi_1;
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = groups[i];
@@ -1886,26 +1842,25 @@ SilAndCreaseTexture::heal_groups(
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD )
          continue;
 
-      final_groups += i;
+      final_groups.push_back(i);
    }
 
-   if (final_groups.num()<2)
+   if (final_groups.size()<2)
       return;
 
    //We're assuming that the groups provide total coverage
    //of the path, and abutt one another perfectly...
-   votegroups_comp_begin_groups = &groups;
-   final_groups.sort(votegroups_comp_begin);
+   std::sort(final_groups.begin(), final_groups.end(), votegroups_comp_begin);
 
-   i0 = -1;
+   i0 = (size_t)-1;
    pi = 0;
 
-   for (i=0; i < final_groups.num(); i++) {
+   for (i=0; i < final_groups.size(); i++) {
       VoteGroup &gi   = groups[final_groups[i]];
 
       bool attach = false;
 
-      if (i<(final_groups.num()-1)) {
+      if (i<(final_groups.size()-1)) {
          VoteGroup &gi_1 = groups[final_groups[i+1]];
          assert(gi.end() == gi_1.begin());
 
@@ -1928,13 +1883,13 @@ SilAndCreaseTexture::heal_groups(
             attach = true;
          } else if (dpix < HEAL_DRAG_PIX_THRESH) {
             //Add healing verts
-            gi.votes() += LuboVote();
-            gi_1.votes() += LuboVote();
+            gi.votes().push_back(LuboVote());
+            gi_1.votes().push_back(LuboVote());
 
-            LuboVote  &vi   =   gi.votes().first();
-            LuboVote &nvi   =   gi.votes().last();
-            LuboVote  &vi_1 = gi_1.votes().first();
-            LuboVote &nvi_1 = gi_1.votes().last();
+            LuboVote  &vi   =   gi.votes().front();
+            LuboVote &nvi   =   gi.votes().back();
+            LuboVote  &vi_1 = gi_1.votes().front();
+            LuboVote &nvi_1 = gi_1.votes().back();
 
             nvi._path_id   = vi._path_id;
             nvi._stroke_id = vi._stroke_id;
@@ -1950,10 +1905,10 @@ SilAndCreaseTexture::heal_groups(
 
             //Invalidate fits
             gi.fstatus() = VoteGroup::FIT_OLD;
-            gi.votes().sort(arclen_compare_votes);
+            std::sort(gi.votes().begin(), gi.votes().end(), arclen_compare_votes);
 
             gi_1.fstatus() = VoteGroup::FIT_OLD;
-            gi_1.votes().sort(arclen_compare_votes);
+            std::sort(gi_1.votes().begin(), gi_1.votes().end(), arclen_compare_votes);
 
          } else {}
 
@@ -1964,17 +1919,17 @@ SilAndCreaseTexture::heal_groups(
       if (attach) {
          //Record this as the starting group if
          //we're not already in a chain
-         if (i0 == -1) {
+         if (i0 == (size_t)-1) {
             i0 = i;
 
             //Make a new VoteGroup
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup &ng   = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup &ng   = groups.back();
             VoteGroup &gi   = groups[final_groups[i]];
 
             //Add the votes (p0 should be 0)
             assert (pi == 0);
-            ng.votes() += gi.votes();
+            ng.votes().insert(ng.votes().end(), gi.votes().begin(), gi.votes().end());
             ng.begin() = gi.begin();
 
          }
@@ -1982,46 +1937,46 @@ SilAndCreaseTexture::heal_groups(
          //the current chain
          else {
             //Add votes from gi (pi = ?)
-            VoteGroup& ng = groups.last();
+            VoteGroup& ng = groups.back();
             n = gi.num();
-            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().last()._t += pi; }
+            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().back()._t += pi; }
          }
          pi = pi_1;
       }
       //If we can't attach with next group...
       else {
          //Then add the votes if necessary
-         if (i0 != -1) {
+         if (i0 != (size_t)-1) {
             //Add votes from gi (pi = ?)
-            VoteGroup& ng = groups.last();
+            VoteGroup& ng = groups.back();
             n = gi.num();
-            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().last()._t += pi; }
+            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().back()._t += pi; }
             ng.end() = gi.end();
 
             //Flag [i0,i] as healed, remove (i0,i]
             while (i > i0) {
                VoteGroup &gi = groups[final_groups[i]];
                gi.status() = VoteGroup::VOTE_GROUP_HEALED;
-               final_groups.remove(i);
+               final_groups.erase(final_groups.begin() + i);
                i--;
             }
             VoteGroup &gi = groups[final_groups[i]];
             gi.status() = VoteGroup::VOTE_GROUP_HEALED;
 
             //Replace i0 with new group
-            final_groups[i] = groups.num()-1;
+            final_groups[i] = groups.size()-1;
 
             //Resort, since remove() mangles order
-            final_groups.sort(votegroups_comp_begin);
+            std::sort(final_groups.begin(), final_groups.end(), votegroups_comp_begin);
 
             //Finally, fit the new group, but sort first!!
-            ng.votes().sort(arclen_compare_votes);
+            std::sort(ng.votes().begin(), ng.votes().end(), arclen_compare_votes);
             if ( ng.num() == 0 )
                arclength_fit(ng,freq);
             else
                (*this.*fit_func)(ng,freq);
 
-            i0 = -1;
+            i0 = (size_t)-1;
             pi = 0;
          }
       }
@@ -2029,7 +1984,7 @@ SilAndCreaseTexture::heal_groups(
    }
 
    //Refit groups that got healer votes
-   for (i=0; i < final_groups.num(); i++) {
+   for (i=0; i < final_groups.size(); i++) {
       VoteGroup &gi   = groups[final_groups[i]];
 
       if (gi.fstatus() == VoteGroup::FIT_OLD) {
@@ -2055,9 +2010,9 @@ SilAndCreaseTexture::refit_backward_fit_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
 
-   int i, n = groups.num();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -2068,11 +2023,11 @@ SilAndCreaseTexture::refit_backward_fit_groups(
       if (g.fstatus() != VoteGroup::FIT_GOOD) {
          assert(g.fstatus() == VoteGroup::FIT_BACKWARDS);
 
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& gi = p->groups()[i];
 
-         ng.votes() += gi.votes();
+         ng.votes().insert(ng.votes().end(), gi.votes().begin(), gi.votes().end());
          ng.begin() = gi.begin();
          ng.end() = gi.end();
 
@@ -2087,10 +2042,8 @@ SilAndCreaseTexture::refit_backward_fit_groups(
 
          cerr << "SilAndCreaseTexture::refit_backward_fit_groups - <<<BACKWARDS FIT>>>\n";
          //HACK_mouse_right_button_up();
-
       }
    }
-
 }
 
 /////////////////////////////////////
@@ -2100,8 +2053,8 @@ void
 SilAndCreaseTexture::random_fit(VoteGroup& g, double freq)
 {
    double phase = drand48();
-   g.fits() += XYpt ( g.begin(), phase + 0.0 );
-   g.fits() += XYpt ( g.end(),   phase + (g.end() - g.begin()) * freq );
+   g.fits().push_back(XYpt(g.begin(), phase + 0.0));
+   g.fits().push_back(XYpt(g.end(),   phase + (g.end() - g.begin()) * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -2111,8 +2064,8 @@ SilAndCreaseTexture::random_fit(VoteGroup& g, double freq)
 void
 SilAndCreaseTexture::sigma_fit(VoteGroup& g, double freq)
 {
-   g.fits() += XYpt ( g.begin(), 0.0 );
-   g.fits() += XYpt ( g.end(),   (g.end() - g.begin())   * freq );
+   g.fits().push_back(XYpt(g.begin(), 0.0));
+   g.fits().push_back(XYpt(g.end(),   (g.end() - g.begin())   * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -2122,8 +2075,8 @@ SilAndCreaseTexture::sigma_fit(VoteGroup& g, double freq)
 void
 SilAndCreaseTexture::arclength_fit(VoteGroup& g, double freq)
 {
-   g.fits() += XYpt ( g.begin(), g.begin() * freq );
-   g.fits() += XYpt ( g.end(),   g.end()   * freq );
+   g.fits().push_back(XYpt(g.begin(), g.begin() * freq));
+   g.fits().push_back(XYpt(g.end(),   g.end()   * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -2179,8 +2132,8 @@ SilAndCreaseTexture::phasing_fit(VoteGroup& g, double freq)
    t_begin = s_begin * freq + phase;
    t_end   = s_end   * freq + phase;
 
-   g.fits() += XYpt ( s_begin, t_begin );
-   g.fits() += XYpt ( s_end  , t_end   );
+   g.fits().push_back(XYpt(s_begin, t_begin));
+   g.fits().push_back(XYpt(s_end  , t_end  ));
 
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
@@ -2199,18 +2152,18 @@ SilAndCreaseTexture::interpolating_fit(VoteGroup& g, double freq)
 
    t_last = -DBL_MAX;
    if (g.begin() < g.first_vote()._s) {
-      g.fits() += XYpt (g.begin(), t_begin);
+      g.fits().push_back(XYpt(g.begin(), t_begin));
    }
    for ( int i =0 ; i < g.num() ; i++ ) {
       assert(g.vote(i)._status == LuboVote::VOTE_GOOD);
       t = g.vote(i)._t;
-      g.fits() += XYpt ( g.vote(i)._s, t);
+      g.fits().push_back(XYpt(g.vote(i)._s, t));
       if (t<t_last)
          bad = true;
       t_last = t;
    }
    if (g.end() > g.vote(g.num()-1)._s) {
-      g.fits() += XYpt ( g.end(), t_end );
+      g.fits().push_back(XYpt(g.end(), t_end));
    }
 
    if (bad)
@@ -2492,7 +2445,7 @@ SilAndCreaseTexture::optimizing_fit(VoteGroup& g, double freq)
          if ((j>0) && (fj < fj_1))
             bad = true;
 
-         g.fits() += XYpt (xj, fj);
+         g.fits().push_back(XYpt(xj, fj));
 
          fj_1 = fj;
       }
@@ -2518,9 +2471,9 @@ SilAndCreaseTexture::optimizing_fit(VoteGroup& g, double freq)
 void
 SilAndCreaseTexture::majority_cover(LuboPath *p)
 {
-
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, max_ind=-1, max_votes=0, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int max_ind=-1, max_votes=0;
 
    for ( i=0; i<n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -2550,13 +2503,11 @@ SilAndCreaseTexture::majority_cover(LuboPath *p)
       g.end() = p->length();
    } else {
       //Deal with no groups
-      groups += VoteGroup ( p->gen_stroke_id(), p );
-      VoteGroup& ng = groups.last();
+      groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+      VoteGroup& ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
-
-
 }
 
 /////////////////////////////////////
@@ -2575,11 +2526,12 @@ SilAndCreaseTexture::one_to_one_cover(LuboPath *p)
    double min_length = min( MIN_PIX_PER_GROUP * p->pix_to_ndc_scale(),
                             MIN_FRAC_PER_GROUP * p->length());
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
    double i_1_num, i_num, del, cnt;
 
-   ARRAY<CoverageBoundary> final_boundary(2*n);
+   vector<CoverageBoundary> final_boundary;
+   final_boundary.reserve(2*n);
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -2590,15 +2542,15 @@ SilAndCreaseTexture::one_to_one_cover(LuboPath *p)
       if ((g.end() - g.begin()) < min_length) {
          g.status() = VoteGroup::VOTE_GROUP_NOT_ONE_TO_ONE;
       } else {
-         final_boundary += CoverageBoundary(i, g.begin(), COVERAGE_START);
-         final_boundary += CoverageBoundary(i,   g.end(),   COVERAGE_END);
+         final_boundary.push_back(CoverageBoundary(i, g.begin(), COVERAGE_START));
+         final_boundary.push_back(CoverageBoundary(i,   g.end(),   COVERAGE_END));
       }
    }
 
-   n = final_boundary.num();
+   n = final_boundary.size();
 
    if (n>0) {
-      final_boundary.sort(coverage_comp);
+      std::sort(final_boundary.begin(), final_boundary.end(), coverage_comp);
       assert(final_boundary[0]._type == COVERAGE_START);
       //Now fall through
    }
@@ -2646,11 +2598,11 @@ SilAndCreaseTexture::one_to_one_cover(LuboPath *p)
 
    //We found groups and filled the holes, now just tidy up the ends...
    if (cnt == 0) {
-      assert(final_boundary.first()._type == COVERAGE_START);
-      assert( final_boundary.last()._type == COVERAGE_END);
+      assert(final_boundary.front()._type == COVERAGE_START);
+      assert( final_boundary.back()._type == COVERAGE_END);
 
-      VoteGroup &gf = groups[final_boundary.first()._vg];
-      VoteGroup &gl = groups[ final_boundary.last()._vg];
+      VoteGroup &gf = groups[final_boundary.front()._vg];
+      VoteGroup &gl = groups[ final_boundary.back()._vg];
 
       if ((0.0 < gf.begin()) && (0.0 < gf.first_vote()._s) &&
           (gf.fstatus() != VoteGroup::FIT_NONE) )
@@ -2666,13 +2618,11 @@ SilAndCreaseTexture::one_to_one_cover(LuboPath *p)
    //Otherwise, just put a fresh-voteless group in...
    else {
       assert(cnt == 1);
-      groups += VoteGroup ( p->gen_stroke_id(), p);
-      VoteGroup &ng = groups.last();
+      groups.push_back(VoteGroup( p->gen_stroke_id(), p));
+      VoteGroup &ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
-
-
 }
 
 /////////////////////////////////////
@@ -2692,13 +2642,16 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
                             MIN_FRAC_PER_GROUP * p->length());
 
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i0, i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   size_t i, n = groups.size();
+   int i0;
    double i0_len, i_len, del;
 
-   ARRAY<CoverageBoundary> boundary(2*n);
-   ARRAY<CoverageBoundary> final_boundary(2*n);
-   ARRAY<int>              confidence_groups;
+   vector<CoverageBoundary> boundary;
+   vector<CoverageBoundary> final_boundary;
+   vector<int>              confidence_groups;
+   boundary.reserve(2*n);
+   final_boundary.reserve(2*n);
 
 
    for ( i=0; i < n ; i++ ) {
@@ -2707,17 +2660,15 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD )
          continue;
 
-      boundary += CoverageBoundary(i, g.begin(), COVERAGE_START);
-      boundary += CoverageBoundary(i,   g.end(),   COVERAGE_END);
+      boundary.push_back(CoverageBoundary(i, g.begin(), COVERAGE_START));
+      boundary.push_back(CoverageBoundary(i,   g.end(),   COVERAGE_END));
 
       g.status() = VoteGroup::VOTE_GROUP_NOT_HYBRID;
    }
 
-
-   n = boundary.num()/2;
+   n = boundary.size()/2;
 
    if (n>0) {
-
       //Assign confidences
       for (i=0; i<n; i++) {
          VoteGroup &g = groups[boundary[2*i]._vg];
@@ -2726,24 +2677,24 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
          g.confidence() = (g.end() - g.begin())/p->length();
       }
 
-      boundary.sort(coverage_comp);
+      std::sort(boundary.begin(), boundary.end(), coverage_comp);
 
       assert(boundary[0]._type == COVERAGE_START);
 
-      final_boundary += boundary[0];
-      confidence_groups += boundary[0]._vg;
+      final_boundary.push_back(boundary[0]);
+      confidence_groups.push_back(boundary[0]._vg);
 
       n = n * 2;
       for (i=1; i<n; i++) {
          CoverageBoundary &cb = boundary[i];
 
          //Between covereage regions
-         if (final_boundary.last()._type == COVERAGE_END) {
-            assert(confidence_groups.num() == 0);
+         if (final_boundary.back()._type == COVERAGE_END) {
+            assert(confidence_groups.empty());
             assert(cb._type == COVERAGE_START);
 
-            final_boundary += cb;
-            confidence_groups += cb._vg;
+            final_boundary.push_back(cb);
+            confidence_groups.push_back(cb._vg);
          }
          //In the midst of a coverage region
          else {
@@ -2752,18 +2703,21 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
                //If its not the current covering region...
                if (cb._vg != confidence_groups[0]) {
                   //Just drop it from the array of current groups
-                  confidence_groups.rem(cb._vg);
+                  vector<int>::iterator it;
+                  it = std::find(confidence_groups.begin(), confidence_groups.end(), cb._vg);
+                  confidence_groups.erase(it);
                }
                //Otherwise, complete this group...
                else {
-                  final_boundary += cb;
-                  confidence_groups.rem(cb._vg);
+                  final_boundary.push_back(cb);
+                  vector<int>::iterator it;
+                  it = std::find(confidence_groups.begin(), confidence_groups.end(), cb._vg);
+                  confidence_groups.erase(it);
 
                   //And begin the next group
-                  if (confidence_groups.num()>0) {
-                     votegroups_comp_confidence_groups = &groups;
-                     confidence_groups.sort(votegroups_comp_confidence);
-                     final_boundary += CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_START);
+                  if (confidence_groups.size()>0) {
+                     std::sort(confidence_groups.begin(), confidence_groups.end(), votegroups_comp_confidence);
+                     final_boundary.push_back(CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_START));
                   }
                }
             }
@@ -2772,25 +2726,25 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
                //If it's less confident...
                if (groups[cb._vg].confidence() <= groups[confidence_groups[0]].confidence()) {
                   //Just tuck it into the list of current groups
-                  confidence_groups += cb._vg;
+                  confidence_groups.push_back(cb._vg);
                }
                //If it's more confident
                else {
                   //Complete the current group
-                  final_boundary += CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_END);
+                  final_boundary.push_back(CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_END));
 
                   //Replace the maximum with the new groups
                   confidence_groups[0] = cb._vg;
 
                   //And begin the next group
-                  final_boundary += cb;
+                  final_boundary.push_back(cb);
                }
             }
          }
       }
 
       //Now kill off any coverages that are too narrow
-      n = final_boundary.num()/2;
+      n = final_boundary.size()/2;
       for (i=0; i<n; i++) {
          if ((final_boundary[2*i+1]._s - final_boundary[2*i]._s) < min_length) {
             final_boundary[2*i]._type = final_boundary[2*i+1]._type = COVERAGE_BAD;
@@ -2806,7 +2760,7 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
    //      so window (begin/end) modifications don't invalidate the fits...
 
    i0 = -1;
-   n = final_boundary.num()/2;
+   n = final_boundary.size()/2;
    for (i=0; i<n; i++) {
       if (final_boundary[2*i]._type != COVERAGE_BAD) {
          //First good coverage should cover start of path
@@ -2855,29 +2809,25 @@ SilAndCreaseTexture::hybrid_cover(LuboPath *p)
 
             //Otherwise, its been segmented, so introduce a new group for this segment
             else {
-               groups += VoteGroup ( p->gen_stroke_id(), p );
-               VoteGroup& ng = groups.last();
+               groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+               VoteGroup& ng = groups.back();
 
                VoteGroup &vg = groups[final_boundary[2*i]._vg];
 
-               ng.votes() += vg.votes();
+               ng.votes().insert(ng.votes().end(), vg.votes().begin(), vg.votes().end());
                ng.begin() = final_boundary[2*i]._s;
                ng.end()   = final_boundary[2*i+1]._s;
             }
          }
       }
-
-
    }
    //Otherwise, just put a fresh-voteless group in...
    else {
-      groups += VoteGroup ( p->gen_stroke_id(), p);
-      VoteGroup &ng = groups.last();
+      groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+      VoteGroup &ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
-
-
 }
 
 /////////////////////////////////////
@@ -2889,7 +2839,9 @@ SilAndCreaseTexture::generate_strokes_from_groups()
 {
    static double SIL_TO_STROKE_PIX_SAMPLING = Config::get_var_dbl("SIL_TO_STROKE_PIX_SAMPLING",6.0,true);
 
-   int n, i, j, k, num;
+   vector<LuboPath*>::size_type k;
+   vector<VoteGroup>::size_type i, n;
+   int j, num;
    double sbegin, send, sdelta, ubegin, uend, udelta, length;
    OutlineStroke* stroke;
 
@@ -2898,19 +2850,18 @@ SilAndCreaseTexture::generate_strokes_from_groups()
 
    LuboPathList& paths = _zx_edge_tex.paths();
 
-   double step_size = (paths.num())?(paths[0]->pix_to_ndc_scale() * SIL_TO_STROKE_PIX_SAMPLING):(0);
+   double step_size = (!paths.empty()) ? (paths[0]->pix_to_ndc_scale() * SIL_TO_STROKE_PIX_SAMPLING) : 0;
 
-   
    for (k=0; k<SIL_STROKE_POOL_NUM; k++) {
       _sil_stroke_pools[k]->blank();
       _sil_stroke_pools[k]->set_path_index_stamp(_zx_edge_tex.path_stamp());
       _sil_stroke_pools[k]->set_group_index_stamp(_zx_edge_tex.group_stamp());
    }
 
-   for (k=0; k<paths.num(); k++) {
+   for (k=0; k<paths.size(); k++) {
       LuboPath *p = paths[k];
 
-      n = p->groups().num(); 
+      n = p->groups().size();
      
       length = p->length();
       for ( i = 0 ; i < n ; i++ ) {

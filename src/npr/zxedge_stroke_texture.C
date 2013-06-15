@@ -338,8 +338,6 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
 
    //XXX this happens ( conditionally ) in sils_split_on_gradient
 
-
-
    _pre_zx_segs.clear(); //instead of modifying the sils from the patch
    //we build our own list that we add to
 
@@ -356,26 +354,24 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
    if (type_is_enabled(STYPE_POLYLINE) )
       add_polyline_to_sils();  
    //pre zx are finished.
-   err_adv(false, "sil_path_preprocess_seethru: %d _pre_zx_segs", _pre_zx_segs.num());   
+   err_adv(false, "sil_path_preprocess_seethru: %d _pre_zx_segs", _pre_zx_segs.size());
       
    //process them into ref segs.
    _ref_segs.clear();           
 
-   int i;
-   int loop_begin=0;
-   int loop_end=0;
+   size_t i;
+   size_t loop_begin=0;
+   size_t loop_end=0;
    int ref_start=0;
    int ref_end=0;
-   int sil_num = _pre_zx_segs.num();   
+   vector<ZXseg>::size_type sil_num = _pre_zx_segs.size();
   
    //const Wtransf& ndc_xform =      (_patch) ? _patch->mesh()->obj_to_ndc() : (_mesh) ? _mesh->obj_to_ndc() : Identity;
    const Wtransf& ndc_xform =  get_obj_to_ndc(_patch, _mesh);     
    const Wtransf& w_to_obj_xform = (_patch) ? _patch->mesh()->inv_xform()  : (_mesh) ? _mesh->inv_xform() : Identity;
    int cur_type;
 
-   
    while ( loop_begin < sil_num ) {
-          
       // Find the end of the loop
       loop_end = loop_begin;
       cur_type = _pre_zx_segs[loop_begin].type();
@@ -384,7 +380,6 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
            assert( cur_type == _pre_zx_segs[loop_end].type() ); //loop ends when .end == true
       }
 
-      
       assert( cur_type == _pre_zx_segs[loop_end].type() );
 
       bool in_frustum, last_in_frustum;
@@ -392,20 +387,20 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
       NDCZpt last_npt         = NDCZpt(_pre_zx_segs[loop_begin].p(), ndc_xform);
       last_in_frustum         = last_npt.in_frustum();
 
-      ref_start = _ref_segs.num();  
+      ref_start = _ref_segs.size();
       if ( last_in_frustum ) { //first point
          //don't add path_id's yet      
          
          assert ( cur_type == _pre_zx_segs[loop_begin].type() );
-         _ref_segs += SilSeg (
+         _ref_segs.push_back(SilSeg(
                          last_npt, true, SIL_VISIBLE, 0,
                          _pre_zx_segs[loop_begin].v(),
                          _pre_zx_segs[loop_begin].s(),
                          _pre_zx_segs[loop_begin].p(),
                          partial_length
-                      );
-         _ref_segs.last().type() = _pre_zx_segs[loop_begin].type();
-         assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                      ));
+         _ref_segs.back().type() = _pre_zx_segs[loop_begin].type();
+         assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
       }
       
       for  ( i = loop_begin+1; i <= loop_end; i++ ) {
@@ -423,15 +418,15 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
             partial_length   += ( npt-last_npt ).planar_length();
 
             assert ( cur_type == _pre_zx_segs[i].type() );
-            _ref_segs += SilSeg (
+            _ref_segs.push_back(SilSeg(
                             npt, make_edge, SIL_VISIBLE, 0,
                             _pre_zx_segs[i].v(),
                             bary_face,
                             _pre_zx_segs[i].p(),
                             partial_length
-                         );
-            _ref_segs.last().type() = _pre_zx_segs[i].type();
-            assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                         ));
+            _ref_segs.back().type() = _pre_zx_segs[i].type();
+            assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
 
          } else if (in_frustum != last_in_frustum) {
 
@@ -448,15 +443,15 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
 
                   assert ( cur_type == _pre_zx_segs[i-1].type() );
                   //add frustum cut point
-                  _ref_segs += SilSeg (
+                  _ref_segs.push_back(SilSeg(
                                   frust_npt, true, SIL_VISIBLE, 0,
                                   _pre_zx_segs[i-1].v(),
                                   _pre_zx_segs[i-1].s(),
                                   frust_wpt,
                                   partial_length
-                               );
-                  _ref_segs.last().type() = _pre_zx_segs[i-1].type();
-                  assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                               ));
+                  _ref_segs.back().type() = _pre_zx_segs[i-1].type();
+                  assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
                   partial_length += ( npt-frust_npt).planar_length();
                } else
                   partial_length=0;       //or here
@@ -464,15 +459,15 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
                assert( cur_type == _pre_zx_segs[i].type() );
 
                //add this point
-               _ref_segs += SilSeg (
+               _ref_segs.push_back(SilSeg(
                                npt, make_edge, SIL_VISIBLE, 0,
                                _pre_zx_segs[i].v(),
                                bary_face,
                                _pre_zx_segs[i].p(),
                                partial_length
-                            );
-               _ref_segs.last().type() = _pre_zx_segs[i].type();
-               assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                            ));
+               _ref_segs.back().type() = _pre_zx_segs[i].type();
+               assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
             } else {
                //we are exiting the frustum
                if ( ( w = intersect_with_frustum(last_npt, npt, frust_npt) ) > 0 ) {
@@ -483,18 +478,18 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
                   assert ( cur_type == _pre_zx_segs[i-1].type() );
 
                   partial_length += (frust_npt-last_npt).planar_length();
-                  _ref_segs += SilSeg (
+                  _ref_segs.push_back(SilSeg(
                                   frust_npt, false, SIL_VISIBLE, 0,
                                   _pre_zx_segs[i].v(),
                                   _pre_zx_segs[i-1].s(),
                                   frust_wpt,
                                   partial_length
-                               );
-                  _ref_segs.last().type() = _pre_zx_segs[i-1].type();
-                  assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                               ));
+                  _ref_segs.back().type() = _pre_zx_segs[i-1].type();
+                  assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
 
                } else {                  
-                  _ref_segs.last().e() = false;  //stop the loop here
+                  _ref_segs.back().e() = false;  //stop the loop here
                }
             }
          }
@@ -503,9 +498,9 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
          last_npt         = npt;
       }
 
-      ref_end = _ref_segs.num();
+      ref_end = _ref_segs.size();
 
-      err_adv(false, "sil_path_preprocess_seethru: %d _ref_segs", _ref_segs.num());   
+      err_adv(false, "sil_path_preprocess_seethru: %d _ref_segs", _ref_segs.size());
       
 
       // assert ( ( ref_end == ref_start) || (ref_end - ref_start > 1 ) );
@@ -553,22 +548,21 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
                }
 
                if ( j > ref_start && j != ref_end-1) {
-
-                  _ref_segs.pop(); //the duplicate point at end isn't needed
+                  _ref_segs.pop_back(); //the duplicate point at end isn't needed
 
                   if ( !(use_mintest&&mintest) )
                      _ref_segs[j-1].e() = 0; //terminate the end (if we stopped because of vis );
 
-                  int block_size = _ref_segs.num() - j;
-                  _ref_segs.insert(ref_start, block_size);
+                  NDCSilPath::size_type block_size = _ref_segs.size() - j;
+                  _ref_segs.insert(_ref_segs.begin() + ref_start, block_size, SilSeg());
                   int seam = ref_start+block_size;
                   if ( block_size > 0 ) {
-
                      for ( k = seam-1; k >= ref_start ; k-- ) {
                         //insert these segments at the beginning of the section we just added
-                        _ref_segs[k] = _ref_segs.pop();
+                        _ref_segs[k] = _ref_segs.back();
+                        _ref_segs.pop_back();
                      }
-                     ref_end = _ref_segs.num();
+                     ref_end = _ref_segs.size();
                      //correct the partial length array;
 
                      //the segment moved from the end is now the beginning
@@ -580,7 +574,7 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
                      }
                      //this seg starts at 0, so increment everything by length of inserted seg
                      //plus the planar length between 'em.
-                     ref_end = _ref_segs.num();
+                     ref_end = _ref_segs.size();
                      double length_inc = _ref_segs[seam-1].l() + (_ref_segs[seam].p()-_ref_segs[seam-1].p()).planar_length();
 
                      for ( k = seam; k < ref_end && _ref_segs[k].e() ; k++ ) {
@@ -589,12 +583,11 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
                            _ref_segs[k+1].l() += length_inc;
                      }
 
-
                      if ( use_mintest && mintest ) {
                         //if you've done something because of a mintest
-                        _ref_segs += _ref_segs[ref_start];
-                        _ref_segs.last().e() = false; //pop on the first point and null the connector;
-                        _ref_segs.last().l() = _ref_segs[_ref_segs.num()-2].l() + ( _ref_segs.last().p() - _ref_segs[_ref_segs.num()-2].p() ).planar_length();
+                        _ref_segs.push_back(_ref_segs[ref_start]);
+                        _ref_segs.back().e() = false; //pop on the first point and null the connector;
+                        _ref_segs.back().l() = _ref_segs[_ref_segs.size()-2].l() + ( _ref_segs.back().p() - _ref_segs[_ref_segs.size()-2].p() ).planar_length();
                      }
 
                   }
@@ -604,11 +597,8 @@ ZXedgeStrokeTexture::sil_path_preprocess_seethru()
       }
       /*HACK*/
 
-
       loop_begin = loop_end+1;
-
    }
-
 }
 
 void
@@ -646,12 +636,12 @@ ZXedgeStrokeTexture::sil_path_preprocess()
 
    //_pre_zx_segs should now be loaded with the proper data   
 
-   int i;
-   int loop_begin=0;
-   int loop_end=0;
+   size_t i;
+   size_t loop_begin=0;
+   size_t loop_end=0;
    int ref_start=0;
    int ref_end=0;
-   int sil_num = _pre_zx_segs.num();
+   vector<ZXseg>::size_type sil_num = _pre_zx_segs.size();
    int vis;
    int cur_type;
 
@@ -677,19 +667,19 @@ ZXedgeStrokeTexture::sil_path_preprocess()
 
       vis = ( _pre_zx_segs[loop_begin].g() ) ? SIL_VISIBLE : SIL_BACKFACING;
 
-      ref_start = _ref_segs.num();
+      ref_start = _ref_segs.size();
 
       if ( last_in_frustum ) {
          //don't add path_id's yet
-         _ref_segs += SilSeg (
+         _ref_segs.push_back(SilSeg(
                          last_npt, true, vis, 0,
                          _pre_zx_segs[loop_begin].v(),
                          _pre_zx_segs[loop_begin].s(),
                          _pre_zx_segs[loop_begin].p(),
                          partial_length
-                      );
-         _ref_segs.last().type() = _pre_zx_segs[loop_begin].type();
-         assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                      ));
+         _ref_segs.back().type() = _pre_zx_segs[loop_begin].type();
+         assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
       }
 
       for  ( i = loop_begin+1; i <= loop_end; i++ ) {
@@ -706,15 +696,15 @@ ZXedgeStrokeTexture::sil_path_preprocess()
          if ( in_frustum && last_in_frustum ) {
             //both in frustum, so we're happy
             partial_length   += ( npt-last_npt ).planar_length();
-            _ref_segs += SilSeg (
+            _ref_segs.push_back(SilSeg(
                             npt, make_edge, vis, 0,
                             _pre_zx_segs[i].v(),
                             bary_face,
                             _pre_zx_segs[i].p(),
                             partial_length
-                         );
-            _ref_segs.last().type() = _pre_zx_segs[i].type();
-            assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                         ));
+            _ref_segs.back().type() = _pre_zx_segs[i].type();
+            assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
 
          } else if (in_frustum != last_in_frustum) {
             double w;
@@ -730,15 +720,15 @@ ZXedgeStrokeTexture::sil_path_preprocess()
 
                   partial_length = 0;        //reset partial length here
 
-                  _ref_segs += SilSeg (
+                  _ref_segs.push_back(SilSeg(
                                   frust_npt, true, vis, 0,
                                   _pre_zx_segs[i-1].v(),
                                   _pre_zx_segs[i-1].s(),
                                   frust_wpt,
                                   partial_length
-                               );
-                  _ref_segs.last().type() = _pre_zx_segs[i-1].type();
-                  assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                               ));
+                  _ref_segs.back().type() = _pre_zx_segs[i-1].type();
+                  assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
 
                   partial_length += ( npt-frust_npt).planar_length();
                } else
@@ -748,15 +738,15 @@ ZXedgeStrokeTexture::sil_path_preprocess()
                vis = (  _pre_zx_segs[i].g() )? SIL_VISIBLE : SIL_BACKFACING;
 
                //add this point
-               _ref_segs += SilSeg (
+               _ref_segs.push_back(SilSeg(
                                npt, make_edge, vis, 0,
                                _pre_zx_segs[i].v(),
                                bary_face,
                                _pre_zx_segs[i].p(),
                                partial_length
-                            );
-               _ref_segs.last().type() = _pre_zx_segs[i].type();
-               assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                            ));
+               _ref_segs.back().type() = _pre_zx_segs[i].type();
+               assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
 
             } else {
                //we are exiting the frustum
@@ -765,21 +755,21 @@ ZXedgeStrokeTexture::sil_path_preprocess()
                   frust_npt[2]  = interp (last_npt[2], npt[2], w );
                   Wpt frust_wpt  = w_to_obj_xform * /* TFMULTFIX */ Wpt(frust_npt);
 
-                  vis = (  _pre_zx_segs[i].g() && _ref_segs.last().v()==SIL_VISIBLE  )? SIL_VISIBLE : SIL_BACKFACING;
+                  vis = (  _pre_zx_segs[i].g() && _ref_segs.back().v()==SIL_VISIBLE  )? SIL_VISIBLE : SIL_BACKFACING;
 
                   partial_length += (frust_npt-last_npt).planar_length();
-                  _ref_segs += SilSeg (
+                  _ref_segs.push_back(SilSeg(
                                   frust_npt, false, vis, 0,
                                   _pre_zx_segs[i].v(),
                                   _pre_zx_segs[i-1].s(),
                                   frust_wpt,
                                   partial_length
-                               );
-                  _ref_segs.last().type() = _pre_zx_segs[i-1].type();
-                  assert ( _ref_segs.num() < 2 || !( _ref_segs[ _ref_segs.num()-2].e() && (_ref_segs[_ref_segs.num()-2].type() != _ref_segs.last().type() ) ) );
+                               ));
+                  _ref_segs.back().type() = _pre_zx_segs[i-1].type();
+                  assert ( _ref_segs.size() < 2 || !( _ref_segs[_ref_segs.size()-2].e() && (_ref_segs[_ref_segs.size()-2].type() != _ref_segs.back().type() ) ) );
                   
                } else {
-                  _ref_segs.last().e() = false;  //stop the loop here
+                  _ref_segs.back().e() = false;  //stop the loop here
                }
             }
          }
@@ -788,18 +778,16 @@ ZXedgeStrokeTexture::sil_path_preprocess()
          last_npt         = npt;
       }
 
-      ref_end = _ref_segs.num();
+      ref_end = _ref_segs.size();
 
       //we have finished one loop
       //did the end of the loop remain visible?
 
-      // if these two points are equivalent ,we have a loop.  can we shift these segments
+      // if these two points are equivalent, we have a loop.  can we shift these segments
       // so that the two connect properly?  either shift this where the loop goes
       // out of frustum or where it becomes a backfacing seg
 
-
       if ( (cur_type == STYPE_SIL) && ( ref_end > ref_start ) ) {
-
          //printf("diff is %d \n", ref_end - ref_start);
          assert ( ref_end - ref_start > 1 );
 
@@ -813,18 +801,18 @@ ZXedgeStrokeTexture::sil_path_preprocess()
                j--; //find a broken connection before this end
 
             if ( j > ref_start ) {
-
                _ref_segs[j-1].e() = 0; //terminate the end (if we stopped because of vis );
                //fprintf( stderr, "shift start %d end %d -- found non-vis at %d\n", ref_start, ref_end, j );
 
-               _ref_segs.pop(); //the duplicate point at end isn't needed
-               int block_size = _ref_segs.num() - j;
-               _ref_segs.insert(ref_start, block_size);
+               _ref_segs.pop_back(); //the duplicate point at end isn't needed
+               vector<SilSeg>::size_type block_size = _ref_segs.size() - j;
+               _ref_segs.insert(_ref_segs.begin() + ref_start, block_size, SilSeg());
                int seam = ref_start+block_size;
                if ( block_size > 0 ) {
                   for ( k = seam-1; k >= ref_start ; k-- ) {
                      //insert these segments at the beginning of the section we just added
-                     _ref_segs[k] = _ref_segs.pop();
+                     _ref_segs[k] = _ref_segs.back();
+                     _ref_segs.pop_back();
                   }
 
                   //correct the partial length array;
@@ -838,7 +826,7 @@ ZXedgeStrokeTexture::sil_path_preprocess()
                   }
                   //this seg starts at 0, so increment everything by length of inserted seg
                   //plus the planar length between 'em.
-                  ref_end = _ref_segs.num();
+                  ref_end = _ref_segs.size();
                   double length_inc = _ref_segs[seam-1].l() + (_ref_segs[seam].p()-_ref_segs[seam-1].p()).planar_length();
                   for ( k = seam; _ref_segs[k].e() ; k++ ) {
                      _ref_segs[k].l() += length_inc;
@@ -921,7 +909,7 @@ ZXedgeStrokeTexture::draw_id_ref()
       return 0;
    }
 
-   int i;
+   size_t i;
    static float line_width = (float) Config::get_var_int("SIL_VIS_PATH_WIDTH", 3, true);
 
    int numpaths=0;
@@ -949,16 +937,14 @@ ZXedgeStrokeTexture::draw_id_ref()
    if ( type_is_enabled(STYPE_BORDER))
       add_borders_to_sils();
 
-
    if (_pre_zx_segs.empty())
       return 0;
 
    // XXX - hack to avoid assert below
-   //if ( _pre_zx_segs.num() > 0 && _pre_zx_segs.last().f() != NULL)
+   //if ( _pre_zx_segs.size() > 0 && _pre_zx_segs.back().f() != NULL)
    //   return 0;
 
-   _path_ids.realloc     (_pre_zx_segs.num());
-
+   _path_ids.reserve(_pre_zx_segs.size());
 
    glPushAttrib(
       GL_LINE_BIT       |       // line width
@@ -981,15 +967,15 @@ ZXedgeStrokeTexture::draw_id_ref()
 
    setIDcolor(path_id);
 
-   //if ( _pre_zx_segs.num() > 0 )
-   //   assert(_pre_zx_segs[_pre_zx_segs.num()-1].f() == NULL);
+   //if ( _pre_zx_segs.size() > 0 )
+   //   assert(_pre_zx_segs[_pre_zx_segs.size()-1].f() == NULL);
 
 
-   for ( i=0; i < _pre_zx_segs.num(); i++) {
+   for ( i=0; i < _pre_zx_segs.size(); i++) {
 
       // record current path_id:
 
-      _path_ids += path_id;
+      _path_ids.push_back(path_id);
 
       vis = _pre_zx_segs[i].g();
 
@@ -1012,7 +998,7 @@ ZXedgeStrokeTexture::draw_id_ref()
          // The path has ended - stop GL.
          glEnd();
          started=false;
-      } else if ( started && i < _pre_zx_segs.num()-1 && !_pre_zx_segs[i+1].g()) {
+      } else if ( started && i < _pre_zx_segs.size()-1 && !_pre_zx_segs[i+1].g()) {
          // The path has gone backfacing - stop GL line
          glEnd();
          started=false;
@@ -1028,12 +1014,12 @@ ZXedgeStrokeTexture::draw_id_ref()
          path_id = gen_id();
 
          setIDcolor(path_id);
-      } else if ( vis && i < _pre_zx_segs.num()-1 && !_pre_zx_segs[i+1].g()) {
+      } else if ( vis && i < _pre_zx_segs.size()-1 && !_pre_zx_segs[i+1].g()) {
          // Will become backfacing (gradient ) on next point.
          path_id = gen_id();
 
          setIDcolor(path_id);
-      } else if ( !vis && i < _pre_zx_segs.num()-1 && _pre_zx_segs[i+1].g()) {
+      } else if ( !vis && i < _pre_zx_segs.size()-1 && _pre_zx_segs[i+1].g()) {
          // Will become front-facing ( gradient ) on next point.
          path_id = gen_id();
 
@@ -1064,14 +1050,13 @@ ZXedgeStrokeTexture::draw_id_ref_param_invis_pass()
    //we're going to draw all silhouettes into the idref image
    //without checking or writing into the depth buffer
    //
-   int i,j;
+   size_t i,j;
    static float line_width = (float) Config::get_var_int("SIL_VIS_PATH_WIDTH", 3, true);
 
    //now we're checking _ref_segs
 
    if (_ref_segs.empty())
       return 0;
-
 
    glPushAttrib(
       GL_LINE_BIT       |       // line width
@@ -1093,13 +1078,13 @@ ZXedgeStrokeTexture::draw_id_ref_param_invis_pass()
 
    bool started = false;
 
-   int  index_start = 0;
-   int  index_end   = 0;
+   size_t index_start = 0;
+   size_t index_end   = 0;
 
    int  type_mode = STYPE_SIL;
 
 
-   for ( i=0; i < _ref_segs.num(); i++) {
+   for ( i=0; i < _ref_segs.size(); i++) {
 
       int cur_vis = _ref_segs[i].v();
       int cur_type = _ref_segs[i].type();
@@ -1155,16 +1140,15 @@ ZXedgeStrokeTexture::draw_id_ref_param_invis_pass()
          }
          glEnd();
 
-         _path_ids         += id;
-         _ffseg_lengths    += ffseg_length;
+         _path_ids.push_back(id);
+         _ffseg_lengths.push_back(ffseg_length);
          started = false;
       }
-
    }
 
    glPopAttrib();
 
-   return (_patch) ? _patch->num_faces() : 0;   
+   return _patch ? _patch->num_faces() : 0;
 }
 
 int
@@ -1180,7 +1164,7 @@ ZXedgeStrokeTexture::draw_id_ref_param_vis_pass()
    // this is almost exactly like the original idref image pass, except that we
    // don't clear out our bookkeeping (cuz inivisible pass does it now )
 
-   int i,j;
+   size_t i,j;
    static float line_width = (float) Config::get_var_int("SIL_VIS_PATH_WIDTH", 3, true);
 
    //now we're checking _ref_segs
@@ -1205,12 +1189,12 @@ ZXedgeStrokeTexture::draw_id_ref_param_vis_pass()
 
    bool started = false;
 
-   int  index_start = 0;
-   int  index_end   = 0;
+   size_t index_start = 0;
+   size_t index_end   = 0;
 
    int  type_mode = STYPE_SIL;
 
-   for ( i=0; i < _ref_segs.num(); i++) {
+   for ( i=0; i < _ref_segs.size(); i++) {
 
       int cur_vis = _ref_segs[i].v();
       int cur_type = _ref_segs[i].type();
@@ -1273,33 +1257,29 @@ ZXedgeStrokeTexture::draw_id_ref_param_vis_pass()
          }
          glEnd();
 
-         _path_ids         += id;
-         _ffseg_lengths    += ffseg_length;
+         _path_ids.push_back(id);
+         _ffseg_lengths.push_back(ffseg_length);
          started=false;
       }
 
    }
    glPopAttrib();
 
-
-  return (_patch) ? _patch->num_faces() : 0;
-  
+  return _patch ? _patch->num_faces() : 0;
 }
 
 
 int
 ZXedgeStrokeTexture::draw_id_ref_parameterized()
 {
-
    assert ( !get_new_branch() );
-   int i,j;
+   size_t i,j;
    static float line_width = (float) Config::get_var_int("SIL_VIS_PATH_WIDTH", 3, true);
 
    //now we're checking _ref_segs
 
    if (_ref_segs.empty())
       return 0;
-
 
    glPushAttrib(
       GL_LINE_BIT       |       // line width
@@ -1317,8 +1297,8 @@ ZXedgeStrokeTexture::draw_id_ref_parameterized()
    glEnable(GL_DEPTH_TEST);
    bool started = false;
    bool need_draw = false;
-   int  index_start = 0;
-   int  index_end   = 0;
+   size_t index_start = 0;
+   size_t index_end   = 0;
    //   bool lvis = false;
    bool vis = false;
 
@@ -1327,9 +1307,7 @@ ZXedgeStrokeTexture::draw_id_ref_parameterized()
    _path_ids.clear();
    _ffseg_lengths.clear();
 
-
-   for ( i=0; i < _ref_segs.num(); i++) {
-
+   for ( i=0; i < _ref_segs.size(); i++) {
       vis = (_ref_segs[i].v() == SIL_VISIBLE );
       //cerr << "vis at " << i << "\tis " << vis << "\tplength " << _ref_segs[i].l();
       //cerr << endl;
@@ -1351,7 +1329,7 @@ ZXedgeStrokeTexture::draw_id_ref_parameterized()
          //path ends ( either actual path finishes, or goes out of frustum
          need_draw= true;
          started=false;
-      } else if ( started && i+1 < _ref_segs.num() && _ref_segs[i+1].v() != SIL_VISIBLE) {
+      } else if ( started && i+1 < _ref_segs.size() && _ref_segs[i+1].v() != SIL_VISIBLE) {
          assert (_ref_segs[i+1].v() == SIL_BACKFACING);
          // front/backfacing test happens for each segment with reference to a face
          // so it applies to this point and the one that follows
@@ -1400,19 +1378,12 @@ ZXedgeStrokeTexture::draw_id_ref_parameterized()
          //cerr << "end strip length " << ffseg_length << endl;
 
          //record the length of each segment drawn, indexed by its id
-         _path_ids         += id;
-         _ffseg_lengths    += ffseg_length;
-         //fprintf ( stderr , "path %x\tffseglen %f\n", _path_ids.last(), _ffseg_lengths.last() );
+         _path_ids.push_back(id);
+         _ffseg_lengths.push_back(ffseg_length);
+         //fprintf ( stderr , "path %x\tffseglen %f\n", _path_ids.back(), _ffseg_lengths.back() );
          need_draw = false;
-
       }
-
    }
-
-   for ( int k = 0; k < _path_ids.num(); k++ ) {
-      //cerr << "path id " << _path_ids[k] << "\tlength" << _ffseg_lengths[k] << endl;
-   }
-   //   cerr << "\n" << endl;
 
    glPopAttrib();
    //cerr << "idref: " << numpaths << endl;
@@ -1425,27 +1396,25 @@ ZXedgeStrokeTexture::draw_id_ref_parameterized()
 void
 ZXedgeStrokeTexture::sils_split_on_gradient()
 {
-
    //explicitly separate front-facing and backfacing portions of silhouettes;
 
    //iterators
-   int i,j;
-   int loop_start=0;
-   int loop_end=0;
-   int loop_break=0; //mark an inconsistency where the loop should break;
+   size_t i,j;
+   size_t loop_start=0;
+   size_t loop_end=0;
+   size_t loop_break=0; //mark an inconsistency where the loop should break;
    int section_mark=0;
-   int pre_segs_start, pre_segs_end;
+   size_t pre_segs_start, pre_segs_end;
 
    bool pass_front = type_is_enabled(STYPE_SIL);
    bool pass_back  = type_is_enabled(STYPE_BF_SIL);
    bool pass;
 
-   pre_segs_start = _pre_zx_segs.num();
+   pre_segs_start = _pre_zx_segs.size();
 
-   ARRAY<ZXseg>& zx_segs = (_patch) ? _patch->cur_zx_sils().segs() : _pre_zx_segs;
-   //ARRAY<ZXseg>& zx_segs = _patch->cur_zx_sils().segs();
+   vector<ZXseg>& zx_segs = (_patch) ? _patch->cur_zx_sils().segs() : _pre_zx_segs;
         
-   int sil_num = zx_segs.num();
+   vector<ZXseg>::size_type sil_num = zx_segs.size();
 
    if ( sil_num == 0 )
       return ;
@@ -1454,7 +1423,6 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
 
       // loop end is the index in the zx strip of the end of a
       // 'valid' (front-facing) piece of silhouette.
-
      
       loop_end = loop_start; 
 
@@ -1470,15 +1438,15 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
          //  loop (or loop segment) has consistent gradient - send them on in..
          int type = (start_grad) ? STYPE_SIL : STYPE_BF_SIL;
          for ( i = loop_start; i < loop_end; i++ ) {
-            _pre_zx_segs += zx_segs[i];
-            _pre_zx_segs.last().settype(type);
-            assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
+            _pre_zx_segs.push_back(zx_segs[i]);
+            _pre_zx_segs.back().settype(type);
+            assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[ _pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
          }
-         _pre_zx_segs += zx_segs[i];
-         _pre_zx_segs.last().settype(type);
-         _pre_zx_segs.last().setg(start_grad);
+         _pre_zx_segs.push_back(zx_segs[i]);
+         _pre_zx_segs.back().settype(type);
+         _pre_zx_segs.back().setg(start_grad);
 
-         assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
+         assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[ _pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
 
       } else {
          i = loop_break;
@@ -1487,53 +1455,50 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
             bool mark_grad = zx_segs[section_mark].g();
             int mark_type = (mark_grad) ? STYPE_SIL : STYPE_BF_SIL;
             for ( i = section_mark; i < loop_end && zx_segs[i].g() == mark_grad; i++ ) {
-               _pre_zx_segs += zx_segs[i];
-               _pre_zx_segs.last().settype(mark_type);
-               assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
+               _pre_zx_segs.push_back(zx_segs[i]);
+               _pre_zx_segs.back().settype(mark_type);
+               assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[ _pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
             }
 
-            _pre_zx_segs += zx_segs[i];
-            _pre_zx_segs.last().settype(mark_type);
-            _pre_zx_segs.last().setg(mark_grad);
-            _pre_zx_segs.last().set_bary(zx_segs[i-1].s());
-            _pre_zx_segs.last().setf(NULL);
-            _pre_zx_segs.last().set_end();
+            _pre_zx_segs.push_back(zx_segs[i]);
+            _pre_zx_segs.back().settype(mark_type);
+            _pre_zx_segs.back().setg(mark_grad);
+            _pre_zx_segs.back().set_bary(zx_segs[i-1].s());
+            _pre_zx_segs.back().setf(NULL);
+            _pre_zx_segs.back().set_end();
             
-            assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
-
+            assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[ _pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
          }
 
          //add that nasty first bit
 
          if (  zx_segs[loop_start].p() == zx_segs[loop_end].p()  &&
-               zx_segs[loop_start].g() == _pre_zx_segs.last().g() ) {
-            _pre_zx_segs.pop();
+               zx_segs[loop_start].g() == _pre_zx_segs.back().g() ) {
+            _pre_zx_segs.pop_back();
          } //pop the end if it's a loop to reconnect
 
          int mark_type = (zx_segs[loop_start].g()) ? STYPE_SIL : STYPE_BF_SIL;
          for ( i = loop_start; i < loop_break; i++ ) {
-            _pre_zx_segs += zx_segs[i];
-            _pre_zx_segs.last().settype(mark_type);
-            assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
+            _pre_zx_segs.push_back(zx_segs[i]);
+            _pre_zx_segs.back().settype(mark_type);
+            assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[_pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
 
          }
-         _pre_zx_segs += zx_segs[i];
-         _pre_zx_segs.last().setg(zx_segs[loop_start].g());
-         _pre_zx_segs.last().set_bary(zx_segs[i-1].s());
-         _pre_zx_segs.last().settype(mark_type);
-         _pre_zx_segs.last().setf(NULL);
-         _pre_zx_segs.last().set_end();
+         _pre_zx_segs.push_back(zx_segs[i]);
+         _pre_zx_segs.back().setg(zx_segs[loop_start].g());
+         _pre_zx_segs.back().set_bary(zx_segs[i-1].s());
+         _pre_zx_segs.back().settype(mark_type);
+         _pre_zx_segs.back().setf(NULL);
+         _pre_zx_segs.back().set_end();
                   
-         assert ( _pre_zx_segs.num() < 2 || !( _pre_zx_segs[ _pre_zx_segs.num()-2].s() && (_pre_zx_segs[_pre_zx_segs.num()-2].g() != _pre_zx_segs.last().g() ) ) );
-
+         assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[_pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
       }
 
       loop_start = loop_end+1;
 
    }
 
-   pre_segs_end = _pre_zx_segs.num();
-
+   pre_segs_end = _pre_zx_segs.size();
 
    //POSTFILTER  -don't consider points that we won't use;
    // this should have already happened in the above code, but
@@ -1552,8 +1517,7 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
       }
    }
    if ( j != pre_segs_end )
-      _pre_zx_segs.truncate(j);
-
+      _pre_zx_segs.resize(j);
 }
 
 //Convenience!!
@@ -1604,13 +1568,12 @@ ZXedgeStrokeTexture::add_to_sils(CEdgeStrip& strip, int type, double angle_thres
    //assert (_patch);
 
    for (int i=0; i<strip.num(); i++) {
-
       // Get current edge, a face adjacent to it(unless there is no face), and current vert:
       Bedge* e = strip.edge(i);
       Bsimplex* s = (e->get_face()) ? (Bsimplex*)e->get_face() : (Bsimplex*)e;      
       Bvert* v = strip.vert(i);
 
-      _pre_zx_segs += ZXseg( s, v->loc(), v, true, s , type, false);
+      _pre_zx_segs.push_back(ZXseg( s, v->loc(), v, true, s , type, false));
 
       // Check if the line strip breaks at the next vert
       // Either due to end of strip, or bending angle
@@ -1618,10 +1581,9 @@ ZXedgeStrokeTexture::add_to_sils(CEdgeStrip& strip, int type, double angle_thres
       if ( strip.has_break(i+1) || ((angle_thresh>=0) &&
             my_angle(v, strip.vert(i+1), strip.next_vert(i+1)) > angle_thresh)) {
          v = strip.next_vert(i);
-             _pre_zx_segs += ZXseg( NULL, v->loc(), v, true, s , type, true);
-      }    
+         _pre_zx_segs.push_back(ZXseg(NULL, v->loc(), v, true, s , type, true));
+      }
    }
-
 }
 
 void
@@ -1676,9 +1638,9 @@ ZXedgeStrokeTexture::add_polyline_to_sils()
  
    for (Wpt_list::size_type i=0; i < _polyline->size(); i++) {
       if (i < _polyline->size()-1)
-         _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, false);
+         _pre_zx_segs.push_back(ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, false));
       else
-         _pre_zx_segs += ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, true);
+         _pre_zx_segs.push_back(ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, true));
          //end of the strip
    }
 }
@@ -1717,17 +1679,16 @@ ZXedgeStrokeTexture::sils_to_ndcz()
    // Start fresh:
    _sil_segs.clear();
 
-
-   int zn = _pre_zx_segs.num();
+   vector<ZXseg>::size_type zn = _pre_zx_segs.size();
    if (zn == 0)
       return;
 
-   int lb = 0;  // index of loop begin
-   int le = 0;  // index of loop end
+   size_t lb = 0;  // index of loop begin
+   size_t le = 0;  // index of loop end
 
    // Indices into _npoints array
    // for start and end of loop:
-   int pstart, pend;
+   size_t pstart, pend;
 
    // current and last in-frustum flags
    bool in_frustum, lin_frustum;
@@ -1773,7 +1734,7 @@ ZXedgeStrokeTexture::sils_to_ndcz()
       NDCZpt    npt_last    = NDCZpt(wpt_last, ndc_xform);
       Bsimplex* bf_last     = _pre_zx_segs[lb].s();
       Wvec      bc_last     = _pre_zx_segs[lb].bc();
-      int       last_i      = lb;
+      size_t    last_i      = lb;
       // record whether point now being visited is in frustum
       lin_frustum = npt_last.in_frustum();
       lvis = check_vis( lb, npt_last, path_id ) ;
@@ -1782,11 +1743,10 @@ ZXedgeStrokeTexture::sils_to_ndcz()
       close_loop = ( _pre_zx_segs[lb].p() == _pre_zx_segs[le].p() && lvis==SIL_VISIBLE );
 
       // index in _npoints of the start of the path we'll build:
-      pstart = _sil_segs.num();
+      pstart = _sil_segs.size();
 
       // Iterate over zx strip from lb to le:
-      for (int i = lb; i <= le; i++ ) {
-
+      for (size_t i = lb; i <= le; i++ ) {
          // Lookup the path id for this part of the loop:
          path_id = _path_ids[i];
 
@@ -1861,18 +1821,15 @@ ZXedgeStrokeTexture::sils_to_ndcz()
                // record whether point now being visited is in frustum
                lin_frustum = npt_last.in_frustum();
                lvis = check_vis( last_i, npt_last, path_id ) ;
-
             }
 
             for ( int j=1 ; j <segs ; j++ ) {
                double ax = j/(double)segs;
 
-
                // XXX -
                //  probably should take equal steps in NDC, not world
                //  does a linear interp in NDC correspond to a linear interp
                //  when projected back into worldspace?
-
 
                Wpt wpx = interp ( wpt_last, wpt1, ax);
                //        Wvec bc = interp ( bc_last, bc_wpt1last , ax);
@@ -1883,13 +1840,13 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 
                if (in_frustum) {
 
-                  _sil_segs += SilSeg (npx, true, vis, path_id , _pre_zx_segs[i].v(), bf_last, wpx, 0.0);
-                  _sil_segs.last().type() = _pre_zx_segs[i].type();
+                  _sil_segs.push_back(SilSeg(npx, true, vis, path_id , _pre_zx_segs[i].v(), bf_last, wpx, 0.0));
+                  _sil_segs.back().type() = _pre_zx_segs[i].type();
 
                } else if ( lin_frustum ) {
 
                   if (!_sil_segs.empty()) {
-                     _sil_segs.last().e() = false;
+                     _sil_segs.back().e() = false;
                   }
                }
 
@@ -1909,12 +1866,12 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 
          if ( in_frustum ) {
             //add point, edge
-            _sil_segs += SilSeg (npt1, true, vis, path_id , _pre_zx_segs[i].v(), bf1, _pre_zx_segs[i].bc());
-            _sil_segs.last().type() = _pre_zx_segs[i].type();
+            _sil_segs.push_back(SilSeg(npt1, true, vis, path_id , _pre_zx_segs[i].v(), bf1, _pre_zx_segs[i].bc()));
+            _sil_segs.back().type() = _pre_zx_segs[i].type();
 
          } else if ( lin_frustum ) {  //not visible.  always close path
             if (!_sil_segs.empty()) {
-               _sil_segs.last().e() = false;
+               _sil_segs.back().e() = false;
             }
          }
 
@@ -1929,20 +1886,17 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 
       // The loop concluded, so we break the path here.
       if (!_sil_segs.empty()) {
-         _sil_segs.last().e() = false;
+         _sil_segs.back().e() = false;
       }
 
-
-
-      pend = _sil_segs.num();
+      pend = _sil_segs.size();
 
       // fix breaks, etc.
 
-
       /* stupid cleaner broke again! */
-      if (_sil_segs.valid_index(pstart) &&
-          _sil_segs.valid_index(pend-1))
-         loop_clean ( pstart, pend, close_loop );
+      if (pstart < _sil_segs.size() &&
+          (pend-1) < _sil_segs.size())
+         loop_clean(pstart, pend, close_loop);
       // start the next one right after
       // the end of the current one:
       lb = le+1;
@@ -1954,27 +1908,27 @@ ZXedgeStrokeTexture::sils_to_ndcz()
 void
 ZXedgeStrokeTexture::loop_clean(int pstart, int pend, bool close_loop )
 {  
-   int i; 
+   size_t i;
    /*
    * SWINE ALERT - CODE ORANGE
    *   this appears to be fixed
    */ 
    if ( close_loop ) {
       // cerr << "close ? " ;
-      int j,k;
+      size_t j,k;
       // close_loop flag means pstart is visible.
       // now find the first point where loop is invisible, or breaks
 
       if ( (_sil_segs[pstart].p() - _sil_segs[pend-1].p()).planar_length() > 2 )
          cerr << "bad loop close!" << endl;
 
-      for ( j = pstart; j < _sil_segs.num() && _sil_segs[j].v()==SIL_VISIBLE; j++ )
+      for ( j = pstart; j < _sil_segs.size() && _sil_segs[j].v()==SIL_VISIBLE; j++ )
          ; // j is first invisible
 
-      for ( k = pstart; k < _sil_segs.num() && _sil_segs[k].e() ; k++ )
+      for ( k = pstart; k < _sil_segs.size() && _sil_segs[k].e() ; k++ )
          ; // k is first line break
 
-      if ( j != _sil_segs.num() && j != 0 && k != 0) { //if loop is fully visible, there are no edges
+      if ( j != _sil_segs.size() && j != 0 && k != 0) { //if loop is fully visible, there are no edges
 
          //if loop is already invisible before break,
          //set _is_edge to FALSE at k
@@ -1991,27 +1945,25 @@ ZXedgeStrokeTexture::loop_clean(int pstart, int pend, bool close_loop )
 
          //read first path from pstart to k into temp array
          for ( i = pstart; i <= k; i++ ) {
-            tmp_silpath += _sil_segs[i];
+            tmp_silpath.push_back(_sil_segs[i]);
          }
 
-         assert ( !tmp_silpath.last().e() ); //last edge should be false
+         assert ( !tmp_silpath.back().e() ); //last edge should be false
          //truncate array
          chop_n ( pstart, 1+(k-pstart));
 
          //pop the last point of the loop
          //it is a copy of the first point in the array
 
-         assert ( !_sil_segs.last().e() );
+         assert ( !_sil_segs.back().e() );
 
-
-
-         _sil_segs.pop();
+         _sil_segs.pop_back();
 
          //add first path seg to end
 
-         _sil_segs += tmp_silpath;
+         _sil_segs.insert(_sil_segs.end(), tmp_silpath.begin(), tmp_silpath.end());
 
-         assert ( !_sil_segs.last().e() );
+         assert ( !_sil_segs.back().e() );
 
          if ( pstart != 0 ) {
 
@@ -2022,15 +1974,12 @@ ZXedgeStrokeTexture::loop_clean(int pstart, int pend, bool close_loop )
       }
    }
 
-
-   for ( i=pstart; i < _sil_segs.num()-1; i++ ) {
+   for ( i=pstart; i < _sil_segs.size()-1; i++ ) {
       if ( !_sil_segs[i].e() ) {
          //connect successive loop segments if screen distance < 4 pix;
 
          if ((_sil_segs[i].p()-_sil_segs[i+1].p()).planar_length() < 4*_pix_to_ndc_scale)
             _sil_segs[i].e() = true;
-
-
       }
    }
 }
@@ -2040,13 +1989,12 @@ ZXedgeStrokeTexture::chop_n(int start, int num)
 {
    // remove num elements starting at index start
 
-   assert ( start+num <= _sil_segs.num() );
-   for ( int i = start; i+num < _sil_segs.num() ; i++) {
-
+   assert(start+num <= (int)_sil_segs.size());
+   for (NDCSilPath::size_type i = start; i+num < _sil_segs.size(); i++) {
       _sil_segs[i] = _sil_segs[i+num];
    }
 
-   _sil_segs.truncate ( _sil_segs.num()-num);
+   _sil_segs.resize(_sil_segs.size()-num);
 }
 
 int
@@ -2074,23 +2022,22 @@ ZXedgeStrokeTexture::check_vis(int i, CNDCZpt& npt, int path_id)
 void
 ZXedgeStrokeTexture::resample_ndcz_seethru()
 {
-
    //Traverse the list of NDC points generated by
    //the processing we did before drawing the IDref
    //resample as needed, perform visibility checks
 
-   assert(_path_ids.num() == _ffseg_lengths.num());     
+   assert(_path_ids.size() == _ffseg_lengths.size());
    
    double sample_scale = _vis_sampling * _pix_to_ndc_scale;
-   int i, j, last;
-   int loop_begin=0;
-   int loop_end=0;
+   size_t i, j, last;
+   size_t loop_begin=0;
+   size_t loop_end=0;
 
-   int sections=0;
+   size_t sections=0;
 
-   int ref_num = _ref_segs.num();
+   vector<SilSeg>::size_type ref_num = _ref_segs.size();
 
-  double dist_from_last_sample;
+   double dist_from_last_sample;
 
    _sil_segs.clear(); //clear out the new array
 
@@ -2226,7 +2173,7 @@ ZXedgeStrokeTexture::resample_ndcz_seethru()
                   s.type()   = _ref_segs[i].type();
 
                   check_vis_mask_seethru(s);
-                  _sil_segs += s;
+                  _sil_segs.push_back(s);
                }
             }
 
@@ -2234,16 +2181,16 @@ ZXedgeStrokeTexture::resample_ndcz_seethru()
             //but we need to know that it's not identical to the last point( in NDC );
 
             if ( i == loop_end && dist_from_last_sample <= gEpsZeroMath ) {
-               _sil_segs.pop();           //pop from sil segs and add loop end instead
+               _sil_segs.pop_back();           //pop from sil segs and add loop end instead
                //because its flags are proper
 
                if ( last != loop_begin )  //but only add loop end again if we have added more than one point
                {
-                  _sil_segs += _ref_segs[loop_end];  //OUTER LOOP ENDS
+                  _sil_segs.push_back(_ref_segs[loop_end]);  //OUTER LOOP ENDS
                }
             } else  // just toss it to the segment list
             {
-               _sil_segs += _ref_segs[i];
+               _sil_segs.push_back(_ref_segs[i]);
                last = i;
             }
 
@@ -2272,20 +2219,19 @@ ZXedgeStrokeTexture::resample_ndcz()
    /*** ***/
 
    double sample_scale = _vis_sampling * _pix_to_ndc_scale;
-   int i, j, last;
-   int loop_begin=0;
-   int loop_end=0;
+   size_t i, j, last;
+   size_t loop_begin=0;
+   size_t loop_end=0;
 #if 0
    int seg_start;
    int seg_end;
 #endif
 
-   int sections=0;
+   size_t sections=0;
 
-   int ref_num = _ref_segs.num();
+   vector<SilSeg>::size_type ref_num = _ref_segs.size();
 
    double dist_from_last_sample=0;
-
 
    _sil_segs.clear();
 
@@ -2299,7 +2245,7 @@ ZXedgeStrokeTexture::resample_ndcz()
          ; // loop_end stops on on first break
 
 #if 0
-      seg_start = _sil_segs.num();
+      seg_start = _sil_segs.size();
 #endif
 
       last= loop_begin;
@@ -2322,7 +2268,7 @@ ZXedgeStrokeTexture::resample_ndcz()
             if (  i != loop_begin &&
                   (_ref_segs[i-1].v() == SIL_VISIBLE || _ref_segs[i].v() == SIL_VISIBLE  ) &&
                   (_ref_segs[i-1].id() & 0xffffff00) == (_ref_segs[i].id() & 0xffffff00  )     ) {
-               //_sil_segs += _ref_segs[i-1];
+               //_sil_segs.push_back(_ref_segs[i-1]);
                for ( j=1; j < sections; j++ ) {
                   //if needed interpolate new points between point
                   //and the point immediately previous ( i-1, NOT last);
@@ -2344,25 +2290,24 @@ ZXedgeStrokeTexture::resample_ndcz()
                             );
                   s.type() = _ref_segs[i-1].type(); //XXX new stuff for rob's mods
                   check_vis_mask(s);
-                  _sil_segs += s;
+                  _sil_segs.push_back(s);
                }
             }
-
 
             //loop end can get in here without passing the distance test
             //but we need to know that it's not identical to the last point( in NDC );
 
             if ( i == loop_end && dist_from_last_sample <= gEpsZeroMath ) {
-               _sil_segs.pop();           //pop from sil segs and add loop end instead
+               _sil_segs.pop_back();           //pop from sil segs and add loop end instead
                //because its flags are proper
 
                if ( last != loop_begin )  //but only add loop end again if we have added more than one point
                {
-                  _sil_segs += _ref_segs[loop_end];  //OUTER LOOP ENDS
+                  _sil_segs.push_back(_ref_segs[loop_end]);  //OUTER LOOP ENDS
                }
             } else  // just toss it to the segment list
             {
-               _sil_segs += _ref_segs[i];
+               _sil_segs.push_back(_ref_segs[i]);
                last = i;
             }
 
@@ -2370,7 +2315,7 @@ ZXedgeStrokeTexture::resample_ndcz()
       }
 
 #if 0
-      seg_end = _sil_segs.num();
+      seg_end = _sil_segs.size();
 
       //clean up loops after this pass as well
       if ( 2==3 && seg_end-seg_start > 0 && _sil_segs[seg_start].p() == _sil_segs[seg_end].p() && _sil_segs[seg_start].v() == SIL_VISIBLE) { 
@@ -2388,34 +2333,28 @@ ZXedgeStrokeTexture::resample_ndcz()
 
       //            j; //start of this segment
             
-            _sil_segs.pop(); //pop off identical point that closes the loop ( with its segment terminator)
-            int block_size = _sil_segs.num() - j;
-            _sil_segs.insert(seg_start, block_size);
+            _sil_segs.pop_back(); //pop off identical point that closes the loop ( with its segment terminator)
+            int block_size = _sil_segs.size() - j;
+            _sil_segs.insert(seg_start, block_size, SilSeg());
 
             for ( k = seg_start+block_size-1; k >= seg_start ; k-- ) { 
                //insert these segments at the beginning of the section we just added
-               _sil_segs[k] = _sil_segs.pop();         
+               _sil_segs[k] = _sil_segs.back();
+               _sil_segs.pop_back();
             }
          }
       }
 #endif
 
       loop_begin = loop_end + 1;
-
-
    }
 
-
-
-   //cerr << "resampled segments: " << _sil_segs.num() << endl;
-
-
+   //cerr << "resampled segments: " << _sil_segs.size() << endl;
 }
 
 int
 ZXedgeStrokeTexture::check_vis_mask(SilSeg &s)
 {
-
    //this is already in frustum
 
    //and we've done the backfacing test
@@ -2423,7 +2362,8 @@ ZXedgeStrokeTexture::check_vis_mask(SilSeg &s)
    //occlusion test
    static int VIS_ID_RAD = Config::get_var_int("VIS_ID_RAD",1, true);
    //fprintf(stderr, "OLDVIS %d ID %x\n" ,s.v(), s.id() );
-   double pix_seg_len = _ffseg_lengths[_path_ids.get_index(s.id() & 0xffffff00)] * VIEW::peek()->ndc2pix_scale();
+   vector<uint>::iterator it = std::find(_path_ids.begin(), _path_ids.end(), s.id() & 0xffffff00);
+   double pix_seg_len = _ffseg_lengths[it-_path_ids.begin()] * VIEW::peek()->ndc2pix_scale();
    int range = (int) ceil (2.0 * max ( 2.0, 256.0/pix_seg_len ) );
    if ( s.v() == SIL_VISIBLE ) {
       if ( _id_ref->find_val_in_box(s.id(), 0xffffff00, s.p(), VIS_ID_RAD, range) )
@@ -2462,8 +2402,10 @@ ZXedgeStrokeTexture::check_vis_mask_seethru(SilSeg &s)
 
    //check first for visibility
    if ( is_vis_path_id(s.id()) ) {
-      idx = _path_ids.get_index(s.id() & mask);
-      assert(idx != BAD_IND);
+      vector<uint>::iterator it;
+      it = std::find(_path_ids.begin(), _path_ids.end(), s.id() & mask);
+      assert(it != _path_ids.end());
+      idx = it - _path_ids.begin();
 
       fseg_len = _ffseg_lengths[idx] * ndc2pix;
 
@@ -2474,8 +2416,10 @@ ZXedgeStrokeTexture::check_vis_mask_seethru(SilSeg &s)
    }
 
    if ( s.v() != SIL_VISIBLE   &&  is_invis_path_id(s.id_invis()) ) {
-      idx = _path_ids.get_index(s.id_invis() & mask);
-      assert(idx != BAD_IND);
+      vector<uint>::iterator it;
+      it = std::find(_path_ids.begin(), _path_ids.end(), s.id_invis() & mask);
+      assert(it != _path_ids.end());
+      idx = it - _path_ids.begin();
 
       fseg_len = _ffseg_lengths[idx] * ndc2pix;
 
@@ -2546,13 +2490,11 @@ ZXedgeStrokeTexture::ndcz_to_strokes()
    NDCZpt last;   // last point added
    int cnt=0;     // count of points added
 
-   int n = _sil_segs.num();
+   NDCSilPath::size_type n = _sil_segs.size();
 
    bool started=false;
-   for (int i=0 ; i<n ; i++) {
-
+   for (NDCSilPath::size_type i=0 ; i<n ; i++) {
       if (_sil_segs[i].v()==SIL_VISIBLE ) {
-
          if (!started ) {
             if ( _sil_segs[i].e() ) {
 
@@ -2607,27 +2549,24 @@ void
 ZXedgeStrokeTexture::add_paths_seethru()
 {
    /*
-      for (int i=0; i<_sil_segs.num() && add_path_seethru(i); )
+      for (int i=0; i<_sil_segs.size() && add_path_seethru(i); )
          ;
    */
-   //cerr << "hello " << _sil_segs.num() << endl;
+   //cerr << "hello " << _sil_segs.size() << endl;
 
-      
-   for (int i=0; i<_sil_segs.num(); i++) {
-
+   for (NDCSilPath::size_type i=0; i<_sil_segs.size(); i++) {
       // find start of next path:
-      while ( _sil_segs.valid_index(i) && !check_render_flags(_sil_segs[i].type(), _sil_segs[i].v() ) )
+      while (i < _sil_segs.size() && !check_render_flags(_sil_segs[i].type(), _sil_segs[i].v() ) )
          i++;
 
       // if there is no next path we're done
-      if (!_sil_segs.valid_index(i))
+      if (i >= _sil_segs.size())
          break;
 
       LuboPath* p = new LuboPath;
       p->type() = _sil_segs[i].type();
       p->vis()  = _sil_segs[i].v();
-      _paths += p;
-
+      _paths.push_back(p);
 
       //the branch here should be noted - in the silsegs array, we kept track of both a visible and invisible id from the reference image
       //before we could read back from the ref-image to know visibility. now that the check has been done, we store
@@ -2636,13 +2575,13 @@ ZXedgeStrokeTexture::add_paths_seethru()
 
       if ( p->vis() == SIL_VISIBLE ) {
          //if we're visible, we add the regular id ( as in the standard case )
-         for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
+         for ( ; i < _sil_segs.size() && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
             assert( _sil_segs[i].type()==p->type());
             p->add
             (_sil_segs[i].p(), true, _sil_segs[i].id() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
          }
          // add the last point
-         if ( _sil_segs.valid_index(i) && _sil_segs[i].v()==p->vis() ) // we stopped because of the edge going bad
+         if (i < _sil_segs.size() && _sil_segs[i].v()==p->vis()) // we stopped because of the edge going bad
          {
             assert(_sil_segs[i].type()==p->type());
             p->add
@@ -2651,13 +2590,13 @@ ZXedgeStrokeTexture::add_paths_seethru()
          
       } else {
          //if we're invisible (therefore a hiddenline) we need to add the id from when it was drawn in hiddenline
-         for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
+         for ( ; i <  _sil_segs.size() && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
             assert(_sil_segs[i].type()==p->type());
             p->add
             (_sil_segs[i].p(), true, _sil_segs[i].id_invis() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
          }
          // add the last point
-         if (_sil_segs.valid_index(i) && _sil_segs[i].v()==p->vis() ) {
+         if (i < _sil_segs.size() && _sil_segs[i].v()==p->vis()) {
             assert(_sil_segs[i].type()==p->type());
             p->add
             (_sil_segs[i].p(), true, _sil_segs[i].id_invis() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
@@ -2668,7 +2607,7 @@ ZXedgeStrokeTexture::add_paths_seethru()
       p->complete();
 
       if (p->num() <= 1) {
-         _paths.pop();
+         _paths.pop_back();
       }
 
       assert(( _use_new_idref_method ) );
@@ -2678,17 +2617,18 @@ ZXedgeStrokeTexture::add_paths_seethru()
          //for the front-facing segment
          //drawn into ref image
 
-         //id_set().num() == 1 all the time!
-         for ( int j=0; j < p->id_set().num()  ; j++ ) {
-            int ind = _path_ids.get_index(p->id_set(j) );
-            assert ( _path_ids.valid_index( ind ) ) ;
-            p->ffseg_lengths() += _ffseg_lengths[ind];
-
+         //id_set().size() == 1 all the time!
+         for (size_t j=0; j < p->id_set().size(); j++) {
+            vector<uint>::iterator it;
+            it = std::find(_path_ids.begin(), _path_ids.end(), p->id_set(j));
+            assert(it != _path_ids.end());
+            int ind = it - _path_ids.begin();
+            p->ffseg_lengths().push_back(_ffseg_lengths[ind]);
          }
 
          int n = p->num();
 
-         if ( p->id_set().num() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
+         if ( p->id_set().size() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
             assert(0); // XXX - Not needed these days... For now...
             //cerr << "\tsingle wrap" << endl;
             //segment is located where loop closes
@@ -2696,26 +2636,25 @@ ZXedgeStrokeTexture::add_paths_seethru()
             while ( offset > 0 && p->ff_len(offset) > p->ff_len(offset-1) )
                offset--;
 
-            p->id_offsets().add     (offset);
-            p->id_set().add         (p->id_set(0));
-            p->ffseg_lengths().add  (p->ffseg_length(0));
+            p->id_offsets().push_back(offset);
+            p->id_set().push_back(p->id_set(0));
+            p->ffseg_lengths().push_back(p->ffseg_length(0));
 
          }  //else , multiple ids found, but we end where we began
-         else if ( p->id_set().num() > 1 && p->id_set().first() == ( p->id(n-1) & 0xffffff00 ) ) {
+         else if ( p->id_set().size() > 1 && p->id_set().front() == ( p->id(n-1) & 0xffffff00 ) ) {
             assert(0); // XXX - Not needed these days... For now...
             //loop is multisegment
             //cerr << "\tmultisegment with wrap" << endl;
-            uint first_id = p->id_set().first();
+            uint first_id = p->id_set().front();
             int offset=n-1;
             while ( offset > 0 && ( p->id(offset-1) & 0xffffff00 ) == first_id )
                offset--;
 
-            p->id_offsets().add        (offset);
-            p->id_set().add            (p->id_set(0));
-            p->ffseg_lengths().add     (p->ffseg_length(0));
-
+            p->id_offsets().push_back(offset);
+            p->id_set().push_back(p->id_set(0));
+            p->ffseg_lengths().push_back(p->ffseg_length(0));
          }
-         //else if ( p->id_set().num() > 1 ) cerr << "\tnon-wrapping multi" << endl;
+         //else if ( p->id_set().size() > 1 ) cerr << "\tnon-wrapping multi" << endl;
          //else cerr << "\tnon-wrapping single" << endl;
          //okay, so now if we have any sort of
          //loop trickery, we have a duplicate entry in the
@@ -2725,32 +2664,27 @@ ZXedgeStrokeTexture::add_paths_seethru()
          //so that now the path in
          //id_set[i] is of ndc length ffseg_lengths[i]
          //and extends from id_offsets[i] to id_offsets[i+1]-1;
-         p->id_offsets().add(n);
-
+         p->id_offsets().push_back(n);
       }
-
    }
 }
 
 
 bool
-ZXedgeStrokeTexture::add_path_seethru(int &i)
+ZXedgeStrokeTexture::add_path_seethru(size_t &i)
 {
-
-
    // find start of next path:
-   while ( _sil_segs.valid_index(i) && !check_render_flags(_sil_segs[i].type(), _sil_segs[i].v() ) )
+   while (i < _sil_segs.size() && !check_render_flags(_sil_segs[i].type(), _sil_segs[i].v()))
       i++;
 
    // if there is no next path we're done
-   if (!_sil_segs.valid_index(i))
+   if (i >= _sil_segs.size())
       return 0;
 
    LuboPath* p = new LuboPath;
    p->type() = _sil_segs[i].type();
    p->vis()  = _sil_segs[i].v();
-   _paths += p;
-
+   _paths.push_back(p);
 
    //the branch here should be noted - in the silsegs array, we kept track of both a visible and invisible id from the reference image
    //before we could read back from the ref-image to know visibility. now that the check has been done, we store
@@ -2759,13 +2693,13 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
 
    if ( p->vis() == SIL_VISIBLE ) {
       //if we're visible, we add the regular id ( as in the standard case )
-      for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
+      for ( ; i < _sil_segs.size() && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
          assert( _sil_segs[i].type()==p->type());
          p->add
          (_sil_segs[i].p(), true, _sil_segs[i].id() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
       }
       // add the last point
-      if (_sil_segs.valid_index(i) && _sil_segs[i].v()==p->vis() ) {
+      if (i < _sil_segs.size() && _sil_segs[i].v()==p->vis()) {
          assert(_sil_segs[i].type()==p->type());
 
          p->add
@@ -2773,13 +2707,13 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
       }
    } else {
       //if we're invisible (therefore a hiddenline) we need to add the id from when it was drawn in hiddenline
-      for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
+      for ( ; i < _sil_segs.size() && _sil_segs[i].e() && _sil_segs[i].v()==p->vis(); i++) {
          assert(_sil_segs[i].type()==p->type());
          p->add
          (_sil_segs[i].p(), true, _sil_segs[i].id_invis() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
       }
       // add the last point
-      if (_sil_segs.valid_index(i) && _sil_segs[i].v()==p->vis() && _sil_segs[i].type()==p->type() ) {
+      if (i < _sil_segs.size() && _sil_segs[i].v()==p->vis() && _sil_segs[i].type()==p->type()) {
          assert(_sil_segs[i].type()==p->type());
          p->add
          (_sil_segs[i].p(), true, _sil_segs[i].id_invis() , _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
@@ -2797,17 +2731,18 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
       //for the front-facing segment
       //drawn into ref image
 
-      //id_set().num() == 1 all the time!
-      for ( int j=0; j < p->id_set().num()  ; j++ ) {
-         int ind = _path_ids.get_index(p->id_set(j) );
-         assert ( _path_ids.valid_index( ind ) ) ;
-         p->ffseg_lengths() += _ffseg_lengths[ind];
-
+      //id_set().size() == 1 all the time!
+      for (vector<uint>::size_type j=0; j < p->id_set().size(); j++) {
+         vector<uint>::iterator it;
+         it = std::find(_path_ids.begin(), _path_ids.end(), p->id_set(j));
+         assert(it != _path_ids.end());
+         int ind = it - _path_ids.begin();
+         p->ffseg_lengths().push_back(_ffseg_lengths[ind]);
       }
 
       int n = p->num();
 
-      if ( p->id_set().num() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
+      if ( p->id_set().size() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
          assert(0); // XXX - Not needed these days... For now...
          //cerr << "\tsingle wrap" << endl;
          //segment is located where loop closes
@@ -2815,26 +2750,25 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
          while ( offset > 0 && p->ff_len(offset) > p->ff_len(offset-1) )
             offset--;
 
-         p->id_offsets().add     (offset);
-         p->id_set().add         (p->id_set(0));
-         p->ffseg_lengths().add  (p->ffseg_length(0));
+         p->id_offsets().push_back(offset);
+         p->id_set().push_back(p->id_set(0));
+         p->ffseg_lengths().push_back(p->ffseg_length(0));
 
       }  //else , multiple ids found, but we end where we began
-      else if ( p->id_set().num() > 1 && p->id_set().first() == ( p->id(n-1) & 0xffffff00 ) ) {
+      else if ( p->id_set().size() > 1 && p->id_set().front() == ( p->id(n-1) & 0xffffff00 ) ) {
          assert(0); // XXX - Not needed these days... For now...
          //loop is multisegment
          //cerr << "\tmultisegment with wrap" << endl;
-         uint first_id = p->id_set().first();
+         uint first_id = p->id_set().front();
          int offset=n-1;
          while ( offset > 0 && ( p->id(offset-1) & 0xffffff00 ) == first_id )
             offset--;
 
-         p->id_offsets().add        (offset);
-         p->id_set().add            (p->id_set(0));
-         p->ffseg_lengths().add     (p->ffseg_length(0));
-
+         p->id_offsets().push_back(offset);
+         p->id_set().push_back(p->id_set(0));
+         p->ffseg_lengths().push_back(p->ffseg_length(0));
       }
-      //else if ( p->id_set().num() > 1 ) cerr << "\tnon-wrapping multi" << endl;
+      //else if ( p->id_set().size() > 1 ) cerr << "\tnon-wrapping multi" << endl;
       //else cerr << "\tnon-wrapping single" << endl;
       //okay, so now if we have any sort of
       //loop trickery, we have a duplicate entry in the
@@ -2844,8 +2778,7 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
       //so that now the path in
       //id_set[i] is of ndc length ffseg_lengths[i]
       //and extends from id_offsets[i] to id_offsets[i+1]-1;
-      p->id_offsets().add(n);
-
+      p->id_offsets().push_back(n);
    }
 
    i++;
@@ -2855,20 +2788,15 @@ ZXedgeStrokeTexture::add_path_seethru(int &i)
 void
 ZXedgeStrokeTexture::add_paths()
 {  
-   
-   for (int i=0; i<_sil_segs.num() && add_path(i); i++) 
+   for (NDCSilPath::size_type i=0; i<_sil_segs.size() && add_path(i); i++)
       ;
-
 }
 
 bool
-ZXedgeStrokeTexture::add_path(int& i)
+ZXedgeStrokeTexture::add_path(size_t& i)
 {
-
    if ( get_new_branch() )
       return add_path_seethru(i);
-
-
 
    static bool long_paths = Config::get_var_bool("LONG_LUBO",false,true);
 
@@ -2877,19 +2805,19 @@ ZXedgeStrokeTexture::add_path(int& i)
 
    // find start of next path:
    if (long_paths) {
-      while (_sil_segs.valid_index(i) && !_sil_segs[i].e())
+      while (i < _sil_segs.size() && !_sil_segs[i].e())
          i++;
    } else {
-      while (_sil_segs.valid_index(i) && !(_sil_segs[i].e() && _sil_segs[i].v()==SIL_VISIBLE))
+      while (i < _sil_segs.size() && !(_sil_segs[i].e() && _sil_segs[i].v()==SIL_VISIBLE))
          i++;
    }
 
    // if there is no next path we're done
-   if (!_sil_segs.valid_index(i))
+   if (i >= _sil_segs.size())
       return 0;
 
    LuboPath* p = new LuboPath;
-   _paths += p;
+   _paths.push_back(p);
 
    //to interface with rob's new drawing code
    p->type() = _sil_segs[i].type();
@@ -2897,84 +2825,81 @@ ZXedgeStrokeTexture::add_path(int& i)
 
    if (long_paths) {
 
-      for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e(); i++)
+      for ( ; i < _sil_segs.size() && _sil_segs[i].e(); i++)
          p->add
          (_sil_segs[i].p(), _sil_segs[i].v()==SIL_VISIBLE, _sil_segs[i].id(), _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
 
       // add the last one
-      if (_sil_segs.valid_index(i))
+      if (i < _sil_segs.size())
          p->add
          (_sil_segs[i].p(), _sil_segs[i].v()==SIL_VISIBLE, _sil_segs[i].id(), _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
 
    } else {
 
-      for ( ; _sil_segs.valid_index(i) && _sil_segs[i].e() && _sil_segs[i].v()==SIL_VISIBLE; i++)
-      {        
+      for ( ; i < _sil_segs.size() && _sil_segs[i].e() && _sil_segs[i].v()==SIL_VISIBLE; i++) {
          p->add
          (_sil_segs[i].p(), _sil_segs[i].v()==SIL_VISIBLE, _sil_segs[i].id(), _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
-
       }
       // add the last one
-      if (_sil_segs.valid_index(i) && _sil_segs[i].v()==SIL_VISIBLE){
+      if (i < _sil_segs.size() && _sil_segs[i].v()==SIL_VISIBLE){
          p->add
          (_sil_segs[i].p(), _sil_segs[i].v()==SIL_VISIBLE, _sil_segs[i].id(), _sil_segs[i].s(), _sil_segs[i].bc(), _sil_segs[i].pl());
-        
       }
    }
 
    // computes lengths:
    p->complete();
 
-   //fprintf(stderr, "lubopath has %d ids\n", p->id_set().num() );
+   //fprintf(stderr, "lubopath has %d ids\n", p->id_set().size() );
    if ( _use_new_idref_method ) {
-
       //retrieve the correct length
       //for the front-facing segment
       //drawn into ref image
-      //int idn = p->id_set().num();
-      for ( int j=0; j < p->id_set().num()  ; j++ ) {
-         int ind = _path_ids.get_index(p->id_set(j) );
-         if ( _path_ids.valid_index( ind ) )
-            p->ffseg_lengths() += _ffseg_lengths[ind];
-         else {
+      //int idn = p->id_set().size();
+      for (vector<uint>::size_type j=0; j < p->id_set().size(); j++) {
+         vector<uint>::iterator it;
+         it = std::find(_path_ids.begin(), _path_ids.end(), p->id_set(j));
+         if (it != _path_ids.end()) {
+            int ind = it - _path_ids.begin();
+            p->ffseg_lengths().push_back(_ffseg_lengths[ind]);
+         } else {
             //we have a bogus id here ( not drawn in ref image )
             cerr << "whoa, bogus id!\t" << "%x" << p->id_set(j) << endl;
-            p->id_set()    .pull_index(j);
-            p->id_offsets().pull_index(j);
+            p->id_set().erase(p->id_set().begin() + j);
+            p->id_offsets().erase(p->id_offsets().begin() + j);
             j--; //check at this index again
          }
          //fprintf (stderr , "\tpath %d has length %f\n", j, p->ffseg_length(j) );
       }
-      //fprintf(stderr, "\t it has %d ids after cleaning\n", p->id_set().num() );
+      //fprintf(stderr, "\t it has %d ids after cleaning\n", p->id_set().size() );
 
       //buy american
       int n = p->num();
-      if ( p->id_set().num() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
+      if ( p->id_set().size() == 1 && p->ff_len(0) > p->ff_len(n-1)  ) {
          //cerr << "\tsingle wrap" << endl;
          //segment is located where loop closes
          int offset=n-1;
          while ( offset > 0 && p->ff_len(offset) > p->ff_len(offset-1) )
             offset--;
 
-         p->id_offsets().add     (offset);
-         p->id_set().add         (p->id_set(0));
-         p->ffseg_lengths().add  (p->ffseg_length(0));
+         p->id_offsets().push_back(offset);
+         p->id_set().push_back(p->id_set(0));
+         p->ffseg_lengths().push_back(p->ffseg_length(0));
 
       }  //else , multiple ids found, but we end where we began
-      else if ( p->id_set().num() > 1 && p->id_set().first() == ( p->id(n-1) & 0xffffff00 ) )   {
+      else if ( p->id_set().size() > 1 && p->id_set().front() == ( p->id(n-1) & 0xffffff00 ) )   {
          //loop is multisegment
          //cerr << "\tmultisegment with wrap" << endl;
-         uint first_id = p->id_set().first();
+         uint first_id = p->id_set().front();
          int offset=n-1;
          while ( offset > 0 && ( p->id(offset-1) & 0xffffff00 ) == first_id )
             offset--;
 
-         p->id_offsets().add        (offset);
-         p->id_set().add            (p->id_set(0));
-         p->ffseg_lengths().add     (p->ffseg_length(0));
-
+         p->id_offsets().push_back(offset);
+         p->id_set().push_back(p->id_set(0));
+         p->ffseg_lengths().push_back(p->ffseg_length(0));
       }
-      //else if ( p->id_set().num() > 1 ) cerr << "\tnon-wrapping multi" << endl;
+      //else if ( p->id_set().size() > 1 ) cerr << "\tnon-wrapping multi" << endl;
       //else cerr << "\tnon-wrapping single" << endl;
       //okay, so now if we have any sort of
       //loop trickery, we have a duplicate entry in the
@@ -2984,10 +2909,8 @@ ZXedgeStrokeTexture::add_path(int& i)
       //so that now the path in
       //id_set[i] is of ndc length ffseg_lengths[i]
       //and extends from id_offsets[i] to id_offsets[i+1]-1;
-      p->id_offsets().add(n);
-
+      p->id_offsets().push_back(n);
    }
-
 
    return 1;
 }
@@ -3033,29 +2956,27 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
 
       int num_missed = 0;
 
-      ARRAY<Vec2i> offsets;
+      vector<Vec2i> offsets;
 
-      offsets += Vec2i( 0, 0);
-      offsets += Vec2i(-1,-1);
-      offsets += Vec2i( 0,-1);
-      offsets += Vec2i( 1,-1);
-      offsets += Vec2i(-1, 0);
-      offsets += Vec2i( 1, 0);
-      offsets += Vec2i(-1, 1);
-      offsets += Vec2i( 0, 1);
-      offsets += Vec2i( 1, 1);
+      offsets.push_back(Vec2i( 0, 0));
+      offsets.push_back(Vec2i(-1,-1));
+      offsets.push_back(Vec2i( 0,-1));
+      offsets.push_back(Vec2i( 1,-1));
+      offsets.push_back(Vec2i(-1, 0));
+      offsets.push_back(Vec2i( 1, 0));
+      offsets.push_back(Vec2i(-1, 1));
+      offsets.push_back(Vec2i( 0, 1));
+      offsets.push_back(Vec2i( 1, 1));
 
-
-
-      ARRAY<uint>       ids;               // loop ids found whilst sampling the idref
-      ARRAY<LuboPath*>  matching_paths;    // paths which match the above ids
-      ARRAY<uint>       matching_ids;
+      set<uint>         ids;               // loop ids found whilst sampling the idref
+      vector<LuboPath*> matching_paths;    // paths which match the above ids
+      vector<uint>      matching_ids;
       // Propagate parameter choices from old samples to new paths:
-      //cerr << "Propagation::attempting to propagate %d votes " << _lubo_samples.num() << endl;
+      //cerr << "Propagation::attempting to propagate %d votes " << _lubo_samples.size() << endl;
 
-      //cerr << "=====================\nNum Lubos: " << _lubo_samples.num() << "\n";
+      //cerr << "=====================\nNum Lubos: " << _lubo_samples.size() << "\n";
 
-      for (int i=0; i<_lubo_samples.num(); i++) {
+      for (vector<LuboSample>::size_type i=0; i<_lubo_samples.size(); i++) {
          //cerr << "\t\t" << i ;
 
          ids.clear();
@@ -3064,8 +2985,6 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
          // Map old points/normals to new screen locations:
 
          LuboSample& lbsample = _lubo_samples[i];
-
-
 
          lbsample.get_wpt( wp );
 
@@ -3103,7 +3022,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
 
          //cerr << "Sample #" << i << ":\n";
 
-         for (j = 0; j<MAX_STEPS && matching_paths.num() == 0 ; j++) {
+         for (j = 0; j<MAX_STEPS && matching_paths.empty(); j++) {
             // Check the ref image for a stroke at each point
             // along the search direction:
             cur = p + delt*j;
@@ -3115,7 +3034,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
                if ( no_box_check ) {
                   id = _id_ref->val(cent);
                   if ( id_fits_sample(id, lbsample) )
-                     ids.add_uniquely(id);
+                     ids.insert(id);
 
                   if (debug_lubo || draw_props) {
                      // draws a white dot at the hit point
@@ -3124,10 +3043,10 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
                         _id_ref->val(cent) = 0x00ffffff;
                   }
                } else {
-                  for ( int off = 0 ; off < offsets.num(); off++ ) {
+                  for (vector<Vec2i>::size_type off = 0 ; off < offsets.size(); off++) {
                      id = _id_ref->val(cent+offsets[off]);
                      if  ( id_fits_sample(id, lbsample) )
-                        ids.add_uniquely(id);
+                        ids.insert(id);
 
                      if (debug_lubo || draw_props) {
                         // draws a white dot at the hit point,greem if right vis
@@ -3141,7 +3060,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
             } else {
                id = _id_ref->val(cent);
                if ( id_fits_sample(id, lbsample) )
-                  ids.add_uniquely(id);
+                  ids.insert(id);
 
                if (debug_lubo || draw_props) {
                   if ( id_fits_sample(id, lbsample) )
@@ -3151,29 +3070,29 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
                }
 
             }
-            //cerr << "  " << ids.num() << " IDs --> ";
+            //cerr << "  " << ids.size() << " IDs --> ";
             // find a path that owns that id:
             assert ( _use_new_idref_method );
             if ( _use_new_idref_method ) {
-               for  ( int k = 0 ; k < ids.num() ; k++ ) {
-                  int x =0;
-                  while ( (path= _paths.lookup(ids[k] & 0xffffff00, x)) ) {
+               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+                  int x = 0;
+                  while ( (path= _paths.lookup(*k & 0xffffff00, x)) ) {
                      //cerr << "stype:" << lbsample._type << " svis: " << lbsample._vis;
                      //cerr << " ptype:" << path->type() << " pvis:" << path->vis() << endl;
-                     if ( sample_matches_path ( lbsample, path ) && path->in_range(ids[k]) ) {
+                     if ( sample_matches_path ( lbsample, path ) && path->in_range(*k) ) {
                         //cerr << "\tsample matches path" << endl;
-                        //if ( matching_paths.add_uniquely(path) ) matching_ids.add(ids[k]);
-                        matching_paths.add(path);
-                        matching_ids.add  (ids[k]);
+                        //if ( matching_paths.add_uniquely(path) ) matching_ids.push_back(ids[k]);
+                        matching_paths.push_back(path);
+                        matching_ids.push_back(*k);
                      }
                      x++;
                   }
                }
                //if we are unsuccessful, clear these ids..
-               if ( matching_paths.num() == 0 )
+               if ( matching_paths.empty() )
                   ids.clear();
             }
-            //cerr << matching_ids.num() << " matches. ";
+            //cerr << matching_ids.size() << " matches. ";
             // If it hits "air" (background) there's no point
             // continuing at all. We're supposed to crawl from
             // inside the mesh toward the silhouette.
@@ -3195,7 +3114,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
 
 
          // if matching_paths isn't empty, search for the closest one to this point
-         if (matching_paths.num() > 0 ) {
+         if (!matching_paths.empty()) {
             LuboPath*   closest_path = NULL;
             double      min_dist = DBL_MAX;
             double      tmp_dist = 0;
@@ -3206,11 +3125,10 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
             //            int         path_index=0;
 
             // find the path that comes closest to tha
-            for ( int k = 0 ; k < matching_paths.num() ; k++ ) {
+            for (vector<LuboPath*>::size_type k = 0; k < matching_paths.size(); k++) {
                assert( _use_new_idref_method ) ;
                if ( _use_new_idref_method ) {
                   tmp_dist = matching_paths[k]->get_closest_point_at(matching_ids[k], cur, delt, tmp_point, tmp_index );
-                  //tmp_dist = matching_paths[k]->get_closest_point( cur, delt, tmp_point, tmp_index );
                }
                /*
                               else tmp_dist = matching_paths[k]->get_closest_point( cur, delt, tmp_point, tmp_index );
@@ -3231,16 +3149,13 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
                assert( closest_path );
                num_missed++;
             }
-
          } else {
             //cerr << "FAILED!!!\n";
             num_missed++;
          }
-
-
       }
 
-      //if ( num_missed > 2 ) { err_mesg(ERR_LEV_ERROR, "missed %d of %d", num_missed, _lubo_samples.num() ); }
+      //if ( num_missed > 2 ) { err_mesg(ERR_LEV_ERROR, "missed %d of %d", num_missed, _lubo_samples.size() ); }
       if (debug_lubo && num_missed > 3) {
          err_mesg(ERR_LEV_ERROR, "num missed: %d", num_missed);
       }
@@ -3302,26 +3217,26 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
       int num_missed = 0;
 
-      ARRAY<Vec2i> offsets;
+      vector<Vec2i> offsets;
 
-      offsets += Vec2i( 0, 0);
-      offsets += Vec2i(-1,-1);
-      offsets += Vec2i( 0,-1);
-      offsets += Vec2i( 1,-1);
-      offsets += Vec2i(-1, 0);
-      offsets += Vec2i( 1, 0);
-      offsets += Vec2i(-1, 1);
-      offsets += Vec2i( 0, 1);
-      offsets += Vec2i( 1, 1);
+      offsets.push_back(Vec2i( 0, 0));
+      offsets.push_back(Vec2i(-1,-1));
+      offsets.push_back(Vec2i( 0,-1));
+      offsets.push_back(Vec2i( 1,-1));
+      offsets.push_back(Vec2i(-1, 0));
+      offsets.push_back(Vec2i( 1, 0));
+      offsets.push_back(Vec2i(-1, 1));
+      offsets.push_back(Vec2i( 0, 1));
+      offsets.push_back(Vec2i( 1, 1));
 
-      ARRAY<uint>       ids;               // loop ids found whilst sampling the idref
-      ARRAY<LuboPath*>  matching_paths;    // paths which match the above ids
-      ARRAY<uint>       matching_ids;
+      set<uint>         ids;               // loop ids found whilst sampling the idref
+      vector<LuboPath*> matching_paths;    // paths which match the above ids
+      vector<uint>      matching_ids;
       // Propagate parameter choices from old samples to new paths:
-      //cerr << "Propagation::attempting to propagate %d votes " << _lubo_samples.num() << endl;
-      //cerr << "Num Lubos = " << _lubo_samples.num() << "\n";
+      //cerr << "Propagation::attempting to propagate %d votes " << _lubo_samples.size() << endl;
+      //cerr << "Num Lubos = " << _lubo_samples.size() << "\n";
 
-      for (int i=0; i<_lubo_samples.num(); i++) {
+      for (vector<LuboSample>::size_type i=0; i<_lubo_samples.size(); i++) {
          //cerr << "\t\t" << i ;
          ids.clear();
          matching_paths.clear();
@@ -3357,7 +3272,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
          int j;
 
 
-         for (j = 0; j<MAX_STEPS && matching_paths.num() == 0 ; j++) {
+         for (j = 0; j<MAX_STEPS && matching_paths.empty(); j++) {
             // Check the ref image for a stroke at each point
             // along the search direction:
             cur = p + delt*j;
@@ -3369,17 +3284,16 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
                if ( no_box_check ) {
                   id = _id_ref->val(cent);
                   if ( is_path_id(id) )
-                     ids.add_uniquely(id);
+                     ids.insert(id);
                } else {
-                  for ( int off = 0 ; off < offsets.num(); off++ ) {
+                  for (vector<Vec2i>::size_type off = 0; off < offsets.size(); off++) {
                      tmp_id = _id_ref->val(cent+offsets[off]);
                      if  ( is_path_id ( tmp_id ) ) {
                         if ( debug_lubo && is_path_id ( id ) && tmp_id != id )
                            cerr << "XXXmultiple ids found!" << endl;
                         id = tmp_id;
                         if ( is_path_id(id) )
-                           ids.add_uniquely(id);
-
+                           ids.insert(id);
                      }
 
                      if (debug_lubo || draw_props) {
@@ -3394,8 +3308,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
                //otherwise just sample at the pixel you land in
                id = _id_ref->val(cent);
                if ( is_path_id(id) )
-                  ids.add_uniquely(id);
-
+                  ids.insert(id);
 
                if (debug_lubo || draw_props) {
                   // draws a white dot at the hit point
@@ -3403,32 +3316,29 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
                   if ( id == 0 )
                      _id_ref->val(cent ) = 0x00ffffff;
                }
-
             }
-
-
 
             // find a path that owns that id:
 
             if ( _use_new_idref_method ) {
-               for  ( int k = 0 ; k < ids.num() ; k++ ) {
-                  int x =0;
-                  while ( (path= _paths.lookup(ids[k] & 0xffffff00, x)) ) {
-                     if ( path->in_range(ids[k]) ) {
-
-                        //if ( matching_paths.add_uniquely(path) ) matching_ids.add(ids[k]);
-                        matching_paths.add(path);
-                        matching_ids.add  (ids[k]);
-
+               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+                  int x = 0;
+                  while ( (path= _paths.lookup(*k & 0xffffff00, x)) ) {
+                     if ( path->in_range(*k) ) {
+                        matching_paths.push_back(path);
+                        matching_ids.push_back(*k);
                      }
                      x++;
                   }
                }
             } else {
-               for  ( int k = 0 ; k < ids.num() ; k++ ) {
-                  int x =0;
-                  while ( (path= _paths.lookup(ids[k], x)) ) {
-                     matching_paths.add_uniquely(path);
+               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+                  int x = 0;
+                  while ( (path= _paths.lookup(*k, x)) ) {
+                     vector<LuboPath*>::iterator it;
+                     it = std::find(matching_paths.begin(), matching_paths.end(), path);
+                     if (it == matching_paths.end())
+                        matching_paths.push_back(path);
                      x++;
                   }
                }
@@ -3444,16 +3354,11 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
          }
 
-
-
-
          if (j == MAX_STEPS)
             num_missed++;
 
-
-
          // if matching_paths isn't empty, search for the closest one to this point
-         if (matching_paths.num() > 0 ) {
+         if (!matching_paths.empty()) {
             LuboPath*   closest_path = NULL;
             double      min_dist = DBL_MAX;
             double      tmp_dist = 0;
@@ -3464,12 +3369,11 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
             //            int         path_index=0;
 
             // find the path that comes closest to tha
-            for ( int k = 0 ; k < matching_paths.num() ; k++ ) {
+            for (vector<LuboPath*>::size_type k = 0; k < matching_paths.size(); k++) {
                //XXX - rob , get_closest_point is the function that tests path-point distance
 
                if ( _use_new_idref_method ) {
                   tmp_dist = matching_paths[k]->get_closest_point_at(matching_ids[k], cur, delt, tmp_point, tmp_index );
-                  //tmp_dist = matching_paths[k]->get_closest_point( cur, delt, tmp_point, tmp_index );
                } else
                   tmp_dist = matching_paths[k]->get_closest_point( cur, delt, tmp_point, tmp_index );
 
@@ -3490,11 +3394,9 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
          } else
             num_missed++;
-
-
       }
 
-      //if ( num_missed > 2 ) { err_mesg(ERR_LEV_ERROR, "missed %d of %d", num_missed, _lubo_samples.num() ); }
+      //if ( num_missed > 2 ) { err_mesg(ERR_LEV_ERROR, "missed %d of %d", num_missed, _lubo_samples.size() ); }
       if (debug_lubo && num_missed > 3) {
          err_mesg(ERR_LEV_ERROR, "num missed: %d", num_missed);
       }
@@ -3510,11 +3412,9 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 void
 ZXedgeStrokeTexture::regen_group_samples()
 {
-
    static int SAMPLE_STEP = Config::get_var_int("LUBO_SAMPLE_STEP", 4,true);
    double sample_dist = _vis_sampling * _pix_to_ndc_scale * SAMPLE_STEP;
    _paths.gen_group_samples(sample_dist, _lubo_samples);
-
 }
 
 
@@ -3600,15 +3500,13 @@ LuboPathList::get_path(TAGformat &d)
 
    }
 
-
    LuboPath *p = new LuboPath;
    assert(p);
 
    p->decode(*d);
    p->complete();
 
-   add
-      (p);
+   push_back(p);
 }
 
 
@@ -3621,16 +3519,13 @@ LuboPathList::put_paths(TAGformat &d) const
 {
    cerr << "LuboPathList::put_paths()\n";
 
-   int i;
+   LuboPathList::size_type i;
 
-   for (i=0; i<num(); i++) {
+   for (i=0; i<size(); i++) {
       d.id();
       ((*this)[i])->format(*d);
       d.end_id();
-
    }
-
-
 }
 
 /////////////////////////////////////
@@ -3639,7 +3534,6 @@ LuboPathList::put_paths(TAGformat &d) const
 int
 LuboPathList::votepath_id_to_index(uint id) const
 {
-
    //Given a votepath id from a previous frame, return the index of the
    //path in this frame with the most votes that have that ._path_id
    //if a tie, returns first
@@ -3648,26 +3542,25 @@ LuboPathList::votepath_id_to_index(uint id) const
    int max_ind = -1;
    int max_count = 0;
 
-   for ( int i=0; i < num(); i++ ) {
-
-      LuboPath * lp = _array[i];
+   for (LuboPathList::size_type i=0; i < size(); i++) {
+      LuboPath * lp = (*this)[i];
       int count = 0;
-      for ( int j =0 ; j < lp->votes().num() ; j++ ) {
+      for (vector<LuboVote>::size_type j = 0; j < lp->votes().size(); j++) {
          if ( lp->votes()[j]._path_id == id )
             count++;
       }
-   if ( count > max_count ) { max_count = count; max_ind = i;}
+      if ( count > max_count ) { max_count = count; max_ind = i;}
    }
 
    return max_ind;
 }
+
 /////////////////////////////////////
 // strokepath_id_to_index()
 /////////////////////////////////////
 int
 LuboPathList::strokepath_id_to_index(uint id, int path_index) const
 {
-
    //Given a stroke id from a previous frame, return the index of the
    //stroke in path possessing the most votes from that id
 
@@ -3678,9 +3571,9 @@ LuboPathList::strokepath_id_to_index(uint id, int path_index) const
 
    int stroke_ind = -1;
    int max_count = 0;
-   LuboPath * lp = _array[path_index];
+   LuboPath * lp = at(path_index);
 
-   for ( int i=0; i < lp->groups().num(); i++ ) {
+   for (vector<VoteGroup>::size_type i=0; i < lp->groups().size(); i++) {
       VoteGroup& g = lp->groups()[i];
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD)
          continue;
@@ -3688,7 +3581,7 @@ LuboPathList::strokepath_id_to_index(uint id, int path_index) const
       for ( int j=0; j < g.num() ; j++ )
          if ( g.vote(j)._stroke_id == id )
             count++;
-   if ( count > max_count ) { max_count = count; stroke_ind = i; }
+      if ( count > max_count ) { max_count = count; stroke_ind = i; }
    }
 
    return stroke_ind;
@@ -3701,7 +3594,6 @@ LuboPathList::strokepath_id_to_index(uint id, int path_index) const
 bool
 LuboPathList::strokepath_id_to_indices(uint id, int* path_index, int* stroke_index ) const
 {
-
    //Given a stroke id from a previous frame, return the index of the
    //path in this frame with the most votes that have that ._stroke_id
    //if a tie, returns first
@@ -3710,10 +3602,11 @@ LuboPathList::strokepath_id_to_indices(uint id, int* path_index, int* stroke_ind
    *path_index       = -1;
    *stroke_index     = -1;
    int max_count     = 0;
-   int i,j,k;
-   for (  i=0; i < num(); i++ ) {
-      LuboPath * lp = _array[i];
-      for ( j =0 ; j < lp->groups().num(); j++ ) {
+   size_t i,j;
+   int k;
+   for (i = 0; i < size(); i++) {
+      LuboPath * lp = at(i);
+      for (j = 0; j < lp->groups().size(); j++) {
          VoteGroup& g   = lp->groups()[j];
          if (g.status() != VoteGroup::VOTE_GROUP_GOOD)
             continue;
@@ -3721,12 +3614,11 @@ LuboPathList::strokepath_id_to_indices(uint id, int* path_index, int* stroke_ind
          for ( k = 0 ; k < g.num() ; k++ )
             if ( g.vote(k)._stroke_id == id )
                count++;
-      if  ( count > max_count ) { max_count = count; *path_index = i; *stroke_index = j;}
+         if  ( count > max_count ) { max_count = count; *path_index = i; *stroke_index = j;}
       }
    }
 
    return (*path_index < 0) ? false : true ;
-
 }
 
 
@@ -3899,12 +3791,12 @@ LuboPath::get_faces(TAGformat &d)
 
    *d >> num;
 
+   _simplexes.reserve(num);
    for (int i=0; i<num; i++) {
       uintptr_t face_pointer;
       *d >> face_pointer;
-      _simplexes.add((Bsimplex*)face_pointer);
+      _simplexes.push_back((Bsimplex*)face_pointer);
    }
-
 }
 
 /////////////////////////////////////
@@ -3916,12 +3808,11 @@ LuboPath::put_faces(TAGformat &d) const
    cerr << "LuboPath::put_faces()\n";
 
    d.id();
-   *d << _simplexes.num();
-   for (int i=0; i<_simplexes.num(); i++) {
+   *d << _simplexes.size();
+   for (vector<Bsimplex*>::size_type i=0; i<_simplexes.size(); i++) {
       *d << (uintptr_t)_simplexes[i];
    }
    d.end_id();
-
 }
 
 /////////////////////////////////////
@@ -4042,9 +3933,8 @@ LuboPath::get_vote(TAGformat &d)
       return;
    }
 
-   _votes.add(LuboVote());
-   _votes.last().decode(*d);
-
+   _votes.push_back(LuboVote());
+   _votes.back().decode(*d);
 }
 
 /////////////////////////////////////
@@ -4055,14 +3945,13 @@ LuboPath::put_votes(TAGformat &d) const
 {
    cerr << "LuboPath::put_votes()\n";
 
-   int i;
+   vector<LuboVote>::size_type i;
 
-   for (i=0; i<_votes.num(); i++) {
+   for (i=0; i<_votes.size(); i++) {
       d.id();
       _votes[i].format(*d);
       d.end_id();
    }
-
 }
 
 /////////////////////////////////////
@@ -4083,9 +3972,8 @@ LuboPath::get_group(TAGformat &d)
       return;
    }
 
-   _groups.add(VoteGroup(this));
-   _groups.last().decode(*d);
-
+   _groups.push_back(VoteGroup(this));
+   _groups.back().decode(*d);
 }
 
 /////////////////////////////////////
@@ -4096,14 +3984,13 @@ LuboPath::put_groups(TAGformat &d) const
 {
    cerr << "LuboPath::put_groups()\n";
 
-   int i;
+   vector<VoteGroup>::size_type i;
 
-   for (i=0; i<_groups.num(); i++) {
+   for (i=0; i<_groups.size(); i++) {
       d.id();
       _groups[i].format(*d);
       d.end_id();
    }
-
 }
 
 
@@ -4118,7 +4005,6 @@ LuboPath::clear()
    _len.clear();
    _stretch = 1;
    _pix_to_ndc_scale = 1;
-
 }
 
 void
@@ -4126,8 +4012,9 @@ LuboPath::add
    (CNDCZpt& p, bool vis, uint id)
 {
    _pts.push_back(p);
-   _path_id.add(id);
-   _id_set.add_uniquely(id);    // add each id just once
+   _path_id.push_back(id);
+   if (std::find(_id_set.begin(), _id_set.end(), id) == _id_set.end())
+      _id_set.push_back(id);    // add each id just once
 }
 
 void
@@ -4135,33 +4022,33 @@ LuboPath::add
    (CNDCZpt& p, bool vis, uint id, Bsimplex * s, CWvec& bc, double len)
 {
    _pts.push_back(p);
-   _path_id.add(id);       //full id ( plus length )
-   _simplexes.add (s);
-   _bcs.add (bc);
-   if (_id_set.add_uniquely(id & 0xffffff00) )
-      _id_offsets.add(_pts.size()-1);    // add each id just once
-   _len.add(len);
-
+   _path_id.push_back(id);       //full id ( plus length )
+   _simplexes.push_back(s);
+   _bcs.push_back(bc);
+   if (std::find(_id_set.begin(), _id_set.end(), id & 0xffffff00) == _id_set.end()) {
+      _id_set.push_back(id & 0xffffff00);
+      _id_offsets.push_back(_pts.size()-1);    // add each id just once
+   }
+   _len.push_back(len);
 }
 
 void
-LuboPath::gen_group_samples( double spacing , int path_index,  ARRAY<LuboSample>& samples) const
+LuboPath::gen_group_samples( double spacing , int path_index, vector<LuboSample>& samples)
 {
-
    double t;
    Bsimplex* s;
    Wvec bc;      
    
    if (!( num() > 1 ) ) {
-      //cerr << "LuboPath::gen_group_samples:::: PATH HAS " << num() << " POINT\n";
+      //cerr << "LuboPath::gen_group_samples:::: PATH HAS " << size() << " POINT\n";
       return;
    }
    
-   Wtransf inv_xform = (_simplexes.num() && _simplexes[0] && _simplexes[0]->mesh()) ? _simplexes[0]->mesh()->inv_xform() : Identity;
+   Wtransf inv_xform = (!_simplexes.empty() && _simplexes[0] && _simplexes[0]->mesh()) ? _simplexes[0]->mesh()->inv_xform() : Identity;
 
    int b = 0 ;          // buf;
-   int n = num()-1 ;    // num()-buf;
-   for ( int i=0 ; i < _groups.num() ; i++ ) {
+   int n = num()-1 ;    // size()-buf;
+   for (vector<VoteGroup>::size_type i=0; i < _groups.size(); i++) {
       //create a set of samples for each stroke that we drew along this path
       //each remaining votegroup in the groups array represents a drawn stroke
 
@@ -4223,11 +4110,11 @@ LuboPath::gen_group_samples( double spacing , int path_index,  ARRAY<LuboSample>
             s->project_barycentric( tmp, bc );
 
 
-            samples     += LuboSample ( g.id(), tmp, tan(l).perpend(), t, s, bc );
-            samples.last()._path_id    = path_index;
-            samples.last()._stroke_id  = g.id();
-            samples.last()._type= g.lubo_path()->type(); //assign the same type and
-            samples.last()._vis = g.lubo_path()->vis();  //visibility as the parent
+            samples.push_back(LuboSample(g.id(), tmp, tan(l).perpend(), t, s, bc));
+            samples.back()._path_id    = path_index;
+            samples.back()._stroke_id  = g.id();
+            samples.back()._type= g.lubo_path()->type(); //assign the same type and
+            samples.back()._vis = g.lubo_path()->vis();  //visibility as the parent
             last_added = l;
          } else {
             int add;
@@ -4250,11 +4137,11 @@ LuboPath::gen_group_samples( double spacing , int path_index,  ARRAY<LuboSample>
             if(!s) continue ;
             s->project_barycentric( tmp, bc );
 
-            samples     += LuboSample ( g.id(), tmp, tan(add).perpend(), t, s, bc );
-            samples.last()._path_id    = path_index;
-            samples.last()._stroke_id  = g.id();
-            samples.last()._type   = g.lubo_path()->type(); //assign the same type and
-            samples.last()._vis   = g.lubo_path()->vis();  //visibility as the parent
+            samples.push_back(LuboSample(g.id(), tmp, tan(add).perpend(), t, s, bc));
+            samples.back()._path_id    = path_index;
+            samples.back()._stroke_id  = g.id();
+            samples.back()._type   = g.lubo_path()->type(); //assign the same type and
+            samples.back()._vis   = g.lubo_path()->vis();  //visibility as the parent
             last_added = add;
             l = r;
          }
@@ -4270,12 +4157,12 @@ LuboPath::gen_group_samples( double spacing , int path_index,  ARRAY<LuboSample>
                      NDCZpt pt1  = interp ( _pts[l], _pts[r], weight ) ;
                      Wpt tmp(pt1);
                      f->project_barycentric( tmp, bc );
-                     
-                     samples     += LuboSample ( g.id(), tmp, tan(l).perpend(), t, f, bc ); 
-                     samples.last()._path_id    = path_index;
-                     samples.last()._stroke_id  = g.id();
-                     samples.last()._type   = g.lubo_path()->type(); //assign the same type and 
-                     samples.last()._vis   = g.lubo_path()->vis();  //visibility as the parent
+
+                     samples.push_back(LuboSample(g.id(), tmp, tan(l).perpend(), t, f, bc));
+                     samples.back()._path_id    = path_index;
+                     samples.back()._stroke_id  = g.id();
+                     samples.back()._type   = g.lubo_path()->type(); //assign the same type and
+                     samples.back()._vis   = g.lubo_path()->vis();  //visibility as the parent
                      //to avoid cross-pollination
          ****/
       }
@@ -4369,10 +4256,18 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
    // if the length <  256 pixels, each segment is pixel
    //        length >  256 pixels, each division is several pixels
 
-   int   pathn    =  _id_set.num();
-   bool  wrap     = ( pathn > 1 && id == _id_set[0] && id == _id_set[pathn-1] ); //parameter wrap
-   int   ind      = ( wrap ) ? 0 : _id_set.get_index(id); // get index matches from the end of the array
-
+   vector<uint>::size_type pathn =  _id_set.size();
+   bool wrap = ( pathn > 1 && id == _id_set[0] && id == _id_set[pathn-1] ); //parameter wrap
+   int ind;
+   if (wrap) {
+      ind = 0;
+   } else {
+      vector<uint>::reverse_iterator it = std::find(_id_set.rbegin(), _id_set.rend(), id);
+      if (it != _id_set.rend())
+         ind = it.base() - _id_set.begin() - 1;
+      else
+         ind = -1;
+   }
 
    double pix_dist      =  VIEW::peek()->pix_to_ndc_scale();
 
@@ -4506,8 +4401,8 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
       if ( brute_min_dist != min_dist && 1==2) {
          fprintf ( stderr, "********* STAMP: %d ********\n", VIEW::peek()->stamp() );
 
-         fprintf ( stderr, "measure for %f : using id %x : (%d of %d ) -  wrap=%d\nlength %f and %f of total %f delta(pix) = %f\nindex %zu to %zu of %zu total offset %d\n",
-                   len, id , ind, _id_set.num(), wrap ,
+         fprintf ( stderr, "measure for %f : using id %x : (%d of %zu) -  wrap=%d\nlength %f and %f of total %f delta(pix) = %f\nindex %zu to %zu of %zu total offset %d\n",
+                   len, id , ind, _id_set.size(), wrap ,
                    _len[lower_ind%n],   _len[upper_ind%n], _ffseg_lengths[ind], len_delta/pix_dist,
                    lower_ind%n,         upper_ind%n , n  , _id_offsets[ind] );
          fprintf ( stderr,   "min %f ne brute min %f\nindices %d vs %d\tseglengths %f vs %f \n",
@@ -4541,12 +4436,12 @@ LuboPath::get_closest_point_at(uint ref_val, CNDCpt &p, CNDCvec &v, NDCpt &ret_p
 }
 
 bool
-LuboPath::in_range( uint ref_val)
+LuboPath::in_range(uint ref_val)
 {
    if (num() < 2)
       return false;
 
-   int n = _id_set.num();
+   vector<uint>::size_type n = _id_set.size();
 
    uint id = ref_val & 0xffffff00;                 //id portion of ref_val
 
@@ -4568,13 +4463,17 @@ LuboPath::in_range( uint ref_val)
          else if ( ff_len(_id_offsets[n-1]) < len && len < ff_len(_id_offsets[n]-1) )
             return true; //clipped portion of a loop
       }
-   } else if ( _id_set.valid_index ( ind = _id_set.get_index(id) ) ) {             //id doesn't match the first, so don't worry about the loop case
-      //cerr << "multisegment path" << endl;
-      //get index of this id
-      //(XXX the valid_index is a bravery issue. in range shouldn't be called on this id if the path didn't match)
-      len = lval * _ffseg_lengths[ind] / 256.0;
-      if ( ff_len(_id_offsets[ind]) < len &&  len < ff_len(_id_offsets[ind+1]-1) )
-         return true;      //check in range
+   } else {
+      vector<uint>::iterator it = std::find(_id_set.begin(), _id_set.end(), id);
+      if ( it != _id_set.end() ) {             //id doesn't match the first, so don't worry about the loop case
+         ind = it - _id_set.begin();
+         //cerr << "multisegment path" << endl;
+         //get index of this id
+         //(XXX the valid_index is a bravery issue. in range shouldn't be called on this id if the path didn't match)
+         len = lval * _ffseg_lengths[ind] / 256.0;
+         if ( ff_len(_id_offsets[ind]) < len &&  len < ff_len(_id_offsets[ind+1]-1) )
+            return true;      //check in range
+      }
    }
    //cerr << " ack!::didn't match an index!" << endl;
    return false;
@@ -4607,16 +4506,16 @@ LuboPath::register_vote ( LuboSample& sample, int path_id, CNDCpt& pt, int index
       IDRefImage::instance()->val(pt) = 0x00ff0000;
 
    double s = get_s(index) + (pt-_pts[index]).length();  // arclen along the path
-   double conf =1;
+   double conf = 1;
 
-   _votes += LuboVote(s , sample._t, conf );
+   _votes.push_back(LuboVote(s , sample._t, conf));
 
    //necessary info for the votes to carry in order to track properly
    // should be in the constructor once this is finalized
-   _votes.last()._path_id     = sample._path_id ;
-   _votes.last()._stroke_id   = sample._stroke_id;
+   _votes.back()._path_id     = sample._path_id ;
+   _votes.back()._stroke_id   = sample._stroke_id;
 
-   _votes.last()._ndc_dist    = ndc_dist; //(pix, actually... no?)
+   _votes.back()._ndc_dist    = ndc_dist; //(pix, actually... no?)
 
    double alph = ( s - get_s(index) ) / ( get_s(index+1) - get_s(index) );
 
@@ -4625,10 +4524,9 @@ LuboPath::register_vote ( LuboSample& sample, int path_id, CNDCpt& pt, int index
    get_wpt( index+1, temp2);
    Wpt world_path_pt = xf * /* TFMULTFIX */ interp ( temp1, temp2, alph );
 
-   _votes.last()._world_dist = ( world_path_pt - world_vote_pt ).length() / sample._s->mesh()->pix_size();
+   _votes.back()._world_dist = ( world_path_pt - world_vote_pt ).length() / sample._s->mesh()->pix_size();
 
    return true;
-
 }
 
 
@@ -4636,23 +4534,16 @@ LuboPath::register_vote ( LuboSample& sample, int path_id, CNDCpt& pt, int index
 * Handy Stuff
 *****************************************************************/
 
-static int
-arclen_compare_votes(const void* va, const void* vb)
+static bool
+arclen_compare_votes(const LuboVote &a, const LuboVote &b)
 {
-   LuboVote* a = (LuboVote*) va;
-   LuboVote* b = (LuboVote*) vb;
-   return Sign2((a->_s - b->_s));
+   return a._s < b._s;
 }
 
-
-static int
-x_compare_samples(const void* va, const void* vb)
+static bool
+x_compare_samples(const XYpt &a, const XYpt &b)
 {
-
-   XYpt* a = (XYpt*) va;
-   XYpt* b = (XYpt*) vb;
-   return Sign2(((*a)[0] - (*b)[0]));
-
+   return a[0] < b[0];
 }
 
 /*****************************************************************
@@ -4779,8 +4670,6 @@ VoteGroup::get_vote(TAGformat &d)
 {
    //cerr << "VoteGroup::get_vote()\n";
 
-
-
    //Grab the class name... should be LuboVote
    string str;
    *d >> str;
@@ -4791,10 +4680,8 @@ VoteGroup::get_vote(TAGformat &d)
       return;
    }
 
-   _votes.add(LuboVote());
-   _votes.last().decode(*d);
-
-
+   _votes.push_back(LuboVote());
+   _votes.back().decode(*d);
 }
 
 /////////////////////////////////////
@@ -4805,14 +4692,13 @@ VoteGroup::put_votes(TAGformat &d) const
 {
    cerr << "VoteGroup::put_votes()\n";
 
-   int i;
+   vector<LuboVote>::size_type i;
 
-   for (i=0; i<_votes.num(); i++) {
+   for (i=0; i<_votes.size(); i++) {
       d.id();
       _votes[i].format(*d);
       d.end_id();
    }
-
 }
 
 /////////////////////////////////////
@@ -4843,12 +4729,9 @@ VoteGroup::put_fits(TAGformat &d) const
 
 double                        // a more efficient and appropriate version of this function
 VoteGroup::get_t( double s )  // ought to replace this basic linear interpolation scheme
-
 {
-
-   int n = _fits.num();
-   //   int i = 0;
-   int l, m, r;
+   vector<mlib::XYpt>::size_type n = _fits.size();
+   vector<mlib::XYpt>::size_type l, m, r;
    // base cases
 
    if    ( n == 0 )
@@ -4861,11 +4744,9 @@ VoteGroup::get_t( double s )  // ought to replace this basic linear interpolatio
    if    ( s > _fits[n-1][0]  )
       return _fits[n-1][1];
 
-   //   while (  i < n && s > _fits[i][0] ) i++;
    l = 0;
    r = n-1;
-   while ( ( m=(l+r)/2 ) != l )
-   {
+   while ( ( m=(l+r)/2 ) != l ) {
       if ( s > _fits[m][0] )
          l = m;
       else
@@ -4881,29 +4762,25 @@ VoteGroup::get_t( double s )  // ought to replace this basic linear interpolatio
    return t;
 }
 
-
-
-
-
 void
 VoteGroup::fitsort()
 {
    //sort fit samples by arclength position
-   _fits.sort(x_compare_samples);
+   std::sort(_fits.begin(), _fits.end(), x_compare_samples);
 }
 
 
 void
 VoteGroup::sort()
 {
-   //resort the group by arclength
-   _votes.sort(arclen_compare_votes);
-   if ( _votes.num() > 0 ) {
+   if (!_votes.empty()) {
+      //resort the group by arclength
+      std::sort(_votes.begin(), _votes.end(), arclen_compare_votes);
       _begin = _votes[0]._s;
-      _end   = _votes.last()._s;
+      _end   = _votes.back()._s;
    } else {
-      _begin=0;
-      _end=0;
+      _begin = 0;
+      _end = 0;
    }
 }
 

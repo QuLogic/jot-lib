@@ -1178,7 +1178,7 @@ BMESH::build_zcross_strips()
          if  ( p != lp ) {
             //patch boundary fixit
 
-            if (!lp->zx_sils().segs().empty() && lp->zx_sils().segs().last().f()) {
+            if (!lp->zx_sils().segs().empty() && lp->zx_sils().segs().back().f()) {
 
                lp->zx_sils().add_seg (
                   NULL, _zx_sils.seg(k-1).p(), _zx_sils.seg(k-1).v(),
@@ -1217,7 +1217,7 @@ BMESH::get_zcross_strips()
    static bool ALLOW_CHECK_ALL = Config::get_var_bool("ALLOW_CHECK_ALL",false);
    static int CHECK_ALL_UNDER = Config::get_var_int ("CHECK_ALL_UNDER", 1000, true);
 
-   ARRAY<ZXseg> old_segs = _zx_sils.segs();
+   vector<ZXseg> old_segs = _zx_sils.segs();
 
    _zx_sils.reset();
    if (HACK_EYE_POS && (geom()->has_transp() | REALLY_HACK_EYE_POS)) {
@@ -1251,7 +1251,8 @@ BMESH::get_zcross_strips()
          _zx_sils.start_sil(_faces[k]);
 
    } else {
-      int k,i;
+      int i;
+      vector<ZXseg>::size_type k;
 
       // We'll time it:
       stop_watch clock;
@@ -1282,7 +1283,7 @@ BMESH::get_zcross_strips()
       }
 
       // Now check old silhoutte triangles:
-      for (k=0 ; k<old_segs.num(); k++) {
+      for (k=0 ; k<old_segs.size(); k++) {
          // some old faces are NULL
          if (old_segs[k].f())
             _zx_sils.start_sil(old_segs[k].f());

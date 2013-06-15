@@ -58,7 +58,7 @@ class HatchingTexture : public BasicTexture  {
    void             set_proxy_texture(ProxyTexture* pt);  
    ProxyTexture*    get_proxy_texture() const { return _proxy_texture;}   
 
-   bool add_stroke(CNDCpt_list& pl, const ARRAY<double>& prl, BaseStroke * proto);
+   bool add_stroke(CNDCpt_list& pl, const vector<double>& prl, BaseStroke * proto);
    
   
  private:    

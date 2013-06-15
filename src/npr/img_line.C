@@ -60,7 +60,7 @@ ImgLineTexture::request_ref_imgs()
 }
 
 void
-ImgLineTexture::build_stroke_one_side(Cpoint2i &start_pix, CXYvec &start_dir, ARRAY<Point2i> &stroke_array, ARRAY<float> &width_array, ARRAY<XYvec> &dir_array)
+ImgLineTexture::build_stroke_one_side(Cpoint2i &start_pix, CXYvec &start_dir, vector<Point2i> &stroke_array, vector<float> &width_array, vector<XYvec> &dir_array)
 {
    bool find_pixel;
    double max_dist, dist;
@@ -134,17 +134,17 @@ ImgLineTexture::build_stroke_one_side(Cpoint2i &start_pix, CXYvec &start_dir, AR
 	 }
       }
 
-      if(find_pixel){
-	 stroke_array += max_pixel;
-	 width_array += radius;
-	 dir_array += dir;
-	 pix = max_pixel;
+      if (find_pixel) {
+         stroke_array.push_back(max_pixel);
+         width_array.push_back(radius);
+         dir_array.push_back(dir);
+         pix = max_pixel;
       }
 
       prev_dir = dir;
       first = false;
 
-   }while(find_pixel == true);
+   } while (find_pixel == true);
 }
 
 bool
@@ -155,7 +155,7 @@ ImgLineTexture::add_stroke(const uint pixel, int &bnum)
 
    int grey_val = _col_ref->alpha(pixel);
    int red_val = _col_ref->red(pixel);
-   ARRAY<Point2i> pos_array;
+   vector<Point2i> pos_array;
 
    if(grey_val == 0 || red_val == 0){
       return false;
@@ -183,23 +183,21 @@ ImgLineTexture::add_stroke(const uint pixel, int &bnum)
    dir[0] = sin(angle);
    dir[1] = -cos(angle);
 
-   ARRAY<Point2i> tmp_array;
-   ARRAY<float> width_array, width_array2; // XXX - for debugging
-   ARRAY<XYvec> dir_array, dir_array2;   // XXX - for debugging
+   vector<Point2i> tmp_array;
+   vector<float> width_array, width_array2; // XXX - for debugging
+   vector<XYvec> dir_array, dir_array2;   // XXX - for debugging
 
    build_stroke_one_side(pix, dir, tmp_array, width_array, dir_array);
 
    // add stroke vertices, starting with farthest
-   for(int k = tmp_array.num()-1; k >= 0; k--){
-      pos_array.add(tmp_array[k]);
-      dir_array2.add(dir_array[k]);
-      width_array2.add(width_array[k]);
-   }
+   pos_array.insert(pos_array.end(), tmp_array.rbegin(), tmp_array.rend());
+   dir_array2.insert(dir_array2.end(), dir_array.rbegin(), dir_array.rend());
+   width_array2.insert(width_array2.end(), width_array.rbegin(), width_array.rend());
 
    // add stroke vertex at center
-   pos_array.add(pix);
-   dir_array2.add(dir);
-   width_array2.add(radius);
+   pos_array.push_back(pix);
+   dir_array2.push_back(dir);
+   width_array2.push_back(radius);
 
    dir[0] = -sin(angle);
    dir[1] = cos(angle);
@@ -208,24 +206,19 @@ ImgLineTexture::add_stroke(const uint pixel, int &bnum)
    build_stroke_one_side(pix, dir, tmp_array, width_array, dir_array);
 
    // add remaining vertices from nearest to farthest
-   for(int k = 0; k < tmp_array.num(); k++){
-      pos_array.add(tmp_array[k]);
-      dir_array2.add(dir_array[k]);
-      width_array2.add(width_array[k]);
-   }
+   pos_array.insert(pos_array.end(), tmp_array.begin(), tmp_array.end());
+   dir_array2.insert(dir_array2.end(), dir_array.begin(), dir_array.end());
+   width_array2.insert(width_array2.end(), width_array.begin(), width_array.end());
 
-
-   if(_apply_snake){
+   if (_apply_snake) {
       apply_snake(pos_array, width_array2, dir_array2);
    }
 
-
-   for(int k = 0; k < pos_array.num(); k++){
-      if(BaseStroke::get_debug()) {
-	 _bstrokes[bnum]->add(
-	 _col_ref->pix_to_ndc(pos_array[k]),
-	 width_array2[k],
-	 dir_array2[k]);
+   for (vector<Point2i>::size_type k = 0; k < pos_array.size(); k++) {
+      if (BaseStroke::get_debug()) {
+         _bstrokes[bnum]->add(_col_ref->pix_to_ndc(pos_array[k]),
+                              width_array2[k],
+                              dir_array2[k]);
       } 
       else {
 	 _bstrokes[bnum]->add(_col_ref->pix_to_ndc(pos_array[k]), 1.0f);
@@ -263,8 +256,8 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
       int grey_val = _col_ref->alpha(pixels[i]);
       int red_val = _col_ref->red(pixels[i]);
 
-      if(grey_val == 0 || red_val == 0){
-	 continue;
+      if (grey_val == 0 || red_val == 0) {
+         continue;
       }
 
       radius = get_radius(pixels[i]);
@@ -277,10 +270,10 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
 
    uint pixel;
 
-   /*ARRAY<uint> tmp_array;
-   ARRAY<uint> tmp_val_array;
+   /*vector<uint> tmp_array;
+   vector<uint> tmp_val_array;
 
-   for(i = 0; i < _previous_start_pixels.num(); i++){
+   for(i = 0; i < _previous_start_pixels.size(); i++){
       pixel = _previous_start_pixels[i];
 
       Point2i p = _col_ref->uint_to_pix(pixel);
@@ -288,17 +281,17 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
       _col_ref->set(p, _col_ref->red(p), _col_ref->green(p), _previous_start_vals[i], _col_ref->alpha(p));
 
       if(add_stroke(pixel, bnum)){
-	 tmp_array.add(pixel);
-	 tmp_val_array.add(_col_ref->blue(pixel));
+         tmp_array.push_back(pixel);
+         tmp_val_array.push_back(_col_ref->blue(pixel));
       }
    }
 
    _previous_start_pixels.clear();
    _previous_start_vals.clear();
 
-   for(i = 0; i < tmp_array.num(); i++){
-      _previous_start_pixels.add(tmp_array[i]);
-      _previous_start_vals.add(tmp_val_array[i]);
+   for(i = 0; i < tmp_array.size(); i++){
+      _previous_start_pixels.push_back(tmp_array[i]);
+      _previous_start_vals.puah_back(tmp_val_array[i]);
    }
 */
    while(!queue.empty()){ 
@@ -307,8 +300,8 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
 
       add_stroke(pixel, bnum);
 /*      if(add_stroke(pixel, bnum)) {
-	 _previous_start_pixels.add(pixel);
-         _previous_start_vals.add(_col_ref->blue(pixel));
+         _previous_start_pixels.push_back(pixel);
+         _previous_start_vals.push_back(_col_ref->blue(pixel));
       }*/
    }
 
@@ -341,17 +334,15 @@ ImgLineTexture::draw_final(CVIEWptr& v)
 }
 
 void 
-ImgLineTexture::apply_snake(ARRAY<Point2i> &point_array, ARRAY<float> &width_array, ARRAY<XYvec> &dir_array)
+ImgLineTexture::apply_snake(vector<Point2i> &point_array, vector<float> &width_array, vector<XYvec> &dir_array)
 {
-   ARRAY<Point2i> t;
-   ARRAY<float> t_w;
-   ARRAY<XYvec> t_d;
+   vector<Point2i> t;
+   vector<float> t_w;
+   vector<XYvec> t_d;
 
-   for(int k = 0; k < point_array.num(); k++){
-      t.add(point_array[k]);
-      t_w.add(width_array[k]);
-      t_d.add(dir_array[k]);
-   }
+   t = point_array;
+   t_w = width_array;
+   t_d = dir_array;
 
    update_snake_positions(1, t);
 
@@ -359,13 +350,18 @@ ImgLineTexture::apply_snake(ARRAY<Point2i> &point_array, ARRAY<float> &width_arr
    width_array.clear();
    dir_array.clear();
 
-   for(int k = 0; k < t.num(); k++){
-      if(point_array.add_uniquely(t[k])){
-	 width_array.add(t_w[k]);
-	 dir_array.add(t_d[k]);
+   for (vector<Point2i>::size_type k = 0; k < t.size(); k++) {
+      vector<Point2i>::iterator it;
+      /* Can't use a set<Point2i> because Point2i are not in any order.
+       * Maybe when changing to C++11, an unordered_set can be used instead.
+      */
+      it = std::find(point_array.begin(), point_array.end(), t[k]);
+      if (it == point_array.end()) {
+         point_array.push_back(t[k]);
+         width_array.push_back(t_w[k]);
+         dir_array.push_back(t_d[k]);
       }
    }
-
 }
 
 void
@@ -478,47 +474,47 @@ ImgLineTexture::lu_decompose(const int matrix_size)
 void
 ImgLineTexture::update_snake_positions(
    const int max_movement,
-   ARRAY<Point2i> &point_array
+   vector<Point2i> &point_array
    )
 {
-   int size = point_array.num()-2;
-   ARRAY<Vec2d> sols;
+   vector<Point2i>::size_type size = point_array.size();
+   vector<Vec2d> sols;
 
-
-   if(size <= 3)
+   if (size <= 5)
       return;
+   size -= 2;
 
    get_snake_matrix(size);
    lu_decompose(size);
 
-   _right_term.init(size);
+   _right_term.clear();
+   _right_term.resize(size);
 
-   for(int i = 0; i < max_movement; i++){
+   for (int i = 0; i < max_movement; i++) {
       get_right_term(point_array);
       lu_back_substitution(size, sols);
 
-      for(int k = 0; k < sols.num(); k++){
+      for (vector<Vec2d>::size_type k = 0; k < sols.size(); k++) {
          // XXX - okay to cast double to int?
-	 point_array[k+1] = Point2i((int)sols[k][0], (int)sols[k][1]);
+         point_array[k+1] = Point2i((int)sols[k][0], (int)sols[k][1]);
       }
    }
 }
 
 void
-ImgLineTexture::get_right_term(ARRAY<Point2i> &point_array)
+ImgLineTexture::get_right_term(vector<Point2i> &point_array)
 {
-   int index, num_points;
+   vector<Point2i>::size_type index, num_points;
    Vec2d first_point, last_point, cur_point;
    Vec2d dir;
 
-   num_points = point_array.num();
+   num_points = point_array.size();
 
    first_point = Vec2d(point_array[0][0], point_array[0][1]); 
    last_point = Vec2d(point_array[num_points-1][0], point_array[num_points-1][1]);
 
 
    for (index = 1; index < num_points-1; index++) {
-
       float angle = get_angle(point_array[index]);
 
       dir[0] = cos(angle);
@@ -526,60 +522,59 @@ ImgLineTexture::get_right_term(ARRAY<Point2i> &point_array)
 
       cur_point = Vec2d(point_array[index][0], point_array[index][1]);
 
-      if( index == 1 ){
-	 _right_term[index-1] = 20.0*cur_point + (3*10.0)*first_point - dir;
+      if (index == 1) {
+         _right_term[index-1] = 20.0*cur_point + (3*10.0)*first_point - dir;
       }
-      else if( index == 2 ){
-	 _right_term[index-1] = 20.0*cur_point - 10.0*first_point - dir;
+      else if (index == 2) {
+         _right_term[index-1] = 20.0*cur_point - 10.0*first_point - dir;
       }
-      else if( index == num_points-2 ){
-	 _right_term[index-1] = 20.0*cur_point + (3*10.0)*last_point - dir;
+      else if (index == num_points-2) {
+         _right_term[index-1] = 20.0*cur_point + (3*10.0)*last_point - dir;
       }
-      else if ( index == num_points-3 ){
-	 _right_term[index-1] = 20.0*cur_point - 10.0*last_point - dir;
+      else if (index == num_points-3) {
+         _right_term[index-1] = 20.0*cur_point - 10.0*last_point - dir;
       }
       else{
-	 _right_term[index-1] = 20.0*cur_point - dir;
+         _right_term[index-1] = 20.0*cur_point - dir;
       }
    }
-} 
+}
+
 void 
-ImgLineTexture::lu_back_substitution(const int matrix_size, ARRAY<Vec2d> &sols)
+ImgLineTexture::lu_back_substitution(const int matrix_size, vector<Vec2d> &sols)
 {
    int i, j, size = matrix_size;
-   ARRAY<Vec2d> ys(size);
+   vector<Vec2d> ys(size);
    Vec2d sum;
 
    // Step 1
 
    ys[0] = _right_term[0];
 
-   for(i = 0; i < size; i++){
-      sols.add(Vec2d());
-   }
+   sols.clear();
+   sols.resize(size, Vec2d());
 
-   for(i = 1 ; i < size; i++) {
+   for (i = 1; i < size; i++) {
       sum[0] = sum[1] = 0.0;
 
-      for(j = 0 ; j < i  ; j++) {
-	 sum += _lower_matrix[i][j] * ys[j];
-
+      for (j = 0; j < i; j++) {
+         sum += _lower_matrix[i][j] * ys[j];
       }
+
       ys[i] = _right_term[i] - sum;
    }
 
    // Step 2
-   sols[size-1] = ys[size-1] /_upper_matrix[size-1][size-1-(size-1)];
+   sols[size-1] = ys[size-1] / _upper_matrix[size-1][size-1-(size-1)];
 
-   for(i = size-2 ; i >= 0 ; i--) {
+   for (i = size-2; i >= 0; i--) {
       sum[0] = sum[1] = 0.0;
 
-      for(j = i + 1 ; j < size ; j++) {
-	 sum += _upper_matrix[i][j-i] * sols[j];
+      for (j = i + 1; j < size; j++) {
+         sum += _upper_matrix[i][j-i] * sols[j];
       }
       sols[i] = (ys[i] - sum) / _upper_matrix[i][i-i];
    }
-
 }
 
 // end of file img_line.C

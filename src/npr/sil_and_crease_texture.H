@@ -30,6 +30,7 @@
 
 #include "npr/zxedge_stroke_texture.H"
 
+#include <vector>
 
 /*****************************************************************
  * SilAndCreaseTexture
@@ -178,9 +179,9 @@ public:
 protected:
    /******** MEMBER VARIABLES ********/
 
-   ARRAY<SilStrokePool*>    _sil_stroke_pools;
+   vector<SilStrokePool*>   _sil_stroke_pools;
 
-   ARRAY<EdgeStrokePool*>   _crease_stroke_pools;
+   vector<EdgeStrokePool*>  _crease_stroke_pools;
 
    bool                     _inited;
 
@@ -217,7 +218,7 @@ public :
       return _sil_stroke_pools[(int)i];
    }
 
-   ARRAY<EdgeStrokePool*>* get_crease_stroke_pools()    { return &_crease_stroke_pools; }
+   vector<EdgeStrokePool*>* get_crease_stroke_pools()    { return &_crease_stroke_pools; }
 
    ZXedgeStrokeTexture*    zx_edge_tex()                { return &_zx_edge_tex;  }
 

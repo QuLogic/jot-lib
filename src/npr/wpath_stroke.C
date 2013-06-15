@@ -42,80 +42,45 @@ extern "C" void HACK_mouse_right_button_up();
 // Sorting comparison functions
 /////////////////////////////////////////////////////////////////
 
-static int
-arclen_compare_votes(const void* va, const void* vb)
+static bool
+arclen_compare_votes(const LuboVote &a, const LuboVote &b)
 {
-   LuboVote* a = (LuboVote*) va;
-   LuboVote* b = (LuboVote*) vb;
-   double diff = a->_s - b->_s;
-   return Sign2(diff);
+   return a._s < b._s;
 }
 
-static int
-double_comp(const void* va, const void* vb)
-
+static bool
+coverage_comp(const CoverageBoundary &a, const CoverageBoundary &b)
 {
-   double* a = (double*) va;
-   double* b = (double*) vb;
-   double diff = *a - *b;
-   return Sign2(diff);
-}
-
-static int
-double_comp_rev(const void* va, const void* vb)
-
-{
-   double* a = (double*) va;
-   double* b = (double*) vb;
-   double diff = *b - *a;
-   return Sign2(diff);
-}
-
-static int
-coverage_comp(const void* va, const void* vb)
-{
-   CoverageBoundary* a = (CoverageBoundary*) va;
-   CoverageBoundary* b = (CoverageBoundary*) vb;
-
-   if ( a->_s == b->_s ) {
-      if      ( a->_type == b->_type )
-         return 0;
-      else if ( a->_type == COVERAGE_START )
-         return -1;
+   if ( a._s == b._s ) {
+      if      ( a._type == b._type )
+         return false;
+      else if ( a._type == COVERAGE_START )
+         return true;
       else
-         return 1;
+         return false;
    }
 
-   double diff = a->_s - b->_s;
-   return Sign2( diff );
+   return a._s < b._s;
 }
 
-static ARRAY<VoteGroup> *votegroups_comp_confidence_groups = NULL;
+/* XXX: The begin() and confidence() functions are not marked const because
+ * they return references that are use a *lot*. I don't really feel like going
+ * and fixing that right now. So we'll have to const_cast instead. No need to
+ * worry, since these functions don't modify VoteGroup as long as you don't mess
+ * with the referenced variables.
+ */
 
-static int
-votegroups_comp_confidence(const void* va, const void* vb)
-
+static bool
+votegroups_comp_confidence(const VoteGroup &a, const VoteGroup &b)
 {
-   assert(votegroups_comp_confidence_groups);
-   VoteGroup &a = (*votegroups_comp_confidence_groups)[*((int*)va)];
-   VoteGroup &b = (*votegroups_comp_confidence_groups)[*((int*)vb)];
-   double diff = a.confidence() - b.confidence();
-   return Sign2((-diff));
+   return const_cast<VoteGroup&>(a).confidence() > const_cast<VoteGroup&>(b).confidence();
 }
 
-static ARRAY<VoteGroup> *votegroups_comp_begin_groups = NULL;
-
-static int
-votegroups_comp_begin(const void* va, const void* vb)
-
+static bool
+votegroups_comp_begin(const VoteGroup &a, const VoteGroup &b)
 {
-   assert(votegroups_comp_begin_groups);
-   VoteGroup &a = (*votegroups_comp_begin_groups)[*((int*)va)];
-   VoteGroup &b = (*votegroups_comp_begin_groups)[*((int*)vb)];
-   double diff = a.begin() - b.begin();
-   return Sign2((diff));
+   return const_cast<VoteGroup&>(a).begin() < const_cast<VoteGroup&>(b).begin();
 }
-
 
 /////////////////////////////////////////////////////////////////
 // Wpath_stroke
@@ -363,13 +328,13 @@ WpathStroke::update_paths(CVIEWptr &v)
 void
 WpathStroke::cache_per_path_values()
 {
-   int k, num;
+   LuboPathList::size_type k, num;
 
    LuboPathList& paths = _zx_edge_tex->paths();
-   num = paths.num();
+   num = paths.size();
 
-   ARRAY<double> offset_pix_lens(0);
-   ARRAY<double> stretch_factors(0);
+   vector<double> offset_pix_lens;
+   vector<double> stretch_factors;
 
    double pix_to_ndc_scale = _zx_edge_tex->pix_to_ndc_scale();
   // double cur_size = (_zx_edge_tex->_mesh) ? pix_to_ndc_scale * _zx_edge_tex->_mesh->pix_size()
@@ -383,9 +348,9 @@ WpathStroke::cache_per_path_values()
       // Always push params around, even if period=0 (by using 1)
 
       if (s->get_offsets())
-         offset_pix_lens += s->get_offsets()->get_pix_len();
+         offset_pix_lens.push_back(s->get_offsets()->get_pix_len());
       else
-         offset_pix_lens += max(1.0f,(s->get_angle()));
+         offset_pix_lens.push_back(max(1.0f,(s->get_angle())));
 
       // First time round, might need to set this...
 
@@ -399,11 +364,9 @@ WpathStroke::cache_per_path_values()
       if ((_coher_stroke->get_coher_global())?
           (SilUI::sigma_one(VIEW::peek())):
           (_coher_stroke->get_coher_sigma_one()))
-         stretch_factors += 1.0;
+         stretch_factors.push_back(1.0);
       else
-         stretch_factors += (get_cur_size() < epsAbsMath()) ? 1.0 : (s->get_original_mesh_size() / get_cur_size());
-
-
+         stretch_factors.push_back((get_cur_size() < epsAbsMath()) ? 1.0 : (s->get_original_mesh_size() / get_cur_size()));
 
    for (k=0; k<num; k++) {
       LuboPath *p = paths[k];
@@ -415,9 +378,7 @@ WpathStroke::cache_per_path_values()
       p->line_type() = pool_index;
       p->set_offset_pix_len(offset_pix_lens[pool_index]);
       p->set_stretch(stretch_factors[pool_index]);
-
    }
-
 }
 
 
@@ -430,7 +391,7 @@ WpathStroke::generate_groups()
 {
    static double MIN_PATH_PIX = Config::get_var_dbl("MIN_PATH_PIX",2.0,true);
 
-   int i;
+   LuboPathList::size_type i;
 
    const int   global_fit_type =   SilUI::fit_type(VIEW::peek());
    const int   global_cover_type = SilUI::cover_type(VIEW::peek());
@@ -439,24 +400,16 @@ WpathStroke::generate_groups()
 
    LuboPathList &paths = _zx_edge_tex->paths();
 
-
-   //if(!paths[0])
-   //   return;
-         
-   //if(paths.num()) err_adv(true, "pix_to_ndc_scale is %d", paths[0]->pix_to_ndc_scale());
-   //if(paths.num()) paths[0]->set_pix_to_ndc_scale(1.00);
-  
-   double min_ndc = (paths.num())?(paths[0]->pix_to_ndc_scale() * MIN_PATH_PIX):(0);
-
+   double min_ndc = (!paths.empty()) ? (paths[0]->pix_to_ndc_scale() * MIN_PATH_PIX) : 0;
 
    //Build and fit groups
-   for (i=0; i < paths.num(); i++) {
+   for (i=0; i < paths.size(); i++) {
       LuboPath* p = paths[i];
       
       if (p->length() < min_ndc )
          continue;
 
-      //cerr << "wpath: " << paths.num() << " and l " << p->length() << endl;   
+      //cerr << "wpath: " << paths.size() << " and l " << p->length() << endl;
       bool  do_heal;                    
       int   fit_type, cover_type;
 
@@ -531,15 +484,15 @@ WpathStroke::generate_groups()
 void
 WpathStroke::build_groups ( LuboPath * p )
 {
-   int i,j,n;
+   size_t i,j,n;
    uint last_id=0, last_ind=0;
 
-   ARRAY<LuboVote>& votes = p->votes();
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<LuboVote>& votes = p->votes();
+   vector<VoteGroup>& groups = p->groups();
 
-   votes.sort(arclen_compare_votes);
+   std::sort(votes.begin(), votes.end(), arclen_compare_votes);
 
-   n = votes.num();
+   n = votes.size();
 
    groups.clear();
    //cerr << "Num Votes: " << n << "\n";
@@ -551,31 +504,30 @@ WpathStroke::build_groups ( LuboPath * p )
          groups[last_ind].add(votes[i]);
          added = true;
       } else {
-         for (j=groups.num()-1; (j>=0) && (!added); j--) {
+         for (j=groups.size()-1; !added; j--) {
             if ( groups[j].id() == votes[i]._stroke_id ) {
                groups[j].add(votes[i]);
                last_id = groups[j].id();
                last_ind = j;
                added = true;
             }
+            if (j==0) break;
          }
       }
 
       if ( !added ) {
-         groups += VoteGroup ( votes[i]._stroke_id, p );
+         groups.push_back(VoteGroup(votes[i]._stroke_id, p));
          last_id = votes[i]._stroke_id;
-         last_ind = groups.num()-1;
+         last_ind = groups.size()-1;
          groups[last_ind].add( votes[i] );
       }
-
    }
 
    //Sort (also sets begin/end), and set unique id's
-   for  (i = 0 ; i < groups.num(); i++ ) {
+   for (i = 0; i < groups.size(); i++) {
       groups[i].sort();
       groups[i].id() = p->gen_stroke_id();
    }
-
 }
 
 /////////////////////////////////////
@@ -589,8 +541,8 @@ WpathStroke::cull_small_groups(LuboPath* p)
    SilStrokePool* pool = _coher_stroke;
    int MIN_VOTES_PER_GROUP = ((pool->get_coher_global())?(GLOBAL_MIN_VOTES_PER_GROUP):(pool->get_coher_mv()));
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -617,8 +569,8 @@ WpathStroke::cull_short_groups(LuboPath* p)
    double min_length = min( MIN_PIX_PER_GROUP * p->pix_to_ndc_scale(),
                             MIN_FRAC_PER_GROUP * p->length());
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -637,8 +589,8 @@ WpathStroke::cull_sparse_groups(LuboPath* p)
 {
    static double SPARSE_FACTOR = Config::get_var_dbl("SPARSE_FACTOR", 3.0,true);
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    double sample_spacing = _zx_edge_tex->get_sampling_dist() * p->pix_to_ndc_scale();
 
@@ -658,7 +610,6 @@ WpathStroke::cull_sparse_groups(LuboPath* p)
 void
 WpathStroke::split_looped_groups(LuboPath* p)
 {
-
    if (!p->is_closed())
       return;
 
@@ -668,11 +619,11 @@ WpathStroke::split_looped_groups(LuboPath* p)
    const double DELTA_FRACTION = 0.75;
    const double DELTA_FACTOR = 4.0;
 
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   vector<double> gaps, sorted_gaps, deltas, sorted_deltas;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> gaps, sorted_gaps, deltas, sorted_deltas;
-
-   int j, i, nv, n = groups.num(), j0, j1;
+   int j, nv, j0, j1;
    double gap_thresh, delta_thresh, cnt;
 
    for ( i=0; i<n; i++ ) {
@@ -689,10 +640,10 @@ WpathStroke::split_looped_groups(LuboPath* p)
 
       cnt = 0.0;
       for (j=0; j<nv-1; j++) {
-         gaps += (g.vote(j+1)._s - g.vote(j)._s);
+         gaps.push_back(g.vote(j+1)._s - g.vote(j)._s);
          double d = (g.vote(j+1)._t - g.vote(j)._t);
-         deltas += d;
-         cnt += ((d<0.0)?(-1.0):(+1.0));
+         deltas.push_back(d);
+         cnt += (d<0.0) ? -1.0 : +1.0;
       }
 
       // Bail out if < 75% of the
@@ -702,14 +653,14 @@ WpathStroke::split_looped_groups(LuboPath* p)
          continue;
       }
 
-      sorted_gaps += gaps;
-      sorted_gaps.sort(double_comp);
+      sorted_gaps.insert(sorted_gaps.end(), gaps.begin(), gaps.end());
+      std::sort(sorted_gaps.begin(), sorted_gaps.end());
 
-      sorted_deltas += deltas;
+      sorted_deltas.insert(sorted_deltas.end(), deltas.begin(), deltas.end());
       if (cnt<0.0)
-         sorted_deltas.sort(double_comp_rev);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end(), std::greater<double>());
       else
-         sorted_deltas.sort(double_comp);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end());
 
       // XXX - Hacky, but it might work:
       // Loop crossing found if there's
@@ -730,7 +681,9 @@ WpathStroke::split_looped_groups(LuboPath* p)
          j0 = nv;
          j1 = -1;
          while (sorted_deltas[j]/delta_thresh > 1.0) {
-            int ind = deltas.get_index(sorted_deltas[j]);
+            vector<double>::iterator it;
+            it = std::find(deltas.begin(), deltas.end(), sorted_deltas[j]);
+            int ind = it - deltas.begin();
             if (ind < j0)
                j0 = ind;
             if (ind > j1)
@@ -739,32 +692,29 @@ WpathStroke::split_looped_groups(LuboPath* p)
             assert(j < (nv-1));
          }
 
-
          if ( j0 != j1 ) {
             cerr << "WpathStroke::split_looped_groups() - Hey! I found >1 large delta...\n";
          }
 
-
-         if ( g.votes().first()._s > gap_thresh ) {
+         if (g.votes().front()._s > gap_thresh) {
             cerr << "WpathStroke::split_looped_groups() - No votes near start of path...\n";
             continue;
          }
-         if ( g.votes().last()._s < (p->length()-gap_thresh) ) {
+         if (g.votes().back()._s < (p->length()-gap_thresh)) {
             cerr << "WpathStroke::split_looped_groups() - No votes near end of path...\n";
             continue;
          }
-
 
          // If we make it past these checks, then
          // we break the group into [0,j0] [j1+1,num-1]
          // One day we'll try rejoining them
          // into a continguous group...
 
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         groups += VoteGroup ( p->gen_stroke_id(), p );
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
 
-         VoteGroup& ng1 = groups[groups.num()-2];
-         VoteGroup& ng2 = groups[groups.num()-1];
+         VoteGroup& ng1 = groups[groups.size()-2];
+         VoteGroup& ng2 = groups[groups.size()-1];
 
          VoteGroup& g = groups[i];
 
@@ -774,7 +724,6 @@ WpathStroke::split_looped_groups(LuboPath* p)
             ng1.add(g.vote(j));
          ng1.begin() = g.vote(0)._s;
          ng1.end() = g.vote(j0)._s;
-
 
          for (j=j1+1; j<nv; j++)
             ng2.add(g.vote(j));
@@ -794,10 +743,11 @@ WpathStroke::split_large_delta_groups(LuboPath* p)
    const double DELTA_FORWARD_FACTOR = 6.0;
    const double DELTA_REVERSE_FACTOR = 3.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> deltas, sorted_deltas;
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   vector<double> deltas, sorted_deltas;
 
-   int k, j, i, j0, nv, n = groups.num();
+   int k, j, j0, nv;
    double cnt, delta_forward_thresh, delta_reverse_thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -813,7 +763,7 @@ WpathStroke::split_large_delta_groups(LuboPath* p)
       cnt = 0.0;
       for (j=0; j<nv-1; j++) {
          double d = (g.vote(j+1)._t - g.vote(j)._t);
-         deltas += d;
+         deltas.push_back(d);
          cnt += ((d<0.0)?(-1.0):(+1.0));
       }
 
@@ -824,11 +774,11 @@ WpathStroke::split_large_delta_groups(LuboPath* p)
          continue;
       }
 
-      sorted_deltas += deltas;
+      sorted_deltas.insert(sorted_deltas.end(), deltas.begin(), deltas.end());
       if (cnt<0.0)
-         sorted_deltas.sort(double_comp_rev);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end(), std::greater<double>());
       else
-         sorted_deltas.sort(double_comp);
+         std::sort(sorted_deltas.begin(), sorted_deltas.end());
 
       delta_reverse_thresh = -1.0 * DELTA_REVERSE_FACTOR * sorted_deltas[(int)(DELTA_FRACTION * (nv-2.0))];
       delta_forward_thresh =  1.0 * DELTA_FORWARD_FACTOR * sorted_deltas[(int)(DELTA_FRACTION * (nv-2.0))];
@@ -839,8 +789,8 @@ WpathStroke::split_large_delta_groups(LuboPath* p)
       j0 = 0;
       for (j=0; j<nv-1; j++) {
          if ( (deltas[j]/delta_reverse_thresh > 1.0) || (deltas[j]/delta_forward_thresh > 1.0) ) {
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
             VoteGroup& g  = groups[i];
 
             for (k=j0; k<=j; k++)
@@ -853,8 +803,8 @@ WpathStroke::split_large_delta_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& g  = groups[i];
          g.status() = VoteGroup::VOTE_GROUP_SPLIT_LARGE_DELTA;
 
@@ -875,10 +825,11 @@ WpathStroke::split_gapped_groups(LuboPath* p)
    const double THRESH_FRACTION = 0.75;
    const double THRESH_FACTOR = 4.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> gaps, sorted_gaps;
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   vector<double> gaps, sorted_gaps;
 
-   int k, j, i, j0, nv, n = groups.num();
+   int k, j, j0, nv;
    double thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -892,20 +843,18 @@ WpathStroke::split_gapped_groups(LuboPath* p)
       sorted_gaps.clear();
 
       for (j=0; j<nv-1; j++)
-         gaps += (g.vote(j+1)._s - g.vote(j)._s);
+         gaps.push_back(g.vote(j+1)._s - g.vote(j)._s);
 
-      sorted_gaps += gaps;
-      sorted_gaps.sort(double_comp);
+      sorted_gaps.insert(sorted_gaps.end(), gaps.begin(), gaps.end());
+      std::sort(sorted_gaps.begin(), sorted_gaps.end());
 
       thresh = THRESH_FACTOR * sorted_gaps[(int)(THRESH_FRACTION * (nv-2.0))];
 
       j0 = 0;
       for (j=0; j<nv-1; j++) {
-
          if (gaps[j] > thresh) {
-
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
             VoteGroup& g  = groups[i];
 
             for (k=j0; k<=j; k++)
@@ -918,8 +867,8 @@ WpathStroke::split_gapped_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& g  = groups[i];
          g.status() = VoteGroup::VOTE_GROUP_SPLIT_GAP;
 
@@ -937,12 +886,12 @@ WpathStroke::split_gapped_groups(LuboPath* p)
 void
 WpathStroke::cull_backwards_groups(LuboPath* p)
 {
-
    const double BACK_THRESH = 0.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
-   int j, i, nv, n = groups.num();
+   int j, nv;
    double cnt;
 
    for ( i=0; i<n; i++ ) {
@@ -961,7 +910,6 @@ WpathStroke::cull_backwards_groups(LuboPath* p)
          g.status() = VoteGroup::VOTE_GROUP_CULL_BACKWARDS;
       }
    }
-
 }
 
 /////////////////////////////////////
@@ -970,10 +918,11 @@ WpathStroke::cull_backwards_groups(LuboPath* p)
 void
 WpathStroke::split_all_backtracking_groups(LuboPath* p)
 {
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> deltas;
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   vector<double> deltas;
 
-   int k, j, i, j0, nv, n = groups.num();
+   int k, j, j0, nv;
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = groups[i];
@@ -985,13 +934,13 @@ WpathStroke::split_all_backtracking_groups(LuboPath* p)
       deltas.clear();
 
       for (j=0; j<nv-1; j++)
-         deltas += (g.vote(j+1)._t - g.vote(j)._t);
+         deltas.push_back(g.vote(j+1)._t - g.vote(j)._t);
 
       j0 = 0;
       for (j=0; j<nv-1; j++) {
          if (deltas[j] < 0.0) {
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup& ng = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup& ng = groups.back();
 
             VoteGroup& g = groups[i];
 
@@ -1005,8 +954,8 @@ WpathStroke::split_all_backtracking_groups(LuboPath* p)
       }
 
       if (j0 != 0) {
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
 
          VoteGroup& g = groups[i];
 
@@ -1019,6 +968,7 @@ WpathStroke::split_all_backtracking_groups(LuboPath* p)
       }
    }
 }
+
 /////////////////////////////////////
 // fit_intial_groups()
 /////////////////////////////////////
@@ -1031,9 +981,8 @@ WpathStroke::fit_initial_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
-
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1056,9 +1005,8 @@ WpathStroke::fit_initial_groups(
 void
 WpathStroke::cull_bad_fit_groups(LuboPath* p)
 {
-   ARRAY<VoteGroup>& groups = p->groups();
-
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1098,10 +1046,11 @@ WpathStroke::cull_outliers_in_groups(LuboPath* p)
    const double THRESH_FRACTION = 0.75;
    const double THRESH_FACTOR = 20.0;
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<double> errs, sorted_errs;
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   vector<double> errs, sorted_errs;
 
-   int j, i, cnt, nv, n = groups.num();
+   int j, cnt, nv;
    double thresh;
 
    for ( i=0; i<n; i++ ) {
@@ -1121,11 +1070,11 @@ WpathStroke::cull_outliers_in_groups(LuboPath* p)
 
       for (j=0; j<nv; j++) {
          double err = (g.vote(j)._t - g.get_t(g.vote(j)._s));
-         errs += fabs(err);
+         errs.push_back(fabs(err));
       }
 
-      sorted_errs += errs;
-      sorted_errs.sort(double_comp);
+      sorted_errs.insert(sorted_errs.end(), errs.begin(), errs.end());
+      std::sort(sorted_errs.begin(), sorted_errs.end());
 
       thresh = THRESH_FACTOR * sorted_errs[(int)(THRESH_FRACTION * (nv-2.0))];
 
@@ -1157,9 +1106,8 @@ WpathStroke::fit_final_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
-
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1198,10 +1146,12 @@ WpathStroke::heal_groups(
    double pix_to_ndc = p->pix_to_ndc_scale();
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   ARRAY<int> final_groups;
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, j, n = groups.size();
+   vector<int> final_groups;
 
-   int pi, pi_1, i, i0, j, n = groups.num();
+   size_t i0;
+   int pi, pi_1;
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = groups[i];
@@ -1209,26 +1159,25 @@ WpathStroke::heal_groups(
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD )
          continue;
 
-      final_groups += i;
+      final_groups.push_back(i);
    }
 
-   if (final_groups.num()<2)
+   if (final_groups.size()<2)
       return;
 
    //We're assuming that the groups provide total coverage
    //of the path, and abutt one another perfectly...
-   votegroups_comp_begin_groups = &groups;
-   final_groups.sort(votegroups_comp_begin);
+   std::sort(final_groups.begin(), final_groups.end(), votegroups_comp_begin);
 
-   i0 = -1;
+   i0 = (size_t)-1;
    pi = 0;
 
-   for (i=0; i < final_groups.num(); i++) {
+   for (i=0; i < final_groups.size(); i++) {
       VoteGroup &gi   = groups[final_groups[i]];
 
       bool attach = false;
 
-      if (i<(final_groups.num()-1)) {
+      if (i<(final_groups.size()-1)) {
          VoteGroup &gi_1 = groups[final_groups[i+1]];
          assert(gi.end() == gi_1.begin());
 
@@ -1251,13 +1200,13 @@ WpathStroke::heal_groups(
             attach = true;
          } else if (dpix < HEAL_DRAG_PIX_THRESH) {
             //Add healing verts
-            gi.votes() += LuboVote();
-            gi_1.votes() += LuboVote();
+            gi.votes().push_back(LuboVote());
+            gi_1.votes().push_back(LuboVote());
 
-            LuboVote  &vi   =   gi.votes().first();
-            LuboVote &nvi   =   gi.votes().last();
-            LuboVote  &vi_1 = gi_1.votes().first();
-            LuboVote &nvi_1 = gi_1.votes().last();
+            LuboVote  &vi   =   gi.votes().front();
+            LuboVote &nvi   =   gi.votes().back();
+            LuboVote  &vi_1 = gi_1.votes().front();
+            LuboVote &nvi_1 = gi_1.votes().back();
 
             nvi._path_id   = vi._path_id;
             nvi._stroke_id = vi._stroke_id;
@@ -1273,10 +1222,10 @@ WpathStroke::heal_groups(
 
             //Invalidate fits
             gi.fstatus() = VoteGroup::FIT_OLD;
-            gi.votes().sort(arclen_compare_votes);
+            std::sort(gi.votes().begin(), gi.votes().end(), arclen_compare_votes);
 
             gi_1.fstatus() = VoteGroup::FIT_OLD;
-            gi_1.votes().sort(arclen_compare_votes);
+            std::sort(gi_1.votes().begin(), gi_1.votes().end(), arclen_compare_votes);
 
          } else {}
 
@@ -1287,17 +1236,17 @@ WpathStroke::heal_groups(
       if (attach) {
          //Record this as the starting group if
          //we're not already in a chain
-         if (i0 == -1) {
+         if (i0 == (size_t)-1) {
             i0 = i;
 
             //Make a new VoteGroup
-            groups += VoteGroup ( p->gen_stroke_id(), p );
-            VoteGroup &ng   = groups.last();
+            groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+            VoteGroup &ng   = groups.back();
             VoteGroup &gi   = groups[final_groups[i]];
 
             //Add the votes (p0 should be 0)
             assert (pi == 0);
-            ng.votes() += gi.votes();
+            ng.votes().insert(ng.votes().end(), gi.votes().begin(), gi.votes().end());
             ng.begin() = gi.begin();
 
          }
@@ -1305,46 +1254,46 @@ WpathStroke::heal_groups(
          //the current chain
          else {
             //Add votes from gi (pi = ?)
-            VoteGroup& ng = groups.last();
+            VoteGroup& ng = groups.back();
             n = gi.num();
-            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().last()._t += pi; }
+            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().back()._t += pi; }
          }
          pi = pi_1;
       }
       //If we can't attach with next group...
       else {
          //Then add the votes if necessary
-         if (i0 != -1) {
+         if (i0 != (size_t)-1) {
             //Add votes from gi (pi = ?)
-            VoteGroup& ng = groups.last();
+            VoteGroup& ng = groups.back();
             n = gi.num();
-            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().last()._t += pi; }
+            for (j=0; j<n; j++) { ng.add(gi.vote(j)); ng.votes().back()._t += pi; }
             ng.end() = gi.end();
 
             //Flag [i0,i] as healed, remove (i0,i]
             while (i > i0) {
                VoteGroup &gi = groups[final_groups[i]];
                gi.status() = VoteGroup::VOTE_GROUP_HEALED;
-               final_groups.remove(i);
+               final_groups.erase(final_groups.begin() + i);
                i--;
             }
             VoteGroup &gi = groups[final_groups[i]];
             gi.status() = VoteGroup::VOTE_GROUP_HEALED;
 
             //Replace i0 with new group
-            final_groups[i] = groups.num()-1;
+            final_groups[i] = groups.size()-1;
 
             //Resort, since remove() mangles order
-            final_groups.sort(votegroups_comp_begin);
+            std::sort(final_groups.begin(), final_groups.end(), votegroups_comp_begin);
 
             //Finally, fit the new group, but sort first!!
-            ng.votes().sort(arclen_compare_votes);
+            std::sort(ng.votes().begin(), ng.votes().end(), arclen_compare_votes);
             if ( ng.num() == 0 )
                arclength_fit(ng,freq);
             else
                (*this.*fit_func)(ng,freq);
 
-            i0 = -1;
+            i0 = (size_t)-1;
             pi = 0;
          }
       }
@@ -1352,7 +1301,7 @@ WpathStroke::heal_groups(
    }
 
    //Refit groups that got healer votes
-   for (i=0; i < final_groups.num(); i++) {
+   for (i=0; i < final_groups.size(); i++) {
       VoteGroup &gi   = groups[final_groups[i]];
 
       if (gi.fstatus() == VoteGroup::FIT_OLD) {
@@ -1362,7 +1311,6 @@ WpathStroke::heal_groups(
             arclength_fit(gi,freq);
          else
             (*this.*fit_func)(gi,freq);
-
       }
    }
 }
@@ -1378,9 +1326,8 @@ WpathStroke::refit_backward_fit_groups(
 
    double freq = p->stretch() * 1.0 / ( p->pix_to_ndc_scale() * p->offset_pix_len() );
 
-   ARRAY<VoteGroup>& groups = p->groups();
-
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
 
    for ( i=0; i<n; i++ ) {
       VoteGroup& g = p->groups()[i];
@@ -1391,11 +1338,11 @@ WpathStroke::refit_backward_fit_groups(
       if (g.fstatus() != VoteGroup::FIT_GOOD) {
          assert(g.fstatus() == VoteGroup::FIT_BACKWARDS);
 
-         groups += VoteGroup ( p->gen_stroke_id(), p );
-         VoteGroup& ng = groups.last();
+         groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+         VoteGroup& ng = groups.back();
          VoteGroup& gi = p->groups()[i];
 
-         ng.votes() += gi.votes();
+         ng.votes().insert(ng.votes().end(), gi.votes().begin(), gi.votes().end());
          ng.begin() = gi.begin();
          ng.end() = gi.end();
 
@@ -1410,10 +1357,8 @@ WpathStroke::refit_backward_fit_groups(
 
          cerr << "WpathStroke::refit_backward_fit_groups - <<<BACKWARDS FIT>>>\n";
          //HACK_mouse_right_button_up();
-
       }
    }
-
 }
 
 /////////////////////////////////////
@@ -1423,8 +1368,8 @@ void
 WpathStroke::random_fit(VoteGroup& g, double freq)
 {
    double phase = drand48();
-   g.fits() += XYpt ( g.begin(), phase + 0.0 );
-   g.fits() += XYpt ( g.end(),   phase + (g.end() - g.begin()) * freq );
+   g.fits().push_back(XYpt(g.begin(), phase + 0.0));
+   g.fits().push_back(XYpt(g.end(),   phase + (g.end() - g.begin()) * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -1434,8 +1379,8 @@ WpathStroke::random_fit(VoteGroup& g, double freq)
 void
 WpathStroke::sigma_fit(VoteGroup& g, double freq)
 {
-   g.fits() += XYpt ( g.begin(), 0.0 );
-   g.fits() += XYpt ( g.end(),   (g.end() - g.begin())   * freq );
+   g.fits().push_back(XYpt(g.begin(), 0.0));
+   g.fits().push_back(XYpt(g.end(),   (g.end() - g.begin())   * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -1445,8 +1390,8 @@ WpathStroke::sigma_fit(VoteGroup& g, double freq)
 void
 WpathStroke::arclength_fit(VoteGroup& g, double freq)
 {
-   g.fits() += XYpt ( g.begin(), g.begin() * freq );
-   g.fits() += XYpt ( g.end(),   g.end()   * freq );
+   g.fits().push_back(XYpt(g.begin(), g.begin() * freq));
+   g.fits().push_back(XYpt(g.end(),   g.end()   * freq));
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
 
@@ -1502,8 +1447,8 @@ WpathStroke::phasing_fit(VoteGroup& g, double freq)
    t_begin = s_begin * freq + phase;
    t_end   = s_end   * freq + phase;
 
-   g.fits() += XYpt ( s_begin, t_begin );
-   g.fits() += XYpt ( s_end  , t_end   );
+   g.fits().push_back(XYpt(s_begin, t_begin));
+   g.fits().push_back(XYpt(s_end  , t_end  ));
 
    g.fstatus() = VoteGroup::FIT_GOOD;
 }
@@ -1522,25 +1467,24 @@ WpathStroke::interpolating_fit(VoteGroup& g, double freq)
 
    t_last = -DBL_MAX;
    if (g.begin() < g.first_vote()._s) {
-      g.fits() += XYpt (g.begin(), t_begin);
+      g.fits().push_back(XYpt(g.begin(), t_begin));
    }
    for ( int i =0 ; i < g.num() ; i++ ) {
       assert(g.vote(i)._status == LuboVote::VOTE_GOOD);
       t = g.vote(i)._t;
-      g.fits() += XYpt ( g.vote(i)._s, t);
+      g.fits().push_back(XYpt(g.vote(i)._s, t));
       if (t<t_last)
          bad = true;
       t_last = t;
    }
    if (g.end() > g.vote(g.num()-1)._s) {
-      g.fits() += XYpt ( g.end(), t_end );
+      g.fits().push_back(XYpt(g.end(), t_end));
    }
 
    if (bad)
       g.fstatus() = VoteGroup::FIT_BACKWARDS;
    else
       g.fstatus() = VoteGroup::FIT_GOOD;
-
 }
 
 #define REALLY_TINY 1.0e-20;
@@ -1812,7 +1756,7 @@ WpathStroke::optimizing_fit(VoteGroup& g, double freq)
          if ((j>0) && (fj < fj_1))
             bad = true;
 
-         g.fits() += XYpt (xj, fj);
+         g.fits().push_back(XYpt(xj, fj));
 
          fj_1 = fj;
       }
@@ -1838,9 +1782,9 @@ WpathStroke::optimizing_fit(VoteGroup& g, double freq)
 void
 WpathStroke::majority_cover(LuboPath *p)
 {
-
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, max_ind=-1, max_votes=0, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
+   int max_ind=-1, max_votes=0;
 
    for ( i=0; i<n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -1870,13 +1814,11 @@ WpathStroke::majority_cover(LuboPath *p)
       g.end() = p->length();
    } else {
       //Deal with no groups
-      groups += VoteGroup ( p->gen_stroke_id(), p );
-      VoteGroup& ng = groups.last();
+      groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+      VoteGroup& ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
-
-
 }
 
 /////////////////////////////////////
@@ -1895,11 +1837,12 @@ WpathStroke::one_to_one_cover(LuboPath *p)
    double min_length = min( MIN_PIX_PER_GROUP * p->pix_to_ndc_scale(),
                             MIN_FRAC_PER_GROUP * p->length());
 
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, n = groups.size();
    double i_1_num, i_num, del, cnt;
 
-   ARRAY<CoverageBoundary> final_boundary(2*n);
+   vector<CoverageBoundary> final_boundary;
+   final_boundary.reserve(2*n);
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -1910,15 +1853,15 @@ WpathStroke::one_to_one_cover(LuboPath *p)
       if ((g.end() - g.begin()) < min_length) {
          g.status() = VoteGroup::VOTE_GROUP_NOT_ONE_TO_ONE;
       } else {
-         final_boundary += CoverageBoundary(i, g.begin(), COVERAGE_START);
-         final_boundary += CoverageBoundary(i,   g.end(),   COVERAGE_END);
+         final_boundary.push_back(CoverageBoundary(i, g.begin(), COVERAGE_START));
+         final_boundary.push_back(CoverageBoundary(i,   g.end(),   COVERAGE_END));
       }
    }
 
-   n = final_boundary.num();
+   n = final_boundary.size();
 
    if (n>0) {
-      final_boundary.sort(coverage_comp);
+      std::sort(final_boundary.begin(), final_boundary.end(), coverage_comp);
       assert(final_boundary[0]._type == COVERAGE_START);
       //Now fall through
    }
@@ -1966,11 +1909,11 @@ WpathStroke::one_to_one_cover(LuboPath *p)
 
    //We found groups and filled the holes, now just tidy up the ends...
    if (cnt == 0) {
-      assert(final_boundary.first()._type == COVERAGE_START);
-      assert( final_boundary.last()._type == COVERAGE_END);
+      assert(final_boundary.front()._type == COVERAGE_START);
+      assert( final_boundary.back()._type == COVERAGE_END);
 
-      VoteGroup &gf = groups[final_boundary.first()._vg];
-      VoteGroup &gl = groups[ final_boundary.last()._vg];
+      VoteGroup &gf = groups[final_boundary.front()._vg];
+      VoteGroup &gl = groups[ final_boundary.back()._vg];
 
       if ((0.0 < gf.begin()) && (0.0 < gf.first_vote()._s) &&
           (gf.fstatus() != VoteGroup::FIT_NONE) )
@@ -1986,8 +1929,8 @@ WpathStroke::one_to_one_cover(LuboPath *p)
    //Otherwise, just put a fresh-voteless group in...
    else {
       assert(cnt == 1);
-      groups += VoteGroup ( p->gen_stroke_id(), p);
-      VoteGroup &ng = groups.last();
+      groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+      VoteGroup &ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
@@ -2011,15 +1954,15 @@ WpathStroke::hybrid_cover(LuboPath *p)
    double min_length = min( MIN_PIX_PER_GROUP * p->pix_to_ndc_scale(),
                             MIN_FRAC_PER_GROUP * p->length());
 
-
-   ARRAY<VoteGroup>& groups = p->groups();
-   int i0, i, n = groups.num();
+   vector<VoteGroup>& groups = p->groups();
+   vector<VoteGroup>::size_type i, i0, n = groups.size();
    double i0_len, i_len, del;
 
-   ARRAY<CoverageBoundary> boundary(2*n);
-   ARRAY<CoverageBoundary> final_boundary(2*n);
-   ARRAY<int>              confidence_groups;
-
+   vector<CoverageBoundary> boundary;
+   vector<CoverageBoundary> final_boundary;
+   vector<int> confidence_groups;
+   boundary.reserve(2*n);
+   final_boundary.reserve(2*n);
 
    for ( i=0; i < n ; i++ ) {
       VoteGroup& g = groups[i];
@@ -2027,17 +1970,15 @@ WpathStroke::hybrid_cover(LuboPath *p)
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD )
          continue;
 
-      boundary += CoverageBoundary(i, g.begin(), COVERAGE_START);
-      boundary += CoverageBoundary(i,   g.end(),   COVERAGE_END);
+      boundary.push_back(CoverageBoundary(i, g.begin(), COVERAGE_START));
+      boundary.push_back(CoverageBoundary(i,   g.end(),   COVERAGE_END));
 
       g.status() = VoteGroup::VOTE_GROUP_NOT_HYBRID;
    }
 
-
-   n = boundary.num()/2;
+   n = boundary.size()/2;
 
    if (n>0) {
-
       //Assign confidences
       for (i=0; i<n; i++) {
          VoteGroup &g = groups[boundary[2*i]._vg];
@@ -2046,24 +1987,24 @@ WpathStroke::hybrid_cover(LuboPath *p)
          g.confidence() = (g.end() - g.begin())/p->length();
       }
 
-      boundary.sort(coverage_comp);
+      std::sort(boundary.begin(), boundary.end(), coverage_comp);
 
       assert(boundary[0]._type == COVERAGE_START);
 
-      final_boundary += boundary[0];
-      confidence_groups += boundary[0]._vg;
+      final_boundary.push_back(boundary[0]);
+      confidence_groups.push_back(boundary[0]._vg);
 
       n = n * 2;
       for (i=1; i<n; i++) {
          CoverageBoundary &cb = boundary[i];
 
          //Between covereage regions
-         if (final_boundary.last()._type == COVERAGE_END) {
-            assert(confidence_groups.num() == 0);
+         if (final_boundary.back()._type == COVERAGE_END) {
+            assert(confidence_groups.empty());
             assert(cb._type == COVERAGE_START);
 
-            final_boundary += cb;
-            confidence_groups += cb._vg;
+            final_boundary.push_back(cb);
+            confidence_groups.push_back(cb._vg);
          }
          //In the midst of a coverage region
          else {
@@ -2072,18 +2013,21 @@ WpathStroke::hybrid_cover(LuboPath *p)
                //If its not the current covering region...
                if (cb._vg != confidence_groups[0]) {
                   //Just drop it from the array of current groups
-                  confidence_groups.rem(cb._vg);
+                  vector<int>::iterator it;
+                  it = std::find(confidence_groups.begin(), confidence_groups.end(), cb._vg);
+                  confidence_groups.erase(it);
                }
                //Otherwise, complete this group...
                else {
-                  final_boundary += cb;
-                  confidence_groups.rem(cb._vg);
+                  final_boundary.push_back(cb);
+                  vector<int>::iterator it;
+                  it = std::find(confidence_groups.begin(), confidence_groups.end(), cb._vg);
+                  confidence_groups.erase(it);
 
                   //And begin the next group
-                  if (confidence_groups.num()>0) {
-                     votegroups_comp_confidence_groups = &groups;
-                     confidence_groups.sort(votegroups_comp_confidence);
-                     final_boundary += CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_START);
+                  if (confidence_groups.size()>0) {
+                     std::sort(confidence_groups.begin(), confidence_groups.end(), votegroups_comp_confidence);
+                     final_boundary.push_back(CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_START));
                   }
                }
             }
@@ -2092,25 +2036,25 @@ WpathStroke::hybrid_cover(LuboPath *p)
                //If it's less confident...
                if (groups[cb._vg].confidence() <= groups[confidence_groups[0]].confidence()) {
                   //Just tuck it into the list of current groups
-                  confidence_groups += cb._vg;
+                  confidence_groups.push_back(cb._vg);
                }
                //If it's more confident
                else {
                   //Complete the current group
-                  final_boundary += CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_END);
+                  final_boundary.push_back(CoverageBoundary(confidence_groups[0], cb._s, COVERAGE_END));
 
                   //Replace the maximum with the new groups
                   confidence_groups[0] = cb._vg;
 
                   //And begin the next group
-                  final_boundary += cb;
+                  final_boundary.push_back(cb);
                }
             }
          }
       }
 
       //Now kill off any coverages that are too narrow
-      n = final_boundary.num()/2;
+      n = final_boundary.size()/2;
       for (i=0; i<n; i++) {
          if ((final_boundary[2*i+1]._s - final_boundary[2*i]._s) < min_length) {
             final_boundary[2*i]._type = final_boundary[2*i+1]._type = COVERAGE_BAD;
@@ -2125,12 +2069,12 @@ WpathStroke::hybrid_cover(LuboPath *p)
    //XXX - Maybe fitting should use all the votes, and we just use a window of that,
    //      so window (begin/end) modifications don't invalidate the fits...
 
-   i0 = -1;
-   n = final_boundary.num()/2;
+   i0 = (size_t)-1;
+   n = final_boundary.size()/2;
    for (i=0; i<n; i++) {
       if (final_boundary[2*i]._type != COVERAGE_BAD) {
          //First good coverage should cover start of path
-         if (i0 == -1) {
+         if (i0 == (size_t)-1) {
             i_len = final_boundary[2*i+1]._s - final_boundary[2*i]._s;
             final_boundary[2*i]._s = 0.0;
          } else {
@@ -2145,7 +2089,7 @@ WpathStroke::hybrid_cover(LuboPath *p)
    }
 
    //If any coverage was found, set up the groups...
-   if (i0 != -1) {
+   if (i0 != (size_t)-1) {
       //First stretch last coverage to end of path
       final_boundary[2*i0+1]._s = p->length();
 
@@ -2175,12 +2119,12 @@ WpathStroke::hybrid_cover(LuboPath *p)
 
             //Otherwise, its been segmented, so introduce a new group for this segment
             else {
-               groups += VoteGroup ( p->gen_stroke_id(), p );
-               VoteGroup& ng = groups.last();
+               groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+               VoteGroup& ng = groups.back();
 
                VoteGroup &vg = groups[final_boundary[2*i]._vg];
 
-               ng.votes() += vg.votes();
+               ng.votes().insert(ng.votes().end(), vg.votes().begin(), vg.votes().end());
                ng.begin() = final_boundary[2*i]._s;
                ng.end()   = final_boundary[2*i+1]._s;
             }
@@ -2191,13 +2135,11 @@ WpathStroke::hybrid_cover(LuboPath *p)
    }
    //Otherwise, just put a fresh-voteless group in...
    else {
-      groups += VoteGroup ( p->gen_stroke_id(), p);
-      VoteGroup &ng = groups.last();
+      groups.push_back(VoteGroup(p->gen_stroke_id(), p));
+      VoteGroup &ng = groups.back();
       ng.begin() = 0;
       ng.end()   = p->length();
    }
-
-
 }
 
 /////////////////////////////////////
@@ -2209,7 +2151,7 @@ WpathStroke::generate_strokes_from_groups()
 {
    static double SIL_TO_STROKE_PIX_SAMPLING = Config::get_var_dbl("SIL_TO_STROKE_PIX_SAMPLING",6.0,true);
 
-   int n, i, j, k, num;
+   size_t n, i, j, k, num;
    double sbegin, send, sdelta, ubegin, uend, udelta, length;
    OutlineStroke* stroke;
 
@@ -2217,26 +2159,20 @@ WpathStroke::generate_strokes_from_groups()
       return;
 
    LuboPathList& paths = _zx_edge_tex->paths();
-     
-  
-     
-   double step_size = (paths.num())?(paths[0]->pix_to_ndc_scale() * SIL_TO_STROKE_PIX_SAMPLING):(0);
+
+   double step_size = (paths.size()) ? (paths[0]->pix_to_ndc_scale() * SIL_TO_STROKE_PIX_SAMPLING) : 0;
   
    _coher_stroke->blank();
    _coher_stroke->set_path_index_stamp(_zx_edge_tex->path_stamp());
    _coher_stroke->set_group_index_stamp(_zx_edge_tex->group_stamp());
 
-
-   for (k=0; k<paths.num(); k++) {
+   for (k=0; k<paths.size(); k++) {
       LuboPath *p = paths[k];
-     
-      
-      n = p->groups().num();
+
+      n = p->groups().size();
       length = p->length();
 
-     
       for ( i = 0 ; i < n ; i++ ) {
-        
          VoteGroup &g = p->groups()[i];
 
          if (g.status() != VoteGroup::VOTE_GROUP_GOOD)

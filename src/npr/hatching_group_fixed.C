@@ -91,8 +91,7 @@ HatchingGroupFixed::decode(STDdstream &ds)
    
    assert(_num_base_levels);
 
-   if (_level[0]->num() > 0)
-   {
+   if (_level[0]->size() > 0) {
       if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
          assert(_backbone);
 
@@ -152,10 +151,9 @@ HatchingGroupFixed::put_levels(TAGformat &d) const
 
    int i;
    assert(_num_base_levels);
-   assert(_level.num() >= _num_base_levels);
+   assert((int)_level.size() >= _num_base_levels);
 
-   for (i=0; i<num_base_levels(); i++)
-   {
+   for (i=0; i<num_base_levels(); i++) {
       d.id();
       base_level(i)->format(*d);
       d.end_id();
@@ -170,7 +168,7 @@ HatchingGroupFixed::get_level(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::get_level()"); 
 
-   assert(_level.num() > 0);
+   assert(_level.size() > 0);
 
    //Grab the class name... should be HatchingLevelBase
    string str;
@@ -183,20 +181,16 @@ HatchingGroupFixed::get_level(TAGformat &d)
       return;
    }
 
-   if (!(base_level(num_base_levels()-1)->pix_size()))
-   {
-      assert(_level.num() == 1);
+   if (!(base_level(num_base_levels()-1)->pix_size())) {
+      assert(_level.size() == 1);
       assert(num_base_levels() == 1);
-   }
-   else
-   {
+   } else {
       add_base_level();
    }
 
    base_level(num_base_levels()-1)->decode(*d);
 
    assert(base_level(num_base_levels()-1)->pix_size() != 0.0);
-
 }
 
 /////////////////////////////////////
@@ -212,19 +206,17 @@ HatchingGroupFixed::put_visibility(TAGformat &d) const
       m = ((LMESH*)m)->cur_mesh();
 
    int k;
-   ARRAY<int> indices;
+   vector<int> indices;
    CBface_list& faces = m->faces();
         
-   for (k=0; k< faces.num(); k++)
-      {
-         HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(faces[k]);
-         if (hsdf) 
-            {
-               if(hsdf->exists(this))
-                  indices += faces[k]->index();
-            }
+   for (k=0; k< faces.num(); k++) {
+      HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(faces[k]);
+      if (hsdf) {
+         if (hsdf->exists(this))
+            indices.push_back(faces[k]->index());
       }
-   err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::put_visibility() - Stored %d tri indices.", indices.num()); 
+   }
+   err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::put_visibility() - Stored %d tri indices.", indices.size());
 
    d.id();
    *d << indices;
@@ -243,27 +235,24 @@ HatchingGroupFixed::get_visibility(TAGformat &d)
    if (LMESH::isa(m))
       m = ((LMESH*)m)->cur_mesh();
 
-   int k, ctr=0;
-   ARRAY<int> indices;
+   vector<int>::size_type k;
+   int ctr=0;
+   vector<int> indices;
    CBface_list& faces = m->faces();
 
    *d >> indices;
 
-   for (k=0; k<indices.num(); k++)
-      {
-         HatchingSimplexDataFixed *hsdf =
-            HatchingSimplexDataFixed::find(faces[indices[k]]);
-         if (!hsdf) 
-            {
-               hsdf = new HatchingSimplexDataFixed(faces[indices[k]]);
-               ctr++;
-            }
-         hsdf->add(this);
+   for (k=0; k<indices.size(); k++) {
+      HatchingSimplexDataFixed *hsdf =
+         HatchingSimplexDataFixed::find(faces[indices[k]]);
+      if (!hsdf) {
+         hsdf = new HatchingSimplexDataFixed(faces[indices[k]]);
+         ctr++;
       }
+      hsdf->add(this);
+   }
 
-   err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::get_visibility() - Flagged %d tris and added %d new simplex data.", indices.num(), ctr); 
-
-
+   err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::get_visibility() - Flagged %d tris and added %d new simplex data.", indices.size(), ctr);
 }
 
 /////////////////////////////////////
@@ -347,26 +336,24 @@ void
 HatchingGroupFixed::notify_change(BMESH *m, BMESH::change_t chg)
 {
    assert(m == _patch->mesh());
-      
-   int l,h;
 
-   if (chg == BMESH::VERT_POSITIONS_CHANGED)
-   {
+   int l;
+   vector<HatchingLevelBase*>::size_type h;
+
+   if (chg == BMESH::VERT_POSITIONS_CHANGED) {
       //Kills of interpolated LODs
       trash_upper_levels();
 
       //Recompute hatch verts from the index/barycentric data
       for (l=0; l<num_base_levels(); l++)
-         for (h=0; h<_level[l]->num(); h++)
+         for (h=0; h<_level[l]->size(); h++)
             ((HatchingHatchFixed*)(*_level[l])[h])->notify_change(m,chg);
 
       //Recompute backbone
       if (_backbone)
          ((HatchingBackboneFixed*)_backbone)->notify_change(m,chg);
 
-   }
-   else
-   {
+   } else {
       err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::notify_change() - Don't care."); 
    }
 
@@ -381,16 +368,15 @@ HatchingGroupFixed::notify_xform(BMESH *m, CWtransf &t, CMOD& mod)
 
    assert(m == _patch->mesh());
 
-   int l,h;
+   HatchingLevelBase::size_type l;
+   vector<HatchingLevelBase*>::size_type h;
 
-   for (l=0; l<_level.num(); l++)
-      for (h=0; h<_level[l]->num(); h++)
+   for (l=0; l<_level.size(); l++)
+      for (h=0; h<_level[l]->size(); h++)
          ((HatchingHatchFixed*)(*_level[l])[h])->notify_xform(m,t, mod);
 
    if (_backbone)
       ((HatchingBackboneFixed*)_backbone)->notify_xform(m,t, mod);
-   
-
 }
 
 /////////////////////////////////////
@@ -417,12 +403,11 @@ HatchingGroupFixed::deselect()
 /////////////////////////////////////
 // level_sorting_comparison
 /////////////////////////////////////
-int compare_pix_size(const void *a, const void *b) 
+bool
+compare_pix_size(const HatchingLevelBase *a, const HatchingLevelBase *b)
 {
-   HatchingLevelBase **pta = (HatchingLevelBase **)a;   
-   HatchingLevelBase **ptb = (HatchingLevelBase **)b;
-   double diff = (**pta).pix_size() - (**ptb).pix_size();  
-   return (diff>0)?(1):((diff<0)?(-1):(0));
+   double diff = a->pix_size() - b->pix_size();
+   return diff < 0;
 }
 
 /////////////////////////////////////
@@ -435,18 +420,15 @@ HatchingGroupFixed::complete()
 
    assert(!_complete);
 
-   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
-   {
+   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT) {
       assert(num_base_levels() == 1);
       assert(base_level(0)->pix_size() == 0.0);
 
-      if (base_level(0)->num() < 2)
-      {
+      if (base_level(0)->size() < 2) {
          err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::complete() - Not enough hatches (<2) to complete group."); 
          return false;
-      }
-      else if (store_visibility(base_level(0)))
-      {
+
+      } else if (store_visibility(base_level(0))) {
          HatchingBackboneFixed  *hbf = new HatchingBackboneFixed(_patch);
          assert(hbf);
          
@@ -477,14 +459,11 @@ HatchingGroupFixed::complete()
    {
       assert(num_base_levels() > 0);
       
-      if (base_level(num_base_levels()-1)->pix_size() > 0.0)
-      {
+      if (base_level(num_base_levels()-1)->pix_size() > 0.0) {
          // If the last editted level is complete, complete the group
          err_mesg(ERR_LEV_INFO, "HatchingGroupFixed::complete() - Completing group."); 
-         for (i=0; i<num_base_levels(); i++)
-         {
-            if (!store_visibility(base_level(i)))
-            {
+         for (i=0; i<num_base_levels(); i++) {
+            if (!store_visibility(base_level(i))) {
                err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::complete() - Visibility failed in a level. Failing out.");
                clear_visibility();
                return false;
@@ -495,23 +474,19 @@ HatchingGroupFixed::complete()
 
          _complete = true;
          return true;
-      }
-      else
-      {
+
+      } else {
          // Else try to complete the last editted level
-         if (base_level(num_base_levels()-1)->num() >= 1)
-         {
+         if (base_level(num_base_levels()-1)->size() >= 1) {
             // XXX - Recompute ndc_length of each hatch?
             
             base_level(num_base_levels()-1)->set_pix_size(_group->patch()->mesh()->pix_size());
             return true;
-         }
-         else
-         {
+
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::complete() - Not enough hatches (<1) to complete level.");
             return false;
          }
-
       }
    }
 }
@@ -528,76 +503,67 @@ HatchingGroupFixed::complete()
 bool
 HatchingGroupFixed::undo_last()
 {
-
    assert(!_complete);
 
-   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT)
-   {
+   if (_params.anim_style() == HatchingGroup::STYLE_MODE_NEAT) {
       assert(num_base_levels() == 1);
       assert(base_level(0)->pix_size() == 0.0);
 
-      if (base_level(0)->num() < 2)
-      {
-         assert(base_level(0)->num() > 0);
+      if (base_level(0)->size() < 2) {
+         assert(base_level(0)->size() > 0);
          err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::undo_last() - Only 1 hatch left... can't undo.");
          //Pen should notice this failure and delete the group...
          return false;
-      }
-      else
-      {
+      } else {
          err_mesg(ERR_LEV_INFO, "HatchingGroupFixed::undo_last() - Popping off hatch.");
          WORLD::message("Popped hatch stroke.");
-         HatchingHatchBase *hhb = base_level(0)->pop();
+         HatchingHatchBase *hhb = base_level(0)->back();
+         base_level(0)->pop_back();
          assert(hhb);
          delete(hhb);
          return true;
       }
-   }
-   else //The two sloppy types
-   {
+
+   } else { //The two sloppy types
       assert(num_base_levels() > 0);
       
-      if (base_level(num_base_levels()-1)->pix_size() > 0.0)
-      {
+      if (base_level(num_base_levels()-1)->pix_size() > 0.0) {
          // If the last editted level is complete, un-complete it
          err_mesg(ERR_LEV_INFO, "HatchingGroupFixed::undo_last() - Uncompleting level.");
          WORLD::message("Un-completed level.");
          base_level(num_base_levels()-1)->set_pix_size(0.0);
          return true;
-      }
-      else
-      {
-         if (base_level(num_base_levels()-1)->num() > 1)
-         {
+
+      } else {
+         if (base_level(num_base_levels()-1)->size() > 1) {
             err_mesg(ERR_LEV_INFO, "HatchingGroupFixed::undo_last() - Popping off hatch.");
             WORLD::message("Popped hatch stroke.");
-            HatchingHatchBase *hhb = base_level(num_base_levels()-1)->pop();
+            HatchingHatchBase *hhb = base_level(num_base_levels()-1)->back();
+            base_level(num_base_levels()-1)->pop_back();
             assert(hhb);
             delete(hhb);
             return true;
-         }
-         else 
-         {
+
+         } else {
             //If there 1 hatch, pop it and the level 
             //if this isn't the bottom level. Else
             //return failure so the pen deletes the
             //remainder.
-            assert(base_level(num_base_levels()-1)->num() != 0);
+            assert(base_level(num_base_levels()-1)->size() != 0);
             
-            if (num_base_levels() > 1)
-            {
+            if (num_base_levels() > 1) {
                err_mesg(ERR_LEV_INFO, "HatchingGroupFixed::undo_last() - Popping off hatch and level.");
                WORLD::message("Popped hatch level of detail.");
-               HatchingHatchBase *hhb = base_level(num_base_levels()-1)->pop();
+               HatchingHatchBase *hhb = base_level(num_base_levels()-1)->back();
+               base_level(num_base_levels()-1)->pop_back();
                assert(hhb);
                delete(hhb);
                HatchingLevelBase *hlb = pop_base_level();
                assert(hlb);
                delete(hlb);
                return true;
-            }
-            else
-            {
+
+            } else {
                err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::undo_last() - Only 1 hatch left... can't undo.");
                //Pen should notice this failure and delete the group...
                return false;
@@ -611,30 +577,32 @@ HatchingGroupFixed::undo_last()
 // compute_convex_hull()
 //  -supporting functions
 /////////////////////////////////////
-int compare_xinc_ydec(const void *a, const void *b) 
+bool
+compare_xinc_ydec(const NDCZpt *a, const NDCZpt *b)
 {
    double diff; 
-   NDCZpt **pta = (NDCZpt **)a;   NDCZpt **ptb = (NDCZpt **)b;
-   diff = (**pta)[0] - (**ptb)[0];  if (diff>0) return 1; if (diff<0) return -1;
-   diff = (**ptb)[1] - (**pta)[1];  if (diff>0) return 1; if (diff<0) return -1;
-	return 0;
+   diff = (*a)[0] - (*b)[0];  if (diff>0) return false; if (diff<0) return true;
+   diff = (*b)[1] - (*a)[1];  if (diff>0) return false; if (diff<0) return true;
+   return false;
 }
 
-int compare_xdec_yinc(const void *a, const void *b) { return compare_xinc_ydec(b,a); }
+bool compare_xdec_yinc(const NDCZpt *a, const NDCZpt *b) { return compare_xinc_ydec(b,a); }
 
-int make_chain(ARRAY<NDCZpt*>& V, int (*cmp)(const void*, const void*)) 
+int make_chain(vector<const NDCZpt*>& V, bool (*cmp)(const NDCZpt*, const NDCZpt*))
 {
-	int i, j, s = 1; 	NDCZpt *tmp;
-	V.sort(cmp);
-	for (i=2; i<V.num(); i++) 
-   {
-      for (j=s; j>=1 ; j--)
-         if ((det(NDCvec(*(V[i]) - *(V[j])),	NDCvec(*(V[j-1]) - *(V[j]))) > 0)) break;
-		s = j+1;
-		tmp = V[s]; V[s] = V[i]; V[i] = tmp;
-	}
-	return s;
+   size_t i, j, s = 1;
+   std::sort(V.begin(), V.end(), cmp);
+   for (i=2; i<V.size(); i++) {
+      for (j=s; j>=1 ; j--) {
+         if (det(NDCvec(*(V[i]) - *(V[j])),	NDCvec(*(V[j-1]) - *(V[j]))) > 0)
+            break;
+      }
+      s = j+1;
+      swap(V[s], V[i]);
+   }
+   return s;
 }
+
 /////////////////////////////////////
 // compute_convex_hull()
 /////////////////////////////////////
@@ -643,12 +611,12 @@ HatchingGroupFixed::compute_convex_hull(
    CNDCZpt_list &pts, 
    NDCZpt_list &hull) 
 {
-   int i, num_upper, num_lower;
-   ARRAY<NDCZpt*> P, Q;
+   size_t i, num_upper, num_lower;
+   vector<const NDCZpt*> P, Q;
 
    hull.clear();
 
-   for (i=0; i<(int)pts.size(); i++)  P.add(const_cast<NDCZpt*>(&(pts[i])));
+   for (i=0; i<pts.size(); i++)  P.push_back(&(pts[i]));
 
    num_lower = make_chain(P, compare_xinc_ydec);
 
@@ -656,8 +624,8 @@ HatchingGroupFixed::compute_convex_hull(
 
    for (i=0; i<num_lower; i++) hull.push_back(*(P[i]));
 
-   for (i=num_lower; i<P.num(); i++) Q.add(P[i]);
-   Q.add(P[0]);
+   for (i=num_lower; i<P.size(); i++) Q.push_back(P[i]);
+   Q.push_back(P[0]);
 
    num_upper = make_chain(Q, compare_xdec_yinc);
 
@@ -672,13 +640,13 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
 {
    assert(!_complete);
 
-   int k;
+   HatchingLevelBase::size_type k;
    NDCZpt_list::size_type j;
 
    NDCZpt_list pts, hull;
 
    //One side
-   for (k=0; k<hlb->num(); k++)
+   for (k=0; k<hlb->size(); k++)
       for (j=0; j<(*hlb)[k]->get_pts().size(); j++)
          pts.push_back(NDCZpt( _patch->xform() * ((*hlb)[k]->get_pts()[j]) ));
 
@@ -713,7 +681,7 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
    }
 
    CBface_list & faces = f->mesh()->faces();
-   for (k=0; k< faces.num(); k++) faces[k]->clear_bit(1);
+   for (k=0; (int)k < faces.num(); k++) faces[k]->clear_bit(1);
 
    int ctr = 0;
         
@@ -1009,7 +977,7 @@ HatchingGroupFixed::query_visibility(
 bool
 HatchingGroupFixed::add(
    CNDCpt_list &pl,
-   const ARRAY<double>&prl,
+   const vector<double>&prl,
    int curve_type
    )
 {
@@ -1028,7 +996,7 @@ HatchingGroupFixed::add(
       return false;
    }
 
-   if ((int)pl.size() != prl.num()) {
+   if (pl.size() != prl.size()) {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupFixed:add() - gesture pixel list and pressure list are not same length.");
       return false;
    }
@@ -1037,15 +1005,15 @@ HatchingGroupFixed::add(
 
    //Smooth the input gesture
    NDCpt_list              smoothpts;
-   ARRAY<double>           smoothprl;
+   vector<double>          smoothprl;
    if (!smooth_gesture(pl, smoothpts, prl, smoothprl, _params.anim_style()))
       return false;
 
    err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed:add() - clipping gesture to model.");
 
    NDCpt_list              ndcpts;
-   ARRAY<double>           finalprl;
-   clip_to_patch(smoothpts,ndcpts,smoothprl,finalprl);
+   vector<double>          finalprl;
+   clip_to_patch(smoothpts, ndcpts, smoothprl, finalprl);
    ndcpts.update_length();
 
    err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed::add() - Checking gesture silliness.");
@@ -1172,9 +1140,9 @@ HatchingGroupFixed::add(
       return false;
    }
 
-   ARRAY<HatchingFixedVertex>    verts;
+   vector<HatchingFixedVertex>   verts;
    Wpt_list                      pts;
-   ARRAY<Wvec>                   norms;
+   vector<Wvec>                  norms;
 
    err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingGroupFixed::add() - Final sampling.");
 
@@ -1182,8 +1150,7 @@ HatchingGroupFixed::add(
       Wpt wloc;
       f = HatchingGroupBase::find_face_vis(NDCpt(ndczlScaledList[k]),wloc);
 
-      if ((f) && (f->patch() == _patch) && (f->front_facing()))
-      {
+      if (f && f->patch() == _patch && f->front_facing()) {
          Wvec bc;
          Wvec norm;
 
@@ -1194,26 +1161,21 @@ HatchingGroupFixed::add(
          Bsimplex::clamp_barycentric(bc);
          double dL = fabs(bc.length() - bc_old.length());
 
-         if (bc != bc_old)
-         {
+         if (bc != bc_old) {
             err_mesg(ERR_LEV_INFO, 
                "HatchingGroupFixed::add() - Baycentric clamp modified result: (%f,%f,%f) --> (%f,%f,%f) Length Change: %f", 
                   bc_old[0], bc_old[1], bc_old[2], bc[0], bc[1], bc[2], dL);
          }
-         if (dL < 1e-3)
-         {
-            verts += HatchingFixedVertex(f->index(),bc);
+         if (dL < 1e-3) {
+            verts.push_back(HatchingFixedVertex(f->index(), bc));
             f->bc2norm_blend(bc,norm);
             pts.push_back(wloc);
-            norms += norm;
-         }
-         else
-         {
+            norms.push_back(norm);
+         } else {
             err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::add() - Change too large due to error in projection. Dumping point...");
          }
-      }
-      else 
-      {
+
+      } else {
          if (!f) 
             err_mesg(ERR_LEV_WARN, "HatchingGroupFixed::add() - Missed in final lookup: No hit on a mesh!");
          else if (!(f->patch() == _patch)) 
@@ -1236,11 +1198,11 @@ HatchingGroupFixed::add(
       ol->set_pix_len(pix_len);
 
       ol->push_back(BaseStrokeOffset(0.0, 0.0, finalprl[0], BaseStrokeOffset::OFFSET_TYPE_BEGIN));
-      for (k=1; (int)k<finalprl.num(); k++)
-         ol->push_back(BaseStrokeOffset((double)k / (double)(finalprl.num()-1), 0.0, finalprl[k],
+      for (k=1; k<finalprl.size(); k++)
+         ol->push_back(BaseStrokeOffset((double)k / (double)(finalprl.size()-1), 0.0, finalprl[k],
                                         BaseStrokeOffset::OFFSET_TYPE_MIDDLE));
 
-      ol->push_back(BaseStrokeOffset(1.0, 0.0, finalprl[finalprl.num()-1], BaseStrokeOffset::OFFSET_TYPE_END));
+      ol->push_back(BaseStrokeOffset(1.0, 0.0, finalprl[finalprl.size()-1], BaseStrokeOffset::OFFSET_TYPE_END));
 
       if (base_level(num_base_levels()-1)->pix_size() > 0) {
          assert(_params.anim_style() != HatchingGroup::STYLE_MODE_NEAT);
@@ -1256,14 +1218,11 @@ HatchingGroupFixed::add(
             base_level(num_base_levels()-1),_patch->mesh()->pix_size(),verts,pts,norms,ol) );
 
       return true;
-   }
-   else
-   {
+
+   } else {
       err_mesg(ERR_LEV_WARN, "HatchingGroupFixed:add() - All lookups are bad. Punting...");
       return false;
    }
-
-
 
    return true;
 
@@ -1275,19 +1234,19 @@ HatchingGroupFixed::add(
 void    
 HatchingGroupFixed::clip_to_patch(
    CNDCpt_list &pts,        NDCpt_list &cpts,
-   const ARRAY<double>&prl, ARRAY<double>&cprl ) 
+   const vector<double>&prl, vector<double>&cprl )
 {
    NDCpt_list::size_type k;
-   int started = 0;
+   bool started = false;
    Bface *f;
    Wpt foo;
 
    for (k=0; k<pts.size(); k++) {
       f = find_face_vis(pts[k], foo);
       if (f && f->patch() == _patch) {
-         started = 1;
+         started = true;
          cpts.push_back(pts[k]);
-         cprl += prl[k];
+         cprl.push_back(prl[k]);
       } else {
          if (started) {
             k=pts.size();
@@ -1385,8 +1344,8 @@ HatchingGroupFixed::interpolate(
    CWpt_list                     &ptl1 = h1->get_pts();
    CWpt_list                     &ptl2 = h2->get_pts();
 
-   const ARRAY<Wvec>             &nl1  = h1->get_norms();
-   const ARRAY<Wvec>             &nl2  = h2->get_norms();
+   const vector<Wvec>            &nl1  = h1->get_norms();
+   const vector<Wvec>            &nl2  = h2->get_norms();
 
    const BaseStrokeOffsetLISTptr &ol1 = h1->get_offsets();
    const BaseStrokeOffsetLISTptr &ol2 = h2->get_offsets();
@@ -1395,7 +1354,7 @@ HatchingGroupFixed::interpolate(
    dlen = 1.0/((double)num-1.0);
 
    Wpt_list pts;
-   ARRAY<Wvec> norms;
+   vector<Wvec> norms;
    BaseStrokeOffsetLISTptr offsets = new BaseStrokeOffsetLIST;
 
    ifrac = 0.5 + (drand48() - 0.5) * INTERPOLATION_RANDOM_FACTOR;
@@ -1405,9 +1364,9 @@ HatchingGroupFixed::interpolate(
          ptl1.interpolate((double) k*dlen, 0, &seg1, &frac1)*ifrac +
          ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac));
 
-      norms +=
+      norms.push_back(
          (nl1[seg1]*(1.0-frac1) + nl1[seg1+1]*frac1)*ifrac  +
-         (nl2[seg2]*(1.0-frac2) + nl2[seg2+1]*frac2)*(1.0-ifrac);
+         (nl2[seg2]*(1.0-frac2) + nl2[seg2+1]*frac2)*(1.0-ifrac));
    }
 
    double pix_size = h1->get_pix_size() * ifrac + h2->get_pix_size() * (1.0 - ifrac);
@@ -1498,13 +1457,13 @@ HatchingHatchFixed::get_verts(TAGformat &d)
 /////////////////////////////////////
 HatchingHatchFixed::HatchingHatchFixed(
    HatchingLevelBase *hlb, double len, 
-   const ARRAY<HatchingFixedVertex> &vl,
-   CWpt_list &pl, const ARRAY<Wvec> &nl, 
+   const vector<HatchingFixedVertex> &vl,
+   CWpt_list &pl, const vector<Wvec> &nl,
    CBaseStrokeOffsetLISTptr &ol) : 
       HatchingHatchBase(hlb,len,pl,nl,ol)
 {
    _verts.clear();   
-   _verts.operator+=(vl);
+   _verts.insert(_verts.end(), vl.begin(), vl.end());
 
    //XXX - Fix this... init() get called twice (in base class, too)
 
@@ -1521,7 +1480,7 @@ HatchingHatchFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
 
    for (k=0; k<_pts.size(); k++)
       _pts[k] = t * _pts[k];
-   for (k=0; (int)k<_norms.num(); k++)
+   for (k=0; k<_norms.size(); k++)
       _norms[k] = t.inverse().transpose() * _norms[k];
 
    //Clear these so they regenerate
@@ -1538,15 +1497,14 @@ HatchingHatchFixed::notify_change(BMESH *m, BMESH::change_t chg)
 {
    assert(chg == BMESH::VERT_POSITIONS_CHANGED);
 
-   int k;
+   vector<HatchingFixedVertex>::size_type k;
 
-   if (_verts.num() > 0) {
+   if (_verts.size() > 0) {
       //Sanity check
-      assert(_verts.num() == (int)_pts.size());
-      assert(_verts.num() == _norms.num());
+      assert(_verts.size() == _pts.size());
+      assert(_verts.size() == _norms.size());
 
-      for (k=0; k < _verts.num(); k++)
-      {
+      for (k=0; k < _verts.size(); k++) {
          Bface *f = m->bf(_verts[k].ind);
          assert(f);
          f->bc2pos(_verts[k].bar,_pts[k]);
@@ -1577,7 +1535,7 @@ HatchingHatchFixed::init()
 
    //If there are _verts (tri index/bary) then
    //make sure we have the right number of them
-   assert((_verts.num() == 0) || ((int)_pts.size() == _verts.num()));
+   assert((_verts.size() == 0) || (_pts.size() == _verts.size()));
 }
 
 /////////////////////////////////////
@@ -1666,54 +1624,49 @@ bool
 HatchingBackboneFixed::compute(
    HatchingLevelBase *hlb)
 {
-   int i;
+   HatchingLevelBase::size_type i;
 
    assert(hlb);
 
-   if (hlb->num() < 2)
-   {
+   if (hlb->size() < 2) {
       err_mesg(ERR_LEV_WARN, "HatchingBackboneFixed::compute() - Can't get backbone from less that 2 hatches!"); 
       return false;
    }
 
-   for (i=0;i<hlb->num()-1;i++)
-      {
-         Wpt p;
-         Wpt_list l;
+   for (i=0;i<hlb->size()-1;i++) {
+      Wpt p;
+      Wpt_list l;
 
-         if ((*hlb)[i]->get_pts().length() < (*hlb)[i+1]->get_pts().length())
-            {
-               p = (*hlb)[i  ]->get_pts().interpolate(0.5);
-               l = (*hlb)[i+1]->get_pts();
-            }
-         else
-            {
-               p = (*hlb)[i+1]->get_pts().interpolate(0.5);
-               l = (*hlb)[i  ]->get_pts();
-            }
-                
-         Wpt loc;
-         loc = l.closest(p);
-
-         NDCpt n1 = NDCZpt( p,   _patch->obj_to_ndc() );
-         NDCpt n2 = NDCZpt( loc, _patch->obj_to_ndc() );
-
-         double len = (n2 - n1).length() * VIEW::peek()->ndc2pix_scale();
-
-         Vertebrae *v = new Vertebrae();
-         assert(v);
-
-         v->exist = true;
-         v->pt1 = p;
-         v->pt2 = loc;
-         v->len = len;
-
-         _vertebrae.add(v);
+      if ((*hlb)[i]->get_pts().length() < (*hlb)[i+1]->get_pts().length()) {
+         p = (*hlb)[i  ]->get_pts().interpolate(0.5);
+         l = (*hlb)[i+1]->get_pts();
+      } else {
+         p = (*hlb)[i+1]->get_pts().interpolate(0.5);
+         l = (*hlb)[i  ]->get_pts();
       }
+
+      Wpt loc;
+      loc = l.closest(p);
+
+      NDCpt n1 = NDCZpt( p,   _patch->obj_to_ndc() );
+      NDCpt n2 = NDCZpt( loc, _patch->obj_to_ndc() );
+
+      double len = (n2 - n1).length() * VIEW::peek()->ndc2pix_scale();
+
+      Vertebrae *v = new Vertebrae();
+      assert(v);
+
+      v->exist = true;
+      v->pt1 = p;
+      v->pt2 = loc;
+      v->len = len;
+
+      _vertebrae.push_back(v);
+   }
 
    _len = find_len();
 
-   err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingBackboneFixed::compute() - Backbone is %f pixels in %d  vertebrae.", _len, _vertebrae.num()); 
+   err_mesg_cond(debug, ERR_LEV_SPAM, "HatchingBackboneFixed::compute() - Backbone is %f pixels in %d vertebrae.", _len, _vertebrae.size());
 
    return true;
 }
@@ -1724,14 +1677,12 @@ HatchingBackboneFixed::compute(
 void
 HatchingBackboneFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
 {
-   int k;
+   vector<Vertebrae*>::size_type k;
 
-   for (k=0; k< _vertebrae.num(); k++)
-   {
+   for (k=0; k< _vertebrae.size(); k++) {
       _vertebrae[k]->pt1 = t * _vertebrae[k]->pt1;
       _vertebrae[k]->pt2 = t * _vertebrae[k]->pt2;
    }
-  
 }
 
 

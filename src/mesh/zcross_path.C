@@ -218,16 +218,16 @@ ZcrossPath::start_sil(Bface *f )
 
          if ( iter_f == f ) {  //closed loop
 
-            if ( !( _segs[cstart].p()  == _segs.last().p() ) ) {
+            if ( !( _segs[cstart].p()  == _segs.back().p() ) ) {
                //cerr << "XXX ZcrossPath::start_sil():: points are not equal" << endl;
                //                 Wpt a = _segs[cstart].p();
                //                 Wpt b = _segs.last().p();
                //cerr << "diff:" << (a-b).length() << endl;
-               _segs.last().p() = _segs[cstart].p() ;
+               _segs.back().p() = _segs[cstart].p() ;
             }
-            _segs.last().setf( NULL );
-            _segs.last().set_end(); 
-            _segs.last().set_bary(f2);
+            _segs.back().setf( NULL );
+            _segs.back().set_end();
+            _segs.back().set_bary(f2);
 
             return;
          }
@@ -274,7 +274,7 @@ ZcrossPath::start_sil(Bface *f )
    if ( chain2num < 0 )
       return;
 
-   _segs.insert(cstart, chain2num);
+   _segs.insert(_segs.begin() + cstart, chain2num, ZXseg());
    int last_ind = num()-1;
 
    int j=0;
@@ -285,10 +285,11 @@ ZcrossPath::start_sil(Bface *f )
       _segs[last_ind-j].set_bary(_segs[last_ind-j].f());        //recalc barycentric
    }
    for ( j=0; j < chain2num ; j++) {
-      _segs[cstart+j] = _segs.pop();
+      _segs[cstart+j] = _segs.back();
+      _segs.pop_back();
    }
 
-   _segs.pop(); //last point was the duplicate
+   _segs.pop_back(); //last point was the duplicate
 
    return;
 }
@@ -308,7 +309,7 @@ ZcrossPath::sil_walk_search ( Bface *f, Bvert * vrt[3], double g[3] )
    //previous entry must exist in the seglist
    //"starter" edge with a face equal to this one
 
-   assert ( f == _segs.last().f() );
+   assert(f == _segs.back().f());
 
    f->zx_mark();
 
@@ -345,7 +346,7 @@ ZcrossPath::sil_walk_search ( Bface *f, Bvert * vrt[3], double g[3] )
    //this gradient is measured for this point and
    //the point before - so update the last point.
 
-   _segs.last().setg(bgrad);
+   _segs.back().setg(bgrad);
 
    //
 

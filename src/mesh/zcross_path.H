@@ -154,7 +154,8 @@ class ZXseg {
       //@{
       
       bool       end()    const { return _end; }
-      Wpt& p()            { return _p; }  
+      CWpt&      p()      const { return _p; }
+      Wpt&       p()            { return _p; }
       Bsimplex*  s()      const { return _s; }
       //! if we really really want the face we can get it
       //! if no face is there you will get a NULL
@@ -163,9 +164,8 @@ class ZXseg {
       bool       g()      const { return _g > 0.0; }
       double     conf()   const { return _g; }
       int        type()   const { return _type; }
-      CWvec& bc()   const { return _bc; }
+      CWvec&     bc()     const { return _bc; }
    
-      
       void set_end()          { _end = true; }
       void setf(Bsimplex* s)  { _s = s; }                             
       void setv(Bvert* v)     { _v = v; }
@@ -241,15 +241,15 @@ public:
 
    void add_seg ( Bface* f , CWpt& pt, Bvert* v, bool grad, mlib::CWvec& bc)
    {
-      bool end = (f) ? false : true;      
-      _segs += ZXseg ( f, pt, v, grad, bc, 0, end );
+      bool end = f ? false : true;
+      _segs.push_back(ZXseg(f, pt, v, grad, bc, 0, end));
    }
-   void add_seg ( const ZXseg& seg) { _segs += seg;  }
+   void add_seg ( const ZXseg& seg) { _segs.push_back(seg);  }
 
    void add_seg ( Bface* f , CWpt& pt, Bvert* v, bool grad, Bface * bary_f)
    {
-      bool end = (f) ? false : true;       
-      _segs += ZXseg ( f, pt, v, grad, bary_f, 0 ,end);
+      bool end = f ? false : true;
+      _segs.push_back(ZXseg(f, pt, v, grad, bary_f, 0, end));
    } 
 
    // Clear the strip:
@@ -257,8 +257,8 @@ public:
 
    //******** ACCESSORS ********
    Patch*         patch()        const { return _patch; }
-   CARRAY<ZXseg>& segs()         const { return _segs; }
-   ARRAY<ZXseg>&  segs()         { return _segs; }
+   const vector<ZXseg>& segs()   const { return _segs; }
+   vector<ZXseg>& segs()         { return _segs; }
 
 
 
@@ -278,7 +278,7 @@ public:
    //bool   empty()               const { return _points.empty(); }
    bool   empty()               const { return _segs.empty(); }
    //int    num()                 const { return _points.num(); }
-   int    num()               const { return _segs.num(); }
+   int    num()               const { return _segs.size(); }
 
    BMESH* mesh() const
    {
@@ -291,7 +291,7 @@ public:
 protected:
    friend class Patch;
    //******** DATA ******** 
-   ARRAY <ZXseg>        _segs;  
+   vector<ZXseg>        _segs;
    Patch*               _patch;       // patch this is assigned to
    int                  _index;       // index in patch's list
    Wpt                  _eye;         // eye_local ( set by bmesh )

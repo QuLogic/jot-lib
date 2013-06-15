@@ -24,6 +24,8 @@
 #include "mesh/bsimplex.H"
 #include "stroke/base_stroke.H"
 
+#include <vector>
+
 /*
  * VISIBILITY DEFINITIONS
  *    SIL_VISIBLE        - sil is fully visible
@@ -90,7 +92,7 @@ public:
          _vis(SIL_VISIBLE)
    {}
 
-   // Needed to instantiate an ARRAY of LuboSamples:
+   // Needed to instantiate a vector of LuboSamples:
    bool operator==(const LuboSample& s) const
    {
       return (_id == s._id && _p == s._p && _t == s._t);
@@ -183,7 +185,7 @@ public:
 
    /******** MEMBERS METHODS ********/
 
-   // Needed to instantiate an ARRAY of LuboVotes:
+   // Needed to instantiate a vector of LuboVotes:
    bool operator==(const LuboVote& v) const
    {
       return true;
@@ -340,8 +342,8 @@ private:
    int                  _vis;   //visibility type
    uint                 _base_id;
 
-   ARRAY<LuboVote>      _votes;     //Copies of LuboPath votes
-   ARRAY<mlib::XYpt>          _fits;
+   vector<LuboVote>     _votes;     //Copies of LuboPath votes
+   vector<mlib::XYpt>   _fits;
 
 
 public:
@@ -384,23 +386,23 @@ public:
    int&              vis()          { return _vis;   }
 
 
-   ARRAY<LuboVote>&  votes()        { return _votes;     }
+   vector<LuboVote>& votes()        { return _votes;     }
    LuboVote&         vote(int i)    { return _votes[i];  }
-   LuboVote&         first_vote()   { return _votes.first();  }
-   LuboVote&         last_vote()    { return _votes.last();   }
-   int               num()          { return _votes.num(); }
+   LuboVote&         first_vote()   { return _votes.front();  }
+   LuboVote&         last_vote()    { return _votes.back();   }
+   int               num()          { return _votes.size(); }
 
 
-   ARRAY<mlib::XYpt>&      fits()         { return _fits;      }
+   vector<mlib::XYpt>&     fits()         { return _fits;      }
    mlib::XYpt&             fit(int i )    { return _fits[i];   }
-   int               nfits()        { return _fits.num();}
+   int               nfits()        { return _fits.size();}
 
    //Query the fit
    double            get_t( double s );
 
    void              sort();
    void              fitsort();
-   void              add(LuboVote v)  { _votes += v; }
+   void              add(LuboVote v)  { _votes.push_back(v); }
 
    bool operator ==( VoteGroup g )     { return true;  }
 
@@ -453,17 +455,17 @@ protected:
    int               _vis;    // visible type (hidden line)
    int               _type;   // line type ( silhouette, backfacing, border, crease 
 
-   mlib::NDCZpt_list       _pts;          // path in screen space
-   ARRAY<int>        _path_id;      // path id per _pt, sent to ID ref
-   ARRAY<mlib::Wvec>       _bcs;          // barycentric coords
-   ARRAY<Bsimplex*>     _simplexes;    // simplexes for barycentric recalc.   
-   ARRAY<double>     _len;          // distance along ffseg (NOT ACTUAL NDCZdist of POINTS);
-   ARRAY<uint>       _id_set;       // list of distinct path ids
-   ARRAY<int>        _id_offsets;   // offsets of these id's in the path
-   ARRAY<double>     _ffseg_lengths;// length of the idref path drawn in that ID
+   mlib::NDCZpt_list  _pts;          // path in screen space
+   vector<int>        _path_id;      // path id per _pt, sent to ID ref
+   vector<mlib::Wvec> _bcs;          // barycentric coords
+   vector<Bsimplex*>  _simplexes;    // simplexes for barycentric recalc.
+   vector<double>     _len;          // distance along ffseg (NOT ACTUAL NDCZdist of POINTS);
+   vector<uint>       _id_set;       // list of distinct path ids
+   vector<int>        _id_offsets;   // offsets of these id's in the path
+   vector<double>     _ffseg_lengths;// length of the idref path drawn in that ID
 
-   ARRAY<LuboVote>   _votes ;       // votes received
-   ARRAY<VoteGroup>  _groups;       // grouped vote structures
+   vector<LuboVote>   _votes ;       // votes received
+   vector<VoteGroup>  _groups;       // grouped vote structures
 
 
 public:
@@ -472,7 +474,6 @@ public:
          _stretch(1),_pix_to_ndc_scale(1),_offset_pix_len(1),
          _line_type(0),_vis(SIL_VISIBLE),_type(STYPE_SIL)
    {
-      _id_set.set_unique();
    }
 
    /******** MEMBER METHODS ********/
@@ -518,8 +519,8 @@ public:
    void clear();
 
    //******** Voting stuff ********
-   ARRAY<LuboVote>&  votes()                   { return   _votes; }
-   ARRAY<VoteGroup>& groups()                  { return   _groups; }
+   vector<LuboVote>&  votes()                  { return   _votes; }
+   vector<VoteGroup>& groups()                 { return   _groups; }
 
    uint              id(int i)           const { return _path_id[i];        }
 
@@ -527,20 +528,20 @@ public:
    int&              type()                    { return _type;   }
    int&              line_type()               { return _line_type;   }
 
-   bool              owns_id(uint id)    const { return _id_set.contains(id); }
+   bool              owns_id(uint id)    const { return std::find(_id_set.begin(), _id_set.end(), id) != _id_set.end(); }
    uint              id_set(int i )      const { return _id_set[i];         }
-   ARRAY<uint>&      id_set()                  { return _id_set;            }
+   vector<uint>&     id_set()                  { return _id_set;            }
 
    int               id_offset(int i)          { return _id_offsets[i];     }
-   ARRAY<int>&       id_offsets()              { return _id_offsets;        }
+   vector<int>&      id_offsets()              { return _id_offsets;        }
 
    double&           ffseg_length(int i)       { return _ffseg_lengths[i];  }
-   ARRAY<double>&    ffseg_lengths()           { return _ffseg_lengths;     }
+   vector<double>&   ffseg_lengths()           { return _ffseg_lengths;     }
 
    void              reset_votes()             { _votes.clear(); }
 
    // Generate lubo samples for next frame
-   void              gen_group_samples(double spacing, int path_index, ARRAY<LuboSample>& samples) const;
+   void              gen_group_samples(double spacing, int path_index, vector<LuboSample>& samples);
 
    // Receive a vote, record it if things go well
    double            get_closest_point(mlib::CNDCpt& p, mlib::CNDCvec& v, mlib::NDCpt& ret_pt, int& ret_index);
@@ -567,7 +568,7 @@ public:
    {
       if (_simplexes[i])
          _simplexes[i]->bc2pos( _bcs[i], w );
-      else if ( _simplexes.num() > 0 && i > 0 && _simplexes[i-1])
+      else if ( _simplexes.size() > 0 && i > 0 && _simplexes[i-1])
          _simplexes[i-1]->bc2pos( _bcs[i], w );
    }
 
@@ -595,7 +596,7 @@ public:
 
       _groups           = l._groups;
 
-      for (int i=0; i<_groups.num(); i++)
+      for (vector<VoteGroup>::size_type i=0; i<_groups.size(); i++)
          _groups[i].lubo_path() = this;
 
       return *this;
@@ -642,7 +643,7 @@ protected:
  * LuboPathList
  *****************************************************************/
 
-class LuboPathList : public ARRAY<LuboPath*>, public DATA_ITEM
+class LuboPathList : public vector<LuboPath*>, public DATA_ITEM
 {
 
    /******** STATIC MEMBERS VARS ********/
@@ -654,46 +655,51 @@ protected:
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
 public:
-   LuboPathList(int n=0) : ARRAY<LuboPath*>(n) {}
+   LuboPathList(int n=0) : vector<LuboPath*>() { reserve(n); }
 
    /******** MEMBERS METHODS ********/
    void delete_all()
    {
-      while (!empty())
-         delete pop();
+      while (!empty()) {
+         delete back();
+         pop_back();
+      }
    }
 
    void clone(const LuboPathList &pl)
    {
-      assert(!num());
-      for(int i=0;i<pl.num();i++) {
+      assert(empty());
+      for (LuboPathList::size_type i=0; i<pl.size(); i++) {
          LuboPath *p = new LuboPath();
          assert(p);
-         add
-            (p);
+         push_back(p);
          *p = *(pl[i]);
       }
    }
 
    LuboPath* lookup(uint id, int& x) const
    {
-      for (int i=x; i<_num; i++)
-      if (_array[i]->owns_id(id)) { x = i; return _array[i]; }
-      x = _num;
+      for (LuboPathList::size_type i=x; i<size(); i++) {
+         if (at(i)->owns_id(id)) {
+            x = i;
+            return at(i);
+         }
+      }
+      x = size();
       return 0;
    }
 
-   void gen_group_samples(double spacing, ARRAY<LuboSample>& samples) const
+   void gen_group_samples(double spacing, vector<LuboSample>& samples) const
    {
       samples.clear();
-      for (int i=0; i<_num; i++)
-         _array[i]->gen_group_samples(spacing, i,  samples);
+      for (LuboPathList::size_type i=0; i<size(); i++)
+         at(i)->gen_group_samples(spacing, i,  samples);
    }
 
    void reset_votes() const
    {
-      for (int i=0; i<_num; i++)
-         _array[i]->reset_votes();
+      for (LuboPathList::size_type i=0; i<size(); i++)
+         at(i)->reset_votes();
    }
 
    /******** DATA_ITEM METHODS ********/
@@ -811,7 +817,7 @@ public:
 
 
 #define CSilSeg const SilSeg
-#define NDCSilPath ARRAY<SilSeg>
+#define NDCSilPath vector<SilSeg>
 
 /*****************************************************************
  * ZXedgeStrokeTexture
@@ -822,13 +828,13 @@ class ZXedgeStrokeTexture : public OGLTexture
 protected:
    /******** MEMBER VARIABLES ********/
    CEdgeStrip*                  _stroke_3d;     // if there is no patch, we use EdgeStrip
-   mlib::CWpt_list*                   _polyline;       // if we don't have a EdgeStrip,
+   mlib::CWpt_list*             _polyline;      // if we don't have a EdgeStrip,
                                                 // we might have a polyline
-   ARRAY <ZXseg>                _pre_zx_segs;
+   vector<ZXseg>                _pre_zx_segs;
    NDCSilPath                   _ref_segs;
    NDCSilPath                   _sil_segs;   
-   ARRAY<uint>                  _path_ids;
-   ARRAY<double>                _ffseg_lengths;
+   vector<uint>                 _path_ids;
+   vector<double>               _ffseg_lengths;
    BaseStroke                   _prototype;     // prototype stroke
    BaseStrokeOffsetLISTptr      _offsets;       // wiggles to apply to strokes   
    BaseStrokeArray              _bstrokes;      // collection of strokes
@@ -860,8 +866,8 @@ protected:
 
    // for lubo computations:
    LuboPathList         _paths;
-   mlib::Wtransf              _old_ndc;
-   ARRAY<LuboSample>    _lubo_samples; 
+   mlib::Wtransf        _old_ndc;
+   vector<LuboSample>   _lubo_samples;
   
    double       _crease_max_bend_angle;
    
@@ -948,8 +954,8 @@ protected:
 
    //******** PATH BUILDING ********
 
-   bool add_path(int&);
-   bool add_path_seethru(int&);
+   bool add_path(size_t&);
+   bool add_path_seethru(size_t&);
    void add_paths();
    void add_paths_seethru();
 

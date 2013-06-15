@@ -33,6 +33,7 @@
 #include "npr/hatching_group_base.H"
 
 #include <set>
+#include <vector>
 
 /*****************************************************************
  * HatchingGroupFixed
@@ -59,7 +60,7 @@ class HatchingGroupFixed : public HatchingGroup,
    /******** MEMBERS METHODS ********/
    //Gesture processing
    void            clip_to_patch(mlib::CNDCpt_list &pts, mlib::NDCpt_list &cpts,
-                           const ARRAY<double>&prl, ARRAY<double>&cprl );
+                           const vector<double>&prl, vector<double>&cprl );
    void            slice_mesh_with_plane(Bface *f, mlib::CWplane &wpPlane, mlib::Wpt_list &wlList);
 
    // Visibility
@@ -86,7 +87,7 @@ class HatchingGroupFixed : public HatchingGroup,
 
    virtual bool    query_pick(mlib::CNDCpt &pt);
 
-   virtual bool    add(mlib::CNDCpt_list &pl, const ARRAY<double>&prl, int);
+   virtual bool    add(mlib::CNDCpt_list &pl, const vector<double>&prl, int);
 
    virtual void    kill_animation();
 
@@ -96,7 +97,7 @@ class HatchingGroupFixed : public HatchingGroup,
    virtual void    notify_change       (BMESH*, BMESH::change_t);
    virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
    //virtual void  notify_merge        (BMESH*, BMESH*)           {}
-   //virtual void  notify_split        (BMESH*, CARRAY<BMESH*>&)  {}
+   //virtual void  notify_split        (BMESH*, const vector<BMESH*>&){}
    //virtual void  notify_subdiv_gen   (BMESH*)                   {}
    //virtual void  notify_delete       (BMESH*)                   {}
    //virtual void  notify_sub_delete   (BMESH*)                   {}
@@ -183,17 +184,17 @@ class HatchingHatchFixed :
  protected:
       /******** MEMBER VARIABLES ********/
 
-      ARRAY<HatchingFixedVertex>       _verts;
+      vector<HatchingFixedVertex>      _verts;
 
  public:
       /******** CONSTRUCTOR/DECONSTRUCTOR *******/
       HatchingHatchFixed(HatchingLevelBase *hlb, 
-            double len, const ARRAY<HatchingFixedVertex> &vl,
-               mlib::CWpt_list &pl, const ARRAY<mlib::Wvec> &nl, 
+            double len, const vector<HatchingFixedVertex> &vl,
+               mlib::CWpt_list &pl, const vector<mlib::Wvec> &nl,
                CBaseStrokeOffsetLISTptr &ol);
 
       HatchingHatchFixed(HatchingLevelBase *hlb, 
-            double len, mlib::CWpt_list &pl, const ARRAY<mlib::Wvec> &nl, 
+            double len, mlib::CWpt_list &pl, const vector<mlib::Wvec> &nl,
                CBaseStrokeOffsetLISTptr &ol) : 
                   HatchingHatchBase(hlb,len,pl,nl,ol) {}
 

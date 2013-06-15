@@ -23,6 +23,8 @@
 
 #include "gtex/basic_texture.H"
 
+#include <vector>
+
 class BaseStroke;
 
 /**********************************************************************
@@ -42,7 +44,7 @@ class NPRControlFrameTexture : public BasicTexture {
    COLOR                _color;         
    double               _alpha;
    EdgeStrip*           _strip;         
-   ARRAY<BaseStroke*>   _strokes;
+   vector<BaseStroke*>  _strokes;
 
  public:
    //******** MANAGERS ********

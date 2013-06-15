@@ -222,7 +222,7 @@ HatchingTexture::draw_end()
 }
 
 bool 
-HatchingTexture::add_stroke(CNDCpt_list& pl, const ARRAY<double>& prl, BaseStroke * proto)
+HatchingTexture::add_stroke(CNDCpt_list& pl, const vector<double>& prl, BaseStroke * proto)
 {    
    cerr << "1 ProxySurface::add : we have " << _strokes.size() << endl;
 
@@ -235,13 +235,13 @@ HatchingTexture::add_stroke(CNDCpt_list& pl, const ARRAY<double>& prl, BaseStrok
       err_msg("PatternGroup:add() - Error: pressure list is empty!");
       return false;
    }
-   if ((int)pl.size() != prl.num()) {
+   if (pl.size() != prl.size()) {
       err_msg("PatternGroup:add() - gesture pixel list and pressure list are not same length.");
       return false;
    }
 
    NDCpt_list              smoothpts;
-   ARRAY<double>           smoothprl;
+   vector<double>          smoothprl;
    if (!(HatchingGroupBase::smooth_gesture(pl, smoothpts, prl, smoothprl, 99)))
         return false;
   

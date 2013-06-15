@@ -127,9 +127,9 @@ HatchingGroupBase::init()
 void
 HatchingGroupBase::clear()
 {
-   int i;
+   vector<HatchingLevelBase*>::size_type i;
 
-   for (i=0;i<_level.num();i++) delete _level[i];
+   for (i=0;i<_level.size();i++) delete _level[i];
 
    assert(_select);
    delete(_select);
@@ -165,11 +165,10 @@ HatchingGroupBase::deselect()
 void    
 HatchingGroupBase::kill_animation()
 {
-   int l;
+   vector<HatchingLevelBase*>::size_type l;
 
-   for (l=0 ; l<_level.num(); l++)
+   for (l=0 ; l<_level.size(); l++)
       if (_level[l]->in_trans()) _level[l]->abort_transition();
-
 }
 
 /////////////////////////////////////
@@ -184,13 +183,14 @@ HatchingGroupBase::kill_animation()
 int     
 HatchingGroupBase::draw(CVIEWptr &v)
 {
-   int i,num = 0;
-        
+   vector<HatchingLevelBase*>::size_type i;
+   int num = 0;
+
    _cam = _group->patch()->inv_xform() * VIEW::peek_cam()->data()->from();
 
    if (_selected) _select->clear();
 
-   for (i=0 ; i<_level.num() ; i++) 
+   for (i=0 ; i<_level.size(); i++)
       num += _level[i]->draw(v);
 
    return num;
@@ -212,7 +212,7 @@ void
 HatchingGroupBase::level_draw_setup()
 {
    //Advance level animations, etc.
-   for (int i=0 ; i<_level.num() ; i++) 
+   for (vector<HatchingLevelBase*>::size_type i=0; i<_level.size(); i++)
       _level[i]->draw_setup();
 }
 
@@ -224,7 +224,7 @@ HatchingGroupBase::hatch_draw_setup()
 {
    //Causes hatches to update (we do this outside of level_draw_setup
    //in hopes of conglomerating code to leverage the cache)
-   for (int i=0 ; i<_level.num() ; i++) 
+   for (vector<HatchingLevelBase*>::size_type i=0; i<_level.size(); i++)
       _level[i]->hatch_draw_setup();
 }
 
@@ -247,10 +247,10 @@ HatchingGroupBase::draw_setup()
 void    
 HatchingGroupBase::add_base_level()
 { 
-   assert(_level.num() == _num_base_levels);
+   assert((int)_level.size() == _num_base_levels);
    HatchingLevelBase *hlb = new HatchingLevelBase(this); 
    assert(hlb); 
-   _level.add(hlb); 
+   _level.push_back(hlb);
    _num_base_levels++; 
 }
 
@@ -260,12 +260,13 @@ HatchingGroupBase::add_base_level()
 HatchingLevelBase*
 HatchingGroupBase::pop_base_level()
 { 
-   assert(_num_base_levels == _level.num());
-   assert(_level.last()->num() == 0);
-   assert(_level.num() > 1);
+   assert(_num_base_levels == (int)_level.size());
+   assert(_level.back()->size() == 0);
+   assert(_level.size() > 1);
    _num_base_levels--; 
-   
-   return _level.pop();
+
+   HatchingLevelBase *hlb = _level.back(); _level.pop_back();
+   return hlb;
 }
 
 /////////////////////////////////////
@@ -274,16 +275,14 @@ HatchingGroupBase::pop_base_level()
 void
 HatchingGroupBase::trash_upper_levels()
 { 
-   while (_level.num() > _num_base_levels)
-   {
-      HatchingLevelBase *hlb = _level.pop(); assert(hlb);
-      
+   while ((int)_level.size() > _num_base_levels) {
+      HatchingLevelBase *hlb = _level.back(); assert(hlb); _level.pop_back();
+
       err_mesg(ERR_LEV_SPAM, "HatchingGroupBase::trash_upper_levels() - Trashing level %d (%d hatches)",
-            (_level.num() + 1), hlb->num() ); 
-     
+            (_level.size() + 1), hlb->size() );
+
       delete hlb;
    }
-
 }
 
 
@@ -349,7 +348,7 @@ HatchingGroupBase::update_levels()
       base_level = (int)floor(desired_level);
       trans_level = base_level + 1;
         
-      if (_level.num() < trans_level+1) generate_interpolated_level(trans_level);
+      if ((int)_level.size() < trans_level+1) generate_interpolated_level(trans_level);
    }
         //(style == HatchingGroup::STYLE_MODE_SLOPPY_REP) ||
    else //(style == HatchingGroup::STYLE_MODE_SLOPPY_ADD)
@@ -438,7 +437,7 @@ HatchingGroupBase::update_levels()
                      (1.0 + (limit_adjust-1.0) * limit_scale);
    
    //Clear extinction flags from non transitioning levels
-   for (l=0 ; l<_level.num(); l++)
+   for (vector<HatchingLevelBase*>::size_type l=0 ; l<_level.size(); l++)
       if (!_level[l]->in_trans()) _level[l]->clear_ext();
 
    //Set the new width targets for all levels below the base level
@@ -579,17 +578,12 @@ HatchingGroupBase::update_levels()
       }
    }
 
-
    //Make sure extra levels are zeroed out
-   if (trans_level)
-   {
-      for (l=trans_level+1 ; l<_level.num(); l++)
-      {
-         if (_level[l]->non_zero()) 
-         {
+   if (trans_level) {
+      for (vector<HatchingLevelBase*>::size_type l=trans_level+1 ; l<_level.size(); l++) {
+         if (_level[l]->non_zero()) {
             _level[l]->set_desired_frac(0);
-            if (!_level[l]->in_trans()) 
-            {
+            if (!_level[l]->in_trans()) {
                _level[l]->set_ext(HatchingLevelBase::EXT_DIE);
                _level[l]->start_transition(trans_time);    
             }
@@ -599,23 +593,19 @@ HatchingGroupBase::update_levels()
 
    static bool keep_old_trans = Config::get_var_bool("HATCHING_KEEP_OLD_TRANSITIONS",false,true);
 
-   if (!keep_old_trans)
-   {
-      if (fabs(desired_level - _old_desired_level) > 1.0)
-      {
+   if (!keep_old_trans) {
+      if (fabs(desired_level - _old_desired_level) > 1.0) {
          err_mesg(ERR_LEV_SPAM, "HatchingGroupBase::update_level() - Aborting out-of-date level transitions.");
-         for (l=0 ; l<_level.num(); l++)
-            if (_level[l]->in_trans()) 
-            {
+         for (vector<HatchingLevelBase*>::size_type l=0 ; l<_level.size(); l++) {
+            if (_level[l]->in_trans()) {
                _level[l]->abort_transition();
                _level[l]->clear_ext();
             }
+         }
       }
    }
 
    _old_desired_level = desired_level;
-
-
 }
 
 /////////////////////////////////////
@@ -624,11 +614,10 @@ HatchingGroupBase::update_levels()
 void    
 HatchingGroupBase::update_prototype()
 {
-   int i;
+   vector<HatchingLevelBase*>::size_type i;
 
-   for (i=0; i<_level.num() ; i++)
+   for (i=0; i<_level.size(); i++)
       _level[i]->update_prototype();
-        
 }
 
 /////////////////////////////////////
@@ -636,22 +625,20 @@ HatchingGroupBase::update_prototype()
 /////////////////////////////////////
 bool    
 HatchingGroupBase::smooth_gesture(
-   CNDCpt_list&         pts,    // input points
-   NDCpt_list&          spts,   // smoothed output points
-   const ARRAY<double>& prl,    // input pressures
-   ARRAY<double>&       sprl,   // smoothed output pressures
-   int                  style   // hatching style (affects how much smoothing)
+   CNDCpt_list&          pts,    // input points
+   NDCpt_list&           spts,   // smoothed output points
+   const vector<double>& prl,    // input pressures
+   vector<double>&       sprl,   // smoothed output pressures
+   int                   style   // hatching style (affects how much smoothing)
    )
 {
    // Q: Would they ever call this on an empty list?
    // A: Yes.
-   if (pts.empty()) 
-   {
+   if (pts.empty()) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::smooth_gesture() - Error: empty point list.");
       return false;
    }
-   if (prl.empty()) 
-   {
+   if (prl.empty()) {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::smooth_gesture() - Error: empty pressure list.");
       return false;
    }
@@ -690,7 +677,7 @@ HatchingGroupBase::smooth_gesture(
 
    for (k=0; k<=num; k++) {
       spts.push_back(pts.interpolate((double)k*dlen,0,&seg,&frac));
-      sprl += prl[seg]*(1.0-frac) + prl[seg+1]*frac;
+      sprl.push_back(prl[seg]*(1.0-frac) + prl[seg+1]*frac);
    }
    spts.update_length();
 
@@ -730,7 +717,7 @@ HatchingGroupBase::smooth_gesture(
    sprl.clear();
    for (k=0 ; k<pix_len ; k++) {
       spts.push_back(NDCpt(spline.pt((double)k*dlen)));
-      sprl += (pspline.pt((double)k*dlen))[0];
+      sprl.push_back((pspline.pt((double)k*dlen))[0]);
    }
    spts.update_length();
 
@@ -1153,7 +1140,7 @@ HatchingGroupBase::compute_hatch_indices(int &level,int &index, int i, int depth
 void
 HatchingGroupBase::generate_interpolated_level(int lev)
 {
-   assert(_level.num() < lev + 1);
+   assert((int)_level.size() < lev + 1);
    assert(lev>0);
 
    //Make sure previous level of interpolation exists (recursive)
@@ -1163,18 +1150,17 @@ HatchingGroupBase::generate_interpolated_level(int lev)
 //   HatchingHatchBase *hhb1, *hhb2;
    int num;
 
-   if (_level.num() < lev) generate_interpolated_level(lev-1);
+   if ((int)_level.size() < lev) generate_interpolated_level(lev-1);
 
-   _level.add(new HatchingLevelBase(this));
+   _level.push_back(new HatchingLevelBase(this));
 
-   num = _level[0]->num();
-   for (k=0; k<((1<<(lev-1))*(num-1)); k++) 
-      {
-         compute_hatch_indices(l1, i1, k, lev-1);
-         compute_hatch_indices(l2, i2, k+1, lev-1);
-         _level[lev]->add_hatch(
-            interpolate(lev,_level[lev],(*_level[l1])[i1],(*_level[l2])[i2]));
-      }
+   num = _level[0]->size();
+   for (k=0; k<((1<<(lev-1))*(num-1)); k++) {
+      compute_hatch_indices(l1, i1, k, lev-1);
+      compute_hatch_indices(l2, i2, k+1, lev-1);
+      _level[lev]->add_hatch(
+         interpolate(lev,_level[lev],(*_level[l1])[i1],(*_level[l2])[i2]));
+   }
 
    err_mesg(ERR_LEV_INFO, "HatchingGroupBase::generate_interpolated_level() - Created level #%d.", lev); 
 }
@@ -1221,10 +1207,9 @@ HatchingLevelBase::put_hatchs(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingLevelBase::put_hatchs()");
 
-   int i;
-   assert(num() > 0);
-   for (i=0; i<num(); i++)
-   {
+   HatchingLevelBase::size_type i;
+   assert(size() > 0);
+   for (i=0; i<size(); i++) {
       d.id();
       (*this)[i]->format(*d);
       d.end_id();
@@ -1289,13 +1274,10 @@ HatchingLevelBase::HatchingLevelBase(HatchingGroupBase *hgb) :
 /////////////////////////////////////
 HatchingLevelBase::~HatchingLevelBase()
 {
-
-
-   while (num()>0)
-   {
-      assert(first());
-      delete first();
-      remove(0);
+   while (size() > 0) {
+      assert(back());
+      delete back();
+      pop_back();
    }
 }
 
@@ -1306,16 +1288,15 @@ HatchingLevelBase::~HatchingLevelBase()
 int     
 HatchingLevelBase::draw(CVIEWptr &v)
 {
-        
-   int i, n=0;
+   HatchingLevelBase::size_type i;
+   int n=0;
 
    // Bail out if width is zero
    if (_current_width == 0.0)
       return 0;
 
-   for (i=0; i<num() ; i++)
-      n += array()[i]->draw(v);
-
+   for (i=0; i<size() ; i++)
+      n += at(i)->draw(v);
 
    return n;
 }
@@ -1337,11 +1318,10 @@ HatchingLevelBase::draw_setup()
 void    
 HatchingLevelBase::hatch_draw_setup()
 {
-   int i;
+   HatchingLevelBase::size_type i;
 
-   for (i=0; i<num() ; i++)
-      array()[i]->draw_setup();
-
+   for (i=0; i<size(); i++)
+      at(i)->draw_setup();
 }
 
 /////////////////////////////////////
@@ -1350,11 +1330,10 @@ HatchingLevelBase::hatch_draw_setup()
 void    
 HatchingLevelBase::update_prototype()
 {
-   int i;
+   HatchingLevelBase::size_type i;
 
-   for (i=0; i<num() ; i++)
-      array()[i]->update_prototype();
-        
+   for (i=0; i<size(); i++)
+      at(i)->update_prototype();
 }
 
 /////////////////////////////////////
@@ -1364,7 +1343,7 @@ void
 HatchingLevelBase::add_hatch(HatchingHatchBase *hhb)
 {
    assert(hhb);
-   add(hhb);
+   push_back(hhb);
 }
 
 /////////////////////////////////////
@@ -1523,7 +1502,7 @@ HatchingHatchBase::get_norms(TAGformat &d)
 {
    *d >> _norms;
 
-   assert((int)_pts.size() == _norms.num());
+   assert(_pts.size() == _norms.size());
 }
 
 /////////////////////////////////////
@@ -1543,7 +1522,6 @@ HatchingHatchBase::put_offsetlist(TAGformat &d) const
 void
 HatchingHatchBase::get_offsetlist(TAGformat &d)
 {
-
    //Grab the class name... should be BaseStrokeOffset
    string str;
    *d >> str;      
@@ -1559,9 +1537,8 @@ HatchingHatchBase::get_offsetlist(TAGformat &d)
    o->decode(*d);
 
    _offsets = o;
-
-
 }
+
 /**** Next four tags are only around so we gracefully die on old files ***/
 /////////////////////////////////////
 // put_pressures()
@@ -1578,7 +1555,7 @@ HatchingHatchBase::put_pressures(TAGformat &d) const
 void
 HatchingHatchBase::get_pressures(TAGformat &d)
 {
-	ARRAY<double> presses;
+	vector<double> presses;
 	*d >> presses;
    //Toss this away
 }
@@ -1598,7 +1575,7 @@ HatchingHatchBase::put_offsets(TAGformat &d) const
 void
 HatchingHatchBase::get_offsets(TAGformat &d)
 {
-	ARRAY<NDCvec> offsets;
+	vector<NDCvec> offsets;
 	*d >> offsets;
    //Toss this away
 }
@@ -1609,19 +1586,19 @@ HatchingHatchBase::HatchingHatchBase(
    HatchingLevelBase *hlb, 
    double len, 
    CWpt_list &pl,  
-   const ARRAY<Wvec> &nl,
+   const vector<Wvec> &nl,
    CBaseStrokeOffsetLISTptr &ol) :
       _level(hlb)
 {
    assert(_level);
 
-   assert((int)pl.size() == nl.num());
+   assert(pl.size() == nl.size());
 
    _pts.clear();   
    _pts.insert(_pts.end(), pl.begin(), pl.end());
 
    _norms.clear();   
-   _norms.operator+=(nl);
+   _norms.insert(_norms.end(), nl.begin(), nl.end());
 
    _offsets = ol;
 
@@ -1644,7 +1621,7 @@ HatchingHatchBase::init()
 {
    assert(_level);
 
-   assert((int)_pts.size() == _norms.num());
+   assert(_pts.size() == _norms.size());
         
    _pts.update_length();
 
@@ -1752,12 +1729,12 @@ HatchingHatchBase::stroke_real_setup()
    //apply the current obj->world xform...
 
    if (_real_pts.empty()) {
-      assert((int)_real_pts.size() == _real_norms.num());
+      assert(_real_pts.size() == _real_norms.size());
 
       for (i=0; i<_pts.size(); i++) {
          _real_pts.push_back(_pts[i]);
-         _real_norms.add(_norms[i]);
-         _real_good.add(true);
+         _real_norms.push_back(_norms[i]);
+         _real_good.push_back(true);
       }
 
       _real_pix_size = _pix_size;
@@ -2018,7 +1995,7 @@ HatchingBackboneBase::put_num(TAGformat &d) const
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::put_num()");
 
    d.id();
-   *d << _vertebrae.num();
+   *d << _vertebrae.size();
    d.end_id();
 }
 
@@ -2035,8 +2012,7 @@ HatchingBackboneBase::get_num(TAGformat &d)
    *d >> num;
 
    for (i=0;i<num;i++) 
-      _vertebrae.add(new Vertebrae);
-
+      _vertebrae.push_back(new Vertebrae);
 }
 
 /////////////////////////////////////
@@ -2047,11 +2023,11 @@ HatchingBackboneBase::put_wpts1(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::put_wpts1()");
 
-   int i;
-   ARRAY<Wpt> pts1;
+   vector<Vertebrae*>::size_type i;
+   vector<Wpt> pts1;
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      pts1.add(_vertebrae[i]->pt1);
+   for (i=0; i<_vertebrae.size(); i++)
+      pts1.push_back(_vertebrae[i]->pt1);
 
    d.id();
    *d << pts1;
@@ -2066,16 +2042,15 @@ HatchingBackboneBase::get_wpts1(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::get_wpts1()");
 
-   int i;
-   ARRAY<Wpt> pts1;
+   vector<Vertebrae*>::size_type i;
+   vector<Wpt> pts1;
 
    *d >> pts1;
 
-   assert(_vertebrae.num() == pts1.num());
+   assert(_vertebrae.size() == pts1.size());
 
-   for (i=0; i<_vertebrae.num(); i++) 
+   for (i=0; i<_vertebrae.size(); i++)
       _vertebrae[i]->pt1 = pts1[i];
-
 }
 
 /////////////////////////////////////
@@ -2086,11 +2061,11 @@ HatchingBackboneBase::put_wpts2(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::put_wpts2()");
 
-   int i;
-   ARRAY<Wpt> pts2;
+   vector<Vertebrae*>::size_type i;
+   vector<Wpt> pts2;
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      pts2.add(_vertebrae[i]->pt2);
+   for (i=0; i<_vertebrae.size(); i++)
+      pts2.push_back(_vertebrae[i]->pt2);
 
    d.id();
    *d << pts2;
@@ -2105,17 +2080,17 @@ HatchingBackboneBase::get_wpts2(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::get_wpts2()");
 
-   int i;
-   ARRAY<Wpt> pts2;
+   vector<Vertebrae*>::size_type i;
+   vector<Wpt> pts2;
 
    *d >> pts2;
 
-   assert(_vertebrae.num() == pts2.num());
+   assert(_vertebrae.size() == pts2.size());
 
-   for (i=0; i<_vertebrae.num(); i++) 
+   for (i=0; i<_vertebrae.size(); i++)
       _vertebrae[i]->pt2 = pts2[i];
-
 }
+
 /////////////////////////////////////
 // put_lengths()
 /////////////////////////////////////
@@ -2124,11 +2099,11 @@ HatchingBackboneBase::put_lengths(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::put_lengths()");
 
-   int i;
-   ARRAY<double> lens;
+   vector<Vertebrae*>::size_type i;
+   vector<double> lens;
 
-   for (i=0; i<_vertebrae.num(); i++) 
-      lens.add(_vertebrae[i]->len);
+   for (i=0; i<_vertebrae.size(); i++)
+      lens.push_back(_vertebrae[i]->len);
 
    d.id();
    *d << lens;
@@ -2143,16 +2118,15 @@ HatchingBackboneBase::get_lengths(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingBackboneBase::get_lengths()");
 
-   int i;
-   ARRAY<double> lens;
+   vector<Vertebrae*>::size_type i;
+   vector<double> lens;
 
    *d >> lens;
 
-   assert(_vertebrae.num() == lens.num());
+   assert(_vertebrae.size() == lens.size());
 
-   for (i=0; i<_vertebrae.num(); i++) 
+   for (i=0; i<_vertebrae.size(); i++)
       _vertebrae[i]->len = lens[i];
-
 }
 
 /////////////////////////////////////
@@ -2160,12 +2134,11 @@ HatchingBackboneBase::get_lengths(TAGformat &d)
 /////////////////////////////////////
 HatchingBackboneBase::~HatchingBackboneBase() 
 {
-   for(int i=0;i<_vertebrae.num();i++) 
+   for (vector<Vertebrae*>::size_type i=0; i<_vertebrae.size(); i++)
       delete _vertebrae[i];
 
    while (_geoms.num()>0)
       WORLD::destroy(_geoms.pop());
-
 }
 
 /////////////////////////////////////
@@ -2187,35 +2160,30 @@ HatchingBackboneBase::~HatchingBackboneBase()
 double
 HatchingBackboneBase::get_ratio()
 {
-   int i;
+   vector<Vertebrae*>::size_type i;
    double original_length;
 
    // XXX - Support for hatch groups with only *one* hatch??
    // So far, we can't get here, as trying to compute backbone
    // will abort...
 
-   assert(_vertebrae.num() > 0);
+   assert(_vertebrae.size() > 0);
 
-   if (_use_exist)
-   {
+   if (_use_exist) {
       original_length = 0.0;
-      for (i=0; i<_vertebrae.num(); i++)
+      for (i=0; i<_vertebrae.size(); i++)
          if (_vertebrae[i]->exist) 
             original_length += _vertebrae[i]->len;
-      if(!(original_length > 0.0))
-      {
+      if (!(original_length > 0.0)) {
          err_mesg(ERR_LEV_WARN, "HatchingBaseboneBase::get_ratio() - Entire backbone is undefined!");
          return 1.0;
       }
-   }
-   else
-   {
+   } else {
       assert(_len);
       original_length = _len;
    }
 
    return find_len() / original_length;
-
 }
 
 /////////////////////////////////////
@@ -2224,7 +2192,7 @@ HatchingBackboneBase::get_ratio()
 double
 HatchingBackboneBase::find_len()
 {
-   int i;
+   vector<Vertebrae*>::size_type i;
    double len = 0.0;
    NDCpt   n1, n2;
 
@@ -2233,38 +2201,33 @@ HatchingBackboneBase::find_len()
    while (_geoms.num()>0)
       WORLD::destroy(_geoms.pop());
 
-   if (_use_exist)
-      {
-         for (i=0;i<_vertebrae.num();i++)
-            {
-               if (_vertebrae[i]->exist)
-                  {
-                     n1 = NDCZpt( _vertebrae[i]->pt1, _patch->obj_to_ndc() );
-                     n2 = NDCZpt( _vertebrae[i]->pt2, _patch->obj_to_ndc() );
-                     len += (n2 - n1).length();
+   if (_use_exist) {
+      for (i=0; i<_vertebrae.size(); i++) {
+         if (_vertebrae[i]->exist) {
+            n1 = NDCZpt( _vertebrae[i]->pt1, _patch->obj_to_ndc() );
+            n2 = NDCZpt( _vertebrae[i]->pt2, _patch->obj_to_ndc() );
+            len += (n2 - n1).length();
 
-                     if (debug)
-                        _geoms.add(WORLD::show(
-                           _patch->xform() * _vertebrae[i]->pt1, 
-                           _patch->xform() * _vertebrae[i]->pt2, 2.5));
-                  }
-            }
+            if (debug)
+               _geoms.add(WORLD::show(
+                  _patch->xform() * _vertebrae[i]->pt1,
+                  _patch->xform() * _vertebrae[i]->pt2, 2.5));
+         }
       }
-   else
-      {
-         for (i=0;i<_vertebrae.num();i++)
-            {
-               n1 = NDCZpt( _vertebrae[i]->pt1, _patch->obj_to_ndc() );
-               n2 = NDCZpt( _vertebrae[i]->pt2, _patch->obj_to_ndc() );
-               len += (n2 - n1).length();
-               if (debug)
-                  _geoms.add(WORLD::show(
-                     _patch->xform() * _vertebrae[i]->pt1, 
-                     _patch->xform() * _vertebrae[i]->pt2 , 2.5));
-            }
+   } else {
+      for (i=0; i<_vertebrae.size(); i++) {
+         n1 = NDCZpt( _vertebrae[i]->pt1, _patch->obj_to_ndc() );
+         n2 = NDCZpt( _vertebrae[i]->pt2, _patch->obj_to_ndc() );
+         len += (n2 - n1).length();
+         if (debug)
+            _geoms.add(WORLD::show(
+               _patch->xform() * _vertebrae[i]->pt1,
+               _patch->xform() * _vertebrae[i]->pt2 , 2.5));
       }
+   }
 
    len *= VIEW::peek()->ndc2pix_scale();
 
    return len;
 }
+

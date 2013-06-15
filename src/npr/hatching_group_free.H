@@ -53,7 +53,7 @@ class HatchingGroupFree :
    /******** MEMBER VARIABLES ********/
         
    UVMapping*                       _mapping;
-   ARRAY<HatchingGroupFreeInst*>    _instances;
+   vector<HatchingGroupFreeInst*>   _instances;
    bool                             _selected;
    HatchingPositionFree*            _position;
 
@@ -69,14 +69,14 @@ class HatchingGroupFree :
    UVMapping*     find_uv_mapping(mlib::CNDCpt_list &pl);
    void           slice_mesh_with_plane(Bface *f, mlib::CWplane &wpPlane, mlib::Wpt_list &wlList);
    void           clip_to_uv_region(mlib::CNDCpt_list &pts, mlib::NDCpt_list &cpts, 
-                                          CARRAY<double>&prl, ARRAY<double>&cprl );
+                                          const vector<double>&prl, vector<double>&cprl );
    void           draw_setup();
 
  public:
 
    inline UVMapping*                      mapping()         { return _mapping; }
    inline HatchingPositionFree*           position()        { return _position; }
-   inline ARRAY<HatchingGroupFreeInst*>&  instances()       { return _instances; }
+   inline vector<HatchingGroupFreeInst*>& instances()       { return _instances; }
    inline HatchingGroupFreeInst*          base_instance()   { return _instances[0]; }
 
    /******** HATCHING GROUP VIRTUAL METHODS ********/
@@ -96,7 +96,7 @@ class HatchingGroupFree :
 
    virtual bool   query_pick(mlib::CNDCpt &pt);
 
-   virtual bool   add(mlib::CNDCpt_list &pl, const ARRAY<double>&prl,int);
+   virtual bool   add(mlib::CNDCpt_list &pl, const vector<double>&prl,int);
 
    virtual void   kill_animation();
 
@@ -211,7 +211,7 @@ class HatchingHatchFree :
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
    HatchingHatchFree(HatchingLevelBase *hlb, double len, 
-                     mlib::CUVpt_list &uvl, mlib::CWpt_list &pl, const ARRAY<mlib::Wvec> &nl,
+                     mlib::CUVpt_list &uvl, mlib::CWpt_list &pl, const vector<mlib::Wvec> &nl,
                      CBaseStrokeOffsetLISTptr &ol);
                                         
    HatchingHatchFree(HatchingLevelBase *hlb, HatchingHatchFree *hhf);
@@ -326,26 +326,25 @@ class HatchingPositionFree :
    HatchingGroupFree*         _group;
    UVMapping*                 _mapping;
 
-   mlib::UVpt                       _lower_left;
-   mlib::UVpt                       _upper_right;
+   mlib::UVpt                 _lower_left;
+   mlib::UVpt                 _upper_right;
 
-   mlib::UVpt                       _center;
-   mlib::Wvec                       _direction;
+   mlib::UVpt                 _center;
+   mlib::Wvec                 _direction;
    double                     _left_dot;
    double                     _right_dot;
 
-   mlib::Wvec                       _curr_direction;
-   ARRAY<mlib::Wvec>                _search_normals;
-   ARRAY<double>              _search_dots;
+   mlib::Wvec                  _curr_direction;
+   vector<mlib::Wvec>          _search_normals;
+   vector<double>              _search_dots;
 
    CRSpline                   _normal_spline;
         
-   ARRAY<HatchingPlacement>*  _curr_placements;
-   ARRAY<HatchingPlacement>*  _old_placements;
-
+   vector<HatchingPlacement>* _curr_placements;
+   vector<HatchingPlacement>* _old_placements;
 
    //XXXX - Keep the unsmoothed ones for now (to visualize)
-   ARRAY<mlib::Wvec>                _old_search_normals;
+   vector<mlib::Wvec>         _old_search_normals;
 
    GEOMlist                   _geoms;
  public:

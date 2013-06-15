@@ -28,96 +28,44 @@
 #include "npr/binary_image.H"
 #include "stroke/base_stroke.H"
 
+#include <vector>
+
 class Vec2d : public Vec2<Vec2d> {
 public:
    Vec2d() {}
    Vec2d(double x, double y) : Vec2<Vec2d>(x, y) {}
 };
 
-class Vec2dArray : public ARRAY<Vec2d> {
+class Vec2dArray : public vector<Vec2d> {
 public:
-   Vec2dArray(int m=0) : ARRAY<Vec2d>(m) {}
-
-   virtual ~Vec2dArray() { clear(); delete [] _array; }
-
-
-   void init(int m = 0){
-      _num = 0; _max = m; _unique = 0; _do_index = 0;
-      if(_array){ 
-	 clear();
-	 delete [] _array;
-	 _array = 0;
-      }
-
-      if(_max) _array = new Vec2d [_max];
-   }
+   Vec2dArray(int m=0) : vector<Vec2d>() { reserve(m); }
 };
 
 
-class DoubleArray : public ARRAY<double> {
+class DoubleArray : public vector<double> {
 public:
-   DoubleArray(int m=0) : ARRAY<double>(m) {}
-   DoubleArray(CARRAY<double>& l) : ARRAY<double>(l) {}
-
-   virtual ~DoubleArray() { clear(); delete [] _array; }
-
-   void init(int m = 0){
-      if(_array){ 
-	 clear();
-
-	 delete [] _array;
-	 _array = 0;
-      }
-      _num = 0; _max = m; _unique = 0; _do_index = 0;
-
-      if(_max) _array = new double [_max];
-   }
+   DoubleArray(int m=0) : vector<double>() { reserve(m); }
+   DoubleArray(const vector<double>& l) : vector<double>(l) {}
 };
 
-class DoubleMatrix : public ARRAY<DoubleArray> {
+class DoubleMatrix : public vector<DoubleArray> {
 public:
-   DoubleMatrix(int m=0, int n=0) : ARRAY<DoubleArray>(m) {
-      if(n){
-	 for(int i = 0; i < m; i++){
-	    _array[i].init(n);
-	 }
-      }
+   DoubleMatrix(int m=0, int n=0) : vector<DoubleArray>() {
+      init(m, n);
    }
 
-   virtual ~DoubleMatrix() { 
-      clear(); 
-
-      for(int i = 0; i < _max; i++){
-	 _array[i].init();
-      }
-
-      delete [] _array; 
-   }
-
-   void init(int m = 0, int n = 0){
-      if(_array){ 
-	 clear();
-
-	 for(int i = 0; i < _max; i++){
-	    _array[i].init();
-	 }
-
-	 delete [] _array;
-	 _array = 0;
-      }
-      _num = 0; _max = m; _unique = 0; _do_index = 0;
-
-      if(_max) _array = new DoubleArray [_max];
-
-      if(n){
-	 for(int i = 0; i < m; i++){
-	    _array[i].init(n);
-	 }
+   void init(int m = 0, int n = 0) {
+      clear();
+      resize(m);
+      if (m && n) {
+         for (int i = 0; i < m; i++) {
+            at(i).reserve(n);
+         }
       }
    }
 
    double operator ()(const int i, const int j) const { 
-      return _array[i][j]; 
+      return (*this)[i][j];
    }
 };
 
@@ -207,13 +155,13 @@ public:
 
    uint                         _strokes_drawn_stamp;
 
-   double                        _start_offset, _end_offset;
-   ARRAY<uint>                   _previous_start_pixels;
-   ARRAY<uint>                   _previous_start_vals;
+   double                       _start_offset, _end_offset;
+   vector<uint>                 _previous_start_pixels;
+   vector<uint>                 _previous_start_vals;
 
-   int                           _apply_snake;
-   DoubleMatrix                  _matrix, _lower_matrix, _upper_matrix;
-   Vec2dArray                    _right_term;
+   int                          _apply_snake;
+   DoubleMatrix                 _matrix, _lower_matrix, _upper_matrix;
+   Vec2dArray                   _right_term;
 
 
    //******** UTILITIES ********
@@ -221,15 +169,15 @@ public:
    void build_strokes(CVIEWptr &v);
    bool add_stroke(const uint pixel, int &bnum);
    void build_stroke_one_side(Cpoint2i &start_pix, CXYvec &dir, 
-	 ARRAY<Point2i> &stroke_array, ARRAY<float> &width_array, 
-	 ARRAY<XYvec> &dir_array);
-   void apply_snake(ARRAY<Point2i> &point_array, 
-         ARRAY<float> &width_array, ARRAY<XYvec> &dir_arra);
+	 vector<Point2i> &stroke_array, vector<float> &width_array,
+	 vector<XYvec> &dir_array);
+   void apply_snake(vector<Point2i> &point_array,
+         vector<float> &width_array, vector<XYvec> &dir_arra);
    void get_snake_matrix(const int size);
    void lu_decompose(const int matrix_size);
-   void lu_back_substitution(const int matrix_size, ARRAY<Vec2d> &sols);
-   void update_snake_positions(const int max_movement, ARRAY<Point2i> &point_array);
-   void get_right_term(ARRAY<Point2i> &point_array);
+   void lu_back_substitution(const int matrix_size, vector<Vec2d> &sols);
+   void update_snake_positions(const int max_movement, vector<Point2i> &point_array);
+   void get_right_term(vector<Point2i> &point_array);
 
    CBaseStroke& get_prototype()  const { return _prototype; }
    void set_prototype(CBaseStroke &s);

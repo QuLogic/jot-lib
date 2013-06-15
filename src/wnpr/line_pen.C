@@ -264,9 +264,8 @@ LinePen::pick_stroke(
 
    if (!tex->stroke_tex()->sil_and_crease_tex()->get_hide_crease())
    {
-      ARRAY<EdgeStrokePool*>* crease_stroke_pools = tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools();  assert(crease_stroke_pools);
-      for (i=0; i<crease_stroke_pools->num(); i++) 
-      {
+      vector<EdgeStrokePool*>* crease_stroke_pools = tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools();  assert(crease_stroke_pools);
+      for (i=0; i<(int)crease_stroke_pools->size(); i++) {
          tmp_pool    = (*crease_stroke_pools)[i];
          tmp_stroke  = tmp_pool->pick_stroke(p, tmp_dist, radius);
 
@@ -982,21 +981,21 @@ LinePen::button_edit_cycle_crease_paths()
 
    assert(_curr_tex);
 
-   ARRAY<EdgeStrokePool*>* pools = _curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools();  assert(pools);
+   vector<EdgeStrokePool*>* pools = _curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools();  assert(pools);
 
-   assert(pools->num()>0);
+   assert(pools->size()>0);
 
-   if (_curr_mode == EDIT_MODE_CREASE)
-   {
+   if (_curr_mode == EDIT_MODE_CREASE) {
       assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
       EdgeStrokePool* edge_pool = (EdgeStrokePool*)_curr_pool;
-      
-      int i = pools->get_index(edge_pool); assert(i!=BAD_IND);
-      new_pool = (*pools)[(i+1)%pools->num()];
 
-   }
-   else
-   {
+      vector<EdgeStrokePool*>::iterator it = std::find(pools->begin(), pools->end(), edge_pool);
+      assert(it != pools->end());
+      ++it;
+      if (it == pools->end()) it = pools->begin();
+      new_pool = *it;
+
+   } else {
       new_pool = (*pools)[0];
    }
 

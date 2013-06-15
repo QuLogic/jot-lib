@@ -1458,12 +1458,9 @@ LinePenUI::update_edit()
 
       _button[BUT_EDIT_CYCLE_LINE_TYPES]->enable();
       _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->enable();
-      if (curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->num()>0)
-      {
+      if (!curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->empty()) {
          _button[BUT_EDIT_CYCLE_CREASE_PATHS]->enable();
-      }
-      else
-      {
+      } else {
          _button[BUT_EDIT_CYCLE_CREASE_PATHS]->disable();
       }
       _button[BUT_EDIT_CYCLE_CREASE_STROKES]->disable();
@@ -1538,7 +1535,7 @@ LinePenUI::update_edit()
 
       _button[BUT_EDIT_CYCLE_LINE_TYPES]->enable();
       _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->enable();
-      assert(curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->num()>0);
+      assert(!curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->empty());
       _button[BUT_EDIT_CYCLE_CREASE_PATHS]->enable();
       
       if (edge_pool->num_strokes()>0)
@@ -1559,10 +1556,12 @@ LinePenUI::update_edit()
       _button[BUT_EDIT_SYNTH_EX_CLEAR]->disable();
       _button[BUT_EDIT_SYNTH_ALL_CLEAR]->disable();
 
-      ARRAY<EdgeStrokePool*>* pools = curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools(); assert(pools);
-      int i = pools->get_index(edge_pool); assert(i != BAD_IND);
+      vector<EdgeStrokePool*>* pools = curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools(); assert(pools);
+      vector<EdgeStrokePool*>::iterator it;
+      it = std::find(pools->begin(), pools->end(), edge_pool);
+      assert(it != pools->end());
 
-      sprintf(text2, "Edit: Crease %d of %d", i + 1, pools->num());
+      sprintf(text2, "Edit: Crease %ld of %zu", (it - pools->begin()) + 1, pools->size());
       text1 = string(text2);
 
       if (curr_stroke)
@@ -1636,7 +1635,7 @@ LinePenUI::update_edit()
 
       _button[BUT_EDIT_CYCLE_LINE_TYPES]->enable();
       _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->enable();
-      if (curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->num()>0)
+      if (!curr_tex->stroke_tex()->sil_and_crease_tex()->get_crease_stroke_pools()->empty())
       {
          _button[BUT_EDIT_CYCLE_CREASE_PATHS]->enable();
       }

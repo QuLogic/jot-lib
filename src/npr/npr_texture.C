@@ -87,8 +87,7 @@ NPRTexture::NPRTexture(Patch *patch) :
    assert(_bkg_tex);
    assert(_ctrl_frm);
 
-   for (int i=0; i<ZXFLAG_NUM; i++)
-      _see_thru_flags += false;
+   _see_thru_flags.resize(ZXFLAG_NUM, false);
 
    _see_thru_flags[ZXFLAG_SIL_VISIBLE] = true;
    _see_thru_flags[ZXFLAG_CREASE_VISIBLE] = true;
@@ -1406,7 +1405,7 @@ NPRTexture::put_see_thru (TAGformat &d) const
    assert(!(_in_data_file && _data_file == ""));
 
    d.id();
-   *d << ((_see_thru)?(1):(0));
+   *d << (_see_thru ? 1 : 0);
    d.end_id();
 
 }
@@ -1438,10 +1437,10 @@ NPRTexture::put_see_thru_flags (TAGformat &d) const
    assert(!(_in_data_file && _data_file == ""));
 
    d.id();
-   assert(_see_thru_flags.num() == ZXFLAG_NUM);
+   assert(_see_thru_flags.size() == ZXFLAG_NUM);
    *d << ZXFLAG_NUM;
    for (int i=0; i<ZXFLAG_NUM; i++) {
-      *d << ((_see_thru_flags[i])?(1):(0));
+      *d << (_see_thru_flags[i] ? 1 : 0);
    }
    d.end_id();
 
@@ -1608,7 +1607,7 @@ NPRTexture::get_view_paper_use (TAGformat &d)
 
    *d >> p;
 
-   v->set_use_paper((p==1)?true:false);
+   v->set_use_paper(p==1);
 }
 
 /////////////////////////////////////
@@ -1622,7 +1621,7 @@ NPRTexture::put_view_paper_use (TAGformat &d) const
       assert(v != NULL);
 
       d.id();
-      *d << ((v->get_use_paper())?(1):(0));
+      *d << (v->get_use_paper() ? 1 : 0);
       d.end_id();
    }
 }
@@ -1695,7 +1694,7 @@ NPRTexture::put_view_paper_active (TAGformat &d) const
 {
    if (put_view_stuff) {
       d.id();
-      *d << ((PaperEffect::is_active())?(1):(0));
+      *d << (PaperEffect::is_active() ? 1 : 0);
       d.end_id();
    }
 }
@@ -1760,15 +1759,14 @@ NPRTexture::get_view_light_coords (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<Wvec> c;
+   vector<Wvec> c;
 
    *d >> c;
 
-   assert(c.num()==4);
+   assert(c.size()==4);
 
    for (int i=0; i<4; i++)
       v->light_set_coordinates_v(i,c[i]);
-
 }
 
 /////////////////////////////////////
@@ -1781,10 +1779,10 @@ NPRTexture::put_view_light_coords (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<Wvec> c;
+      vector<Wvec> c;
 
       for (int i=0; i<4; i++)
-         c.add(v->light_get_coordinates_v(i));
+         c.push_back(v->light_get_coordinates_v(i));
 
       d.id();
       *d << c;
@@ -1801,15 +1799,14 @@ NPRTexture::get_view_light_positional (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<int> p;
+   vector<int> p;
 
    *d >> p;
 
-   assert(p.num()==4);
+   assert(p.size()==4);
 
    for (int i=0; i<4; i++)
-      v->light_set_positional(i,(p[i]==1)?(true):(false));
-
+      v->light_set_positional(i, p[i]==1);
 }
 
 /////////////////////////////////////
@@ -1822,10 +1819,10 @@ NPRTexture::put_view_light_positional (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<int> p;
+      vector<int> p;
 
       for (int i=0; i<4; i++)
-         p.add((v->light_get_positional(i))?(1):(0));
+         p.push_back(v->light_get_positional(i) ? 1 : 0);
 
       d.id();
       *d << p;
@@ -1842,15 +1839,14 @@ NPRTexture::get_view_light_cam_space (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<int> c;
+   vector<int> c;
 
    *d >> c;
 
-   assert(c.num()==4);
+   assert(c.size()==4);
 
    for (int i=0; i<4; i++)
-      v->light_set_in_cam_space(i,((c[i]==1)?(true):(false)));
-
+      v->light_set_in_cam_space(i, c[i]==1);
 }
 
 /////////////////////////////////////
@@ -1863,10 +1859,10 @@ NPRTexture::put_view_light_cam_space (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<int> c;
+      vector<int> c;
 
       for (int i=0; i<4; i++)
-         c.add((v->light_get_in_cam_space(i))?(1):(0));
+         c.push_back(v->light_get_in_cam_space(i) ? 1 : 0);
 
       d.id();
       *d << c;
@@ -1883,15 +1879,14 @@ NPRTexture::get_view_light_color_diff (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<COLOR> c;
+   vector<COLOR> c;
 
    *d >> c;
 
-   assert(c.num()==4);
+   assert(c.size()==4);
 
    for (int i=0; i<4; i++)
       v->light_set_diffuse(i,c[i]);
-
 }
 
 /////////////////////////////////////
@@ -1904,10 +1899,10 @@ NPRTexture::put_view_light_color_diff (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<COLOR> c;
+      vector<COLOR> c;
 
       for (int i=0; i<4; i++)
-         c.add(v->light_get_diffuse(i));
+         c.push_back(v->light_get_diffuse(i));
 
       d.id();
       *d << c;
@@ -1924,15 +1919,14 @@ NPRTexture::get_view_light_color_amb (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<COLOR> a;
+   vector<COLOR> a;
 
    *d >> a;
 
-   assert(a.num()==4);
+   assert(a.size()==4);
 
    for (int i=0; i<4; i++)
       v->light_set_ambient(i,a[i]);
-
 }
 
 /////////////////////////////////////
@@ -1945,10 +1939,10 @@ NPRTexture::put_view_light_color_amb (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<COLOR> a;
+      vector<COLOR> a;
 
       for (int i=0; i<4; i++)
-         a.add(v->light_get_ambient(i));
+         a.push_back(v->light_get_ambient(i));
 
       d.id();
       *d << a;
@@ -1999,15 +1993,14 @@ NPRTexture::get_view_light_enable (TAGformat &d)
    VIEWptr v = VIEW::peek();
    assert(v != NULL);
 
-   ARRAY<int> e;
+   vector<int> e;
 
    *d >> e;
 
-   assert(e.num()==4);
+   assert(e.size()==4);
 
    for (int i=0; i<4; i++)
-      v->light_set_enable(i,(e[i]==1)?(true):(false));
-
+      v->light_set_enable(i, e[i]==1);
 }
 
 /////////////////////////////////////
@@ -2020,10 +2013,10 @@ NPRTexture::put_view_light_enable (TAGformat &d) const
       VIEWptr v = VIEW::peek();
       assert(v != NULL);
 
-      ARRAY<int> e;
+      vector<int> e;
 
       for (int i=0; i<4; i++)
-         e.add((v->light_get_enable(i))?(1):(0));
+         e.push_back(v->light_get_enable(i) ? 1 : 0);
 
       d.id();
       *d << e;
