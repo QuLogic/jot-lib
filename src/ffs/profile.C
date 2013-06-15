@@ -172,7 +172,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    //    of a primitive
 
    const  PIXEL_list& pts = g->pts();
-   ARRAY<PIXEL_list> pt_lists;
+   vector<PIXEL_list> pt_lists;
    PIXEL_list temp_list;
    bool recording = false;
    Primitive* p = 0;
@@ -183,14 +183,14 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
       Primitive* temp_p = Primitive::find_controller(vis_ref->intersect(pts[i]));
       if (temp_p == p && recording) {
          temp_list.push_back(pts[i]);
-         if (i == pts.size()-1) pt_lists += temp_list;
+         if (i == pts.size()-1) pt_lists.push_back(temp_list);
       } else if (temp_p && temp_p != p && !recording) { // start
          recording = true;
          temp_list.clear();
          temp_list.push_back(pts[i]);
       } else if (temp_p != p && recording) { // end
          recording = false; 
-         pt_lists += temp_list;
+         pt_lists.push_back(temp_list);
          i--;
       }
       p = temp_p;
@@ -206,11 +206,12 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
       return false;
    }
 
-   for (int i = 0; i < pt_lists.num(); i++) 
+   for (vector<PIXEL_list>::size_type i = 0; i < pt_lists.size(); i++) {
       if (!do_xsec_match(pt_lists[i])) {
          err_adv(debug, "   gesture not aligned with cross section");
          return false;
       }
+   }
    err_adv(debug, "   gesture aligns with cross section");
    err_adv(debug, "   mesh level %d", mesh->subdiv_level());
 
@@ -554,7 +555,7 @@ PROFILE::n_next_quads(Bedge* edge, int n, bool dir, bool add_bound)
       Bedge* e = lookup_edge(vlist1.last(), vlist2.last());
       if (e && add_bound) {
          _region_boundary.add(e->v1(), e);
-         _boundary_side += dir;
+         _boundary_side.push_back(dir);
       }
    }
 
@@ -897,12 +898,12 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
 inline void
 get_parents(
    CBvert_list&         children,
-   CARRAY<double>&      child_offsets,
+   const vector<double>&child_offsets,
    Bvert_list&          parents,        // return val
    vector<double>&      parent_offsets  // return val
    )
 {
-   assert(children.num() == child_offsets.num());
+   assert(children.num() == (int)child_offsets.size());
    parents.clear();
    parent_offsets.clear();
    if (!LMESH::isa(children.mesh()))
@@ -917,9 +918,9 @@ get_parents(
 }
 
 bool
-PROFILE::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
+PROFILE::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets)
 {
-   assert(sil_verts.num() == sil_offsets.num());
+   assert(sil_verts.num() == (int)sil_offsets.size());
    if (sil_verts.empty())
       return false;
 
@@ -927,7 +928,7 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
    int n = (1 << p->rel_cur_level()) + _n;
 
    map<Bvert*, double> os_map;
-   map<Bvert*, double>::iterator it, end = os_map.end();
+   map<Bvert*, double>::iterator it;
    for (int i = 0; i < sil_verts.num(); i++) {
       os_map[sil_verts[i]] = sil_offsets[i];
       Bvert_list v_list1 = n_next_verts(sil_verts[i], n+_a, true);
@@ -947,10 +948,10 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
    }
 
    Bvert_list region_verts;
-   ARRAY<double> offsets;
+   vector<double> offsets;
    for (it = os_map.begin(); it != os_map.end(); it++)  {
       region_verts += it->first;
-      offsets += it->second;
+      offsets.push_back(it->second);
    }
 
    Bvert_list parent_verts;
@@ -993,13 +994,13 @@ PROFILE::compute_offsets(CPIXEL_list& pts, CEdgeStrip& sils)
    int k = 0;
    sils.get_chain(k, chain);
    int count = 0;
-   ARRAY<double> offsets;
+   vector<double> offsets;
    Wpt_list new_locs = chain.pts();
    for (int i=0; i<chain.num(); i++) {
-      offsets += compute_offset(chain[i], pts, yardstick);
-      if (offsets.last()==0 && offsets.num()!=1 && offsets.num()!=chain.num())
+      offsets.push_back(compute_offset(chain[i], pts, yardstick));
+      if (offsets.back()==0 && offsets.size()!=1 && (int)offsets.size()!=chain.num())
          return false;
-      if (offsets.last() > 0) {
+      if (offsets.back() > 0) {
          count++;
       }
    }

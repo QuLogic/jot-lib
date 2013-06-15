@@ -80,10 +80,10 @@ ROOF::clean_on_exit()
 }
 
 // get connected sub regions
-inline ARRAY<Bface_list> 
+inline vector<Bface_list>
 get_regions(CBface_list& cregion)
 {
-   ARRAY<Bface_list> ret;
+   vector<Bface_list> ret;
    Bface_list region = cregion;
 
    while(!region.empty()) {
@@ -91,11 +91,11 @@ get_regions(CBface_list& cregion)
       region.set_flags(1);
       Bface_list comp(region.num());
       comp.grow_connected(region.first());
-      ret += comp;
+      ret.push_back(comp);
       region -= comp;
    }
 
-   if (debug) cerr << "num of regions:" << ret.num() << endl;
+   if (debug) cerr << "num of regions:" << ret.size() << endl;
 
    return ret;
 }
@@ -240,19 +240,20 @@ ROOF::init(CGESTUREptr& g)
       return false;
 
    // region has to be rectangular and consisted of quads
-   ARRAY<Bface_list> regions = get_regions(faces);
-   ARRAY<Bface_list> rect_regions;
-   for (int i = 0; i < regions.num(); i++) {
+   vector<Bface_list> regions = get_regions(faces);
+   vector<Bface_list> rect_regions;
+   for (vector<Bface_list>::size_type i = 0; i < regions.size(); i++) {
       if (is_rect(regions[i]))
-         rect_regions += regions[i];
+         rect_regions.push_back(regions[i]);
    }
    if (rect_regions.empty())
       return false;
 
    // dslash has to start at the boundary of a rect area
    EdgeStrip bound_strip;
-   int seg_index = 0, j = 0;
-   for (j = 0; j < rect_regions.num(); j++) {
+   int seg_index = 0;
+   vector<Bface_list>::size_type j = 0;
+   for (j = 0; j < rect_regions.size(); j++) {
       bound_strip = rect_regions[j].get_boundary();
       PIXEL_list bound_wpts = bound_strip.verts().wpts();
       bound_wpts.push_back(bound_wpts.front());
@@ -262,7 +263,7 @@ ROOF::init(CGESTUREptr& g)
       if (neardist < SEARCH_RAD) 
          break;
    }
-   if (j == rect_regions.num())
+   if (j == rect_regions.size())
       return false;
 
    // setup protected values

@@ -65,7 +65,7 @@ CRV_SKETCH::cache_curve(Bcurve* bcurve)
    _shadow_pts.update_length();
 
    for (Wpt_list::size_type i = 0; i < _shadow_pts.size(); i++) {
-      _shadow_normals += normal_at_shadow(i);
+      _shadow_normals.push_back(normal_at_shadow(i));
    }
 }
 
@@ -181,7 +181,7 @@ CRV_SKETCH::draw(CVIEWptr& v)
       if (debug) {
          cerr << "debug" << endl;
          this->update();
-         ARRAY<PIXEL_list> pl;
+         vector<PIXEL_list> pl;
          // this will only work when there are drawn pixels
          match_spans(pl,
                      _drawn_pixels,
@@ -207,7 +207,7 @@ CRV_SKETCH::draw(CVIEWptr& v)
          GL_VIEW::init_line_smooth(GLfloat(v->line_scale()*2));
       
          // draw the line strip
-         for (int i = 0; i < pl.num(); i++) {
+         for (vector<PIXEL_list>::size_type i = 0; i < pl.size(); i++) {
             PIXEL_list pts = pl[i];
             glBegin(GL_LINE_STRIP);
             for (PIXEL_list::size_type k=0; k< pts.size(); k++) {
@@ -985,7 +985,7 @@ CRV_SKETCH::update(void)
       Wpt_list cusp_pts;  // XXX -- redundant with _shadow_cusp_list
    
       // first one is always a cusp
-      _shadow_cusp_list += 0;
+      _shadow_cusp_list.push_back(0);
       cusp_pts.push_back(shadow_pts[0]);
 
       for (Wpt_list::size_type i = 1 ;i<shadow_pts.size() - 1;i++) {
@@ -995,7 +995,7 @@ CRV_SKETCH::update(void)
                                  //Wvec(0,1,0)) // XXX -- replace with line below
              normal_at_shadow(i))
             ) {
-            _shadow_cusp_list+=i;
+            _shadow_cusp_list.push_back(i);
             cusp_pts.push_back(shadow_pts[i]);
          }
       }
@@ -1006,7 +1006,7 @@ CRV_SKETCH::update(void)
 
 
       // last one is always a cusp
-      _shadow_cusp_list += shadow_pts.size() - 1;
+      _shadow_cusp_list.push_back(shadow_pts.size() - 1);
       cusp_pts.push_back(shadow_pts[shadow_pts.size() - 1]);
 
       if (debug) {
@@ -1088,7 +1088,7 @@ CRV_SKETCH::reshape_shadow(const PIXEL_list &new_curve)
    //m->set_pts(_shadow_pts);
    _shadow_normals.clear();
    for (Wpt_list::size_type i = 0; i < _shadow_pts.size(); i++)
-      _shadow_normals += _curve->shadow_plane().normal();
+      _shadow_normals.push_back(_curve->shadow_plane().normal());
 
    //or can be represented in one line as  //   WORLD::add_command(new (WPT_LIST_RESHAPE_CMD(m,pts)));
    // m->set_pts(pts);
@@ -1104,10 +1104,10 @@ CRV_SKETCH::reshape_shadow(const PIXEL_list &new_curve)
 /*bool 
 CRV_SKETCH::do_match(PIXEL_list& drawnlist,
                      Wpt_list& result_list,
-                     CARRAY<int>& shadow_cusps,
+                     const vector<int>& shadow_cusps,
                      CWpt_list& shadow_pts,
                      CPIXEL_list& shadow_pixels,
-                     CARRAY<Wvec>& shadow_normals)
+                     const vector<Wvec>& shadow_normals)
 {
    // Finding orientation of drawing with respect to shadow
    PIXELline first_norm(
@@ -1173,7 +1173,7 @@ CRV_SKETCH::do_match(PIXEL_list& drawnlist,
    // "fits" the shadow_pixels, and that each cusp point of the shadow
    // has a directly corresponding cusp point in the upper curve
 
-   ARRAY<PIXEL_list> spans;
+   vector<PIXEL_list> spans;
 
    if (!CRV_SKETCH::match_spans(spans,
                                 drawnlist,
@@ -1208,10 +1208,10 @@ bool
 CRV_SKETCH::re_match(PIXEL_list& drawnlist,
                      CPIXEL_list& upperlist,
                      Wpt_list& result_list,
-                     CARRAY<int>& shadow_cusps,
+                     const vector<int>& shadow_cusps,
                      CWpt_list& shadow_pts,
                      CPIXEL_list& shadow_pixels,
-                     CARRAY<Wvec>& shadow_normals)
+                     const vector<Wvec>& shadow_normals)
 {
 
    static bool debug = Config::get_var_bool("DEBUG_CRV_SKETCH_OVERSKETCH",false);
@@ -1337,8 +1337,7 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
       }
    }
 
-   ARRAY<PIXEL_list> spans;
-
+   vector<PIXEL_list> spans;
 
    if(!CRV_SKETCH::match_spans(spans,
                                composite,
@@ -1392,12 +1391,12 @@ CRV_SKETCH::is_cusp(CWpt& a, CWpt& p, CWpt& b, CWvec& n)
 //! Return false if matching fails.
 
 bool  
-CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
+CRV_SKETCH::match_spans(vector<PIXEL_list>& spans,
                         CPIXEL_list& drawnpixels,
-                        CARRAY<int>& shadow_cusps,
+                        const vector<int>& shadow_cusps,
                         CWpt_list& shadow_pts,
                         CPIXEL_list& shadow_pixels,
-                        CARRAY<Wvec>& shadow_normals)
+                        const vector<Wvec>& shadow_normals)
 {
 
    static bool debug = Config::get_var_bool("DEBUG_MATCH_SPANS",false);
@@ -1413,9 +1412,9 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    PIXEL_list::size_type i;
 
    // array of indeces that represent cusps in the drawn curve
-   ARRAY<int> drawn_cusp_list;
+   vector<size_t> drawn_cusp_list;
    
-   int cur_shadow_cusp = 0;
+   size_t cur_shadow_cusp = 0;
    
    // the signed distance of the second to lastly visited drawn pixel
    // from the cusp we are approaching
@@ -1425,10 +1424,9 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    // cusp we are approaching
    double last_dist = 1000000000.0;
    
-   // parallel arrays storing indexes and values of minima found
+   // map storing indexes and values of minima found
    // while approaching the next cusp
-   ARRAY<int> minima_ind;
-   ARRAY<double> minima_val;
+   map<int,double> minima;
    
    // whether we have entered the zone.. so we know when we leave the zone
    bool in_the_zone = false;
@@ -1442,7 +1440,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    if (debug) {
       cerr << " -- In CRV_SKETCH::match_spans() " << endl;
-      cerr << "    The shadow curve has " << shadow_cusps.num() << " cusps" << endl;
+      cerr << "    The shadow curve has " << shadow_cusps.size() << " cusps" << endl;
       cerr << "    The drawn pixels list has " << drawn.size() << " pixels " << endl;
    }
 
@@ -1462,7 +1460,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
          // if we are looking for the first cusp, we just take the
          // first drawn point
          assert(i == 0);
-         drawn_cusp_list += i;
+         drawn_cusp_list.push_back(i);
          cur_shadow_cusp++;
          
          // should check whether beginning of curve is close
@@ -1473,7 +1471,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
          VEXEL line_to_i = drawn[i] - shadow_pixels[shadow_cusps[cur_shadow_cusp]];
          ortho = line_to_i.orthogonalized(scusp).normalized();
          //ortho = scusp.orthogonalized(line_to_i).normalized();
-      } else if (cur_shadow_cusp >= shadow_cusps.num() - 1) {
+      } else if (cur_shadow_cusp >= shadow_cusps.size() - 1) {
          // we are moving towards the last cusp. 
 
          // for now we just wait til the last point in the drawn list,
@@ -1497,7 +1495,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
                return false;
             } else {
                if (debug) cerr << "adding last pixel as last cusp" << endl;
-               drawn_cusp_list += i;
+               drawn_cusp_list.push_back(i);
             }
          } else {
             if (debug) cerr << "looking for last cusp, waiting for last drawn pixel" << endl;
@@ -1538,9 +1536,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
                   // been a minimum, and thus a potential cusp
                   
                   // add the previous one to the list of possibilities
-                  minima_ind += i - 1;
-                  // also add the distance
-                  minima_val += last_dist;
+                  minima[i - 1] = last_dist;
 
                   last_last_dist = last_dist;
                   last_dist = dist;
@@ -1556,12 +1552,11 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
                // we just left the zone
                if (last_dist < last_last_dist) {
-                  minima_ind += i-1;
-                  minima_val += last_dist;
+                  minima[i-1] = last_dist;
                }
                
                // check to see if there is anything in the minima_ind array
-               if (minima_ind.num() == 0) {
+               if (minima.empty()) {
                   // there were no minima, we fail
                   if (debug) {
                      cerr << "Could not match for cusp " << cur_shadow_cusp << endl;
@@ -1569,22 +1564,21 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
                   return false;
                }
 
-               int j;
+               map<int,double>::iterator j;
                int best = -1;
                double minimum = 100000000000.0;
                // search for the minimum minima
-               for (j = 0; j < minima_ind.num(); j++) {
-                  if (minima_val[minima_ind[j]] < minimum) {
-                     best = minima_ind[j];
-                     minimum = minima_val[minima_ind[j]];
+               for (j = minima.begin(); j != minima.end(); ++j) {
+                  if (j->second < minimum) {
+                     best = j->first;
+                     minimum = j->second;
                   }
                }
-               minima_ind.clear();
-               minima_val.clear();
+               minima.clear();
 
                assert (best != -1);
                // now 'best' is the index we want to add
-               drawn_cusp_list += best;
+               drawn_cusp_list.push_back(best);
 
                if (debug)
                   cerr << "found cusp " << best << " distance = " << minimum << endl;
@@ -1616,7 +1610,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    if (debug) {
       cerr << "Found Cusps at " << endl;
-      for (i = 0; (int)i < drawn_cusp_list.num(); i++) {
+      for (i = 0; i < drawn_cusp_list.size(); i++) {
          cerr << drawn_cusp_list[i] << " ";
       }
       cerr << endl;
@@ -1625,10 +1619,10 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
    // at this point we should have all the cusps for the
    // drawn list in drawn_cusps_ind
 
-   if(shadow_cusps.num() != drawn_cusp_list.num()) {
+   if (shadow_cusps.size() != drawn_cusp_list.size()) {
       if (debug) {
-         cerr << "cusp counts don't match: shadow = " << shadow_cusps.num()
-              << " drawn = " << drawn_cusp_list.num() << endl;
+         cerr << "cusp counts don't match: shadow = " << shadow_cusps.size()
+              << " drawn = " << drawn_cusp_list.size() << endl;
       }
       return false;
    }
@@ -1640,25 +1634,25 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    spans.clear();
 
-   int cur_span;
+   size_t cur_span;
 
    if (debug) cerr << " building spans array " << endl;
 
    // build up the array of spans : NOTE : each span pixel list has a
    // copy of its endpoints, so interior cusp points are duplicated in
    // adjacent spans
-   for (cur_span = 0; cur_span < drawn_cusp_list.num() - 1; cur_span++) {
+   for (cur_span = 0; cur_span < drawn_cusp_list.size() - 1; cur_span++) {
       PIXEL_list pl;
       if (debug) cerr << " Span #" << cur_span << endl;
-      for (i = drawn_cusp_list[cur_span]; (int)i <= drawn_cusp_list[cur_span + 1]; i++) {
+      for (i = drawn_cusp_list[cur_span]; i <= drawn_cusp_list[cur_span + 1]; i++) {
          pl.push_back(drawn[i]);
          if (debug) cerr << " " << i << " added pixel" << drawn[i] << endl;
       }
       pl.update_length();
-      spans += pl;
+      spans.push_back(pl);
    }
 
-   for (cur_span = 0; cur_span < drawn_cusp_list.num() - 1; cur_span++) {
+   for (cur_span = 0; cur_span < drawn_cusp_list.size() - 1; cur_span++) {
       // copy the pixel list out
       PIXEL_list pl = spans[cur_span];
       // figure out best endpoints
@@ -1682,7 +1676,7 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 
    if (debug) {
       cerr << "Corrected SPANS" << endl;
-      for (cur_span = 0; cur_span < spans.num(); cur_span++) {
+      for (cur_span = 0; cur_span < spans.size(); cur_span++) {
          PIXEL_list pl = spans[cur_span];
          cerr << "Span #" << cur_span << endl;
          for (i = 0; i < pl.size(); i++) {
@@ -1698,15 +1692,14 @@ CRV_SKETCH::match_spans(ARRAY<PIXEL_list>& spans,
 //! With the spans correctly matched, build the list of points in
 //! world.
 bool
-CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans, 
+CRV_SKETCH::build_curve(const vector<PIXEL_list>& spans,
                         Wpt_list& ret,
-                        CARRAY<int>& shadow_cusps,
+                        const vector<int>& shadow_cusps,
                         CWpt_list& shadow_pts,
                         CPIXEL_list& shadow_pixels,
-                        CARRAY<Wvec>& shadow_normals)
+                        const vector<Wvec>& shadow_normals)
 {
-
-   assert(spans.num() == (shadow_cusps.num() - 1));
+   assert(spans.size() == (shadow_cusps.size() - 1));
 
    static bool debug = Config::get_var_bool("DEBUG_BUILD_CURVE",false);
 
@@ -1715,8 +1708,8 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
    if (debug) {
       cerr << "Build_curve() : correlating points" << endl;
       cerr << "Shadow has cusps at ";
-      int k;
-      for ( k = 0; k < shadow_cusps.num(); k++) {
+      vector<int>::size_type k;
+      for (k = 0; k < shadow_cusps.size(); k++) {
          cerr << shadow_cusps[k] << " ";
       }
       cerr << endl;
@@ -1730,7 +1723,7 @@ CRV_SKETCH::build_curve(CARRAY<PIXEL_list>& spans,
          cur_span++;
       }
       
-      PIXEL_list& plist = spans[cur_span];
+      CPIXEL_list& plist = spans[cur_span];
       PIXELline pline(shadow_pixels[i], VEXEL(shadow_pts[i], shadow_normals[i]));
       
       PIXEL_list::size_type j;

@@ -228,11 +228,11 @@ class SWEEP_DISK : public SWEEP_BASE {
    virtual int draw(CVIEWptr& v);
 
    //******** FOR RETURNING TO THIS MODE ****
-   static ARRAY<Panel*> panels;
-   static ARRAY<Bpoint_list> bpoints;
-   static ARRAY<Bcurve_list> bcurves;
-   static ARRAY<Bsurface_list> bsurfaces;
-   static ARRAY<Wpt_list> profiles;
+   static vector<Panel*> panels;
+   static vector<Bpoint_list> bpoints;
+   static vector<Bcurve_list> bcurves;
+   static vector<Bsurface_list> bsurfaces;
+   static vector<Wpt_list> profiles;
 
  protected:
 

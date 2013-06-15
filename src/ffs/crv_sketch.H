@@ -34,6 +34,8 @@
 #include "tess/bcurve.H"
 #include "gest/draw_widget.H"
 
+#include <vector>
+
 /*****************************************************************
  * CRV_SKETCH:
  *****************************************************************/
@@ -97,7 +99,7 @@ class CRV_SKETCH : public DrawWidget {
    virtual PIXEL_list shadow_pix() const { return _shadow_pixels; }
    virtual Bcurve* curve() const { return _curve; }
    virtual Wpt_listMap* shadow_map() const { return _shadow_map; }
-   virtual ARRAY<Wvec> shadow_norms() const { return _shadow_normals; }
+   virtual vector<Wvec> shadow_norms() const { return _shadow_normals; }
 
    //******** MODE NAME ********
 
@@ -126,10 +128,10 @@ class CRV_SKETCH : public DrawWidget {
 
    /*static bool do_match(PIXEL_list& drawnlist,
                         Wpt_list& result_list,
-                        CARRAY<int>& shadow_cusps,
+                        const vector<int>& shadow_cusps,
                         CWpt_list& shadow_pts,
                         CPIXEL_list& shadow_pixels,
-                        CARRAY<Wvec>& shadow_normals);
+                        const vector<Wvec>& shadow_normals);
    */
 
    //! similar to do_match, except that drawnlist is spliced into
@@ -137,24 +139,24 @@ class CRV_SKETCH : public DrawWidget {
    static bool re_match(PIXEL_list& drawnlist,
                         CPIXEL_list& upperlist, // pixel list for existing upper curve
                         Wpt_list& result_list,
-                        CARRAY<int>& shadow_cusps,
+                        const vector<int>& shadow_cusps,
                         CWpt_list& shadow_pts,
                         CPIXEL_list& shadow_pixels,
-                        CARRAY<Wvec>& shadow_normals);
+                        const vector<Wvec>& shadow_normals);
 
-   static bool match_spans(ARRAY<PIXEL_list>& spans,
+   static bool match_spans(vector<PIXEL_list>& spans,
                            CPIXEL_list& drawnpixels,
-                           CARRAY<int>& shadow_cusps,
+                           const vector<int>& shadow_cusps,
                            CWpt_list& shadow_pts,
                            CPIXEL_list& shadow_pixels,
-                           CARRAY<Wvec>& shadow_normals);
+                           const vector<Wvec>& shadow_normals);
 
-   static bool build_curve(CARRAY<PIXEL_list>& spans, 
+   static bool build_curve(const vector<PIXEL_list>& spans,
                            Wpt_list& ret,
-                           CARRAY<int>& shadow_cusps,
+                           const vector<int>& shadow_cusps,
                            CWpt_list& shadow_pts,
                            CPIXEL_list& shadow_pixels,
-                           CARRAY<Wvec>& shadow_normals);
+                           const vector<Wvec>& shadow_normals);
 
    static bool is_cusp(CWpt& a, CWpt& p, CWpt& b, CWvec& n);
 
@@ -164,7 +166,7 @@ class CRV_SKETCH : public DrawWidget {
 
    static PIXELline shadow_pix_line(int i, 
                                     CWpt_list& shadow_pts,
-                                    CARRAY<Wvec>& shadow_normals) {
+                                    const vector<Wvec>& shadow_normals) {
       return CRV_SKETCH::normal_to_screen_line(shadow_normals[i], shadow_pts[i]);
    }
 
@@ -194,8 +196,8 @@ class CRV_SKETCH : public DrawWidget {
    Wpt_listMap* _shadow_map;
 
    //! normals at each pt of _shadow_pts;
-   ARRAY<Wvec>  _shadow_normals;
-   ARRAY<int>   _shadow_cusp_list;  // indices of cusps in _shadow_pts
+   vector<Wvec> _shadow_normals;
+   vector<int>  _shadow_cusp_list;  // indices of cusps in _shadow_pts
    
    static CRV_SKETCHptr      _instance;
 

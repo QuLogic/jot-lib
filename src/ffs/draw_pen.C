@@ -425,25 +425,25 @@ subdiv_mapper(VertMapper* m, CEdgeStrip& strip)
    return pmap.a_to_b(strip);
 }
 
-inline ARRAY<Bface_list> 
+inline vector<Bface_list>
 get_regions(CBface_list& cregion)
 {
    bool debug = false;
 
-   ARRAY<Bface_list> ret;
+   vector<Bface_list> ret;
    Bface_list region = cregion;
 
-   while(!region.empty()) {
+   while (!region.empty()) {
       region.get_verts().clear_flag02();
       region.set_flags(1);
       Bface_list comp(region.num());
       comp.grow_connected(region.first(), 
                           !(BcurveFilter() || UncrossableEdgeFilter()));
-      ret += comp;
+      ret.push_back(comp);
       region -= comp;
    }
 
-   if (debug) cerr << "num of regions:" << ret.num() << endl;
+   if (debug) cerr << "num of regions:" << ret.size() << endl;
 
    return ret;
 }
@@ -472,12 +472,12 @@ shift(Bvert_list& b_verts)
    return shift_loc;
 }
 
-inline ARRAY<Bvert_list>
+inline vector<Bvert_list>
 get_c_verts(Bvert_list& b_verts)
 {
    bool debug = false;
 
-   ARRAY<Bvert_list> ret;
+   vector<Bvert_list> ret;
    int shift_loc = shift(b_verts);
    Bvert_list curve_verts;
    bool recording = false;
@@ -489,7 +489,7 @@ get_c_verts(Bvert_list& b_verts)
          if (recording) {
             curve_verts += b_verts[j];
             recording = false;
-            ret += curve_verts;
+            ret.push_back(curve_verts);
          }
       } else {
          if (!recording && shift_loc != b_verts.num()) {
@@ -502,10 +502,10 @@ get_c_verts(Bvert_list& b_verts)
    }
 
    if (shift_loc == b_verts.num()) {
-      ret += curve_verts;
+      ret.push_back(curve_verts);
    }
 
-   if (debug) cerr << "curve no: " << ret.num() << endl;
+   if (debug) cerr << "curve no: " << ret.size() << endl;
 
    return ret;
 }
@@ -750,10 +750,11 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
 
       // create curve on the other side
       ARRAY<Bvert_list> templists;
+      vector<Bvert_list> templists2;
       p_region.get_boundary().get_chains(templists);
-      templists = get_c_verts(templists[0]);
-      for (int i = 0; i < templists.num(); i++) {
-         Bcurve* b_curve = new Bcurve(templists[i], c_p_skin,
+      templists2 = get_c_verts(templists[0]);
+      for (vector<Bvert_list>::size_type i = 0; i < templists2.size(); i++) {
+         Bcurve* b_curve = new Bcurve(templists2[i], c_p_skin,
                                     (LMESH::upcast(region.mesh()))->subdiv_level());
          cmd->add(new SHOW_BBASE_CMD(b_curve));
       }
@@ -826,17 +827,19 @@ try_punch(CBface_list& region, bool debug)
    } 
 
    MULTI_CMDptr cmd = new MULTI_CMD; 
-   ARRAY<Bface_list> regions = get_regions(check_inf_region(region));
-   if (debug) cerr << "   num of regions: " << regions.num() << endl; 
+   vector<Bface_list> regions = get_regions(check_inf_region(region));
+   if (debug) cerr << "   num of regions: " << regions.size() << endl;
    ARRAY<Bvert_list> b_verts_lists;
    vector<Skin*> skins;
 
-   for (int i = 0; i < regions.num(); i++) {
+   for (vector<Bface_list>::size_type i = 0; i < regions.size(); i++) {
       regions[i].get_boundary().get_chains(b_verts_lists);
 
-      ARRAY<Bvert_list> curve_verts_lists;
-      for (int j = 0; j < b_verts_lists.num(); j++)
-         curve_verts_lists += get_c_verts(b_verts_lists[j]);
+      vector<Bvert_list> curve_verts_lists;
+      for (int j = 0; j < b_verts_lists.num(); j++) {
+         vector<Bvert_list> tmp = get_c_verts(b_verts_lists[j]);
+         curve_verts_lists.insert(curve_verts_lists.end(), tmp.begin(), tmp.end());
+      }
 
       Bsurface* owner = Bsurface::find_owner(regions[i][0]);
       if (owner && owner->bfaces().same_elements(regions[0])) {
@@ -850,7 +853,7 @@ try_punch(CBface_list& region, bool debug)
          
          UVpt_list uvpts;
          UVpt pt;
-         for (int j = 0; j < curve_verts_lists.num(); j++) {
+         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
             uvpts.clear();
             for (int k = 0; k < curve_verts_lists[j].num(); k++) {
                surf->get_uv(curve_verts_lists[j][k], pt);
@@ -873,7 +876,7 @@ try_punch(CBface_list& region, bool debug)
          push(regions[i], cmd);
          cov_inf_punch(c_skin, regions[i], cmd);//punch on the cover of either side of the inflation
 
-         for (int j = 0; j < curve_verts_lists.num(); j++) {
+         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
             Bcurve* b_curve =
                new Bcurve(curve_verts_lists[j], c_skin,
                           (LMESH::upcast(mesh))->subdiv_level());
@@ -887,7 +890,7 @@ try_punch(CBface_list& region, bool debug)
          push(map_skel_to_skin(c_skin, regions[i]), cmd);
          cov_inf_punch(c_skin, map_skel_to_skin(c_skin, regions[i]), cmd);
 
-         for (int j = 0; j < curve_verts_lists.num(); j++) {
+         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
             Bcurve* b_curve =
                new Bcurve(curve_verts_lists[j], c_skin,
                           (LMESH::upcast(mesh))->subdiv_level());
@@ -907,7 +910,7 @@ try_punch(CBface_list& region, bool debug)
             push(map_skel_to_skin(c_skin, regions[i]), cmd);
             cov_inf_punch(c_skin, map_skel_to_skin(c_skin, regions[i]), cmd);
 
-            for (int j = 0; j < curve_verts_lists.num(); j++) {
+            for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
                Bcurve* b_curve = new Bcurve(curve_verts_lists[j], c_skin, 
                   (LMESH::upcast(mesh))->subdiv_level());
                cmd->add(new SHOW_BBASE_CMD(b_curve));

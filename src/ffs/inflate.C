@@ -430,7 +430,6 @@ INFLATE::build_lines()
    // Convenience method for building the guidelines for
    // inflating a set of faces
    Wpt_list draw_lines;
-   //ARRAY<Bvert_list> boundry_loops;
 
    if (_faces.empty())
       return;

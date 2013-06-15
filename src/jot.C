@@ -2033,20 +2033,20 @@ switch_mode(const Event&, State *&)
    }
 
    // choose a panel from the candidates in SWEEP_DISK
-   ARRAY<Panel*> panels = SWEEP_DISK::panels;
-   int loc;
-   for (loc = 0; loc < panels.num(); loc++) {
+   vector<Panel*> panels = SWEEP_DISK::panels;
+   vector<Panel*>::size_type loc;
+   for (loc = 0; loc < panels.size(); loc++) {
       if (panels[loc]->mesh() == m)
          break;
    }
-   if (loc == panels.num())
+   if (loc == panels.size())
       return 0;
 
    // shouldn't happen
-   if (panels.num() != SWEEP_DISK::bpoints.num() ||
-      panels.num() != SWEEP_DISK::bcurves.num() ||
-      panels.num() != SWEEP_DISK::bsurfaces.num() ||
-      panels.num() != SWEEP_DISK::profiles.num())
+   if (panels.size() != SWEEP_DISK::bpoints.size() ||
+       panels.size() != SWEEP_DISK::bcurves.size() ||
+       panels.size() != SWEEP_DISK::bsurfaces.size() ||
+       panels.size() != SWEEP_DISK::profiles.size())
       return 0;
 
    SWEEP_DISK::init(panels[loc], SWEEP_DISK::bpoints[loc], 

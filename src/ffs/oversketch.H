@@ -121,7 +121,7 @@ class OVERSKETCH : public DrawWidget {
    bool match_substrip(mlib::CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& strip);
    bool get_sil_substrip(mlib::CPIXEL_list& pts, EdgeStrip& strip);
    bool compute_offsets(mlib::CPIXEL_list& pts, CEdgeStrip& sils);
-   bool apply_offsets(CBvert_list& sil_verts, CARRAY<double>& offsets);
+   bool apply_offsets(CBvert_list& sil_verts, const vector<double>& offsets);
 
    void select_faces();
 

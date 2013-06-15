@@ -363,11 +363,11 @@ swell_profile(double x)
 }
 
 bool
-OVERSKETCH::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
+OVERSKETCH::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets)
 {
    // XXX - preliminary...
 
-   assert(sil_verts.num() == sil_offsets.num());
+   assert(sil_verts.num() == (int)sil_offsets.size());
 
    // Expand region around oversketched silhouette verts.
    // XXX - Should compute the one-ring size, not use "3"
@@ -385,7 +385,7 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, CARRAY<double>& sil_offsets)
       Wpt foo;
       int k = -1;
       double d = sil_path.closest(region_verts[i]->loc(), foo, k);
-      if (!sil_offsets.valid_index(k)) {
+      if (k < 0 || k >= (int)sil_offsets.size()) {
          err_adv(debug, "OVERSKETCH::apply_offsets: error: can't find closest");
          continue;
       }
@@ -437,11 +437,11 @@ OVERSKETCH::compute_offsets(CPIXEL_list& pts, CEdgeStrip& sils)
    int k = 0;
    sils.get_chain(k, chain);
    int count = 0;
-   ARRAY<double> offsets;
+   vector<double> offsets;
    Wpt_list new_locs = chain.pts();
    for (int i=0; i<chain.num(); i++) {
-      offsets += compute_offset(chain[i], pts, yardstick);
-      if (offsets.last() > 0) {
+      offsets.push_back(compute_offset(chain[i], pts, yardstick));
+      if (offsets.back() > 0) {
          count++;
       }
    }

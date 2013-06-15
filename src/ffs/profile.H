@@ -85,7 +85,7 @@ class PROFILE : public DrawWidget {
    EdgeStrip    _selected_edges;
    Bface_list   _selected_region;
    EdgeStrip    _region_boundary;
-   ARRAY<bool>  _boundary_side;
+   vector<bool> _boundary_side;
    LMESHptr     _mesh;
    int          _n, _a, _b; // these affect the aoi
    int          _mode; // 0-editing silhouettes; 1-editing cross sections
@@ -133,7 +133,7 @@ class PROFILE : public DrawWidget {
    bool match_substrip(mlib::CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& strip);
    bool get_sil_substrip(mlib::CPIXEL_list& pts, EdgeStrip& strip);
    bool compute_offsets(mlib::CPIXEL_list& pts, CEdgeStrip& sils);
-   bool apply_offsets(CBvert_list& sil_verts, CARRAY<double>& offsets);
+   bool apply_offsets(CBvert_list& sil_verts, const vector<double>& offsets);
    bool sharp_end_xform(Bvert* v, PIXEL tap);
 
    void select_faces();

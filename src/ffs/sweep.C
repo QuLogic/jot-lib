@@ -143,7 +143,7 @@ SWEEP_BASE::tap_cb(CGESTUREptr& g, DrawState*& s)
 }
 
 //! Extract a consecutive set of points from a point list.
-//! Maybe should go in ARRAY class or _point2d_list...
+//! Maybe should go in vector class or _point2d_list...
 //! needed in stroke_cb() below:
 template <class T>
 inline T
@@ -357,11 +357,11 @@ SWEEP_BASE::draw_id_ref_pre4()
  * SWEEP_DISK
  *****************************************************************/
 SWEEP_DISKptr SWEEP_DISK::_instance;
-ARRAY<Panel*> SWEEP_DISK::panels;
-ARRAY<Bpoint_list> SWEEP_DISK::bpoints;
-ARRAY<Bcurve_list> SWEEP_DISK::bcurves;
-ARRAY<Bsurface_list> SWEEP_DISK::bsurfaces;
-ARRAY<Wpt_list> SWEEP_DISK::profiles;
+vector<Panel*> SWEEP_DISK::panels;
+vector<Bpoint_list> SWEEP_DISK::bpoints;
+vector<Bcurve_list> SWEEP_DISK::bcurves;
+vector<Bsurface_list> SWEEP_DISK::bsurfaces;
+vector<Wpt_list> SWEEP_DISK::profiles;
 
 SWEEP_DISK::SWEEP_DISK() : SWEEP_BASE()
 {
@@ -852,8 +852,9 @@ SWEEP_DISK::build_revolve(
       cmd->add(new TUBE_MAP_RESHAPE_CMD(tmap,spts));   
 
       // change the record
-      int loc = panels.get_index(p);
-      assert(loc >= 0);
+      vector<Panel*>::iterator it = std::find(panels.begin(), panels.end(), p);
+      assert(it != panels.end());
+      int loc = it - panels.begin();
       profiles[loc] = _profile;
 
    } else {
@@ -867,11 +868,11 @@ SWEEP_DISK::build_revolve(
       if (ret) {
          //FLOOR::realign(ret->cur_mesh(), cmd);
 
-         panels += p;
-         bpoints += points;
-         bcurves += curves;
-         bsurfaces += surfs;
-         profiles += _profile;
+         panels.push_back(p);
+         bpoints.push_back(points);
+         bcurves.push_back(curves);
+         bsurfaces.push_back(surfs);
+         profiles.push_back(_profile);
       }
    }
 
@@ -1019,16 +1020,17 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
    Panel* p = Panel::upcast(Bsurface::get_surface(_enclosed_faces));
    assert(p);
    if (is_editing) {
-      int loc = panels.get_index(p);
-      assert(loc >= 0);
+      vector<Panel*>::iterator it = std::find(panels.begin(), panels.end(), p);
+      assert(it != panels.end());
+      int loc = it - panels.begin();
       profiles[loc] = _profile;
    } else {
-      panels += p;
+      panels.push_back(p);
       top_pts += bot_pts;
-      bpoints += top_pts;
-      bcurves += curves;
-      bsurfaces += surfaces;
-      profiles += _profile;
+      bpoints.push_back(top_pts);
+      bcurves.push_back(curves);
+      bsurfaces.push_back(surfaces);
+      profiles.push_back(_profile);
    }
    
    //FLOOR::realign(_mesh->cur_mesh(), cmd);
