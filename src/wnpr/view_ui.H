@@ -25,6 +25,7 @@
 #include "disp/view.H"
 
 #include <map>
+#include <vector>
 
 class GLUI;
 class GLUI_Listbox;
@@ -172,7 +173,7 @@ class ViewUI {
  protected:
    /******** STATIC MEMBERS VARS ********/
    static map<VIEWimpl*,ViewUI*> _hash;
-   static ARRAY<ViewUI*>   _ui;
+   static vector<ViewUI*>        _ui;
  
  public:
    static bool             is_vis(CVIEWptr& v);
@@ -196,16 +197,16 @@ class ViewUI {
    GLUI*                         _glui;   
    vector<string>                _bkgtex_filenames;
    vector<string>                _paper_filenames;
-   ARRAY<GLUI_Listbox*>          _listbox;
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_Spinner*>          _spinner;
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_Rotation*>         _rotation;
-   ARRAY<GLUI_RadioGroup*>       _radgroup;
-   ARRAY<GLUI_RadioButton*>      _radbutton;
-   ARRAY<GLUI_Checkbox*>         _checkbox;
+   vector<GLUI_Listbox*>         _listbox;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_Spinner*>         _spinner;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_Rotation*>        _rotation;
+   vector<GLUI_RadioGroup*>      _radgroup;
+   vector<GLUI_RadioButton*>     _radbutton;
+   vector<GLUI_Checkbox*>        _checkbox;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
  protected:     

@@ -1461,13 +1461,13 @@ LinePen::button_edit_offset_apply()
       const vector<double>& press = _gestures[i]->pressures();
   
       PIXEL_list   filtered_pix;
-      ARRAY<double> filtered_press;
+      vector<double> filtered_press;
 
       assert(pix.size() == press.size());
 
       // No duplicate pixels at all, damn it!
       for (PIXEL_list::size_type l=0; l<pix.size(); l++)
-         if (filtered_pix.add_uniquely(pix[l])) filtered_press.add(press[l]);
+         if (filtered_pix.add_uniquely(pix[l])) filtered_press.push_back(press[l]);
 
       // must have at least 2 gesture vertices
       if (filtered_pix.size() < 2) continue;
@@ -2301,11 +2301,11 @@ interpolate_pressure(
 void
 LinePen::set_decal_stroke_verts(
    CPIXEL_list& pix, 
-   const ARRAY<double>& press,
+   const vector<double>& press,
    DecalLineStroke* stroke)
 {
    assert(stroke);
-   assert((int)pix.size() == press.num());
+   assert(pix.size() == press.size());
 
    BaseVisRefImage *vis_ref = BaseVisRefImage::lookup(VIEW::peek()); assert(vis_ref);
 

@@ -27,6 +27,7 @@
 #include "npr/sil_and_crease_texture.H"
 
 #include <map>
+#include <vector>
 
 class GLUI;
 class GLUI_Listbox;
@@ -171,7 +172,7 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
    static TAGlist*         _sui_tags;
  protected:
    static map<VIEWimpl*,SilUI*> _hash;
-   static ARRAY<SilUI*>    _ui;
+   static vector<SilUI*>        _ui;
 
  public:
 
@@ -232,17 +233,17 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
    float                         _weight_heal;
 
    GLUI*                         _glui;   
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_Listbox*>          _listbox;
-   ARRAY<GLUI_Graph*>            _graph;
-   ARRAY<GLUI_StaticText*>       _text;
-   ARRAY<GLUI_EditText*>         _edittext;
-   ARRAY<GLUI_Checkbox*>         _checkbox;
-   ARRAY<GLUI_RadioGroup*>       _radgroup;
-   ARRAY<GLUI_RadioButton*>      _radbutton;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_Listbox*>         _listbox;
+   vector<GLUI_Graph*>           _graph;
+   vector<GLUI_StaticText*>      _text;
+   vector<GLUI_EditText*>        _edittext;
+   vector<GLUI_Checkbox*>        _checkbox;
+   vector<GLUI_RadioGroup*>      _radgroup;
+   vector<GLUI_RadioButton*>     _radbutton;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
  protected:     

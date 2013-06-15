@@ -54,7 +54,7 @@
 /////////////////////////////////////
 
 TAGlist*                SilUI::_sui_tags = 0;
-ARRAY<SilUI*>           SilUI::_ui;
+vector<SilUI*>          SilUI::_ui;
 map<VIEWimpl*,SilUI*>   SilUI::_hash;
 
 /////////////////////////////////////
@@ -421,9 +421,8 @@ SilUI::SilUI(VIEWptr v) :
    _view(v),
    _glui(0)
 {
-       
-   _ui += this;
-   _id = (_ui.num()-1);
+   _ui.push_back(this);
+   _id = (_ui.size()-1);
     
    // Defer init() until the first build()
 
@@ -758,7 +757,6 @@ SilUI::internal_update()
 void
 SilUI::build() 
 {
-   int i;
    int id = _id << ID_SHIFT;
 
    assert(!_glui);
@@ -771,17 +769,17 @@ SilUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_button.num()==0);        for (i=0; i<BUT_NUM; i++)        _button.add(0);
-   assert(_slider.num()==0);        for (i=0; i<SLIDE_NUM; i++)      _slider.add(0);
-   assert(_listbox.num()==0);       for (i=0; i<LIST_NUM; i++)       _listbox.add(0);
-   assert(_panel.num()==0);         for (i=0; i<PANEL_NUM; i++)      _panel.add(0);
-   assert(_rollout.num()==0);       for (i=0; i<ROLLOUT_NUM; i++)    _rollout.add(0);
-   assert(_graph.num()==0);         for (i=0; i<GRAPH_NUM; i++)      _graph.add(0);
-   assert(_text.num()==0);          for (i=0; i<TEXT_NUM; i++)       _text.add(0);
-   assert(_edittext.num()==0);      for (i=0; i<EDITTEXT_NUM; i++)   _edittext.add(0);
-   assert(_checkbox.num()==0);      for (i=0; i<CHECK_NUM; i++)      _checkbox.add(0);
-   assert(_radgroup.num()==0);      for (i=0; i<RADGROUP_NUM; i++)   _radgroup.add(0);
-   assert(_radbutton.num()==0);     for (i=0; i<RADBUT_NUM; i++)     _radbutton.add(0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_graph.empty());        _graph.resize(GRAPH_NUM, 0);
+   assert(_text.empty());         _text.resize(TEXT_NUM, 0);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
 
    assert(_mesh_names.empty());
    assert(_buffer_filenames.empty());
@@ -2153,14 +2151,13 @@ SilUI::buffer_selected()
 void
 SilUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch(id&ID_MASK)
    {
       case BUT_REFRESH:
          cerr << "SilUI::button_cb() - Refresh\n";
-         if (_ui[id >> ID_SHIFT]->update_mesh_list())
-         {
+         if (_ui[id >> ID_SHIFT]->update_mesh_list()) {
             _ui[id >> ID_SHIFT]->select_name();
             _ui[id >> ID_SHIFT]->update_non_lives();
          }
@@ -2222,10 +2219,9 @@ SilUI::button_cb(int id)
 void
 SilUI::slider_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
       case SLIDE_RATE:
          //_ui[id >> ID_SHIFT]->update_non_lives();
       break;
@@ -2241,7 +2237,6 @@ SilUI::slider_cb(int id)
       case SLIDE_WEIGHT_HEAL:
          //_ui[id >> ID_SHIFT]->update_non_lives();
       break;
-
    }
 }
 
@@ -2256,10 +2251,9 @@ SilUI::slider_cb(int id)
 void
 SilUI::listbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch (id&ID_MASK)
-   {
+   switch (id&ID_MASK) {
     case LIST_MESH:
       cerr << "SilUI::listbox_cb - Mesh()\n";
       _ui[id >> ID_SHIFT]->select_name();
@@ -2269,7 +2263,6 @@ SilUI::listbox_cb(int id)
       cerr << "SilUI::listbox_cb - Buffer()\n";
       _ui[id >> ID_SHIFT]->buffer_selected();
     break;
-
    }
 }
 
@@ -2280,10 +2273,9 @@ SilUI::listbox_cb(int id)
 void
 SilUI::edittext_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case EDITTEXT_BUFFER_NAME:
          cerr << "SilUI::edittext_cb() - Buffer\n";
          _ui[id >> ID_SHIFT]->buffer_name_text();
@@ -2298,7 +2290,6 @@ SilUI::edittext_cb(int id)
 //         _ui[id >> ID_SHIFT]->preset_save_text();
        break;
    }
-
 }
 
 /////////////////////////////////////
@@ -2312,17 +2303,15 @@ SilUI::edittext_cb(int id)
 void
 SilUI::graph_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch (id&ID_MASK)
-   {
+   switch (id&ID_MASK) {
     case GRAPH_PATH:
       cerr << "SilUI::graph_cb() - Path\n";
     break;
     case GRAPH_SEG:
       cerr << "SilUI::graph_cb() - Seg\n";
     break;
-
    }
 }
 
@@ -2337,10 +2326,9 @@ SilUI::graph_cb(int id)
 void
 SilUI::checkbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch (id&ID_MASK)
-   {
+   switch (id&ID_MASK) {
     case CHECK_TRACK_STROKES:
       cerr << "SilUI::checkbox_cb() - Track strokes\n";
     break;
@@ -2350,7 +2338,6 @@ SilUI::checkbox_cb(int id)
     case CHECK_ALWAYS_UPDATE:
       cerr << "SilUI::checkbox_cb() - Always update\n";
     break;
-
    }
 }
 
@@ -2361,17 +2348,15 @@ SilUI::checkbox_cb(int id)
 void
 SilUI::radiogroup_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case RADGROUP_FIT:
          cerr << "SilUI::radiogroup_cb() - Fit type\n";
        break;
        case RADGROUP_COVER:
          cerr << "SilUI::radiogroup_cb() - Fit cover\n";
        break;
-
    }
 }
 
@@ -2678,12 +2663,10 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
    update_non_lives();
    update_path_indices();
 
-   static ARRAY<double>    x;
-   static ARRAY<double>    y;
+   static vector<double> x;
+   static vector<double> y;
 
-   if (_votePathIndex == -1)
-   {
-
+   if (_votePathIndex == -1) {
       _graph[GRAPH_PATH]->set_num_series(0);
       _graph[GRAPH_PATH]->redraw(); 
 
@@ -2695,15 +2678,12 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       _text[TEXT_VOTE_3]->set_text("");   
       _text[TEXT_VOTE_4]->set_text("");   
 
-   }
-   else
-   {
+   } else {
 
       LuboPath *l = pl[_votePathIndex];
       vector<VoteGroup> &gs = l->groups();
 
-      ARRAY<unsigned int>  path_ids;
-      ARRAY<int>           group_cnt;
+      set<unsigned int> path_ids;
 
       int total = 0;
       int seg_total = 0;
@@ -2712,14 +2692,8 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       for ( ; i<(int)gs.size(); i++) {
          VoteGroup &g = gs[i];
 
-         if (g.num()>0)
-         {
-            path_ids.add_uniquely( g.vote(0)._path_id );
-
-            if (path_ids.num() > group_cnt.num())
-            {
-               group_cnt.add(0);
-            }
+         if (g.num()>0) {
+            path_ids.insert(g.vote(0)._path_id);
 
             for (int j=1; j<g.num(); j++) 
             {
@@ -2727,14 +2701,9 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                //assert(g.vote(0)._path_id == g.vote(j)._path_id);
             }
 
-            int index = path_ids.get_index(g.vote(0)._path_id);
-
-            group_cnt[index] = group_cnt[index] + 1;
-
             total++;
 
-            if ((int)g.id() == _strokePathId)
-            {
+            if ((int)g.id() == _strokePathId) {
                assert(i == _strokePathIndex);
                seg_total++;
             }
@@ -2746,48 +2715,42 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
       _graph[GRAPH_SEG]->set_num_series(2*seg_total + 2 + ((_voteIndex!=-1)?(2):(0)));
 
 
-      for (int j=0; j<path_ids.num(); j++)
-      {
+      int j = 0;
+      for (set<unsigned int>::iterator it=path_ids.begin(); it!=path_ids.end(); ++it, ++j) {
          int cnt = 0;
 
          for (vector<VoteGroup>::size_type i=0; i<gs.size(); i++) {
             VoteGroup &g = gs[i];
             
-            if (g.num() > 0)
-            {
-               if (path_ids[j] == g.vote(0)._path_id)
-               {
+            if (g.num() > 0) {
+               if (*it == g.vote(0)._path_id) {
                   total--;
 
                   x.clear(); y.clear();
                
-                  for (int k=0; k<g.num(); k++) 
-                  {
-                     x.add(g.vote(k)._s);
-                     y.add(g.vote(k)._t);
+                  for (int k=0; k<g.num(); k++) {
+                     x.push_back(g.vote(k)._s);
+                     y.push_back(g.vote(k)._t);
                   }
 
                   char path_str[64];
                   sprintf(path_str, "Path #%d", total);
 
-                  if ((int)g.id() != _strokePathId)
-                  {
+                  if ((int)g.id() != _strokePathId) {
                      _graph[GRAPH_PATH]->set_series_name(2*total,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total,GLUI_GRAPH_SERIES_LINE);
                      _graph[GRAPH_PATH]->set_series_size(2*total,1.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total, &series_color[cnt%6][0]);
 
-                     _graph[GRAPH_PATH]->set_series_data(2*total,x.num(),x.array(),y.array());
+                     _graph[GRAPH_PATH]->set_series_data(2*total,x.size(),&x[0],&y[0]);
 
                      _graph[GRAPH_PATH]->set_series_name(2*total+1,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_PATH]->set_series_size(2*total+1,4.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total+1,&series_color[j%6][0]);
 
-                     _graph[GRAPH_PATH]->set_series_data(2*total+1,x.num(),x.array(),y.array());
-                  }
-                  else
-                  {
+                     _graph[GRAPH_PATH]->set_series_data(2*total+1,x.size(),&x[0],&y[0]);
+                  } else {
                      seg_total--;
 
                      _graph[GRAPH_PATH]->set_series_name(2*total,path_str);
@@ -2795,14 +2758,14 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                      _graph[GRAPH_PATH]->set_series_size(2*total,1.4);
                      _graph[GRAPH_PATH]->set_series_color(2*total, &series_color_selected[cnt%6][0]);
 
-                     _graph[GRAPH_PATH]->set_series_data(2*total,x.num(),x.array(),y.array());
+                     _graph[GRAPH_PATH]->set_series_data(2*total,x.size(),&x[0],&y[0]);
 
                      _graph[GRAPH_PATH]->set_series_name(2*total+1,path_str);
                      _graph[GRAPH_PATH]->set_series_type(2*total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_PATH]->set_series_size(2*total+1,5.0);
                      _graph[GRAPH_PATH]->set_series_color(2*total+1,&series_color_selected[j%6][0]);
 
-                     _graph[GRAPH_PATH]->set_series_data(2*total+1,x.num(),x.array(),y.array());
+                     _graph[GRAPH_PATH]->set_series_data(2*total+1,x.size(),&x[0],&y[0]);
 
 
                      sprintf(path_str, "Path #%d", seg_total);
@@ -2812,22 +2775,21 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total,1.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total, &series_color[cnt%6][0]);
 
-                     _graph[GRAPH_SEG]->set_series_data(2*seg_total,x.num(),x.array(),y.array());
+                     _graph[GRAPH_SEG]->set_series_data(2*seg_total,x.size(),&x[0],&y[0]);
 
                      _graph[GRAPH_SEG]->set_series_name(2*seg_total+1,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total+1,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+1,4.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+1,&series_color[j%6][0]);
 
-                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+1,x.num(),x.array(),y.array());
+                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+1,x.size(),&x[0],&y[0]);
 
 
                      x.clear(); y.clear();
                
-                     for (int k=0; k<g.nfits(); k++) 
-                     {
-                        x.add(g.fit(k)[0]);
-                        y.add(g.fit(k)[1]);
+                     for (int k=0; k<g.nfits(); k++) {
+                        x.push_back(g.fit(k)[0]);
+                        y.push_back(g.fit(k)[1]);
                      }
 
                      _graph[GRAPH_SEG]->set_series_name(2*seg_total+2,path_str);
@@ -2835,22 +2797,21 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+2,1.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+2, &series_color_fit[0]);
 
-                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+2,x.num(),x.array(),y.array());
+                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+2,x.size(),&x[0],&y[0]);
 
                      _graph[GRAPH_SEG]->set_series_name(2*seg_total+3,path_str);
                      _graph[GRAPH_SEG]->set_series_type(2*seg_total+3,GLUI_GRAPH_SERIES_DOT);
                      _graph[GRAPH_SEG]->set_series_size(2*seg_total+3,4.0);
                      _graph[GRAPH_SEG]->set_series_color(2*seg_total+3,&series_color_fit[0]);
 
-                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+3,x.num(),x.array(),y.array());
+                     _graph[GRAPH_SEG]->set_series_data(2*seg_total+3,x.size(),&x[0],&y[0]);
 
 
-                     if (_voteIndex != -1)
-                     {
+                     if (_voteIndex != -1) {
                         x.clear(); y.clear();
             
-                        x.add(g.vote(_voteIndex)._s);
-                        y.add(g.vote(_voteIndex)._t);
+                        x.push_back(g.vote(_voteIndex)._s);
+                        y.push_back(g.vote(_voteIndex)._t);
 
                         sprintf(path_str, "Path #%d", seg_total + 1);
 
@@ -2859,15 +2820,14 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                         _graph[GRAPH_SEG]->set_series_size(2*seg_total+4,7.0);
                         _graph[GRAPH_SEG]->set_series_color(2*seg_total+4,&series_color_selected[j%6][0]);
 
-                        _graph[GRAPH_SEG]->set_series_data(2*seg_total+4,x.num(),x.array(),y.array());
+                        _graph[GRAPH_SEG]->set_series_data(2*seg_total+4,x.size(),&x[0],&y[0]);
 
                         _graph[GRAPH_SEG]->set_series_name(2*seg_total+5,path_str);
                         _graph[GRAPH_SEG]->set_series_type(2*seg_total+5,GLUI_GRAPH_SERIES_DOT);
                         _graph[GRAPH_SEG]->set_series_size(2*seg_total+5,4.0);
                         _graph[GRAPH_SEG]->set_series_color(2*seg_total+5,inner_dot_color);
 
-                        _graph[GRAPH_SEG]->set_series_data(2*seg_total+5,x.num(),x.array(),y.array());
-
+                        _graph[GRAPH_SEG]->set_series_data(2*seg_total+5,x.size(),&x[0],&y[0]);
                      }
                   }
                   cnt++;
@@ -3108,9 +3068,9 @@ SilUI::fps_display()
    const  double           tps_color[4] = {0.0,0.0,1.0,1.0};
 
    static stop_watch       watch;
-   static ARRAY<double>    x;
-   static ARRAY<double>    fps;
-   static ARRAY<double>    tps;
+   static vector<double>   x;
+   static vector<double>   fps;
+   static vector<double>   tps;
    static unsigned int     stamp;
    static int              tris;
 
@@ -3118,14 +3078,12 @@ SilUI::fps_display()
 
    update_non_lives();
 
-   if (fps.num() == 0)
-   {
-      for (i=0; i<FPS_NUM; i++)
-      {
-         x.add(i+1.0);
-         fps.add(0.0);
-         tps.add(0.0);
+   if (fps.size() == 0) {
+      for (i=0; i<FPS_NUM; i++) {
+         x.push_back(i+1.0);
       }
+      fps.resize(FPS_NUM, 0.0);
+      tps.resize(FPS_NUM, 0.0);
       watch.set();
       tris = 0;
       stamp = _view->stamp();
@@ -3173,8 +3131,7 @@ SilUI::fps_display()
       double new_tps = tris/elapsed_time;
 
 
-      for (i=0; i<fps.num()-1; i++)
-      {
+      for (vector<double>::size_type i=0; i<fps.size()-1; i++) {
          fps[i]=fps[i+1];
          tps[i]=tps[i+1];
       }
@@ -3187,12 +3144,12 @@ SilUI::fps_display()
 
       //Now show it!
 
-      _graph[GRAPH_PATH]->set_series_data(0,fps.num(),x.array(),fps.array());
+      _graph[GRAPH_PATH]->set_series_data(0,fps.size(),&x[0],&fps[0]);
       _graph[GRAPH_PATH]->set_min_x(true);   _graph[GRAPH_PATH]->set_max_x(true);
       _graph[GRAPH_PATH]->set_min_y(true);   _graph[GRAPH_PATH]->set_max_y(true);
       _graph[GRAPH_PATH]->redraw();
 
-      _graph[GRAPH_SEG]->set_series_data(0,tps.num(),x.array(),tps.array());
+      _graph[GRAPH_SEG]->set_series_data(0,tps.size(),&x[0],&tps[0]);
       _graph[GRAPH_SEG]->set_min_x(true);    _graph[GRAPH_SEG]->set_max_x(true);
       _graph[GRAPH_SEG]->set_min_y(true);    _graph[GRAPH_SEG]->set_max_y(true);
       _graph[GRAPH_SEG]->redraw();

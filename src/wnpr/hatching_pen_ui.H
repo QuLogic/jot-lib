@@ -32,6 +32,8 @@
 
 #include "wnpr/stroke_ui.H"
 
+#include <vector>
+
 class HatchingPen;
 
 class GLUI;
@@ -100,7 +102,7 @@ class HatchingPenUI : public StrokeUIClient {
 	 
 	/******** STATIC MEMBERS VARS ********/
 
-	static ARRAY<HatchingPenUI*>	_ui;
+    static vector<HatchingPenUI*> _ui;
 
 	/******** MEMBERS VARS ********/
 
@@ -108,11 +110,11 @@ class HatchingPenUI : public StrokeUIClient {
 
    HatchingPen*				_pen;
 
-	ARRAY<GLUI_Button*>		_button;
-	ARRAY<GLUI_Slider*>		_slider;
-	ARRAY<GLUI_Checkbox*>	_checkbox;
-	ARRAY<GLUI_Panel*>		_panel;
-	ARRAY<GLUI_Rollout*>		_rollout;
+    vector<GLUI_Button*>   _button;
+    vector<GLUI_Slider*>   _slider;
+    vector<GLUI_Checkbox*> _checkbox;
+    vector<GLUI_Panel*>    _panel;
+    vector<GLUI_Rollout*>  _rollout;
 
 	int							_delete_confirm;
 

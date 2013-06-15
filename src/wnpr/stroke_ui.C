@@ -120,7 +120,7 @@ STROKE_UI_JOB::updated()
 // Static variables
 /////////////////////////////////////
 
-ARRAY<StrokeUI*>        StrokeUI::_ui;
+vector<StrokeUI*>        StrokeUI::_ui;
 map<VIEWimpl*,StrokeUI*> StrokeUI::_hash;
 
 /////////////////////////////////////
@@ -134,10 +134,8 @@ StrokeUI::StrokeUI(VIEWptr v) :
    _client(0),
    _glui(0)
 {
-       
-   _ui += this;
-   _id = (_ui.num()-1);
-    
+   _ui.push_back(this);
+   _id = (_ui.size()-1);
 
    _params.set_color(STROKEUI_DEFAULT_COLOR); 
    _params.set_alpha(STROKEUI_DEFAULT_ALPHA);
@@ -154,7 +152,6 @@ StrokeUI::StrokeUI(VIEWptr v) :
    _params.set_paper(STROKEUI_DEFAULT_PAPER_FILE);
 
    // Defer init() until the first build()
-
 }
 
 /////////////////////////////////////
@@ -643,13 +640,13 @@ StrokeUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_listbox.num()==0);      for (i=0; i<LIST_NUM; i++)      _listbox.add(0);
-   assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)       _button.add(0);
-   assert(_slider.num()==0);       for (i=0; i<SLIDE_NUM; i++)     _slider.add(0);
-   assert(_edittext.num()==0);     for (i=0; i<EDITTEXT_NUM; i++)  _edittext.add(0);
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)     _panel.add(0);
-   assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)   _rollout.add(0);
-   assert(_bitmapbox.num()==0);    for (i=0; i<BITMAPBOX_NUM; i++) _bitmapbox.add(0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, 0);
 
    assert(_texture_filenames.empty());
    assert(_paper_filenames.empty());
@@ -1522,15 +1519,13 @@ StrokeUI::params_changed()
 void
 StrokeUI::edittext_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-      {
+   switch(id&ID_MASK) {
        case EDITTEXT_SAVE:
          _ui[id >> ID_SHIFT]->preset_save_text();
        break;
-      }
-
+   }
 }
 
 
@@ -1545,12 +1540,11 @@ StrokeUI::edittext_cb(int id)
 void
 StrokeUI::listbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    int i;
 
-   switch (id&ID_MASK)
-      {
+   switch (id&ID_MASK) {
        case LIST_TEXTURE:
          i = _ui[id >> ID_SHIFT]->_listbox[LIST_TEXTURE]->get_int_val();
          if (i>0)
@@ -1570,7 +1564,7 @@ StrokeUI::listbox_cb(int id)
        case LIST_PRESET:
          _ui[id >> ID_SHIFT]->preset_selected();
          break;
-      }
+   }
 }
 
 /////////////////////////////////////
@@ -1584,22 +1578,18 @@ StrokeUI::listbox_cb(int id)
 void
 StrokeUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case BUT_SAVE:
          _ui[id >> ID_SHIFT]->preset_save_button();
        break;
        case BUT_DEBUG:
          //BaseStroke::set_debug(!BaseStroke::get_debug());
          GLExtensions::set_debug(!GLExtensions::get_debug());
-         if (GLExtensions::get_debug())
-         {
+         if (GLExtensions::get_debug()) {
             WORLD::message("Debug ON");
-         }
-         else
-         {
+         } else {
             WORLD::message("Debug OFF");
          }
          _ui[id >> ID_SHIFT]->params_changed();
@@ -1611,7 +1601,6 @@ StrokeUI::button_cb(int id)
          BaseJOTapp::instance()->prev_pen();
       break;
    }
-
 }
 
 
@@ -1626,13 +1615,11 @@ StrokeUI::button_cb(int id)
 void
 StrokeUI::slider_cb(int id)
 {
-
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    HSVCOLOR c;
 
-   switch(id&ID_MASK)
-      {
+   switch(id&ID_MASK) {
        case SLIDE_H:
        case SLIDE_S:
        case SLIDE_V:
@@ -1678,8 +1665,7 @@ StrokeUI::slider_cb(int id)
        case SLIDE_FOO2:
          _ui[id >> ID_SHIFT]->params_changed();
          break;
-
-      }
+   }
 }
 
 
@@ -1694,15 +1680,13 @@ StrokeUI::slider_cb(int id)
 void
 StrokeUI::bitmapbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num()); 
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-      {
+   switch(id&ID_MASK) {
        case BITMAPBOX_PREVIEW:
          _ui[id >> ID_SHIFT]->handle_preview_bitmapbox();
        break;
-      }
-
+   }
 }
 
 /////////////////////////////////////

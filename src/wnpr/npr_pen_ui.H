@@ -24,6 +24,8 @@
 
 #include "disp/view.H"
 
+#include <vector>
+
 class NPRPen;
 
 class GLUI;
@@ -176,7 +178,7 @@ class NPRPenUI {
  protected:
    /******** STATIC MEMBERS VARS ********/
 
-   static ARRAY<NPRPenUI*>   _ui;
+   static vector<NPRPenUI*>   _ui;
 
    /******** MEMBERS VARS ********/
 
@@ -194,18 +196,18 @@ class NPRPenUI {
    vector<string>                _other_filenames;
    vector<string>                _toon_filenames;
 
-   ARRAY<GLUI_Listbox*>          _listbox;
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_Rotation*>         _rotation;
-   ARRAY<GLUI_Translation*>      _translation;
-   ARRAY<GLUI_Translation*>      _scale;
-   ARRAY<GLUI_RadioGroup*>       _radgroup;
-   ARRAY<GLUI_RadioButton*>      _radbutton;
-   ARRAY<GLUI_Checkbox*>         _checkbox;
-   ARRAY<GLUI_EditText*>         _edittext;
+   vector<GLUI_Listbox*>         _listbox;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_Rotation*>        _rotation;
+   vector<GLUI_Translation*>     _translation;
+   vector<GLUI_Translation*>     _scale;
+   vector<GLUI_RadioGroup*>      _radgroup;
+   vector<GLUI_RadioButton*>     _radbutton;
+   vector<GLUI_Checkbox*>        _checkbox;
+   vector<GLUI_EditText*>        _edittext;
 
   float _old_target_value [6];
   float _old_factor_value [6];

@@ -49,7 +49,7 @@ using namespace mlib;
 // Static variables
 /////////////////////////////////////
 
-ARRAY<LinePenUI*>          LinePenUI::_ui;
+vector<LinePenUI*> LinePenUI::_ui;
 
 /////////////////////////////////////
 // Constructor
@@ -60,11 +60,10 @@ LinePenUI::LinePenUI(LinePen *p) :
    _init(false),
    _pen(p)
 {
-   _ui += this;
-   _id = (_ui.num()-1);
+   _ui.push_back(this);
+   _id = (_ui.size()-1);
     
    // Defer init() until the first build()
-
 }
 
 /////////////////////////////////////
@@ -174,19 +173,17 @@ LinePenUI::update()
 void
 LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w) 
 {
-
-   int i;
    int id = _id << ID_SHIFT;
 
-    //Init the control arrays
-   assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)      _button.add(0);
-   assert(_slider.num()==0);       for (i=0; i<SLIDE_NUM; i++)    _slider.add(0);
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)    _panel.add(0);
-   assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
-   assert(_radgroup.num()==0);     for (i=0; i<RADGROUP_NUM; i++) _radgroup.add(0);
-   assert(_radbutton.num()==0);    for (i=0; i<RADBUT_NUM; i++)   _radbutton.add(0);
-   assert(_checkbox.num()==0);     for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
-   assert(_statictext.num()==0);   for (i=0; i<TEXT_NUM; i++)     _statictext.add(0);
+   //Init the control arrays
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
+   assert(_statictext.empty());   _statictext.resize(TEXT_NUM, 0);
 
    //Sub-panel containing silhouette flag controls
    _rollout[ROLLOUT_FLAGS] = new GLUI_Rollout(p, "Line Types", true);
@@ -973,7 +970,6 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
 
    _rollout[ROLLOUT_MESH]->close(); 
    _rollout[ROLLOUT_NOISE]->close();
-
 }
 
 
@@ -1061,7 +1057,6 @@ LinePenUI::cleanup_sizes(GLUI_Panel *p, int w)
    delta = (_panel[PANEL_EDIT_OVERSKETCH]->get_w() - _panel[PANEL_EDIT_STROKES]->get_w());
    _radbutton[RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE]->set_w(_radbutton[RADBUT_EDIT_OVERSKETCH_VIRTUAL_BASELINE]->get_w() - delta);   
    _radbutton[RADBUT_EDIT_OVERSKETCH_SELECTED_BASELINE]->set_w(_radbutton[RADBUT_EDIT_OVERSKETCH_SELECTED_BASELINE]->get_w() - delta);   
-
 }
 
 
@@ -1072,7 +1067,6 @@ LinePenUI::cleanup_sizes(GLUI_Panel *p, int w)
 void
 LinePenUI::destroy(GLUI*,GLUI_Panel *) 
 {
-
    //Hands off these soon to be bad things
 
    _button.clear();
@@ -1083,7 +1077,6 @@ LinePenUI::destroy(GLUI*,GLUI_Panel *)
    _radbutton.clear();
    _checkbox.clear();
    _statictext.clear();
-
 }
 
 
@@ -2041,7 +2034,7 @@ LinePenUI::apply_edit()
 void
 LinePenUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch(id&ID_MASK)
    {
@@ -2121,11 +2114,9 @@ LinePenUI::button_cb(int id)
 void
 LinePenUI::slider_cb(int id)
 {
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   assert((id >> ID_SHIFT) < _ui.num());
-
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
       case SLIDE_COHER_PIX:
       case SLIDE_COHER_WF:
       case SLIDE_COHER_WS:
@@ -2160,9 +2151,9 @@ LinePenUI::slider_cb(int id)
 void
 LinePenUI::radiogroup_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
-   switch(id&ID_MASK)
-   {
+   assert((id >> ID_SHIFT) < (int)_ui.size());
+
+   switch(id&ID_MASK) {
       case RADGROUP_COHER_FIT:
       case RADGROUP_COHER_COVER:
          _ui[id >> ID_SHIFT]->apply_coherence();
@@ -2180,10 +2171,9 @@ LinePenUI::radiogroup_cb(int id)
 void
 LinePenUI::checkbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
       case CHECK_FLAG_SIL_VIS:
       case CHECK_FLAG_SIL_HID:
       case CHECK_FLAG_SIL_OCC:

@@ -34,6 +34,7 @@
 #include "stroke/base_stroke.H"
 
 #include <map>
+#include <vector>
 
 #define	GESTURE_SMOOTHING_PASSES	3
 #define	GESTURE_PIXEL_RESOLUTION	15.0
@@ -246,7 +247,7 @@ class StrokeUI : public PaperEffectObs {
    /******** STATIC MEMBERS VARS ********/
 
    static map<VIEWimpl*,StrokeUI*> _hash;
-   static ARRAY<StrokeUI*> _ui;
+   static vector<StrokeUI*>        _ui;
 
  public:
 
@@ -283,13 +284,13 @@ class StrokeUI : public PaperEffectObs {
    vector<string>                _texture_filenames;
    vector<string>                _paper_filenames;
    vector<string>                _preset_filenames;
-   ARRAY<GLUI_Listbox*>          _listbox;
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_EditText*>         _edittext;
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_BitmapBox*>        _bitmapbox;
+   vector<GLUI_Listbox*>         _listbox;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_EditText*>        _edittext;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_BitmapBox*>       _bitmapbox;
 
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/

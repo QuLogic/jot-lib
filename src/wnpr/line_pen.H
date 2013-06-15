@@ -143,7 +143,7 @@ class LinePen : public Pen, public CAMobs {
 
    int         create_stroke(CGESTUREptr&);   
 
-   void        set_decal_stroke_verts(mlib::CPIXEL_list&, CARRAY<double>&, DecalLineStroke*);
+   void        set_decal_stroke_verts(mlib::CPIXEL_list&, const vector<double>&, DecalLineStroke*);
 
    void        easel_add(CGESTUREptr&);
    void        easel_clear();

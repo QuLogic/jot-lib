@@ -177,7 +177,7 @@ class LinePenUI : public StrokeUIClient {
  protected:
    /******** STATIC MEMBERS VARS ********/
 
-   static ARRAY<LinePenUI*>      _ui;
+   static vector<LinePenUI*>     _ui;
 
    /******** MEMBERS VARS ********/
 
@@ -186,14 +186,14 @@ class LinePenUI : public StrokeUIClient {
 
    LinePen*                      _pen;
 
-   ARRAY<GLUI_Button*>           _button;
-   ARRAY<GLUI_Slider*>           _slider;
-   ARRAY<GLUI_Panel*>            _panel;
-   ARRAY<GLUI_Rollout*>          _rollout;
-   ARRAY<GLUI_RadioGroup*>       _radgroup;
-   ARRAY<GLUI_RadioButton*>      _radbutton;
-   ARRAY<GLUI_Checkbox*>         _checkbox;
-   ARRAY<GLUI_StaticText*>       _statictext;
+   vector<GLUI_Button*>          _button;
+   vector<GLUI_Slider*>          _slider;
+   vector<GLUI_Panel*>           _panel;
+   vector<GLUI_Rollout*>         _rollout;
+   vector<GLUI_RadioGroup*>      _radgroup;
+   vector<GLUI_RadioButton*>     _radbutton;
+   vector<GLUI_Checkbox*>        _checkbox;
+   vector<GLUI_StaticText*>      _statictext;
 
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
  public:     

@@ -50,7 +50,7 @@ using namespace mlib;
 // Static variables
 /////////////////////////////////////
 
-ARRAY<ViewUI*>          ViewUI::_ui;
+vector<ViewUI*>         ViewUI::_ui;
 map<VIEWimpl*,ViewUI*>  ViewUI::_hash;
 
 /////////////////////////////////////
@@ -63,11 +63,10 @@ ViewUI::ViewUI(VIEWptr v) :
       _view(v),
       _glui(0)
 {
-   _ui += this;
-   _id = (_ui.num()-1);
+   _ui.push_back(this);
+   _id = (_ui.size()-1);
 
    // Defer init() until the first build()
-
 }
 
 /////////////////////////////////////
@@ -349,27 +348,16 @@ ViewUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_listbox.num()==0);
-   for (i=0; i<LIST_NUM; i++)     _listbox.add(0);
-   assert(_button.num()==0);
-   for (i=0; i<BUT_NUM; i++)      _button.add(0);
-   assert(_slider.num()==0);
-   for (i=0; i<SLIDE_NUM; i++)    _slider.add(0);
-   assert(_spinner.num()==0);
-   for (i=0; i<SPINNER_NUM; i++)    _spinner.add(0);
-   assert(_panel.num()==0);
-   for (i=0; i<PANEL_NUM; i++)    _panel.add(0);
-   assert(_rollout.num()==0);
-   for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
-   assert(_rotation.num()==0);
-   for (i=0; i<ROT_NUM; i++)      _rotation.add(0);
-   assert(_radgroup.num()==0);
-   for (i=0; i<RADGROUP_NUM; i++) _radgroup.add(0);
-   assert(_radbutton.num()==0);
-   for (i=0; i<RADBUT_NUM; i++)   _radbutton.add(0);
-   assert(_checkbox.num()==0);
-   for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
-
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_spinner.empty());      _spinner.resize(SPINNER_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_rotation.empty());     _rotation.resize(ROT_NUM, 0);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
 
    assert(_bkgtex_filenames.empty());
    assert(_paper_filenames.empty());
@@ -1578,7 +1566,7 @@ ViewUI::apply_anti()
 void
 ViewUI::listbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case LIST_BKGTEX:
@@ -1594,7 +1582,6 @@ ViewUI::listbox_cb(int id)
       _ui[id >> ID_SHIFT]->apply_anti();
       _ui[id >> ID_SHIFT]->update_anti();
       break;
-
    }
 }
 
@@ -1605,7 +1592,7 @@ ViewUI::listbox_cb(int id)
 void
 ViewUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case BUT_DEBUG:
@@ -1622,7 +1609,7 @@ void
 ViewUI::slider_cb(int id)
 {
 //   static bool HACK_EYE_POS = Config::get_var_bool("HACK_EYE_POS",false);
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case SLIDE_LH:
@@ -1673,7 +1660,7 @@ ViewUI::slider_cb(int id)
 void 
 ViewUI::spinner_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
    int i = _ui[id >> ID_SHIFT]->_radgroup[RADGROUP_LIGHTNUM]->get_int_val();
    Wvec new_dir;
    switch (id&ID_MASK) {
@@ -1707,7 +1694,7 @@ ViewUI::spinner_cb(int id)
          new_dir = (_ui[id >> ID_SHIFT]->_spot_dir).normalized();
          _ui[id >> ID_SHIFT]->_view->light_set_spot_direction(i, new_dir);
          break;
-      }
+   }
 }
 
 /////////////////////////////////////
@@ -1717,7 +1704,7 @@ ViewUI::spinner_cb(int id)
 void
 ViewUI::radiogroup_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case RADGROUP_LIGHTNUM:
@@ -1734,7 +1721,7 @@ ViewUI::radiogroup_cb(int id)
 void
 ViewUI::checkbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case CHECK_POS:
@@ -1780,7 +1767,7 @@ ViewUI::rotation_cb(int id)
 {
    static bool HACK_EYE_POS = Config::get_var_bool("HACK_EYE_POS",false);
 
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch (id&ID_MASK) {
    case ROT_LIGHT:

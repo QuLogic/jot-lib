@@ -55,7 +55,7 @@
 // Static variables
 /////////////////////////////////////
 
-ARRAY<HatchingPenUI*> HatchingPenUI::_ui;
+vector<HatchingPenUI*> HatchingPenUI::_ui;
 
 /////////////////////////////////////
 // Constructor
@@ -69,10 +69,9 @@ HatchingPenUI::HatchingPenUI(
    assert(pen);
    _pen = pen;
 
-   _ui += this;
+   _ui.push_back(this);
 
-   _id = (_ui.num()-1);
-
+   _id = _ui.size()-1;
 }
 
 /////////////////////////////////////
@@ -97,16 +96,14 @@ HatchingPenUI::~HatchingPenUI()
 void
 HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width) 
 {
-
-
    int i;
    int id = _id << ID_SHIFT;
 
-   assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)      _button.add(0);
-   assert(_slider.num()==0);       for (i=0; i<SLIDE_NUM; i++)    _slider.add(0);
-   assert(_checkbox.num()==0);     for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)    _panel.add(0);
-   assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
 
    //Sub-panel containing animation controls
    _rollout[ROLLOUT_ANIM] = new GLUI_Rollout(p, "Animation Settings", true);
@@ -299,20 +296,17 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    new_w =  (_rollout[ROLLOUT_ANIM]->get_w() - _panel[PANEL_CONTROLS]->get_w() 
                + _button[BUT_TYPE]->get_w() + _button[BUT_CURVES]->get_w() + _button[BUT_STYLE]->get_w())/3;
 
-   for (i=0; i<BUT_NUM; i++)  
-   {
-      if (i==BUT_DELETE_ALL)
-      {
+   for (i=0; i<BUT_NUM; i++) {
+      if (i==BUT_DELETE_ALL) {
          _button[i]->set_w(new_w - (_panel[PANEL_DELETE_ALL]->get_w() - _button[BUT_DELETE_ALL]->get_w() 
                - _panel[PANEL_UNDO_LAST]->get_w() + _button[BUT_UNDO_LAST]->get_w()));
-      }
-      else
+      } else {
          _button[i]->set_w(new_w);
+      }
    }
 
    // XXX - Should prolly 'member the old state
    _rollout[ROLLOUT_ANIM]->close();
-
 }
 
 /////////////////////////////////////
@@ -322,7 +316,6 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
 void
 HatchingPenUI::destroy(GLUI*,GLUI_Panel *) 
 {
-
    //Hands off these soon to be bad things
 
    _button.clear();
@@ -330,7 +323,6 @@ HatchingPenUI::destroy(GLUI*,GLUI_Panel *)
    _panel.clear(); 
    _checkbox.clear();
    _rollout.clear();
-
 }
 
 /////////////////////////////////////
@@ -427,7 +419,7 @@ HatchingPenUI::update()
 void
 HatchingPenUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    switch(id&ID_MASK)
    {
@@ -475,9 +467,7 @@ HatchingPenUI::button_cb(int id)
          cerr << "HatchingPenUI::button_cb() - Undo Last\n";
          _ui[id >> ID_SHIFT]->_pen->undo_last();
       break;
-
    }
-
 }
 
 /////////////////////////////////////
@@ -491,8 +481,7 @@ HatchingPenUI::button_cb(int id)
 void
 HatchingPenUI::slider_cb(int id)
 {
-
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    float lo,hi;
 
@@ -536,10 +525,9 @@ HatchingPenUI::slider_cb(int id)
 void
 HatchingPenUI::checkbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
     case CHECK_CONFIRM:
       cerr << "HatchingPenUI::checkbox_cb() - Confirm\n";
       break;

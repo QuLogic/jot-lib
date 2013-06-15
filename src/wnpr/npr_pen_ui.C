@@ -49,7 +49,7 @@ using namespace mlib;
 // Static variables
 /////////////////////////////////////
 
-ARRAY<NPRPenUI*>          NPRPenUI::_ui;
+vector<NPRPenUI*> NPRPenUI::_ui;
 
 //This is relative to JOT_ROOT, and should
 //contain ONLY the texture dots for hatching strokes
@@ -70,8 +70,8 @@ NPRPenUI::NPRPenUI(NPRPen *p) :
    _light(0,0,-1) {
 
 
-  _ui += this;
-  _id = (_ui.num()-1);
+  _ui.push_back(this);
+  _id = (_ui.size()-1);
   
   for (int i=0 ; i<5 ; i++){
     _old_target_value[i] = 0.0f;
@@ -79,7 +79,6 @@ NPRPenUI::NPRPenUI(NPRPen *p) :
   }
     
    // Defer init() until the first build()
-
 }
 
 /////////////////////////////////////
@@ -217,18 +216,18 @@ NPRPenUI::build()
    _glui->set_main_gfx_window(_pen->view()->win()->id());
 
    //Init the control arrays
-   assert(_listbox.num()==0);      for (i=0; i<LIST_NUM; i++)     _listbox.add(0);
-   assert(_button.num()==0);       for (i=0; i<BUT_NUM; i++)      _button.add(0);
-   assert(_slider.num()==0);       for (i=0; i<SLIDE_NUM; i++)    _slider.add(0);
-   assert(_panel.num()==0);        for (i=0; i<PANEL_NUM; i++)    _panel.add(0);
-   assert(_rollout.num()==0);      for (i=0; i<ROLLOUT_NUM; i++)  _rollout.add(0);
-   assert(_rotation.num()==0);     for (i=0; i<ROT_NUM; i++)      _rotation.add(0);
-   assert(_translation.num()==0);  for (i=0; i<TRAN_NUM; i++)     _translation.add(0);
-   assert(_scale.num()==0);        for (i=0; i<SCALE_NUM; i++)    _scale.add(0);
-   assert(_radgroup.num()==0);     for (i=0; i<RADGROUP_NUM; i++) _radgroup.add(0);
-   assert(_radbutton.num()==0);    for (i=0; i<RADBUT_NUM; i++)   _radbutton.add(0);
-   assert(_checkbox.num()==0);     for (i=0; i<CHECK_NUM; i++)    _checkbox.add(0);
-   assert(_edittext.num()==0);     for (i=0; i<EDIT_NUM; i++)     _edittext.add(0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, 0);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_rotation.empty());     _rotation.resize(ROT_NUM, 0);
+   assert(_translation.empty());  _translation.resize(TRAN_NUM, 0);
+   assert(_scale.empty());        _scale.resize(SCALE_NUM, 0);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
+   assert(_edittext.empty());     _edittext.resize(EDIT_NUM, 0);
 
    assert(_toon_filenames.size() == 0);
    assert(_other_filenames.size() == 0);
@@ -821,25 +820,20 @@ NPRPenUI::build()
       id+EDIT_ROT_Z, edit_xform_cb);
    assert(_edittext[EDIT_ROT_Z]);
 
-
-
    // Cleanup sizes
 
-   for (i=0; i<EDIT_NUM; i++)  
-   {
+   for (i=0; i<EDIT_NUM; i++) {
       if (i != EDIT_NAME)
          _edittext[i]->set_w(80);
    }
   
    int w = _panel[PANEL_XFORM]->get_w();
 
-   for (i=0; i<SLIDE_NUM; i++)
-   {
+   for (i=0; i<SLIDE_NUM; i++) {
       if (i == SLIDE_R)
          _slider[i]->set_w(_panel[PANEL_GTEX_LIGHT_OPTS]->get_w());
       else
          _slider[i]->set_w(w);
-      
    }
 
    _listbox[LIST_TEX]->set_w(_listbox[LIST_TEX]->get_w() + 
@@ -892,8 +886,6 @@ NPRPenUI::destroy()
    _glui->close();
 
    _glui = NULL;
-
-
 }
 
 /////////////////////////////////////
@@ -2217,10 +2209,9 @@ NPRPenUI::compute_curvatures()
 void
 NPRPenUI::listbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch (id&ID_MASK)
-   {
+   switch (id&ID_MASK) {
     case LIST_TEX:
       cerr << "NPRPenUI::listbox_cb() - Tex\n";
       _ui[id >> ID_SHIFT]->apply_gtex();
@@ -2238,7 +2229,8 @@ NPRPenUI::listbox_cb(int id)
       cerr << "NPRPenUI::listbox_cb() - smooth detail map\n";
       _ui[id >> ID_SHIFT]->update_gtex();
       _ui[id >> ID_SHIFT]->apply_gtex();
-    break;  }
+    break;
+  }
 }
 
 
@@ -2249,10 +2241,9 @@ NPRPenUI::listbox_cb(int id)
 void
 NPRPenUI::edittext_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch (id&ID_MASK)
-   {
+   switch (id&ID_MASK) {
     case EDIT_NAME:
       cerr << "NPRPenUI::edittext_cb() - Layer Name\n";
       _ui[id >> ID_SHIFT]->rename_layer();
@@ -2267,19 +2258,18 @@ NPRPenUI::edittext_cb(int id)
 void
 NPRPenUI::button_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
       case BUT_REFRESH:
          cerr << "StrokeUI::button_cb() - Refresh\n";
          _ui[id >> ID_SHIFT]->refresh_tex();
       break;
       case BUT_NEXT_PEN:
-	BaseJOTapp::instance()->next_pen(); 
+         BaseJOTapp::instance()->next_pen(); 
       break;
       case BUT_PREV_PEN:
-	BaseJOTapp::instance()->prev_pen();
+         BaseJOTapp::instance()->prev_pen();
       break;
       case BUT_ADD:
          cerr << "StrokeUI::button_cb() - Add Layer\n";
@@ -2314,10 +2304,9 @@ NPRPenUI::button_cb(int id)
 void
 NPRPenUI::slider_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
       case SLIDE_H:
       case SLIDE_S:
       case SLIDE_V:
@@ -2345,9 +2334,9 @@ NPRPenUI::slider_cb(int id)
 void
 NPRPenUI::radiogroup_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
-   switch(id&ID_MASK)
-   {
+   assert((id >> ID_SHIFT) < (int)_ui.size());
+
+   switch(id&ID_MASK) {
       case RADGROUP_GTEX:
       break;
       case RADGROUP_LIGHT:
@@ -2364,10 +2353,9 @@ NPRPenUI::radiogroup_cb(int id)
 void
 NPRPenUI::checkbox_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case CHECK_TRANS:
        case CHECK_ANNOTATE:
        case CHECK_TRAVEL:
@@ -2378,11 +2366,11 @@ NPRPenUI::checkbox_cb(int id)
        break;
        case CHECK_PAPER:  //apply paper efect
        case CHECK_LIGHT:  
-	  _ui[id >> ID_SHIFT]->apply_gtex();
+          _ui[id >> ID_SHIFT]->apply_gtex();
           _ui[id >> ID_SHIFT]->update_gtex();
        break;
        case CHECK_INV:    //invert detal
-	  _ui[id >> ID_SHIFT]->apply_gtex();
+          _ui[id >> ID_SHIFT]->apply_gtex();
           _ui[id >> ID_SHIFT]->update_gtex();          
        break;
    }
@@ -2395,10 +2383,9 @@ NPRPenUI::checkbox_cb(int id)
 void
 NPRPenUI::rotation_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case ROT_L:
          _ui[id >> ID_SHIFT]->apply_gtex();
        break;
@@ -2416,10 +2403,9 @@ NPRPenUI::rotation_cb(int id)
 void
 NPRPenUI::translation_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case TRAN_X:
        case TRAN_Y:
        case TRAN_Z:
@@ -2437,10 +2423,9 @@ NPRPenUI::translation_cb(int id)
 void
 NPRPenUI::scale_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
-   switch(id&ID_MASK)
-   {
+   switch(id&ID_MASK) {
        case SCALE_UNIFORM:
          _ui[id >> ID_SHIFT]->update_scale_edits();    
          _ui[id >> ID_SHIFT]->apply_xform();
@@ -2456,12 +2441,11 @@ NPRPenUI::scale_cb(int id)
 void
 NPRPenUI::edit_xform_cb(int id)
 {
-   assert((id >> ID_SHIFT) < _ui.num());
+   assert((id >> ID_SHIFT) < (int)_ui.size());
 
    cerr << "edit_xform" << endl;
 
-   switch(id&ID_MASK)
-      {
+   switch(id&ID_MASK) {
        case EDIT_TRAN_X:
        case EDIT_TRAN_Y:
        case EDIT_TRAN_Z:
@@ -2474,7 +2458,7 @@ NPRPenUI::edit_xform_cb(int id)
          _ui[id >> ID_SHIFT]->get_xform_edits();
          _ui[id >> ID_SHIFT]->apply_xform();
          break;
-      }
+   }
 }
 
 
