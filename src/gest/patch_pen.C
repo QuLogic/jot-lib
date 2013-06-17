@@ -42,7 +42,7 @@ CHANGE_PATCH_CMD::add(Bface* f)
    // skip if null face or already in the new patch:
    if (!f || f->patch() == _new_patch)
       return;
-   _faces       += f;
+   _faces.push_back(f);
    _old_patches += f->patch();
    if (is_done()) {
       _new_patch->add(f);
@@ -68,7 +68,7 @@ CHANGE_PATCH_CMD::undoit()
    if (!is_done())
       return true;
 
-   assert(_old_patches.num() == _faces.num());
+   assert(_old_patches.num() == (int)_faces.size());
    for (int i=0; i<_old_patches.num(); i++) {
       _old_patches[i]->add(_faces[i]);
       _old_patches[i]->mesh()->changed(BMESH::PATCHES_CHANGED);
@@ -168,7 +168,7 @@ PatchPen::stroke_cb(CGESTUREptr& stroke, DrawState*&)
    assert(p && p->mesh());
    CBface_list& faces = p->mesh()->faces();
    CPIXEL_list& lasso = stroke->pts();
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       if (faces[i]->patch() != p) {
          for (int j=1; j<=3; j++) {
             if (lasso.contains(faces[i]->v(j)->pix())) {

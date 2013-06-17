@@ -20,6 +20,8 @@
  **********************************************************************/
 #include "bvert_grid.H"
 
+#include <iterator>
+
 bool
 BvertGrid::build(
    CBvert_list& bottom,         // bottom row
@@ -32,24 +34,39 @@ BvertGrid::build(
    // On the left and right they run bottom to top.
 
    // Check everything is righteous:
-   if (bottom.num() < 2                 ||
-       bottom.num() != top.num()        ||
-       left.num() < 2                   ||
-       left.num() != right.num()        ||
-       bottom.first() != left.first()   ||
-       bottom.last()  != right.first()  ||
-       top.first()    != left.last()    ||
-       top.last()     != right.last()   ||
+   if (bottom.size() < 2                ||
+       bottom.size() != top.size()      ||
+       left.size() < 2                  ||
+       left.size() != right.size()      ||
+       bottom.front() != left.front()   ||
+       bottom.back()  != right.front()  ||
+       top.front()    != left.back()    ||
+       top.back()     != right.back()   ||
        !bottom.same_mesh()              ||
        !top.same_mesh()                 ||
        !left.same_mesh()                ||
        !right.same_mesh()               ||
        bottom.mesh() == 0) {
       err_msg("BvertGrid::build: can't deal with CRAP input");
-      cerr << "bottom: " << bottom << endl;
-      cerr << "top:    " << top    << endl;
-      cerr << "left:   " << left   << endl;
-      cerr << "right:  " << right  << endl;
+
+      std::ostream_iterator<Bvert*> err_it (std::cerr, ", ");
+
+      cerr << "bottom: ";
+      std::copy(bottom.begin(), bottom.end(), err_it);
+      cerr << endl;
+
+      cerr << "top:    ";
+      std::copy(top.begin(), top.end(), err_it);
+      cerr << endl;
+
+      cerr << "left:   ";
+      std::copy(left.begin(), left.end(), err_it);
+      cerr << endl;
+
+      cerr << "right:  ";
+      std::copy(right.begin(), right.end(), err_it);
+      cerr << endl;
+
       return false;
    }
 
@@ -63,12 +80,12 @@ BvertGrid::build(
    BMESH* m = bottom.mesh();    assert(m);
 
    // Internal rows:
-   for (int j=1; j<left.num()-1; j++) {
-      Bvert_list row;                   // vertices for row j
-      row += left[j];                   // add first vertex for row j
-      for (int i=1; i<bottom.num()-1; i++)
-         row += m->add_vertex();        // add internal vertices
-      row += right[j];                  // add last vertex for row j
+   for (Bvert_list::size_type j=1; j<left.size()-1; j++) {
+      Bvert_list row;                    // vertices for row j
+      row.push_back(left[j]);            // add first vertex for row j
+      for (Bvert_list::size_type i=1; i<bottom.size()-1; i++)
+         row.push_back(m->add_vertex()); // add internal vertices
+      row.push_back(right[j]);           // add last vertex for row j
       _grid.push_back(row);
    }
 
@@ -165,7 +182,7 @@ BvertGrid::col(int i) const
 {
    Bvert_list ret;
    for (int j=0; j<nrows(); j++)
-      ret += vert(i,j);
+      ret.push_back(vert(i,j));
    return ret;
 }
 

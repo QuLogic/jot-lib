@@ -20,6 +20,8 @@
 
 #include "tess/meme.H"
 
+#include <set>
+
 class Skin;
 /*****************************************************************
  * SkinMeme:
@@ -47,7 +49,7 @@ class SkinMeme : public VertMeme {
    SkinMeme* child()    const { return (SkinMeme*)VertMeme::child(); }
 
    Bsimplex* track_simplex() const {
-      return _trackers.empty() ? 0 : _trackers.first();
+      return _trackers.empty() ? 0 : _trackers.front();
    }
 
    void set_track_simplex(Bsimplex* s);
@@ -62,8 +64,8 @@ class SkinMeme : public VertMeme {
    Wvec track_norm()    const;
 
    // multi-tracking is not used
-   bool is_tracking()           const { return _trackers.num() > 0; }
-   bool is_multi_tracking()     const { return _trackers.num() > 1; }
+   bool is_tracking()           const { return _trackers.size() > 0; }
+   bool is_multi_tracking()     const { return _trackers.size() > 1; }
 
    void set_track_filter(SimplexFilter* f) { _track_filter = f; }
    bool is_restricted()         const;
@@ -104,6 +106,7 @@ class SkinMeme : public VertMeme {
 
  protected:
    Bsimplex_list  _trackers;      // track simplices
+   std::set<Bsimplex*> _unique_trackers;
    Wvec     _bc;            // barycentric coords on given simplex
    Wvec     _delt;          // displacement computed in compute_delt()
    double         _h;             // displacement along normal

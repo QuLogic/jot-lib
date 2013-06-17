@@ -42,12 +42,12 @@ Bsimplex::generate_key()
    // XXX - change back to 1<<24 after verifying highest bit is no
    // longer being used in some hacky code somewhere like it was at
    // one point
-   if (_table.num() >= ((1<<23) - 1)) {
+   if (_table.size() >= ((1<<23) - 1)) {
       // can't allocate > 8 million IDs
       err_msg("Bsimplex::generate_key: error: key table is full");
    } else {
-      _key = _table.num();
-      _table += this;
+      _key = _table.size();
+      _table.push_back(this);
    }
    return _key;
 }
@@ -126,7 +126,7 @@ Bsimplex::add_simplex_data(SimplexData* sd)
    if (!_data_list) _data_list = new SimplexDataList(); assert(_data_list);
 
    // Now go ahead:
-   _data_list->add(sd);
+   _data_list->push_back(sd);
 }
 
 Bsimplex* 
@@ -162,7 +162,7 @@ Bsimplex::walk_to_target(CWpt& target, const SimplexFilter& f) const
 
    // can any neighbors get closer?
    Bsimplex_list nbrs = neighbors().filter(f);
-   for (int i=0; i<nbrs.num(); i++) {
+   for (Bsimplex_list::size_type i=0; i<nbrs.size(); i++) {
       double d = nbrs[i]->dist(target);
       if (d < min_dist - epsAbsMath()) {         // get closer by nonzero amount
          min_dist = d;

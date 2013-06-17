@@ -107,10 +107,10 @@ qr_centroid_skincurve(SkinCurveMap* m, Bvert* v)
    double net_weight = 0; 
    Bedge_list nbrs = v->get_manifold_edges(); // work with primary layer edges
    Bedge_list star;
-   for (int i = 0; i < nbrs.num(); i++) {
+   for (Bedge_list::size_type i = 0; i < nbrs.size(); i++) {
       Bbase* ctrl = Bbase::find_controller(nbrs[i]);
       if (Bcurve::isa(ctrl) || Skin::isa(ctrl))
-         star += nbrs[i];
+         star.push_back(nbrs[i]);
    }
 
    if (star.empty())
@@ -118,7 +118,7 @@ qr_centroid_skincurve(SkinCurveMap* m, Bvert* v)
 
    double avg_len = star.avg_len();
    assert(avg_len > 0);
-   for (int i=0; i<star.num(); i++) {
+   for (Bedge_list::size_type i=0; i<star.size(); i++) {
       Bedge* e = star[i];
       if (e->is_strong()) {
          // add contribution from r neighbor
@@ -654,8 +654,8 @@ Bcurve::Bcurve(
    assert(m);
    set_mesh(m);
 
-   bool is_closed = (verts.last()==verts.first()) && 
-      !Bcurve::find_controller(verts.last());
+   bool is_closed = (verts.back()==verts.front()) &&
+                     !Bcurve::find_controller(verts.back());
 
    if (is_closed) {
       err_adv(debug, "vert list is closed");
@@ -673,10 +673,10 @@ Bcurve::Bcurve(
 
    Bpoint* b1 = 0;
    Bpoint* b2 = 0;
-   Bvert* first = s_verts.first();
-   Bvert* last = s_verts.last();
-   if (first->get_all_faces().empty()) first = verts.first();
-   if (last->get_all_faces().empty()) last = verts.last();
+   Bvert* first = s_verts.front();
+   Bvert* last = s_verts.back();
+   if (first->get_all_faces().empty()) first = verts.front();
+   if (last->get_all_faces().empty()) last = verts.back();
 
    if ( !is_closed ) {
      
@@ -689,7 +689,7 @@ Bcurve::Bcurve(
             Bvert_list cur_verts = c->cur_subdiv_verts();
             Wpt_list cur_pts = cur_verts.pts();
 
-            for (int i = 0; i < cur_verts.num(); i++) {
+            for (Bvert_list::size_type i = 0; i < cur_verts.size(); i++) {
                double t = get_param(cur_pts, i);
                if (cur_verts[i] == first)
                   b1 = new Bpoint((Lvert*)first, t, c->map(), res_lev);
@@ -716,7 +716,7 @@ Bcurve::Bcurve(
             Bvert_list cur_verts = c->cur_subdiv_verts();
             Wpt_list cur_pts = cur_verts.pts();
 
-            for (int i = 0; i < cur_verts.num(); i++) {
+            for (Bvert_list::size_type i = 0; i < cur_verts.size(); i++) {
                double t = get_param(cur_pts, i);
                if (cur_verts[i] == last)
                   b2 = new Bpoint((Lvert*)last, t, c->map(), res_lev);
@@ -737,10 +737,10 @@ Bcurve::Bcurve(
 
    Bsimplex_list simps;
    std::vector<Wvec> bcs;
-   for (int i = !is_closed; i < s_verts.num()-!is_closed; i++) {
+   for (Bvert_list::size_type i = !is_closed; i < s_verts.size()-!is_closed; i++) {
       assert(SkinMeme::isa(Bbase::find_boss_meme(s_verts[i])));
       SkinMeme* meme = (SkinMeme*)Bbase::find_boss_meme(s_verts[i]);
-      simps += (meme->track_simplex());
+      simps.push_back(meme->track_simplex());
       bcs.push_back(meme->get_bc());
    }
    _map = new SkinCurveMap(simps, bcs, skin,
@@ -760,22 +760,22 @@ Bcurve::Bcurve(
 
    CurveMeme* cm;
    if (is_closed)
-      cm = new CurveMeme(this, (Lvert*)s_verts.first(), get_param(pts, 0), true);
+      cm = new CurveMeme(this, (Lvert*)s_verts.front(), get_param(pts, 0), true);
    else
       cm = new CurveMeme(this, (Lvert*)first, get_param(pts, 0), false);
 
    // Compute the index of the last vertex for which we want to create a meme:
    // if the curve is closed, leave out the last vertex (which is the same as 
    // the first) to avoid adding a duplicate meme to the first vertex.
-   int n = verts.num();
+   Bvert_list::size_type n = verts.size();
    if (is_closed) 
       --n;
 
    // Interior vertices: 2nd param to last
-   for (int k=1; k<n; k++) {
+   for (Bvert_list::size_type k=1; k<n; k++) {
       if (is_closed || k < n-1)
          cm = new CurveMeme(this, (Lvert*)s_verts[k], get_param(pts, k), true);
-      else if (verts.first() != verts.last())
+      else if (verts.front() != verts.back())
          cm = new CurveMeme(this, (Lvert*)last, 1, false);
    }
 
@@ -813,8 +813,8 @@ Bcurve::Bcurve(
    assert(m);
    set_mesh(m);
 
-   assert(verts.num()>1 && verts.num()==(int)uvpts.size());
-   bool is_closed = (verts.last()==verts.first());
+   assert(verts.size()>1 && verts.size()==uvpts.size());
+   bool is_closed = (verts.back()==verts.front());
 
    if (is_closed) {
       err_adv(debug, "vert list is closed");
@@ -834,8 +834,8 @@ Bcurve::Bcurve(
 
    if ( !is_closed ) {
      
-      b1 = Bpoint::find_owner(verts.first());
-      b2 = Bpoint::find_owner(verts.last());
+      b1 = Bpoint::find_owner(verts.front());
+      b2 = Bpoint::find_owner(verts.back());
 
       if (b1) {
          if (b1->constraining_surface() != surf) 
@@ -844,7 +844,7 @@ Bcurve::Bcurve(
          //assert(surf == b1->constraining_surface());
       } else {
          // XXX -- here and below, is cast to Lvert* definitely safe?
-         b1 = new Bpoint((Lvert*)verts.first(), uvpts.front(), surf, res_lev);
+         b1 = new Bpoint((Lvert*)verts.front(), uvpts.front(), surf, res_lev);
          if (debug)
             cerr << "Created new endpoint b1 with uvpt" << uvpts.front() << endl;
       }
@@ -855,7 +855,7 @@ Bcurve::Bcurve(
             err_adv(debug, "Warning: bcurve endpoint 2 doesn't live in the same surface..");
          //assert(surf == b2->constraining_surface());
       } else {
-         b2 = new Bpoint((Lvert*)verts.last(), uvpts.back(), surf, res_lev);
+         b2 = new Bpoint((Lvert*)verts.back(), uvpts.back(), surf, res_lev);
          if (debug)
             cerr << "Created new endpoint b2 with uvpt "
                  << uvpts.back() << endl;
@@ -886,17 +886,17 @@ Bcurve::Bcurve(
    // create vert memes
    // 1st vertex:
 
-   new CurveMeme(this, (Lvert*)verts.first(), get_param(uvpts, 0), is_closed);
+   new CurveMeme(this, (Lvert*)verts.front(), get_param(uvpts, 0), is_closed);
 
    // Compute the index of the last vertex for which we want to create a meme:
    // if the curve is closed, leave out the last vertex (which is the same as 
    // the first) to avoid adding a duplicate meme to the first vertex.
-   int n = verts.num();
+   Bvert_list::size_type n = verts.size();
    if (is_closed) 
       --n;
 
    // Interior vertices: 2nd param to last
-   for (int k=1; k<n; k++) {
+   for (Bvert_list::size_type k=1; k<n; k++) {
       new CurveMeme(this, (Lvert*)verts[k], get_param(uvpts, k), k<n-1 || is_closed);
    }
 
@@ -1014,7 +1014,7 @@ Bcurve::cur_strip() const
 inline void
 set_creases(CBedge_list& edges, unsigned short k)
 {
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       edges[i]->set_crease(k);
 }
 
@@ -1074,7 +1074,7 @@ Bcurve::surfaces() const
    Bsurface* surf=0;
    Bsurface_list ret;
    CBedge_list &edges = _strip.edges();
-   for (int k=0; k<edges.num(); k++) {
+   for (Bedge_list::size_type k=0; k<edges.size(); k++) {
       if ((surf = Bsurface::find_controller(edges[k]->f1())))
          ret.add_uniquely(surf);
       if ((surf = Bsurface::find_controller(edges[k]->f2())))
@@ -1116,8 +1116,8 @@ next_curve(Bpoint* b, Bcurve* c, bool ccw)
 
    // vector from b along c:
    Wvec vec = (c->b1() == b) ?
-      edge_vec(v, c->edges().first()) :
-      edge_vec(v, c->edges().last());
+      edge_vec(v, c->edges().front()) :
+      edge_vec(v, c->edges().back());
 
    Wvec n = VIEW::eye_vec(b->loc()); // unit vector from point to eye
    if (ccw)
@@ -1127,7 +1127,7 @@ next_curve(Bpoint* b, Bcurve* c, bool ccw)
    Bedge_list adj = b->vert()->get_manifold_edges();
    Bcurve* ret = 0;
    double min_angle = 0;
-   for (int i=0; i<adj.num(); i++) {
+   for (Bedge_list::size_type i=0; i<adj.size(); i++) {
       Bedge*    e = adj[i];
       Bcurve* crv = Bcurve::find_owner(e);
       if (!crv || crv->is_hidden() || crv == c)
@@ -1221,12 +1221,10 @@ Bcurve::extend_boundaries()
 Bvert_list
 Bcurve::verts() const
 {
-   
-
    EdgeStrip    s = get_strip();
    Bvert_list ret = s.verts();
    if (!(is_closed() || s.empty()))
-      ret += s.last();
+      ret.push_back(s.last());
    return ret;
 }
 
@@ -1235,11 +1233,10 @@ Bcurve::verts() const
 Bvert_list
 Bcurve::full_verts() const
 {
-
    EdgeStrip    s = get_strip();
    Bvert_list ret = s.verts();
    if (!s.empty())
-      ret += s.last();
+      ret.push_back(s.last());
    return ret;
 }
 
@@ -1247,8 +1244,6 @@ Bcurve::full_verts() const
 CBedge_list&
 Bcurve::cur_subdiv_edges() const
 {
-   
-
    Bcurve* cur = cur_curve();
    if (cur) {
       return cur->edges();
@@ -1262,7 +1257,6 @@ Bcurve::cur_subdiv_edges() const
 Bvert_list
 Bcurve::cur_subdiv_verts() const
 {
-
    // See note in Bcurve::verts() above.
 
    Bvert_list ret;
@@ -1270,7 +1264,7 @@ Bcurve::cur_subdiv_verts() const
    if (cur) {
       ret = cur->verts();
       if (!(is_closed() || cur->empty()))
-         ret += cur->last();
+         ret.push_back(cur->last());
    } else {
       err_msg("Bcurve::cur_subdiv_verts: can't get cur strip");
    }
@@ -1334,17 +1328,17 @@ Bcurve::delete_elements()
    }
 
    // Eliminate last vertex:
-   if (ctrl.num() > 1 && !Bpoint::lookup(ctrl.last())) {
+   if (ctrl.size() > 1 && !Bpoint::lookup(ctrl.back())) {
       if (debug)
          err_msg("Bcurve::delete_elements: removing last vertex");
-      _mesh->remove_vertex(ctrl.last());
+      _mesh->remove_vertex(ctrl.back());
    }
 
    // Eliminate interior vertices:
-   for (int i=1; i<ctrl.num()-1; i++) {
+   for (Bvert_list::size_type i=1; i<ctrl.size()-1; i++) {
       if (debug)
          err_msg("Bcurve::delete_elements: removing interior vertex %d/%d",
-                 i, ctrl.num()-1);
+                 i, ctrl.size()-1);
       _mesh->remove_vertex(ctrl[i]);
    }
 
@@ -1873,7 +1867,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
 
    Bvert_list verts = cur_subdiv_verts();
 
-   if (verts.num() < 2) 
+   if (verts.size() < 2)
       return false;
 
    switch(mode){
@@ -1885,7 +1879,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
     } 
     case RESHAPE_MESH_NORMALS: 
     {
-       for ( int i=0; i<verts.num(); i++ ) {
+       for (Bvert_list::size_type i=0; i<verts.size(); i++) {
           Wpt start = verts[i]->loc();
           Wpt end = start + (len * verts[i]->norm());
           ret_lines.push_back(Wline(start, end));
@@ -1897,7 +1891,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
     {
        bool total_success = true;
 
-       for ( int i=0; i<verts.num(); i++ ) {
+       for (Bvert_list::size_type i=0; i<verts.size(); i++) {
           Wpt start = verts[i]->loc();
 
           // Use the direction of the curve edge containing this vertex
@@ -1907,7 +1901,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
           // connecting to the previous vertex.)
 
           // find the index of the 
-          int other_i = (i < verts.num()-1) ? i+1 : i-1;
+          Bvert_list::size_type other_i = (i < verts.size()-1) ? i+1 : i-1;
           Bedge *e = verts[i]->lookup_edge(verts[other_i]);
 
           if (!e) {
@@ -1954,7 +1948,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
     {
        bool total_success = true;
 
-       for ( int i=0; i<verts.num(); i++ ) {
+       for (Bvert_list::size_type i=0; i<verts.size(); i++) {
 
           Wpt start = verts[i]->loc();
 
@@ -1965,7 +1959,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
           // connecting to the previous vertex.)
 
           // find the index of the other vertex connected by the edge
-          int other_i = (i < verts.num()-1) ? i+1 : i-1;
+          Bvert_list::size_type other_i = (i < verts.size()-1) ? i+1 : i-1;
           Bedge *e = verts[i]->lookup_edge(verts[other_i]);
 
           if (!e) {
@@ -2491,34 +2485,34 @@ Bcurve_list::extract_boundary(Bvert_list& ret) const
 
    for (int i=0; i<_num; i++) {
       Bvert_list v = _array[i]->verts();
-      if (v.num() < 2)
+      if (v.size() < 2)
          return false;
-      if (ret.num() > 0) {
+      if (ret.size() > 0) {
          // If it's not the first time thru the loop,
          // this curve must connect to the previous one...
          // is it oriented forward or backward?
-         if (ret.last() == v.first()) {
+         if (ret.back() == v.front()) {
             // It's in the right order (oriented forward)
             // now pull out the duplicate 1st vertex:
-            v.pull_index(0);
-         } else if (ret.last() == v.last()) {
+            v.erase(v.begin());
+         } else if (ret.back() == v.back()) {
             // It's backwards -- fix it
-            v.pop();
-            v.reverse();
+            v.pop_back();
+            std::reverse(v.begin(), v.end());
          } else {
             // There is no else
             return false;
          }
       }
       // add new verts via array concatenation:
-      ret += v;
+      ret = ret + v;
    }
 
-   if (ret.num() < 3)
+   if (ret.size() < 3)
       return false;
 
-   if (ret.first() == ret.last())
-      ret.pop();
+   if (ret.front() == ret.back())
+      ret.pop_back();
 
    return true;
 }
@@ -2538,17 +2532,17 @@ Bcurve_list::extract_boundary(vector<Bvert_list>& ret) const
 
    for (int i=0; i<_num; i++) {
       Bvert_list v = _array[i]->verts();
-      if (v.num() < 2)
+      if (v.size() < 2)
          return false;
       if (ret.size() > 0) {
          // If it's not the first time thru the loop,
          // this curve must connect to the previous one...
          // is it oriented forward or backward?
-         if (v.first() == ret.back().last()) {
+         if (v.front() == ret.back().back()) {
             // It's in the right order (oriented forward)
-         } else if (v.last() == ret.back().last()) {
+         } else if (v.back() == ret.back().back()) {
             // It's backwards -- fix it
-            v.reverse();
+            std::reverse(v.begin(), v.end());
          } else {
             // There is no else
             return false;
@@ -2580,9 +2574,9 @@ can_fill_ccw(CBvert_list& verts)
       err_adv(debug, "can_fill_ccw: 1 or more edges are interior");
       return false;
    }
-   assert(verts.num() == chain.num()   ||
-          verts.num() == chain.num()+1);
-   for (int i=0; i<chain.num(); i++) {
+   assert(verts.size() == chain.size()   ||
+          verts.size() == chain.size()+1);
+   for (Bedge_list::size_type i=0; i<chain.size(); i++) {
       if (chain[i]->ccw_face(verts[i]) != NULL) {
          err_adv(debug, "can_fill_ccw: a face lies in the interior");
          return false;
@@ -2611,10 +2605,8 @@ do_reverse(Bvert_list& ret)
    // becomes:
    //   0 4 3 2 1
 
-   assert(ret.num() > 0);
-   ret += ret.first();
-   ret.reverse();
-   ret.pop();
+   assert(ret.size() > 0);
+   std::reverse(ret.begin() + 1, ret.end());
 }
 
 inline void
@@ -2629,7 +2621,7 @@ do_reverse(vector<Bvert_list>& ret)
    assert(ret.size() > 0);
    std::reverse(ret.begin() + 1, ret.end());
    for (vector<Bvert_list>::size_type i=0; i<ret.size(); i++)
-      ret[i].reverse();
+      std::reverse(ret[i].begin(), ret[i].end());
 }
 
 inline bool
@@ -2698,7 +2690,7 @@ Bcurve_list::all_edges() const
 {
    Bedge_list ret;
    for (int k=0; k<_num; k++)
-      ret += _array[k]->edges();
+      ret = ret + _array[k]->edges();
    return ret;
 }
 
@@ -2727,8 +2719,8 @@ Bcurve::rebuild_seg(
    new_pts.update_length();
    Bvert_list vertices = verts();
    if (is_closed())
-      vertices.pop();
-   int n = vertices.num();
+      vertices.pop_back();
+   int n = vertices.size();
 
    // Build list of affected vertices and their indices in the
    // control verts list:
@@ -3121,7 +3113,7 @@ Bcurve::oversketch(CPIXEL_list& sketch_pixels)
       // otherwise, project the vertex locations at the current
       // subdivision level to pixel space
       Bvert_list verts = cur_subdiv_verts();     
-      for (int i=0; i<verts.num(); i++) {
+      for (Bvert_list::size_type i=0; i<verts.size(); i++) {
          curve_pixels.push_back(PIXEL(verts[i]->loc()));
       } 
    }
@@ -3278,7 +3270,7 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
       int inter_face = -1;
       double inter_depth = 1e+10;
       Wvec bc; double depth; Wpt hit;
-      for (int j = 0; j < skel_faces.num(); j++) {
+      for (Bface_list::size_type j = 0; j < skel_faces.size(); j++) {
          if (skel_faces[j]->ray_intersect(Wline(new_curve[i]), hit, depth) && (depth < inter_depth)) {
             skel_faces[j]->project_barycentric(hit, bc);
             inter_depth = depth;
@@ -3288,16 +3280,16 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
       if (inter_face == -1) {
          hit = skel_faces[0]->plane_intersect(new_curve[i]);
          skel_faces[0]->project_barycentric(hit, bc);
-         faces += skel_faces[0];
+         faces.push_back(skel_faces[0]);
          bcs.push_back(bc);
       } else {
-         faces += skel_faces[inter_face];
+         faces.push_back(skel_faces[inter_face]);
          bcs.push_back(bc);
       }
    }
 
    if (is_closed()) {
-      faces += faces.first();
+      faces.push_back(faces.front());
       bcs.push_back(bcs.front());
    }
    ((SkinCurveMap*)_map)->set_pts(faces, bcs);
@@ -3336,7 +3328,7 @@ Bcurve::reshape_on_surface(const PIXEL_list &new_curve)
    UVsurface* uv_surf = UVsurface::find_controller(verts()[1]);
 
    if (!uv_surf) {
-      ARRAY<Bface*> faces;
+      std::vector<Bface*> faces;
       verts()[1]->get_faces(faces);
       if ( !faces.empty() ){
          // just get the surface from the first face

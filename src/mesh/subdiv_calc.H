@@ -24,6 +24,8 @@
 #include "bfilters.H"
 #include "lvert.H"
 
+#include <vector>
+
 /*****************************************************************
  * SubdivCalc:
  *
@@ -182,8 +184,8 @@ class LoopCalc : public SubdivCalc<T> {
           this->clear(ret);
           Bvert_list nbrs;
           v->get_p_nbrs(nbrs);
-          int n = nbrs.num();
-          for (int k=0; k<n; k++)
+          Bvert_list::size_type n = nbrs.size();
+          for (Bvert_list::size_type k=0; k<n; k++)
              ret = (ret + get_val(nbrs[k]));
           return ret/n;
        }
@@ -200,7 +202,7 @@ class LoopCalc : public SubdivCalc<T> {
           int count = 0;
           Bvert_list nbrs;
           v->get_p_nbrs(nbrs);
-          for (int k=0; k<nbrs.num(); k++) {
+          for (Bvert_list::size_type k=0; k<nbrs.size(); k++) {
              Bedge* e = v->e(k);
              if (e->is_crease() || e->is_border() || e->is_polyline()) {
                 double w = 1.0 / ++count; // weight for incoming value
@@ -343,21 +345,21 @@ class LoopLoc : public LoopCalc<Wpt> {
 
       // get neighbors in CCW order:
       Bvert_list nbrs = v->get_ccw_nbrs();
-      assert(nbrs.num() == v->degree());
+      assert((int)nbrs.size() == v->degree());
       
       Wpt t1, t2; // tangent "vectors" 
-      int n = nbrs.num();
+      Bvert_list::size_type n = nbrs.size();
       int bd = v->border_degree();
       if (bd == 0) {
          // no borders: simple case
-         for (int k=0; k<n; k++) {
+         for (Bvert_list::size_type k=0; k<n; k++) {
             double theta = TWO_PI * k / n;
             t1 += nbrs[k]->loc() * cos(theta);
             t2 += nbrs[k]->loc() * sin(theta);
          }
       } else if (bd == 2) {
          // t1: along the border:
-         t1 = nbrs.first()->loc() + (-1 * nbrs.last()->loc());
+         t1 = nbrs.front()->loc() + (-1 * nbrs.back()->loc());
          // t2 goes across the border:
          if (n == 4) {
             // regular case
@@ -367,14 +369,14 @@ class LoopLoc : public LoopCalc<Wpt> {
                   nbrs[2]->loc()*( 2) +
                   nbrs[3]->loc()*(-1));
          } else if (n == 2) {
-            t2 = nbrs.first()->loc() + nbrs.last()->loc() + (-2 * v->loc());
+            t2 = nbrs.front()->loc() + nbrs.back()->loc() + (-2 * v->loc());
          } else if (n == 3) {
             t2 = nbrs[1]->loc() + (-1 * v->loc());
          } else {
             double theta = M_PI/(n - 1);
             double c = 2*cos(theta) - 2;
-            t2 = (nbrs.first()->loc() + nbrs.last()->loc())*sin(theta);
-            for (int i=1; i<n-1; i++) {
+            t2 = (nbrs.front()->loc() + nbrs.back()->loc())*sin(theta);
+            for (Bvert_list::size_type i=1; i<n-1; i++) {
                t2 += c*sin(i*theta)*nbrs[i]->loc();
             }   
          }
@@ -449,7 +451,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       Bedge_list adj;    // adjacent edges from primary level
       v->get_manifold_edges(adj);
       int count = 0;
-      for (int k=0; k<adj.num(); k++) {
+      for (Bedge_list::size_type k=0; k<adj.size(); k++) {
          if (adj[k]->is_strong()) {
             // weight for incoming value:
             double w = 1.0 / ++count; 
@@ -468,7 +470,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
          ret = (ret*0.75) + (get_val(f->quad_vert())*0.25);
       return ret;
    }
-   T fcentroids(CARRAY<Bface*>& faces) const {
+   T fcentroids(const vector<Bface*>& faces) const {
       // returns average of the face centroids in the given list
       // (usually from the 1-ring of a given vertex)
       T ret;
@@ -477,9 +479,9 @@ class CatmullClarkCalc : public SubdivCalc<T> {
          err_msg("CatmullClarkCalc::fcentroids: error: empty face list");
          return ret;
       }
-      for (int k=0; k<faces.num(); k++)
+      for (vector<Bface*>::size_type k=0; k<faces.size(); k++)
          ret = ret + fcentroid(faces[k]);
-      return ret / faces.num();
+      return ret / faces.size();
    }
    T smooth_centroid(CBvert* v) const {
       // value used in catmull-clark computation for
@@ -502,7 +504,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       int count = 0;
       Bedge_list adj;    // adjacent edges from primary level
       v->get_manifold_edges(adj);
-      for (int k=0; k<adj.num(); k++) {
+      for (Bedge_list::size_type k=0; k<adj.size(); k++) {
          if (v->e(k)->is_strong_poly_crease()) {
             // weight for incoming value:
             double w = 1.0 / ++count; 
@@ -524,7 +526,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       if (v->is_manifold())
          n = v->degree(StrongEdgeFilter());
       else
-         n = v->get_manifold_edges().filter(StrongEdgeFilter()).num();
+         n = v->get_manifold_edges().filter(StrongEdgeFilter()).size();
       double w = (n-2)/double(n); // vertex weight
       return interp(smooth_centroid(v), get_val(v), w);
    }
@@ -556,7 +558,7 @@ class CatmullClarkCalc : public SubdivCalc<T> {
       if (v->is_manifold())
          n = v->degree(StrongPolyCreaseEdgeFilter());
       else
-         n = v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).num();
+         n = v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).size();
       switch (n) {
        case 0:
        case 1:
@@ -617,7 +619,7 @@ class HybridCalc : public SubdivCalc<T> {
    T sum(CBvert_list & p) const {
       T ret;
       this->clear(ret);
-      for (int i=0; i<p.num(); i++)
+      for (Bvert_list::size_type i=0; i<p.size(); i++)
          ret = ret + get_val(p[i]);
       return ret;
    }
@@ -630,15 +632,15 @@ class HybridCalc : public SubdivCalc<T> {
 
       // Load up p and r lists
       Bedge_list e = v->get_manifold_edges();
-      for (int i=0; i<e.num(); i++) {
+      for (Bedge_list::size_type i=0; i<e.size(); i++) {
          if (e[i]->is_strong()) {
             switch (e[i]->num_quads()) {
              case 1:
-               r += e[i]->other_vertex(v);
+               r.push_back(e[i]->other_vertex(v));
              brcase 2:
-               p += e[i]->other_vertex(v);
+               p.push_back(e[i]->other_vertex(v));
              brdefault:
-               t += e[i]->other_vertex(v);
+               t.push_back(e[i]->other_vertex(v));
             }
          }
       }
@@ -653,7 +655,7 @@ class HybridCalc : public SubdivCalc<T> {
       double delta = 4;
 
       double net_weight =
-         alpha*p.num() + beta*q.num() + gamma*r.num() + delta*t.num();
+         alpha*p.size() + beta*q.size() + gamma*r.size() + delta*t.size();
 
       return (sum(p)*alpha + sum(q)*beta + sum(r)*gamma + sum(t)*delta) /
          net_weight;
@@ -676,7 +678,7 @@ class HybridCalc : public SubdivCalc<T> {
       if (v->is_manifold())
          n = v->degree(StrongPolyCreaseEdgeFilter());
       else
-         n = v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).num();
+         n = v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).size();
       switch (n) {
        case 0:
        case 1: {

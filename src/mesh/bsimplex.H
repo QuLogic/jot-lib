@@ -23,6 +23,8 @@
 
 #include "simplex_data.H"
 
+#include <vector>
+
 class Bsimplex;
 class Bvert;
 class Bedge;
@@ -88,7 +90,7 @@ class Bsimplex {
 
    uintptr_t key() const { return _key ? _key : ((Bsimplex*)this)->generate_key();}
    static Bsimplex* lookup(uintptr_t k) {
-      return (k<(uint)_table.num()) ? _table[k] : 0;
+      return (k<_table.size()) ? _table[k] : 0;
    }
 
    //******** DIMENSION ********
@@ -141,8 +143,11 @@ class Bsimplex {
    
    void add_simplex_data(SimplexData* sd);
    void rem_simplex_data(SimplexData* sd) {
-      if (_data_list)
-         _data_list->rem(sd);
+      if (_data_list) {
+         SimplexDataList::iterator it;
+         it = std::find(_data_list->begin(), _data_list->end(), sd);
+         _data_list->erase(it);
+      }
    }
 
    // For debugging only
@@ -272,9 +277,9 @@ class Bsimplex {
    // Table for looking up a Bsimplex from its "key" value. First slot
    // contains a null item, so index of 0 always looks up a null item.
  public:
-   class IDtable : public ARRAY<Bsimplex*> {
+   class IDtable : public vector<Bsimplex*> {
     public:
-      IDtable(int max) : ARRAY<Bsimplex*>(max) { *this += (Bsimplex*)0; }
+      IDtable(int max) : vector<Bsimplex*>() { reserve(max); this->push_back((Bsimplex*)0); }
    };
  protected:
    static IDtable       _table;

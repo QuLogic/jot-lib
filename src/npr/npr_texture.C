@@ -536,12 +536,12 @@ NPRTexture::read_stream(istream &is, vector<string> & leftover)
 
          static IOBlockList blocklist;
 
-         if (blocklist.num() == 0) {
-            blocklist +=
+         if (blocklist.empty()) {
+            blocklist.push_back(
                new IOBlockMeth<NPRTexture>("GTEXTURE",
-                                           &NPRTexture::read_gtexture,  this);
+                                           &NPRTexture::read_gtexture, this));
          } else {
-            for (int i = 0; i < blocklist.num(); i++)
+            for (IOBlockList::size_type i = 0; i < blocklist.size(); i++)
                ((IOBlockMeth<NPRTexture> *) blocklist[i])->set_obj(this);
          }
          retval = IOBlock::consume(is, blocklist, leftover);

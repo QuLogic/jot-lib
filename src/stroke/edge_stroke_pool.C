@@ -101,18 +101,17 @@ EdgeStrokePool::put_edge_strip(TAGformat &d) const
 {
    vector<Point2i> edge_strip;
 
-   CARRAY<Bvert*> &verts = _strip.verts();
-   CARRAY<Bedge*> &edges = _strip.edges();
+   const vector<Bvert*> &verts = _strip.verts();
+   const vector<Bedge*> &edges = _strip.edges();
 
-   assert(verts.num() == edges.num());
+   assert(verts.size() == edges.size());
 
-   for (int i=0; i<verts.num(); i++) 
+   for (vector<Bvert*>::size_type i=0; i<verts.size(); i++)
       edge_strip.push_back(Point2i(verts[i]->index(),edges[i]->index()));
 
    d.id();
    *d << edge_strip;
    d.end_id();
-
 }
 
 void
@@ -189,8 +188,8 @@ EdgeStrokePool::EdgeStrokePool(EdgeStroke* proto) :
 
 EdgeStrokePool::~EdgeStrokePool()
 {
-   int i = 0; // loop index
-   for (i = 0; i < _strip.edges().num(); i++) {
+   Bedge_list::size_type i = 0; // loop index
+   for (i = 0; i < _strip.edges().size(); i++) {
       Bedge* edge = _strip.edges()[i];
       assert(edge);
       //SimplexData* d = edge->find_data(this->static_name());
@@ -200,7 +199,7 @@ EdgeStrokePool::~EdgeStrokePool()
    }
 
    i = 0;
-   while (i < (int)size()) {
+   while (i < size()) {
       assert(at(i)->is_of_type(EdgeStroke::static_name()));
       ((EdgeStroke*)at(i++))->clear_simplex_data();
    }
@@ -227,7 +226,7 @@ void EdgeStrokePool::set_edge_strip(CEdgeStrip& strip)
    _strip = strip;
    set_stroke_strips();
 
-   for(int i=0; i<_strip.edges().num(); i++){
+   for (Bedge_list::size_type i=0; i<_strip.edges().size(); i++) {
       Bedge* e = _strip.edges()[i];
       new EdgeStrokePool::EdgeData(this, e);
    }
@@ -249,22 +248,22 @@ EdgeStrokePool::add_to_strip(Bvert* vert, Bedge* edge)
    // check that the vert being added is contiguous to last vert in edge
    // strip
 
-   if (_strip.verts().num() > 0) {
+   if (_strip.verts().size() > 0) {
       // Edge (if any) connecting this vert to previous vert;
-      Bedge* last_edge = vert->lookup_edge(_strip.verts().last());
+      Bedge* last_edge = vert->lookup_edge(_strip.verts().back());
 
       // Should have edge connecting v to last vert on the list
       if(!last_edge) {
          cerr << "EdgeStrokePool::add_to_strip(), " 
               << "WARNING: vertex not adjacent to previous vertex:" << endl;
-         cerr << "Old vertex: " << _strip.verts().last()->index() << endl;
+         cerr << "Old vertex: " << _strip.verts().back()->index() << endl;
          cerr << "New vertex: " << vert->index() << endl;
          cerr << "returning" << endl;
          return;
       }
 
       // reject adjacent v's with duplicate locations
-      if (_strip.verts().last()->loc() == vert->loc()) {
+      if (_strip.verts().back()->loc() == vert->loc()) {
          cerr << "EdgeStrokePool::add_to_strip(), " 
               << "WARNING: adjacent verts identical:" << endl;
          cerr << "returning" << endl;
@@ -362,13 +361,13 @@ EdgeStrokePool::write_stream(ostream &os) const
 {   
    BStrokePool::write_stream(os);
 
-   CARRAY<Bvert*> &verts = _strip.verts();
-   CARRAY<Bedge*> &edges = _strip.edges();
+   const vector<Bvert*> &verts = _strip.verts();
+   const vector<Bedge*> &edges = _strip.edges();
    vector<int> vert_inds;
    vector<int> edge_inds;
-   int i;
-   assert(verts.num() == edges.num());
-   for (i = 0; i < verts.num(); i++) {
+   vector<Bvert*>::size_type i;
+   assert(verts.size() == edges.size());
+   for (i = 0; i < verts.size(); i++) {
       vert_inds.push_back(verts[i]->index());
       edge_inds.push_back(edges[i]->index());
    }

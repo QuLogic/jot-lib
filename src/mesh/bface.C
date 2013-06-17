@@ -251,7 +251,7 @@ Bface::ndc_walk(
    NDCpt  curr_nearest;
    int    curr_on_tri=0;
 
-   for (int k = 0; k < nbrs.num(); k++) {
+   for (Bface_list::size_type k = 0; k < nbrs.size(); k++) {
       if (nbrs[k] != this) {
          curr_nearest = nbrs[k]->nearest_pt_ndc(target, curr_bc, curr_on_tri);
          if (curr_nearest.dist_sqrd(target) < dist_sqrd ) {
@@ -417,18 +417,18 @@ get_other_face(CBedge* e, CBface* f, Bsimplex_list& ret)
    Bface* g = e->other_face(f);
    if (!g)
       return;
-   ret += g;
+   ret.push_back(g);
    g = g->quad_partner();
    if (g)
-      ret += g;
+      ret.push_back(g);
 }
 
 inline Bsimplex_list
 bfa_to_bsa(CBface_list& faces)
 {
-   Bsimplex_list ret(faces.num());
-   for (int i=0; i<faces.num(); i++)
-      ret += faces[i];
+   Bsimplex_list ret(faces.size());
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
+      ret.push_back(faces[i]);
    return ret;
 }
 
@@ -444,12 +444,12 @@ Bface::neighbors() const
    return bfa_to_bsa(Bface_list((Bface*)this).one_ring_faces());
 
    Bsimplex_list ret(9);
-   ret += _v1;
-   ret += _v2;
-   ret += _v3;
-   ret += _e1;
-   ret += _e2;
-   ret += _e3;
+   ret.push_back(_v1);
+   ret.push_back(_v2);
+   ret.push_back(_v3);
+   ret.push_back(_e1);
+   ret.push_back(_e2);
+   ret.push_back(_e3);
    get_other_face(_e1, this, ret);
    get_other_face(_e2, this, ret);
    get_other_face(_e3, this, ret);
@@ -520,7 +520,7 @@ Bface::local_search(
             Bface_list near_faces(16);
             assert(is_vert(sim));
             ((Bvert*)sim)->get_faces(near_faces);
-            for (int k = near_faces.num()-1; k>=0; k--) {
+            for (int k = near_faces.size()-1; k>=0; k--) {
                if (near_faces[k] != this) {
                   int good_path = near_faces[k]->local_search(
                            end, final_bc, target, reached, sim, iters-1);
@@ -1017,10 +1017,10 @@ Bface::get_quad_verts(Bvert_list& verts) const
    Bvert *v1=0, *v2=0, *v3=0, *v4=0;
    if (!get_quad_verts(v1,v2,v3,v4))
       return 0;
-   verts += v1;
-   verts += v2;
-   verts += v3;
-   verts += v4;
+   verts.push_back(v1);
+   verts.push_back(v2);
+   verts.push_back(v3);
+   verts.push_back(v4);
    return 1;
 
 }
@@ -1062,10 +1062,10 @@ Bface::get_quad_edges(Bedge_list& edges)                          const
    Bedge *e1=0, *e2=0, *e3=0, *e4=0;
    if (!get_quad_edges(e1,e2,e3,e4))
       return 0;
-   edges += e1;
-   edges += e2;
-   edges += e3;
-   edges += e4;
+   edges.push_back(e1);
+   edges.push_back(e2);
+   edges.push_back(e3);
+   edges.push_back(e4);
    return 1;
 }
 
@@ -1215,18 +1215,18 @@ Bface_list::clear_vert_flags() const
 {   
    // Clear the flag of each vertex of each face
 
-   for (int i=0; i<_num; i++)
+   for (Bface_list::size_type i=0; i<size(); i++)
       for (int j=1; j<4; j++)
-         _array[i]->v(j)->clear_flag();
+         at(i)->v(j)->clear_flag();
 }
 
 void
 Bface_list::clear_edge_flags() const
 {   
    // Clear the flag of each edge of each face:
-   for (int i=0; i<_num; i++)
+   for (Bface_list::size_type i=0; i<size(); i++)
       for (int j=1; j<4; j++)
-         _array[i]->e(j)->clear_flag();
+         at(i)->e(j)->clear_flag();
 }
 
 Bvert_list 
@@ -1238,15 +1238,15 @@ Bface_list::get_verts() const
    clear_vert_flags();
 
    // Put verts into output array uniquely:
-   Bvert_list ret(_num);       // pre-allocate plenty
-   for (int i=0; i<_num; i++) {
+   Bvert_list ret(size());       // pre-allocate plenty
+   for (Bface_list::size_type i=0; i<size(); i++) {
       for (int j=1; j<4; j++) {
-         Bvert* v = _array[i]->v(j);
+         Bvert* v = at(i)->v(j);
          if (!v) {
             err_msg("Bface_list::get_verts: null vert");
          } else if (v->flag() == 0) {
             v->set_flag(1);
-            ret += v;
+            ret.push_back(v);
          }
       }
    }
@@ -1262,13 +1262,13 @@ Bface_list::get_edges() const
    clear_edge_flags();
 
    // Put edges into output array uniquely:
-   Bedge_list ret(_num*2);       // pre-allocate plenty
-   for (int i=0; i<_num; i++) {
+   Bedge_list ret(size()*2);       // pre-allocate plenty
+   for (Bface_list::size_type i=0; i<size(); i++) {
       for (int j=1; j<4; j++) {
-         Bedge* e = _array[i]->e(j);
+         Bedge* e = at(i)->e(j);
          if (e->flag() == 0) {
             e->set_flag(1);
-            ret += e;
+            ret.push_back(e);
          }
       }
    }
@@ -1280,8 +1280,8 @@ Bface_list::avg_normal() const
 {
    // Returns the average of the face normals
    Wvec ret;
-   for (int i=0; i<_num; i++)
-      ret += _array[i]->norm();
+   for (Bface_list::size_type i=0; i<size(); i++)
+      ret += at(i)->norm();
    return ret.normalized();
 }
 
@@ -1292,15 +1292,15 @@ Bface_list::max_norm_deviation(CWvec& n) const
    // value passed in
 
    double ret = 0;
-   for (int i=0; i<_num; i++)
-      ret = max(ret, n.angle(_array[i]->norm()));
+   for (Bface_list::size_type i=0; i<size(); i++)
+      ret = max(ret, n.angle(at(i)->norm()));
    return ret;
 }
 
 bool 
 Bface_list::same_patch() const 
 {
-   for (int k=1; k<num(); k++) {
+   for (Bface_list::size_type k=1; k<size(); k++) {
       if ((*this)[k-1]->patch() != (*this)[k]->patch())
          return false;
    }
@@ -1310,7 +1310,7 @@ Bface_list::same_patch() const
 Patch*
 Bface_list::get_patch() const 
 {
-   return same_patch() && !empty() ? first()->patch() : 0;
+   return same_patch() && !empty() ? front()->patch() : 0;
 }
 
 double 
@@ -1324,8 +1324,8 @@ Bface_list::volume() const
    // Uses the divergence theorem.
 
    double ret = 0;
-   for (int k=0; k<_num; k++)
-      ret += _array[k]->volume_el();
+   for (Bface_list::size_type k=0; k<size(); k++)
+      ret += at(k)->volume_el();
    return ret;
 }
 
@@ -1373,9 +1373,9 @@ Bface_list::quad_complete_faces() const
    mark_faces();
    Bface* p=0;
    Bface_list ret = *this;
-   for (int i=0; i<_num; i++)
-      if ((p = check_partner(_array[i])))
-         ret.add(p);
+   for (Bface_list::size_type i=0; i<size(); i++)
+      if ((p = check_partner(at(i))))
+         ret.push_back(p);
    return ret;
 }
 
@@ -1413,7 +1413,7 @@ Bface_list::grow_connected(Bface* f, CSimplexFilter& pass)
       return false;
 
    f->set_flag(2);
-   add(f);
+   push_back(f);
 
    // check each neighboring edge:
    for (int i=1; i<4; i++) {
@@ -1452,17 +1452,17 @@ Bface_list::is_connected() const
    // The search will not go outside this Bface_list,
    // because every neighboring outside face has flag == 0
    // and will therefore be ignored.
-   Bface_list comp1(_num);
-   comp1.grow_connected(first());
+   Bface_list comp1(size());
+   comp1.grow_connected(front());
 
    bool debug = Config::get_var_bool("DEBUG_BFACE_LIST_IS_CONNECTED", false);
 
    err_adv(debug, "Bface_list::is_connected:");
    err_adv(debug, "  nfaces: %d, comp 1: %d, connected: %s",
-           _num, comp1.num(), ((comp1.num() == _num) ? "yes" : "no"));
+           size(), comp1.size(), ((comp1.size() == size()) ? "yes" : "no"));
 
    // Return true iff that component is the whole Bface_list:
-   return comp1.num() == _num;
+   return comp1.size() == size();
 }
 
 bool
@@ -1514,7 +1514,11 @@ Bface_list::interior_verts() const
    // Return list vertices that are not adjacent to any external face.
 
    Bvert_list ret = get_verts();
-   ret -= get_boundary().verts();
+   for (Bvert_list::size_type i=0; i<get_boundary().verts().size(); i++) {
+      Bvert_list::iterator it;
+      it = std::find(ret.begin(), ret.end(), get_boundary().verts()[i]);
+      ret.erase(it);
+   }
    return ret;
 
    // mark internal faces w/ flag 1, external faces with flag 0:
@@ -1539,11 +1543,11 @@ Bface_list::is_consistently_oriented() const
    mark_faces();
 
    if (Config::get_var_bool("DEBUG_INFLATE_ALL",false)) {
-      err_msg("Total faces: %d", _num);
-      err_msg("Total edges: %d", get_edges().num());
-      err_msg("Boundary edges: %d", get_edges().filter(boundary).num());
-      err_msg("Interior edges: %d", get_edges().filter(!boundary).num());
-      err_msg("Inconsistent edges: %d", get_edges().filter(inconsistent).num());
+      err_msg("Total faces: %d", size());
+      err_msg("Total edges: %d", get_edges().size());
+      err_msg("Boundary edges: %d", get_edges().filter(boundary).size());
+      err_msg("Interior edges: %d", get_edges().filter(!boundary).size());
+      err_msg("Inconsistent edges: %d", get_edges().filter(inconsistent).size());
    }
 
    return get_edges().filter(interior + inconsistent).empty();
@@ -1632,8 +1636,8 @@ Bface_list::push_layer(bool push_boundary) const
       bdry.edges().set_flags();
 
       // See inlined demote() above
-      for (int i=0; i<num(); i++)
-         demote(_array[i]);
+      for (Bface_list::size_type i=0; i<size(); i++)
+         demote(at(i));
 
    }
 
@@ -1659,14 +1663,14 @@ Bface_list::can_unpush_layer() const
    if (debug) {
       bool b = boundary_edges().all_satisfy(CanPromoteEdgeFilter());
       cerr << "Bface_list::can_unpush_layer: " << endl
-           << "   " << num() << " faces, "
+           << "   " << size() << " faces, "
            << (same_mesh() ? "same mesh" : "different meshes") << ", "
            << (is_2_manifold() ? "" : "non-") << "manifold, "
            << "boundary: " << (b ? "good" : "bad")
-           << " (" << boundary_edges().num() << " edges)"
+           << " (" << boundary_edges().size() << " edges)"
            << endl;
       Bedge_list bad_edges = boundary_edges().filter(!CanPromoteEdgeFilter());
-      cerr << bad_edges.num() << " bad edges" << endl;
+      cerr << bad_edges.size() << " bad edges" << endl;
       if (!b) {
          MeshGlobal::select(bad_edges);
       }
@@ -1716,8 +1720,8 @@ Bface_list::unpush_layer(bool unpush_boundary) const
       bdry.edges().set_flags();
 
       // See inlined promote() above
-      for (int i=0; i<num(); i++)
-         promote(_array[i]);
+      for (Bface_list::size_type i=0; i<size(); i++)
+         promote(at(i));
    }
 
    // Notify mesh to rebuild tri-strips, check topology etc.

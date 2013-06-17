@@ -33,23 +33,17 @@
 
 MESH_SELECT_CMD::MESH_SELECT_CMD(Bvert *v)
 {
-   
-   vlist += v;
-   
+   vlist.push_back(v);
 }
 
 MESH_SELECT_CMD::MESH_SELECT_CMD(Bedge *e)
 {
-   
-   elist += e;
-   
+   elist.push_back(e);
 }
 
 MESH_SELECT_CMD::MESH_SELECT_CMD(Bface *f)
 {
-   
-   flist += f;
-   
+   flist.push_back(f);
 }
 
 MESH_SELECT_CMD::MESH_SELECT_CMD(const Bvert_list &vl)

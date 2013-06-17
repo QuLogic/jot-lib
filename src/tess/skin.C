@@ -69,16 +69,16 @@ subdiv_mapper(CVertMapper& pmap)
 {
    Bedge_list a_edges = pmap.a_edges();
    Bedge_list b_edges = pmap.a_to_b(a_edges);
-   assert(a_edges.num() == b_edges.num());
+   assert(a_edges.size() == b_edges.size());
 
    if (0 && debug) {
       err_msg("parents: verts: %d --> %d, edges: %d --> %d",
-              pmap.A().num(), pmap.B().num(), a_edges.num(), b_edges.num());
+              pmap.A().size(), pmap.B().size(), a_edges.size(), b_edges.size());
       err_msg("children: verts: %d --> %d",
               (child_verts<Bvert_list,Lvert>(pmap.A()) +
-               child_verts<Bedge_list,Ledge>(a_edges)).num(),
+               child_verts<Bedge_list,Ledge>(a_edges)).size(),
               (child_verts<Bvert_list,Lvert>(pmap.B()) +
-               child_verts<Bedge_list,Ledge>(b_edges)).num());
+               child_verts<Bedge_list,Ledge>(b_edges)).size());
 
       Bvert_list c = (child_verts<Bvert_list,Lvert>(pmap.A()) +
                       child_verts<Bedge_list,Ledge>(a_edges));
@@ -173,9 +173,9 @@ inline bool
 check(CBface_list& faces)
 {
    Bface_list bad;
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       if (is_bad(faces[i]))
-         bad += faces[i];
+         bad.push_back(faces[i]);
    if (bad.empty())
       return true;
 
@@ -227,7 +227,7 @@ Skin::create_cover_skin(
          ((Skin*)Bsurface::get_surfaces(region)[i])->_covers.push_back(ret);
    }
    // XXX - only work for faces(region) on the same skin
-   if (region.num()>0 && Skin::find_controller(region[0])) {
+   if (region.size()>0 && Skin::find_controller(region[0])) {
       Skin::find_controller(region[0])->_covers.push_back(ret);
    }
 
@@ -291,19 +291,19 @@ Skin::create_multi_sleeve(
       // previous level.
 
       err_adv(debug, "  getting interior subdiv faces");
-      int n = interior.num();
+      Bface_list::size_type n = interior.size();
       interior = get_subdiv_faces(interior, 1); // no holes can form here
-      if (4*n != interior.num()) {
+      if (4*n != interior.size()) {
          err_adv(debug, "  *** ERROR *** got %d interior subdiv faces from %d",
-                 interior.num(), n);
+                 interior.size(), n);
       }
 
       err_adv(debug, "  getting skel subdiv faces");
-      n = cur->skel_faces().num();
+      n = cur->skel_faces().size();
       exterior = get_subdiv_faces(cur->skel_faces(), 1);
-      if (4*n != exterior.num()) {
+      if (4*n != exterior.size()) {
          err_adv(debug, "  *** ERROR *** got %d exterior subdiv faces from %d",
-                 exterior.num(), n);
+                 exterior.size(), n);
       }
 
       // check for holes:
@@ -318,7 +318,7 @@ Skin::create_multi_sleeve(
       assert(new_faces.is_all_primary()); // must be true (we think)
       if (!new_faces.empty()) {
          err_adv(debug, "  adding %d new faces at level %d",
-                 new_faces.num(), k);
+                 new_faces.size(), k);
          exterior.append(new_faces);
       }
 
@@ -359,10 +359,10 @@ report(CVertMapper& mapper, const string& msg)
 {
    err_msg("  %s: %d verts to %d verts, %d edges to %d edges",
            msg.c_str(),
-           mapper.A().num(),
-           mapper.B().num(),
-           mapper.a_edges().num(),
-           mapper.a_to_b(mapper.a_edges()).num());
+           mapper.A().size(),
+           mapper.B().size(),
+           mapper.a_edges().size(),
+           mapper.a_to_b(mapper.a_edges()).size());
 }
 
 Skin::Skin(
@@ -455,7 +455,7 @@ Skin::Skin(
    Bface_list extras = skin_faces().minus(_mapper.a_to_b(_skel_faces));
    if (debug && !extras.empty()) {
       cerr << "found "
-           << extras.num()
+           << extras.size()
            << " unexpected faces" << endl;
       push(extras, cmd);
    }
@@ -469,9 +469,9 @@ Skin::finish_ctor(MULTI_CMDptr cmd)
    if (_skel_faces.has_any_secondary()) {
       if (debug) {
          cerr << "Skin::finish_ctor: pushing "
-              << _mapper.a_to_b(_skel_faces.secondary_faces()).num()
+              << _mapper.a_to_b(_skel_faces.secondary_faces()).size()
               << " skin faces from "
-              << _skel_faces.secondary_faces().num()
+              << _skel_faces.secondary_faces().size()
               << " skel faces"
               << endl;
       }
@@ -627,7 +627,7 @@ Skin::gen_faces(const VertMapper& skel_mapper)
       return false;
    }
 
-   for (int i=0; i<_skel_faces.num(); i++)
+   for (Bface_list::size_type i=0; i<_skel_faces.size(); i++)
       gen_face(_skel_faces[i]);
 
    copy_edges(_skel_faces.get_edges());
@@ -664,7 +664,7 @@ Skin::gen_verts(CBvert_list& skel_verts)
    // replicate skel verts to create new skin verts.
    // ignores verts that have already been done.
    bool ret = true;
-   for (int i=0; i<skel_verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<skel_verts.size(); i++)
       if (!gen_vert(skel_verts[i]))
          ret = false;
    return ret;
@@ -723,7 +723,7 @@ bool
 Skin::copy_edges(CBedge_list& edges) const
 {
    bool ret = true;
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       if (!copy_edge(edges[i]))
          ret = false;
    return ret;
@@ -740,9 +740,9 @@ show_polys(BMESH* m)
    PolylineEdgeFilter        poly;
 
    EdgeStrip strip(m->edges(), unreached + poly);
-   ARRAY<Bvert_list> chains;
+   vector<Bvert_list> chains;
    strip.get_chains(chains);
-   for (int i=0; i<chains.num(); i++)
+   for (vector<Bvert_list>::size_type i=0; i<chains.size(); i++)
       WORLD::show_polyline(chains[i].pts(), 3, Color::blue_pencil_d, 0.5);
 }
 
@@ -754,7 +754,7 @@ join(CBvert_list& o, CBvert_list& c, MULTI_CMDptr& cmd, const string& msg)
    JOIN_SEAM_CMDptr join = new JOIN_SEAM_CMD(o, c);
    if (join->doit()) {
       err_adv(debug, "  joined %s (%d verts to %d verts)",
-              msg.c_str(), o.num(), c.num());
+              msg.c_str(), o.size(), c.size());
       cmd->add(join);
       return true;
    } else {
@@ -789,7 +789,7 @@ Skin::join_to_skel(CBface_list& interior, MULTI_CMDptr cmd)
 
    // Find external boundaries in separate chains
    // (each is its own connected component):
-   ARRAY<Bvert_list> skel_chains;
+   vector<Bvert_list> skel_chains;
    skel_region.get_boundary().get_chains(skel_chains);
    if (skel_chains.empty()) {
       err_adv(debug, "  error: can't find seams to join");
@@ -798,9 +798,9 @@ Skin::join_to_skel(CBface_list& interior, MULTI_CMDptr cmd)
 
    push(skel_region, cmd);
 
-   for (int i=0; i<skel_chains.num(); i++) {
+   for (vector<Bvert_list>::size_type i=0; i<skel_chains.size(); i++) {
       // chains repeat 1st vertex at end, so remove it
-      skel_chains[i].pop();
+      skel_chains[i].pop_back();
       // get matching skin chain
       Bvert_list skin_chain = _mapper.a_to_b(skel_chains[i]);
       // put skin chain first; it is the "open" chain, meaning
@@ -932,7 +932,7 @@ Skin::do_boundary_correction()
 
    bool     ret = true;
    bool changed = false;
-   for (int i=0; i<skin_faces.num(); i++)
+   for (Bface_list::size_type i=0; i<skin_faces.size(); i++)
       if (!correct_face(skin_faces[i], changed))
          ret = false;
 
@@ -955,7 +955,7 @@ int
 Skin::set_sticky(CBvert_list& verts, bool sticky) const
 {
    int ret = 0;
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       ret += ::set_sticky(SkinMeme::upcast(find_meme(verts[i])), sticky);
    }
    return ret;
@@ -982,7 +982,7 @@ int
 Skin::set_offsets(CBvert_list& verts, double h) const
 {
    int ret = 0;
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       ret += ::set_offset(SkinMeme::upcast(find_meme(verts[i])), h);
    }
    return ret;
@@ -1006,7 +1006,7 @@ freeze(SkinMeme* m)
 void
 Skin::freeze(CBvert_list& verts) const
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ::freeze(SkinMeme::upcast(find_meme(verts[i])));
 }
 
@@ -1014,7 +1014,7 @@ void
 Skin::restrict(CBvert_list& verts, SimplexFilter* f) const
 {
    assert(f);
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m) {
          //assert(m->track_simplex() == 0 || f->accept(m->track_simplex()));
@@ -1026,7 +1026,7 @@ Skin::restrict(CBvert_list& verts, SimplexFilter* f) const
 void
 Skin::set_non_penetrate(CBvert_list& verts, bool b) const
 {
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m) {
          m->set_non_penetrate(b);
@@ -1037,7 +1037,7 @@ Skin::set_non_penetrate(CBvert_list& verts, bool b) const
 void
 Skin::set_stay_outside(CBvert_list& verts, bool b) const
 {
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m) {
          m->set_stay_outside(b);
@@ -1055,8 +1055,8 @@ scale_offset(SkinMeme* m, double s)
 inline vector<double>
 get_offset_scales(CBvert_list& skels, CSimplexFilter& filter)
 {
-   vector<double> ret(skels.num());
-   for (int i=0; i<skels.num(); i++)
+   vector<double> ret(skels.size());
+   for (Bvert_list::size_type i=0; i<skels.size(); i++)
       ret[i] = offset_scale(skels[i], filter);
    return ret;
 }
@@ -1070,7 +1070,7 @@ Skin::adjust_crease_offsets() const
       crease_skel_verts, ProblemEdgeFilter()
       );
    Bvert_list crease_skin_verts = _mapper.a_to_b(crease_skel_verts);
-   for (int i=0; i<crease_skin_verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<crease_skin_verts.size(); i++)
       scale_offset(SkinMeme::upcast(find_meme(crease_skin_verts[i])), scales[i]);
 }
 
@@ -1115,7 +1115,7 @@ track_deeper(SkinMeme* m, int R)
 void
 Skin::track_deeper(CBvert_list& verts, int R) const
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ::track_deeper(SkinMeme::upcast(find_meme(verts[i])), R);
 }
 
@@ -1405,11 +1405,11 @@ Skin::set_partner(Skin* partner)
 Bvert_list
 Skin::frozen_verts(CBvert_list& verts) const
 {
-   Bvert_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
+   Bvert_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m && m->is_frozen()) {
-         ret += m->vert();
+         ret.push_back(m->vert());
       }
    }
    return ret;
@@ -1424,11 +1424,11 @@ Skin::unfrozen_verts(CBvert_list& verts) const
 Bvert_list
 Skin::sticky_verts(CBvert_list& verts) const
 {
-   Bvert_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
+   Bvert_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m && m->is_sticky()) {
-         ret += m->vert();
+         ret.push_back(m->vert());
       }
    }
    return ret;
@@ -1437,8 +1437,8 @@ Skin::sticky_verts(CBvert_list& verts) const
 Wpt_list
 Skin::track_points(CBvert_list& verts) const
 {
-   Wpt_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
+   Wpt_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
       if (m && m->is_tracking()) {
          ret.push_back(m->track_pt());
@@ -1462,8 +1462,8 @@ bundle_lines(CWpt_list& a, CWpt_list& b)
 inline Wpt_list
 centroids(CBvert_list& verts)
 {
-   Wpt_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
+   Wpt_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       ret.push_back(verts[i]->qr_centroid());
    }
    return ret;
@@ -1530,18 +1530,17 @@ SkinCurveMap::SkinCurveMap(
        _bcs(bcs),
        _skin(skin)
 {
-   assert(_simps.num() == (int)_bcs.size());
+   assert(_simps.size() == _bcs.size());
 
-   
    if (!p0 && !p1)
-      assert(_simps.first() == _simps.last() && _bcs.front() == _bcs.back());
+      assert(_simps.front() == _simps.back() && _bcs.front() == _bcs.back());
 
    hookup();
    
    if (Config::get_var_bool("DEBUG_SKIN_CURVE_MAP_CONSTRUCTOR",false,true)) {
       cerr << " -- in SkinCurveMapconstructor with simp/bc pairs: " << endl;
-      int i;
-      for (i = 0; i < _simps.num(); i++) {
+      Bsimplex_list::size_type i;
+      for (i = 0; i < _simps.size(); i++) {
          cerr << _simps[i] << "; " << _bcs[i] << endl;
       }
       cerr << " -- end simp/bc pairs list" << endl;
@@ -1576,9 +1575,9 @@ Wpt_list
 SkinCurveMap::get_wpts() const 
 { 
   // Return a Wpt_list describing the current shape of the map
-  Wpt_list ret(_simps.num()+2*!(!_p0));
+  Wpt_list ret(_simps.size()+2*!(!_p0));
   if (!(!_p0)) ret.push_back(_p0->map());
-  for ( int i=0; i<_simps.num(); i++ ) {
+  for (Bsimplex_list::size_type i=0; i<_simps.size(); i++) {
     Wpt pt;
     _simps[i]->bc2pos(_bcs[i], pt);
     ret.push_back(pt);
@@ -1652,16 +1651,16 @@ SkinCurveMap::hlen() const
    // XXX - this isn't a good way to calculate this...
    //       but it's okay "for now."
 
-   double h = ((_simps.num()  < 2) ?  1.0 :
-               (_simps.num() == 2) ? 1e-9 :
-               1.0/_simps.num());
+   double h = ((_simps.size()  < 2) ?  1.0 :
+               (_simps.size() == 2) ? 1e-9 :
+               1.0/_simps.size());
    return max(h, 1e-9)/10.0;
 }
 
 void
 SkinCurveMap::set_pts(CBsimplex_list& simps, vector<Wvec>& bcs)
 {
-   assert(simps.num() == (int)bcs.size());
+   assert(simps.size() == bcs.size());
    
    _simps = simps;
    _bcs = bcs;
@@ -1670,8 +1669,8 @@ SkinCurveMap::set_pts(CBsimplex_list& simps, vector<Wvec>& bcs)
 
    if (debug) {
       cerr << "-- In SkinCurveMap::set_ptss() got hte following simp/bc pair list" << endl;
-      int i;
-      for (i = 0; i < _simps.num(); i++) {
+      Bsimplex_list::size_type i;
+      for (i = 0; i < _simps.size(); i++) {
          cerr << i << " " << _simps[i] << "; " << _bcs[i] << endl;
       }
       cerr << "-- End list" << endl;

@@ -162,8 +162,7 @@ class StripTexCoordsCB2 : public GLStripCB {
       UV_grad gradient;
       UVvec derivative;
 
-      for(int i=0; i<faces.num(); i++)
-      {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          derivative = att_function->dFdx(faces[i]);
 
 		   gradient.U_grad[0] = derivative[0]; 
@@ -210,8 +209,7 @@ class StripTexCoordsCB2 : public GLStripCB {
    base_3 = base_3.normalized();
 
 
-	   for(int i=0; i<faces.num(); i++)
-	   {
+	   for (Bface_list::size_type i=0; i<faces.size(); i++) {
          //getting the previously computed face gradients
 
          UV_grad grad = face_gradient_map[faces[i]];
@@ -238,8 +236,8 @@ class StripTexCoordsCB2 : public GLStripCB {
 	   }
 
 	   //just simple average for now
-	   acc_U = (acc_U / double(faces.num()) );
-	   acc_V = (acc_V / double(faces.num()) );
+	   acc_U = (acc_U / double(faces.size()) );
+	   acc_V = (acc_V / double(faces.size()) );
 
       //cerr << " dV = " << acc_V << endl;
 

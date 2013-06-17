@@ -125,7 +125,7 @@ class Lface : public Bface {
       return (Lface*) lookup_face(subdiv_edge2(),lv(3)->subdiv_vertex());
    }
    
-   void append_subdiv_faces(int lev, ARRAY<Bface *> &faces);
+   void append_subdiv_faces(int lev, vector<Bface *> &faces);
 
    virtual void color_changed();
 

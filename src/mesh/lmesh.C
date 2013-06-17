@@ -497,8 +497,10 @@ LMESH::_merge(BMESH* bm)
    // Get the dirty vertices from m and put them into this
    // mesh's dirty list:
    m->_dirty_verts.clear_bits(Lvert::DIRTY_VERT_LIST_BIT);
-   while (!m->_dirty_verts.empty())
-      add_dirty_vert((Lvert*)m->_dirty_verts.pop());
+   while (!m->_dirty_verts.empty()) {
+      add_dirty_vert((Lvert*)m->_dirty_verts.back());
+      m->_dirty_verts.pop_back();
+   }
 
    // this concludes the LMESH-specific aspect of the merge
    // method. now just continue with the normal merge...
@@ -536,7 +538,7 @@ allocate_adjacent_child_faces(Ledge* e)
    allocate_child_faces(e->lf(2));
    if (e->is_multi()) {
       CBface_list& faces = *e->adj();
-      for (int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          allocate_child_faces((Lface*)faces[i]);
       }
    }
@@ -632,7 +634,7 @@ check(Ledge* e)
            << face_type(e->f2());
       if (e->adj()) {
          CBface_list& adj = *e->adj();
-         for (int i=0; i<adj.num(); i++)
+         for (Bface_list::size_type i=0; i<adj.size(); i++)
             cerr << face_type(adj[i]);
       }
       cerr << endl;
@@ -648,14 +650,14 @@ debug_check_verts(const string& msg, CBvert_list& verts, CBvert_list& dirty_vert
    Bvert_list A = verts.filter(BitSetSimplexFilter(Lvert::DIRTY_VERT_LIST_BIT));
    if (!dirty_verts.contains_all(A)) {
       Bvert_list bad = A.minus(dirty_verts);
-      cerr << msg << ": found " << bad.num()
+      cerr << msg << ": found " << bad.size()
            << " vertices missing from dirty list" << endl;
       WORLD::show_pts(bad.pts(), 8, Color::red);
    }
    Bvert_list B = verts.filter(BitClearSimplexFilter(Lvert::DIRTY_VERT_LIST_BIT));
    if (dirty_verts.contains_any(B)) {
       Bvert_list bad = dirty_verts.minus(B);
-      cerr << msg << ": found " << bad.num()
+      cerr << msg << ": found " << bad.size()
            << " unexpected vertices in dirty list" << endl;
       WORLD::show_pts(bad.pts(), 8, Color::blue);
    }
@@ -718,9 +720,9 @@ LMESH::update_subdivision(int level)
            "level %d to level %d: %d faces, updating %d of %d vertices using %s",
            subdiv_level(),
            level,
-           _faces.num(),
-           _dirty_verts.num(),
-           _verts.num(),
+           _faces.size(),
+           _dirty_verts.size(),
+           _verts.size(),
            _loc_calc->name().c_str());
 
    // Q: How do we know which mesh elements to visit to tell them
@@ -738,14 +740,15 @@ LMESH::update_subdivision(int level)
    if (debug && ret) {
       err_adv(0, "level %d: %d faces, updating %d of %d vertices using %s",
               subdiv_level(),
-              _faces.num(),
-              _dirty_verts.num(),
-              _verts.num(),
+              _faces.size(),
+              _dirty_verts.size(),
+              _verts.size(),
               _loc_calc->name().c_str());
       debug_check_verts("  before", _verts, _dirty_verts);
    }
    while (!_dirty_verts.empty()) {
-      Lvert* v = (Lvert*)_dirty_verts.pop();
+      Lvert* v = (Lvert*)_dirty_verts.back();
+      _dirty_verts.pop_back();
       v->clear_bit(Lvert::DIRTY_VERT_LIST_BIT);
       // See inline helper function update_sub(Lvert* v) above
       update_sub(v);
@@ -768,7 +771,7 @@ inline void
 update_verts(CBvert_list& verts)
 {
    // helper for LMESH::update_subdivision(CBface_list& faces)
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ((Lvert*)verts[i])->update_subdivision();
 }
 
@@ -776,7 +779,7 @@ inline void
 update_edges(CBedge_list& edges)
 {
    // helper for LMESH::update_subdivision(CBface_list& faces)
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       ((Ledge*)edges[i])->update_subdivision();
 }
 
@@ -792,7 +795,7 @@ update_faces(CBface_list& faces, bool debug)
    update_edges(faces.get_edges());
 
    err_adv(debug, "updating faces");
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       allocate_child_faces((Lface*)faces[i]);
 }
 
@@ -802,7 +805,7 @@ LMESH::update_subdivision(CBface_list& faces, int k)
    static bool debug = Config::get_var_bool("DEBUG_BFACE_LIST_SUBDIVISION",false);
 
    if (debug) {
-      cerr << "LMESH::update_subdivision: " << faces.num()
+      cerr << "LMESH::update_subdivision: " << faces.size()
            << " faces to level "<< k << endl;
    }
 
@@ -1007,7 +1010,7 @@ LMESH::mark_all_dirty()
 }
 
 void
-LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
+LMESH::fit(vector<Lvert*>& verts, bool do_gauss_seidel)
 {
    static bool debug = Config::get_var_bool("DEBUG_LMESH_FIT",false);
    static bool move_along_normal =
@@ -1018,20 +1021,20 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
 
    // calculate the bounding box of the vertices
    BBOX box;
-   int i;
-   for (i=0; i<verts.num(); i++)
+   size_t i;
+   for (i=0; i<verts.size(); i++)
       box.update(verts[i]->loc());
 
    double max_err = box.dim().length() * 1e-5;
 
-   int n = verts.num();
+   size_t n = verts.size();
 
    // get original control point locations
-   ARRAY<Wpt> C(n);   // original control points
-   ARRAY<Wpt> L(n);   // current limit points
+   vector<Wpt> C(n);   // original control points
+   vector<Wpt> L(n);   // current limit points
    for (i=0; i<n; i++) {
-      C += verts[i]->loc();
-      L += Wpt::Origin();
+      C[i] = verts[i]->loc();
+      L[i] = Wpt::Origin();
    }
 
    if(debug) {
@@ -1052,7 +1055,7 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
 
          // Gauss-Seidel iteration: use updated values from the
          // current iteration as they are computed...
-         for (int j=0; j<n; j++) {
+         for (size_t j=0; j<n; j++) {
             // don't need that L[] array...
             Wpt limit;
             verts[j]->limit_loc(limit);
@@ -1067,7 +1070,7 @@ LMESH::fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel)
       } else {
          // compute the new offsets from the offsets computed in the
          // previous iteration
-         int j;
+         size_t j;
          for (j=0; j<n; j++)
             verts[j]->limit_loc(L[j]);
 
@@ -1120,9 +1123,9 @@ add_p(Lvert* v, Bvert_list& vp, Bedge_list& ep)
    if (!p)
       return;
    if (is_vert(p))
-      vp += (Bvert*)p;
+      vp.push_back((Bvert*)p);
    else if (is_edge(p))
-      ep += (Bedge*)p;
+      ep.push_back((Bedge*)p);
    else
       assert(0);
 }
@@ -1139,7 +1142,7 @@ get_parents(CBvert_list& verts, Bvert_list& vp, Bedge_list& ep)
 
    assert(LMESH::isa(verts.mesh()));
 
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       add_p((Lvert*)verts[i], vp, ep);
 }
 
@@ -1152,7 +1155,7 @@ clear_face_flags(CBvert_list& verts)
    // that are part of a quad that contains the vertex.
 
    Bface_list star;
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       verts[i]->get_q_faces(star);
       star.clear_flags();
    }
@@ -1165,7 +1168,7 @@ try_append(Bface_list& A, Bface* f)
 
    if (f && !f->flag()) {
       f->set_flag();
-      A += f;
+      A.push_back(f);
    }
 }
 
@@ -1177,7 +1180,7 @@ try_append(Bface_list& A, CBface_list& B)
    // the face flag is clear. Set the flag after
    // appending.
 
-   for (int i=0; i<B.num(); i++)
+   for (Bface_list::size_type i=0; i<B.size(); i++)
       try_append(A, B[i]);
 }
 
@@ -1190,7 +1193,7 @@ get_q_faces(CBvert_list& verts)
    // that are part of a quad that contains the vertex.
 
    Bface_list ret, star;
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       verts[i]->get_q_faces(star);
       try_append(ret, star);
    }
@@ -1218,7 +1221,7 @@ LMESH::get_subdiv_inputs(CBvert_list& verts)
    get_parents(verts, vp, ep);
 
    err_adv(debug, "%d verts: parents: %d verts, %d edges",
-           verts.num(), vp.num(), ep.num());
+           verts.size(), vp.size(), ep.size());
 
    // Clear flags of all adjacent faces
    clear_face_flags(vp);
@@ -1226,9 +1229,9 @@ LMESH::get_subdiv_inputs(CBvert_list& verts)
 
    // Put all adjacent faces into a list
    Bface_list faces = get_q_faces(vp);
-   err_adv(debug, "parent faces from verts: %d", faces.num());
+   err_adv(debug, "parent faces from verts: %d", faces.size());
    try_append(faces, ep.get_primary_faces());
-   err_adv(debug, "parent faces from edges too: %d", faces.num());
+   err_adv(debug, "parent faces from edges too: %d", faces.size());
 
    // Pull out the vertices:
    return faces.get_verts();

@@ -246,13 +246,13 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
    _col_ref = ColorRefImage::lookup(1,v);
    _id_ref  =    IDRefImage::lookup(v);
 
-   const ARRAY<uint>& pixels = _patch->pixels();
+   const vector<uint>& pixels = _patch->pixels();
 
    priority_queue<PriorityPixel, vector<PriorityPixel> > queue;
 
    double radius;
 
-   for (int i=0; i<pixels.num(); i++) {
+   for (vector<uint>::size_type i=0; i<pixels.size(); i++) {
       int grey_val = _col_ref->alpha(pixels[i]);
       int red_val = _col_ref->red(pixels[i]);
 
@@ -322,7 +322,7 @@ ImgLineTexture::draw(CVIEWptr& v)
 {
    rebuild_if_needed(v);
 
-   return _patch->faces().num();
+   return _patch->faces().size();
 }
 
 int
@@ -330,7 +330,7 @@ ImgLineTexture::draw_final(CVIEWptr& v)
 {
    _bstrokes.draw(v);
 
-   return _patch->faces().num();
+   return _patch->faces().size();
 }
 
 void 

@@ -37,7 +37,7 @@ MeshGlobal::select(Bface*f)
       return;
 
    f->set_bit(Bsimplex::SELECTED_BIT);
-   _selected_faces += f;
+   _selected_faces.push_back(f);
 
    if (f->is_quad())
       select(f->quad_partner());
@@ -54,7 +54,9 @@ MeshGlobal::deselect(Bface* f)
       return;
 
    f->clear_bit(Bsimplex::SELECTED_BIT);
-   _selected_faces -= f; // O(n) operation
+   Bface_list::iterator it;
+   it = std::find(_selected_faces.begin(), _selected_faces.end(), f);
+   _selected_faces.erase(it);
 
    if (f->is_quad())
       deselect(f->quad_partner());
@@ -81,7 +83,7 @@ MeshGlobal::select(CBface_list& faces)
 { 
    // selects the faces
 
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       select(faces[i]);
    }
 }
@@ -91,7 +93,7 @@ MeshGlobal::deselect(CBface_list& faces)
 { 
    // deselects the faces
 
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       deselect(faces[i]);
    }
 }
@@ -132,12 +134,12 @@ MeshGlobal::selected_faces_all_levels(BMESH* m)
    BMESH* cm = get_ctrl_mesh(m);
 
    // return the faces selected from this mesh
-   ret += selected_faces(cm);
+   ret = ret + selected_faces(cm);
 
    // If this is an lmesh, also find the selected
    // faces for any sub mesh in the hierarchy
    for (LMESH* lm = LMESH::upcast(cm); lm != 0; lm = lm->subdiv_mesh()) {
-      ret += selected_faces(lm);
+      ret = ret + selected_faces(lm);
    }
 
    return ret;
@@ -155,7 +157,7 @@ MeshGlobal::select(Bedge* e)
       return;
 
    e->set_bit(Bsimplex::SELECTED_BIT);
-   _selected_edges += e;
+   _selected_edges.push_back(e);
 
    BMESH::set_focus(e->mesh(), get_patch(e));
 }
@@ -170,7 +172,9 @@ MeshGlobal::deselect(Bedge* e)
       return;
 
    e->clear_bit(Bsimplex::SELECTED_BIT);
-   _selected_edges -= e;
+   Bedge_list::iterator it;
+   it = std::find(_selected_edges.begin(), _selected_edges.end(), e);
+   _selected_edges.erase(it);
 }
 
 void
@@ -204,7 +208,7 @@ MeshGlobal::select(CBedge_list& edges)
 { 
    // selects the edges
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       select(edges[i]);
    }
 }
@@ -214,7 +218,7 @@ MeshGlobal::deselect(CBedge_list& edges)
 { 
    // deselects the edges
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       deselect(edges[i]);
    }
 }
@@ -245,7 +249,7 @@ MeshGlobal::selected_edges_all_levels(BMESH* m)
    BMESH* cm = get_ctrl_mesh(m);
 
    // return the edges selected from this mesh
-   ret += selected_edges(cm);
+   ret = ret + selected_edges(cm);
 
    // if this is an lmesh, also find the selected
    // edges for any sub mesh in the hierarchy
@@ -254,7 +258,7 @@ MeshGlobal::selected_edges_all_levels(BMESH* m)
       LMESH* lm = (LMESH*)cm;
       while(lm->subdiv_mesh()) {
          lm = lm->subdiv_mesh();
-         ret += selected_edges(lm);
+         ret = ret + selected_edges(lm);
       }
    }
 
@@ -273,7 +277,7 @@ MeshGlobal::select(Bvert* v)
       return;
 
    v->set_bit(Bsimplex::SELECTED_BIT);
-   _selected_verts += v;
+   _selected_verts.push_back(v);
 
    BMESH::set_focus(v->mesh(), get_patch(v));
 }
@@ -288,7 +292,9 @@ MeshGlobal::deselect(Bvert* v)
       return;
 
    v->clear_bit(Bsimplex::SELECTED_BIT);
-   _selected_verts -= v;
+   Bvert_list::iterator it;
+   it = std::find(_selected_verts.begin(), _selected_verts.end(), v);
+   _selected_verts.erase(it);
 }
 
 void
@@ -322,7 +328,7 @@ MeshGlobal::select(CBvert_list& verts)
 { 
    // selects the verts
 
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       select(verts[i]);
    }
 }
@@ -332,7 +338,7 @@ MeshGlobal::deselect(CBvert_list& verts)
 { 
    // deselects the verts
 
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       deselect(verts[i]);
    }
 }
@@ -363,7 +369,7 @@ MeshGlobal::selected_verts_all_levels(BMESH* m)
    BMESH* cm = get_ctrl_mesh(m);
 
    // return the verts selected from this mesh
-   ret += selected_verts(cm);
+   ret = ret + selected_verts(cm);
 
    // if this is an lmesh, also find the selected
    // verts for any sub mesh in the hierarchy
@@ -372,7 +378,7 @@ MeshGlobal::selected_verts_all_levels(BMESH* m)
       LMESH* lm = (LMESH*)cm;
       while(lm->subdiv_mesh()) {
          lm = lm->subdiv_mesh();
-         ret += selected_verts(lm);
+         ret = ret + selected_verts(lm);
       }
    }
 
@@ -401,7 +407,7 @@ debug_sel_faces_per_level(LMESH* m)
 
    while(m) {
       cerr << "num sel faces level: " << m->subdiv_level() << ": "
-           << MeshGlobal::selected_faces(m).num() << endl;
+           << MeshGlobal::selected_faces(m).size() << endl;
       m = m->subdiv_mesh();
    }
    cerr << "=====================" << endl;
@@ -459,9 +465,9 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
    Bvert_list new_selected_verts;
 
    // loop indices
-   int i=0;     // faces
-   int j=0;     // edges
-   int k=0;     // verts
+   Bface_list::size_type i=0;
+   Bedge_list::size_type j=0;
+   Bvert_list::size_type k=0;
    
    int diff = to-from;  // the change in edit level
 
@@ -471,74 +477,76 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
 
       // get the children of the old selected components at the new level
 
-      for (i=0; i<selected_faces.num(); ++i) {
-         ((Lface*)selected_faces[i])->append_subdiv_faces(diff, new_selected_faces);      }
+      for (i=0; i<selected_faces.size(); ++i)
+         ((Lface*)selected_faces[i])->append_subdiv_faces(diff, new_selected_faces);
 
-      for (j=0; j<selected_edges.num(); ++j) {
+      for (j=0; j<selected_edges.size(); ++j)
          ((Ledge*)selected_edges[j])->append_subdiv_edges(diff, new_selected_edges);
-      }
-      for (k=0; k<selected_verts.num(); ++k) {
+
+      for (k=0; k<selected_verts.size(); ++k) {
          Lvert* v = ((Lvert*)selected_verts[k])->subdiv_vert(diff);
          if (v)
-            new_selected_verts += v;
+            new_selected_verts.push_back(v);
       }
 
    } else { // edit level unrefined
 
       // get the parents of the old selected components at the new level
 
-      Bface_list parent_faces;
-      Bedge_list parent_edges;
-      Bvert_list parent_verts;
+      set<Bface*> parent_faces;
+      set<Bedge*> parent_edges;
+      set<Bvert*> parent_verts;
 
-      for (i=0; i<selected_faces.num(); ++i) {
+      for (i=0; i<selected_faces.size(); ++i) {
          Lface* parent_f = ((Lface*)selected_faces[i])->parent(-diff);
          if (!parent_f) {
             err_adv(debug, "MeshGlobal::edit_level_changed: missing parent face");
             continue;
          }
-         parent_faces.add_uniquely(parent_f);
+         parent_faces.insert(parent_f);
       }
 
-      for (j=0; j<selected_edges.num(); ++j) {
+      for (j=0; j<selected_edges.size(); ++j) {
          Ledge* parent_e = ((Ledge*)selected_edges[j])->parent_edge(-diff);
          if (!parent_e)
             continue;
-         parent_edges.add_uniquely(parent_e);
+         parent_edges.insert(parent_e);
       }
 
-      for (k=0; k<selected_verts.num(); ++k) {
+      for (k=0; k<selected_verts.size(); ++k) {
          Lvert* parent_v = ((Lvert*)selected_verts[k])->parent_vert(-diff);
          if (!parent_v)
             continue;
-         parent_verts.add_uniquely(parent_v);
+         parent_verts.insert(parent_v);
       }
 
       // if all descendents of a parent component were selected at the old level, 
       // select the parent
       
-      for (i=0; i<parent_faces.num(); ++i) {
+      for (set<Bface*>::iterator it=parent_faces.begin(); it!=parent_faces.end(); ++it) {
          // get all the parent's children at the old edit level
          Bface_list child_faces; 
-         ((Lface*)parent_faces[i])->append_subdiv_faces(-diff, child_faces);
+         ((Lface*)(*it))->append_subdiv_faces(-diff, child_faces);
 
          if (all_selected(child_faces)) {
-            new_selected_faces += parent_faces[i];
+            new_selected_faces.push_back(*it);
          }
       }
 
-      for (j=0; j<parent_edges.num(); ++j) {
+      for (set<Bedge*>::iterator it=parent_edges.begin(); it!=parent_edges.end(); ++it) {
          // get all the parent's children at the old edit level
          Bedge_list child_edges; 
-         ((Ledge*)parent_edges[j])->append_subdiv_edges(-diff, child_edges);
+         ((Ledge*)(*it))->append_subdiv_edges(-diff, child_edges);
 
          if (all_selected(child_edges)) {
-            new_selected_edges += parent_edges[j];
+            new_selected_edges.push_back(*it);
          }
       }
 
-      // this case is simpler: verts have 1 child vert
-      new_selected_verts = parent_verts;
+      for (set<Bvert*>::iterator it=parent_verts.begin(); it!=parent_verts.end(); ++it) {
+         // this case is simpler: verts have 1 child vert
+         new_selected_verts.push_back(*it);
+      }
    }
 
    // deselect components for old level

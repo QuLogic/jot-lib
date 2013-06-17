@@ -408,10 +408,10 @@ VertMeme::get_nbrs(vector<FaceMeme*>& ret) const
 
    ret.clear();
    if (vert()) {
-      static ARRAY<Bface*> faces;
+      vector<Bface*> faces;
       vert()->get_faces(faces);
       FaceMeme* m;
-      for (int i=0; i<faces.num(); i++)
+      for (vector<Bface*>::size_type i=0; i<faces.size(); i++)
          if ((m = _owner->find_face_meme(faces[i])))
             ret.push_back(m);
    }
@@ -456,10 +456,10 @@ get_adjs(const Bvert* v, CBedge_list& edges)
    // Returns corresponding opposite verts.
 
    assert(v);
-   Bvert_list ret(edges.num());
-   for (int i=0; i<edges.num(); i++) {
+   Bvert_list ret(edges.size());
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       assert(v->nbr(edges[i]));
-      ret += v->nbr(edges[i]);
+      ret.push_back(v->nbr(edges[i]));
    }
    return ret;
 }
@@ -475,15 +475,15 @@ VertMeme::smooth_target() const
 
    Bedge_list all_edges = v->get_adj();
    Bedge_list star;
-   for (int k = 0; k < all_edges.num(); k++) {
+   for (Bedge_list::size_type k = 0; k < all_edges.size(); k++) {
       Bsurface* p = Bsurface::find_controller(all_edges[k]);
       if (p && (p->name()=="roof_panel") && (Bbase::find_controller(v)!=p))
          continue;
       if (Primitive::isa(p) && ((Primitive*)p)->is_roof())
          continue;
-      star += all_edges[k];
+      star.push_back(all_edges[k]);
    }
-   bool special = (star.num()!=all_edges.num());
+   bool special = (star.size()!=all_edges.size());
    if (!special)
       star = v->get_manifold_edges(); // work with primary layer edges
 
@@ -523,7 +523,7 @@ VertMeme::smooth_target() const
    CWpt& c = v->loc();          // location of this vertex
    double w = 0;                // net weight of centroid components
 
-   for (int i=0; i<star.num(); i++) {
+   for (Bedge_list::size_type i=0; i<star.size(); i++) {
       Bedge* e = star[i];
       if (e->is_strong()) {
          // add contribution from r neighbor

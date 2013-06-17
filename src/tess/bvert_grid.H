@@ -40,7 +40,7 @@ class BvertGrid {
 
    // dimensions
    int nrows() const { return _grid.size(); }
-   int ncols() const { return _grid.empty() ? 0 : bottom().num(); }
+   int ncols() const { return _grid.empty() ? 0 : bottom().size(); }
 
    // Vertex (i,j), where i designates the column and j
    // designates the row:
@@ -100,7 +100,7 @@ class BvertGrid {
          return false;
       // check that each row is the same size
       for (int i=1; i<nrows(); i++)
-         if (row(i).num() != row(i-1).num())
+         if (row(i).size() != row(i-1).size())
             return false;
       return true;
    }

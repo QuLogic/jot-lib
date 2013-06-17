@@ -48,8 +48,8 @@ main(int argc, char *argv[])
    if (do_components) {
       // Reverse separate components as needed:
       bool changed = false;
-      ARRAY<Bface_list> components = mesh->get_components();
-      for (int i=0; i<components.num(); i++) {
+      vector<Bface_list> components = mesh->get_components();
+      for (vector<Bface_list>::size_type i=0; i<components.size(); i++) {
          if (components[i].volume() < 0) {
             err_msg("reversing component: %d faces", components[i].num());
             reverse_faces(components[i]);

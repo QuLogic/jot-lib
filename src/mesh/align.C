@@ -26,10 +26,10 @@
 #include "mi.H"
 
 inline double 
-cross_mult(int i, int j, CARRAY<Wvec>& v)
+cross_mult(int i, int j, const vector<Wvec>& v)
 {
    double ret = 0;
-   for (int k=0; k<v.num(); k++)
+   for (vector<Wvec>::size_type k=0; k<v.size(); k++)
       ret += v[k][i] * v[k][j];
    return ret;
 }
@@ -196,7 +196,7 @@ sym_mat_eigenvectors(const WMat3& A)
 }
 
 Wtransf
-compute_xf(CARRAY<Wvec>& v)
+compute_xf(const vector<Wvec>& v)
 {
    WMat3 A;
 
@@ -230,11 +230,11 @@ compute_xf(CWpt_list& p)
    Wpt    c = p.average();
    double s = p.spread();
 
-   ARRAY<Wvec> v(p.num());
-   for (int i=0; i<p.num(); i++) {
-      v += (p[i] - c)/s;
+   vector<Wvec> v(p.size());
+   for (Wpt_list::size_type i=0; i<p.size(); i++) {
+      v[i] = (p[i] - c)/s;
    }
-   assert(v.num() == p.num());
+   assert(v.size() == p.size());
    return Wtransf::translation(c) * compute_xf(v) * Wtransf::translation(-c);
 }
 

@@ -23,6 +23,8 @@
 
 #include "bvert.H"
 
+#include <vector>
+
 class StripCB;
 /**********************************************************************
  * VertStrip:
@@ -41,26 +43,26 @@ class VertStrip {
    virtual ~VertStrip();
 
    //******** ACCESSORS ********
-   CARRAY<Bvert*> &verts() const { return _verts;}
+   const vector <Bvert*> &verts() const { return _verts;}
    Patch*          patch() const { return _patch; }
 
    Bvert* vert(int i)      const { return _verts[i]; }
 
    bool   empty()          const { return _verts.empty(); }
-   int    num()            const { return _verts.num(); }
+   int    num()            const { return _verts.size(); }
 
    //******** THE MAIN JOB ********
    virtual void draw(StripCB* cb);
 
    //******** BUILDING ********
    virtual void reset() { _verts.clear(); }
-   void add(Bvert* v)   { _verts += v; }
+   void add(Bvert* v)   { _verts.push_back(v); }
 
  protected:
    friend class Patch;
 
    //******** DATA ********
-   ARRAY<Bvert*>  _verts;       // the sequence of verts
+   vector<Bvert*> _verts;       // the sequence of verts
    Patch*         _patch;       // patch this is assigned to
    int            _index;       // index in patch's list
 

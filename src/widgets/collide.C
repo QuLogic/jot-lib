@@ -57,14 +57,14 @@ Collide::_get_move(CWpt& s, CWvec& vel)
 		return velocity+(_size * .1 * log(force.length()) * force);
 		}
 
-   vector<Wvec> norms(_hitFaces.num(), Wvec(0,0,0));
-   vector<double> weights(_hitFaces.num(), 0.0);
+   vector<Wvec> norms(_hitFaces.size(), Wvec(0,0,0));
+   vector<double> weights(_hitFaces.size(), 0.0);
    double totalWeight = 0;
 
    //spring forces
 
    //weight all near by nodes
-   for (int i = 0; i < _hitFaces.num(); i++) {
+   for (Bface_list::size_type i = 0; i < _hitFaces.size(); i++) {
       Wpt p;
       _hitFaces[i]->bc2pos(_smplPoints[i],p);
       Wvec n = _hitFaces[i]->bc2norm(_smplPoints[i]);
@@ -87,7 +87,7 @@ Collide::_get_move(CWpt& s, CWvec& vel)
 
    //calculate combination of all weighted norms
    Wvec force = Wvec(0,0,0);
-   for (int i = 0; i < _hitFaces.num(); i++)
+   for (Bface_list::size_type i = 0; i < _hitFaces.size(); i++)
       force += (weights[i]/totalWeight) * norms[i];
 
    //smooth forces so its not jerky
@@ -169,7 +169,7 @@ Collide::buildCollisionList(OctreeNode* node)
 
    //if the node has no children(its a leaf), add its triangles
    if (node->get_leaf()) {
-      _hitFaces += node->get_face();
+      _hitFaces = _hitFaces + node->get_face();
       _smplPoints.push_back(node->get_point());
    } else { //else, check its children
       OctreeNode** children =  node->get_children();

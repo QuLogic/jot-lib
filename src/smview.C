@@ -611,7 +611,7 @@ print_edge_info(CBedge_list& edges)
 {
    bool ret = false;
    err_msg("********");
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       int n = edges[i]->nfaces();
       int a = edges[i]->num_all_faces();
       err_msg("  %2d: %d top, %d lower", i, n, a - n);

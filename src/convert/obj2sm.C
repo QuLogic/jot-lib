@@ -173,26 +173,12 @@ template <class T>
 inline bool
 all_valid_indices(const T& l, int i, int j, int k)
 {
-   return l.valid_index(i) && l.valid_index(j) && l.valid_index(k);
-}
-
-template <class T>
-inline bool
-any_valid_indices(const T& l, int i, int j, int k)
-{
-   return l.valid_index(i) || l.valid_index(j) || l.valid_index(k);
-}
-
-template <class T>
-inline bool
-all_valid_indices2(const T& l, int i, int j, int k)
-{
    return 0 <= i && i < (int)l.size() && 0 <= j && j < (int)l.size() && 0 <= k && k < (int)l.size();
 }
 
 template <class T>
 inline bool
-any_valid_indices2(const T& l, int i, int j, int k)
+any_valid_indices(const T& l, int i, int j, int k)
 {
    return (0 <= i && i < (int)l.size()) || (0 <= j && j < (int)l.size()) || (0 <= k && k < (int)l.size());
 }
@@ -203,7 +189,7 @@ add_tri(LMESH* mesh, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v
    assert(mesh);
    assert(all_valid_indices(mesh->verts(), v1._v, v2._v, v3._v));
 
-   if (all_valid_indices2(uvs, v1._t, v2._t, v3._t)) {
+   if (all_valid_indices(uvs, v1._t, v2._t, v3._t)) {
       mesh->add_face(v1._v, v2._v, v3._v, uvs[v1._t], uvs[v2._t], uvs[v3._t]);
    } else {
       mesh->add_face(v1._v, v2._v, v3._v);

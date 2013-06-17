@@ -70,7 +70,7 @@ class VertMapper {
    bool add(Bvert* a, Bvert* b);
 
    bool is_valid() const { 
-      return ((_a_verts.num() == _b_verts.num()) &&
+      return ((_a_verts.size() == _b_verts.size()) &&
               !_a_verts.has_duplicates() &&
               !(_dual && _b_verts.has_duplicates()));
    }
@@ -84,7 +84,7 @@ class VertMapper {
    // edges that cannot be mapped to B:
    Bedge_list a_edges() const;
 
-   int num_verts() const { return is_valid() ? _a_verts.num() : 0; }
+   int num_verts() const { return is_valid() ? _a_verts.size() : 0; }
    bool is_empty() const { return num_verts() == 0; }
 
    //******** A --> B MAPPING ********
@@ -92,7 +92,7 @@ class VertMapper {
    // Given side A element, return corresponding side B element:
    Bvert* a_to_b(Bvert* a) const {
       int i = _a_verts.get_index(a);
-      return _b_verts.valid_index(i) ? _b_verts[i] : 0;
+      return (0 <= i && i < (int)_b_verts.size()) ? _b_verts[i] : 0;
    }
    Bedge* a_to_b(Bedge* a) const {
       if (!a) return 0;
@@ -139,7 +139,7 @@ class VertMapper {
    Bvert* b_to_a(Bvert* b) const {
       if (!_dual) return 0;
       int i = _b_verts.get_index(b);
-      return _a_verts.valid_index(i) ? _a_verts[i] : 0;
+      return (0 <= i && i < (int)_a_verts.size()) ? _a_verts[i] : 0;
    }
    Bedge* b_to_a(Bedge* b) const {
       if (!b) return 0;

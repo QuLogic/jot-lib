@@ -368,7 +368,7 @@ subdiv_mapper(CVertMapper& pmap)
 {
    Bedge_list a_edges = pmap.a_edges();
    Bedge_list b_edges = pmap.a_to_b(a_edges);
-   assert(a_edges.num() == b_edges.num());
+   assert(a_edges.size() == b_edges.size());
 
    return VertMapper(
       child_verts<Bvert_list,Lvert>(pmap.A()) +
@@ -386,9 +386,9 @@ parent_verts(CBvert_list& verts, int lev)
       ret = verts;
    } else {
       Bvert_list parents;
-      for (int i = 0; i < verts.num(); i++) {
+      for (Bvert_list::size_type i = 0; i < verts.size(); i++) {
          Lvert* p = ((Lvert*)verts[i])->parent_vert(1);
-         if (p) parents += p;
+         if (p) parents.push_back(p);
       }
       ret = parent_verts(parents, lev-1);
    }
@@ -436,11 +436,15 @@ get_regions(CBface_list& cregion)
    while (!region.empty()) {
       region.get_verts().clear_flag02();
       region.set_flags(1);
-      Bface_list comp(region.num());
-      comp.grow_connected(region.first(), 
+      Bface_list comp(region.size());
+      comp.grow_connected(region.front(),
                           !(BcurveFilter() || UncrossableEdgeFilter()));
       ret.push_back(comp);
-      region -= comp;
+      for (Bface_list::size_type i=0; i<comp.size(); i++) {
+         Bface_list::iterator it;
+         it = std::find(region.begin(), region.end(), comp[i]);
+         region.erase(it);
+      }
    }
 
    if (debug) cerr << "num of regions:" << ret.size() << endl;
@@ -453,18 +457,18 @@ shift(Bvert_list& b_verts)
 {
    bool debug = false;
 
-   int shift_loc;
-   for (shift_loc = 0; shift_loc < b_verts.num(); shift_loc++) {
+   Bvert_list::size_type shift_loc;
+   for (shift_loc = 0; shift_loc < b_verts.size(); shift_loc++) {
       bool a = Bpoint::find_controller(b_verts[shift_loc]) || 
           Bcurve::find_controller(b_verts[shift_loc]);
       bool b = b_verts[shift_loc]->degree(ProblemEdgeFilter())>0;//b_verts[shift_loc]->is_crease();
       if (a || b)
          break;
    }
-   if (shift_loc != b_verts.num()) {
-      b_verts.pop();
-      b_verts.shift(-shift_loc);
-      b_verts += b_verts.first();
+   if (shift_loc != b_verts.size()) {
+      b_verts.pop_back();
+      std::rotate(b_verts.begin(), b_verts.end() - shift_loc, b_verts.end());
+      b_verts.push_back(b_verts.front());
    }
 
    if (debug) cerr << "the shift loc is:" << shift_loc << endl;
@@ -478,30 +482,30 @@ get_c_verts(Bvert_list& b_verts)
    bool debug = false;
 
    vector<Bvert_list> ret;
-   int shift_loc = shift(b_verts);
+   Bvert_list::size_type shift_loc = shift(b_verts);
    Bvert_list curve_verts;
    bool recording = false;
 
-   for (int j = 0; j < b_verts.num(); j++) {
+   for (Bvert_list::size_type j = 0; j < b_verts.size(); j++) {
       bool a = Bpoint::find_controller(b_verts[j]) || Bcurve::find_controller(b_verts[j]);
       bool b = b_verts[j]->degree(ProblemEdgeFilter())>0;//b_verts[j]->is_crease();
       if (a || b) {
          if (recording) {
-            curve_verts += b_verts[j];
+            curve_verts.push_back(b_verts[j]);
             recording = false;
             ret.push_back(curve_verts);
          }
       } else {
-         if (!recording && shift_loc != b_verts.num()) {
+         if (!recording && shift_loc != b_verts.size()) {
             curve_verts.clear();
-            curve_verts += b_verts[j-1];
+            curve_verts.push_back(b_verts[j-1]);
             recording = true;
          }
-         curve_verts += b_verts[j];
+         curve_verts.push_back(b_verts[j]);
       }
    }
 
-   if (shift_loc == b_verts.num()) {
+   if (shift_loc == b_verts.size()) {
       ret.push_back(curve_verts);
    }
 
@@ -529,8 +533,8 @@ map_skel_to_skin(Skin* skin, CBface_list& region) {
    Bface_list ret;
    Bface_list skin_faces = skin->skin_faces();
 
-   for (int i = 0; i < skin_faces.num(); i++) {
-      for (int j = 0; j < region.num(); j++) {
+   for (Bface_list::size_type i = 0; i < skin_faces.size(); i++) {
+      for (Bface_list::size_type j = 0; j < region.size(); j++) {
          Bvert* v1 = skin->get_mapper()->a_to_b(region[j]->v1());
          Bvert* v2 = skin->get_mapper()->a_to_b(region[j]->v2());
          Bvert* v3 = skin->get_mapper()->a_to_b(region[j]->v3());
@@ -541,16 +545,16 @@ map_skel_to_skin(Skin* skin, CBface_list& region) {
          count += (skin_faces[i]->contains(v3) || skin_faces[i]->contains(region[j]->v3()));
          count += (skin_faces[i]->contains(v4) || skin_faces[i]->contains(region[j]->quad_vert()));
          if (count == 3) {
-            ret += skin_faces[i];
-            if (skin_faces[i]->is_quad()) ret += skin_faces[i]->quad_partner();
+            ret.push_back(skin_faces[i]);
+            if (skin_faces[i]->is_quad()) ret.push_back(skin_faces[i]->quad_partner());
             break;
          }         
       }
    }
 
    ret = ret.unique_elements();
-   if (ret.num() != region.num()) {
-      if (debug) cerr << "face map failure: " << ret.num() << endl;    
+   if (ret.size() != region.size()) {
+      if (debug) cerr << "face map failure: " << ret.size() << endl;
       return Bface_list();
    }
    return ret;
@@ -563,7 +567,7 @@ map_skel_to_skin(Skin* skin, CEdgeStrip& strip) {
    EdgeStrip ret;
    Bedge_list skin_edges = skin->skin_edges();
    for (int j = 0; j < strip.num(); j++) {
-      for (int i = 0; i < skin_edges.num(); i++) {
+      for (Bedge_list::size_type i = 0; i < skin_edges.size(); i++) {
          Bvert* v1 = skin->get_mapper()->a_to_b(strip.vert(j));
          Bvert* v2 = skin->get_mapper()->a_to_b(strip.next_vert(j));
 
@@ -594,8 +598,8 @@ map_skin_to_skel(Skin* skin, CBface_list& region) {
    Bface_list ret;
    Bface_list skel_faces = skin->skel_faces();
 
-   for (int i = 0; i < region.num(); i++) {
-      for (int j = 0; j < skel_faces.num(); j++) {
+   for (Bface_list::size_type i = 0; i < region.size(); i++) {
+      for (Bface_list::size_type j = 0; j < skel_faces.size(); j++) {
          Bvert* v1 = skin->get_mapper()->a_to_b(skel_faces[j]->v1());
          Bvert* v2 = skin->get_mapper()->a_to_b(skel_faces[j]->v2());
          Bvert* v3 = skin->get_mapper()->a_to_b(skel_faces[j]->v3());
@@ -606,16 +610,16 @@ map_skin_to_skel(Skin* skin, CBface_list& region) {
          count += (region[i]->contains(v3) || region[i]->contains(skel_faces[j]->v3()));
          count += (region[i]->contains(v4) || region[i]->contains(skel_faces[j]->quad_vert()));
          if (count == 3) {
-            ret += skel_faces[j];
-            if (skel_faces[j]->is_quad()) ret += skel_faces[j]->quad_partner();
+            ret.push_back(skel_faces[j]);
+            if (skel_faces[j]->is_quad()) ret.push_back(skel_faces[j]->quad_partner());
             break;
          }
       }
    }
 
    ret = ret.unique_elements();
-   if (ret.num() != region.num()) {
-      if (debug) cerr << "map_skin_to_skel failure: " << ret.num() << endl;
+   if (ret.size() != region.size()) {
+      if (debug) cerr << "map_skin_to_skel failure: " << ret.size() << endl;
       return Bface_list();
    }
    return ret;
@@ -630,7 +634,7 @@ map_skin_to_skel(Skin* skin, CEdgeStrip& strip) {
    EdgeStrip ret;
    Bedge_list skel_edges = skin->skel_edges();
    for (int i = 0; i < strip.num(); i++) {
-      for (int j = 0; j < skel_edges.num(); j++) {
+      for (Bedge_list::size_type j = 0; j < skel_edges.size(); j++) {
          Bvert* v1 = skin->get_mapper()->a_to_b(skel_edges[j]->v1());
          Bvert* v2 = skin->get_mapper()->a_to_b(skel_edges[j]->v2());
          Bedge* e = strip.edge(i);
@@ -671,7 +675,7 @@ get_ext_strip(EdgeStrip s, bool ccw)
       ret.add(temp_v, temp_e);
       temp_v = temp_e->other_vertex(temp_v);
       Bedge_list star = temp_v->get_manifold_edges();
-      for (int i = 0; i < star.num(); i++) {
+      for (Bedge_list::size_type i = 0; i < star.size(); i++) {
          Bface* a = star[i]->ccw_face(temp_v);
          Bface* b = star[i]->cw_face(temp_v);
          if ((ccw && (!a||a->is_secondary()) && (b&&b->is_primary())) ||
@@ -696,12 +700,12 @@ find_ribbons(EdgeStrip s)
    for (int i = 0; i < s.num(); i++) {
       Bface* f = s.edge(i)->cw_face(s.vert(i));
       if (!Skin::find_controller(f))
-         ret += Bface_list::reachable_faces(f, 
+         ret = ret + Bface_list::reachable_faces(f,
             !(BcurveFilter() || UncrossableEdgeFilter()));
    }
 
    ret = ret.unique_elements();
-   if (debug) cerr << "found " << ret.num() << " faces on the ribbon" << endl;
+   if (debug) cerr << "found " << ret.size() << " faces on the ribbon" << endl;
    return ret;
 }
 
@@ -735,7 +739,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       }
       // the corresponding region on p_skin
       Bface_list p_region = subdiv_mapper(under->get_inf_mapper(), map_skin_to_skel(c_skin, region));
-      if(debug) cerr << "the corresponding region faces num: " << p_region.num() << endl;
+      if (debug) cerr << "the corresponding region faces num: " << p_region.size() << endl;
 
       // to see if the other side has a cover skin
       Skin* c_p_skin = get_skin(p_skin->get_covers(), p_region); 
@@ -749,12 +753,11 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       p_region = map_skel_to_skin(c_p_skin, p_region); 
 
       // create curve on the other side
-      ARRAY<Bvert_list> templists;
-      vector<Bvert_list> templists2;
+      vector<Bvert_list> templists;
       p_region.get_boundary().get_chains(templists);
-      templists2 = get_c_verts(templists[0]);
-      for (vector<Bvert_list>::size_type i = 0; i < templists2.size(); i++) {
-         Bcurve* b_curve = new Bcurve(templists2[i], c_p_skin,
+      templists = get_c_verts(templists[0]);
+      for (vector<Bvert_list>::size_type i = 0; i < templists.size(); i++) {
+         Bcurve* b_curve = new Bcurve(templists[i], c_p_skin,
                                     (LMESH::upcast(region.mesh()))->subdiv_level());
          cmd->add(new SHOW_BBASE_CMD(b_curve));
       }
@@ -793,7 +796,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
 inline Bface_list
 check_inf_region(Bface_list region)
 {
-   for (int i = 0; i < region.num(); i++) {
+   for (Bface_list::size_type i = 0; i < region.size(); i++) {
       Skin* ctrl = Skin::find_controller(region[i]);
       if (ctrl && !ctrl->is_inflate() && ctrl->get_partner()) {
          Skin* partner = ctrl->get_partner();
@@ -829,14 +832,14 @@ try_punch(CBface_list& region, bool debug)
    MULTI_CMDptr cmd = new MULTI_CMD; 
    vector<Bface_list> regions = get_regions(check_inf_region(region));
    if (debug) cerr << "   num of regions: " << regions.size() << endl;
-   ARRAY<Bvert_list> b_verts_lists;
+   vector<Bvert_list> b_verts_lists;
    vector<Skin*> skins;
 
    for (vector<Bface_list>::size_type i = 0; i < regions.size(); i++) {
       regions[i].get_boundary().get_chains(b_verts_lists);
 
       vector<Bvert_list> curve_verts_lists;
-      for (int j = 0; j < b_verts_lists.num(); j++) {
+      for (vector<Bvert_list>::size_type j = 0; j < b_verts_lists.size(); j++) {
          vector<Bvert_list> tmp = get_c_verts(b_verts_lists[j]);
          curve_verts_lists.insert(curve_verts_lists.end(), tmp.begin(), tmp.end());
       }
@@ -855,7 +858,7 @@ try_punch(CBface_list& region, bool debug)
          UVpt pt;
          for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
             uvpts.clear();
-            for (int k = 0; k < curve_verts_lists[j].num(); k++) {
+            for (Bvert_list::size_type k = 0; k < curve_verts_lists[j].size(); k++) {
                surf->get_uv(curve_verts_lists[j][k], pt);
                uvpts.push_back(pt);
             }
@@ -901,7 +904,7 @@ try_punch(CBface_list& region, bool debug)
          
          Bface_list l_region = Bface_list::reachable_faces(regions[i][0], 
             !(BcurveFilter() || UncrossableEdgeFilter()));
-         cerr << "   cover region faces no: " << l_region.num() << endl;
+         cerr << "   cover region faces no: " << l_region.size() << endl;
          Skin* c_skin = Skin::create_cover_skin(l_region, cmd);
 
          if (c_skin) {
@@ -923,7 +926,7 @@ try_punch(CBface_list& region, bool debug)
       }
    }
 
-   err_adv(debug, "punching region with %d faces", region.num());
+   err_adv(debug, "punching region with %d faces", region.size());
 
    WORLD::add_command(cmd);
 

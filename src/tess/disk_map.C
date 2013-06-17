@@ -26,11 +26,11 @@ DiskMap::create(CBface_list& disk, bool flip_tan, Bvert* v)
 
    // Check topology conditions:
    if (!disk.is_disk()) {
-      err_adv(debug, " %d faces do not form disk", disk.num());
+      err_adv(debug, " %d faces do not form disk", disk.size());
       return 0;
    }
 
-   if (v && !disk.get_verts().contains(v)) {
+   if (v && std::find(disk.get_verts().begin(), disk.get_verts().end(), v) == disk.get_verts().end()) {
       err_adv(debug, " input vert not on the input faces");
       return 0;
    }

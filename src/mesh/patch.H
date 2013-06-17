@@ -142,12 +142,12 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    TexCoordGen* tex_coord_gen()         const      { return _tex_coord_gen; }
    void         set_tex_coord_gen(TexCoordGen* tg);
       
-   CARRAY<uint>& pixels()               const      { return _pixels; }
-   void          add_pixel(uint p)                 { _pixels += p; }
+   const vector<uint>& pixels()         const      { return _pixels; }
+   void          add_pixel(uint p)                 { _pixels.push_back(p); }
       
-   int num_vert_strips() const { return _vert_strips.num(); }
-   int num_edge_strips() const { return _edge_strips.num(); }
-   int num_tri_strips()  const { return _tri_strips.num(); }
+   int num_vert_strips() const { return _vert_strips.size(); }
+   int num_edge_strips() const { return _edge_strips.size(); }
+   int num_tri_strips()  const { return _tri_strips.size(); }
       
    virtual void          set_data(PatchData *d)     { _data = d; }
    virtual PatchData*    get_data()                 { return _data; }
@@ -259,7 +259,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //! For BMESH patch: returns number of faces in patch.
    //! For LMESH patch: returns number of faces at current subdiv level.
    //! \remark Popular with Gtextures to report on how many faces they rendered.
-   virtual int          num_faces()     const    { return _faces.num();}
+   virtual int          num_faces()     const    { return _faces.size(); }
       
    //! \brief Used by Lpatch to produce a child patch
    //! at the next subdivision level.
@@ -292,7 +292,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    void remove(Bface* f);
 
    void add(CBface_list& faces) {
-      for (int i=0; i<faces.num(); i++)
+      for (Bface_list::size_type i=0; i<faces.size(); i++)
          add(faces[i]);
    }
 
@@ -305,7 +305,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    void build_tri_strips();
    virtual double tris_per_strip() const {
       return _tri_strips.empty() ? 0.0 :
-         double(_faces.num())/_tri_strips.num();
+         double(_faces.size())/_tri_strips.size();
    }
       
    //@}
@@ -540,14 +540,14 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    BMESH*            _mesh;             //!< owner
    
    Bface_list        _faces;            //!< unordered faces
-   ARRAY<TriStrip*>  _tri_strips;       //!< faces organized into tri strips
+   vector<TriStrip*> _tri_strips;       //!< faces organized into tri strips
    
    EdgeStrip         _sils;             //!< silhouette edges (as strip)
    ZcrossPath        _zx_sils;          //!< zero_crossing sils
    EdgeStrip*        _creases;          //!< crease edges (maybe derived type)
    EdgeStrip*        _borders;          //!< border edges (maybe derived type)
-   ARRAY<EdgeStrip*> _edge_strips;      //!< edges to be rendered as line strips
-   ARRAY<VertStrip*> _vert_strips;      //!< vertices to be rendered as points
+   vector<EdgeStrip*> _edge_strips;     //!< edges to be rendered as line strips
+   vector<VertStrip*> _vert_strips;     //!< vertices to be rendered as points
    EdgeStrip*        _boundaries;      
 
    GTexture_list     _textures;         //!< list of textures
@@ -556,7 +556,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    
    GTexture*         _prev_tex;         //!< last GTexture used
    
-   ARRAY<uint>       _pixels;           //!< pixels on patch
+   vector<uint>      _pixels;           //!< pixels on patch
    uint              _stamp;            //!< version number
    uint              _mesh_version;     //!< last recorded mesh version
    bool              _tri_strips_dirty; //!< used to rebuild _tri_strips
@@ -791,8 +791,8 @@ class Patch_list : public RIC_array<Patch> {
    // creates a list of patches, 1 per face
    // result has same number of patches as there are faces.
    // (i.e., may have duplicates):
-   Patch_list(CBface_list& faces)     : RIC_array<Patch>(faces.num()) {
-      for (int k=0; k<faces.num(); k++) {
+   Patch_list(CBface_list& faces)     : RIC_array<Patch>(faces.size()) {
+      for (Bface_list::size_type k=0; k<faces.size(); k++) {
          assert(faces[k] && faces[k]->patch());
          add(faces[k]->patch());
       }
@@ -802,7 +802,7 @@ class Patch_list : public RIC_array<Patch> {
    // with no duplicates:
    static Patch_list get_unique_patches(CBface_list& faces) {
       Patch_list ret;
-      for (int k=0; k<faces.num(); k++) {
+      for (Bface_list::size_type k=0; k<faces.size(); k++) {
          assert(faces[k]);
          if (faces[k]->patch())
             ret.add_uniquely(faces[k]->patch());

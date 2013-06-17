@@ -45,7 +45,7 @@ EdgeStrip::draw(StripCB* cb)
    // The following loop checks for these breaks.
 
    bool started = 0;
-   for (int i=0; i<_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++) {
 
       // start new line strip if needed:
       if (!started) {
@@ -62,7 +62,7 @@ EdgeStrip::draw(StripCB* cb)
 
       // If we got to the end of the array or if _verts[i+1]
       // isn't part of current edge, then break the strip here.
-      if ((i == _verts.num()-1) || (_verts[i+1] != next)) {
+      if ((i == _verts.size()-1) || (_verts[i+1] != next)) {
          cb->end_edges(this);
          started = 0;
       }
@@ -89,7 +89,7 @@ EdgeStrip::next_edge(
    for (int i=v->degree()-1; i>=0; i--) {
       if (filter.accept(v->e(i))) { // if we find a good edge
          if (i > 0)                 //  and not all edges have been checked
-            stack += v;             //  remember this vertex to come back to it
+            stack.push_back(v);     //  remember this vertex to come back to it
          return v->e(i);            // return the good edge
       }
    }
@@ -104,7 +104,7 @@ EdgeStrip::build(CBedge_list& edges, CSimplexFilter& filter)
 
    reset();
 
-   for (int k=0; k<edges.num(); k++)
+   for (Bedge_list::size_type k=0; k<edges.size(); k++)
       build(0, edges[k], filter);
 }
 
@@ -152,7 +152,9 @@ EdgeStrip::build(Bvert* v, Bedge* e, CSimplexFilter& filter)
 
    // get the rest of them
    while (!stack.empty()) {
-      if ((v = stack.pop()) && (e = next_edge(v, stack, filter))) 
+      v = stack.back();
+      stack.pop_back();
+      if (v && (e = next_edge(v, stack, filter)))
          build_line_strip(v, e, filter, stack);
    }
 }
@@ -179,17 +181,17 @@ EdgeStrip::build_with_tips(CBedge_list& edges, CSimplexFilter& filter)
    UnreachedSimplexFilter unreached;
    AndFilter       wanted = unreached + filter;
 
-   int k;
+   Bedge_list::size_type k;
 
    // Start from all the tips first:
-   for (k=0; k<tips.num(); k++) {
+   for (k=0; k<tips.size(); k++) {
       Bedge* e = tips[k];
       Bvert* v = (e->v2()->degree(filter) != 2) ? e->v2() : e->v1();
       build(v, e, wanted);
    }
 
    // Now check the rest:
-   for (k=0; k<edges.num(); k++)
+   for (k=0; k<edges.size(); k++)
       build(0, edges[k], wanted);
 }
 
@@ -221,10 +223,10 @@ EdgeStrip::build_ccw_boundaries(
    UnreachedSimplexFilter unreached;
    AndFilter       wanted = unreached + boundary;
 
-   int k;
+   Bedge_list::size_type k;
 
    // Start from all the tips first:
-   for (k=0; k<tips.num(); k++) {
+   for (k=0; k<tips.size(); k++) {
       Bedge* e = tips[k];
       Bvert* v = (e->v2()->degree(boundary) != 2) ? e->v2() : e->v1();
       Bface* f = e->screen_face(face_filter);
@@ -237,7 +239,7 @@ EdgeStrip::build_ccw_boundaries(
    }
 
    // Now check the rest:
-   for (k=0; k<edges.num(); k++) {
+   for (k=0; k<edges.size(); k++) {
       Bedge* e = edges[k];
       Bface* f = e->screen_face(face_filter);
       assert(f); // e must have 1 face satisfying the filter
@@ -254,12 +256,12 @@ EdgeStrip::has_break(int i) const
    // (or if it's the first or last vert):
 
    // For bogus input say it's not broken:
-   if (empty() || (i < 0) || (i > _verts.num()))
+   if (empty() || (i < 0) || (i > (int)_verts.size()))
       return false;
 
    // For the first or last vertex say it is broken:
    // Note: last vert is the one *after* _verts.last()
-   if ((i == 0) || (i == _verts.num()))
+   if ((i == 0) || (i == (int)_verts.size()))
       return true;
 
    // Just check the vertex:
@@ -277,7 +279,7 @@ EdgeStrip::num_line_strips() const
    int ret = 1; // last edge has a break
 
    // check all edges but the last:
-   for (int i=0; i<_edges.num()-1; i++)
+   for (Bedge_list::size_type i=0; i<_edges.size()-1; i++)
       if (next_vert(i) != _verts[i+1])
          ret++;
    return ret;
@@ -297,16 +299,16 @@ EdgeStrip::get_chain(int& k, Bvert_list& chain) const
    if (!has_break(k))           // if k is not a chain endpoint, reject
       return false;             
 
-   chain += vert(k);            // add leading vertex
+   chain.push_back(vert(k));    // add leading vertex
    do {
-      chain.add(next_vert(k));  // add subsequent vertex
+      chain.push_back(next_vert(k)); // add subsequent vertex
    } while (!has_break(++k));   // advance k, break at chain end
 
    return true;
 }
 
 void
-EdgeStrip::get_chains(ARRAY<Bvert_list>& chains) const
+EdgeStrip::get_chains(vector<Bvert_list>& chains) const
 {
    // Return a list of distinct chains of edges, in the form
    // of a set of Bvert_lists. 
@@ -315,7 +317,7 @@ EdgeStrip::get_chains(ARRAY<Bvert_list>& chains) const
 
    Bvert_list chain;
    for (int k=0; get_chain(k, chain); )
-      chains += chain;
+      chains.push_back(chain);
 }
 
 EdgeStrip 
@@ -325,10 +327,10 @@ EdgeStrip::get_reverse() const
 
    EdgeStrip ret = *this;
    if (!empty()) {
-      ret._edges.reverse();
-      ret._verts += last();
-      ret._verts.reverse();
-      ret._verts.pop();
+      std::reverse(ret._edges.begin(), ret._edges.end());
+      ret._verts.push_back(last());
+      std::reverse(ret._verts.begin(), ret._verts.end());
+      ret._verts.pop_back();
    }
    return ret;
 }
@@ -348,10 +350,10 @@ get_leading_vert(CEdgeStrip& source)
 {
    CBvert_list& verts = source.verts();
    CBedge_list& edges = source.edges();
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       if (verts[i]->degree(SimplexFlagFilter(1)) == 1 && edges[i]->flag())
          return verts[i];
-   for (int j=0; j<verts.num(); j++)
+   for (Bvert_list::size_type j=0; j<verts.size(); j++)
       if (edges[j]->flag())
          return verts[j];
    return 0;
@@ -364,8 +366,8 @@ add_to_strip(Bvert* v, CEdgeStrip& source, EdgeStrip& ret)
    CBvert_list& verts = source.verts();
    CBedge_list& edges = source.edges();
    int k = verts.get_index(v);
-   assert(verts.valid_index(k) && edges[k]->flag());
-   while (verts.valid_index(k) && edges[k]->flag()) {
+   assert(0 <= k && k < (int)verts.size() && edges[k]->flag());
+   while (0 <= k && k < (int)verts.size() && edges[k]->flag()) {
       edges[k]->clear_flag();
       ret.add(verts[k], edges[k]);
       if (source.has_break(k+1)) {

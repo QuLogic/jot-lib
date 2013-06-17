@@ -290,7 +290,7 @@ inline bool
 copy_edges(CBedge_list& edges, CVertMapper& vmap)
 {
    bool ret = true;
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       if (!copy_edge(edges[i], vmap))
          ret = false;
    return ret;
@@ -317,28 +317,28 @@ gen_flip_side(CBface_list& top, Patch* p, VertMapper& vmap)
    assert(p && p->mesh());
    Bvert_list A = top.get_verts();
    Bvert_list B = p->mesh()->add_verts(A.pts());
-   err_adv(debug, "gen_flip_side: %d/%d verts", A.num(), B.num());
+   err_adv(debug, "gen_flip_side: %d/%d verts", A.size(), B.size());
    vmap.set(A,B);
    Bface_list ret;
-   for (int i=0; i<top.num(); i++)
-      ret += gen_flip_face(top[i], vmap);
+   for (Bface_list::size_type i=0; i<top.size(); i++)
+      ret.push_back(gen_flip_face(top[i], vmap));
    copy_edges(top.get_edges(), vmap);
-   err_adv(debug, "gen_flip_side: %d faces to %d faces", top.num(), ret.num());
+   err_adv(debug, "gen_flip_side: %d faces to %d faces", top.size(), ret.size());
    return ret;
 }
 
 inline void
 displace(CBvert_list& verts, const vector<Wvec>& delt)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       verts[i]->offset_loc(delt[i]);
 }
 
 inline void
 displace(CBvert_list& verts, CWvec&n)
 {
-   vector<Wvec> delt(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   vector<Wvec> delt(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       delt[i] = (n * (verts[i]->avg_strong_len()/2));
    displace(verts, delt);
 }
@@ -380,7 +380,7 @@ gen_ribbon(CEdgeStrip& boundary, CVertMapper& vmap, Patch* p)
       UVpt ub1(u+du,  0);
       UVpt ua0(u   , du);
       UVpt ua1(u+du, du);
-      ret += mesh->add_quad(b0, b1, a1, a0, ub0, ub1, ua1, ua0, p);
+      ret.push_back(mesh->add_quad(b0, b1, a1, a0, ub0, ub1, ua1, ua0, p));
       u += du;
    }
 
@@ -545,8 +545,8 @@ Primitive::build_ball(Bpoint* skel, double pix_rad)
 
    // Find the our verts and create memes on them
    Bvert_list verts = _patch->verts();
-   assert(verts.num() == 8);
-   for (int i=0; i<verts.num(); i++)
+   assert(verts.size() == 8);
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       create_xf_meme((Lvert*)verts[i], frame);
 
    add_face_memes(_mesh->faces());
@@ -795,7 +795,7 @@ Primitive::extend_branch(
    if (!base2.empty()) {
       if (!(base2.mesh() == base1.mesh() &&           // same mesh as base1
             (!base2.contains_any(base1)) &&  // distinct from base1
-            base2.boundary_edges().num() == base1.boundary_edges().num())) { // matching bases
+            base2.boundary_edges().size() == base1.boundary_edges().size())) { // matching bases
          err_adv(debug, "Primitive::extend_branch: bad base 2");
          return 0;
       }
@@ -1188,7 +1188,7 @@ get_end_frame(uintptr_t key, Bpoint* b, Bcurve* c, int bnum, CWvec& n)
       else if (bnum == 2) b = c->b2();
       else assert(0);
       assert(!c->edges().empty());
-      Bedge* e = ((bnum == 1) ? c->edges().first() : c->edges().last());
+      Bedge* e = (bnum == 1) ? c->edges().front() : c->edges().back();
       return new SkelFrame(key, b->vert(), n, e);
    }
    return 0;
@@ -1382,8 +1382,8 @@ Primitive::build_tube(
    if (sleeve_needed)
       build_ring(f1, u1, p1);
    else {
-      for (int i = 0; i < v1.num(); i++)
-         p1 += v1[i];
+      for (Bvert_list::size_type i = 0; i < v1.size(); i++)
+         p1.push_back(v1[i]);
    }
    prev = p1;
 
@@ -1393,18 +1393,18 @@ Primitive::build_tube(
    VertMapper vmap;
    if (sleeve_needed) {
       build_ring(f1, cap_u1, B);
-      A += v1;
-      B += p1;
+      A = A + v1;
+      B = B + p1;
       vmap.set(A, B);
-      for (int i = 0; i < _base1.num(); i++)
-         cap1 += gen_flip_face(_base1[i], vmap, _patch);
+      for (Bface_list::size_type i = 0; i < _base1.size(); i++)
+         cap1.push_back(gen_flip_face(_base1[i], vmap, _patch));
       add_face_memes(cap1);
       copy_edges(_base1.get_edges(), vmap);
    } else 
       push(_base1, cmd);
 
    // Do internal rings and bands (if any)
-   for (int k=0; k<edges.num(); k++) {
+   for (Bedge_list::size_type k=0; k<edges.size(); k++) {
       // Get frame for the ring
       SimplexFrame* frame = new EdgeFrame((uintptr_t)this, edges[k], n);
 
@@ -1432,17 +1432,17 @@ Primitive::build_tube(
          B.clear();
          Wpt_list cap_u2 = f2->inv() * A.pts();
          build_ring(f2, cap_u2, B);
-         A += v2;
-         B += p2;
+         A = A + v2;
+         B = B + p2;
          vmap.set(A, B);
-         for (int i = 0; i < _base2.num(); i++)
-            cap2 += gen_flip_face(_base2[i], vmap);
+         for (Bface_list::size_type i = 0; i < _base2.size(); i++)
+            cap2.push_back(gen_flip_face(_base2[i], vmap));
          copy_edges(_base2.get_edges(), vmap);
 
       } else {
-            for (int i = 0; i < v2.num(); i++)
-               p2 += v2[i];
-            push(_base2, cmd);
+         for (Bvert_list::size_type i = 0; i < v2.size(); i++)
+            p2.push_back(v2[i]);
+         push(_base2, cmd);
       }
 
    } else {
@@ -1458,11 +1458,11 @@ Primitive::build_tube(
       B.clear();
       Wpt_list cap_u2 = f1->inv() * A.pts();
       build_ring(f2, Wtransf::translation(Wvec(offset,0,0)) * cap_u2, B);
-      A += p1;
-      B += p2;
+      A = A + p1;
+      B = B + p2;
       vmap.set(A, B);
-      for (int i = 0; i < temp.num(); i++)
-         cap2 += gen_flip_face(temp[i], vmap);
+      for (Bface_list::size_type i = 0; i < temp.size(); i++)
+         cap2.push_back(gen_flip_face(temp[i], vmap));
       if (!sleeve_needed)
          cap2.reverse_faces();
       copy_edges(temp.get_edges(), vmap);
@@ -1471,7 +1471,7 @@ Primitive::build_tube(
    cur = p2;
 
    // Last band:
-   double vp = skel_point ? 0.0 : pcalc.u(edges.num()); // previous v-value
+   double vp = skel_point ? 0.0 : pcalc.u(edges.size()); // previous v-value
    build_band(prev, cur, du, vp, 1.0);
 
    //cap2 = build_cap(cur[0], cur[1], cur[2], cur[3], du);
@@ -1500,24 +1500,24 @@ extract_sides(CBface_list& bases, CEdgeStrip& side, Bvert_list& side2, Bvert_lis
 
    Bvert_list bound_verts = bases.get_boundary().verts();
    int start = bound_verts.get_index(side.first());
-   bound_verts.shift(-start);
+   std::rotate(bound_verts.begin(), bound_verts.end() - start, bound_verts.end());
    assert(bound_verts[0] == side.first());
 
-   int total = bound_verts.num();
+   int total = bound_verts.size();
    assert(total%2 == 0);
    int a = side.num();
    int b = total/2 - a;
    
    if (bound_verts[1] == side.vert(1) || bound_verts[1] == side.last()) { // same orientation
       for (int i = a+b; i >= a; i--)
-         side2 += bound_verts[i];
+         side2.push_back(bound_verts[i]);
       for (int i = 2*a+b; i <= total; i++)
-         side4 += bound_verts[i%total];
+         side4.push_back(bound_verts[i%total]);
    } else {
       for (int i = a+b; i <= a+2*b; i++)
-         side2 += bound_verts[i];
+         side2.push_back(bound_verts[i]);
       for (int i = b; i >= 0; i--)
-         side4 += bound_verts[i];
+         side4.push_back(bound_verts[i]);
    }
 }
 
@@ -1528,25 +1528,25 @@ get_frame(uintptr_t key, CBface_list& bases, CWvec& n, Bvert* a1, Bvert* a2, Bve
    Bedge* end = lookup_edge(a3, a4);
    
    Bface* f = start->f1();
-   if (!bases.contains(f)) {
+   if (std::find(bases.begin(), bases.end(), f) == bases.end()) {
       f = start->f2();
-      assert(bases.contains(f));
+      assert(std::find(bases.begin(), bases.end(), f) != bases.end());
    }
    
    Bedge* e = start;
    vlist.clear();
-   vlist += a1;
+   vlist.push_back(a1);
    while (e != end) {
       e = f->opposite_quad_edge(e);
-      vlist += e->other_vertex(f->quad_opposite_vert(vlist.last()));
-      assert(bases.get_verts().contains(vlist.last()));
+      vlist.push_back(e->other_vertex(f->quad_opposite_vert(vlist.back())));
+      assert(std::find(bases.get_verts().begin(), bases.get_verts().end(), vlist.back()) != bases.get_verts().end());
       f = e->other_face(f->quad_partner());
    }
 
-   if (vlist.num()%2 == 1)
-      return new VertFrame(key, vlist[vlist.num()/2], Wvec(1,1,1), n);
+   if (vlist.size()%2 == 1)
+      return new VertFrame(key, vlist[vlist.size()/2], Wvec(1,1,1), n);
    else {
-      Bvert *v1 = vlist[vlist.num()/2-1], *v2 = vlist[vlist.num()/2];
+      Bvert *v1 = vlist[vlist.size()/2-1], *v2 = vlist[vlist.size()/2];
       e = lookup_edge(v1, v2);
       return new EdgeFrame(key, e, n, 0.5, v1!=e->v1());
    }
@@ -1555,7 +1555,7 @@ get_frame(uintptr_t key, CBface_list& bases, CWvec& n, Bvert* a1, Bvert* a2, Bve
 inline void
 set_creases(CBedge_list& edges)
 {
-   for (int i = 0; i < edges.num(); i++)
+   for (Bedge_list::size_type i = 0; i < edges.size(); i++)
       edges[i]->set_crease();
 }
 
@@ -1611,7 +1611,7 @@ Primitive::extend(
    //   xfactor > 1 strings them out.
    double xfactor = Config::get_var_dbl("ROOF_SAMPLING_FACTOR", 0.5,true);
    Bvert_list side_verts = side.verts();
-   side_verts += side.last();
+   side_verts.push_back(side.last());
    double w = xfactor*side_verts.pts().avg_len();
 
    //
@@ -1649,7 +1649,7 @@ Primitive::extend(
    }
 
    // create vertices of based on wpt_listmap:
-   v1 += side.first();
+   v1.push_back(side.first());
    assert(corners.front() == 0 && corners.back() == (int)pts.size()-1);
    for (vector<int>::size_type i = 1; i < corners.size(); i++) {
       double p_start = pts.partial_length(corners[i-1]);
@@ -1661,20 +1661,20 @@ Primitive::extend(
       double delta_t = (t_end-t_start)/num_edges;
       int end = (i==corners.size()-1)?(num_edges-1):num_edges;
       for (int j = 1; j <= end; j++) {
-         v1 += _mesh->add_vertex(map->map(t_start+j*delta_t));
-         add_edge(v1[v1.num()-2], v1.last());
-         create_xf_meme((Lvert*)v1.last(), f1);
+         v1.push_back(_mesh->add_vertex(map->map(t_start+j*delta_t)));
+         add_edge(v1[v1.size()-2], v1.back());
+         create_xf_meme((Lvert*)v1.back(), f1);
       }
-      if (i!=corners.size()-1) crease_locs.push_back(v1.num()-1);
+      if (i!=corners.size()-1) crease_locs.push_back(v1.size()-1);
    }
-   add_edge(v1.last(), side.last());
-   v1 += side.last();
-   v1.reverse();
+   add_edge(v1.back(), side.last());
+   v1.push_back(side.last());
+   std::reverse(v1.begin(), v1.end());
    for (vector<int>::size_type i = 0; i < crease_locs.size(); i++)
-      crease_locs[i] = v1.num() - 1 - crease_locs[i];
+      crease_locs[i] = v1.size() - 1 - crease_locs[i];
 
    // Compute local coords
-   for (int i = 1; i < v1.num()-1; i++)
+   for (Bvert_list::size_type i = 1; i < v1.size()-1; i++)
       u1.push_back(f1->inv() * v1[i]->loc());
 
    //******** Generate xsecs and bands ********
@@ -1687,15 +1687,15 @@ Primitive::extend(
    prev = v1;
    // create panel
    Bvert_list bound = v1;
-   bound -= bound.last();
-   bound += side.verts();
+   bound.erase(bound.end());
+   bound = bound + side.verts();
    // XXX - switch to using action...
    Bsurface* surf = Panel::create(bound);
    if (surf) {
       surf->set_res_level(0);
       if(debug) cerr << "panel created" << endl;
       cmd->add(new SHOW_BBASE_CMD(surf));
-      creases += surf->bfaces().boundary_edges();
+      creases = creases + surf->bfaces().boundary_edges();
       surf->set_name("roof_panel");
    }
 
@@ -1710,28 +1710,28 @@ Primitive::extend(
    //         1(side)
    Bvert_list side2, side4;
    extract_sides(bases, side, side2, side4);   
-   assert(side2.num() == side4.num());
-   assert(prev.first() == side2.last() && prev.last() == side4.last());
+   assert(side2.size() == side4.size());
+   assert(prev.front() == side2.back() && prev.back() == side4.back());
    Bvert_list cur_cross;
 
    // Do internal cross sections and bands (if any)
-   for (int k=side2.num()-2; k>=0; k--) {
+   for (int k=side2.size()-2; k>=0; k--) {
       // Get frame for the ring
       SimplexFrame* frame = get_frame((uintptr_t)this, bases, n, side2[k], side2[k+1], side4[k], side4[k+1], cur_cross);
 
       // Generate the cross section of verts.
       cur.clear();
-      cur += side2[k];
+      cur.push_back(side2[k]);
       for (Wpt_list::size_type i=0; i<u1.size(); i++) {
-         cur += _mesh->add_vertex(frame->xf()*u1[i]);
-         create_xf_meme((Lvert*)cur.last(), frame);
+         cur.push_back(_mesh->add_vertex(frame->xf()*u1[i]));
+         create_xf_meme((Lvert*)cur.back(), frame);
       }
-      cur += side4[k];
-      assert(cur.first() != cur.last());
-      assert(cur.num() == prev.num());
+      cur.push_back(side4[k]);
+      assert(cur.front() != cur.back());
+      assert(cur.size() == prev.size());
 
-      int n = cur.num();
-      double vc = (side2.num()-1-k);
+      int n = cur.size();
+      double vc = (side2.size()-1-k);
       double vp = vc - 1;
       for (int i=0; i<n-1; i++) {
          int j = (i+1) % n;
@@ -1748,28 +1748,32 @@ Primitive::extend(
 
    // Last cross section
    bound = cur;
-   assert(cur.last() == cur_cross.last());
-   bound -= bound.last();
-   cur_cross.reverse();
-   bound += cur_cross;
-   bound -= bound.last();
-   bound.reverse();
+   assert(cur.back() == cur_cross.back());
+   bound.erase(bound.end());
+   std::reverse(cur_cross.begin(), cur_cross.end());
+   bound = bound + cur_cross;
+   bound.erase(bound.end());
+   std::reverse(bound.begin(), bound.end());
    // XXX - switch to using action...
    Bsurface* other_surf = Panel::create(bound);
    if (other_surf) {
       other_surf->set_res_level(0);
       if(debug) cerr << "panel created" << endl;
       cmd->add(new SHOW_BBASE_CMD(other_surf));
-      creases += other_surf->bfaces().boundary_edges();
+      creases = creases + other_surf->bfaces().boundary_edges();
       other_surf->set_name("roof_panel");
    }
    
    // done building, notify mesh of changes:
    push(bases, cmd);
-   creases -= bases.boundary_edges();
+   for (Bedge_list::size_type i=0; i<bases.boundary_edges().size(); i++) {
+      Bedge_list::iterator it;
+      it = std::find(creases.begin(), creases.end(), bases.boundary_edges()[i]);
+      creases.erase(it);
+   }
 
    Bedge_list pedges = bases.boundary_edges();
-   for (int i = 0; i < pedges.num(); i++) {
+   for (Bedge_list::size_type i = 0; i < pedges.size(); i++) {
       Bedge* e = pedges[i];
       assert(e->can_promote() && e->adj());
       Bface* f = (*(e->adj()))[0];
@@ -1936,7 +1940,7 @@ Primitive::extend(
       bool b2back = ((P2.normal() * tan2) > 0);
       // only reverse order if it needs to be reversed: --Jim
       if (b2back == b1back)
-         v2.reverse();
+         std::reverse(v2.begin(), v2.end());
 
       f2 = create_disk_map(_base2, n, !b2back);
       _other_inputs += f2;
@@ -1946,8 +1950,8 @@ Primitive::extend(
       int p = min_dist_permutation(u1, u2);
 
       // Shift them:
-      v2.shift(p);
-      u2.shift(p);
+      std::rotate(v2.begin(), v2.begin() + p, v2.end());
+      std::rotate(u2.begin(), u2.begin() + p, u2.end());
    }
 
    //******** Generate rings and bands ********
@@ -1977,7 +1981,7 @@ Primitive::extend(
    // attached there (b2 non-empty) and there is more than one band
    // (skel_curve != 0):
    if (!b2.empty() && skel_curve)
-      pfaces += p2.one_ring_faces();
+      pfaces = pfaces + p2.one_ring_faces();
 
    // the skel faces passed to skin include all those except b1 and b2:
    Bface_list skel_faces = pfaces + (_base1 + _base2).exterior_faces();
@@ -2117,25 +2121,25 @@ Primitive::build_simple_tube(
    Bvert_list cur (u.size());
 
    // build 1st ring, add end cap
-   CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, 0, edges.first());
+   CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, 0, edges.front());
    build_ring(f1, Wtransf::translation(Wvec(-w/2,0,0)) * u, prev);
    build_cap(prev[1], prev[0], prev[3], prev[2]);
 
    // Do internal rings and bands (if any)
-   double dv = 1.0/(edges.num() + 1);
-   for (int k=0; k<edges.num(); k++) {
+   double dv = 1.0/(edges.size() + 1);
+   for (Bedge_list::size_type k=0; k<edges.size(); k++) {
       build_ring(new EdgeFrame((uintptr_t)this, edges[k], n), u, cur);
-      build_band(prev, cur, 1.0/cur.num(), k*dv, (k+1)*dv);
+      build_band(prev, cur, 1.0/cur.size(), k*dv, (k+1)*dv);
       prev=cur;
    }
 
    // build last ring, add end cap
-   CoordFrame* f2 = new SkelFrame((uintptr_t)this, b2->vert(), n, edges.last(), 0);
+   CoordFrame* f2 = new SkelFrame((uintptr_t)this, b2->vert(), n, edges.back(), 0);
    build_ring(f2, Wtransf::translation(Wvec(w/2,0,0)) * u, cur);
    build_cap(cur[0], cur[1], cur[2], cur[3]);
 
    // Last band
-   build_band(prev, cur, 1.0/cur.num(), 1.0 - dv, 1.0);
+   build_band(prev, cur, 1.0/cur.size(), 1.0 - dv, 1.0);
 
    finish_build(cmd);
 
@@ -2170,8 +2174,8 @@ Primitive::build_ring(
 {
    ring.clear();
    for (Wpt_list::size_type i=0; i<u.size(); i++) {
-      ring += _mesh->add_vertex(frame->xf()*u[i]);
-      create_xf_meme((Lvert*)ring.last(), frame);
+      ring.push_back(_mesh->add_vertex(frame->xf()*u[i]));
+      create_xf_meme((Lvert*)ring.back(), frame);
    }
 }
 
@@ -2196,9 +2200,9 @@ Primitive::build_band(
    //
    //   As shown, surface normal points toward you.
 
-   assert(p.num() == c.num());
+   assert(p.size() == c.size());
    double u = 0;
-   int n = c.num();
+   int n = c.size();
    for (int i=0; i<n; i++) {
       int j = (i+1) % n;
       double ui = u;            // u coordinate for p[i], c[i]
@@ -2285,7 +2289,7 @@ void
 Primitive::create_xf_memes(CBvert_list& verts, CoordFrame* f)
 {
    assert(LMESH::isa(verts.mesh()));
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       create_xf_meme((Lvert*)verts[i], f);
 }
 

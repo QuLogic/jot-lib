@@ -1090,7 +1090,7 @@ print_edge_info(CBedge_list& edges)
 {
    bool ret = false;
    err_msg("********");
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       int n = edges[i]->nfaces();
       int a = edges[i]->num_all_faces();
       err_msg("  %2d: %d top, %d lower", i, n, a - n);
@@ -1168,9 +1168,9 @@ debug_primary_edges()
    err_msg("full degree:    %d", v->degree());
    err_msg("primary degree: %d", v->p_degree());
    err_msg("strong degree:  %d",
-           v->get_manifold_edges().filter(StrongEdgeFilter()).num());
+           v->get_manifold_edges().filter(StrongEdgeFilter()).size());
    err_msg("crease degree:  %d",
-           v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).num());
+           v->get_manifold_edges().filter(StrongPolyCreaseEdgeFilter()).size());
    err_msg("num quads:      %d", v->num_quads());
    err_msg("num tris:       %d", v->num_tris());
 
@@ -1671,7 +1671,7 @@ demote_surface_meme(CBvert* v)
 inline void
 demote_surface_memes(CBvert_list& verts)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       demote_surface_meme(verts[i]);
 }
 
@@ -2381,9 +2381,9 @@ split_mesh(const Event &e, State *&)
        (mesh = gel_to_bmesh(r.geom()))) {
       WORLD::message("Split components");
 
-      ARRAY<BMESH*> new_meshes = mesh->split_components();
+      vector<BMESH*> new_meshes = mesh->split_components();
 
-      for (int i=0; i<new_meshes.num(); i++)
+      for (vector<BMESH*>::size_type i=0; i<new_meshes.size(); i++)
          WORLD::create(new TEXBODY(new_meshes[i],
                                    WORLD::unique_name(BMESH::static_name())));
 

@@ -35,7 +35,7 @@ SubdivUpdater::SubdivUpdater(LMESHptr m, CBvert_list& verts) :
       err_msg("SubdivUpdater::SubdivUpdater:");
       cerr << "  "; print_dependencies();
       err_msg("  level %d, %d verts, %d boss memes",
-              m->subdiv_level(), verts.num(),
+              m->subdiv_level(), verts.size(),
               Bbase::find_boss_vmemes(verts).size());
    }
 
@@ -124,7 +124,7 @@ SubdivUpdater::update_vert(Lvert* v)
 void 
 SubdivUpdater::recompute() 
 {
-   for (int i=0; i<_verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++)
       update_vert((Lvert*)_verts[i]);
 }
 

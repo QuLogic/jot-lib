@@ -159,17 +159,19 @@ class LMESH : public BMESH {
    void add_dirty_vert(Lvert* v) {
       if (v && v->is_clear(Lvert::DIRTY_VERT_LIST_BIT)) {
          v->set_bit(Lvert::DIRTY_VERT_LIST_BIT);
-         _dirty_verts += v;
+         _dirty_verts.push_back(v);
       }
    }
    void rem_dirty_vert(Lvert* v) {
       if (v && v->is_set(Lvert::DIRTY_VERT_LIST_BIT)) {
          v->clear_bit(Lvert::DIRTY_VERT_LIST_BIT);
-         _dirty_verts -= v;
+         Bvert_list::iterator it;
+         it = std::find(_dirty_verts.begin(), _dirty_verts.end(), v);
+         _dirty_verts.erase(it);
       }
    }
 
-   static void fit(ARRAY<Lvert*>& verts, bool do_gauss_seidel=1);
+   static void fit(vector<Lvert*>& verts, bool do_gauss_seidel=1);
 
    // Merging two meshes:
    //    Convenience method -- same as BMESH::merge() but
@@ -481,7 +483,7 @@ get_subdiv_faces(CBface_list& faces, int level)
    LMESH* m = LMESH::upcast(faces.mesh());
    if (!(level >= 0 && m && m->subdiv_mesh(level)))
       return ret;
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       ((Lface*)faces[i])->append_subdiv_faces(level, ret);
    return ret;
 }
@@ -498,17 +500,17 @@ get_parent_faces(CBface_list& faces, int level=1)
 
    // first clear the flag of each parental face
    Lface* p = 0;
-   int i;
-   for (i = 0; i<faces.num(); i++) {
+   Bface_list::size_type i;
+   for (i = 0; i<faces.size(); i++) {
       if ((p = ((Lface*)faces[i])->parent()))
          p->clear_flag();
    }
 
    // now store each parent face that hasn't yet been reached:
-   for (i = 0; i<faces.num(); i++) {
+   for (i = 0; i<faces.size(); i++) {
       if ((p = ((Lface*)faces[i])->parent()) && !p->flag()) {
          p->set_flag(1);
-         ret += p;
+         ret.push_back(p);
       }
    }
    return ret;
@@ -562,17 +564,17 @@ child_verts(const L& list)
    // Child vertices must already exist.
    // We aren't creating them, just returning a list of them.
 
-   Bvert_list ret(list.num());
+   Bvert_list ret(list.size());
 
    if (list.empty())
       return ret;
 
    assert(LMESH::isa(list.mesh()));
 
-   for (int i=0; i<list.num(); i++) {
+   for (size_t i=0; i<list.size(); i++) {
       Lvert* v = ((S*)list[i])->subdiv_vertex();
       assert(v);
-      ret += v;
+      ret.push_back(v);
    }
    return ret;
 }

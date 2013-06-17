@@ -33,13 +33,13 @@ leading_faces(CBvert* v, CSimplexFilter& filter)
       Bedge* e = v->e(i);
       if ((e->is_border() || filter.accept(e)) &&
           (f = e->ccw_face((Bvert*)v))) // XXX - fix Bedge::ccw_face()
-         ret += f;
+         ret.push_back(f);
          
    }
    // if no edges are accepted by the filter and there are no border
    // edges, add in any old face:
    if (ret.empty() && v->get_face())
-      ret += v->get_face();
+      ret.push_back(v->get_face());
 
    return ret;
 }

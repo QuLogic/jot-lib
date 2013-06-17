@@ -25,6 +25,7 @@
 #include "simplex_filter.H"
 #include "simplex_array.H"
 
+#include <vector>
 
 class Patch;
 
@@ -684,15 +685,15 @@ class Bedge_list : public SimplexArray<Bedge_list,Bedge*> {
 
    //******** MANAGERS ********
 
-   Bedge_list(CARRAY<Bedge*>& list) : SimplexArray<Bedge_list,Bedge*>(list) {}
+   Bedge_list(const vector<Bedge*>& list) : SimplexArray<Bedge_list,Bedge*>(list) {}
    explicit Bedge_list(int n=0)     : SimplexArray<Bedge_list,Bedge*>(n)    {}
    explicit Bedge_list(Bedge* e)    : SimplexArray<Bedge_list,Bedge*>(e)    {}
 
    //******** EDGE FLAGS ********
 
    void clear_flag02() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->clear_flag02();
+      for (Bedge_list::size_type i=0; i<size(); i++)
+         at(i)->clear_flag02();
    }
 
    //******** EDGE LENGTHS ********
@@ -700,21 +701,21 @@ class Bedge_list : public SimplexArray<Bedge_list,Bedge*> {
    // Returns the sum of the edge lengths:
    double total_length() const {
       double ret = 0;
-      for (int i=0; i<_num; i++)
-         ret += _array[i]->length();
+      for (Bedge_list::size_type i=0; i<size(); i++)
+         ret += at(i)->length();
       return ret;
    }
 
    // Returns average length of the edges:
-   double avg_len() const { return empty() ? 0 : total_length()/_num; }
+   double avg_len() const { return empty() ? 0 : total_length()/size(); }
 
    // minimum edge length
    double min_edge_len() const {
       if (empty())
          return 0;
-      double ret = first()->length();
-      for(int i=1; i<_num; i++)
-         ret = min(ret,_array[i]->length());
+      double ret = front()->length();
+      for (Bedge_list::size_type i=1; i<size(); i++)
+         ret = min(ret, at(i)->length());
       return ret;
    }
 
@@ -723,20 +724,20 @@ class Bedge_list : public SimplexArray<Bedge_list,Bedge*> {
    bool nfaces_is_equal(int num_faces) const {
       if (empty())
          return false;
-      for (int i=0; i<_num; i++)
-         if (_array[i]->nfaces() != num_faces)
+      for (Bedge_list::size_type i=0; i<size(); i++)
+         if (at(i)->nfaces() != num_faces)
             return false;
       return true;
    }
 
    void inc_crease_vals(ushort max_val = USHRT_MAX) const {
-      for (int i=0; i<num(); i++)
-         _array[i]->inc_crease(max_val);
+      for (Bedge_list::size_type i=0; i<size(); i++)
+         at(i)->inc_crease(max_val);
    }
 
    void dec_crease_vals(ushort max_val = USHRT_MAX) const {
-      for (int i=0; i<num(); i++)
-         _array[i]->dec_crease(max_val);
+      for (Bedge_list::size_type i=0; i<size(); i++)
+         at(i)->dec_crease(max_val);
    }
 
    // Returns list of verts contained in these edges:

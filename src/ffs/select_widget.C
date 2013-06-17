@@ -227,11 +227,11 @@ get_cur_level_verts(Bvert* v, Bedge* e)
    if (mesh) {
       ((Ledge*)e)->get_subdiv_verts(mesh->rel_cur_level(), ret);
    } else {
-      ret += e->v1();
-      ret += e->v2();
+      ret.push_back(e->v1());
+      ret.push_back(e->v2());
    }
    if (e->v1() != v)
-      ret.reverse();
+      std::reverse(ret.begin(), ret.end());
    return ret;
 }
 
@@ -309,13 +309,13 @@ match_span(Bvert* v, Bedge* e, CPIXEL_list& trail, int k, double thresh)
 
    // Get the chain of vertices at the "current" mesh level:
    Bvert_list verts = get_cur_level_verts(v, e);
-   assert(verts.num() > 1);
+   assert(verts.size() > 1);
 
    // Ensure the vertex chain starts near the current
    // position in the pixel trail:
-   if (trail[k].dist(verts.first()->wloc()) > thresh) {
+   if (trail[k].dist(verts.front()->wloc()) > thresh) {
       err_adv(debug, "match_span: vert chain too far from pixel trail: %f > %f",
-              trail[k].dist(verts.first()->wloc()), thresh);
+              trail[k].dist(verts.front()->wloc()), thresh);
       return -1;
    }
 
@@ -324,7 +324,7 @@ match_span(Bvert* v, Bedge* e, CPIXEL_list& trail, int k, double thresh)
    //
    // This is a cheap way of seeing that the projected edge
    // lies reasonably along the given portion of the pixel trail.
-   int ret = next_match(verts.last(), trail, k, thresh);
+   int ret = next_match(verts.back(), trail, k, thresh);
    if (ret < 0) {
       err_adv(debug, "match_span: can't match next vert");
       return -1;
@@ -335,8 +335,8 @@ match_span(Bvert* v, Bedge* e, CPIXEL_list& trail, int k, double thresh)
    // Measure length of the trail, including distance to
    // beginning and end of the projected edge:
    double tlen = length(trail, k, ret);
-   double e1 = verts.first()->pix().dist(trail[  k]);
-   double e2 = verts.last ()->pix().dist(trail[ret]);;
+   double e1 = verts.front()->pix().dist(trail[  k]);
+   double e2 = verts.back ()->pix().dist(trail[ret]);;
    err_adv(debug, "adding %3.0f, %3.0f", e1, e2);
    err_adv(debug, "edge length: %3.0f, span length: %3.0f, ratio: %1.2f: %s",
            vlen, tlen, tlen/vlen, (tlen > 1.2*vlen) ? "rejected" : "accepted");
@@ -502,13 +502,17 @@ SELECT_WIDGET::tap_cb(CGESTUREptr& g, DrawState*& s)
 	   //pattern editing
 		Bface* f = find_face(g->start(),0.25,MIN_PIX_AREA);
 		if (f) {
-			if (select_list.contains(f)||select_list.contains(f->quad_partner()))
-			{
-	
-				//get whichever part of the quad is in the selection list
-				int temp = select_list.contains(f) ? select_list.get_index(f)+1 : select_list.get_index(f->quad_partner())+1 ;
-
-
+			size_t temp = (size_t)-1;
+			Bface_list::iterator it;
+			it = std::find(select_list.begin(), select_list.end(), f);
+			if (it != select_list.end()) {
+				temp = it - select_list.begin() + 1;
+			} else {
+				it = std::find(select_list.begin(), select_list.end(), f->quad_partner());
+				if (it != select_list.end())
+					temp = it - select_list.begin() + 1;
+			}
+			if (temp != (size_t)-1) {
 				if (temp>end_face) //user selected the end face
 				{
 					end_face=temp;
@@ -640,7 +644,7 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 			do
 			{			
 				if (!fn->is_selected())	
-					select_list +=fn;
+					select_list.push_back(fn);
 		
 				assert(edge);			//I'm paranoid too
 				assert(edge->f1()!=edge->f2());
@@ -687,10 +691,9 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 			//copy the face pointers to the final list 
 			//using the pattern as a repeating template
 			//and stop at the end face
-			for (int i = 0; i<(end_face ? (end_face) : select_list.num()) ; i++)
-			{
+			for (size_t i = 0; i<(end_face ? end_face : select_list.size()) ; i++) {
 				if (pattern ? pattern_array[(i%pattern)+1] : 1)
-				final_list+=select_list[i];
+				final_list.push_back(select_list[i]);
 			}
 
 		
@@ -751,8 +754,7 @@ SELECT_WIDGET::draw(CVIEWptr& v)
 		glBegin(GL_TRIANGLES);
 
 		
-			  for (int i = 0; i<select_list.num(); i++)
-	  {
+	  for (Bface_list::size_type i = 0; i<select_list.size(); i++) {
 		  if( (i<(MAX_PATTERN_SIZE-1) ? (pattern ? pattern_array[i+1] : 1) : 1))
 		{
 		
@@ -761,9 +763,7 @@ SELECT_WIDGET::draw(CVIEWptr& v)
 			GL_COL(Color::blue3, 0.7*alpha()); 
 
 			//color the last selected face red
-		  if ((end_face!=0)&&(i==(end_face-1)))
-			  
-		  {
+		  if (end_face!=0 && i==(end_face-1)) {
 			GL_COL(Color::red3, 0.7*alpha()); 
 		  }
 
@@ -778,11 +778,10 @@ SELECT_WIDGET::draw(CVIEWptr& v)
 		glVertex3dv(select_list[i]->quad_partner()->v3()->wloc().data());
 	
 		//restore the green color
-		  if(i< (pattern))
+		  if (i < pattern)
 				GL_COL(Color::s_green, 0.7*alpha()); 
 
-		  if ((end_face!=0)&&(i==(end_face-1)))
-		  {
+		  if (end_face!=0 && i==(end_face-1)) {
 			GL_COL(Color::s_green, 0.7*alpha()); 
 		  }
 		}
@@ -821,18 +820,13 @@ SELECT_WIDGET::draw(CVIEWptr& v)
       //     (v)-----------(v)                 
       //    
 
-	  for (int i = 0; i<select_list.num(); i++)
-	  {
-	
-		
+	  for (Bface_list::size_type i = 0; i<select_list.size(); i++) {
 		//color the pattern blue
 		  if(i< (pattern))
 			GL_COL(Color::blue3, 0.7*alpha()); 
 
 			//color the last selected face red
-		  if ((end_face!=0)&&(i==(end_face-1)))
-			  
-		  {
+		  if (end_face!=0 && i==(end_face-1)) {
 			GL_COL(Color::red3, 0.7*alpha()); 
 		  }
 
@@ -843,11 +837,10 @@ SELECT_WIDGET::draw(CVIEWptr& v)
 
 
 		//restore the green color
-		  if(i< (pattern))
+		  if (i < pattern)
 				GL_COL(Color::s_green, 0.7*alpha()); 
 
-		  if ((end_face!=0)&&(i==(end_face-1)))
-		  {
+		  if (end_face!=0 && i==(end_face-1)) {
 			GL_COL(Color::s_green, 0.7*alpha()); 
 		  }
 		}
@@ -872,7 +865,6 @@ SELECT_WIDGET::draw(CVIEWptr& v)
 Bedge*
 match_span(Bvert* v, CPIXEL_list& trail, int& k)
 {
-
    static double PT_THRESH =
       Config::get_var_dbl("SELECT_EDGE_CHAIN_PT_THRESH", 7);
 
@@ -890,7 +882,7 @@ match_span(Bvert* v, CPIXEL_list& trail, int& k)
    if (edges.empty())
       err_adv(debug, "match_span: 0 edges to check");
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       int next_k = match_span(v, edges[i], trail, k, PT_THRESH);
       if (0 <= next_k && next_k < (int)trail.size()) {
          k = next_k;
@@ -924,15 +916,13 @@ SELECT_WIDGET::select_faces(CPIXEL_list& pts)
       f = find_face(pts[i], 0.1, MIN_PIX_AREA);
       if (!f || f->is_selected())
          continue;
-      flist += f;
+      flist.push_back(f);
    }
    
-   if(flist.num() > 0){
-      
+   if (flist.size() > 0) {
       WORLD::add_command(new MESH_SELECT_CMD(flist));
       err_adv(debug, "  succeeded");
       return true;
-      
    }
    
    err_adv(debug, "  no faces selected");
@@ -965,11 +955,11 @@ SELECT_WIDGET::select_edges(CPIXEL_list& pts)
    Bvert* cur = v;                      // current vertex
    Bedge* e = 0;
    while ((e = match_span(cur, pts, k))) {
-      if(!e->is_selected()) chain += e;
+      if (!e->is_selected()) chain.push_back(e);
       cur = e->other_vertex(cur);
    }
 
-   err_adv(debug, "  got %d edges", chain.num());
+   err_adv(debug, "  got %d edges", chain.size());
 
    // Confirm gest is sufficiently close to edge chain
 

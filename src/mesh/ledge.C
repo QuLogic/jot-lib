@@ -35,7 +35,7 @@ Ledge::~Ledge()
       if (_f1) _mesh->remove_face(_f1);
       if (_f2) _mesh->remove_face(_f2);
       if (_adj) {
-         for (int i=0; i<_adj->num(); i++)
+         for (Bface_list::size_type i=0; i<_adj->size(); i++)
             _mesh->remove_face((*_adj)[i]);
       }
    }
@@ -404,13 +404,13 @@ Ledge::allocate_subdiv_elements()
 
 // Helper used below in Ledge::append_subdiv_edges():
 inline bool
-get_subdiv_edges(Ledge* e, int lev, ARRAY<Bedge*>& edges)
+get_subdiv_edges(Ledge* e, int lev, vector<Bedge*>& edges)
 {
    return e ? e->append_subdiv_edges(lev, edges) : false;
 }
 
 bool
-Ledge::append_subdiv_edges(int lev, ARRAY<Bedge*>& edges)
+Ledge::append_subdiv_edges(int lev, vector<Bedge*>& edges)
 {
    // Return an ordered list of edges at the given subdiv level
    // *relative* to the level of this edge. (Level must be >= 0).
@@ -423,7 +423,7 @@ Ledge::append_subdiv_edges(int lev, ARRAY<Bedge*>& edges)
       err_msg("Ledge::append_subdiv_edges: error: bad level: %d", lev);
       return false;
    } else if (lev == 0) {
-      edges += this;
+      edges.push_back(this);
       return true;
    } else {
       return (
@@ -444,10 +444,10 @@ Ledge::get_subdiv_verts(int lev, Bvert_list& ret)
    if (!append_subdiv_edges(lev, edges))
       return false;
    Lvert* v = lv(1)->subdiv_vert(lev);
-   assert(v && !edges.empty() && edges.first()->contains(v));
-   ret += v;
-   for (int i=0; i<edges.num(); i++) {
-      ret += edges[i]->other_vertex(ret.last());
+   assert(v && !edges.empty() && edges.front()->contains(v));
+   ret.push_back(v);
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
+      ret.push_back(edges[i]->other_vertex(ret.back()));
    }
    return true;
 }
@@ -616,8 +616,8 @@ get_subdiv_chain(Bvert* v1, Bvert* v2, int level, Bvert_list& ret)
    }
 
    if (level == 0) {
-      ret += v1;
-      ret += v2;
+      ret.push_back(v1);
+      ret.push_back(v2);
       return true;
    }
 
@@ -633,7 +633,7 @@ get_subdiv_chain(Bvert* v1, Bvert* v2, int level, Bvert_list& ret)
       return 0;
    }
     
-   l1.pop();
+   l1.pop_back();
    ret = l1 + l2;
    return true;
 } 
@@ -668,15 +668,15 @@ get_subdiv_chain(CBvert_list& chain, int level, Bvert_list& ret)
       return 0;
    }
 
-   ret.realloc(((chain.num()-1) * (1 << level)) + 1);
+   ret.reserve(((chain.size()-1) * (1 << level)) + 1);
 
-   for (int i=1; i<chain.num(); i++) {
+   for (Bvert_list::size_type i=1; i<chain.size(); i++) {
       Bvert_list segment;       // sub-chain from vertex i-1 to i
       if (!get_subdiv_chain(chain[i-1], chain[i], level, segment))
          return false;
       if (!ret.empty())
-         ret.pop();
-      ret += segment;
+         ret.pop_back();
+      ret = ret + segment;
    }
       
    return true;

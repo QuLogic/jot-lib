@@ -71,9 +71,9 @@ Lstrip::add(Bvert* v)
       return;
    }
 
-   _verts += v;
+   _verts.push_back(v);
 
-   int n = _verts.num();
+   int n = _verts.size();
 
    if (n < 3)
       return;   // just starting -- no face lookup yet
@@ -82,10 +82,10 @@ Lstrip::add(Bvert* v)
    // once otherwise
    Bface* f = lookup_face(_verts[n-3], _verts[n-2], v);
    if (n == 3) {
-      _faces += f;
-      _faces += f;
+      _faces.push_back(f);
+      _faces.push_back(f);
    }
-   _faces += f;
+   _faces.push_back(f);
 }
 
 
@@ -95,7 +95,7 @@ Lstrip::build_substrip1(Lstrip* substrip)
    substrip->add(subvert(0));
    substrip->add(subvert(0,1));
 
-   for (int k=2; k<_verts.num(); k++) {
+   for (Bvert_list::size_type k=2; k<_verts.size(); k++) {
       if (k%2) {
          substrip->add(subvert(k,k-1));
       } else {
@@ -112,7 +112,7 @@ Lstrip::build_substrip2(Lstrip* substrip)
    substrip->add(subvert(1,0));
    substrip->add(subvert(1));
 
-   for (int k=2; k<_verts.num(); k++) {
+   for (Bvert_list::size_type k=2; k<_verts.size(); k++) {
       if (k%2) {
          substrip->add(subvert(k,k-2));
          substrip->add(subvert(k,k-1));

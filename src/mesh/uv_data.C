@@ -163,7 +163,7 @@ UVdata::split(Bvert* v)
       // and then push the old uv coord onto all the
       // neighboring faces.
       Bface_list faces = v->get_all_faces();
-      for (int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          if (lookup(faces[i]) == NULL) {
             if (debug) {
                err_msg("UVdata::split: continous vert next to non-uv face!");
@@ -183,7 +183,7 @@ UVdata::split(Bvert* v)
 void
 UVdata::split(CBvert_list& verts)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       UVdata::split(verts[i]);
 }
 
@@ -198,9 +198,9 @@ UVdata::split_chain(Bvert_list chain)
 void
 UVdata::split(CEdgeStrip& strip)
 {
-   ARRAY<Bvert_list> chains;
+   vector<Bvert_list> chains;
    strip.get_chains(chains);
-   for (int i=0; i<chains.num(); i++)
+   for (vector<Bvert_list>::size_type i=0; i<chains.size(); i++)
       split_chain(chains[i]);
 }
 
@@ -601,7 +601,7 @@ UVdata::handle_subdiv_calc()
          // surrounding the subdiv vert:
          Bface_list faces;
          v->get_faces(faces);
-         for (int i=0; i<faces.num(); i++)
+         for (Bface_list::size_type i=0; i<faces.size(); i++)
             set_subdiv_uv(v, (Lface*)faces[i]);
       }
    } else {

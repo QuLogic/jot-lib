@@ -21,6 +21,9 @@
 #include "bsimplex.H"
 #include "simplex_filter.H"
 
+#include <set>
+#include <vector>
+
 class SimplexFilter;
 typedef const SimplexFilter CSimplexFilter;
 /*****************************************************************
@@ -34,49 +37,46 @@ typedef const SimplexFilter CSimplexFilter;
  *
  *****************************************************************/
 template <class L, class T>
-class SimplexArray : public ARRAY<T> {
+class SimplexArray : public vector<T> {
  public:
 
    //******** MANAGERS ********
 
-   SimplexArray(const ARRAY<T>& list)  : ARRAY<T>(list) {}
-   explicit SimplexArray(int n=0)      : ARRAY<T>(n)    {}
-   explicit SimplexArray(T s)          : ARRAY<T>()     { this->add(s); }
+   SimplexArray(const vector<T>& list) : vector<T>(list) {}
+   explicit SimplexArray(int n=0)      : vector<T>()     { vector<T>::reserve(n); }
+   explicit SimplexArray(T s)          : vector<T>()     { this->push_back(s); }
 
-   virtual ~SimplexArray() {
-      if (_do_index)
-         end_index();
-   }
+   virtual ~SimplexArray() {}
 
    //******** CONVENIENCE ********
 
    // Clear all the flags
    void clear_flags() const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          (*this)[i]->clear_flag();
    }
 
    // Set all the flags
    void set_flags(uchar b=1) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          (*this)[i]->set_flag(b);
    }
 
    // Increment all the flags
    void inc_flags(uchar b=1) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          (*this)[i]->inc_flag(b);
    }
 
    // Clear a particular bit on all the simplices:
    void clear_bits(uint b) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          (*this)[i]->clear_bit(b);
    }
 
    // Set a particular bit on all the simplices:
    void set_bits(uint b, int x=1) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          (*this)[i]->set_bit(b, x);
    }
 
@@ -84,7 +84,7 @@ class SimplexArray : public ARRAY<T> {
    BMESH* mesh() const {
       if (empty()) return 0;
       BMESH* ret = (*this)[0]->mesh();
-      for (int i=1; i<num(); i++)
+      for (size_t i=1; i<size(); i++)
          if (ret != (*this)[i]->mesh())
             return 0;            
       return ret;         
@@ -94,24 +94,25 @@ class SimplexArray : public ARRAY<T> {
    // the same mesh
    bool same_mesh() const { return empty() || mesh() != NULL; }
    
-   ARRAY<BMESH*> get_meshes() const {
-     ARRAY<BMESH*> ret;
-     ret.set_unique();
-     for (int i=0; i<num(); i++)
-       ret += (*this)[i]->mesh();
+   vector<BMESH*> get_meshes() const {
+     vector<BMESH*> ret;
+     set<BMESH*> unique;
+     for (size_t i=0; i<size(); i++) {
+       pair<set<BMESH*>::iterator,bool> result;
+       result = unique.insert((*this)[i]->mesh());
+       if (result.second)
+          ret.push_back(*result.first);
+     }
 
      return ret;
    }
 
    // delete all elements:
    void delete_all() {
-      bool indexing_was_on = _do_index;
-      if (_do_index)
-         end_index();
-      while (!empty())
-         delete this->pop();    // g++ on macosx requires this->pop()
-      if (indexing_was_on)      //  instead of just pop()
-         begin_index();
+      while (!empty()) {
+         delete this->back();
+         this->pop_back();
+      }
    }
 
    //******** SET OPERATIONS ********
@@ -121,7 +122,7 @@ class SimplexArray : public ARRAY<T> {
    bool contains_all(const L& list) const {
       list.clear_flags();
       set_flags(1);
-      for (int i=0; i<list.num(); i++)
+      for (size_t i=0; i<list.size(); i++)
          if (list[i]->flag() == 0)
             return false;
       return true;
@@ -132,7 +133,7 @@ class SimplexArray : public ARRAY<T> {
    bool contains_any(const L& list) const {
       list.clear_flags();
       set_flags(1);
-      for (int i=0; i<list.num(); i++)
+      for (size_t i=0; i<list.size(); i++)
          if (list[i]->flag() == 1)
             return true;
       return false;
@@ -146,7 +147,7 @@ class SimplexArray : public ARRAY<T> {
    // Return true if any element occurs more than once:
    bool has_duplicates() const {
       clear_flags();
-      for (int i=0; i<num(); i++) {
+      for (size_t i=0; i<size(); i++) {
          if ((*this)[i]->flag())
             return true;
          (*this)[i]->set_flag(1);
@@ -156,11 +157,11 @@ class SimplexArray : public ARRAY<T> {
 
    // Return the elements of this list, without duplicates
    L unique_elements() const {
-      L ret(num());
+      L ret(size());
       clear_flags();
-      for (int i=0; i<num(); i++) {
+      for (size_t i=0; i<size(); i++) {
          if (!(*this)[i]->flag()) {
-            ret += (*this)[i];
+            ret.push_back((*this)[i]);
             (*this)[i]->set_flag(1);
          }
       }
@@ -169,12 +170,12 @@ class SimplexArray : public ARRAY<T> {
 
    // Return elements common to this and list:
    L intersect(const L& list) const {
-      L ret(min(num(), list.num()));
+      L ret(min(size(), list.size()));
       list.set_flags(1);
       clear_flags();
-      for (int i=0; i<list.num(); i++) {
+      for (size_t i=0; i<list.size(); i++) {
          if (list[i]->flag() == 0) {
-            ret += list[i];
+            ret.push_back(list[i]);
             list[i]->set_flag(1);
          }
       }
@@ -189,12 +190,12 @@ class SimplexArray : public ARRAY<T> {
 
    // Returns elements of this that are not also in list
    L minus(const L& list) const {
-      L ret(num());
+      L ret(size());
       clear_flags();
       list.set_flags(1);
-      for (int i=0; i<num(); i++) {
+      for (size_t i=0; i<size(); i++) {
          if ((*this)[i]->flag() == 0) {
-            ret += (*this)[i];
+            ret.push_back((*this)[i]);
             (*this)[i]->set_flag(1);
          }
       }
@@ -205,16 +206,16 @@ class SimplexArray : public ARRAY<T> {
 
    L filter(CSimplexFilter& f) const {
       L ret;
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          if (f.accept((*this)[i]))
-           ret += (*this)[i];
+           ret.push_back((*this)[i]);
       return ret;
    }
 
    // Returns true if all simplices satisfy the given filter
    // (if empty, returns true)
    bool all_satisfy(CSimplexFilter& f) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          if (!f.accept((*this)[i]))
             return false;
       return true;
@@ -223,7 +224,7 @@ class SimplexArray : public ARRAY<T> {
    // Returns true if any simplices satisfy the given filter
    // (if empty, returns false)
    bool any_satisfy(CSimplexFilter& f) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          if (f.accept((*this)[i]))
             return true;
       return false;
@@ -231,7 +232,7 @@ class SimplexArray : public ARRAY<T> {
 
    int num_satisfy(CSimplexFilter& f) const {
       int ret = 0;
-      for (int j=0; j<num(); j++)
+      for (size_t j=0; j<size(); j++)
          if (f.accept((*this)[j]))
             ret++;
       return ret;
@@ -239,7 +240,7 @@ class SimplexArray : public ARRAY<T> {
 
    // Returns the first simplex satisfied by the filter:
    T first_satisfies(CSimplexFilter& f) const {
-      for (int i=0; i<num(); i++)
+      for (size_t i=0; i<size(); i++)
          if (f.accept((*this)[i]))
             return (*this)[i];
       return 0;
@@ -260,9 +261,9 @@ class SimplexArray : public ARRAY<T> {
    // Append elements of list to this one:
    void append(const L& list) {
       if (!list.empty()) {
-         this->realloc(num() + list.num());
-         for (int i=0; i<list.num(); i++)
-            *this += list[i];
+         this->reserve(size() + list.size());
+         for (size_t i=0; i<list.size(); i++)
+            this->push_back(list[i]);
       }
    }
 
@@ -276,75 +277,28 @@ class SimplexArray : public ARRAY<T> {
    //******** ARRAY VIRTUAL METHODS ********
 
    virtual int get_index(const T& s) const {
-      if (_do_index) {
-         IndexData* d = lookup_data(s);
-         return d ? d->index() : -1;
-      }
-      return ARRAY<T>::get_index(s);
+      typename vector<T>::const_iterator it;
+      it = std::find(begin(), end(), s);
+      if (it != end())
+         return it - begin();
+      else
+         return -1;
    }
 
-   using ARRAY<T>::num;
-   using ARRAY<T>::empty;
-   using ARRAY<T>::clear;
-   using ARRAY<T>::begin_index;
-   using ARRAY<T>::end_index;
-   
+   using vector<T>::size;
+   using vector<T>::empty;
+   using vector<T>::clear;
+   using vector<T>::begin;
+   using vector<T>::end;
+
  protected:
-
-   using ARRAY<T>::_do_index;
-
-   virtual void set_index(const T& el, int i) const {
-      if (_do_index)
-         put_data(el)->set_index(i);
-   }
-
-   virtual void clear_index(const T& el) const {
-      if (_do_index)
-         delete lookup_data(el);
-   }
-
-   /*****************************************************************
-    * IndexData:
-    *
-    *    Used to store element indices WRT a particular SimplexArray.
-    *
-    *****************************************************************/
-   class IndexData : public SimplexData {
-    public:
-
-      //******** MANAGERS ********
-
-      IndexData(uintptr_t key, Bsimplex* s) :
-         SimplexData(key, s), _index(-1) {}
-
-      //******** ACCESSORS ********
-
-      int  index()                 const   { return _index; }
-      void set_index(int i)                { _index = i; }
-
-    protected:
-      int  _index;
-   };
-
-   //******** ARRAY INDEXING ********
-
-   // On the given simplex, find the data owned by this list:
-   IndexData* lookup_data(const T& s) const {
-      return s ? (IndexData*)s->find_data((uintptr_t)this) : 0;
-   }
-
-   // Similar to lookup_data() but creates the data if needed
-   IndexData* put_data(const T& s) const {
-      IndexData* ret = lookup_data(s);
-      return ret ? ret : new IndexData((uintptr_t)this, (T)s);
-   }
 
    //******** ARRAY VIRTUAL METHODS ********
 
    virtual void  append_ele(const T& s) {
       // Don't permit NULL pointers to be inserted
       if (s) {
-         ARRAY<T>::append_ele(s);
+         vector<T>::push_back(s);
       } else {
          err_msg("SimplexArray::append_ele: warning: ignoring NULL Simplex*");
       }
@@ -366,7 +320,7 @@ class Bsimplex_list : public SimplexArray<Bsimplex_list,Bsimplex*> {
    //******** MANAGERS ********
    Bsimplex_list(int n=0) :
       SimplexArray<Bsimplex_list,Bsimplex*>(n)    {}
-   Bsimplex_list(CARRAY<Bsimplex*>& list) :
+   Bsimplex_list(const vector<Bsimplex*>& list) :
       SimplexArray<Bsimplex_list,Bsimplex*>(list) {}
 };
 

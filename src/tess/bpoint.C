@@ -53,7 +53,8 @@ inline bool
 is_dirty(VertMeme* v)
 {
    assert(v && v->vert() && v->vert()->lmesh());
-   return v->vert()->lmesh()->dirty_verts().contains(v->vert());
+   Bvert_list tmp = v->vert()->lmesh()->dirty_verts();
+   return std::find(tmp.begin(), tmp.end(), v->vert()) != tmp.end();
 }
 
 inline void 

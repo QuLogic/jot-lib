@@ -66,8 +66,7 @@ HatchingTexture::draw(CVIEWptr& v)
    
    CBface_list& faces = patch()->mesh()->faces();
   // cerr << "faces has " << faces.num() << endl;
-   for(int i=0; i < faces.num(); ++i)
-   {
+   for (Bface_list::size_type i=0; i < faces.size(); ++i) {
       if(faces[i]->is_quad_rep()){
       for (uint j=0; j < _strokes.size(); ++j) {
                //ProxyStroke* rendered_stroke = new ProxyStroke();

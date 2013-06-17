@@ -83,7 +83,7 @@ Lvert::~Lvert()
    // faces with it:
    if (_mesh) {
       while (degree() > 0)
-         _mesh->remove_edge(_adj.last());
+         _mesh->remove_edge(_adj.back());
    }
 }
 
@@ -443,7 +443,7 @@ Lvert::set_mask()
    // vertex can be explicitly set to be a "corner."  i.e., it is not
    // smoothed in subdivision. also applies to isolated vertices, or
    // vertices adjacent to just one edge.
-   if (_corner || pedges.num() < 2) {
+   if (_corner || pedges.size() < 2) {
       _mask = CORNER_VERTEX;
       return;
    }
@@ -460,7 +460,7 @@ Lvert::set_mask()
 
    // normal case (vertex is part of a surface).
    // count adjacent crease or border edges:
-   for (int k=0; k<pedges.num(); k++)
+   for (Bedge_list::size_type k=0; k<pedges.size(); k++)
       if (pedges[k]->is_crease() || pedges[k]->is_border())
          s++;
 

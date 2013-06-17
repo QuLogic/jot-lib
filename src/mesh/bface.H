@@ -24,6 +24,8 @@
 #include "bvert.H"
 //#include "vert_attrib.H"
 
+#include <vector>
+
 class EdgeStrip;
 class Patch;
 /**********************************************************************
@@ -736,9 +738,9 @@ ccw_face(CBedge* e)
 }
 
 inline void
-reverse_faces(CARRAY<Bface*>& faces)
+reverse_faces(const vector<Bface*>& faces)
 {
-   for (int k=faces.num()-1; k>=0; k--)
+   for (int k=faces.size()-1; k>=0; k--)
       faces[k]->reverse();
 }
 
@@ -819,11 +821,11 @@ class Bface_list : public SimplexArray<Bface_list,Bface*> {
 
    //******** MANAGERS ********
 
-   Bface_list(CARRAY<Bface*>& list) : SimplexArray<Bface_list,Bface*>(list) {}
+   Bface_list(const vector<Bface*>& list) : SimplexArray<Bface_list,Bface*>(list) {}
    explicit Bface_list(int n=0)     : SimplexArray<Bface_list,Bface*>(n)    {}
    explicit Bface_list(Bface* f)    : SimplexArray<Bface_list,Bface*>(f) {
       if (f && f->is_quad())
-         add(f->quad_partner());
+         push_back(f->quad_partner());
    }
 
    //******** ADJACENCY ********
@@ -884,8 +886,8 @@ class Bface_list : public SimplexArray<Bface_list,Bface*> {
 
    // Flip the orientation:
    void reverse_faces() const { 
-      for (int k=0; k<_num; k++)
-         _array[k]->reverse();
+      for (Bface_list::size_type k=0; k<size(); k++)
+         at(k)->reverse();
    }
 
    // Extract boundary edges in one or more continuous chains
@@ -961,15 +963,15 @@ class Bface_list : public SimplexArray<Bface_list,Bface*> {
 
    // Label each face as "primary"
    void make_primary() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->make_primary();
+      for (Bface_list::size_type i=0; i<size(); i++)
+         at(i)->make_primary();
    }
 
    // Label each face as "secondary",
    // i.e., as not being in the primary layer
    void make_secondary() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->make_secondary();
+      for (Bface_list::size_type i=0; i<size(); i++)
+         at(i)->make_secondary();
    }
 
    //******** PRIMARY/SECONDARY FACES ********
@@ -1088,7 +1090,7 @@ Bedge::opposite_vert(CBface* f) const
 inline bool 
 Bedge::contains(CBface* f) const 
 {
-   return (_f1 == f || _f2 == f || (_adj && _adj->contains((Bface*)f)));
+   return (_f1 == f || _f2 == f || (_adj && std::find(_adj->begin(), _adj->end(), f) != _adj->end()));
 }
 
 /*****************************************************************

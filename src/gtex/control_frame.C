@@ -197,7 +197,7 @@ get_cur_sub_faces(Patch* p, Bface* f, Bface_list& ret)
      if (lev >= 0)
         ((Lface*)f)->append_subdiv_faces(f->mesh()->rel_cur_level(), ret);
   } else {
-    ret += f;
+    ret.push_back(f);
   }
 }
 
@@ -220,8 +220,8 @@ ControlFrameTexture::draw_selected_faces()
    // Remap to current subdiv level
    // keeping only those from our patch:
    Bface_list sub_faces;
-   int i=0; // loop index
-   for (i=0; i<sel_faces.num(); i++) {
+   Bface_list::size_type i=0; // loop index
+   for (i=0; i<sel_faces.size(); i++) {
      get_cur_sub_faces(patch(), sel_faces[i], sub_faces);
    }
    if (sub_faces.empty())
@@ -239,7 +239,7 @@ ControlFrameTexture::draw_selected_faces()
    }
    GL_COL(orange_pencil_l, a);                          // GL_CURRENT_BIT
    glBegin(GL_TRIANGLES);
-   for (i=0; i<sub_faces.num(); i++) {
+   for (i=0; i<sub_faces.size(); i++) {
      draw_face(sub_faces[i]);
    }
    glEnd();
@@ -257,7 +257,7 @@ get_cur_sub_edges(Patch* p, Bedge* e, Bedge_list& ret)
      if (lev >= 0)
         ((Ledge*)e)->append_subdiv_edges(e->mesh()->rel_cur_level(), ret);
   } else {
-    ret += e;
+    ret.push_back(e);
   }
 }
 
@@ -280,8 +280,8 @@ ControlFrameTexture::draw_selected_edges()
    // draw the selected edges at the current subdivision level
    Bedge_list sub_edges;
 
-   int i=0; // loop index
-   for (i=0; i<sel_edges.num(); i++) {
+   Bedge_list::size_type i=0; // loop index
+   for (i=0; i<sel_edges.size(); i++) {
      get_cur_sub_edges(patch(), sel_edges[i], sub_edges);
    }
 
@@ -289,14 +289,14 @@ ControlFrameTexture::draw_selected_edges()
      return;
 
    err_adv(false, "ControlFrameTexture::draw_selected_edges: drawing %d edges",
-           sub_edges.num());
+           sub_edges.size());
 
    GL_VIEW::init_line_smooth(SELECTED_EDGE_WIDTH, GL_CURRENT_BIT);
    glDisable(GL_LIGHTING);                              // GL_LIGHTING_BIT
    double a = SELECTED_SIMPLEX_ALPHA*alpha();
    GL_COL(Color::red_pencil, a);                        // GL_CURRENT_BIT
    glBegin(GL_LINES);
-   for (i=0; i<sub_edges.num(); i++) {
+   for (i=0; i<sub_edges.size(); i++) {
      draw_edge(sub_edges[i]);
    }
    glEnd();
@@ -326,10 +326,10 @@ get_cur_sub_vert(Patch* p, Bvert* v, Bvert_list& ret)
       if (lev >= 0) {
          Lvert* u = ((Lvert*)v)->subdiv_vert(lev);
          if (u)
-            ret += u;
+            ret.push_back(u);
       }
    } else {
-      ret += v;
+      ret.push_back(v);
    }
 }
 
@@ -344,8 +344,8 @@ ControlFrameTexture::draw_selected_verts()
    // draw the selected verts at the current subdivision level
    Bvert_list sub_verts;
 
-   int i=0; // loop index
-   for (i=0; i<sel_verts.num(); i++) {
+   Bvert_list::size_type i=0; // loop index
+   for (i=0; i<sel_verts.size(); i++) {
      get_cur_sub_vert(patch(), sel_verts[i], sub_verts);
    }
 

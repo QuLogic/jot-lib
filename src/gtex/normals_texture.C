@@ -78,12 +78,12 @@ VertNormalsTexture::draw(CVIEWptr& v)
    //   (expensive, but OK in a display list):
    Bvert_list verts = _patch->cur_verts().filter(PrimaryVertFilter());
 
-   ARRAY<Wvec> norms;
+   vector<Wvec> norms;
    glBegin(GL_LINES);
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       CBvert* bv = verts[i];
       bv->get_normals(norms);
-      for (int k=0; k<norms.num(); k++)
+      for (vector<Wvec>::size_type k=0; k<norms.size(); k++)
          draw_seg(bv->loc(), norms[k]*scale);
    }
    glEnd();
@@ -174,7 +174,7 @@ VertUVTexture::draw(CVIEWptr& v)
    Bvert_list verts = _patch->cur_verts().filter(PrimaryVertFilter());
 
    glBegin(GL_LINES);
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       CBvert* bv = verts[i];
       
       Bface_list faces = bv->get_faces();
@@ -196,7 +196,7 @@ VertUVTexture::draw(CVIEWptr& v)
 
       // Wtransf rotate( base_2, base_3, Wvec(0,0,0));
   
-      for(int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          //getting the previously computed face gradients
          UV_grads grad = face_gradient_map[(unsigned int)(faces[i]->index())];
          
@@ -219,8 +219,8 @@ VertUVTexture::draw(CVIEWptr& v)
       }
 
       //just simple average for now
-      acc_U = (acc_U / double(faces.num()) );
-      acc_V = (acc_V / double(faces.num()) );
+      acc_U = (acc_U / double(faces.size()) );
+      acc_V = (acc_V / double(faces.size()) );
 
       GL_COL(COLOR::blue, alpha());  
       draw_seg(bv->loc(), acc_U*scale);
@@ -252,7 +252,7 @@ VertUVTexture::compute_UV_grads()
    UV_grads gradient;
    UVvec derivative;
 
-   for(int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       derivative = attr.dFdx(faces[i]);
 
       gradient.U_grad[0] = derivative[0]; 

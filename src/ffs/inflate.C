@@ -143,7 +143,7 @@ INFLATE::tap_cb(CGESTUREptr& gest, DrawState*& state)
          = _mode ? _faces : Bface_list::reachable_faces(_orig_face);
 
       // verify that the user tapped a face that is part of the inflation region
-      if ( face && !set.contains( face ) ) {
+      if ( face && std::find(set.begin(), set.end(), face) == set.end() ) {
          return cancel_cb(gest,state);
       }
 
@@ -349,7 +349,7 @@ INFLATE::setup(Bface *bf, double dist, double dur)
       = Bface_list::reachable_faces(f);
    assert(set.mesh() != NULL);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
-           set.num(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
+           set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
    // given face set should be an entire connected piece.
    if (!is_maximal_connected(set
@@ -361,7 +361,7 @@ INFLATE::setup(Bface *bf, double dist, double dur)
    Bface_list p = set;//get_top_level(set);
    assert(LMESH::isa(p.mesh()));
    err_adv(debug, "top level: %d faces (out of %d)",
-           p.num(), p.mesh()->nfaces());
+           p.size(), p.mesh()->nfaces());
 
    BMESH* m = p.mesh();
    if (!m) {
@@ -629,7 +629,7 @@ INFLATE::do_inflate(
    Bface_list set = Bface_list::reachable_faces(face);
    assert(set.mesh() != NULL);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
-           set.num(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
+           set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
    if (!set.is_consistently_oriented()) {
       err_msg("INFLATE::do_inflate: rejecting inconsistently \
@@ -684,7 +684,7 @@ INFLATE::do_inflate(
    Bface_list set = orig_faces;
    assert(set.mesh() != NULL);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
-           set.num(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
+           set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
    if (!set.is_consistently_oriented()) {
       err_msg("INFLATE::do_inflate: rejecting inconsistently \

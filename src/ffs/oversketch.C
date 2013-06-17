@@ -178,11 +178,11 @@ ctrl_faces(CBedge_list& edges)
 {
    if (!LMESH::isa(edges.mesh()))
       return Bface_list();
-   Bface_list ret(edges.num());
-   for (int i=0; i<edges.num(); i++) {
+   Bface_list ret(edges.size());
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       Bface* f = ((Ledge*)edges[i])->ctrl_face();
       if (f)
-         ret += f;
+         ret.push_back(f);
    }
    return ret.unique_elements().quad_complete_faces();
 }
@@ -255,11 +255,11 @@ inline void
 make_strip(Bvert_list chain, int k0, int k1, EdgeStrip& strip)
 {
    assert(chain.forms_chain());
-   assert(chain.valid_index(k0) && chain.valid_index(k1));
+   assert(0 <= k0 && k0 < (int)chain.size() && 0 <= k1 && k1 < (int)chain.size());
    assert(k0 != k1);
    if (k0 > k1) {
-      chain.reverse();
-      int n = chain.num()-1;
+      std::reverse(chain.begin(), chain.end());
+      int n = chain.size()-1;
       k0 = n - k0;
       k1 = n - k1;
    }
@@ -285,7 +285,7 @@ OVERSKETCH::match_substrip(CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& stri
    int k0 = get_near_index(chain_path, pts.front(), MAX_DIST);
    int k1 = get_near_index(chain_path, pts.back(),  MAX_DIST);
 
-   if (!(chain.valid_index(k0) && chain.valid_index(k1))) {
+   if (!(0 <= k0 && k0 < (int)chain.size() && 0 <= k1 && k1 < (int)chain.size())) {
       err_adv(debug, "  bad k0/k1: %d/%d", k0, k1);
       return false;
    } if (k0 == k1) {
@@ -367,7 +367,7 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offs
 {
    // XXX - preliminary...
 
-   assert(sil_verts.num() == (int)sil_offsets.size());
+   assert(sil_verts.size() == sil_offsets.size());
 
    // Expand region around oversketched silhouette verts.
    // XXX - Should compute the one-ring size, not use "3"
@@ -381,7 +381,7 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offs
    Bvert_list region_verts = region.get_verts();
    Wpt_list   new_locs     = region_verts.pts();
    vector<double> offsets;
-   for (int i=0; i<region_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<region_verts.size(); i++) {
       Wpt foo;
       int k = -1;
       double d = sil_path.closest(region_verts[i]->loc(), foo, k);
@@ -439,13 +439,13 @@ OVERSKETCH::compute_offsets(CPIXEL_list& pts, CEdgeStrip& sils)
    int count = 0;
    vector<double> offsets;
    Wpt_list new_locs = chain.pts();
-   for (int i=0; i<chain.num(); i++) {
+   for (Bvert_list::size_type i=0; i<chain.size(); i++) {
       offsets.push_back(compute_offset(chain[i], pts, yardstick));
       if (offsets.back() > 0) {
          count++;
       }
    }
-   err_adv(debug, "found %d/%d offsets", count, chain.num());
+   err_adv(debug, "found %d/%d offsets", count, chain.size());
 
    apply_offsets(chain, offsets);
 
@@ -501,8 +501,8 @@ OVERSKETCH::try_oversketch(CPIXEL_list& pts)
 inline void
 show_yardstick(CBvert_list& verts, double yardstick)
 {
-   vector<Wline> lines(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   vector<Wline> lines(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       lines[i] = Wline(verts[i]->loc(), verts[i]->norm()*yardstick);
    GL_VIEW::draw_lines(lines, Color::yellow, 0.8, 1, false);
 }

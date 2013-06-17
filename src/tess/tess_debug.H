@@ -36,12 +36,12 @@ show_verts(CBvert_list& verts, int size, CCOLOR& c0, CCOLOR& c1)
 {
    if (verts.empty())
       return;
-   if (verts.num() == 1)
+   if (verts.size() == 1)
       show_vert(verts[0], size, c0);
 
    // ramp the colors
-   double di = 1.0/(verts.num()-1);
-   for (int i=0; i<verts.num(); i++)
+   double di = 1.0/(verts.size()-1);
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       show_vert(verts[i], size, interp(c0, c1, i*di));
 }
 

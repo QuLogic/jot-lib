@@ -17,13 +17,15 @@
  *****************************************************************/
 #include "std/support.H"
 
+#include <vector>
+
 /*
    This class deals with reading in text bookended by:
 #BEGIN X
 #END Y
 */
 
-#define IOBlockList ARRAY<IOBlock *>
+#define IOBlockList vector<IOBlock *>
 #define CIOBlock const IOBlock
 class IOBlock {
    protected:
@@ -58,11 +60,11 @@ class IOBlockMeth: public IOBlock {
 };
 
 template <class T>
-class IOBlockMethList : public ARRAY<IOBlockMeth<T> *> {
+class IOBlockMethList : public vector<IOBlockMeth<T> *> {
    public:
-      IOBlockMethList(int num = 5) : ARRAY<IOBlockMeth<T> *>(num) {}
+      IOBlockMethList(int num = 5) : vector<IOBlockMeth<T> *>() { vector<IOBlockMeth<T> *>::reserve(num); }
       void set_obj(T *inst) {
-         for (int i = 0; i < ARRAY<IOBlockMeth<T>*>::num(); i++) {
+         for (size_t i = 0; i < vector<IOBlockMeth<T>*>::size(); i++) {
             (*this)[i]->set_obj(inst);
          }
       }

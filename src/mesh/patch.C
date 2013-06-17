@@ -115,8 +115,10 @@ Patch::~Patch()
    // The patch owns its tri_strips, crease strips, and Gtexures, 
    // but not its faces, edge strips, or vert strips. So it deletes
    // the former but not the latter.
-   while (!_tri_strips.empty())
-      delete _tri_strips.pop();
+   while (!_tri_strips.empty()) {
+      delete _tri_strips.back();
+      _tri_strips.pop_back();
+   }
    delete _creases;
    delete _borders;   
 
@@ -125,7 +127,7 @@ Patch::~Patch()
    //      a valid _mesh pointer...
    //_textures.delete_all();
    
-   for (int i=0; i<_faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<_faces.size(); i++) {
       _faces[i]->set_patch(0);
       _faces[i]->set_patch_index(-1);
    }
@@ -298,7 +300,7 @@ Patch::verts() const
    assert(_mesh);
 
    // Short-cut if patch is whole mesh
-   if (_mesh->nfaces() == _faces.num() &&
+   if (_mesh->nfaces() == (int)_faces.size() &&
        !(_mesh->is_polylines() || _mesh->is_points()))
       return _mesh->verts();
 
@@ -313,7 +315,7 @@ Patch::edges() const
    assert(_mesh);
 
    // Short-cut if patch is whole mesh
-   if (_mesh->nfaces() == _faces.num() && !_mesh->is_polylines())
+   if (_mesh->nfaces() == (int)_faces.size() && !_mesh->is_polylines())
       return _mesh->edges();
 
    return _faces.get_edges();
@@ -332,8 +334,8 @@ Patch::add(Bface* f)
       f->patch()->remove(f);
 
    // Add it to the face list etc.:
-   f->set_patch_index(_faces.num());
-   _faces += f;
+   f->set_patch_index(_faces.size());
+   _faces.push_back(f);
    f->set_patch(this);
 
    triangulation_changed();
@@ -348,8 +350,8 @@ Patch::remove(Bface* f)
    }
 
    int k = f->patch_index();
-   if (_faces.valid_index(k)) {
-      _faces.remove(k);
+   if (0 <= k && k < (int)_faces.size()) {
+      _faces.erase(_faces.begin() + k);
       _faces[k]->set_patch_index(k);
    }
    f->set_patch_index(-1);
@@ -363,8 +365,8 @@ Patch::add(VertStrip* vs)
    if (vs->patch())
       vs->patch()->remove(vs);
    vs->set_patch(this);
-   vs->set_patch_index(_vert_strips.num());
-   _vert_strips += vs;
+   vs->set_patch_index(_vert_strips.size());
+   _vert_strips.push_back(vs);
    changed();
 }
 
@@ -373,8 +375,8 @@ Patch::remove(VertStrip* vs)
 {
    assert(vs->patch() == this);
    int k = vs->patch_index();
-   if (_vert_strips.valid_index(k)) {
-      _vert_strips.remove(k);
+   if (0 <= k && k < (int)_vert_strips.size()) {
+      _vert_strips.erase(_vert_strips.begin() + k);
       _vert_strips[k]->set_patch_index(k);
       changed();
    }
@@ -388,8 +390,8 @@ Patch::add(EdgeStrip* es)
    if (es->patch())
       es->patch()->remove(es);
    es->set_patch(this);
-   es->set_patch_index(_edge_strips.num());
-   _edge_strips += es;
+   es->set_patch_index(_edge_strips.size());
+   _edge_strips.push_back(es);
    changed();
 }
 
@@ -398,8 +400,8 @@ Patch::remove(EdgeStrip* es)
 {
    assert(es->patch() == this);
    int k = es->patch_index();
-   if (_edge_strips.valid_index(k)) {
-      _edge_strips.remove(k);
+   if (0 <= k && k < (int)_edge_strips.size()) {
+      _edge_strips.erase(_edge_strips.begin() + k);
       _edge_strips[k]->set_patch_index(k);
       changed();
    }
@@ -414,13 +416,13 @@ Patch::build_tri_strips()
       _tri_strips_dirty = 0;
 
       // get rid of old strips:
-      int k;
-      for (k=0; k<_tri_strips.num(); k++)
+      vector<TriStrip*>::size_type k;
+      for (k=0; k<_tri_strips.size(); k++)
          delete _tri_strips[k];
       _tri_strips.clear();
 
       // clear face flags before finding triangle strips
-      for (k=0; k<_faces.num(); k++) {
+      for (k=0; k<_faces.size(); k++) {
          _faces[k]->clear_flag();
          _faces[k]->orient_strip(0);
       }
@@ -430,7 +432,7 @@ Patch::build_tri_strips()
       if (!BMESH::show_secondary_faces())
          _faces.secondary_faces().set_flags(1);
 
-      for (k=0; k<_faces.num(); k++)
+      for (k=0; k<_faces.size(); k++)
          if (!_faces[k]->flag())
             TriStrip::get_strips(_faces[k], _tri_strips);
 
@@ -464,10 +466,10 @@ Patch::draw_tri_strips(StripCB* cb)
 {
    build_tri_strips();
 
-   for (int k=0; k<_tri_strips.num(); k++)
+   for (vector<TriStrip*>::size_type k=0; k<_tri_strips.size(); k++)
       _tri_strips[k]->draw(cb);
 
-   return _faces.num();
+   return _faces.size();
 }
 
 int
@@ -482,13 +484,13 @@ Patch::draw_n_ring_triangles(int n, StripCB* cb, bool exclude_interior)
       n_ring = n_ring.minus(cur_faces());
    }
    cb->begin_triangles();
-   for(int i=0; i<n_ring.num(); ++i) {                
+   for(Bface_list::size_type i=0; i<n_ring.size(); ++i) {
       cb->faceCB(n_ring[i]->v1(), n_ring[i]);
       cb->faceCB(n_ring[i]->v2(), n_ring[i]);
       cb->faceCB(n_ring[i]->v3(), n_ring[i]);         
    }
-   cb->end_triangles();      
-   return n_ring.num();
+   cb->end_triangles();
+   return n_ring.size();
 }
 
 int
@@ -515,7 +517,7 @@ Patch::draw_edge_strips(StripCB *cb)
    int ret=0;
 
    // draw edges as line strips
-   for (int i=0; i<_edge_strips.num(); i++) {
+   for (vector<EdgeStrip*>::size_type i=0; i<_edge_strips.size(); i++) {
       _edge_strips[i]->draw(cb);
       ret += _edge_strips[i]->num();
    }
@@ -529,7 +531,7 @@ Patch::draw_vert_strips(StripCB *cb)
    int ret=0;
 
    // draw point strips (vertices as dots):
-   for (int i=0; i<_vert_strips.num(); i++) {
+   for (vector<VertStrip*>::size_type i=0; i<_vert_strips.size(); i++) {
       _vert_strips[i]->draw(cb);
       ret += _vert_strips[i]->num();
    }
@@ -721,12 +723,12 @@ Patch::write_stream(ostream &os)
    //******** FACES ********
 
    // Don't output any faces if this patch has all the faces
-   if (_faces.num() > _mesh->nfaces()) {
+   if ((int)_faces.size() > _mesh->nfaces()) {
 
       // Never happens
       assert(0);
 
-   } else if (_faces.num() == _mesh->nfaces()) {
+   } else if ((int)_faces.size() == _mesh->nfaces()) {
 
       // We have them all. "0" faces here is a secret code
       // meaning "all" faces.
@@ -739,9 +741,9 @@ Patch::write_stream(ostream &os)
       CBface_list& cfaces = cur_faces();
 
       // Number of faces in this patch
-      os << cfaces.num() << endl;
+      os << cfaces.size() << endl;
 
-      for (int f=0; f<cfaces.num(); f++) {
+      for (Bface_list::size_type f=0; f<cfaces.size(); f++) {
          assert(get_ctrl_patch(cfaces[f]) == this);
          os << cfaces[f]->index() << endl;
       }
@@ -827,18 +829,18 @@ Patch::read_stream(istream &is, vector<string> &leftover)
 
    // continue reading the file but now check for tokens
    static IOBlockList blocklist;
-   if (blocklist.num() == 0) {
-      blocklist += new IOBlockMeth<Patch>("GTEXTURE", &Patch::read_texture,
-                                          this);
-      blocklist += new IOBlockMeth<Patch>("COLOR",    &Patch::read_color,
-                                          this);
-      blocklist += new IOBlockMeth<Patch>("TEXTURE_MAP",
-                                          &Patch::read_texture_map,
-                                          this);
-      blocklist += new IOBlockMeth<Patch>("PATCHNAME",&Patch::read_patchname,
-                                          this);
+   if (blocklist.empty()) {
+      blocklist.push_back(new IOBlockMeth<Patch>("GTEXTURE", &Patch::read_texture,
+                                                 this));
+      blocklist.push_back(new IOBlockMeth<Patch>("COLOR",    &Patch::read_color,
+                                                 this));
+      blocklist.push_back(new IOBlockMeth<Patch>("TEXTURE_MAP",
+                                                 &Patch::read_texture_map,
+                                                 this));
+      blocklist.push_back(new IOBlockMeth<Patch>("PATCHNAME",&Patch::read_patchname,
+                                                 this));
    } else {
-      for (int i = 0; i < blocklist.num(); i++) {
+      for (IOBlockList::size_type i = 0; i < blocklist.size(); i++) {
          ((IOBlockMeth<Patch> *) blocklist[i])->set_obj(this);
       }
    }
@@ -1136,18 +1138,14 @@ Patch::recompute()
 void
 Patch::get_faces(TAGformat &d)
 {
-   ARRAY<int> faces;
+   vector<int> faces;
    *d >> faces;
 
    // for each face...
-   for (int f = 0; f < faces.num(); f++) 
-   {
-      if (faces[f] < _mesh->nfaces()) 
-      {
+   for (vector<int>::size_type f = 0; f < faces.size(); f++) {
+      if (faces[f] < _mesh->nfaces()) {
          add(_mesh->bf(faces[f]));
-      } 
-      else 
-      {
+      } else {
          err_msg("Patch::get_faces() - ERROR! face #%d > %d.", faces[f], _mesh->nfaces());
       }
    }
@@ -1157,18 +1155,16 @@ void
 Patch::put_faces(TAGformat &d) const
 {
    // XXX - no faces entry means all faces
-   if (_faces.num() == ((Patch *) this)->mesh()->nfaces()) return;
+   if ((int)_faces.size() == ((Patch *) this)->mesh()->nfaces()) return;
 
-   ARRAY<int> faces(_faces.num());
+   vector<int> faces; faces.reserve(_faces.size());
 
-   for (int f=0; f<_faces.num(); f++) 
-   {
+   for (Bface_list::size_type f=0; f<_faces.size(); f++) {
       const Bface *outf = _faces[f];
-      if (outf->patch() != this) 
-      {
+      if (outf->patch() != this) {
          err_msg("Patch::put_faces() - ERROR! face #%d has ownership issues...", outf->index());
       }
-      faces += outf->index();
+      faces.push_back(outf->index());
    }
    d.id();
    *d << faces;
@@ -1276,10 +1272,10 @@ Patch::create_dynamic_samples(const VisibilityTest& vis)
       _sps_min_dist,
       _sps_regularity
       );
-   assert(sample_faces.num() == (int)sample_bc.size());
+   assert(sample_faces.size() == sample_bc.size());
    if (0 && debug_samples) {
       cerr << "Patch::create_dynamic_samples: created "
-           << sample_faces.num() << " samples, spacing: "
+           << sample_faces.size() << " samples, spacing: "
            << _sample_spacing
            << endl; 
    }
@@ -1313,7 +1309,7 @@ Patch::create_dynamic_samples(const VisibilityTest& vis)
    double r = _sample_spacing * xf.X().length(); 
 
    // create the sample list:
-   for(int i=0; i < sample_faces.num(); ++i) {
+   for (Bface_list::size_type i=0; i < sample_faces.size(); ++i) {
       // sample location in world space:
       Wpt p = xf*sample_faces[i]->bc2pos(sample_bc[i]);
       // surface normal at sample, in world space:

@@ -159,7 +159,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Return true if every vertex is under meme control
    static bool is_covered(CBvert_list& verts) {
-      return (int)find_boss_vmemes(verts).size() == verts.num();
+      return find_boss_vmemes(verts).size() == verts.size();
    }
 
    // Returns the Bbase that owns the boss meme on the simplex:

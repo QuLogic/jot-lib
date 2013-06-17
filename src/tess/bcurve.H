@@ -191,7 +191,7 @@ class Bcurve : public Bbase{
       assert(s);
       return s->edges();
    }
-   int          num_edges()             const   { return edges().num(); }
+   int          num_edges()             const   { return edges().size(); }
    Bedge*       edge(int i)             const   { return edges()[i]; }
 
    //! Vertices of this curve;
@@ -429,8 +429,8 @@ class Bcurve : public Bbase{
 
    //! Returns the Bcurve (if any) that owns all the edges (if any):
    static Bcurve* lookup(CBedge_list& edges) {
-      Bcurve* ret = edges.empty() ? 0 : find_controller(edges.first());
-      for (int i=1; i<edges.num(); i++)
+      Bcurve* ret = edges.empty() ? 0 : find_controller(edges.front());
+      for (Bedge_list::size_type i=1; i<edges.size(); i++)
          if (find_controller(edges[i]) != ret)
             return 0;
       return ret;
@@ -793,7 +793,7 @@ Bcurve::get_curves(CBedge_list& edges)
 {
    Bcurve_list ret;
    Bcurve* bc = 0;
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       if ((bc = find_controller(edges[i])))
          ret.add_uniquely(bc);
    return ret;

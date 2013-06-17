@@ -66,7 +66,7 @@ IOBlock::consume(istream &is, const IOBlockList &list, vector<string> &leftover)
 
       starttype = str2;
       consumed = 0;
-      for (int i = 0; !consumed && i < list.num(); i++) {
+      for (IOBlockList::size_type i = 0; !consumed && i < list.size(); i++) {
          if (starttype == list[i]->name()) {
             if (leftover.size()) {
                cerr << "IOBlock::consume - " 

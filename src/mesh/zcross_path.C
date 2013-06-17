@@ -92,8 +92,8 @@ ZcrossPath::has_sil(Bface * f)
 void
 ZcrossPath::build(CBface_list& list )
 {
-   int k;
-   for (k = 0 ; k < list.num(); k++)
+   Bface_list::size_type k;
+   for (k = 0 ; k < list.size(); k++)
       if ( has_sil(list[k]))
          start_sil(list[k]);
 }

@@ -85,7 +85,7 @@ EdgeStroke::draw(CVIEWptr& view)
    if (_strip->edges().empty() )       
       return 0;
    
-   assert(_strip->edges().num() == _strip->verts().num());
+   assert(_strip->edges().size() == _strip->verts().size());
 
    // cache per frame constants
    static uint   cache_stamp   = UINT_MAX;
@@ -110,9 +110,7 @@ EdgeStroke::draw(CVIEWptr& view)
       NDCZvec vec;
       double  len = 0.0;
 
-         
-      for ( int i=0; i<_strip->verts().num(); i++) {
-
+      for (Bvert_list::size_type i=0; i<_strip->verts().size(); i++) {
          cur_p = _strip->vert(i)->ndc();
 
          // To refine visibility testing, add vertices along the
@@ -146,7 +144,7 @@ EdgeStroke::draw(CVIEWptr& view)
       vec = cur_p - prev_p;
       len = vec.length();
       vec = vec.normalized();
-      refine(prev_p, vec, len, step_size, _strip->edges().last());
+      refine(prev_p, vec, len, step_size, _strip->edges().back());
          
       add(cur_p);
 
@@ -187,17 +185,17 @@ EdgeStroke::clear_simplex_data()
    // XXX -- trying to remove stroke data from edge.  Is this correct?   
    if (!_strip) return;
 
-   for(int i=0; i<_strip->verts().num(); i++){
+   for (Bvert_list::size_type i=0; i<_strip->verts().size(); i++) {
       Bvert* v = _strip->vert(i);
       assert(v);
       Bface_list faces;
       v->get_faces(faces);
 
-      for ( int j=0; j<faces.num(); j++) {
+      for (Bface_list::size_type j=0; j<faces.size(); j++) {
          assert(faces[j]);
          SimplexData* d = faces[j]
             ->find_data(EdgeStroke::static_name());
-         if(d) {
+         if (d) {
             faces[j]->rem_simplex_data(d);
          }
       }
@@ -313,13 +311,13 @@ EdgeStroke::set_edge_strip(EdgeStrip* strip)
 
    _strip = strip;
 
-   for(int i=0; i<_strip->verts().num(); i++){
+   for (Bvert_list::size_type i=0; i<_strip->verts().size(); i++){
       Bvert* v = _strip->vert(i);
       assert(v);
       Bface_list faces;
       v->get_faces(faces);
 
-      for ( int j=0; j<faces.num(); j++) {
+      for (Bface_list::size_type j=0; j<faces.size(); j++) {
          SimplexData* d = 
             faces[j]
             ->find_data(EdgeStroke::static_name());
@@ -407,9 +405,9 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
       CBvert* mesh_v = (Bvert*)sim;
 
       // get the edges adjacent to this vertex
-      CARRAY<Bedge*>&  adj_e = mesh_v->get_adj();
+      const vector<Bedge*>& adj_e = mesh_v->get_adj();
 
-      for (int i=0; i<adj_e.num(); i++) {
+      for (vector<Bedge*>::size_type i=0; i<adj_e.size(); i++) {
          front_facing_face = adj_e[i]->frontfacing_face();
          if (front_facing_face) {      
             break;
@@ -422,8 +420,7 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
          return false;
 
 
-      for (int j=0; j<adj_e.num(); j++) {
-
+      for (vector<Bedge*>::size_type j=0; j<adj_e.size(); j++) {
          Bedge* e = adj_e[j];
 
          if ( e->is_crease() ) {

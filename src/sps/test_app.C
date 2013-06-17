@@ -147,10 +147,10 @@ TestSPSapp::load_scene()
          //generate_samples(BMESH::upcast(geom->body()), 1.0, fs, bcs);
          //generate_samples(BMESH::upcast(geom->body()), fs, bcs, HEIGHT, MIN_DIST);
          _nodes.push_back(sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing));
-         for (int i = 0; i < fs.num(); i++) {
+         for (Bface_list::size_type i = 0; i < fs.size(); i++) {
             Wpt pt;
             fs[i]->bc2pos(bcs[i], pt);
-            list += new Bvert(pt);
+            list.push_back(new Bvert(pt));
          }
          _pts.push_back(list);
       }
@@ -160,7 +160,7 @@ TestSPSapp::load_scene()
       visit(*i);
 
    for (vector<Bvert_list>::iterator i = _pts.begin(); i != _pts.end(); ++i) {
-      for (int j = 0; j < (*i).num(); j++) {
+      for (Bvert_list::size_type j = 0; j < (*i).size(); j++) {
          _balls.push_back(new BALLwidget_anchor);
          GEOMptr _anchor = _balls.back();
          _anchor->set_pickable(0); // Don't allow picking of anchor
@@ -195,7 +195,7 @@ TestSPSapp::toggle_sample_cb(const Event&, State *&)
       vector<Bvert_list>::size_type i;
       vector<GEOMptr>::iterator k;
       for (i = 0, k = _instance->_balls.begin(); i < _instance->_pts.size(); i++) {
-         for (int j = 0; j < _instance->_pts[i].num(); j++, ++k) {
+         for (Bvert_list::size_type j = 0; j < _instance->_pts[i].size(); j++, ++k) {
             WORLD::display(*k, false);
             Wpt p = _instance->_pts[i][j]->loc();
             Wvec    delt(p-Wpt(XYpt(p)+XYvec(VEXEL(3,3)), p));

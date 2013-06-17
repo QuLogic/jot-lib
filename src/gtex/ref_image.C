@@ -999,8 +999,8 @@ IDRefImage::find_all_neighbors(
    int          radius
    ) const 
 {
-   static Bedge_list neighbors(radius*radius);
-   neighbors.clear();
+   Bedge_list neighbors(radius*radius);
+   std::set<Bedge*> unique;
    Bedge* temp = 0;
    Point2i check;
    for (int i = -radius; i <= radius; i++) {
@@ -1011,8 +1011,12 @@ IDRefImage::find_all_neighbors(
          temp = edge(check);
          if (!temp)
             continue;
-         if ((temp->patch() == patch) && (temp->is_sil()))
-            neighbors.add_uniquely(temp);
+         if ((temp->patch() == patch) && (temp->is_sil())) {
+            pair<std::set<Bedge*>::iterator,bool> result;
+            result = unique.insert(temp);
+            if (result.second)
+               neighbors.push_back(temp);
+         }
       }
    }
    
@@ -1353,12 +1357,17 @@ Bface_list
 VisRefImage::get_faces(const PIXEL_list& pix, double screen_rad)
 {
    // Call get_face() on each screen point in sequence:
-
    Bface_list ret;
+   std::set<Bface*> unique;
+
    for (PIXEL_list::size_type i=0; i<pix.size(); i++) {
       Bface* f = get_face(pix[i], screen_rad);
-      if (f)
-         ret.add_uniquely(f);
+      if (f) {
+         pair<std::set<Bface*>::iterator,bool> result;
+         result = unique.insert(f);
+         if (result.second)
+            ret.push_back(f);
+      }
    }
    return ret;
 }

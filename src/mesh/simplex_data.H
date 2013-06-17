@@ -24,6 +24,8 @@
 #include "net/rtti.H"
 #include "mlib/points.H"
 
+#include <vector>
+
 using namespace mlib;
 
 typedef unsigned int   uint;
@@ -117,51 +119,51 @@ class SimplexData {
  *      Can lookup a SimplexData item from its owner's unique ID,
  *      or "key."
  *****************************************************************/
-class SimplexDataList : public ARRAY<SimplexData*> {
+class SimplexDataList : public vector<SimplexData*> {
  public:
    //******** MANAGERS ********
-   SimplexDataList(int n=0) : ARRAY<SimplexData*>(n) {}
+   SimplexDataList(int n=0) : vector<SimplexData*>() { reserve(n); }
    ~SimplexDataList();
 
    //******** LOOKUP ********
    SimplexData* get_item(uintptr_t key) const {
-      for (int k=0; k<_num; k++)
-         if (_array[k]->id() == key)
-            return _array[k];
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         if (at(k)->id() == key)
+            return at(k);
       return 0;
    }
 
    //******** CONVENIENCE METHODS ********
    void notify_split(Bsimplex* new_simp) const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_split(new_simp);
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_split(new_simp);
    }
    void notify_simplex_changed() const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_simplex_changed();
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_simplex_changed();
    }
    void notify_normal_changed() const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_normal_changed();
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_normal_changed();
    }
    void notify_simplex_xformed(CWtransf& xf) const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_simplex_xformed(xf);
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_simplex_xformed(xf);
    }
    void notify_simplex_deleted() const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_simplex_deleted();
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_simplex_deleted();
    }
    void notify_subdiv_gen() const {
-      for (int k=0; k<_num; k++)
-         _array[k]->notify_subdiv_gen();
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         at(k)->notify_subdiv_gen();
    }
    bool  handle_subdiv_calc() {
       // They all get a chance...
       // return true if one or more take it:
       bool ret = false;
-      for (int k=0; k<_num; k++)
-         ret = _array[k]->handle_subdiv_calc() || ret;
+      for (vector<SimplexData*>::size_type k=0; k<size(); k++)
+         ret = at(k)->handle_subdiv_calc() || ret;
       return ret;
    }
 };

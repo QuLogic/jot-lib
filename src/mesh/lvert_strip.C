@@ -55,7 +55,7 @@ LvertStrip::generate_substrip()
    _substrip  = new LvertStrip;
 
    // ... and fill it in
-   for (int i=0; i<_verts.num(); i++) {
+   for (vector<Bvert*>::size_type i=0; i<_verts.size(); i++) {
      if (((Lvert*)_verts[i])->subdiv_vertex()) {
       _substrip->add(((Lvert*)_verts[i])->subdiv_vertex());
      }

@@ -37,7 +37,7 @@ cur_subdiv_faces(Bface_list in)
    if (in.empty()) return out;
    int level = (in[0]->mesh())->rel_cur_level();
 
-   for (int i = 0; i < in.num(); i++)
+   for (Bface_list::size_type i = 0; i < in.size(); i++)
       ((Lface*)(in[i]))->append_subdiv_faces(level, out);
    return out;
 }
@@ -137,7 +137,7 @@ PCell::shared_edges(const PCell_list& cells)
    // the shared ones will have flag value = 2
    Bedge_list ret;
    for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
-      ret += boundaries[i].filter(SimplexFlagFilter(2));
+      ret = ret + boundaries[i].filter(SimplexFlagFilter(2));
 
    return ret;
 }
@@ -170,9 +170,9 @@ void
 Panel::add_cell(CBface_list& faces)
 {
    Bface_list new_faces;
-   for (int i = 0; i < faces.num(); i++) {
+   for (Bface_list::size_type i = 0; i < faces.size(); i++) {
       if (!find_cell(faces[i]))
-         new_faces += faces[i];
+         new_faces.push_back(faces[i]);
    }
    _cells.push_back(new PCell(this, new_faces));
 }
@@ -342,7 +342,7 @@ Panel::prepare_tessellation(LMESH* m)
    // Delete all mesh elements controlled by this Panel
    if (debug && !bfaces().empty())
       err_msg("Panel::prepare_tessellation: warning: deleting %d faces",
-              bfaces().num());
+              bfaces().size());
    delete_elements();
    _cells.clear(); 
 
@@ -379,7 +379,7 @@ Panel::prepare_tessellation(CBcurve_list& contour)
 bool
 Panel::finish_tessellation()
 {
-   err_adv(debug, "Panel::finish_tessellation: %d faces", bfaces().num());
+   err_adv(debug, "Panel::finish_tessellation: %d faces", bfaces().size());
 
    // Done building, tell mesh:
    _mesh->changed();
@@ -413,7 +413,7 @@ Panel::finish_tessellation()
       for (Panel* p = this; p; p = upcast(p->child())) {
          cerr << p->identifier() << ": "
               << p->vmemes().size() << " memes / "
-              << p->bverts().num() << " verts" << endl;
+              << p->bverts().size() << " verts" << endl;
       }
    }
 
@@ -486,8 +486,8 @@ Panel::tessellate_disk(CBvert_list& verts, bool create_mode)
    invalidate(); // memes are hot, sign up for updates
 
    // Build faces
-   int n = verts.num();
-   for (int k=0; k<n; k++)
+   Bvert_list::size_type n = verts.size();
+   for (Bvert_list::size_type k=0; k<n; k++)
       add_face(verts[k], cv, verts[(k+n-1)%n]);
 
    // create a single cell for the disk:
@@ -496,7 +496,7 @@ Panel::tessellate_disk(CBvert_list& verts, bool create_mode)
    if (create_mode) {
       // Keep a record of the curves and points:
       Bcurve_list curves = Bcurve::get_curves(verts.get_chain());
-      curves.add_uniquely(Bcurve::find_controller(lookup_edge(verts.last(), verts.first())));
+      curves.add_uniquely(Bcurve::find_controller(lookup_edge(verts.back(), verts.front())));
       curves.reverse();
       absorb(curves);
       absorb(Bpoint::get_points(verts));
@@ -529,9 +529,9 @@ Panel::tessellate_banded_disk(CBcurve_list& contour)
 
    // make interior band of vertices:
    Bvert_list inner;
-   int n = verts.num();
-   for (int i=0; i<n; i++)
-      inner += _mesh->add_vertex(interp(center, verts[i]->loc(), 0.55));
+   Bvert_list::size_type n = verts.size();
+   for (Bvert_list::size_type i=0; i<n; i++)
+      inner.push_back(_mesh->add_vertex(interp(center, verts[i]->loc(), 0.55)));
 
    // create memes before we forget
    add_vert_meme(cv);
@@ -539,7 +539,7 @@ Panel::tessellate_banded_disk(CBcurve_list& contour)
    add_vert_memes(inner);
 
    // Build faces
-   for (int k=0; k<n; k++) {
+   for (Bvert_list::size_type k=0; k<n; k++) {
       int j = (k+n-1)%n;
       add_quad(verts[k], inner[k], inner[j], verts[j]);
       add_face(inner[j], inner[k], cv);
@@ -740,9 +740,9 @@ inline Bvert_list
 trim(Bvert_list in)
 {
    Bvert_list out;
-   for (int i = 0; i < in.num(); i++)
+   for (Bvert_list::size_type i = 0; i < in.size(); i++)
       if (Bcurve::find_controller(in[i]))
-         out += in[i];
+         out.push_back(in[i]);
    return out;
 }
 
@@ -830,8 +830,15 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       shared_verts_down = (i==0) ? Bvert_list() :
           _cells[i]->shared_boundary(_cells[i-1]).get_verts();
       others = _cells[i]->boundary_edges().get_verts();
-      others -= shared_verts_up;
-      others -= shared_verts_down;
+      Bvert_list::iterator it;
+      for (Bvert_list::size_type j=0; j<shared_verts_up.size(); j++) {
+         it = std::find(others.begin(), others.end(), shared_verts_up[j]);
+         others.erase(it);
+      }
+      for (Bvert_list::size_type j=0; j<shared_verts_down.size(); j++) {
+         it = std::find(others.begin(), others.end(), shared_verts_down[j]);
+         others.erase(it);
+      }
       shared_verts_down = trim(shared_verts_down);
       
       // find the new positions for shared verts
@@ -840,7 +847,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       t = get_t(old_skel, i, true); 
       new_t = get_t(new_skel, i, true);
       pts = transform(shared_verts_down.pts(), o, new_o, t, new_t, n);
-      for (int j = 0; j < shared_verts_down.num(); j++) {
+      for (Bvert_list::size_type j = 0; j < shared_verts_down.size(); j++) {
          if (map_locs.find(shared_verts_down[j]) == map_locs.end())
             map_locs[shared_verts_down[j]] = pts[j];
       }
@@ -851,7 +858,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       t = (old_skel.size()==1) ? default_old_t : get_t(old_skel, i, false);
       new_t = (new_skel.size()==1) ? default_new_t : get_t(new_skel, i, false);
       pts = transform(others.pts(), o, new_o, t, new_t, n);
-      for (int j = 0; j < others.num(); j++) {
+      for (Bvert_list::size_type j = 0; j < others.size(); j++) {
          if (map_locs.find(others[j]) == map_locs.end())
             map_locs[others[j]] = pts[j];
       }
@@ -863,7 +870,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
    for (int i = 0; i < _bcurves.num(); i++) {
       Bvert_list verts = _bcurves[i]->verts();
       Wpt_list pts;
-      for (int j = 0; j < verts.num(); j++) {
+      for (Bvert_list::size_type j = 0; j < verts.size(); j++) {
          assert(map_locs.find(verts[j]) != map_locs.end());
          pts.push_back(map_locs[verts[j]]);
       }
@@ -885,8 +892,8 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
    for (int i = 0; i < _bcurves.num(); i++) {      
       Panel* nbr = nbr_panel(_bcurves[i]);
       if (nbr && visited.find(nbr) == visited.end()) {
-         Bvert* first = _bcurves[i]->verts().first();
-         Bvert* last = _bcurves[i]->verts().last();
+         Bvert* first = _bcurves[i]->verts().front();
+         Bvert* last = _bcurves[i]->verts().back();
          o =  (first->loc() + last->loc()) / 2;
          new_o = (map_locs[last] + map_locs[first]) / 2;
          t = last->loc() - first->loc();
@@ -1180,7 +1187,7 @@ Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
    //        /            |                         
    //        ------ > -----                         
    //             c[0]
-   v[2].reverse();
+   std::reverse(v[2].begin(), v[2].end());
 
    // create memes at vertices:
    // (all vertices are on the boundary):
@@ -1192,9 +1199,9 @@ Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
    //   1,n,n  (n > 1)
    //   1,1,2
    //   1,2,1
-   n0 = v[0].num() - 1;
-   n1 = v[1].num() - 1;
-   n2 = v[2].num() - 1;
+   n0 = v[0].size() - 1;
+   n1 = v[1].size() - 1;
+   n2 = v[2].size() - 1;
    if (n1 == n2) {
       // use quads all the way up until the last one, a triangle:
       for (int k=0; k<n2-1; k++) {
@@ -1202,7 +1209,7 @@ Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
          add_cell(add_quad(v[2][k],v[1][k],v[1][k+1],v[2][k+1])); 
       }
       // triangle
-      add_cell(add_face(v[2][n2-1],v[1][n2-1],v[1].last()));
+      add_cell(add_face(v[2][n2-1],v[1][n2-1],v[1].back()));
    } else if (n1 == 1) {
       //                    /|                        
       //                  /  |                         
@@ -1365,8 +1372,8 @@ Panel::tessellate_quad(CBcurve_list& c, const vector<int> ns)
    //       ---------------->                       
    //             v[0]                             
    //                                            
-   v[2].reverse();
-   v[3].reverse();
+   std::reverse(v[2].begin(), v[2].end());
+   std::reverse(v[3].begin(), v[3].end());
 
    // Try to build the grid. It checks further conditions
    // like same numbers of verts on top and bottom and on
@@ -1379,8 +1386,8 @@ Panel::tessellate_quad(CBcurve_list& c, const vector<int> ns)
          return 0;
       }
    } else {
-      v[1].reverse();
-      v[3].reverse();
+      std::reverse(v[1].begin(), v[1].end());
+      std::reverse(v[3].begin(), v[3].end());
       if (!grid.build(v[3], v[1], v[2], v[0])) {
          err_adv(debug, "  can't build grid");
          return 0;
@@ -1536,7 +1543,7 @@ Panel::add_vert_memes(CBvert_list& verts)
       return;
    }
 
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       add_vert_meme((Lvert*)verts[i]);
 }
 

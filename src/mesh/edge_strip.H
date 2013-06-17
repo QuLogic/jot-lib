@@ -23,6 +23,8 @@
 
 #include "bvert.H"
 
+#include <vector>
+
 class StripCB;
 /**********************************************************************
  * EdgeStrip:
@@ -90,7 +92,7 @@ class EdgeStrip {
    // Add another segment to the strip:
    void add(Bvert* v, Bedge* e) {
       if (v && e) {
-         _verts += v; _edges += e;
+         _verts.push_back(v); _edges.push_back(e);
       }
    }
 
@@ -116,7 +118,7 @@ class EdgeStrip {
    Bvert* last()           const { return next_vert(num()-1); }
 
    bool   empty()          const { return _verts.empty(); }
-   int    num()            const { return _verts.num(); }
+   int    num()            const { return _verts.size(); }
 
    // Returns true if the line strip is broken at vert i
    // (or if it's the first or last vert):
@@ -127,7 +129,7 @@ class EdgeStrip {
 
    // Return a list of distinct chains of edges, in the form
    // of a set of Bvert_lists. 
-   void get_chains(ARRAY<Bvert_list>& chains) const;
+   void get_chains(vector<Bvert_list>& chains) const;
 
    // Return the chain starting at index k,
    // and advance k to the start of the next chain.

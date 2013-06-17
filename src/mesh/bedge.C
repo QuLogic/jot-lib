@@ -52,7 +52,7 @@ Bedge::~Bedge()
       if (_f1) _mesh->remove_face(_f1);
       if (_f2) _mesh->remove_face(_f2);
       if (_adj) {
-         for (int i=0; i<_adj->num(); i++)
+         for (Bface_list::size_type i=0; i<_adj->size(); i++)
             _mesh->remove_face((*_adj)[i]);
       }
    }   
@@ -77,7 +77,7 @@ Bedge::num_all_faces() const
 
    int ret = nfaces();
    if (_adj)
-      ret += _adj->num();
+      ret += _adj->size();
    return ret;
 }
 
@@ -88,8 +88,8 @@ Bedge::get_all_faces() const
 
    Bface_list ret(num_all_faces());
    if (_adj) ret = *_adj;
-   if (_f1) ret += _f1;
-   if (_f2) ret += _f2;
+   if (_f1) ret.push_back(_f1);
+   if (_f2) ret.push_back(_f2);
    return ret;
 }
 
@@ -101,7 +101,7 @@ Bedge::f(int k) const
     case 2: return _f2;
    }
    k -= 3;
-   return (_adj && _adj->valid_index(k)) ? (*_adj)[k] : 0;
+   return (_adj && 0 <= k && k < (int)_adj->size()) ? (*_adj)[k] : 0;
 }
 
 int
@@ -109,7 +109,7 @@ Bedge::nfaces() const
 {
    // XXX - not counting "multi" edges at this time
 
-   return (_f1?1:0) + (_f2?1:0); // + (_adj?_adj->num():0);
+   return (_f1?1:0) + (_f2?1:0); // + (_adj?_adj->size():0);
 }
 
 Bface*
@@ -127,7 +127,7 @@ Bedge::lookup_face(CBvert *v) const
    if (_f2 && _f2->contains(v))
       return _f2;
    if (_adj) {
-      for (int i=0; i<_adj->num(); i++) {
+      for (Bface_list::size_type i=0; i<_adj->size(); i++) {
          Bface* f = (*_adj)[i];
          if (f->contains(v))
             return f;
@@ -151,7 +151,7 @@ Bedge::lookup_face(CBedge *e) const
    if (_f2 && _f2->contains(e))
       return _f2;
    if (_adj) {
-      for (int i=0; i<_adj->num(); i++) {
+      for (Bface_list::size_type i=0; i<_adj->size(); i++) {
          Bface* f = (*_adj)[i];
          if (f->contains(e))
             return f;
@@ -286,9 +286,11 @@ Bedge::operator -=(Bface* f)
       _f1 = 0;
    else if (f == _f2)
       _f2 = 0;
-   else if (is_multi(f))
-      _adj->rem(f);
-   else {
+   else if (is_multi(f)) {
+      Bface_list::iterator it;
+      it = std::find(_adj->begin(), _adj->end(), f);
+      _adj->erase(it);
+   } else {
       err_msg("Bedge::operator-=(Bface*): error: unknown face");
       return 0;
    }
@@ -335,7 +337,7 @@ Bedge::avg_area() const
    if (_f1) avg.add(_f1->area());
    if (_f2) avg.add(_f2->area());
    if (_adj) {
-      for (int i=0; i<_adj->num(); i++)
+      for (Bface_list::size_type i=0; i<_adj->size(); i++)
          avg.add((*_adj)[i]->area());
    }
    return (avg.num() > 0) ? avg.val() : 0.0;
@@ -388,7 +390,7 @@ Bedge::is_multi(CBface* f) const
 {
    // Is the face a secondary face of this edge?
 
-   return (f && _adj && f->contains(this) && _adj->contains((Bface*)f));
+   return (f && _adj && f->contains(this) && std::find(_adj->begin(), _adj->end(), f) != _adj->end());
 }
 
 bool
@@ -411,7 +413,7 @@ Bedge::demote(Bface* f)
    } else if (_f2 == f) {
       _f2 = 0;
    } else {
-      assert(_adj && _adj->contains(f));
+      assert(_adj && std::find(_adj->begin(), _adj->end(), f) != _adj->end());
 
       // It's already demoted. Return true indicating "success".
       return true;
@@ -437,7 +439,8 @@ Bedge::add_multi(Bface* f)
       return demote(f);
    } else {
       allocate_adj();
-      _adj->add_uniquely(f);
+      if (std::find(_adj->begin(), _adj->end(), f) == _adj->end())
+         _adj->push_back(f);
       faces_changed();
       return true;
    }
@@ -465,13 +468,14 @@ Bedge::promote(Bface* f)
       return false;
    }
 
-   if (!(_adj && _adj->contains(f))) {
+   Bface_list::iterator it;
+   if (!_adj || (it = std::find(_adj->begin(), _adj->end(), f)) == _adj->end()) {
       // Allow this case only if f is already _f1 or _f2.
       // Then return true, indicating "success".
       assert(f == _f1 || f == _f2);
       return true;
    }
-   _adj->rem(f);
+   _adj->erase(it);
    bool ret = add_primary(f);
    assert(ret);
    return ret;
@@ -525,11 +529,12 @@ Bedge::fix_multi()
    }
 
    // Work backwards to remove items from the list:
-   for (int i=_adj->num()-1; i>=0; i--) {
+   for (Bface_list::size_type i=_adj->size()-1; ; i--) {
       Bface *face = (*_adj)[i];
       if (face->is_primary()) {
          promote(face);
       }
+      if (i==0) break;
    }
 }
 
@@ -764,13 +769,13 @@ Bsimplex_list
 Bedge::neighbors() const
 {
    Bsimplex_list ret(4);
-   ret += _v1;
-   ret += _v2;
-   if (_f1) ret += _f1;
-   if (_f2) ret += _f2;
+   ret.push_back(_v1);
+   ret.push_back(_v2);
+   if (_f1) ret.push_back(_f1);
+   if (_f2) ret.push_back(_f2);
    if (_adj) {
-      for (int j=0; j<_adj->num(); j++)
-         ret += (*_adj)[j];
+      for (Bface_list::size_type j=0; j<_adj->size(); j++)
+         ret.push_back((*_adj)[j]);
    }
    return ret;
 }
@@ -1294,9 +1299,9 @@ Bedge_list::clear_vert_flags() const
 {   
    // Clear the flag of each vertex of each edge
 
-   for (int i=0; i<_num; i++) {
-      _array[i]->v1()->clear_flag();
-      _array[i]->v2()->clear_flag();
+   for (Bedge_list::size_type i=0; i<size(); i++) {
+      at(i)->v1()->clear_flag();
+      at(i)->v2()->clear_flag();
    }
 }
 
@@ -1306,7 +1311,7 @@ screen(Bvert_list& list, Bvert* v)
 {
    if (v && !v->flag()) {
       v->set_flag();
-      list += v;
+      list.push_back(v);
    }
 }
 
@@ -1320,9 +1325,9 @@ Bedge_list::get_verts() const
 
    // Put verts into output array uniquely:
    Bvert_list ret;
-   for (int i=0; i<_num; i++) {
-      screen(ret, _array[i]->v1());
-      screen(ret, _array[i]->v2());
+   for (Bedge_list::size_type i=0; i<size(); i++) {
+      screen(ret, at(i)->v1());
+      screen(ret, at(i)->v2());
    }
    return ret;
 }
@@ -1338,7 +1343,7 @@ add_face(Bface* f, Bface_list& ret)
 
    if (f && !f->flag()) {
       f->set_flag();
-      ret += f;
+      ret.push_back(f);
    }
 }
 
@@ -1349,7 +1354,7 @@ add_faces(Bface_list* faces, Bface_list& ret)
 
    if (!faces)
       return;
-   for (int i=0; i<faces->num(); i++)
+   for (Bface_list::size_type i=0; i<faces->size(); i++)
       add_face((*faces)[i], ret);
 }
 
@@ -1377,8 +1382,8 @@ Bedge_list::get_faces() const
 
    // Put faces into output array uniquely:
    Bface_list ret;
-   for (int i=0; i<_num; i++)
-      add_faces(_array[i], ret);
+   for (Bedge_list::size_type i=0; i<size(); i++)
+      add_faces(at(i), ret);
    return ret;
 }
 

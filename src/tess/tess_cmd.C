@@ -325,15 +325,15 @@ avg_dist(CBvert_list& a, CBvert_list& b)
    // Given two sets of vertices with the same number in each,
    // return the average distance between matching vertices.
 
-   assert(a.num() == b.num());
+   assert(a.size() == b.size());
 
    if (a.empty())
       return 0;
 
    double ret = 0;
-   for (int i=0; i<a.num(); i++)
+   for (Bvert_list::size_type i=0; i<a.size(); i++)
       ret += a[i]->dist(b[i]);
-   return ret / a.num();
+   return ret / a.size();
 }
 
 inline Bvert_list
@@ -345,8 +345,8 @@ gen_interp_row(CBvert_list& r, CBvert_list& s, double v)
    // interpolation amount v is 0.3, the resulting vertices will
    // be located 0.3 of the way from r to s.
 
-   Bvert_list ret(r.num());
-   assert(r.num() == s.num());
+   Bvert_list ret(r.size());
+   assert(r.size() == s.size());
    if (r.empty())
       return ret;
    BMESH* mesh = r.mesh();
@@ -361,16 +361,16 @@ gen_interp_row(CBvert_list& r, CBvert_list& s, double v)
    // should also avoid generating duplicate internal vertices.
    // (The "ribbon" will be non-manifold in that case!)  we're
    // not handling that case "for now."
-   int n = r.num();
-   bool does_wrap = r.first() == r.last();
+   int n = r.size();
+   bool does_wrap = r.front() == r.back();
    if (does_wrap) {
-      assert(s.first() == s.last()); // The other one should also wrap
+      assert(s.front() == s.back()); // The other one should also wrap
       n--;
    }
    for (int i=0; i<n; i++)
-      ret += mesh->add_vertex(interp(r[i]->loc(), s[i]->loc(), v));
+      ret.push_back(mesh->add_vertex(interp(r[i]->loc(), s[i]->loc(), v)));
    if (does_wrap)
-      ret += ret.first(); // like r and s, we re-use the first one
+      ret.push_back(ret.front()); // like r and s, we re-use the first one
    return ret;
 }
 
@@ -392,7 +392,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    //    b0--------b1--------b2--------b3--------b4---...       
 
    assert(a.forms_chain() && b.forms_chain());
-   assert(a.num() > 1 && a.num() == b.num());
+   assert(a.size() > 1 && a.size() == b.size());
 
    BMESH* mesh = a.mesh();
    assert(mesh != 0 && b.mesh() == mesh && p != 0 && p->mesh() == mesh);
@@ -410,7 +410,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    err_adv(_debug, "CREATE_RIBBONS_CMD::gen_ribbon: using %d vertical segments",
            n);
 
-   vector<double> uvals = make_params(a.num() - 1);
+   vector<double> uvals = make_params(a.size() - 1);
    UVpt_list  prev_uvs = make_uvpt_list(uvals, 0);
    Bvert_list prev_row = b;
 
@@ -426,17 +426,17 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
 
       // Create internal vertices (except for the final row):
       Bvert_list cur_row = (k<n) ? gen_interp_row(b, a, v) : a;
-      assert(cur_row.num() == a.num());
+      assert(cur_row.size() == a.size());
 
       // Create a band of quads from the current and previous rows:
-      for (int i=1; i<cur_row.num(); i++) {
+      for (Bvert_list::size_type i=1; i<cur_row.size(); i++) {
          Bface* f = surf->add_quad(prev_row[i-1], prev_row[i  ],
                                    cur_row [i  ],  cur_row[i-1],
                                    prev_uvs[i-1], prev_uvs[i  ],
                                    cur_uvs [i  ],  cur_uvs[i-1])->face();//, p);
          assert(f && f->is_quad());
-         _ribbon += f;
-         _ribbon += f->quad_partner();
+         _ribbon.push_back(f);
+         _ribbon.push_back(f->quad_partner());
       }
 
       prev_uvs = cur_uvs;

@@ -161,7 +161,7 @@ namespace GtexUtil {
    // Draw a set of Bfaces, for debugging:
    inline GELptr show_tris(CBface_list& faces, CCOLOR& col=Color::yellow) {
       SHOW_TRISptr tris = new SHOW_TRIS();
-      for (int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          tris->add(tri(faces[i]));
       }
       tris->set_fill_color(col);
@@ -191,8 +191,8 @@ namespace GtexUtil {
       double            alpha=1,
       bool              depth_test=true
       ) {
-      GELlist ret(edges.num());
-      for (int i=0; i<edges.num(); i++)
+      GELlist ret(edges.size());
+      for (Bedge_list::size_type i=0; i<edges.size(); i++)
          ret += show(edges[i], width, col, alpha, depth_test);
       return ret;
    }

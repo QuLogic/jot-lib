@@ -201,7 +201,7 @@ avg_strong_edge_len(CBface* f)
 inline void
 set_adjacent_edges(CBvert_list& verts, uchar b)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       verts[i]->get_adj().set_flags(b);
 }
 

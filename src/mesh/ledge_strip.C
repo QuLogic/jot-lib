@@ -86,7 +86,7 @@ LedgeStrip::generate_substrip()
 
    // ... and fill it in
    EdgeStripFilter f;
-   for (int i=0; i<_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++) {
       Bvert *first  = ((Lvert*)_verts[i])->subdiv_vertex();
       Bvert *middle = ((Ledge*)_edges[i])->subdiv_vertex();
       Bvert *last   = ((Lvert*)next_vert(i))->subdiv_vertex();

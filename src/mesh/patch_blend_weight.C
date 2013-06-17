@@ -43,7 +43,7 @@ PatchBlendWeight::clear(CBMESH* mesh)
    // remove all weights stored on the mesh:
    if (mesh) {
       CBvert_list& verts = mesh->verts();
-      for (int i=0; i<verts.num(); i++)
+      for (Bvert_list::size_type i=0; i<verts.size(); i++)
          delete lookup(verts[i]);
    }
 }
@@ -61,7 +61,7 @@ void
 PatchBlendWeight::init(CBvert_list verts) 
 {
    // initialize a set of vertices:
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       init(verts[i]);
 }
 
@@ -96,7 +96,7 @@ PatchBlendWeight::init()
    assert(vert());
    Bface_list star = vert()->get_faces();
    Patch_list patches = Patch_list::get_unique_patches(star);
-   double n = star.num();
+   double n = star.size();
    for (int i=0; i<patches.num(); i++) {
       _map[patches[i]] = star.num_satisfy(PatchFaceFilter(patches[i]))/n;
    }
@@ -116,7 +116,7 @@ PatchBlendWeight::total_weight() const
 void 
 PatchBlendWeight::normalize(CBvert_list& verts)
 {
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       PatchBlendWeight* pbw = get_data(verts[i]);
       assert(pbw);
       pbw->normalize();
@@ -150,12 +150,12 @@ PatchBlendWeight::smooth_weights(Patch* p, int n)
       return;
 
    // compute smoothed weights first...
-   ARRAY<double> new_weights;
-   for (int i=0; i<verts.num(); i++) {
-      new_weights += get_smooth_weight(verts[i], p);
+   vector<double> new_weights;
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
+      new_weights.push_back(get_smooth_weight(verts[i], p));
    }
    // now assign the smoothed weights:
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       set_weight(verts[i], new_weights[i], p);
    }
 }
@@ -170,10 +170,10 @@ PatchBlendWeight::get_smooth_weight(Bvert* v, Patch* p)
       return get_weight(p, v);
    }
    double ret = 0;
-   for (int i=0; i<nbrs.num(); i++) {
+   for (Bvert_list::size_type i=0; i<nbrs.size(); i++) {
       ret += get_weight(p, nbrs[i]);
    }
-   return ret / nbrs.num();
+   return ret / nbrs.size();
 }
 
 void

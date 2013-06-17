@@ -125,7 +125,7 @@ best_match_align(CBedge_list& edges, CGESTUREptr& g)
    Bedge* ret = 0;
    double min_dist = 0;
    int k = mesh->rel_cur_level(); // compare edges mapped to this level
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       double overlap = 0;
       const double MIN_ANGLE = 20; // minimum acceptable dihedral angle: 20 degrees
       if (rad2deg(edges[i]->dihedral_angle()) < MIN_ANGLE)
@@ -181,7 +181,7 @@ find_match_align(CGESTUREptr& g)
       return 0;
    }
 
-   err_adv(debug, "find_match_align: %d top-level faces", faces.num());
+   err_adv(debug, "find_match_align: %d top-level faces", faces.size());
    
    return best_match_align(faces.get_edges(), g);
 }
@@ -203,7 +203,7 @@ best_match_cross(CBedge_list& edges, CGESTUREptr& g)
    Bedge* ret = 0;
    double min_dist = 0;
    int k = mesh->rel_cur_level(); // compare edges mapped to this level
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       const double MIN_ANGLE = 20; // minimum acceptable dihedral angle: 20 degrees
       if (rad2deg(edges[i]->dihedral_angle()) < MIN_ANGLE)
          continue;
@@ -251,7 +251,7 @@ find_match_cross(CGESTUREptr& g)
       return 0;
    }
 
-   err_adv(debug, "find_match_cross: %d top-level faces", faces.num());
+   err_adv(debug, "find_match_cross: %d top-level faces", faces.size());
    
    return best_match_cross(faces.get_edges(), g);
 }
@@ -383,7 +383,7 @@ CREASE_WIDGET::tap_cb(CGESTUREptr& gest, DrawState*& s)
 inline void
 mark_dirty(CBvert_list& verts, int bit = Lvert::SUBDIV_LOC_VALID_BIT)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ((Lvert*)verts[i])->mark_dirty(bit);
 }
 
@@ -403,10 +403,10 @@ CREASE_WIDGET::sharpen_cb(CGESTUREptr& gest, DrawState*& s)
       err_adv(debug, "found edge, but mesh is wrong");
       return 1;
    }
-   if (_strip->edges().contains(e)) {
+   if (std::find(_strip->edges().begin(), _strip->edges().end(), e) != _strip->edges().end()) {
       LMESH* lm = lmesh();
       if (lm)
-         err_adv(debug, "before sharpen: %d dirty verts", lm->dirty_verts().num());
+         err_adv(debug, "before sharpen: %d dirty verts", lm->dirty_verts().size());
       if (e->crease_val()<USHRT_MAX)
          WORLD::add_command(new CREASE_INC_CMD(_strip->edges(), 
             (ushort)_mesh->rel_cur_level(), true));
@@ -415,7 +415,7 @@ CREASE_WIDGET::sharpen_cb(CGESTUREptr& gest, DrawState*& s)
          mark_dirty(_strip->edges().get_verts());
       _mesh->changed(BMESH::CREASES_CHANGED);
       if (lm)
-         err_adv(debug, "after  sharpen: %d dirty verts", lm->dirty_verts().num());
+         err_adv(debug, "after  sharpen: %d dirty verts", lm->dirty_verts().size());
    } else {
       add(e);
    }
@@ -439,7 +439,7 @@ CREASE_WIDGET::smooth_cb(CGESTUREptr& gest, DrawState*& s)
       err_adv(debug, "found edge, but mesh is wrong");
       return 1;
    }
-   if (_strip->edges().contains(e)) {
+   if (std::find(_strip->edges().begin(), _strip->edges().end(), e) != _strip->edges().end()) {
       if (e->crease_val()> 0)
          WORLD::add_command(new CREASE_INC_CMD(_strip->edges(), 
             (ushort)_mesh->rel_cur_level(), false));

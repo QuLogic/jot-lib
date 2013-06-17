@@ -39,6 +39,7 @@
 
 #include <map>
 #include <set>
+#include <vector>
 
 class Patch;
 /**********************************************************************/
@@ -114,19 +115,13 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    /// Faces ofthe current subdivision mesh, if any
    virtual CBface_list& cur_faces()        const { return _faces; }
 
-   // turn on/off indexing in vert, edge, and face lists.
-   // indexing allows O(1) index lookup and removal, but
-   // adds data to simplex data lists:
-   void begin_index(); ///< Turn on indexing in vert, edge and face lists
-   void end_index(); ///< Turn off indexing in vert, edge and face lists
-
    // size of lists:
    /// Number of vertices
-   int    nverts()      const   { return _verts.num(); }
+   int    nverts()      const   { return _verts.size(); }
    /// Number of edges
-   int    nedges()      const   { return _edges.num(); }
+   int    nedges()      const   { return _edges.size(); }
    /// Number of faces
-   int    nfaces()      const   { return _faces.num(); }
+   int    nfaces()      const   { return _faces.size(); }
    /// Number of patches
    int    npatches()    const   { return _patches.num(); }
    /// Is the vertex list empty?
@@ -437,16 +432,16 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    void get_enclosed_verts(CXYpt_list& boundary,
                            Bface* startface,
-                           ARRAY<Bvert*>& ret);
+                           vector<Bvert*>& ret);
 
    void remove_duplicate_vertices(bool keep_vert=1);
 
    /// Returns separate Bface_lists, one for each connected component
    /// of the mesh:
-   ARRAY<Bface_list> get_components() const;
+   vector<Bface_list> get_components() const;
 
    /// split mesh into connected components:
-   virtual ARRAY<BMESH*> split_components();
+   virtual vector<BMESH*> split_components();
 
    void split_patches();
 
@@ -477,8 +472,8 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    // face operations:
    Bvert*  split_face(Bface* face, CWpt &pt);
-   int     split_faces(CXYpt_list&, ARRAY<Bvert*>&, Bface* =0); 
-   void    split_tris(Bface* start_face, Wplane plane, ARRAY<Bvert*>& nv);
+   int     split_faces(CXYpt_list&, vector<Bvert*>&, Bface* =0);
+   void    split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& nv);
 
    //******** SUBDIVISION/EDIT LEVEL ********
 
@@ -532,13 +527,13 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    int set_patch_boundary(int i, int j) const;
 
    bool valid_vert_indices(int i, int j) const {
-      return (_verts.valid_index(i) && _verts.valid_index(j));
+      return (0 <= i && i < (int)_verts.size() && 0 <= j && j < (int)_verts.size());
    }
    bool valid_vert_indices(int i, int j, int k) const {
-      return valid_vert_indices(i,j) && _verts.valid_index(k);
+      return valid_vert_indices(i,j) && 0 <= k && k < (int)_verts.size();
    }
    bool valid_vert_indices(int i, int j, int k, int l) const {
-      return valid_vert_indices(i,j,k) && _verts.valid_index(l);
+      return valid_vert_indices(i,j,k) && 0 <= l && l < (int)_verts.size();
    }
 
    //******** I/O - READ ********
@@ -698,8 +693,8 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    uint   version()     const   { return _version; }
 
    // XXX - static function in bmesh.C, unused elsewhere
-   static void grow_oriented_face_lists(Bface*, ARRAY<Bface*>&,
-                                        ARRAY<Bface*>&);
+   static void grow_oriented_face_lists(Bface*, vector<Bface*>&,
+                                        vector<Bface*>&);
 
    // XXX - not used by anyone, brute force approach
    Bedge* nearest_edge(CWpt&);
@@ -840,7 +835,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    // obsolete?
    void grow_mesh_equivalence_class(
       Bvert*, 
-      ARRAY<Bface*>&, ARRAY<Bedge*>&, ARRAY<Bvert*>&
+      vector<Bface*>&, vector<Bedge*>&, vector<Bvert*>&
       );
 };
 
@@ -909,7 +904,7 @@ class BMESHobs_list : public set<BMESHobs*> {
    void notify_change        (BMESH*, BMESH::change_t)  const;
    void notify_xform         (BMESH*, CWtransf&, CMOD&) const;
    void notify_merge         (BMESH*, BMESH*)           const;
-   void notify_split         (BMESH*, CARRAY<BMESH*>&)  const;
+   void notify_split         (BMESH*, const vector<BMESH*>&) const;
    void notify_subdiv_gen    (BMESH* parent)            const;
    void notify_delete        (BMESH*)                   const;
    void notify_sub_delete    (BMESH*)                   const;
@@ -959,7 +954,7 @@ class BMESHobs {
    virtual void notify_change    (BMESH*, BMESH::change_t)  {}
    virtual void notify_xform     (BMESH*, CWtransf&, CMOD&) {}
    virtual void notify_merge     (BMESH*, BMESH*)           {}
-   virtual void notify_split     (BMESH*, CARRAY<BMESH*>&)  {}
+   virtual void notify_split     (BMESH*, const vector<BMESH*>&) {}
    virtual void notify_subdiv_gen(BMESH*)                   {}
    virtual void notify_delete    (BMESH*)                   {}
    virtual void notify_sub_delete(BMESH*)                   {}
@@ -974,7 +969,7 @@ class BMESHobs {
    static  void broadcast_change        (BMESH*, BMESH::change_t);
    static  void broadcast_xform         (BMESH*, CWtransf& xf, CMOD&);
    static  void broadcast_merge         (BMESH* joined, BMESH* removed);
-   static  void broadcast_split         (BMESH*, CARRAY<BMESH*>&);
+   static  void broadcast_split         (BMESH*, const vector<BMESH*>&);
    static  void broadcast_subdiv_gen    (BMESH*);
    static  void broadcast_delete        (BMESH*);
    static  void broadcast_sub_delete    (BMESH*);

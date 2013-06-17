@@ -24,6 +24,8 @@
 
 #include "bface.H"
 
+#include <vector>
+
 class StripCB;
 /**********************************************************************
  * TriStrip:
@@ -46,12 +48,12 @@ class TriStrip {
 
    bool   orientation()         const { return _orientation;}
    bool   empty()               const { return _verts.empty(); }
-   int    num()                 const { return _verts.num(); }
+   int    num()                 const { return _verts.size(); }
 
    //******** BUILDING ********
    virtual void reset() { _verts.clear(); _faces.clear(); _orientation = 0; }
-   void add(Bvert* v, Bface* f) { _verts += v; _faces += f; }
-   static  void get_strips(Bface*, ARRAY<TriStrip*>&);
+   void add(Bvert* v, Bface* f) { _verts.push_back(v); _faces.push_back(f); }
+   static  void get_strips(Bface*, vector<TriStrip*>&);
 
    //******** DRAWING ********
    virtual void draw(StripCB* cb);

@@ -161,7 +161,7 @@ TriStrip::build(
    if ((opp = start->opposite_face(b)) && is_cleared(opp) &&
       opp->patch() == start->patch()) {
       opp->orient_strip(_orientation ? a : c);
-      stack += opp;
+      stack.push_back(opp);
    }
 
    int i=_orientation;
@@ -177,7 +177,7 @@ TriStrip::build(
       if ((opp = cur->opposite_face(b)) && is_cleared(opp) &&
           opp->patch() == start->patch()) {
          opp->orient_strip(i % 2 ? a : c);
-         stack += opp;
+         stack.push_back(opp);
       }
 
       add(c,cur);
@@ -189,7 +189,7 @@ TriStrip::build(
 void
 TriStrip::get_strips(
    Bface* start,
-   ARRAY<TriStrip*>& strips
+   vector<TriStrip*>& strips
    ) 
 {
    // if starting face was visited already, stop
@@ -201,16 +201,17 @@ TriStrip::get_strips(
    // strips that align with the current one
    static Bface_list stack(1024);
    stack.clear();
-   stack += start;
+   stack.push_back(start);
 
    BMESH* mesh = start->mesh();
 
    while (!stack.empty()) {
-      start = stack.pop();
+      start = stack.back();
+      stack.pop_back();
       if (is_cleared(start)) {
          TriStrip* strip = mesh->new_tri_strip();
          strip->build(start, stack);
-         strips += strip;
+         strips.push_back(strip);
       }
    }
 }
@@ -226,7 +227,7 @@ TriStrip::draw(StripCB* cb)
    //   Temporary check to see if it ever happens (10/2003):
    if (!BMESH::show_secondary_faces() && _faces.has_any_secondary()) {
       err_msg("TriStrip::draw: warning: %d/%d secondary faces",
-              _faces.num_secondary(), _faces.num());
+              _faces.num_secondary(), _faces.size());
       MeshGlobal::select(_faces.secondary_faces());
    }
 
@@ -237,7 +238,7 @@ TriStrip::draw(StripCB* cb)
    if (_orientation)
       cb->faceCB(_verts[0], _faces[0]); // good thing it's not empty
 
-   for (int i=0; i<_verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++)
       cb->faceCB(_verts[i], _faces[i]);
 
    cb->end_faces(this);

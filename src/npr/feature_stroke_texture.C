@@ -295,7 +295,7 @@ FeatureStrokeTexture::draw(CVIEWptr& v)
    _decal_strokes.draw_flat(v);
    _sil_and_crease_tex->draw(v);
 
-   return _patch->faces().num();
+   return _patch->faces().size();
 }
 
 
@@ -427,15 +427,15 @@ FeatureStrokeTexture::read_stream(istream &is, vector<string>& leftover)
 
    DecalLineStroke::set_mesh(0);
 
-   int i;
-
    static IOBlockList blocklist;
+   IOBlockList::size_type i;
 
-   if (blocklist.num() == 0) {
-      blocklist += new IOBlockMeth<FeatureStrokeTexture>("GTEXTURE",
-                   &FeatureStrokeTexture::read_gtexture,  this);
+   if (blocklist.empty()) {
+      blocklist.push_back(new IOBlockMeth<FeatureStrokeTexture>("GTEXTURE",
+                                                                &FeatureStrokeTexture::read_gtexture,
+                                                                this));
    } else {
-      for (i = 0; i < blocklist.num(); i++) {
+      for (i = 0; i < blocklist.size(); i++) {
          ((IOBlockMeth<FeatureStrokeTexture> *) blocklist[i])->set_obj(this);
       }
    }

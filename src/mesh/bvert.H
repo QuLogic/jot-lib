@@ -26,6 +26,8 @@
 #include "mesh/bedge.H"
 #include "mesh/bmesh_curvature.H"
 
+#include <vector>
+
 /**********************************************************************
  * Bvert:
  *
@@ -60,7 +62,7 @@ class Bvert : public Bsimplex {
    NDCZpt  ndc() const;                           ///< NDCZ position
    PIXEL   pix() const   { return mlib::PIXEL(wloc());} ///< position in mlib::PIXEL coords
 
-   int     degree()    const   { return _adj.num(); }   ///< number of edges
+   int     degree()    const   { return _adj.size(); }  ///< number of edges
    CCOLOR& color()     const   { return _color; }       ///< color
    double  alpha()     const   { return _alpha; }       ///< transparency
    bool    has_color() const   { return is_set(VALID_COLOR_BIT); }
@@ -80,7 +82,7 @@ class Bvert : public Bsimplex {
    // Computes an (angle-weighted) average normal from the given
    // set of faces, WRT this vertex. Any face that does not contain
    // this vertex makes no contribution to the final result.
-   Wvec compute_normal(const ARRAY<Bface*>& faces) const;
+   Wvec compute_normal(const vector<Bface*>& faces) const;
 
    /// normal -- i.e. unit length average of adjacent faces:
    ///   (uses angle-weighted face normals)
@@ -107,7 +109,7 @@ class Bvert : public Bsimplex {
    
    /// for a vertex with adjacent crease edges, returns 1 normal
    /// for each set of adjacent faces bounded by crease edges:
-   void get_normals(ARRAY<Wvec>& norms) const;
+   void get_normals(vector<Wvec>& norms) const;
 
    //******** LOCATION, COLOR, CURVATURE, etc. ********
 
@@ -137,7 +139,7 @@ class Bvert : public Bsimplex {
 
    // Neighboring vertex number k:
    Bvert* nbr(int k) const {
-      return _adj.valid_index(k) ? _adj[k]->other_vertex(this) : 0;
+      return (0 <= k && k < (int)_adj.size()) ? _adj[k]->other_vertex(this) : 0;
    }
    // Neighboring vertex along given edge (which must be adjacent to this):
    Bvert* nbr(CBedge* e) const { return e ? e->other_vertex(this) : 0; }
@@ -157,7 +159,7 @@ class Bvert : public Bsimplex {
    //     The exception is get_all_faces().
 
    // Adjacent faces in star of this vertex:
-   void get_faces(ARRAY<Bface*>& ret) const;
+   void get_faces(vector<Bface*>& ret) const;
 
    // like above, but returns the list by copying
    // defined in bface.H
@@ -165,15 +167,15 @@ class Bvert : public Bsimplex {
 
    // Return a list of quads in the star of this vertex.
    // (Each quad is represented by a single Bface -- the "quad rep").
-   void get_quad_faces(ARRAY<Bface*>& ret) const;
+   void get_quad_faces(vector<Bface*>& ret) const;
 
    // Return a list of faces in the star of this vertex,
    // including both faces of every quad adjacent to this vertex.
-   void get_q_faces(ARRAY<Bface*>& ret) const;
+   void get_q_faces(vector<Bface*>& ret) const;
 
    // Return ALL faces incident to the vertex,
    // including faces adjacent to non-manifold ("multi") edges:
-   void  get_all_faces(ARRAY<Bface*>& ret) const;
+   void  get_all_faces(vector<Bface*>& ret) const;
 
    Bface_list get_all_faces() const; // defined in bface.H
 
@@ -184,22 +186,22 @@ class Bvert : public Bsimplex {
    Bedge* lookup_edge(CBvert* v) const {
       if (v == this)
          return 0;  
-      for(int k=0; k<_adj.num(); k++)
-         if(_adj[k]->contains(v))
+      for (Bedge_list::size_type k=0; k<_adj.size(); k++)
+         if (_adj[k]->contains(v))
             return _adj[k];
       return 0;
    }
 
    // tell if this is adjacent to the given vertex:
    bool is_adjacent(CBvert* v) const {
-      for(int k=0; k<_adj.num(); k++)
-         if(v == _adj[k]->other_vertex(this))
+      for (Bedge_list::size_type k=0; k<_adj.size(); k++)
+         if (v == _adj[k]->other_vertex(this))
             return 1;
       return 0;
    }
 
    // Return neighboring vertices in an array
-   void get_nbrs(ARRAY<Bvert*>& nbrs) const;
+   void get_nbrs(vector<Bvert*>& nbrs) const;
 
    // The following assume edges can be put in CCW order,
    // meaning the vertex is either surrounded by faces, or
@@ -217,7 +219,7 @@ class Bvert : public Bsimplex {
    // Return adjacent edges the normal way, unless it's a
    // "multi" vertex; then return primary edges. Used in
    // computing centroids, e.g. for subdivision.
-   void get_manifold_edges(ARRAY<Bedge*>& ret) const;
+   void get_manifold_edges(vector<Bedge*>& ret) const;
 
    // Same as above but returns list by copying
    Bedge_list get_manifold_edges() const {
@@ -233,26 +235,26 @@ class Bvert : public Bsimplex {
    // I.e., neighboring vertices connected to this one by
    // an edge that has one or more adjacent faces with
    // Bface::SECONDARY_BIT not set in its flag.
-   void get_primary_nbrs(ARRAY<Bvert*>& nbrs) const;
+   void get_primary_nbrs(vector<Bvert*>& nbrs) const;
 
    // Get neighbors the normal way, unless it's a "multi"
    // (non-manifold) vertex; then get primary neighbors. Used in
    // computing centroids, e.g. for subdivision.
-   void  get_p_nbrs(ARRAY<Bvert*>& nbrs) const;
+   void  get_p_nbrs(vector<Bvert*>& nbrs) const;
 
    // Same as above but returns list by copying
-   ARRAY<Bvert*> get_p_nbrs() const {
-      ARRAY<Bvert*> ret;
+   vector<Bvert*> get_p_nbrs() const {
+      vector<Bvert*> ret;
       get_p_nbrs(ret);
       return ret;
    }
 
    int p_degree() const {
-      return is_manifold() ? degree() : get_p_nbrs().num();
+      return is_manifold() ? degree() : get_p_nbrs().size();
    }
 
    // Return "quad opposite vertices" in an array
-   void get_q_nbrs(ARRAY<Bvert*>& q) const;
+   void get_q_nbrs(vector<Bvert*>& q) const;
 
    // Given that this vertex lies on a chain of border edges,
    // (with exactly 2 adjacent border edges to this vertex),
@@ -464,6 +466,8 @@ class Bvert : public Bsimplex {
    //******** INTERNAL METHODS ********
    // methods for recomputing cached values when needed:
    void set_normal();
+   // Internal version of get_faces used in other functions.
+   void get_faces(vector<Bface*>&, set<Bface*>&) const;
 };
 
 inline Bedge*
@@ -497,7 +501,7 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
 
    explicit Bvert_list(int n=0)     : SimplexArray<Bvert_list,Bvert*>(n)    {}
    explicit Bvert_list(Bvert* v)    : SimplexArray<Bvert_list,Bvert*>(v)    {}
-   Bvert_list(CARRAY<Bvert*>& list) : SimplexArray<Bvert_list,Bvert*>(list) {}
+   Bvert_list(const vector<Bvert*>& list) : SimplexArray<Bvert_list,Bvert*>(list) {}
 
    //******** STATICS ********
 
@@ -524,24 +528,24 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
    // Clear flags of vertices and adjacent edges and faces
    // (from dimension 0 to 2)
    void clear_flag02() const {
-      for (int i=0; i<_num; i++)
-         _array[i]->clear_flag02();
+      for (Bvert_list::size_type i=0; i<size(); i++)
+         at(i)->clear_flag02();
    }
 
    // Return corresponding list of Wpts (object space)
    Wpt_list pts() const {
-      Wpt_list ret(_num);
-      for (int i=0; i<_num; i++) 
-         ret.push_back(_array[i]->loc());
+      Wpt_list ret(size());
+      for (Bvert_list::size_type i=0; i<size(); i++)
+         ret.push_back(at(i)->loc());
       ret.update_length();
       return ret;
    }
 
    // Return corresponding list of Wpts (world space)
    Wpt_list wpts() const {
-      Wpt_list ret(_num);
-      for (int i=0; i<_num; i++) 
-         ret.push_back(_array[i]->wloc());
+      Wpt_list ret(size());
+      for (Bvert_list::size_type i=0; i<size(); i++)
+         ret.push_back(at(i)->wloc());
       ret.update_length();
       return ret;
    }
@@ -554,7 +558,7 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
 
    // apply a transform to each vertex:
    void transform(CWtransf &xf) {
-      for (int i=0; i<num(); i++)
+      for (Bvert_list::size_type i=0; i<size(); i++)
          (*this)[i]->transform(xf);
    }
 

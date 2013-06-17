@@ -418,20 +418,20 @@ Lface::set_patch(Patch* p)
 }
 
 inline void
-get_subdiv_faces(Lface* f, int lev, ARRAY<Bface*>& faces)
+get_subdiv_faces(Lface* f, int lev, vector<Bface*>& faces)
 {
    if (f) 
       f->append_subdiv_faces(lev, faces);
 }
 
 void 
-Lface::append_subdiv_faces(int lev, ARRAY<Bface*>& faces)
+Lface::append_subdiv_faces(int lev, vector<Bface*>& faces)
 {
    if (lev < 0) {
       err_msg("Lface::append_subdiv_faces: error: bad level: %d", lev);
       return;
    } else if (lev == 0) {
-      faces += this;
+      faces.push_back(this);
    } else {
       get_subdiv_faces(subdiv_face1(),       lev-1, faces);
       get_subdiv_faces(subdiv_face2(),       lev-1, faces);

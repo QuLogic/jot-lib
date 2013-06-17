@@ -67,7 +67,7 @@ class PCell {
 
    //******** TESTS ********
    bool is_empty()           const { return _faces.empty(); }
-   bool contains(Bface* f)   const { return _faces.contains(f); }
+   bool contains(Bface* f)   const { return std::find(_faces.begin(), _faces.end(), f) != _faces.end(); }
 
    //******** GEOMETRY ********
    Wpt center() const;
@@ -107,7 +107,7 @@ class PCell {
    // counts number of corners:
    int num_corners() const {
       return faces().get_boundary().edges().get_verts().
-         filter(PCellCornerVertFilter()).num();
+         filter(PCellCornerVertFilter()).size();
    }
 
  protected:
@@ -170,7 +170,7 @@ class Panel:  public Bsurface {
    static PCell_list find_cells(CBface_list& faces) {
       PCell_list ret;
       set<PCell*> unique;
-      for (int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          PCell* c = find_cell(faces[i]);
          if (c) {
             pair<set<PCell*>::iterator,bool> result;

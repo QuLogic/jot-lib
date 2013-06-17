@@ -35,7 +35,6 @@ SkinMeme::SkinMeme(Skin* skin, Lvert* v, Bsimplex* t) :
    _is_frozen(false),
    _track_filter(&default_filter)
 {
-   _trackers.set_unique();
    add_track_simplex(t);
 }
 
@@ -60,9 +59,14 @@ SkinMeme::set_track_simplex(Bsimplex* s)
    assert(_track_filter);
    if (!s) {
       _trackers.clear();
+      _unique_trackers.clear();
    } else if (!_track_filter->accept(s)) {
       err_adv(debug, "SkinMeme::set_track_simplex: error: filter rejects simplex");
    } else if (is_tracking()) {
+      std::set<Bsimplex*>::iterator it;
+      it = _unique_trackers.find(_trackers[0]);
+      _unique_trackers.erase(it);
+      _unique_trackers.insert(s);
       _trackers[0] = s;
    } else {
       add_track_simplex(s);
@@ -74,7 +78,10 @@ SkinMeme::add_track_simplex(Bsimplex* s)
 {
    assert(_track_filter);
    if (s && _track_filter->accept(s)) {
-      _trackers.add_uniquely(s);
+      pair<std::set<Bsimplex*>::iterator,bool> result;
+      result = _unique_trackers.insert(s);
+      if (result.second)
+         _trackers.push_back(s);
    }
 }
 
@@ -286,8 +293,12 @@ SkinMeme::apply_delt()
 inline void
 add_tracker(Bsimplex* s, CSimplexFilter& f, Bsimplex_list& ret)
 {
-   if (s && f.accept(s))
-      ret.add_uniquely(s);
+   if (s && f.accept(s)) {
+      Bsimplex_list::iterator it;
+      it = std::find(ret.begin(), ret.end(), s);
+      if (it == ret.end())
+         ret.push_back(s);
+   }
 }
 
 Bsimplex_list
@@ -336,7 +347,7 @@ SkinMeme::update_tracker(
 
    assert(_track_filter && trackers.all_satisfy(*_track_filter));
 
-   for (int i=0; i<trackers.num(); i++) {
+   for (Bsimplex_list::size_type i=0; i<trackers.size(); i++) {
       Bsimplex* tracker = trackers[i];
       assert(tracker);
       if (tracker == best_simplex)

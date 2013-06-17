@@ -143,8 +143,8 @@ depth(CWpt& p, CCAMdataptr& camdata)
 inline PIXEL_list
 get_pixels(CBvert_list& verts, ProxySurface* p)
 {
-   PIXEL_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
+   PIXEL_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       ret.push_back(PixelsData::get_pix(verts[i], p));
    }
    return ret;
@@ -178,7 +178,7 @@ ProxySurface::apply_xform()
    PIXEL_list   pixels = get_pixels(verts, this); // their old pixel locations
 
    // compute and apply the transform to each vertex:
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       set_pix(verts[i], this, n + cmult(pixels[i] - o, z));
    }
 
@@ -350,56 +350,51 @@ ProxySurface::trim_proxy_surface()
    //get all the quads
    Bface_list faces = _proxy_mesh->faces();
    //clear out all the markings
-   for(int i=0; i < faces.num(); ++i)
-   {
+   for (Bface_list::size_type i=0; i < faces.size(); ++i) {
       if(faces[i])
          ProxyData::set_mark(faces[i],this, false);
       //else
       //   cerr << "FACE is NULL" << endl;
    }
    //mark all the faces that do not overap bounding box
-   for(int i=0; i < faces.num(); ++i)
-   {
-      if(faces[i]){
+   for (Bface_list::size_type i=0; i < faces.size(); ++i) {
+      if (faces[i]) {
          bool t1 = (is_inside_bounding_box(faces[i]->e1())) ? true : false;
          bool t2 = (is_inside_bounding_box(faces[i]->e2())) ? true : false;
          bool t3 = (is_inside_bounding_box(faces[i]->e3())) ? true : false;
          
          // If all the edges are outside, then mark the face
-         if(!t1 && !t2 && !t3){
+         if (!t1 && !t2 && !t3) {
             //cerr << "we can delete this face" << endl;
             ProxyData::set_mark(faces[i], this, true);
             n++;
          }
-      }else {
+      } else {
          //cerr << "FACE is NULL" << endl;
       }
    }
 
-   if(n < 1)
+   if (n < 1)
       return; 
 
    //for all verts check to see if all the faces that it is attached to has a marked
    Bvert_list verts = _proxy_mesh->verts();
-   for(int i=0; i < verts.num(); ++i)
-   {
-      ARRAY<Bface*> ret;
+   for (Bvert_list::size_type i=0; i < verts.size(); ++i) {
+      vector<Bface*> ret;
       verts[i]->get_quad_faces(ret);
       // Make sure that all adjasent faces need to be deleted
       bool do_it=true;
-      for(int k=0; k < ret.num(); ++k)
-      {
-         if(ret[k]){
+      for (vector<Bface*>::size_type k=0; k < ret.size(); ++k) {
+         if (ret[k]) {
             assert(ret[k]->is_quad());            
-            if(!ProxyData::get_mark(ret[k], this) || !ProxyData::get_mark(ret[k]->quad_partner(), this))
-            {
+            if(!ProxyData::get_mark(ret[k], this) || !ProxyData::get_mark(ret[k]->quad_partner(), this)) {
               // cerr << "vert degree " << verts[i]->p_degree() << endl;
                do_it = false;
                break;
             }
          }
       }
-      if(do_it){
+      if (do_it) {
          UVpt remove_uv;
          UVdata::get_uv(verts[i], remove_uv);
          remove_vert_grid(remove_uv);
@@ -408,20 +403,17 @@ ProxySurface::trim_proxy_surface()
          _proxy_mesh->changed();
       }
    }
+
    //clean up faces
    Bface_list faces2 = _proxy_mesh->faces();
-   for(int i=0; i < faces2.num(); ++i)
-   {
-      if(!(faces2[i]->is_quad()) || !(faces2[i]->quad_partner())){
+   for (Bface_list::size_type i=0; i < faces2.size(); ++i) {
+      if (!(faces2[i]->is_quad()) || !(faces2[i]->quad_partner())) {
          _proxy_mesh->remove_face(faces2[i]);
          _proxy_mesh->changed();
       }
-      
    }
 
    //debug_grid();
-
-   
 }
 
 bool 
@@ -655,10 +647,8 @@ bool
 ProxySurface::baseUVpt(Bface* f, UVpt& uv)
 {
    CBface_list& faces = _proxy_mesh->faces();
-   for(int i=0; i < faces.num(); ++i)
-   {  
-      if(faces[i]->is_quad_rep() && faces[i]==f)
-      {
+   for (Bface_list::size_type i=0; i < faces.size(); ++i) {
+      if (faces[i]->is_quad_rep() && faces[i]==f) {
          UVpt uva, uvb, uvc, uvd;
          UVdata::get_quad_uvs(f, uva, uvb, uvc, uvd);
          UVpt_list uvpts;
@@ -672,7 +662,5 @@ ProxySurface::baseUVpt(Bface* f, UVpt& uv)
       }
    }
    return false;
-   
-
 }
 // end of proxy_surface.C

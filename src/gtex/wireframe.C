@@ -90,7 +90,7 @@ WireframeTexture::draw(CVIEWptr& v)
       if (!BMESH::show_secondary_faces())
          edges.secondary_edges().set_flags(1);
 
-      err_adv(debug, "wireframe: %d edges", edges.num());
+      err_adv(debug, "wireframe: %d edges", edges.size());
 
       // Construct filter that accepts unreached strong edges of
       // this patch:

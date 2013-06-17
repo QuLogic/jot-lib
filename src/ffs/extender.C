@@ -278,7 +278,7 @@ choose_x(CEdgeStrip& strip, Wpt o)
 
    Wvec ret = edges[0]->vec().normalized();
    double min_dot = fabs(ret * e);
-   for (int i = 1; i < edges.num(); i++) {
+   for (Bedge_list::size_type i = 1; i < edges.size(); i++) {
       if (fabs(edges[i]->vec().normalized() * e) < min_dot) {
          ret = edges[i]->vec().normalized();
          min_dot = fabs(ret * e);
@@ -388,7 +388,7 @@ EXTENDER::add(Bface_list faces, double)
    }
 
    // Base areas should match
-   if (!_base1.empty() && _base1.boundary_edges().num() != faces.boundary_edges().num()) {
+   if (!_base1.empty() && _base1.boundary_edges().size() != faces.boundary_edges().size()) {
       err_adv(debug, "EXTENDER::add: boundaries dont match");
       return false;
    }
@@ -731,12 +731,12 @@ EXTENDER::circle_cb(CGESTUREptr& gest, DrawState*& s)
    }
 
    // Remember which selected quad we're actually dealing with:
-   if ((_base1.contains(f) && _base1.num() != 2) ||
-      (_base2.contains(f) && _base2.num() != 2)) {
+   if ((_base1.contains_all(Bface_list(f)) && _base1.size() != 2) ||
+      (_base2.contains_all(Bface_list(f)) && _base2.size() != 2)) {
       err_adv(debug, "EXTENDER::circle_cb: base is not a quad");
       return 1; // This means we used up the gesture
    }
-   bool from_base1 = _base1.contains(f);
+   bool from_base1 = _base1.contains_all(Bface_list(f));
    Bface*& quad = from_base1 ? _base1[0] : _base2[0];
 
    // Convert barycentric coords on the triangle to

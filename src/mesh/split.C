@@ -69,17 +69,17 @@ main(int argc, char *argv[])
    mesh->remove_duplicate_vertices(false); // don't keep the bastards
 
    // Split it:
-   ARRAY<BMESH*> meshes = mesh->split_components();
+   vector<BMESH*> meshes = mesh->split_components();
 
-   err_msg("got %d meshes", meshes.num());
+   err_msg("got %d meshes", meshes.size());
 
-   string out_mesh = mesh_path + "0.sm");
+   string out_mesh = mesh_path + "0.sm";
    cerr << "\nwriting " << out_mesh << endl;
    if (Config::get_var_bool("JOT_RECENTER"))
       mesh->recenter();
    mesh->write_file(out_mesh.c_str());
 
-   for (int i=0; i<meshes.num(); i++) {
+   for (vector<BMESH*>::size_type i=0; i<meshes.size(); i++) {
       char tmp[32];
       sprintf(tmp, "%d", i + 1);
       out_mesh = mesh_path + tmp + string(".sm");

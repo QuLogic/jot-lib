@@ -60,7 +60,7 @@ GTexture::alpha() const
 {
    // include alpha from the patch, if any:
    double a = _patch ? _patch->transp() : 1.0;
-   return a * (_alphas.empty() ? 1.0 : _alphas.last());
+   return a * (_alphas.empty() ? 1.0 : _alphas.back());
 }
 
 // end of file gtexture.C

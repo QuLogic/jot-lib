@@ -230,7 +230,7 @@ inline Bface*
 get_preferred_face(Bvert* v)
 {
    Bface_list faces = v->get_all_faces();
-   for (int i = 0; i < faces.num(); i++)
+   for (Bface_list::size_type i = 0; i < faces.size(); i++)
       if (!is_cap(faces[i]))
          return faces[i];
    return v->get_face();
@@ -245,7 +245,7 @@ get_uv(Bvert* v, UVpt& uv)
    UVpt temp_uv;
    uv[0] = 1000000; // large enough number
    
-   for (int i = 0; i < faces.num(); i++) {
+   for (Bface_list::size_type i = 0; i < faces.size(); i++) {
       if (!is_cap(faces[i])) {
          ret |= UVdata::get_uv(v, faces[i], temp_uv);
          if (temp_uv[0] < uv[0]) {
@@ -279,7 +279,7 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
    // find the 2 candidate neiboring edges in both directions
    Bedge_list star = vert->get_adj();
    Bedge_list cands;
-   for (int i = 0; i < star.num(); i++) {
+   for (Bedge_list::size_type i = 0; i < star.size(); i++) {
       Bvert* temp_v = star[i]->other_vertex(vert);
       has_uv = get_uv(temp_v, uv);
       // candidate should have the same u (or v if _mode is 0) coordinate as
@@ -287,20 +287,20 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
       // in mind that the u coordinates form a closed ring.
       if (has_uv && (fabs(uv[!_mode]-h)<0.001)) {
          if (!(is_cap(star[i]->f1())&&is_cap(star[i]->f2())))
-            cands += star[i];
+            cands.push_back(star[i]);
       }
    } 
    // do some checks
-   if (cands.num() != 2) {
-      if (!(_mode && ((fabs(w-1)<0.001 && dir) || (fabs(w)<0.001 && !dir)) && cands.num()==1)) {
-         if (debug) cerr << "   h: " << h << "; num: " << cands.num() << endl;
+   if (cands.size() != 2) {
+      if (!(_mode && ((fabs(w-1)<0.001 && dir) || (fabs(w)<0.001 && !dir)) && cands.size()==1)) {
+         if (debug) cerr << "   h: " << h << "; num: " << cands.size() << endl;
          return ret;
       }
    }
 
    // decide which candidate to choose based on direction
    Bedge* e = cands[0];
-   if (cands.num() == 2) {
+   if (cands.size() == 2) {
       Bvert* v1 = cands[0]->other_vertex(vert);
       Bvert* v2 = cands[1]->other_vertex(vert);
       UVpt uv1, uv2;
@@ -325,10 +325,10 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
    Bvert* v = vert;
    for (int i = 0; i < n; i++) {
       v = e->other_vertex(v);
-      ret += v;
+      ret.push_back(v);
       star = v->get_adj();
-      int j = 0;
-      for (; j < star.num(); j++) {
+      Bedge_list::size_type j = 0;
+      for (; j < star.size(); j++) {
          Bvert* temp_v = star[j]->other_vertex(v);
          has_uv = get_uv(temp_v, uv);
          if ((fabs(uv[!_mode]-h)<0.001) && star[j] != e) {
@@ -338,7 +338,7 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
             }
          }
       }
-      if (j == star.num()) break;
+      if (j == star.size()) break;
    }
    return ret;
 }
@@ -369,8 +369,8 @@ PROFILE::do_xsec_match(PIXEL_list& pts)
    _mode = 0;
    Bvert_list xsec_ring(v);
    for (int i = 0; i < 100; i++) { // avoid inf loops
-      xsec_ring += n_next_verts(xsec_ring.last(), delta_n, true);
-      if (xsec_ring.last() == v) break;
+      xsec_ring = xsec_ring + n_next_verts(xsec_ring.back(), delta_n, true);
+      if (xsec_ring.back() == v) break;
    }
 
    // the pixel trail should not be too far away from the cross section
@@ -380,7 +380,7 @@ PROFILE::do_xsec_match(PIXEL_list& pts)
          return false;
    
    // add to selection
-   for (int i = 0; i < xsec_ring.num()-1; i++)
+   for (Bvert_list::size_type i = 0; i < xsec_ring.size()-1; i++)
       _selected_edges.add(xsec_ring[i], lookup_edge(xsec_ring[i], xsec_ring[i+1]));   
 
    return true;
@@ -511,8 +511,8 @@ get_neibors(Bface*& f, Bedge*& e)
    Bedge* edge = get_sil_edge(f);
    assert(edge && edge != e);
 
-   ret += f;
-   ret += edge->other_face(f);
+   ret.push_back(f);
+   ret.push_back(edge->other_face(f));
    e = ret[1]->other_edge(edge->other_vertex(edge->shared_vert(e)), edge);
    assert(e);
    f = e->other_face(ret[1]);
@@ -529,30 +529,30 @@ PROFILE::n_next_quads(Bedge* edge, int n, bool dir, bool add_bound)
 
    // find the next n verts first
    Bvert_list vlist1(edge->v1()), vlist2(edge->v2());
-   vlist1 += n_next_verts(vlist1.last(), n, dir);
-   vlist2 += n_next_verts(vlist2.last(), n, dir);
-   int m = min(vlist1.num(), vlist2.num());
-   if (m == vlist1.num())
-      vlist2 = vlist2.extract(0, m);
+   vlist1 = vlist1 + n_next_verts(vlist1.back(), n, dir);
+   vlist2 = vlist1 + n_next_verts(vlist2.back(), n, dir);
+   size_t m = min(vlist1.size(), vlist2.size());
+   if (m == vlist1.size())
+      vlist2.resize(m);
    else
-      vlist1 = vlist1.extract(0, m);
+      vlist1.resize(m);
 
    // four verts form a quad
-   for (int i = 0; i < vlist1.num()-1; i++) {
+   for (Bvert_list::size_type i = 0; i < vlist1.size()-1; i++) {
       Bface* f = NULL;
       f = lookup_face(vlist1[i], vlist1[i+1], vlist2[i]); 
-      if (f) ret += f;
+      if (f) ret.push_back(f);
       f = lookup_face(vlist1[i], vlist1[i+1], vlist2[i+1]);
-      if (f) ret += f;
+      if (f) ret.push_back(f);
       f = lookup_face(vlist1[i], vlist2[i+1], vlist2[i]);
-      if (f) ret += f;
+      if (f) ret.push_back(f);
       f = lookup_face(vlist1[i+1], vlist2[i+1], vlist2[i]);
-      if (f) ret += f;
+      if (f) ret.push_back(f);
    }
 
    // set up boundary
-   if (vlist1.num() != 1) {
-      Bedge* e = lookup_edge(vlist1.last(), vlist2.last());
+   if (vlist1.size() != 1) {
+      Bedge* e = lookup_edge(vlist1.back(), vlist2.back());
       if (e && add_bound) {
          _region_boundary.add(e->v1(), e);
          _boundary_side.push_back(dir);
@@ -584,9 +584,10 @@ PROFILE::select_faces()
       Primitive* p = Primitive::find_controller(e);
       int n = (1 << p->rel_cur_level()) + _n; // default size
       if (UVdata::get_uv(e->v1(), e->f1())[0] == UVdata::get_uv(e->v2(), e->f1())[0]
-         || e->is_weak() || _mode)
-         _selected_region += n_next_quads(e, n+_a, true, true) +
-            n_next_quads(e, n+_b, false, true);
+         || e->is_weak() || _mode) {
+         _selected_region = _selected_region + n_next_quads(e, n+_a, true, true);
+         _selected_region = _selected_region + n_next_quads(e, n+_b, false, true);
+      }
    }
 
    MeshGlobal::select(_selected_region);
@@ -688,11 +689,11 @@ inline void
 make_strip(PIXEL_list pts, Bvert_list chain, int k0, int k1, EdgeStrip& strip)
 {
    assert(chain.forms_chain());
-   assert(chain.valid_index(k0) && chain.valid_index(k1));
+   assert(0 <= k0 && k0 < (int)chain.size() && 0 <= k1 && k1 < (int)chain.size());
    assert(k0 != k1);
    if (k0 > k1) {
-      chain.reverse();
-      int n = chain.num()-1;
+      std::reverse(chain.begin(), chain.end());
+      int n = chain.size()-1;
       k0 = n - k0;
       k1 = n - k1;
    }
@@ -701,9 +702,9 @@ make_strip(PIXEL_list pts, Bvert_list chain, int k0, int k1, EdgeStrip& strip)
       strip.add(chain[i], lookup_edge(chain[i], chain[i+1]));
    }
 
-   if (chain.first() == chain.last()) {
+   if (chain.front() == chain.back()) {
       EdgeStrip alt_strip;
-      for (int i = k1; i < chain.num(); i++)
+      for (int i = k1; i < (int)chain.size(); i++)
          alt_strip.add(chain[i], lookup_edge(chain[i], chain[i+1]));
       for (int i = 0; i < k0; i++)
          alt_strip.add(chain[i], lookup_edge(chain[i], chain[i+1]));
@@ -730,7 +731,7 @@ PROFILE::match_substrip(CPIXEL_list& pts, CBvert_list& chain, EdgeStrip& strip)
    int k0 = get_near_index(chain_path, pts.front(), MAX_DIST);
    int k1 = get_near_index(chain_path, pts.back(),  MAX_DIST);
 
-   if (!(chain.valid_index(k0) && chain.valid_index(k1))) {
+   if (!(0 <= k0 && k0 < (int)chain.size() && 0 <= k1 && k1 < (int)chain.size())) {
       err_adv(debug, "  bad k0/k1: %d/%d", k0, k1);
       return false;
    } if (k0 == k1) {
@@ -826,13 +827,13 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
    // find cap ring
    Bvert_list ring0(v);
    for (int i = 0; i < 100; i++) { // avoid inf loops
-      ring0 += n_next_verts(ring0.last(), 1<<lev, true);
-      if (ring0.last() == v) break;
+      ring0 = ring0 + n_next_verts(ring0.back(), 1<<lev, true);
+      if (ring0.back() == v) break;
    }
 
    // find a control vert of the cap ring
    Bvert* ctrl = NULL;
-   for (int i = 0; i < ring0.num(); i++)
+   for (Bvert_list::size_type i = 0; i < ring0.size(); i++)
       if ((ctrl = ((Lvert*)ring0[i])->ctrl_vert()))
          break;
    if (!ctrl) return false;
@@ -840,11 +841,11 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
    // find cap ring at ctrl level
    Bvert_list verts(ctrl);   
    for (int i = 0; i < 100; i++) { // avoid inf loops
-      verts += n_next_verts(verts.last(), 1, true);
-      if (verts.last() == ctrl) break;
+      verts = verts + n_next_verts(verts.back(), 1, true);
+      if (verts.back() == ctrl) break;
    }
-   verts.pop();
-   if (verts.num() < 3) return false;
+   verts.pop_back();
+   if (verts.size() < 3) return false;
 
    // find the intersection point on the cap
    Wpt o = verts.center();
@@ -854,38 +855,39 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
    if (debug) cerr << "   bc: " << bc << endl;
 
    // set up the target locs for cap ring verts
-   for (int i = 0; i < verts.num(); i++)
+   for (Bvert_list::size_type i = 0; i < verts.size(); i++)
       new_locs.push_back(target0);
 
    // find the area of influence
    _mode = 1;
-   int n = ((_n+_a)/(1<<lev))+1, ring_len = verts.num();
-   Bvert_list affected_rings = n_next_verts(verts.last(), n, true);
+   int n = ((_n+_a)/(1<<lev))+1;
+   Bvert_list::size_type ring_len = verts.size();
+   Bvert_list affected_rings = n_next_verts(verts.back(), n, true);
    if (affected_rings.empty()) {
       n = ((_n+_b)/(1<<lev))+1;
-      affected_rings = n_next_verts(verts.last(), n, false);
+      affected_rings = n_next_verts(verts.back(), n, false);
    }
-   if (debug) cerr << "   found " << affected_rings.num() << " affected rings" << endl;
+   if (debug) cerr << "   found " << affected_rings.size() << " affected rings" << endl;
 
    // define target locs for cap interior verts
    Bedge* e = lookup_edge(verts[0], verts[1]);
    Bface* f = is_cap(e->f1()) ? e->f1() : e->f2();
    Bvert_list interior_verts = 
       Bface_list::reachable_faces(f, !CapFaceBoundaryEdgeFilter()).interior_verts();
-   verts += interior_verts;
-   for (int i = 0; i < interior_verts.num(); i++)
+   verts = verts + interior_verts;
+   for (Bvert_list::size_type i = 0; i < interior_verts.size(); i++)
       new_locs.push_back(target0);
 
    // define target locs for verts influenced by the xform
    _mode= 0;
-   for (int i = 0; i < affected_rings.num(); i++) {
+   for (Bvert_list::size_type i = 0; i < affected_rings.size(); i++) {
       Bvert_list ring = n_next_verts(affected_rings[i], ring_len, true);
-      if (ring.num() != ring_len) return false;
+      if (ring.size() != ring_len) return false;
       Wpt target = bc[0]*ring[0]->loc() + bc[1]*ring[1]->loc() + bc[2]*ring.center();
-      verts += ring;
-      for (int j = 0; j < ring.num(); j++) {
+      verts = verts + ring;
+      for (Bvert_list::size_type j = 0; j < ring.size(); j++) {
          Wvec dir = ring[j]->loc() - target;
-         new_locs.push_back(target + dir*(((double)i+1)/(affected_rings.num()+1)));
+         new_locs.push_back(target + dir*(((double)i+1)/(affected_rings.size()+1)));
       }
    }
 
@@ -903,15 +905,15 @@ get_parents(
    vector<double>&      parent_offsets  // return val
    )
 {
-   assert(children.num() == (int)child_offsets.size());
+   assert(children.size() == child_offsets.size());
    parents.clear();
    parent_offsets.clear();
    if (!LMESH::isa(children.mesh()))
       return;
-   for (int i=0; i<children.num(); i++) {
+   for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
-         parents += p;
+         parents.push_back(p);
          parent_offsets.push_back(child_offsets[i]);
       }
    }
@@ -920,7 +922,7 @@ get_parents(
 bool
 PROFILE::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets)
 {
-   assert(sil_verts.num() == (int)sil_offsets.size());
+   assert(sil_verts.size() == sil_offsets.size());
    if (sil_verts.empty())
       return false;
 
@@ -929,18 +931,18 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets
 
    map<Bvert*, double> os_map;
    map<Bvert*, double>::iterator it;
-   for (int i = 0; i < sil_verts.num(); i++) {
+   for (Bvert_list::size_type i = 0; i < sil_verts.size(); i++) {
       os_map[sil_verts[i]] = sil_offsets[i];
       Bvert_list v_list1 = n_next_verts(sil_verts[i], n+_a, true);
-      for (int j = 0; j < v_list1.num(); j++) {
-         double offset = sil_offsets[i] * cos(((double)(j+1))/v_list1.num() * (M_PI/2));
+      for (Bvert_list::size_type j = 0; j < v_list1.size(); j++) {
+         double offset = sil_offsets[i] * cos(((double)(j+1))/v_list1.size() * (M_PI/2));
          if (os_map.find(v_list1[j])==os_map.end() || fabs(os_map[v_list1[j]])<fabs(offset))
             os_map[v_list1[j]] = offset;
       }
 
       Bvert_list v_list2 = n_next_verts(sil_verts[i], n+_b, false);
-      for (int j = 0; j < v_list2.num(); j++) {
-         double offset = sil_offsets[i] * cos(((double)(j+1))/v_list2.num() * (M_PI/2));
+      for (Bvert_list::size_type j = 0; j < v_list2.size(); j++) {
+         double offset = sil_offsets[i] * cos(((double)(j+1))/v_list2.size() * (M_PI/2));
          if (os_map.find(v_list2[j])==os_map.end() || fabs(os_map[v_list2[j]])<fabs(offset))
             os_map[v_list2[j]] = offset;
       }
@@ -950,7 +952,7 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets
    Bvert_list region_verts;
    vector<double> offsets;
    for (it = os_map.begin(); it != os_map.end(); it++)  {
-      region_verts += it->first;
+      region_verts.push_back(it->first);
       offsets.push_back(it->second);
    }
 
@@ -996,15 +998,15 @@ PROFILE::compute_offsets(CPIXEL_list& pts, CEdgeStrip& sils)
    int count = 0;
    vector<double> offsets;
    Wpt_list new_locs = chain.pts();
-   for (int i=0; i<chain.num(); i++) {
+   for (Bvert_list::size_type i=0; i<chain.size(); i++) {
       offsets.push_back(compute_offset(chain[i], pts, yardstick));
-      if (offsets.back()==0 && offsets.size()!=1 && (int)offsets.size()!=chain.num())
+      if (offsets.back()==0 && offsets.size()!=1 && offsets.size()!=chain.size())
          return false;
       if (offsets.back() > 0) {
          count++;
       }
    }
-   err_adv(debug, "found %d/%d positive offsets", count, chain.num());
+   err_adv(debug, "found %d/%d positive offsets", count, chain.size());
 
    apply_offsets(chain, offsets);
 
@@ -1076,7 +1078,7 @@ find_intersects(CPIXEL_list& pts, Bface_list& faces)
    for (PIXEL_list::size_type i = 0; i < pts.size(); i++) {
       Bface* f = VisRefImage::Intersect(pts[i]);
       if (!f) return false;
-      faces += f;
+      faces.push_back(f);
    }
    return true;
 }
@@ -1100,9 +1102,9 @@ PROFILE::try_extend_boundary(CPIXEL_list& pts)
       return false;
    }
    faces = faces.unique_elements();
-   if (faces.num()>1) faces -= faces[0]; // allow some gesture inaccuracy
+   if (faces.size()>1) faces.erase(faces.begin()); // allow some gesture inaccuracy
 
-   int n = faces.num();
+   int n = faces.size();
    Bedge* e = _region_boundary.edge(loc);
    Bface_list neibors1 = n_next_quads(e, n, false, false);
    Bface_list neibors2 = n_next_quads(e, n, true, false);
@@ -1111,8 +1113,8 @@ PROFILE::try_extend_boundary(CPIXEL_list& pts)
       return false;
    }
 
-   int i1 = neibors1.get_index(faces.last()), 
-      i2 = neibors2.get_index(faces.last());
+   int i1 = neibors1.get_index(faces.back()),
+      i2 = neibors2.get_index(faces.back());
    if (i1!=-1) i1 = i1/2 + 1;
    if (i2!=-1) i2 = i2/2 + 1;
    bool side = _boundary_side[loc];
@@ -1132,8 +1134,8 @@ PROFILE::try_extend_boundary(CPIXEL_list& pts)
 inline void
 show_yardstick(CBvert_list& verts, double yardstick)
 {
-   vector<Wline> lines(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   vector<Wline> lines(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       lines[i] = Wline(verts[i]->loc(), verts[i]->norm()*yardstick);
    GL_VIEW::draw_lines(lines, Color::yellow, 0.8, 1, false);
 }

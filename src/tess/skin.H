@@ -317,7 +317,7 @@ class SkinCurveMap : public Map1D3D {
    virtual double hlen() const;
 
    // Tells how many "samples" are used to describe the curve.
-   virtual int nsamples()       const { return _simps.num(); }
+   virtual int nsamples()       const { return _simps.size(); }
 
    // Return a Wpt_list describing the current shape of the map
    virtual mlib::Wpt_list get_wpts() const;

@@ -144,7 +144,7 @@ min_uv_delt(CBedge_list& edges)
 {
    double ret = 1.0;
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       ret = min(ret, min_uv_delt(edges[i]));
    }
    return ret;
@@ -190,7 +190,7 @@ get_norms(CBvert* v, CSimplexFilter& filter)
 {
    vector<Wvec> ret;
    Bface_list leaders = leading_faces(v, filter); // empty if v == 0
-   for (int i=0; i<leaders.num(); i++)
+   for (Bface_list::size_type i=0; i<leaders.size(); i++)
       ret.push_back(vert_normal(v, leaders[i], filter));
    return ret;
 }

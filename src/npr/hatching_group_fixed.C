@@ -205,11 +205,11 @@ HatchingGroupFixed::put_visibility(TAGformat &d) const
    if (LMESH::isa(m))
       m = ((LMESH*)m)->cur_mesh();
 
-   int k;
+   Bface_list::size_type k;
    vector<int> indices;
    CBface_list& faces = m->faces();
         
-   for (k=0; k< faces.num(); k++) {
+   for (k=0; k< faces.size(); k++) {
       HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(faces[k]);
       if (hsdf) {
          if (hsdf->exists(this))
@@ -681,13 +681,13 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
    }
 
    CBface_list & faces = f->mesh()->faces();
-   for (k=0; (int)k < faces.num(); k++) faces[k]->clear_bit(1);
+   for (k=0; k < faces.size(); k++) faces[k]->clear_bit(1);
 
    int ctr = 0;
         
    ctr = recurse_visibility(f,hull);
 
-   err_mesg(ERR_LEV_INFO, "HatchingGroupFixed:store_visibility() - There were %d faces in the visible region (from %d).", ctr, faces.num());
+   err_mesg(ERR_LEV_INFO, "HatchingGroupFixed:store_visibility() - There were %d faces in the visible region (from %d).", ctr, faces.size());
 
    _group->patch()->changed();
 
@@ -816,21 +816,18 @@ HatchingGroupFixed::recurse_visibility(Bface *f, CNDCpt_list &poly)
 void
 HatchingGroupFixed::clear_visibility(void)
 {
-   int k, ctr=0, kctr=0;
+   vector<Bface*>::size_type k;
+   int ctr=0, kctr=0;
         
-   CARRAY<Bface*>& faces = _patch->cur_faces();
+   const vector<Bface*>& faces = _patch->cur_faces();
 
-   for (k=0; k< faces.num(); k++)
-   {
+   for (k=0; k<faces.size(); k++) {
       HatchingSimplexDataFixed *hsdf = HatchingSimplexDataFixed::find(faces[k]);
-      if (hsdf) 
-      {
-         if(hsdf->exists(this))
-         {
+      if (hsdf) {
+         if(hsdf->exists(this)) {
             hsdf->remove(this);
             ctr++;
-            if (hsdf->num()==0)
-            {
+            if (hsdf->num()==0) {
                faces[k]->rem_simplex_data(hsdf);
                kctr++;
                delete hsdf;

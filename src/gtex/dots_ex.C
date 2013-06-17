@@ -139,28 +139,24 @@ class StripTexCoordsCB3 : public GLStripCB {
          UV_grad gradient;
          UVvec derivative;
 
-         for(int i=0; i<faces.num(); i++)
-            {
-               derivative = att_function->dFdx(faces[i]);
+         for (Bface_list::size_type i=0; i<faces.size(); i++) {
+            derivative = att_function->dFdx(faces[i]);
 
-               gradient.U_grad[0] = derivative[0]; 
-               gradient.V_grad[0] = derivative[1]; 
+            gradient.U_grad[0] = derivative[0];
+            gradient.V_grad[0] = derivative[1];
 
-               derivative = att_function->dFdy(faces[i]);
+            derivative = att_function->dFdy(faces[i]);
 
-               gradient.U_grad[1] = derivative[0]; 
-               gradient.V_grad[1] = derivative[1]; 
+            gradient.U_grad[1] = derivative[0];
+            gradient.V_grad[1] = derivative[1];
 
-               derivative = att_function->dFdz(faces[i]);
+            derivative = att_function->dFdz(faces[i]);
 
-               gradient.U_grad[2] = derivative[0]; 
-               gradient.V_grad[2] = derivative[1]; 
-         
-        
+            gradient.U_grad[2] = derivative[0];
+            gradient.V_grad[2] = derivative[1];
 
-               face_gradient_map[(unsigned int)(faces[i]->index())]= gradient; //uses the face pointer as a key
-
-            }
+            face_gradient_map[(unsigned int)(faces[i]->index())]= gradient; //uses the face pointer as a key
+         }
 
          valid_gradients = true;
       }
@@ -189,33 +185,31 @@ class StripTexCoordsCB3 : public GLStripCB {
          base_3 = base_3.normalized();
 
 
-         for(int i=0; i<faces.num(); i++)
-            {
-               //getting the previously computed face gradients
-               UV_grad grad = face_gradient_map[(unsigned int)(faces[i]->index())];
+         for (Bface_list::size_type i=0; i<faces.size(); i++) {
+            //getting the previously computed face gradients
+            UV_grad grad = face_gradient_map[(unsigned int)(faces[i]->index())];
          
-               U_vec = grad.U_grad;
-               V_vec = grad.V_grad;
+            U_vec = grad.U_grad;
+            V_vec = grad.V_grad;
 
-               //rotate to tangent plane
+            //rotate to tangent plane
 
-               double U_magnitude = U_vec.length();
-               double V_magnitude = V_vec.length();
+            double U_magnitude = U_vec.length();
+            double V_magnitude = V_vec.length();
 
-               U_vec =  Wvec((base_2 * (base_2 * U_vec)) + (base_3 * (base_3 * U_vec)));
-               V_vec =  Wvec((base_2 * (base_2 * V_vec)) + (base_3 * (base_3 * V_vec)));
+            U_vec =  Wvec((base_2 * (base_2 * U_vec)) + (base_3 * (base_3 * U_vec)));
+            V_vec =  Wvec((base_2 * (base_2 * V_vec)) + (base_3 * (base_3 * V_vec)));
 
-               U_vec = U_vec.normalized() * U_magnitude;
-               V_vec = V_vec.normalized() * V_magnitude;
+            U_vec = U_vec.normalized() * U_magnitude;
+            V_vec = V_vec.normalized() * V_magnitude;
 
-               acc_U += U_vec;
-               acc_V += V_vec;
-
-            }
+            acc_U += U_vec;
+            acc_V += V_vec;
+         }
 
          //just simple average for now
-         acc_U = (acc_U / double(faces.num()) );
-         acc_V = (acc_V / double(faces.num()) );
+         acc_U = (acc_U / double(faces.size()) );
+         acc_V = (acc_V / double(faces.size()) );
 
          //cerr << " dV = " << acc_V << endl;
 

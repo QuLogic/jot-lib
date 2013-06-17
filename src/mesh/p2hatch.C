@@ -36,28 +36,30 @@
 using namespace std;
 
 inline void
-delete_images(ARRAY<Image*>& imgs)
+delete_images(vector<Image*>& imgs)
 {
-   while (!imgs.empty())
-      delete imgs.pop();
+   while (!imgs.empty()) {
+      delete imgs.back();
+      imgs.pop_back();
+   }
 }
 
 inline bool
-same_dims(const ARRAY<Image*>& imgs)
+same_dims(const vector<Image*>& imgs)
 {
-   for (int i=1; i<imgs.num(); i++) {
+   for (vector<Image*>::size_type i=1; i<imgs.size(); i++) {
       if (!imgs[i]->same_dims(*imgs[i-1]))
          return false;
    }
    return true;
 }
 
-ARRAY<Image*>
+vector<Image*>
 read_images(int num, char* names[])
 {
-   ARRAY<Image*> ret(num);
+   vector<Image*> ret(num);
    for (int i=0; i<num; i++) {
-      ret += new Image(names[i]);
+      ret[i] = new Image(names[i]);
    }
    if (!same_dims(ret)) {
       cerr << "error: images don't have the same dimensions" << endl;
@@ -83,9 +85,9 @@ modulate_by_tone(Image& img)
 }
 
 void
-modulate_by_tone(const ARRAY<Image*>& imgs)
+modulate_by_tone(const vector<Image*>& imgs)
 {
-   for (int i=0; i<imgs.num(); i++)
+   for (vector<Image*>::size_type i=0; i<imgs.size(); i++)
       modulate_by_tone(*imgs[i]);
 }
 
@@ -107,12 +109,12 @@ get_min(Image& ret, const Image& img)
 }
 
 void
-get_min(Image& ret, const ARRAY<Image*>& imgs)
+get_min(Image& ret, const vector<Image*>& imgs)
 {
-   assert(imgs.num() > 0);
-   ret = *imgs.first();
+   assert(imgs.size() > 0);
+   ret = *imgs.front();
    modulate_by_tone(ret);
-   for (int i=1; i<imgs.num(); i++)
+   for (vector<Image*>::size_type i=1; i<imgs.size(); i++)
       get_min(ret, *imgs[i]);
 }
 
@@ -128,14 +130,14 @@ main(int argc, char *argv[])
       exit(1);
    }
 
-   ARRAY<Image*> imgs = read_images(argc-2, argv+1);
+   vector<Image*> imgs = read_images(argc-2, argv+1);
 
    if (imgs.empty()) {
       cerr << argv[0] << ": could not read images" << endl;
       return 1;
    }
 
-   cerr << argv[0] << ": read " << imgs.num() << " images" << endl;
+   cerr << argv[0] << ": read " << imgs.size() << " images" << endl;
 
    modulate_by_tone(imgs);
 

@@ -46,7 +46,7 @@ VertStrip::draw(StripCB* cb)
    // iterate over the strip.
    cb->begin_verts(this);
 
-   for (int i=0; i<_verts.num(); i++) {
+   for (vector<Bvert*>::size_type i=0; i<_verts.size(); i++) {
       cb->vertCB(_verts[i]);
    }
 

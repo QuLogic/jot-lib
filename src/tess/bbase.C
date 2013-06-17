@@ -113,7 +113,7 @@ Bbase::delete_elements()
    Bvert_list mine;
    for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++)
       if (_vmemes[i]->is_boss())
-         mine += _vmemes[i]->vert();
+         mine.push_back(_vmemes[i]->vert());
 
    // delete vert memes
    _vmemes.delete_all();
@@ -400,7 +400,7 @@ void
 _find_controllers(const T& set, Bbase_list& ret)
 {
    Bbase* bb=0;
-   for (int i=0; i<set.num(); i++)
+   for (size_t i=0; i<set.size(); i++)
       if ((bb = Bbase::find_controller(set[i])))
          ret.add_uniquely(bb);
 }
@@ -453,7 +453,7 @@ Bbase::find_boss_vmemes(CBvert_list& verts)
    // Convenience: lookup boss memes for a whole list of vertices
 
    VertMemeList ret;
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       VertMeme* vm = find_boss_vmeme(verts[i]);
       if (vm)
          ret.push_back(vm);
@@ -467,7 +467,7 @@ Bbase::find_boss_ememes(CBedge_list& edges)
    // Convenience: lookup boss memes for a whole list of edges
 
    EdgeMemeList ret;
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       EdgeMeme* vm = find_boss_ememe(edges[i]);
       if (vm)
          ret.push_back(vm);
@@ -482,7 +482,7 @@ void
 _find_owners(const T& set, Bbase_list& ret)
 {
    Bbase* bb=0;
-   for (int i=0; i<set.num(); i++)
+   for (size_t i=0; i<set.size(); i++)
       if ((bb = Bbase::find_owner(set[i])))
          ret.add_uniquely(bb);
 }
@@ -596,7 +596,7 @@ Bbase::add_face_memes(CBface_list& faces)
       return;
    }
 
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       add_face_meme((Lface*)faces[i]);
 }
 
@@ -608,7 +608,7 @@ Bbase::add_edge_memes(CBedge_list& edges)
       return;
    }
 
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       add_edge_meme((Ledge*)edges[i]);
 }
 

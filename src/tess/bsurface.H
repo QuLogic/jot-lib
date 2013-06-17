@@ -332,7 +332,7 @@ Bsurface::get_surfaces(CBface_list& faces)
 {
    Bsurface_list ret;
    Bsurface* bs = 0;
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       if ((bs = find_owner(faces[i])))
          ret.add_uniquely(bs);
    return ret;

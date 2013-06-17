@@ -86,13 +86,17 @@ get_regions(CBface_list& cregion)
    vector<Bface_list> ret;
    Bface_list region = cregion;
 
-   while(!region.empty()) {
+   while (!region.empty()) {
       region.get_verts().clear_flag02();
       region.set_flags(1);
-      Bface_list comp(region.num());
-      comp.grow_connected(region.first());
+      Bface_list comp(region.size());
+      comp.grow_connected(region.front());
       ret.push_back(comp);
-      region -= comp;
+      for (Bface_list::size_type i=0; i<comp.size(); i++) {
+         Bface_list::iterator it;
+         it = std::find(region.begin(), region.end(), comp[i]);
+         region.erase(it);
+      }
    }
 
    if (debug) cerr << "num of regions:" << ret.size() << endl;
@@ -105,7 +109,7 @@ inline bool
 is_rect(CBface_list& region)
 {
    // need to consist only of quads
-   for (int i = 0; i < region.num(); i++) {
+   for (Bface_list::size_type i = 0; i < region.size(); i++) {
       if (!region[i]->is_quad())
          return false;
    }
@@ -115,7 +119,7 @@ is_rect(CBface_list& region)
 
    // face degree of boundary verts should not exceed 3
    Bvert_list verts = region.get_boundary().verts();
-   for (int i = 0; i < verts.num(); i++) {
+   for (Bvert_list::size_type i = 0; i < verts.size(); i++) {
       if (verts[i]->face_degree(SimplexFlagFilter(1)) > 3)
          return false;
    }
@@ -140,7 +144,7 @@ extract_rect_side(CBface_list& rect, Bedge* edge)
    Bedge* e = edge;
    while (v->face_degree(SimplexFlagFilter(1)) > 2) {
       Bedge_list star = v->get_manifold_edges().filter(SimplexFlagFilter(2));
-      assert(star.num() == 2);
+      assert(star.size() == 2);
       e = (star[0]==e)?star[1]:star[0];
       v = e->other_vertex(v);
    }
@@ -150,7 +154,7 @@ extract_rect_side(CBface_list& rect, Bedge* edge)
    v = e->other_vertex(v);
    while (v->face_degree(SimplexFlagFilter(1)) > 2) {
       Bedge_list star = v->get_manifold_edges().filter(SimplexFlagFilter(2));
-      assert(star.num() == 2);
+      assert(star.size() == 2);
       e = (star[0]==e)?star[1]:star[0];
       ret.add(v, e);
       v = e->other_vertex(v);
@@ -161,7 +165,7 @@ extract_rect_side(CBface_list& rect, Bedge* edge)
 
    Bvert_list bound_verts = rect.get_boundary().verts();
    int loc = bound_verts.get_index(ret.first());
-   bound_verts.shift(-loc);
+   std::rotate(bound_verts.begin(), bound_verts.end() - loc, bound_verts.end());
    assert(bound_verts[0] == ret.first());
    if (bound_verts[1] != ret.vert(1) && bound_verts[1] != ret.last())
       return ret.get_reverse();
@@ -176,16 +180,16 @@ ctrl_faces(Bface_list& region)
 {
    if (!LMESH::isa(region.mesh()))
       return Bface_list();
-   Bface_list ret(region.num()/4);
-   for (int i = 0; i < region.num(); i++) {
+   Bface_list ret(region.size()/4);
+   for (Bface_list::size_type i = 0; i < region.size(); i++) {
       Lface* f = ((Lface*)region[i])->parent();
       if (!f)
          return region;
-      if (!ret.contains(f)) {
-         ARRAY<Bface*> faces;
+      if (!ret.contains_all(Bface_list(f))) {
+         vector<Bface*> faces;
          f->append_subdiv_faces(1, faces);
          if (region.contains_all(faces))
-            ret.add_uniquely(f);
+            ret.push_back(f);
          else
             return region;
       }
@@ -208,7 +212,7 @@ parent_edges(EdgeStrip& strip, int rel_lev)
       Bedge* e = ((Ledge*)(strip.edge(i)))->parent_edge(rel_lev);
       if (!e) 
          return EdgeStrip();
-      if (ret.empty() || e != ret.edges().last()) {
+      if (ret.empty() || e != ret.edges().back()) {
          ret.add(v, e);
          v = e->other_vertex(v);
       }
@@ -270,8 +274,8 @@ ROOF::init(CGESTUREptr& g)
    me->_edges = extract_rect_side(rect_regions[j], bound_strip.edge(seg_index));
    me->_bases = ctrl_faces(rect_regions[j]);
    if (debug)
-      cerr << "has " << rect_regions[j].num() << " selected faces and "
-         << me->_bases.num() << " ctrl faces" << endl;
+      cerr << "has " << rect_regions[j].size() << " selected faces and "
+         << me->_bases.size() << " ctrl faces" << endl;
    int rel_lev = rect_regions[j].mesh()->subdiv_level() - me->_bases.mesh()->subdiv_level();
    me->_edges = parent_edges(me->_edges, rel_lev);
    if (debug)
@@ -323,8 +327,8 @@ ROOF::compute_plane()
    Wvec x = (_edges.last()->loc() - _edges.first()->loc()).normalized();
    Bedge* e = _edges.edge(0);
    Wvec y = e->f1()->norm();
-   if (!_bases.contains(e->f1())) {
-      assert(_bases.contains(e->f2()));
+   if (!_bases.contains_all(Bface_list(e->f1()))) {
+      assert(_bases.contains_all(Bface_list(e->f2())));
       y = e->f2()->norm();
    }
    

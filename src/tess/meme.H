@@ -703,7 +703,7 @@ class VertMemeList : public MemeList<VertMeme> {
    Bvert_list verts() const {
       Bvert_list ret(size());
       for (VertMemeList::size_type i=0; i<size(); i++)
-         ret += (*this)[i]->vert();
+         ret.push_back((*this)[i]->vert());
       return ret;
    }
    Wpt centroid()  const { return verts().center(); }

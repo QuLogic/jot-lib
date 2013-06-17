@@ -93,7 +93,7 @@ class Ledge : public Bedge {
    // *relative* to the level of this edge. (Level must be >= 0).
    // E.g. level 1 means one level down the subdivision hierarchy.
    // The returned edges run in the direction of v1 to v2.
-   bool append_subdiv_edges(int lev, ARRAY<Bedge *> &edges); 
+   bool append_subdiv_edges(int lev, vector<Bedge *> &edges);
 
    // Similar to append_subdiv_edges(), but returns the
    // ordered list of subdiv verts at the given level lev >= 0:

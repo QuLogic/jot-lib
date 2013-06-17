@@ -135,7 +135,7 @@ Bsurface::delete_elements()
    Bvert_list mine;
    for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++)
       if (_vmemes[i]->is_boss())
-         mine += _vmemes[i]->vert();
+         mine.push_back(_vmemes[i]->vert());
 
    // delete vert memes
    _vmemes.delete_all();
@@ -147,7 +147,7 @@ Bsurface::delete_elements()
    Bedge_list mine_e;
    for (EdgeMemeList::size_type i = 0; i < _ememes.size(); i++)
       if (_ememes[i]->is_boss())
-         mine_e += _ememes[i]->edge();
+         mine_e.push_back(_ememes[i]->edge());
    _ememes.delete_all();
    _mesh->remove_edges(mine_e);
 
@@ -293,7 +293,7 @@ Bsurface::add_face_memes(CBface_list& faces)
       err_msg("Bsurface::add_face_memes: error: bad mesh");
       return;
    }
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       add_face_meme((Lface*)faces[i]);
 }
 
@@ -696,7 +696,7 @@ vertexCB(void* vdata)
 {
    Bvert* v = (Bvert*)vdata;
 
-   if (tess_data.num() == 2) {
+   if (tess_data.size() == 2) {
       if (tess_data[0] && tess_data[1] && v) {
          // we add memes just to the newly created edges
          // (not existing boundary edges, in particular),
@@ -712,7 +712,7 @@ vertexCB(void* vdata)
       }
       tess_data.clear();
    } else {
-      tess_data += v;
+      tess_data.push_back(v);
    }
 }
 
@@ -754,14 +754,14 @@ Bsurface::tessellate(const vector<Bvert_list>& contours)
    tess_data.set_surface(this);
 
    vector<Bvert_list>::size_type i;
-   int j;
+   Bvert_list::size_type j;
 
    //----------------------------------------------------------------
    // XXX - hack to tell GLU the plane so it won't crash like a ninny
    Wplane   P;
    Wpt_list pts;
    for (i=0; i<contours.size(); i++)
-      for (j=0; j<contours[i].num(); j++)
+      for (j=0; j<contours[i].size(); j++)
          pts.push_back(contours[i][j]->loc());
    // calculate the plane
    pts.update_length();
@@ -776,7 +776,7 @@ Bsurface::tessellate(const vector<Bvert_list>& contours)
    
    for (i=0; i<contours.size(); i++) {
       gluTessBeginContour(tess_data.tess());
-      for (j=0; j<contours[i].num(); j++) {
+      for (j=0; j<contours[i].size(); j++) {
          Bvert* bv = contours[i][j];
          gluTessVertex(tess_data.tess(), 
                        (GLdouble*)(bv->loc().data()), bv);

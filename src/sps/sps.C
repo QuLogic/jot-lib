@@ -106,7 +106,7 @@ sps_real(CBface_list& input_faces,
    end = clock();
    duration = (double)(end - start) / CLOCKS_PER_SEC;
    err_adv(debug, "step 3 time: %f", duration);   
-   err_adv(debug, "no of points: %d", flist.num());
+   err_adv(debug, "no of points: %d", flist.size());
 
    return root;
 }
@@ -135,9 +135,9 @@ class Priority{
 inline Wpt_list
 get_pts(Bface_list& flist, vector<Wvec>& blist)
 {
-   assert(flist.num() == (int)blist.size());
+   assert(flist.size() == blist.size());
    Wpt_list pts;
-   for (int i = 0; i < flist.num(); i++) {
+   for (Bface_list::size_type i = 0; i < flist.size(); i++) {
       Wpt pt;
       flist[i]->bc2pos(blist[i], pt);
       pts.push_back(pt);
@@ -148,7 +148,7 @@ get_pts(Bface_list& flist, vector<Wvec>& blist)
 void 
 remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<OctreeNode*>& t)
 {
-   assert(flist.num() == (int)blist.size());
+   assert(flist.size() == blist.size());
    Wpt_list pts = get_pts(flist, blist);
    vector< list<int> > N;
    vector<bool> to_remove;
@@ -211,9 +211,9 @@ remove_nodes(Bface_list& flist, vector<Wvec>& blist, double min_dist, vector<Oct
    vector<Wvec> btemp(blist);
    flist.clear();
    blist.clear();
-   for (int i = 0; i < ftemp.num(); i++) {
+   for (Bface_list::size_type i = 0; i < ftemp.size(); i++) {
       if (!to_remove[i]) {
-         flist += ftemp[i];
+         flist.push_back(ftemp[i]);
          blist.push_back(btemp[i]);
       }
    }
@@ -285,9 +285,9 @@ visit(OctreeNode* node,
          // subdivision
          vector<QuadtreeNode*> fs;
          Bface_list temp;
-         for (int i = 0; i < node->intersects().num(); i++) {
+         for (Bface_list::size_type i = 0; i < node->intersects().size(); i++) {
             Bface* f = node->intersects()[i];
-            temp += f;
+            temp.push_back(f);
             fs.push_back(new QuadtreeNode(f->v1()->loc(), f->v2()->loc(), f->v3()->loc()));
             fs.back()->build_quadtree(node, regularity);
             fs.back()->set_terms();
@@ -301,7 +301,7 @@ visit(OctreeNode* node,
 
          //set node face
          Bface_list ftemp;
-         ftemp += temp[t];
+         ftemp.push_back(temp[t]);
          node->set_face(ftemp);
 
          // pick a point
@@ -310,7 +310,7 @@ visit(OctreeNode* node,
             Wvec bc;
             temp[t]->project_barycentric(fs[t]->terms()[p]->urand_pick(), bc);
             blist.push_back(bc);
-            flist += temp[t];
+            flist.push_back(temp[t]);
             node->set_point(bc);
          }
 
@@ -433,7 +433,8 @@ OctreeNode::build_octree(int height)
    if (_leaf || _height == height) 
       return;
 
-   int i, j;
+   int i;
+   Bface_list::size_type  j;
    Wpt_list pts;
    points(pts);
 
@@ -442,17 +443,17 @@ OctreeNode::build_octree(int height)
                                     _height+1, this);
    }
 
-   for (j = 0; j < _intersects.num(); j++) {
+   for (j = 0; j < _intersects.size(); j++) {
       Bface* f = _intersects[j];
 
       for (i = 0; i < 8; i++) {
          OctreeNode* n = _children[i];
          if (n->contains(f->v1()->loc()) && n->contains(f->v2()->loc())
              && n->contains(f->v3()->loc())) {
-            n->intersects() += f;
+            n->intersects().push_back(f);
             break;
          } else if (n->overlaps(bface_bbox(f))) {
-            n->intersects() += f;
+            n->intersects().push_back(f);
          }
       }
    }

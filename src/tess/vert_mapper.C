@@ -23,25 +23,17 @@ static bool debug = Config::get_var_bool("DEBUG_VERT_MAPPER",false);
 VertMapper::VertMapper(bool dual) :
    _dual(dual)
 {
-   _a_verts.begin_index();
-   if (_dual)
-      _b_verts.begin_index();
 }
 
 VertMapper::VertMapper(CBvert_list& A, CBvert_list& B, bool dual) :
    _dual(dual)
 {
-   _a_verts.begin_index();
-   if (_dual)
-      _b_verts.begin_index();
-
    set(A,B);
 }
 
 VertMapper::VertMapper(CVertMapper& mapper) :
    _dual(false)
 {
-   _a_verts.begin_index();
    *this = mapper;
 }
 
@@ -49,9 +41,7 @@ VertMapper&
 VertMapper::operator=(CVertMapper& mapper)
 {
    if (&mapper != this) {
-      if (_dual) _b_verts.end_index();
       _dual = mapper._dual;
-      if (_dual) _b_verts.begin_index();
       set(mapper.A(), mapper.B());
    }
    return *this;
@@ -60,8 +50,8 @@ VertMapper::operator=(CVertMapper& mapper)
 bool
 VertMapper::set(CBvert_list& A, CBvert_list& B)
 {
-   if (A.num() != B.num()) {
-      err_msg("VertMapper::set: error: unequal sizes: %d, %d", A.num(), B.num());
+   if (A.size() != B.size()) {
+      err_msg("VertMapper::set: error: unequal sizes: %d, %d", A.size(), B.size());
       return false;
    }
    if (A.has_duplicates()) {
@@ -80,8 +70,8 @@ VertMapper::set(CBvert_list& A, CBvert_list& B)
 bool
 VertMapper::add(CBvert_list& A, CBvert_list& B)
 {
-   if (A.num() != B.num()) {
-      err_msg("VertMapper::add: error: unequal sizes: %d, %d", A.num(), B.num());
+   if (A.size() != B.size()) {
+      err_msg("VertMapper::add: error: unequal sizes: %d, %d", A.size(), B.size());
       return false;
    }
    if (A.has_duplicates()) {
@@ -105,16 +95,16 @@ VertMapper::add(Bvert* a, Bvert* b)
       err_msg("VertMapper::add: error: null vert(s)");
       return false;
    }
-   if (_a_verts.contains(a)) {
+   if (std::find(_a_verts.begin(), _a_verts.end(), a) != _a_verts.end()) {
       err_msg("VertMapper::add: error: 'from' vert is duplicate");
       return false;
    }
-   if (_dual && _b_verts.contains(b)) {
+   if (_dual && std::find(_b_verts.begin(), _b_verts.end(), b) != _b_verts.end()) {
       err_msg("VertMapper::add: error: 'to' vert is duplicate");
       return false;
    }
-   _a_verts += a;
-   _b_verts += b;
+   _a_verts.push_back(a);
+   _b_verts.push_back(b);
    return true;
 }
 
@@ -126,10 +116,10 @@ VertMapper::map_verts(CBvert_list& in, map_vert_meth_t fn) const
    Bvert_list ret;
    if (in.empty())
       return ret;    // "success"
-   for (int i=0; i<in.num(); i++) {
+   for (Bvert_list::size_type i=0; i<in.size(); i++) {
       Bvert* v = (this->*fn)(in[i]);
       if (v) {
-         ret += v;
+         ret.push_back(v);
       } else {
          return Bvert_list();
       }
@@ -145,10 +135,10 @@ VertMapper::map_edges(CBedge_list& in, map_edge_meth_t fn) const
    Bedge_list ret;
    if (in.empty())
       return ret;    // "success"
-   for (int i=0; i<in.num(); i++) {
+   for (Bedge_list::size_type i=0; i<in.size(); i++) {
       Bedge* e = (this->*fn)(in[i]);
       if (e) {
-         ret += e;
+         ret.push_back(e);
       }
    }
    return ret;
@@ -162,10 +152,10 @@ VertMapper::map_faces(CBface_list& in, map_face_meth_t fn) const
    Bface_list ret;
    if (in.empty())
       return ret;    // "success"
-   for (int i=0; i<in.num(); i++) {
+   for (Bface_list::size_type i=0; i<in.size(); i++) {
       Bface* f = (this->*fn)(in[i]);
       if (f) {
-         ret += f;
+         ret.push_back(f);
       }
    }
    return ret;

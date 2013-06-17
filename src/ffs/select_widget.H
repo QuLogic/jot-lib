@@ -120,8 +120,8 @@ class SELECT_WIDGET : public DrawWidget {
 
    // slash select variables
    Bface_list			select_list;    //!< preliminary selection list
-   int					end_face; //!< zero means all the way around
-   int					pattern;
+   size_t				end_face; //!< zero means all the way around
+   size_t				pattern;
    bool					pattern_array[MAX_PATTERN_SIZE];
 
    static SELECT_WIDGETptr  _instance;

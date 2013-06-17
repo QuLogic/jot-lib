@@ -26,6 +26,8 @@
 #include "disp/view.H"
 #include "stripcb.H"
 
+#include <vector>
+
 class Patch;
 class GTexture;
 typedef const GTexture CGTexture;
@@ -182,7 +184,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
       if (_alphas.empty()) {
          push_alpha(a);
       } else {
-         _alphas.last() = a;
+         _alphas.back() = a;
          gtextures().set_alpha(a);
       }
    }
@@ -208,11 +210,11 @@ class GTexture : public DATA_ITEM, public RefImageClient {
    // push_alpha() and pop_alpha() exist as an alternative to adding
    // an alpha parameter to the regular draw() method:
    virtual void push_alpha(double a)  {
-      _alphas += a;
+      _alphas.push_back(a);
       gtextures().push_alpha(a);
    }
    virtual void pop_alpha () {
-      _alphas.pop();
+      _alphas.pop_back();
       gtextures().pop_alpha();
    }
 
@@ -273,7 +275,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
 
    // for drawing the texture with a specified amount of
    // transparency thrown in:
-   ARRAY<double> _alphas;
+   vector<double> _alphas;
 
    // optional (usually nil) "controlling" texture that this one
    // defers to:

@@ -36,6 +36,7 @@
 
 #include "bface.H"
 
+#include <vector>
 
 /*****************************************************************
  * UVMapping
@@ -48,7 +49,7 @@ class UVMapping {
 
    /******** MEMBERS VARIABLES ********/
 
-   ARRAY<ARRAY<Bface*>*>        _mapping;
+   vector<vector<Bface*>*>      _mapping;
    Bface*                       _seed_face;
    int                          _face_cnt;
    int                          _bin_cnt;

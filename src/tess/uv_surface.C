@@ -461,7 +461,7 @@ UVsurface::apply_xf(CWtransf& xf, CMOD& mod)
 inline bool
 contained_face(Bface* f, CBface_list& faces)
 {
-   return f && faces.contains(f);
+   return f && std::find(faces.begin(), faces.end(), f) != faces.end();
 }
 
 inline Bface*
@@ -474,9 +474,9 @@ internal_face(Bvert* v1, Bvert* v2, CBface_list& enclosed_faces)
    assert(v1 && v2);
    Bedge* e = v1->lookup_edge(v2);
    assert(e);
-   if (e->f1() && enclosed_faces.contains(e->f1()))
+   if (e->f1() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f1()) != enclosed_faces.end())
       return e->f1();
-   if (e->f2() && enclosed_faces.contains(e->f2()))
+   if (e->f2() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f2()) != enclosed_faces.end())
       return e->f2();
    return 0;
 }
@@ -507,9 +507,9 @@ external_face(Bvert* v1, Bvert* v2, CBface_list& enclosed_faces)
    assert(v1 && v2);
    Bedge* e = v1->lookup_edge(v2);
    assert(e);
-   if (e->f1() && !enclosed_faces.contains(e->f1()))
+   if (e->f1() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f1()) == enclosed_faces.end())
       return e->f1();
-   if (e->f2() && !enclosed_faces.contains(e->f2()))
+   if (e->f2() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f2()) == enclosed_faces.end())
       return e->f2();
    return 0;
 }
@@ -525,7 +525,7 @@ is_inconsistent_wrt_external_surface(
 
    if (!bcurve) return false;
    Bvert_list verts = bcurve->verts();
-   assert(verts.num() > 1);
+   assert(verts.size() > 1);
    Bvert *v1 = verts[0], *v2 = verts[1];
 
    Bface* f = external_face(v1, v2, enclosed_faces);
@@ -626,7 +626,7 @@ UVsurface::build_revolve(
    if (need_reverse) {
       err_adv(debug, "build_revolve: reversing curve map");
       bot_map = ReverseMap1D3D::get_reverse_map(bot_map);
-      bot_verts.reverse();
+      std::reverse(bot_verts.begin(), bot_verts.end());
    }
    if (bcurve->is_embedded_any_level()) {
       // Enclosed portion of surface gets pushed down to be a
@@ -678,7 +678,7 @@ UVsurface::build_revolve(
       Lvert* v = (Lvert*)bcurve->mesh()->add_vertex(top_pt);
       tpoint = new Bpoint(v, UVpt(0,1), tube_map);
       points += tpoint;
-      top_verts += v;
+      top_verts.push_back(v);
       if (cmd) cmd->add(new SHOW_BBASE_CMD(tpoint));
    } else {
       // Make the top curve to resemble the bottom one
@@ -707,7 +707,7 @@ UVsurface::build_revolve(
       assert(tube_mesh && tube_mesh->subdiv_level() == abs_k);
       get_subdiv_chain(bot_verts, k, bot_sub_verts);
       if (is_cone_top)
-         top_sub_verts += ((Lvert*)top_verts[0])->subdiv_vert(k);
+         top_sub_verts.push_back(((Lvert*)top_verts[0])->subdiv_vert(k));
       else
          get_subdiv_chain(top_verts, k, top_sub_verts);
    } else {
@@ -720,7 +720,7 @@ UVsurface::build_revolve(
    UVsurface* ret = new UVsurface(tube_map, tube_mesh);
    surfs += ret;
 
-   int ncols = bot_sub_verts.num();
+   int ncols = bot_sub_verts.size();
    int nrows = vvals.size();
 
    // Make a 2D array of vertices and their uv-coords:
@@ -736,7 +736,7 @@ UVsurface::build_revolve(
    for (int j=1; j<nrows; j++) {
       verts.push_back((j == nrows-1) ? top_sub_verts : Bvert_list());
       uvpts.push_back(UVpt_list());
-      if (verts[j].num() == 1) {
+      if (verts[j].size() == 1) {
          // cone top
          assert(j == nrows-1 && is_cone_top);
          err_adv(debug, "build_revolve: creating cone top");
@@ -760,7 +760,7 @@ UVsurface::build_revolve(
    if (!is_cone_top) {
       // Slap on a cap at level 0 relative to the two curves
       Bvert_list final = top_verts; // Get the last row, 
-      final.pop();                  // sans the duplicate vertex at the end:
+      final.pop_back();             // sans the duplicate vertex at the end:
       // XXX - use action
       top = Panel::create(final);
       if (top) {
@@ -887,30 +887,30 @@ UVsurface::build_coons_patch(
   if ( ab->b1() != a ) {
     c1 = ReverseMap1D3D::get_reverse_map( c1 );
     ReverseMap1D3D::reverse_tvals(c1_uvals);
-    c1_verts.reverse();
+    std::reverse(c1_verts.begin(), c1_verts.end());
   }
   if ( bc->b1() != b ) {
     d2 = ReverseMap1D3D::get_reverse_map( d2 );
     ReverseMap1D3D::reverse_tvals(d2_vvals);
-    d2_verts.reverse();
+    std::reverse(d2_verts.begin(), d2_verts.end());
   }
   if ( cd->b1() != d ) {
     c2 = ReverseMap1D3D::get_reverse_map( c2 );
     ReverseMap1D3D::reverse_tvals(c2_uvals);
-    c2_verts.reverse();
+    std::reverse(c2_verts.begin(), c2_verts.end());
   }
   if ( da->b1() != a ) {
     d1 = ReverseMap1D3D::get_reverse_map( d1 );
     ReverseMap1D3D::reverse_tvals(d1_vvals);
-    d1_verts.reverse();
+    std::reverse(d1_verts.begin(), d1_verts.end());
   }
 
   CoonsPatchMap* coons = new CoonsPatchMap( c1, c2, d1, d2 );
 
    UVsurface* ret = new UVsurface(coons, a->mesh());
 
-   int ncols = c1_verts.num();
-   int nrows = d1_verts.num();
+   int ncols = c1_verts.size();
+   int nrows = d1_verts.size();
 
    // Make a 2D array of vertices and their uv-coords:
    vector<Bvert_list> verts(nrows);
@@ -1081,11 +1081,11 @@ UVsurface::build_row(
 
    bool build_verts = true;
    if (!verts.empty()) {
-      assert(verts.num() == n);
+      assert((int)verts.size() == n);
       build_verts = false;
    } else {
       verts.clear();
-      verts.realloc(n);
+      verts.reserve(n);
    }
    uvs.clear();
    uvs.reserve(n);
@@ -1096,16 +1096,16 @@ UVsurface::build_row(
          // Last one: no need to create a meme, just
          // copy the first vertex to the last slot:
          if (build_verts)
-            verts += verts[0];
+            verts.push_back(verts[0]);
       } else {
          if (build_verts) {
             // Don't really have to set position now since memes will do it:
             if ( i == 0 && first_v )
-               verts += first_v;
+               verts.push_back(first_v);
             else if ( i == n-1 && last_v )
-               verts += last_v;
+               verts.push_back(last_v);
             else 
-               verts += _mesh->add_vertex(_map->map(uvs.back()));
+               verts.push_back(_mesh->add_vertex(_map->map(uvs.back())));
          }
          new UVmeme(this, (Lvert*)verts[i], uvs[i]);
       }
@@ -1118,9 +1118,9 @@ UVsurface::add_memes(CBvert_list& verts, CUVpt_list& uvs)
    if (verts.empty())
       return;
    assert(verts.mesh() == _mesh);
-   assert(verts.num() == (int)uvs.size());
+   assert(verts.size() == uvs.size());
 
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       if (!find_meme(verts[i]))
          new UVmeme(this, (Lvert*)verts[i], uvs[i]);
 }
@@ -1145,9 +1145,9 @@ UVsurface::build_band(
    //
    //   As shown, surface normal points toward you.
 
-   assert(p.num() == c.num() && p.num() == (int)puv.size() && c.num() == (int)cuv.size());
-   int n = c.num();
-   for (int i=0; i<n-1; i++) {
+   assert(p.size() == c.size() && p.size() == puv.size() && c.size() == cuv.size());
+   Bvert_list::size_type n = c.size();
+   for (size_t i=0; i<n-1; i++) {
       add_quad(  p[i],   p[i+1],   c[i+1],   c[i],
                puv[i], puv[i+1], cuv[i+1], cuv[i]);
    }
@@ -1178,9 +1178,9 @@ UVsurface::build_fan(
    //   As shown, surface normal points toward you.
    */
 
-   assert(r.num() > 2 && r.first() == r.last() && r.num() == (int)ruv.size());
-   int n = r.num();
-   for (int i=0; i<n-1; i++) {
+   assert(r.size() > 2 && r.front() == r.back() && r.size() == ruv.size());
+   Bvert_list::size_type n = r.size();
+   for (size_t i=0; i<n-1; i++) {
       add_face(  r[i],   r[i+1],   c,
                ruv[i], ruv[i+1], cuv); 
    }

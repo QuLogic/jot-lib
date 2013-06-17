@@ -56,7 +56,7 @@ main(int argc, char *argv[])
    for (z=0; z<img.height(); z++) {
       top_verts[z] = Bvert_list();
       for (x=0; x<img.width(); x++) {
-         top_verts[z] += mesh->add_vertex(Wpt(x,img.pixel_grey_dbl(x,z),z));
+         top_verts[z].push_back(mesh->add_vertex(Wpt(x,img.pixel_grey_dbl(x,z),z)));
       }
    }
 
@@ -75,7 +75,7 @@ main(int argc, char *argv[])
       for (z=0; z<img.height(); z++) {
          bot_verts[z] = Bvert_list();
          for (x=0; x<img.width(); x++) {
-            bot_verts[z] += mesh->add_vertex(Wpt(x,-1,z));
+            bot_verts[z].push_back(mesh->add_vertex(Wpt(x,-1,z)));
          }
       }
       // create faces:

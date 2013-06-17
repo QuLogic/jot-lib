@@ -174,7 +174,7 @@ Lpatch::cur_verts() const
    assert(_mesh);
 
    // Short-cut if patch is whole mesh
-   if (_mesh->nfaces() == _faces.num() &&
+   if (_mesh->nfaces() == (int)_faces.size() &&
        !(_mesh->is_polylines() || _mesh->is_points()))
       return lmesh()->cur_mesh()->verts();
 
@@ -189,12 +189,12 @@ Lpatch::cur_edges() const
    assert(_mesh);
 
    // Short-cut if patch is whole mesh
-   if (_mesh->nfaces() == _faces.num() && !_mesh->is_polylines())
+   if (_mesh->nfaces() == (int)_faces.size() && !_mesh->is_polylines())
       return lmesh()->cur_mesh()->edges();
 
    if (debug)
       err_msg("Lpatch: level %d, faces %d, edges %d",
-              subdiv_level(), _faces.num(), cur_faces().get_edges().num());
+              subdiv_level(), _faces.size(), cur_faces().get_edges().size());
 
    return cur_faces().get_edges();
 }
@@ -211,7 +211,7 @@ Lpatch::clear_subdiv_strips(int /* level */)
    // strips at all levels below the top.
 
    if (!_tri_strips_dirty) {
-      for (int i=0; i<_tri_strips.num(); i++)
+      for (vector<TriStrip*>::size_type i=0; i<_tri_strips.size(); i++)
          lstrip(i)->delete_substrips();
    }
 }

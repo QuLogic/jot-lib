@@ -335,7 +335,7 @@ class Bpoint_list : public _Bbase_list<Bpoint_list,Bpoint> {
    Bvert_list get_verts() const {
       Bvert_list ret(num());
       for (int i=0; i<num(); i++)
-         ret += _array[i]->vert();
+         ret.push_back(_array[i]->vert());
       return ret;
    }
 
@@ -358,7 +358,7 @@ Bpoint::get_points(CBvert_list& verts)
 {
    Bpoint_list ret;
    Bpoint* bp = 0;
-   for (int i=0; i<verts.num(); i++)
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       if ((bp = lookup(verts[i])))
          ret += bp;
    return ret;

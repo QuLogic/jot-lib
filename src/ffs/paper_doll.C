@@ -53,9 +53,9 @@ are_all_bsurfaces(const Bsurface_list& surfs)
 inline Bvert_list
 copy_verts(CBvert_list& verts, LMESHptr mesh)
 {
-   Bvert_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++) {
-      ret += mesh->add_vertex(verts[i]->loc());
+   Bvert_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
+      ret.push_back(mesh->add_vertex(verts[i]->loc()));
    }
    return ret;
 }
@@ -115,7 +115,7 @@ inline bool
 copy_edges(CBedge_list& edges, CVertMapper& vmap)
 {
    bool ret = true;
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       if (!copy_edge(edges[i], vmap))
          ret = false;
    return ret;
@@ -127,8 +127,8 @@ copy_faces(CBface_list& faces, CVertMapper& vmap, Primitive* p, bool reverse=fal
    assert(p && vmap.is_valid());
    Bface_list ret;
 
-   for (int i=0; i<faces.num(); i++) {
-      ret += copy_face(faces[i], vmap, p, reverse);
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
+      ret.push_back(copy_face(faces[i], vmap, p, reverse));
    }
    copy_edges(faces.get_edges(), vmap);
    return ret;
@@ -215,7 +215,7 @@ quad_cell_end_edges(PCell* cell)
    // find an edge of the shared boundary.
    // do it now before messing with flags...
    assert(!cell->shared_boundary(nbrs[0]).empty());
-   Bedge* e = cell->shared_boundary(nbrs[0]).first();
+   Bedge* e = cell->shared_boundary(nbrs[0]).front();
    assert(e);
 
    EdgeStrip boundary = cell->get_boundary();
@@ -243,25 +243,25 @@ reorder(CBedge_list& edges)
    Bvert_list ret;
 
    Bvert_list verts = edges.get_verts();
-   for (int i = 0; i < verts.num(); i++)
+   for (Bvert_list::size_type i = 0; i < verts.size(); i++)
       if (Bpoint::find_controller(verts[i]) || Bcurve::find_controller(verts[i])) {
-         ret += verts[i];
+         ret.push_back(verts[i]);
          break;
       }
    if (ret.empty())
          return ret;
 
-   for (int i = 1; i < verts.num(); i++) {
-      for (int j = 0; j < edges.num(); j++) {
-         Bvert* v = edges[j]->other_vertex(ret.last());
-         if (v && !ret.contains(v)) {
-            ret += v;
+   for (Bvert_list::size_type i = 1; i < verts.size(); i++) {
+      for (Bedge_list::size_type j = 0; j < edges.size(); j++) {
+         Bvert* v = edges[j]->other_vertex(ret.back());
+         if (v && std::find(ret.begin(), ret.end(), v) == ret.end()) {
+            ret.push_back(v);
             break;
          }
       }
    }
 
-   err_adv(debug, "   reorder: num of verts: %d", ret.num());
+   err_adv(debug, "   reorder: num of verts: %d", ret.size());
    return ret;
 }
 
@@ -277,11 +277,11 @@ compute_h(Bvert* v)
          return cells[0]->shared_boundary(cells[1]).avg_len()/2;
 
       Bvert_list verts = reorder(cells[0]->shared_boundary(cells[1]));
-      double num = verts.num()-1;
+      double num = verts.size()-1;
       assert(num > 1);
       int index = verts.get_index(v);
       assert(index != -1);
-      double h = (compute_h(verts.first()) + compute_h(verts.last())) / 2;
+      double h = (compute_h(verts.front()) + compute_h(verts.back())) / 2;
       return h * (1 + min(index/num, 1-index/num));
 
    } else if (cells.size() > 2) {
@@ -301,7 +301,7 @@ compute_h(Bvert* v)
          } else if (cells[0]->nbrs().size() == 1) {
             // or maybe should do same rule as next case
             Bedge_list end_edges = quad_cell_end_edges(cells[0]);
-            err_adv(debug, "found %d end edges", end_edges.num());
+            err_adv(debug, "found %d end edges", end_edges.size());
             return end_edges.avg_len()/2;
          }
          return v->strong_edges().avg_len()/2;
@@ -359,7 +359,7 @@ define_offsets(
 {
    assert(tmap.is_valid() && bmap.is_valid());
 
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       define_offset(verts[i], tmap, bmap, n, p);
    }
 }
@@ -430,8 +430,8 @@ PAPER_DOLL::init(CGESTUREptr& g)
       err_adv(debug, "PAPER_DOLL::init: ellipse not over selected panel");
       return false;
    }
-   assert(p && p->bfaces().num() > 0);
-   Bface_list faces = Bface_list::reachable_faces(p->bfaces().first());
+   assert(p && p->bfaces().size() > 0);
+   Bface_list faces = Bface_list::reachable_faces(p->bfaces().front());
    assert(!faces.empty());
    if (!faces.is_planar(deg2rad(1.0))) {
       err_adv(debug, "PAPER_DOLL::init: region is not planar");
@@ -453,7 +453,7 @@ PAPER_DOLL::init(CGESTUREptr& g)
    err_adv(debug, "PAPER_DOLL::init: proceeding...");
 
    err_adv(debug, "  boundary edges: %d, components: %d, panels: %d",
-           boundary.edges().num(), boundary.num_line_strips(), surfs.num()
+           boundary.edges().size(), boundary.num_line_strips(), surfs.num()
       );
 
    if (get_instance()->build_primitive(faces)) {

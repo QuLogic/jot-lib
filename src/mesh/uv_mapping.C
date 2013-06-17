@@ -62,7 +62,7 @@ UVMapping::UVMapping(Bface *f) :
    assert(_seed_face);
 
    _mapping.clear();
-   for (k=0 ; k < MAPPING_BINS ; k++) _mapping.add(new ARRAY<Bface*>);
+   for (k=0 ; k < MAPPING_BINS ; k++) _mapping.push_back(new vector<Bface*>);
 
    compute_limits(f);
    compute_mapping(f);
@@ -80,40 +80,34 @@ UVMapping::UVMapping(Bface *f) :
 /////////////////////////////////////
 UVMapping::~UVMapping()
 {
-
-
    UVdata* uvd;
-   int k, i, cnt=0;
+   size_t k, i, cnt=0;
 
    //We should be unreferenced if we get here...
    assert(!_use_cnt);
 
    //Remove ourself from the uvdata of binned faces
-   for (k=0;k<_mapping.num();k++) 
-      {
-         for (i=0;i<_mapping[k]->num();i++) 
-            {
-               uvd = UVdata::lookup((*_mapping[k])[i]);
-               assert(uvd);
-               if (uvd->mapping())
-                  {
-                     assert(uvd->mapping()==this);
-                     uvd->set_mapping(0);
-                     cnt++;
-                  }
-            }
+   for (k=0; k<_mapping.size(); k++) {
+      for (i=0; i<_mapping[k]->size(); i++) {
+         uvd = UVdata::lookup((*_mapping[k])[i]);
+         assert(uvd);
+         if (uvd->mapping()) {
+            assert(uvd->mapping()==this);
+            uvd->set_mapping(0);
+            cnt++;
+         }
       }
+   }
 
    err_mesg(ERR_LEV_WARN,  
       "UVMapping::~UVMapping() - Removed from %d faces (should have been %d).",
          cnt, _face_cnt);
 
-   for (k=0;k<_mapping.num();k++) delete _mapping[k];
+   for (k=0;k<_mapping.size();k++) delete _mapping[k];
    _mapping.clear();
 
    if (_virgin_debug_image) delete[] _virgin_debug_image;
    if (_marked_debug_image) delete[] _marked_debug_image;
-
 }
 
 /////////////////////////////////////
@@ -166,10 +160,9 @@ UVMapping::draw_debug()
 void
 UVMapping::compute_debug_image()
 {
-
    err_mesg(ERR_LEV_SPAM, "UVMapping::compute_debug_map()");
 
-   int k, max=0;
+   size_t k, max=0;
 
    assert(!_virgin_debug_image);
    assert(!_marked_debug_image);
@@ -179,11 +172,11 @@ UVMapping::compute_debug_image()
    _marked_debug_image = new unsigned char[3*DEBUG_SIZE];
    assert(_marked_debug_image);
 
-   assert(_mapping.num() == MAPPING_BINS);
+   assert(_mapping.size() == MAPPING_BINS);
 
-   for (k=0;k<_mapping.num();k++)
-      if (_mapping[k]->num() > max)
-         max = _mapping[k]->num();
+   for (k=0;k<_mapping.size();k++)
+      if (_mapping[k]->size() > max)
+         max = _mapping[k]->size();
 
    //The UV binning part
 
@@ -191,7 +184,7 @@ UVMapping::compute_debug_image()
    for (k=0;k<MAPPING_BINS;k++)
       {
          b = (unsigned char)( (double)(0x88)*
-                              ( (double)(_mapping[k]->num()) / (double)(max) )  );
+                              ( (double)(_mapping[k]->size()) / (double)(max) )  );
 
          if (b)
             {
@@ -283,8 +276,6 @@ UVMapping::debug_dot(
 void
 UVMapping::compute_limits(Bface *f)
 {
-   int k;
-
    assert(f);
    
    //There oughta be uv here
@@ -302,7 +293,8 @@ UVMapping::compute_limits(Bface *f)
 
    //Clear the mesh bits
    CBface_list& faces = f->mesh()->faces();
-   for (k=0; k< faces.num(); k++) faces[k]->clear_bit(1);
+   for (Bface_list::size_type k=0; k< faces.size(); k++)
+      faces[k]->clear_bit(1);
 
    //Walk from seed face and fill out uv min/max
    recurse(f,&UVMapping::add_limit);
@@ -328,8 +320,6 @@ UVMapping::compute_limits(Bface *f)
 void
 UVMapping::compute_mapping(Bface *f)
 {
-   int k;
-
    assert(f);
    
    //There oughta be uv here
@@ -341,14 +331,15 @@ UVMapping::compute_mapping(Bface *f)
 
    //Clear mesh bits
    CBface_list& faces = f->mesh()->faces();
-   for (k=0; k< faces.num(); k++) faces[k]->clear_bit(1);
+   for (Bface_list::size_type k=0; k< faces.size(); k++)
+      faces[k]->clear_bit(1);
 
    //Walk from seed face and store faces in region in map
    recurse(f,&UVMapping::add_face);
 
    err_mesg(ERR_LEV_INFO,
       "UVMapping::generate_mapping() - %d faces added to mapping (from %d in mesh) using %d entries.",
-         _face_cnt, faces.num(), _entry_cnt);
+         _face_cnt, faces.size(), _entry_cnt);
 
    err_mesg(ERR_LEV_INFO,
       "UVMapping::generate_mapping() - %d populated bins of possible %d (%d holes).",
@@ -361,8 +352,6 @@ UVMapping::compute_mapping(Bface *f)
 void
 UVMapping::compute_wrapping(Bface *f)
 {
-   int k;
-
    assert(f);
    
    //There oughta be uv here
@@ -374,7 +363,8 @@ UVMapping::compute_wrapping(Bface *f)
 
    //Clear mesh bits
    CBface_list& faces = f->mesh()->faces();
-   for (k=0; k< faces.num(); k++) faces[k]->clear_bit(1);
+   for (Bface_list::size_type k=0; k< faces.size(); k++)
+      faces[k]->clear_bit(1);
 
    //Walk from seed face and check uv region edges
    recurse_wrapping(f);
@@ -399,16 +389,16 @@ UVMapping::recurse_wrapping(Bface *seed_f)
    int k;
 
    Bface *f;
-   ARRAY<Bface*> faces;
+   vector<Bface*> faces;
 
    assert(seed_f);
 
-   faces.push(seed_f);
+   faces.insert(faces.begin(), seed_f);
 
-   while (faces.num()>0)
-   {
+   while (faces.size()>0) {
       //Remove face from end of queue
-      f = faces.pop();
+      f = faces.back();
+      faces.pop_back();
 
       //Skip if already seen
       if (!f->is_set(1))
@@ -445,7 +435,7 @@ UVMapping::recurse_wrapping(Bface *seed_f)
                   if ((uva==nxt_uvb)&&(uvb==nxt_uva))
                   {
                      //Stick face on start of queue
-                     faces.push(nxt_f);
+                     faces.insert(faces.begin(), nxt_f);
                   }
                   //But if not, let's see if the other face is
                   //part of this mapping. If it is, then we found
@@ -560,17 +550,17 @@ UVMapping::recurse(Bface *seed_f, rec_fun_t fun )
    int k;
 //   bool done = false;
 
-   Bface*                  f;
-   ARRAY<Bface*>   faces;
+   Bface *f;
+   vector<Bface*> faces;
 
    assert(seed_f);
 
-   faces.push(seed_f);
+   faces.insert(faces.begin(), seed_f);
 
-   while (faces.num()>0)
-      {
+   while (faces.size()>0) {
          //Remove oldest face from end of queue
-         f = faces.pop();
+         f = faces.back();
+         faces.pop_back();
 
          //Skip if already seen
          if (!f->is_set(1))
@@ -610,7 +600,7 @@ UVMapping::recurse(Bface *seed_f, rec_fun_t fun )
                                  if ((uva==nxt_uvb)&&(uvb==nxt_uva))
                                     {
                                        //Add to front of queue
-                                       faces.push(nxt_f);
+                                       faces.insert(faces.begin(), nxt_f);
                                     }
                                  else {
                                     //Nothing
@@ -755,12 +745,11 @@ UVMapping::add_face(Bface *f)
                         }
                   }
          
-               if (isect)
-                  {
-                     entry_count++;
-                     _mapping[u+MAPPING_SIZE*v]->add(f);
-                     if ( _mapping[u+MAPPING_SIZE*v]->num() == 1 )   bin_count++;
-                  }
+               if (isect) {
+                  entry_count++;
+                  _mapping[u+MAPPING_SIZE*v]->push_back(f);
+                  if ( _mapping[u+MAPPING_SIZE*v]->size() == 1 )   bin_count++;
+               }
       
             }
       }
@@ -791,7 +780,7 @@ UVMapping::find_face(CUVpt &uv, Wvec &bc)
 {
    static bool debug = Config::get_var_bool("HATCHING_DEBUG_MAPPING",false);
    
-   int k,i;
+   size_t k,i;
 //   double bc1,bc2,bc3;
    UVdata* uvdata;
    Bface *f;
@@ -803,8 +792,7 @@ UVMapping::find_face(CUVpt &uv, Wvec &bc)
 
    i = u+MAPPING_SIZE*v;
 
-   for (k=0; k<_mapping[i]->num(); k++)
-      {
+   for (k=0; k<_mapping[i]->size(); k++) {
          f = (*_mapping[i])[k];
          uvdata = UVdata::lookup(f);
          assert(uvdata);

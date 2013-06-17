@@ -34,7 +34,7 @@ Bvert::~Bvert()
    // adjacent edges are removed:
    if (_mesh) {
       while (degree() > 0)
-         _mesh->remove_edge(_adj.last());
+         _mesh->remove_edge(_adj.back());
    }
 }
 
@@ -50,7 +50,7 @@ Bvert::index() const
 void
 Bvert::operator +=(Bedge* e) 
 {
-   _adj += e;
+   _adj.push_back(e);
    degree_changed();
    if (e->is_crease())
       crease_changed();
@@ -61,7 +61,10 @@ Bvert::operator -=(Bedge* e)
 {
    // forget about an edge which is disconnecting from this
 
-   int ret = (_adj -= e);
+   Bedge_list::iterator it;
+   it = std::find(_adj.begin(), _adj.end(), e);
+   int ret = (it != _adj.end());
+   _adj.erase(it);
    if (!ret)
       err_msg("Bvert::operator -=(Bedge* e): can't remove e: not in list");
    if (e->is_crease())
@@ -84,7 +87,7 @@ Bvert::wloc() const
 }
 
 void
-Bvert::get_q_nbrs(ARRAY<Bvert*>& q) const
+Bvert::get_q_nbrs(vector<Bvert*>& q) const
 {
    // Returns "neighboring" vertices that share a quad with
    // this vertex, and that are positioned at the opposite
@@ -94,47 +97,47 @@ Bvert::get_q_nbrs(ARRAY<Bvert*>& q) const
 
    Bface* f;
    Bedge_list a = get_manifold_edges();
-   for (int i=0; i<a.num(); i++)
+   for (Bedge_list::size_type i=0; i<a.size(); i++)
       if (a[i]->is_strong() && (f = ccw_face(a[i], this)) && f->is_quad())
-         q += f->quad_opposite_vert(this);
+         q.push_back(f->quad_opposite_vert(this));
 }
 
 Bsimplex_list
 Bvert::neighbors() const
 {
    Bface_list faces = get_all_faces();
-   Bsimplex_list ret(faces.num() + _adj.num());
-   for (int i=0; i<faces.num(); i++)
-      ret += faces[i];
-   for (int j=0; j<_adj.num(); j++)
-      ret += _adj[j];
+   Bsimplex_list ret(faces.size() + _adj.size());
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
+      ret.push_back(faces[i]);
+   for (Bedge_list::size_type j=0; j<_adj.size(); j++)
+      ret.push_back(_adj[j]);
    return ret;
 }
 
 inline void
-get_nbrs(CBvert* v, CBedge_list& edges, ARRAY<Bvert*>& nbrs)
+get_nbrs(CBvert* v, CBedge_list& edges, vector<Bvert*>& nbrs)
 {
    nbrs.clear();
    if (!v)
       return;
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       Bvert* nbr = edges[i]->other_vertex(v);
       assert(nbr);
-      nbrs += nbr;
+      nbrs.push_back(nbr);
    }
 }
 
-Bvert_list 
+Bvert_list
 Bvert::get_nbrs(CBedge_list& edges) const
 {
    // Return a set of neighboring vertices from the
    // given set of edges, all of which must contain
    // this vertex (or an assertion failure will occur):
-   Bvert_list ret(edges.num());
-   for (int i=0; i<edges.num(); i++) {
+   Bvert_list ret(edges.size());
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       Bvert* v = nbr(edges[i]);
       assert(v);
-      ret += v;
+      ret.push_back(v);
    }
    return ret;
 }
@@ -184,7 +187,7 @@ Bvert::get_ccw_edges() const
 
    // add first edge
    Bedge_list ret(degree());
-   ret += start;
+   ret.push_back(start);
 
    // Repeatedly advance to next face and next edge going CCW.
    // Add edges to the list until we reach the start edge.
@@ -193,9 +196,9 @@ Bvert::get_ccw_edges() const
    while ((f = ccw_face(e, this)) &&
           (e = f->opposite_edge(e->other_vertex(this))) &&
           (e != start))
-      ret += e;
+      ret.push_back(e);
 
-   assert(ret.num() == _adj.num());
+   assert(ret.size() == _adj.size());
 
    return ret;
 }
@@ -217,7 +220,7 @@ Bvert::order_edges_ccw()
       return true;
 
    Bedge_list ordered = get_ccw_edges();
-   if (ordered.num() == degree()) {
+   if ((int)ordered.size() == degree()) {
       _adj = ordered;
       set_bit(VALID_CCW_BIT);
       return true;
@@ -225,22 +228,22 @@ Bvert::order_edges_ccw()
    return false;
 }
 
-void 
-Bvert::get_nbrs(ARRAY<Bvert*>& nbrs) const 
+void
+Bvert::get_nbrs(vector<Bvert*>& nbrs) const
 {
    // return neighboring vertices in an array
 
    ::get_nbrs(this, _adj, nbrs);
 }
 
-void 
-Bvert::get_primary_nbrs(ARRAY<Bvert*>& nbrs) const 
+void
+Bvert::get_primary_nbrs(vector<Bvert*>& nbrs) const
 {
    ::get_nbrs(this, get_manifold_edges(), nbrs);
 }
 
-void 
-Bvert::get_p_nbrs(ARRAY<Bvert*>& nbrs) const 
+void
+Bvert::get_p_nbrs(vector<Bvert*>& nbrs) const
 {
    ::get_nbrs(this, get_manifold_edges(), nbrs);
 }
@@ -268,7 +271,7 @@ mark_pushed_faces(CBvert* v, Bedge* e)
    assert(v && e && e->contains(v));
    if (!e->adj()) return;
    CBface_list& adj = *e->adj();
-   for (int i=0; i<adj.num();i++)
+   for (Bface_list::size_type i=0; i<adj.size(); i++)
       mark_pushed_faces(v, e, adj[i]);
 }
 
@@ -277,7 +280,7 @@ mark_pushed_faces(CBvert* v, CBedge_list& edges)
 {
    // for each nm edge, run over nm faces and mark them
    assert(v);
-   for (int i=0; i<edges.num(); i++)
+   for (Bedge_list::size_type i=0; i<edges.size(); i++)
       mark_pushed_faces(v, edges[i]);
 }
 
@@ -290,16 +293,16 @@ has_unmarked_face(Bedge* e)
 }
 
 inline void
-try_get_nm_edge(Bedge* e, ARRAY<Bedge*>& ret)
+try_get_nm_edge(Bedge* e, vector<Bedge*>& ret)
 {
    if (e && e->flag() == 0 && has_unmarked_face(e)) {
       e->set_flag();
-      ret += e;
+      ret.push_back(e);
    }
 }
 
 void 
-Bvert::get_manifold_edges(ARRAY<Bedge*>& ret) const 
+Bvert::get_manifold_edges(vector<Bedge*>& ret) const 
 {
    // Return adjacent edges the normal way, unless it's a
    // "multi" vertex; then return manifold edges.
@@ -316,78 +319,88 @@ Bvert::get_manifold_edges(ARRAY<Bedge*>& ret) const
 
    // collect up edges adjacent to faces we do want:
    ret.clear();
-   for (int i=0; i<_adj.num(); i++) {
+   for (Bedge_list::size_type i=0; i<_adj.size(); i++) {
       try_get_nm_edge(_adj[i], ret);
    }
 }
 
 inline void
-get_faces(CBedge_list& e, ARRAY<Bface*>& ret)
+add_face(vector<Bface*>& faces, set<Bface*>& unique, Bface *f)
+{
+   // Helper method used below.
+   // Add a non-null face uniquely to the list.
+   pair<set<Bface*>::iterator,bool> result;
+
+   if (f) {
+      result = unique.insert(f);
+      if (result.second)
+         faces.push_back(f);
+   }
+}
+
+inline void
+get_faces(CBedge_list& e, vector<Bface*>& ret, set<Bface*>& unique)
 {
    // Helper function used below in Bvert::get_faces()
 
    ret.clear();
 
-   Bface* f;
-   for (int k=0; k<e.num(); k++) {
-      if ((f = e[k]->f1()))
-         ret.add_uniquely(f);
-      if ((f = e[k]->f2()))
-         ret.add_uniquely(f);
+   for (Bedge_list::size_type k=0; k<e.size(); k++) {
+      add_face(ret, unique, e[k]->f1());
+      add_face(ret, unique, e[k]->f2());
    }
 }
 
 void
-Bvert::get_faces(ARRAY<Bface*>& ret) const
+Bvert::get_faces(vector<Bface*>& ret, set<Bface*>& unique) const
+{
+   // Helper function for the below function.
+
+   if (is_manifold()) {
+      ::get_faces(_adj, ret, unique);
+   } else {
+      ::get_faces(get_manifold_edges(), ret, unique);
+   }
+}
+
+void
+Bvert::get_faces(vector<Bface*>& ret) const
 {
    // Return a list of faces in the star of this vertex.
    //
    // At a non-manifold part of the mesh,
    // select faces just from the primary layer
-
-   if (is_manifold()) {
-      ::get_faces(_adj, ret);
-   } else {
-      ::get_faces(get_manifold_edges(), ret);
-   }
+   set<Bface*> unique;
+   get_faces(ret, unique);
 }
 
 inline void
-add_face(ARRAY<Bface*>& faces, Bface* f)
-{
-   // Helper method used in add_quad_partners() below.
-   // Add a non-null face uniquely to the list.
-
-   if (f)
-      faces.add_uniquely(f);
-}
-
-inline void
-add_quad_partners(ARRAY<Bface*>& faces)
+add_quad_partners(vector<Bface*>& faces, set<Bface*>& unique)
 {
    // Expand the given face list to include "quad partners"
    // of any of the faces in the original list.
 
    // Work backwards to add faces as we go.
-   for (int k=faces.num()-1; k>=0; k--)
-      add_face(faces, faces[k]->quad_partner());
+   for (int k=faces.size()-1; k>=0; k--)
+      add_face(faces, unique, faces[k]->quad_partner());
 }
 
 void
-Bvert::get_q_faces(ARRAY<Bface*>& ret) const
+Bvert::get_q_faces(vector<Bface*>& ret) const
 {
    // Return a list of faces in the star of this vertex,
    // including both faces of every quad adjacent to this vertex.
+   set<Bface*> unique;
 
-   get_faces(ret);
-   add_quad_partners(ret);
+   get_faces(ret, unique);
+   add_quad_partners(ret, unique);
 }
 
 inline Bedge* 
 next_border_edge_cw(CBvert* v, CBedge_list& edges) 
 {
    assert(v);
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       Bedge* e = edges[i];
       if (e->is_border() && e->cw_face(v))
          return e;
@@ -403,21 +416,15 @@ Bvert::next_border_edge_cw()
       );
 }
 
-inline void
-add_uniquely(ARRAY<Bface*>& a, CBface_list& b)
-{
-   for (int i=0; i<b.num(); i++)
-      a.add_uniquely(b[i]);
-}
-
 void
-Bvert::get_all_faces(ARRAY<Bface*>& ret) const
+Bvert::get_all_faces(vector<Bface*>& ret) const
 {
    // Return ALL faces incident to the vertex,
    // including faces adjacent to non-manifold ("multi") edges:
+   set<Bface*> unique;
 
    // get ordinary (manifold) faces:
-   get_faces(ret);
+   get_faces(ret, unique);
 
    // if there are no "multi" edges, we're done
    if (is_manifold())
@@ -426,31 +433,34 @@ Bvert::get_all_faces(ARRAY<Bface*>& ret) const
    // collect up additional faces from multi-edges
    for (int i=0; i<degree(); i++) {
       if (e(i)->adj() != NULL) {
-         add_uniquely(ret, e(i)->get_all_faces());
+         Bface_list b = e(i)->get_all_faces();
+         for (Bface_list::size_type j=0; j<b.size(); j++)
+            add_face(ret, unique, b[j]);
       }
    }
 }
 
 inline void 
-get_quad_faces(CBedge_list& e, ARRAY<Bface*>& ret)
+get_quad_faces(CBedge_list& e, vector<Bface*>& ret)
 {
    // Helper function used below in Bvert::get_quad_faces()
+   set<Bface*> unique;
 
    ret.clear();
 
    Bface* f;
-   for (int k=0; k<e.num(); k++) {
+   for (Bedge_list::size_type k=0; k<e.size(); k++) {
       if (!e[k]->is_weak()) {
          if ((f = e[k]->f1()) && f->is_quad())
-            ret.add_uniquely(f->quad_rep());
+            add_face(ret, unique, f->quad_rep());
          if ((f = e[k]->f2()) && f->is_quad())
-            ret.add_uniquely(f->quad_rep());
+            add_face(ret, unique, f->quad_rep());
       }
    }
 }
 
 void
-Bvert::get_quad_faces(ARRAY<Bface*>& ret) const
+Bvert::get_quad_faces(vector<Bface*>& ret) const
 {
    // Return a list of quads in the star of this vertex.
    //
@@ -466,19 +476,19 @@ Bvert::get_quad_faces(ARRAY<Bface*>& ret) const
 int
 Bvert::num_quads() const 
 {
-   static Bface_list faces;
+   Bface_list faces;
 
    get_quad_faces(faces);
-   return faces.num();
+   return faces.size();
 }
 
 int
 Bvert::num_tris() const 
 {
-   static Bface_list faces;
+   Bface_list faces;
    get_faces(faces);
    int ret=0;
-   for (int i=0; i<faces.num(); i++)
+   for (Bface_list::size_type i=0; i<faces.size(); i++)
       if (!faces[i]->is_quad())
          ret++;
    return ret;
@@ -488,9 +498,9 @@ int
 Bvert::face_degree(CSimplexFilter& f) const
 {
    // within the star of this vertex, return the number of
-   // faces that satisify the given filter:
+   // faces that satisfy the given filter:
 
-   static Bface_list faces;
+   Bface_list faces;
    get_faces(faces);
    return faces.num_satisfy(f);
 }
@@ -499,7 +509,7 @@ Bface*
 Bvert::get_face() const
 {
    Bface* ret = 0;
-   for (int k=0; k<_adj.num(); k++)
+   for (Bedge_list::size_type k=0; k<_adj.size(); k++)
       if ((ret = e(k)->get_face()))
          return ret;
    return 0;
@@ -512,12 +522,12 @@ Bvert::on_face(CBface* f) const
 }
 
 Wvec
-Bvert::compute_normal(CARRAY<Bface*>& faces) const
+Bvert::compute_normal(const vector<Bface*>& faces) const
 {
    // Computes angle-weighted average normal from the given faces:
 
    Wvec ret;
-   for (int k=0; k<faces.num(); k++)
+   for (vector<Bface*>::size_type k=0; k<faces.size(); k++)
       ret += weighted_vnorm(faces[k], this);
    return ret.normalized();
 }
@@ -559,7 +569,7 @@ Bvert::wnorm() const
 }
 
 void
-Bvert::get_normals(ARRAY<Wvec>& norms) const
+Bvert::get_normals(vector<Wvec>& norms) const
 {
    // Return a list of distinct "normals." For a vertex that
    // contains no crease edges just return the single vertex
@@ -568,17 +578,20 @@ Bvert::get_normals(ARRAY<Wvec>& norms) const
 
    // XXX - should be more efficient.
 
+   set<Wvec> unique;
    norms.clear();
    if (is_crease()) {
       Bface_list faces;
       get_faces(faces);
-      for (int i=0; i<faces.num(); i++) {
+      for (Bface_list::size_type i=0; i<faces.size(); i++) {
          Wvec n;
          faces[i]->vert_normal(this, n);
-         norms.add_uniquely(n);
+         pair<set<Wvec>::iterator,bool> result = unique.insert(n);
+         if (result.second)
+            norms.push_back(n);
       }
    } else {
-      norms += norm();
+      norms.push_back(norm());
    }
 }
 
@@ -590,10 +603,10 @@ Bvert::geometry_changed()
    // Notify simplex data
    Bsimplex::geometry_changed();
 
-   int i;
+   size_t i;
 
    // Tell adjacent edges they changed shape:
-   for (i=0; i<_adj.num(); i++)
+   for (i=0; i<_adj.size(); i++)
       _adj[i]->geometry_changed();
 
    // Tell 1-ring faces they changed shape, which will cause each
@@ -604,9 +617,9 @@ Bvert::geometry_changed()
    // non-border edges will receive 2 normal_changed()
    // notifications, and so will each vertex at the opposite
    // ends of those edges.
-   static Bface_list star(32);
+   Bface_list star(32);
    get_all_faces(star);
-   for (i=0; i<star.num(); i++) {
+   for (i=0; i<star.size(); i++) {
       star[i]->geometry_changed();
    }
 }
@@ -635,11 +648,11 @@ Bvert::star_sum_angles() const
 {
    // add up "interior" angles around the vertex
 
-   static Bface_list star(32);
+   Bface_list star(32);
    get_faces(star);
 
    double ret = 0;
-   for (int i=0; i<star.num(); i++)
+   for (Bface_list::size_type i=0; i<star.size(); i++)
       ret += star[i]->angle(this);
    return ret;
 }
@@ -649,11 +662,11 @@ Bvert::star_area() const
 {
    // add up the areas of the triangles around the vertex
 
-   static Bface_list star(32);
+   Bface_list star(32);
    get_faces(star);
 
    double ret = 0;
-   for (int i=0; i<star.num(); i++)
+   for (Bface_list::size_type i=0; i<star.size(); i++)
       ret += star[i]->area();
    return ret;
 }
@@ -680,10 +693,10 @@ get_nbrs(const Bvert* v, CBedge_list& edges)
    // Returns corresponding opposite verts.
 
    assert(v);
-   Bvert_list ret(edges.num());
-   for (int i=0; i<edges.num(); i++) {
+   Bvert_list ret(edges.size());
+   for (Bvert_list::size_type i=0; i<edges.size(); i++) {
       assert(v->nbr(edges[i]));
-      ret += v->nbr(edges[i]);
+      ret.push_back(v->nbr(edges[i]));
    }
    return ret;
 }
@@ -701,7 +714,7 @@ Bvert::centroid() const
    if (star.any_satisfy(BorderEdgeFilter()))
       return ::get_nbrs(this, star.filter(BorderEdgeFilter())).center();
 
-   for (int i=0; i<star.num(); i++) {
+   for (Bedge_list::size_type i=0; i<star.size(); i++) {
       ret = ret + nbr_loc(star[i]);
       w += 1.0;
    }
@@ -723,7 +736,7 @@ Bvert::area_centroid() const
    if (star.any_satisfy(BorderEdgeFilter()))
       return ::get_nbrs(this, star.filter(BorderEdgeFilter())).center();
 
-   for (int i=0; i < star.num(); i++) {
+   for (Bedge_list::size_type i=0; i < star.size(); i++) {
       Bedge* e = star[i];
       w = e->avg_area();
       total_weight += w;
@@ -776,12 +789,12 @@ Bvert::qr_centroid() const
 */
    double avg_len = star.avg_len();
    assert(avg_len > 0);
-   for (int i=0; i<star.num(); i++) {
+   for (Bedge_list::size_type i=0; i<star.size(); i++) {
       Bedge* e = star[i];
       if (e->is_strong()) {
          // add contribution from r neighbor
          double w = e->length()/avg_len;
-	 ret = ret + w*nbr_loc(e);
+         ret = ret + w*nbr_loc(e);
          net_weight += w;
          Bface* f = ccw_face(e, this);
          if (f && f->is_quad() && f->quad_opposite_vert(this)) {
@@ -841,7 +854,7 @@ Bvert::local_search(
 {
    Bface_list star(16);
    get_faces(star);
-   for (int k = star.num()-1; k>=0; k--) {
+   for (int k = star.size()-1; k>=0; k--) {
       int good_path = star[k]->local_search(
          end, final_bc, target, reached, this, iters-1);
       if (good_path == 1)
@@ -1031,7 +1044,7 @@ FoldVertFilter::accept(CBsimplex* s) const
 
    Bedge_list edges = v->get_adj().filter(_edge_filter);
 
-   if (edges.num() != 2)
+   if (edges.size() != 2)
       return false;
 
    return is_fold(
@@ -1076,7 +1089,7 @@ inline bool
 get_edge(Bedge_list& list, Bedge* e)
 {
    if (!e) return false;
-   list += e;
+   list.push_back(e);
    return true;
 }
 
@@ -1086,12 +1099,12 @@ Bvert_list::get_chain(bool try_close) const
    // Return the chain of edges formed by the vertices
    // (or the empty list)
 
-   Bedge_list ret(_num);
-   for (int i=1; i<_num; i++)
-      if (!get_edge(ret, _array[i]->lookup_edge(_array[i-1])))
+   Bedge_list ret(size());
+   for (Bvert_list::size_type i=1; i<size(); i++)
+      if (!get_edge(ret, at(i)->lookup_edge(at(i-1))))
          return Bedge_list(0);
-   if (try_close && num() > 2)
-      get_edge(ret, first()->lookup_edge(last())); // gets the edge if it exists
+   if (try_close && size() > 2)
+      get_edge(ret, front()->lookup_edge(back())); // gets the edge if it exists
       
    return ret;
 }
@@ -1105,7 +1118,7 @@ Bvert_list::get_closed_chain() const
 
    Bedge_list ret = get_chain();
    if (ret.empty()) return ret;
-   if (!get_edge(ret, first()->lookup_edge(last())))
+   if (!get_edge(ret, front()->lookup_edge(back())))
       return Bedge_list(0);
    return ret;
 }
@@ -1122,7 +1135,7 @@ Bvert_list::forms_chain() const
 bool 
 Bvert_list::forms_closed_chain() const 
 {
-   return (num() > 1) && forms_chain() && first()->lookup_edge(last());
+   return (size() > 1) && forms_chain() && front()->lookup_edge(back());
 }
 
 inline void
@@ -1132,7 +1145,7 @@ try_get_face(Bface* f, Bface_list& ret)
 
    if ( f && !f->flag() ) {
       f->set_flag();
-      ret += f;
+      ret.push_back(f);
    }
 }
 
@@ -1152,7 +1165,7 @@ try_get_faces(CBedge_list& edges, Bface_list& ret)
 {
    // Convenience method used in 1-ring extractions, below
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       try_get_faces(edges[i], ret);
    }
 }
@@ -1165,8 +1178,8 @@ Bvert_list::one_ring_faces() const
    clear_flag02();
 
    Bface_list ret;
-   for (int i=0; i<_num; i++) {
-      try_get_faces(_array[i]->get_manifold_edges(), ret);
+   for (Bvert_list::size_type i=0; i<size(); i++) {
+      try_get_faces(at(i)->get_manifold_edges(), ret);
    }
    return ret.quad_complete_faces();
 }
@@ -1184,7 +1197,7 @@ try_get_edge(Bedge* e, Bedge_list& ret)
 {
    if (e && !e->flag()) {
       e->set_flag();
-      ret += e;
+      ret.push_back(e);
    }
 }
 
@@ -1193,7 +1206,7 @@ try_get_edges(CBedge_list& edges, Bedge_list& ret)
 {
    // Convenience method used in 1-ring extractions, below
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       try_get_edge(edges[i], ret);
    }
 }
@@ -1206,8 +1219,8 @@ Bvert_list::get_outer_edges() const
 
    clear_flag02();
    Bedge_list ret;
-   for (int i=0; i<_num; i++) {
-      try_get_edges(_array[i]->get_adj(), ret);
+   for (Bvert_list::size_type i=0; i<size(); i++) {
+      try_get_edges(at(i)->get_adj(), ret);
    }
    return ret;
 }
@@ -1244,15 +1257,15 @@ Bvert_list::get_verts(Bsimplex* s)
    if (!s)
       return ret;
    if (is_vert(s)) {
-      ret += ((Bvert*)s);
+      ret.push_back((Bvert*)s);
    } else if (is_edge(s)) {
-      ret += ((Bedge*)s)->v1();
-      ret += ((Bedge*)s)->v2();
+      ret.push_back(((Bedge*)s)->v1());
+      ret.push_back(((Bedge*)s)->v2());
    } else {
       assert(is_face(s));
-      ret += ((Bface*)s)->v1();
-      ret += ((Bface*)s)->v2();
-      ret += ((Bface*)s)->v3();
+      ret.push_back(((Bface*)s)->v1());
+      ret.push_back(((Bface*)s)->v2());
+      ret.push_back(((Bface*)s)->v3());
    }
    return ret;
 }
@@ -1270,7 +1283,7 @@ Bvert_list::add_verts_recursively(Bvert_list& ret, Bvert* v)
    v->set_flag(); // mark as added
 
    // add it to the list and check its neighbors:
-   ret += v;
+   ret.push_back(v);
    add_verts_recursively(ret, get_nbrs(v));
 }
 
@@ -1280,7 +1293,7 @@ Bvert_list::add_verts_recursively(Bvert_list& ret, CBvert_list& L)
    // utility used in connected_verts, below.
    // requires that all vertex flags have been cleared initially.
    
-   for (int i=0; i<L.num(); i++) {
+   for (Bvert_list::size_type i=0; i<L.size(); i++) {
       add_verts_recursively(ret, L[i]);
    }
 }
@@ -1298,7 +1311,7 @@ Bvert_list::connected_verts(Bsimplex* s)
    assert(m);
    m->verts().clear_flags();
    add_verts_recursively(ret, L);
-   err_adv(debug, "Bvert_list::connected_verts: found %d verts", ret.num());
+   err_adv(debug, "Bvert_list::connected_verts: found %d verts", ret.size());
    return ret;
 }
 

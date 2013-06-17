@@ -2415,14 +2415,12 @@ SilUI::select_gel(GEL *g)
    //Default to patch with most triangles
 
    int max_i=0;
-   int max_tris=pl[0]->cur_faces().num();
+   Bface_list::size_type max_tris=pl[0]->cur_faces().size();
 
-   for (int i=1; i<pl.num(); i++)
-   {
-      if (pl[i]->cur_faces().num() > max_tris)
-      {
+   for (int i=1; i<pl.num(); i++) {
+      if (pl[i]->cur_faces().size() > max_tris) {
          max_i = i;
-         max_tris = pl[i]->cur_faces().num();
+         max_tris = pl[i]->cur_faces().size();
       }
    }
 

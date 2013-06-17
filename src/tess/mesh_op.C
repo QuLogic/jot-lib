@@ -351,7 +351,7 @@ JOIN_SEAM_CMD::JOIN_SEAM_CMD(CBvert_list& o, CBvert_list& c) :
    _cmds(new MULTI_CMD())
 {
    LMESH* m = LMESH::upcast(c.mesh());
-   if (!(m && m == o.mesh() && c.num() == o.num())) {
+   if (!(m && m == o.mesh() && c.size() == o.size())) {
       err_adv(debug, "JOIN_SEAM_CMD::JOIN_SEAM_CMD: bad chains");
       return;
    }
@@ -361,7 +361,7 @@ JOIN_SEAM_CMD::JOIN_SEAM_CMD(CBvert_list& o, CBvert_list& c) :
          return;
       }
       // non-closed chains have to share vertices at beginning and end:
-      if (!(c.first() == o.first() && c.last() == o.last())) {
+      if (!(c.front() == o.front() && c.back() == o.back())) {
          err_adv(debug, "JOIN_SEAM_CMD::JOIN_SEAM_CMD: bad chain topology");
          return;
       }
@@ -408,18 +408,18 @@ JOIN_SEAM_CMD::doit()
 
    // for each face adjacent to an o vertex, redefine it to
    // replace o with c, but don't update the edges yet:
-   for (int i=0; i<_o.num(); i++)
+   for (Bvert_list::size_type i=0; i<_o.size(); i++)
       redefine_faces(_o[i], _c[i]);
 
    // for each non-chain edge adjacent to an o vertex,
    // redefine it to replace o with c. (o-chain edges
    // have flag = 1; others have flag = 0).
-   for (int j=0; j<_o.num(); j++)
+   for (Bvert_list::size_type j=0; j<_o.size(); j++)
       redefine_edges(_o[j], _c[j]);
 
    // for each o-chain edge, update adjacent faces
    // to replace the edge w/ corresponding c-chain edge
-   for (int k=0; k<o_edges.num(); k++)
+   for (Bedge_list::size_type k=0; k<o_edges.size(); k++)
       redefine_faces(o_edges[k], c_edges[k]);
 
    // switch parents of o to think their children are c
@@ -437,7 +437,7 @@ JOIN_SEAM_CMD::doit()
 void
 JOIN_SEAM_CMD::reparent_verts()
 {
-   for (int i=0; i<_o.num(); i++) {
+   for (Bvert_list::size_type i=0; i<_o.size(); i++) {
       REPARENT_CMDptr cmd = new REPARENT_CMD(_o[i], _c[i]);
       cmd->doit();
       _cmds->add(cmd);
@@ -456,7 +456,7 @@ JOIN_SEAM_CMD::redefine_faces(Bvert* o, Bvert* c)
 
    Bface_list faces;
    o->get_all_faces(faces);
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       REDEF_FACE_V_CMDptr cmd = new REDEF_FACE_V_CMD(faces[i], o, c);
       cmd->doit();
       _cmds->add(cmd);
@@ -475,7 +475,7 @@ JOIN_SEAM_CMD::redefine_edges(Bvert* o, Bvert* c)
 
    // get a copy of the adjacency list because it will change as we go:
    Bedge_list edges = o->get_adj();
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       // only do edges w/ flag == 0
       if (!edges[i]->flag()) {
          REDEF_EDGE_CMDptr cmd = new REDEF_EDGE_CMD(edges[i], o, c);
@@ -496,7 +496,7 @@ JOIN_SEAM_CMD::redefine_faces(Bedge* o, Bedge* c)
       return;
 
    Bface_list faces = o->get_all_faces();
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       REDEF_FACE_E_CMDptr cmd = new REDEF_FACE_E_CMD(faces[i], o, c);
       cmd->doit();
       _cmds->add(cmd);
@@ -521,9 +521,9 @@ JOIN_SEAM_CMD::undoit()
  *****************************************************************/
 FIT_VERTS_CMD::FIT_VERTS_CMD(CBvert_list& verts, CWpt_list& new_locs)
 {
-   if (verts.num() != (int)new_locs.size()) {
+   if (verts.size() != new_locs.size()) {
       err_msg("FIT_VERTS_CMD::FIT_VERTS_CMD: error: lists not equal: %d vs. %d",
-              verts.num(), new_locs.size());
+              verts.size(), new_locs.size());
       return;
    }
    if (!LMESH::isa(verts.mesh())) {
@@ -539,8 +539,8 @@ bool
 FIT_VERTS_CMD::is_good() const
 {
    return (
-      _verts.num() == (int)_new_locs.size() &&
-      _verts.num() == (int)_old_lists.back().size() &&
+      _verts.size() == _new_locs.size() &&
+      _verts.size() == _old_lists.back().size() &&
       (is_empty() || LMESH::isa(_verts.mesh()))
       );
 }
@@ -553,15 +553,15 @@ get_parents(
    Wpt_list&    parent_locs
    )
 {
-   assert(children.num() == (int)child_locs.size());
+   assert(children.size() == child_locs.size());
    parents.clear();
    parent_locs.clear();
    if (!LMESH::isa(children.mesh()))
       return;
-   for (int i=0; i<children.num(); i++) {
+   for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
-         parents += p;
+         parents.push_back(p);
          parent_locs.push_back(child_locs[i]);
       }
    }
@@ -588,9 +588,9 @@ FIT_VERTS_CMD::fit_verts(CBvert_list& verts, CWpt_list& new_locs, int lev)
 
    static bool debug = Config::get_var_bool("DEBUG_OVERSKETCH",false);
 
-   err_adv(debug, "FIT_VERTS_CMD::fit_verts: fitting %d verts", verts.num());
+   err_adv(debug, "FIT_VERTS_CMD::fit_verts: fitting %d verts", verts.size());
 
-   assert(is_done() || verts.num() == (int)new_locs.size());
+   assert(is_done() || verts.size() == new_locs.size());
 
    if (verts.empty())
       return; // no-op
@@ -606,7 +606,7 @@ FIT_VERTS_CMD::fit_verts(CBvert_list& verts, CWpt_list& new_locs, int lev)
 
    // now compute offsets at this level
    // needed to approximate new locs:
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       if (!is_done()) 
          fit_vert((Lvert*)verts[i], new_locs[i]);
       else
@@ -737,8 +737,8 @@ get_offsets(CBvert_list& verts)
    if (!LMESH::isa(verts.mesh()))
       return vector<double>(0);
 
-   vector<double> ret(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   vector<double> ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ret[i] = ((Lvert*)verts[i])->offset();
    return ret;
 }
@@ -752,15 +752,15 @@ get_parents(
    vector<double>&      parent_offsets  // return val
    )
 {
-   assert(children.num() == (int)child_offsets.size());
+   assert(children.size() == child_offsets.size());
    parents.clear();
    parent_offsets.clear();
    if (!LMESH::isa(children.mesh()))
       return;
-   for (int i=0; i<children.num(); i++) {
+   for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
       if (p) {
-         parents += p;
+         parents.push_back(p);
          parent_offsets.push_back(child_offsets[i]);
       }
    }
@@ -771,9 +771,9 @@ SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD(
    const vector<double>& offsets
    )
 {
-   if (verts.num() != (int)offsets.size()) {
+   if (verts.size() != offsets.size()) {
       err_msg("SUBDIV_OFFSET_CMD: error: lists not equal: %d vs. %d",
-              verts.num(), offsets.size());
+              verts.size(), offsets.size());
       return;
    }
    if (!LMESH::isa(verts.mesh())) {
@@ -795,7 +795,7 @@ bool
 SUBDIV_OFFSET_CMD::is_good() const
 {
    return (
-      _verts.num() == (int)_offsets.size() &&
+      _verts.size() == _offsets.size() &&
       (is_empty() || LMESH::isa(_verts.mesh()))
       );
 }
@@ -806,8 +806,8 @@ get_smooth_locs(CBvert_list& verts)
    if (!LMESH::isa(verts.mesh()))
       return Wpt_list();
 
-   Wpt_list ret(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   Wpt_list ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ret.push_back(((Lvert*)verts[i])->smooth_loc_from_parent());
    return ret;
 }
@@ -818,8 +818,8 @@ get_parent_norms(CBvert_list& verts)
    if (!LMESH::isa(verts.mesh()))
       return vector<Wvec>();
 
-   vector<Wvec> ret(verts.num());
-   for (int i=0; i<verts.num(); i++)
+   vector<Wvec> ret(verts.size());
+   for (Bvert_list::size_type i=0; i<verts.size(); i++)
       ret[i] = get_norm(((Lvert*)verts[i])->parent());
    return ret;
 }
@@ -852,7 +852,7 @@ SUBDIV_OFFSET_CMD::doit()
       if (_parent_cmd) _parent_cmd->doit();
       Wpt_list     new_base  = get_smooth_locs(_verts);
       vector<Wvec> new_norms = get_parent_norms(_verts);
-      for (int i=0; i<_verts.num(); i++) {
+      for (Bvert_list::size_type i=0; i<_verts.size(); i++) {
          if (((Lvert*)_verts[i])->parent()) {
             double dh = (new_base[i] - old_base[i])*new_norms[i];
             _offsets[i] -= dh;
@@ -877,7 +877,7 @@ SUBDIV_OFFSET_CMD::doit()
 
    LMESH::update_subdivision(get_parent_faces(_verts.one_ring_faces(), 1), 1);
 
-   for (int i=0; i<_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++) {
       if (((Lvert*)_verts[i])->parent())
          ((Lvert*)_verts[i])->add_offset(_offsets[i]);
    }
@@ -900,7 +900,7 @@ SUBDIV_OFFSET_CMD::undoit()
    assert(is_good());
 
    _ctrl_vert_cmds->undoit();
-   for (int i=0; i<_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<_verts.size(); i++) {
       if (((Lvert*)_verts[i])->parent())
          ((Lvert*)_verts[i])->add_offset(-_offsets[i]);
    }

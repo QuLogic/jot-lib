@@ -126,7 +126,6 @@ BMESH::BMESH(int num_v, int num_e, int num_f) :
    _shadow_softness(0.5),
    _shadow_offset(0.0)
 {
-   begin_index();
    _drawables.set_unique();
 }
 
@@ -157,7 +156,6 @@ BMESH::BMESH(CBMESH& m) :
    _shadow_softness(0.5),
    _shadow_offset(0.0)
 {
-   begin_index();
    _drawables.set_unique();
         
    *this = m;
@@ -172,9 +170,6 @@ BMESH::~BMESH()
    // Notify observers that it's gonna happen
    BMESHobs::broadcast_delete(this);
    
-   // Disable indexing (prevents crash on WIN32 and possibly other OS's):
-   end_index();
-
    // then delete mesh elements
    delete_elements();
 
@@ -195,29 +190,12 @@ BMESH::set_focus(BMESHptr m, Patch* p)
    Patch::set_focus(p);
 }
 
-void
-BMESH::begin_index()
-{
-   _verts.begin_index();
-   _edges.begin_index();
-   _faces.begin_index();
-}
-
-
-void
-BMESH::end_index()
-{
-   _verts.end_index();
-   _edges.end_index();
-   _faces.end_index();
-}
-
 Bvert*
 BMESH::add_vertex(Bvert* v)
 {
    if (v) {
       v->set_mesh(this);
-      _verts += v;
+      _verts.push_back(v);
    } else
       err_msg("BMESH::add_vertex:: error: vertex is nil");
    return v;
@@ -234,7 +212,7 @@ BMESH::add_verts(CWpt_list& pts)
 {
    Bvert_list ret(pts.size());
    for (Wpt_list::size_type i=0; i<pts.size(); i++)
-      ret += add_vertex(pts[i]);
+      ret.push_back(add_vertex(pts[i]));
    return ret;
 }
 
@@ -243,7 +221,7 @@ BMESH::add_edge(Bedge* e)
 {
    if (e) {
       e->set_mesh(this);
-      _edges += e;
+      _edges.push_back(e);
    } else
       err_msg("BMESH::add_edge:: error: edge is nil");
    return e;
@@ -279,7 +257,7 @@ BMESH::add_edge(int i, int j)
 Bedge*
 BMESH::lookup_edge (const Point2i &p)
 {
-   if (!(_verts.valid_index(p[0]) && _verts.valid_index(p[1])))
+   if (p[0] < 0 || p[0] >= (int)_verts.size() || p[1] < 0 || p[1] >= (int)_verts.size())
       return 0;
    return (::lookup_edge (bv(p[0]), bv(p[1])));
 
@@ -295,7 +273,7 @@ BMESH::add_face(Bface* f, Patch* p)
    }
 
    f->set_mesh(this);
-   _faces += f;
+   _faces.push_back(f);
 
    // deal with the patch.
    // first do error-check
@@ -362,8 +340,7 @@ BMESH::add_face(Bvert* u, Bvert* v, Bvert* w, CUVpt& a, CUVpt& b, CUVpt& c, Patc
 {
    Bface* ret = add_face(u,v,w,p);
    if (ret)
-      UVdata::set
-         (ret, u, v, w, a, b, c);
+      UVdata::set(ret, u, v, w, a, b, c);
    return ret;
 }
 
@@ -372,8 +349,7 @@ BMESH::add_face(int i, int j, int k, CUVpt& a, CUVpt& b, CUVpt& c, Patch* p)
 {
    Bface* ret = add_face(i,j,k,p);
    if (ret)
-      UVdata::set
-         (ret, _verts[i], _verts[j], _verts[k], a, b, c);
+      UVdata::set(ret, _verts[i], _verts[j], _verts[k], a, b, c);
    return ret;
 }
 
@@ -448,8 +424,9 @@ BMESH::add_quad(int i, int j, int k, int l,
 Bface*
 BMESH::lookup_face (const Point3i &p)
 {
-   if (!(_verts.valid_index(p[0]) && _verts.valid_index(p[1])&&
-         _verts.valid_index(p[2]))) {
+   if (p[0] < 0 || p[0] >= (int)_verts.size()
+    || p[1] < 0 || p[1] >= (int)_verts.size()
+    || p[2] < 0 || p[2] >= (int)_verts.size()) {
       cerr << "BMESH::lookup_face - invalid vert index\n";
       return 0;
    }
@@ -824,7 +801,7 @@ BMESH::area() const
    // sum up the area
 
    double ret = 0;
-   for (int k=0; k<_faces.num(); k++)
+   for (Bface_list::size_type k=0; k<_faces.size(); k++)
       ret += _faces[k]->area();
 
    return ret;
@@ -837,7 +814,7 @@ BMESH::volume() const
    // using the divergence theorem
 
    double ret = 0;
-   for (int k=0; k<_faces.num(); k++)
+   for (Bface_list::size_type k=0; k<_faces.size(); k++)
       ret += _faces[k]->volume_el();
 
    return ret;
@@ -869,9 +846,9 @@ void
 BMESH::print() const
 {
    err_msg("%s: ", class_name().c_str());
-   err_msg("\tverts: %6d", _verts.num());
-   err_msg("\tedges: %6d", _edges.num());
-   err_msg("\tfaces: %6d", _faces.num());
+   err_msg("\tverts: %6d", _verts.size());
+   err_msg("\tedges: %6d", _edges.size());
+   err_msg("\tfaces: %6d", _faces.size());
    if (Config::get_var_bool("PRINT_MESH_SIZE",false))
       err_msg("\tMbytes used:  %6.1lf", size()/1e6);
    cerr << "\ttype: ";
@@ -1016,7 +993,7 @@ void
 BMESH::clear_creases()
 {
    bool changed_occurred = 0;
-   for (int i=0; i<_edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<_edges.size(); i++) {
       if (be(i)->is_crease()) {
          be(i)->set_crease(0);
          changed_occurred=1;
@@ -1032,7 +1009,7 @@ BMESH::compute_creases()
 {
    double thresh = Config::get_var_dbl("JOT_CREASE_THRESH", 0.5, true);
 
-   for (int k = 0; k < _edges.num(); k++)
+   for (Bedge_list::size_type k=0; k<_edges.size(); k++)
       be(k)->compute_crease(thresh);
 
    changed(CREASES_CHANGED);
@@ -1061,37 +1038,38 @@ BMESH::build_polyline_strips()
    // find polyline ends; i.e., polyline edges that are
    // not adjacent to other polyline edges at both ends.
    // prefer to start strips from these polyline ends.
-   ARRAY<Bedge*> polyline_edges(1024);
-   ARRAY<Bedge*> polyline_ends (128);
-   int k;
-   for (k=0; k<_edges.num(); k++) {
+   vector<Bedge*> polyline_edges; polyline_edges.reserve(1024);
+   vector<Bedge*> polyline_ends; polyline_ends.reserve(128);
+   Bedge_list::size_type k;
+   for (k=0; k<_edges.size(); k++) {
       // also clear all edge flags.
       _edges[k]->clear_flag();
       if (_edges[k]->is_polyline()) {
          // collect regular polyline edges in one list,
          // and polyline ends into another
          if (_edges[k]->is_polyline_end())
-            polyline_ends  += _edges[k];
+            polyline_ends.push_back(_edges[k]);
          else
-            polyline_edges += _edges[k];
+            polyline_edges.push_back(_edges[k]);
       }
    }
 
    // put the polyline ends last
-   polyline_edges += polyline_ends;
+   polyline_edges.insert(polyline_edges.end(), polyline_ends.begin(), polyline_ends.end());
 
    // work backward to get polyline ends first:
    UnreachedSimplexFilter unreached;
    PolylineEdgeFilter     polyline;
    AndFilter       wanted = unreached + polyline;
-   for (k=polyline_edges.num()-1; k>=0; k--) {
+   for (k=polyline_edges.size()-1; ; k--) {
       Bedge* e = polyline_edges[k];
       Bvert* v = e->v2()->is_polyline_end() ? e->v2() : e->v1();
       _polylines->build(v, e, wanted);
+      if (k == 0) break;
    }
 
    err_msg("BMESH::build_polyline_strips: got %d edges",
-           _polylines->edges().num());
+           _polylines->edges().size());
    err_msg("Warning: BMESH does not currently draw polylines");
 
    return _polylines->num();
@@ -1118,7 +1096,7 @@ BMESH::build_vert_strips()
    _patches[0]->add
       (_lone_verts);
 
-   for (int k=0; k<_verts.num(); k++)
+   for (Bvert_list::size_type k=0; k<_verts.size(); k++)
       if (bv(k)->degree() == 0)
          _lone_verts->add
             (bv(k));
@@ -1238,8 +1216,8 @@ BMESH::get_zcross_strips()
    } else
       _zx_sils.set_eye(eye_local());
 
-   int n = _faces.num();
-   bool CHECK_ALL = ALLOW_CHECK_ALL && (_faces.num() < CHECK_ALL_UNDER);
+   int n = _faces.size();
+   bool CHECK_ALL = ALLOW_CHECK_ALL && (n < CHECK_ALL_UNDER);
    static int min_rand_faces = Config::get_var_int("RANDOMIZED_MIN_FACES", 4000, true);
    if (n < min_rand_faces               ||      // if too few faces
        _zx_stamp < VIEW::stamp() - 1     ||      // or the old sils are too old
@@ -1251,7 +1229,7 @@ BMESH::get_zcross_strips()
          _zx_sils.start_sil(_faces[k]);
 
    } else {
-      int i;
+      size_t i;
       vector<ZXseg>::size_type k;
 
       // We'll time it:
@@ -1266,7 +1244,7 @@ BMESH::get_zcross_strips()
       // until creases change again.)
       //
       CBedge_list& creases = get_creases();
-      for (i=0; i<creases.num(); i++) {
+      for (i=0; i<creases.size(); i++) {
          Bedge* e = creases[i];
          if (e && e->f(1))
             _zx_sils.start_sil(e->f(1));
@@ -1274,7 +1252,7 @@ BMESH::get_zcross_strips()
             _zx_sils.start_sil(e->f(2));
       }
       CBedge_list& borders = get_borders();
-      for (i=0; i<borders.num(); i++) {
+      for (i=0; i<borders.size(); i++) {
          Bedge* e = borders[i];
          if (e && e->f(1))
             _zx_sils.start_sil(e->f(1));
@@ -1305,7 +1283,7 @@ BMESH::get_zcross_strips()
 
    _zx_stamp = VIEW::stamp();
 
-   return _faces.num();
+   return _faces.size();
 }
 
 int
@@ -1369,7 +1347,7 @@ BMESH::get_sil_strips()
       stop_watch clock;
 
       // Check all edges to find new sils:
-      for (int k = 0; k < _edges.num(); k++)
+      for (Bedge_list::size_type k=0; k<_edges.size(); k++)
          if (_edges[k]->is_sil())
             _sils.build(0, _edges[k], filter);  // get all connected sils
 
@@ -1392,8 +1370,8 @@ BMESH::get_sil_strips()
       stop_watch clock;
 
       // 1. First check all the old ones.
-      int k;
-      for (k = 0; k < old_sils.num(); k++)
+      size_t k;
+      for (k = 0; k < old_sils.size(); k++)
          if (old_sils[k]->is_sil())
             _sils.build(0, old_sils[k], filter);
 
@@ -1401,8 +1379,8 @@ BMESH::get_sil_strips()
       //    (If n is the total number of edges,
       //     we'll check 2 * sqrt(n) edges.)
 
-      int n = _edges.num();
-      k = (int)(2*sqrt((double)n));
+      int n = _edges.size();
+      k = (size_t)(2*sqrt((double)n));
       for (int maxj = n - 1; k>0; k--) {
          // XXX - On WIN32 drand48() sometimes returns 1.0,
          //       so we're careful below to ensure j < n:
@@ -1490,7 +1468,7 @@ BMESH::make_patch_if_needed()
 {
    Patch* p = 0;
 
-   for (int k=0; k<_faces.num(); k++) {
+   for (Bface_list::size_type k=0; k<_faces.size(); k++) {
       if (!bf(k)->patch()) {
          if (!p)
             p=new_patch();
@@ -1589,9 +1567,9 @@ BMESH::triangulate(Wpt_list &verts, FACElist &faces)
    verts.clear();
    faces.clear();
    if (nverts() > 0)
-      verts.reserve(_verts.num());
+      verts.reserve(_verts.size());
    if (nfaces() > 0)
-      faces.resize(_faces.num());
+      faces.resize(_faces.size());
 
    int i;
    for (i=0; i<nverts(); i++)
@@ -1839,20 +1817,20 @@ BMESH::read_blocks(istream &is)
       return true;
 
    static IOBlockList blocklist;
-   if (blocklist.num() == 0) {
-      blocklist += new IOBlockMeth<BMESH>("COLORS",
-                                          &BMESH::read_colors, this);
-      blocklist += new IOBlockMeth<BMESH>("TEX_COORDS2",
-                                          &BMESH::read_texcoords2, this);
-      blocklist += new IOBlockMeth<BMESH>("WEAK_EDGES",
-                                          &BMESH::read_weak_edges, this);
-      blocklist += new IOBlockMeth<BMESH>("PATCH",
-                                          &BMESH::read_patch,  this);
-      blocklist += new IOBlockMeth<BMESH>("INCLUDE",
-                                          &BMESH::read_include, this);
+   if (blocklist.empty()) {
+      blocklist.push_back(new IOBlockMeth<BMESH>("COLORS",
+                                                 &BMESH::read_colors, this));
+      blocklist.push_back(new IOBlockMeth<BMESH>("TEX_COORDS2",
+                                                 &BMESH::read_texcoords2, this));
+      blocklist.push_back(new IOBlockMeth<BMESH>("WEAK_EDGES",
+                                                 &BMESH::read_weak_edges, this));
+      blocklist.push_back(new IOBlockMeth<BMESH>("PATCH",
+                                                 &BMESH::read_patch, this));
+      blocklist.push_back(new IOBlockMeth<BMESH>("INCLUDE",
+                                                 &BMESH::read_include, this));
 
    } else {
-      for (int i = 0; i < blocklist.num(); i++) {
+      for (IOBlockList::size_type i = 0; i < blocklist.size(); i++) {
          ((IOBlockMeth<BMESH> *) blocklist[i])->set_obj(this);
       }
    }
@@ -1925,14 +1903,14 @@ BMESH::read_vertices(istream& is)
       return 0;
    }
 
-   _verts.realloc(n);
-   _edges.realloc(3*n);
+   _verts.reserve(n);
+   _edges.reserve(3*n);
 
    for (int i=0 ; i<n; i++) {
       double x, y, z;
       is >> x >> y >> z;
 
-      if (i<_verts.num())
+      if (i<(int)_verts.size())
          _verts[i]->set_loc(Wpt(x,y,z));
       else
          add_vertex(Wpt(x,y,z));
@@ -1950,7 +1928,7 @@ BMESH::read_faces(istream& is)
       return 0;
 
    if (n>0)
-      _faces.realloc(n);
+      _faces.reserve(n);
 
    int ret = 1; // really it's a bool (1 == success)
 
@@ -2067,7 +2045,7 @@ BMESH::read_texcoords2(istream& is, vector<string> &leftover)
       UVpt uv[3];
       int k;
       is >> k >> uv[0] >> uv[1] >> uv[2];
-      if (_faces.valid_index(k)) {
+      if (0 <= k && k < (int)_faces.size()) {
          // Round UV's to nearest UV_RESOLUTION
          // A value of 0.00001 is nice...
          if (UV_RESOLUTION>0) {
@@ -2226,18 +2204,20 @@ BMESH::write_creases(ostream& os) const
    if (nedges()<1 || os.bad())
       return 0;
 
-   static ARRAY<Bedge*> creases(512);
+   vector<Bedge*> creases; creases.reserve(512);
 
    creases.clear();
 
    int k;
    for (k=0; k<nedges(); k++)
       if (be(k)->is_crease())
-         creases += be(k);
+         creases.push_back(be(k));
 
-   os << creases.num() << endl;
-   while (!creases.empty())
-      os << *creases.pop() << endl;
+   os << creases.size() << endl;
+   while (!creases.empty()) {
+      os << *creases.back() << endl;
+      creases.pop_back();
+   }
 
    os << endl;
 
@@ -2250,18 +2230,20 @@ BMESH::write_weak_edges(ostream& os) const
    if (os.bad())
       return 0;
 
-   ARRAY<Bedge*> weak_edges(nedges());
+   vector<Bedge*> weak_edges; weak_edges.reserve(nedges());
 
    for (int k=0; k<nedges(); k++)
       if (be(k)->is_weak())
-         weak_edges += be(k);
+         weak_edges.push_back(be(k));
 
    if (!weak_edges.empty()) {
 
       os << "#BEGIN WEAK_EDGES" << endl;
-      os << weak_edges.num() << endl;
-      while (!weak_edges.empty())
-         os << *weak_edges.pop() << endl;
+      os << weak_edges.size() << endl;
+      while (!weak_edges.empty()) {
+         os << *weak_edges.back() << endl;
+         weak_edges.pop_back();
+      }
       os << endl;
 
       os << "#END WEAK_EDGES" << endl;
@@ -2293,18 +2275,20 @@ BMESH::write_polylines(ostream& os) const
       return 0;
 
    // XXX - use _polylines
-   static ARRAY<Bedge*> polylines(256);
+   vector<Bedge*> polylines; polylines.reserve(256);
 
    polylines.clear();
 
    int k;
    for (k=0; k<nedges(); k++)
       if (be(k)->is_polyline())
-         polylines += be(k);
+         polylines.push_back(be(k));
 
-   os << polylines.num() << endl;
-   while (!polylines.empty())
-      os << *polylines.pop() << endl;
+   os << polylines.size() << endl;
+   while (!polylines.empty()) {
+      os << *polylines.back() << endl;
+      polylines.pop_back();
+   }
 
    os << endl;
 
@@ -2338,11 +2322,11 @@ BMESH::operator =(CBMESH& m)
    _type_valid = m._type_valid;
 
    if (m.nverts() > 0)
-      _verts.realloc(m._verts.num());
+      _verts.reserve(m._verts.size());
    if (m.nedges() > 0)
-      _edges.realloc(m._edges.num());
+      _edges.reserve(m._edges.size());
    if (m.nfaces() > 0)
-      _faces.realloc(m._faces.num());
+      _faces.reserve(m._faces.size());
 
    // copy verts
    int k;
@@ -2395,9 +2379,9 @@ BMESH::operator =(BODY& body)
    FACElist tris;
    body.triangulate(pts, tris);
    if (!pts.empty() && !tris.empty()) {
-      _verts.realloc(pts.size());
-      _faces.realloc(tris.size());
-      _edges.realloc(tris.size()*3/2+10);
+      _verts.reserve(pts.size());
+      _faces.reserve(tris.size());
+      _edges.reserve(tris.size()*3/2+10);
       size_t i;
       for (i = 0; i < pts.size(); i++)
          add_vertex(pts[i]);
@@ -2449,8 +2433,8 @@ BMESH::check_type()
       num_inconsistent_edges = 0;
 
    // check for isolated vertices:
-   int k;
-   for (k=0; k<_verts.num(); k++)
+   size_t k;
+   for (k=0; k<_verts.size(); k++)
       if (bv(k)->degree() == 0)
          num_isolated_verts++;
 
@@ -2459,7 +2443,7 @@ BMESH::check_type()
 
    // check for isolated edges, border edges,
    // and inconsistently oriented edges:
-   for (k=0; k<_edges.num(); k++) {
+   for (k=0; k<_edges.size(); k++) {
       if (be(k)->nfaces() == 0)
          num_isolated_edges++;
       else if (be(k)->nfaces() == 1)
@@ -2480,7 +2464,7 @@ BMESH::check_type()
       _type |= CLOSED_SURFACE;
 
    // XXX - may not be needed
-   for (k=0; k<nfaces(); k++)
+   for (k=0; (int)k<nfaces(); k++)
       _faces[k]->orient_strip(0);
 
    // deal with inconsistently oriented edges if needed.
@@ -2509,18 +2493,18 @@ BMESH::fix_orientation()
 
    _faces.clear_flags();
 
-   ARRAY<Bface*> pos_faces;
-   ARRAY<Bface*> neg_faces;
-   for (int k=0; k<_faces.num(); k++) {
+   vector<Bface*> pos_faces;
+   vector<Bface*> neg_faces;
+   for (Bface_list::size_type k=0; k<_faces.size(); k++) {
       if (!_faces[k]->flag()) {
          if (debug)
             err_msg("fix_orientation: starting on untouched face...");
          pos_faces.clear();
          neg_faces.clear();
          _faces[k]->set_flag(1);
-         pos_faces += _faces[k];
+         pos_faces.push_back(_faces[k]);
          grow_oriented_face_lists(_faces[k], pos_faces, neg_faces);
-         reverse_faces((pos_faces.num() < neg_faces.num()) ?
+         reverse_faces((pos_faces.size() < neg_faces.size()) ?
                        pos_faces : neg_faces);
       }
    }
@@ -2528,7 +2512,7 @@ BMESH::fix_orientation()
 
    // check consistency (e.g. surface is not orientable)
    int num_inconsistent_edges = 0;
-   for (int j=0; j<_edges.num(); j++)
+   for (Bedge_list::size_type j=0; j<_edges.size(); j++)
       if (!_edges[j]->consistent_orientation())
          num_inconsistent_edges++;
 
@@ -2542,18 +2526,18 @@ BMESH::fix_orientation()
 void
 BMESH::grow_oriented_face_lists(
    Bface* f,
-   ARRAY<Bface*>& pos_faces,
-   ARRAY<Bface*>& neg_faces)
+   vector<Bface*>& pos_faces,
+   vector<Bface*>& neg_faces)
 {
    for (int i=1; i<=3; i++) {
       Bface* nbr = f->nbr(i);
       if (nbr && !nbr->flag()) {
          nbr->set_flag(1);
          if (f->e(i)->consistent_orientation()) {
-            pos_faces += nbr;
+            pos_faces.push_back(nbr);
             grow_oriented_face_lists(nbr, pos_faces, neg_faces);
          } else {
-            neg_faces += nbr;
+            neg_faces.push_back(nbr);
             grow_oriented_face_lists(nbr, neg_faces, pos_faces);
          }
       }
@@ -2570,7 +2554,7 @@ BMESH::nearest_edge(CWpt &p)
    Bedge *ret = _edges[0];
    double dist = (p - _edges[0]->project_to_simplex(p, q)).length_sqrd(), d;
 
-   for (int i=1; i<_edges.num(); i++) {
+   for (Bedge_list::size_type i=1; i<_edges.size(); i++) {
       if ((d = (p - _edges[i]->project_to_simplex(p, q)).length_sqrd()) < dist) {
          ret = _edges[i];
          dist = d;
@@ -2589,7 +2573,7 @@ BMESH::nearest_vert(CWpt &p)
    Bvert *ret = _verts[0];
    double dist = (p - _verts[0]->loc()).length_sqrd(), d;
 
-   for (int i=1; i<_verts.num(); i++) {
+   for (Bvert_list::size_type i=1; i<_verts.size(); i++) {
       if ((d = (p - _verts[i]->loc()).length_sqrd()) < dist) {
          ret = _verts[i];
          dist = d;
@@ -2603,7 +2587,7 @@ void
 BMESH::get_enclosed_verts(
    CXYpt_list& boundary,
    Bface* startface,
-   ARRAY<Bvert*>& ret)
+   vector<Bvert*>& ret)
 {
    // Do a search on the mesh to find out vertices that
    // lie inside the boundary, with the vertices of the
@@ -2622,32 +2606,33 @@ BMESH::get_enclosed_verts(
    for (int j=0; j<nverts(); j++)
       bv(j)->clear_flag();
 
-   ARRAY<Bvert*> frontier; // expandable frontier of vertices to check
+   vector<Bvert*> frontier; // expandable frontier of vertices to check
 
    // start with on-screen vertices, since others
    // cannot be projected reliably to screen
    // coordinates:
    if (startface->v1()->ndc().in_frustum())
-      frontier += startface->v1();
+      frontier.push_back(startface->v1());
    if (startface->v2()->ndc().in_frustum())
-      frontier += startface->v2();
+      frontier.push_back(startface->v2());
    if (startface->v3()->ndc().in_frustum())
-      frontier += startface->v3();
+      frontier.push_back(startface->v3());
 
    while (!frontier.empty()) {
-      Bvert* v = frontier.pop();
+      Bvert* v = frontier.back();
+      frontier.pop_back();
 
       // note: v->ndc() accessor takes into account
       // mesh transform if any
       XYpt xy = NDCpt(v->ndc());
 
       if (boundary.contains(xy)) {
-         ret += v;
+         ret.push_back(v);
          for (int i=0 ;i<v->degree(); i++) {
             Bvert *nbr = v->nbr(i);
             if (!nbr->flag()) {
                nbr->set_flag();
-               frontier += nbr;
+               frontier.push_back(nbr);
             }
          }
       }
@@ -2657,7 +2642,9 @@ BMESH::get_enclosed_verts(
 int
 BMESH::remove_face(Bface* f)
 {
-   _faces -= f;
+   Bface_list::iterator it;
+   it = std::find(_faces.begin(), _faces.end(), f);
+   _faces.erase(it);
    delete_face(f);
 
    return 1;
@@ -2666,7 +2653,9 @@ BMESH::remove_face(Bface* f)
 int
 BMESH::remove_edge(Bedge* e)
 {
-   _edges -= e;
+   Bedge_list::iterator it;
+   it = std::find(_edges.begin(), _edges.end(), e);
+   _edges.erase(it);
    delete_edge(e);
 
    return 1;
@@ -2675,7 +2664,9 @@ BMESH::remove_edge(Bedge* e)
 int
 BMESH::remove_vertex(Bvert* v)
 {
-   _verts -= v;
+   Bvert_list::iterator it;
+   it = std::find(_verts.begin(), _verts.end(), v);
+   _verts.erase(it);
    delete_vert(v);
 
    return 1;
@@ -2690,7 +2681,7 @@ BMESH::remove_faces(CBface_list& faces)
       return 0;
    }
 
-   for (int i=0; i<faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<faces.size(); i++) {
       remove_face(faces[i]);
    }
 
@@ -2706,7 +2697,7 @@ BMESH::remove_edges(CBedge_list& edges)
       return 0;
    }
 
-   for (int i=0; i<edges.num(); i++) {
+   for (Bedge_list::size_type i=0; i<_edges.size(); i++) {
       remove_edge(edges[i]);
    }
 
@@ -2722,7 +2713,7 @@ BMESH::remove_verts(CBvert_list& verts)
       return 0;
    }
 
-   for (int i=0; i<verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       remove_vertex(verts[i]);
    }
 
@@ -2739,19 +2730,19 @@ BMESH::merge_vertex(Bvert* v, Bvert* u, bool keep_vert)
    // Get faces around v and detach them
    Bface_list star_faces(6);
    v->get_all_faces(star_faces);
-   int k;
-   for (k=0; k<star_faces.num(); k++)
+   size_t k;
+   for (k=0; k<star_faces.size(); k++)
       star_faces[k]->detach();
 
    // redefine edges coming out of v,
    // removing those that can't be redefined
    // (because they would duplicate an existing edge).
-   ARRAY<Bedge*> star_edges = v->get_adj();
-   for (k=0; k<star_edges.num(); k++)
+   vector<Bedge*> star_edges = v->get_adj();
+   for (k=0; k<star_edges.size(); k++)
       if (!star_edges[k]->redefine(v,u))
          remove_edge(star_edges[k]);
 
-   for (k=0; k<star_faces.num(); k++)
+   for (k=0; k<star_faces.size(); k++)
       if (!star_faces[k]->redefine(v,u))
          remove_face(star_faces[k]);
 
@@ -2762,12 +2753,12 @@ BMESH::merge_vertex(Bvert* v, Bvert* u, bool keep_vert)
 
 
 int
-compare_locs_lexicographically(const void* va, const void* vb)
+compare_locs_lexicographically(const Bvert *va, const Bvert *vb)
 {
    // used in BMESH::remove_duplicate_vertices() below
 
-   CWpt& a = (*((Bvert**)va))->loc();
-   CWpt& b = (*((Bvert**)vb))->loc();
+   CWpt& a = va->loc();
+   CWpt& b = vb->loc();
 
    return ((a[0] > b[0]) ?  1 :
            (a[0] < b[0]) ? -1 :
@@ -2782,7 +2773,7 @@ void
 BMESH::remove_duplicate_vertices(bool keep_verts)
 {
    // zero-length edges cause problems -- remove them and their
-   // adjacent zero-area faces.  NOTE: because of the way ARRAY
+   // adjacent zero-area faces.  NOTE: because of the way vector
    // deletion works, we have to work backwards.
    for (int j=nedges()-1; j>=0; j--) {
       if (_edges[j]->length() == 0)
@@ -2798,13 +2789,13 @@ BMESH::remove_duplicate_vertices(bool keep_verts)
    Bvert_list verts = _verts;
 
    // sort verts by increasing (x,y,z) order:
-   verts.sort(compare_locs_lexicographically);
+   std::sort(verts.begin(), verts.end(), compare_locs_lexicographically);
 
    // remove duplicate vertices, which now lie
    // next to each other in the array:
    int count = 0;
    Bvert* prev = verts[0];
-   for (int k=1; k<verts.num(); k++) {
+   for (Bvert_list::size_type k=1; k<verts.size(); k++) {
       if (verts[k]->loc() == prev->loc()) {
          merge_vertex(verts[k], prev, keep_verts);
          count++;
@@ -3002,7 +2993,7 @@ BMESH::split_face(Bface *face, CWpt &pos)
 int
 BMESH::split_faces(
    CXYpt_list &pts,
-   ARRAY<Bvert *> &verts,
+   vector<Bvert *> &verts,
    Bface* start_face)
 {
    // preconditions:
@@ -3039,7 +3030,7 @@ BMESH::split_faces(
       return 0;
    }
 
-   verts += split_face(cur, cur_pt);
+   verts.push_back(split_face(cur, cur_pt));
    NDCpt new_ndc;
 
    Bface_list star_faces(16);
@@ -3049,19 +3040,19 @@ BMESH::split_faces(
       // the way, accumulating new vertices.
 
       int success = 0;
-      verts.last()->get_faces(star_faces);
-      NDCpt last_ndc = xform() * verts.last()->loc();
+      verts.back()->get_faces(star_faces);
+      NDCpt last_ndc = xform() * verts.back()->loc();
 
       if (closed && i==pts.size()-1) {
          cerr << "In closed search" <<endl;
          // see if there is an adjacent vertex at the final position
          // already.  if so, declare success and we're done.
-         for (int j=0; j < verts.last()->degree(); j++) {
-            if (verts.last()->nbr(j) == verts[0]) {
+         for (int j=0; j < verts.back()->degree(); j++) {
+            if (verts.back()->nbr(j) == verts[0]) {
                i++;
                success = 1;
                Bvert* v= verts[0];
-               verts += v;
+               verts.push_back(v);
                break;
             }
          }
@@ -3069,7 +3060,7 @@ BMESH::split_faces(
             cerr << "BMESH::split_faces: Closed SearchFailed" << endl;
          else {
             cerr << "BMESH::split_faces: Closing correctly" << endl;
-            assert(verts[0]==verts.last());
+            assert(verts[0]==verts.back());
          }
       }
 
@@ -3077,34 +3068,33 @@ BMESH::split_faces(
       // so the closing can possibly fail but succeed in subsequent triangles
 
       if (!success) {
-         for (int j=0; j<star_faces.num(); j++) {
-
+         for (Bface_list::size_type j=0; j<star_faces.size(); j++) {
             if (star_faces[j]->ndc_contains(pts[i]) ) {
-
                if (i==pts.size()-1)
                   cerr << "BMESH::split_faces: Why here" << endl;
                Wpt new_pt = star_faces[j]->plane_intersect(
                   inv_xform() * Wline(pts[i]));
-               verts += split_face(star_faces[j], new_pt);
+               verts.push_back(split_face(star_faces[j], new_pt));
                cerr << "BMESH::split_faces: Split face insert "
-                    << verts.num()
+                    << verts.size()
                     << endl;
                i++;
 
                success = 1;
                break;
-            } else if (star_faces[j]->opposite_edge(verts.last())->
+
+            } else if (star_faces[j]->opposite_edge(verts.back())->
                        ndc_intersect(last_ndc, pts[i], new_ndc)) {
 
                if (i==pts.size()-1)
                   cerr << "Kept going" << endl;
                Wpt new_pt = star_faces[j]->plane_intersect(
                   inv_xform() * Wline(new_ndc));
-               verts += split_edge(
-                  star_faces[j]->opposite_edge(verts.last()),new_pt);
+               verts.push_back(split_edge(
+                  star_faces[j]->opposite_edge(verts.back()),new_pt));
 
                cerr << "BMESH::split_faces: Split edge insert "
-                    << verts.num()
+                    << verts.size()
                     << endl;
                success = 1;
                break;
@@ -3120,7 +3110,7 @@ BMESH::split_faces(
    }
 
    cerr << "BMESH::Split_faces :: Success.. returning "
-        << verts.num()
+        << verts.size()
         << " vertices"
         << endl;
    changed(TRIANGULATION_CHANGED);
@@ -3431,10 +3421,10 @@ BMESH::put_vertices(TAGformat &d) const
 
    if (Config::get_var_bool("JOT_SAVE_XFORMED_MESH",false))
       for (int i = 0; i< nverts(); i++)
-         verts.push_back(bv(i)->wloc());
+         verts[i] = bv(i)->wloc();
    else
       for (int i = 0; i< nverts(); i++)
-         verts.push_back(bv(i)->loc());
+         verts[i] = bv(i)->loc();
 
    // XXX - copied code from net_type.H,
    //       want to avoid super long lines that may be
@@ -3459,10 +3449,10 @@ BMESH::put_vertices(TAGformat &d) const
 void
 BMESH::put_faces(TAGformat &d) const
 {
-   ARRAY<ARRAY<int> > faces(nfaces());
+   vector<vector<int> > faces(nfaces());
    
    for (int i=0; i<nfaces(); i++) {
-      ARRAY<int> face;
+      vector<int> face;
       Bface *f = bf(i);
       if (use_new_bface_io) {
          // Faces with uv coords will be written out in
@@ -3471,27 +3461,27 @@ BMESH::put_faces(TAGformat &d) const
             continue;
          if (!f->is_quad()) {
             // Write an ordinary triangle
-            face  += f->v1()->index();
-            face  += f->v2()->index();
-            face  += f->v3()->index();
-            faces += face;
+            face.push_back(f->v1()->index());
+            face.push_back(f->v2()->index());
+            face.push_back(f->v3()->index());
+            faces[i] = face;
          } else if (f->quad_rep() == f) {
             // Write a quad:
             Bvert *a=0, *b=0, *c=0, *d=0;
             f->get_quad_verts(a,b,c,d);
             assert(a && b && c && d);
-            face  += a->index();
-            face  += b->index();
-            face  += c->index();
-            face  += d->index();
-            faces += face;
+            face.push_back(a->index());
+            face.push_back(b->index());
+            face.push_back(c->index());
+            face.push_back(d->index());
+            faces[i] = face;
          }
       } else {
          // Old I/O: write a plain triangle
-         face  += f->v1()->index();
-         face  += f->v2()->index();
-         face  += f->v3()->index();
-         faces += face;
+         face.push_back(f->v1()->index());
+         face.push_back(f->v2()->index());
+         face.push_back(f->v3()->index());
+         faces[i] = face;
       }
    }
 
@@ -3502,9 +3492,9 @@ BMESH::put_faces(TAGformat &d) const
    if ((*d).ascii()) {
       (*d) << "{";
    } else {
-      (*d) << faces.num();
+      (*d) << faces.size();
    }
-   for (int i=0; i<faces.num();i++) {
+   for (size_t i=0; i<faces.size();i++) {
       (*d) << " " << faces[i];
       (*d).write_newline();
    }
@@ -3518,8 +3508,8 @@ BMESH::put_faces(TAGformat &d) const
 class UVforIO2
 {
  public:
-   ARRAY<int>  _face;   // indices of vertices making up the triangle or quad
-   ARRAY<UVpt> _uvs;    // corresponding UV coords
+   vector<int>  _face;   // indices of vertices making up the triangle or quad
+   vector<UVpt> _uvs;    // corresponding UV coords
 
    UVforIO2() {}
    UVforIO2(CBface* f)
@@ -3535,14 +3525,14 @@ class UVforIO2
             UVpt ua, ub, uc, ud;
             if (f->get_quad_verts(a,b,c,d) && UVdata::get_quad_uvs(a,b,c,d,ua,ub,uc,ud)) {
                assert(a && b && c && d);
-               _face += a->index();
-               _face += b->index();
-               _face += c->index();
-               _face += d->index();
-               _uvs += ua;
-               _uvs += ub;
-               _uvs += uc;
-               _uvs += ud;
+               _face.push_back(a->index());
+               _face.push_back(b->index());
+               _face.push_back(c->index());
+               _face.push_back(d->index());
+               _uvs.push_back(ua);
+               _uvs.push_back(ub);
+               _uvs.push_back(uc);
+               _uvs.push_back(ud);
             } else {
                // could just as well assert(0)
                err_msg("UVforIO2::UVforIO2: error getting quad uv's; skipping...");
@@ -3550,12 +3540,12 @@ class UVforIO2
          } else {
             UVpt ua, ub, uc;
             if (UVdata::get_uvs(f, ua, ub, uc)) {
-               _face += f->v1()->index();
-               _face += f->v2()->index();
-               _face += f->v3()->index();
-               _uvs += ua;
-               _uvs += ub;
-               _uvs += uc;
+               _face.push_back(f->v1()->index());
+               _face.push_back(f->v2()->index());
+               _face.push_back(f->v3()->index());
+               _uvs.push_back(ua);
+               _uvs.push_back(ub);
+               _uvs.push_back(uc);
             } else {
                // could just as well assert(0)
                err_msg("UVforIO2::UVforIO2: error getting triangle uv's; skipping...");
@@ -3563,15 +3553,15 @@ class UVforIO2
          }
       }
 
-   int  num()     const { return _face.num(); }
-   bool is_good() const { return (num() == 3 || num() == 4) && (num() == _uvs.num()); }
+   int  num()     const { return _face.size(); }
+   bool is_good() const { return (num() == 3 || num() == 4) && (num() == (int)_uvs.size()); }
 
-   // Needed by ARRAY<UVforIO2>::get_index():
+   // Needed by vector<UVforIO2>::get_index():
    bool operator==(const UVforIO2 &u) const
-      {
-         // Use operator==(ARRAY<T>, ARRAY<T>)
-         return (_face == u._face && _uvs == u._uvs);
-      }
+   {
+      // Use operator==(vector<T>, vector<T>)
+      return (_face == u._face && _uvs == u._uvs);
+   }
 };
 
 inline STDdstream&
@@ -3610,12 +3600,12 @@ BMESH::put_uvfaces(TAGformat &d) const
    if (!use_new_bface_io)
       return;
 
-   ARRAY<UVforIO2> uvs(nfaces());
+   vector<UVforIO2> uvs; uvs.reserve(nfaces());
 
    for (int i=0; i<nfaces(); i++) {
       UVforIO2 uv(bf(i));
       if (uv.is_good())
-         uvs += uv;
+         uvs.push_back(uv);
    }
 
    if (!uvs.empty()) {
@@ -3628,14 +3618,14 @@ BMESH::put_uvfaces(TAGformat &d) const
 void
 BMESH::get_uvfaces(TAGformat &d)
 {
-   ARRAY<UVforIO2> uvs;
+   vector<UVforIO2> uvs;
    *d >> uvs;
 
    if (uvs.empty())
       return;
 
    Patch* p = 0;
-   for (int i=0; i<uvs.num(); i++) {
+   for (vector<UVforIO2>::size_type i=0; i<uvs.size(); i++) {
       const UVforIO2& uv = uvs[i];
       if (!uv.is_good()) {
          err_msg("BMESH::get_uvfaces: skipping bad face:");
@@ -3666,38 +3656,37 @@ BMESH::get_uvfaces(TAGformat &d)
 void
 BMESH::put_creases(TAGformat &d) const
 {
-   ARRAY<Point2i> creases;
+   vector<Point2i> creases;
 
    for (int i=0; i<nedges(); i++) {
       Bedge *e = be(i);
       if (e->is_crease())
-         creases += Point2i(e->v(1)->index(), e->v(2)->index());
+         creases.push_back(Point2i(e->v(1)->index(), e->v(2)->index()));
    }
 
    // No tag if no creases!
-   if (creases.num() == 0)
+   if (creases.empty())
       return;
 
    d.id();
    *d << creases;
    d.end_id();
-
 }
 
 
 void
 BMESH::put_polylines(TAGformat &d) const
 {
-   ARRAY<Point2i> polylines;
+   vector<Point2i> polylines;
 
    for (int i=0; i<nedges(); i++) {
       Bedge *e = be(i);
       if (e->is_polyline())
-         polylines += Point2i(e->v(1)->index(), e->v(2)->index());
+         polylines.push_back(Point2i(e->v(1)->index(), e->v(2)->index()));
    }
 
    //No tag if no creases!
-   if (polylines.num() == 0)
+   if (polylines.empty())
       return;
 
    d.id();
@@ -3712,12 +3701,12 @@ BMESH::put_weak_edges(TAGformat &d) const
    if (use_new_bface_io)
       return;
 
-   ARRAY<Point2i> weak_edges;
+   vector<Point2i> weak_edges;
 
    for (int i=0; i<nedges(); i++) {
       Bedge *e = be(i);
       if (e->is_weak())
-         weak_edges += Point2i(e->v(1)->index(), e->v(2)->index());
+         weak_edges.push_back(Point2i(e->v(1)->index(), e->v(2)->index()));
    }
 
    if (weak_edges.empty())
@@ -3731,12 +3720,12 @@ BMESH::put_weak_edges(TAGformat &d) const
 void
 BMESH::put_sec_faces(TAGformat &d) const
 {
-   ARRAY<Point3i> sec_faces;
+   vector<Point3i> sec_faces;
 
    for (int i=0; i<nfaces(); i++) {
       Bface *f = bf(i);
       if (f && f->is_secondary())
-         sec_faces += Point3i(f->v1()->index(), f->v2()->index(), f->v3()->index());
+         sec_faces.push_back(Point3i(f->v1()->index(), f->v2()->index(), f->v3()->index()));
    }
 
    if (sec_faces.empty())
@@ -3745,7 +3734,6 @@ BMESH::put_sec_faces(TAGformat &d) const
    d.id();
    *d << sec_faces;
    d.end_id();
-
 }
 
 
@@ -3795,22 +3783,21 @@ BMESH::put_texcoords2(TAGformat &d) const
    if (use_new_bface_io)
       return;
 
-   ARRAY<UVforIO> texcoords2;
+   vector<UVforIO> texcoords2;
 
    for (int i=0; i<nfaces(); i++) {
       UVdata* uvdata = UVdata::lookup(bf(i));
       if (uvdata)
-         texcoords2 += UVforIO(i, uvdata->uv(1), uvdata->uv(2), uvdata->uv(3));
+         texcoords2.push_back(UVforIO(i, uvdata->uv(1), uvdata->uv(2), uvdata->uv(3)));
    }
 
    // No tag if no texcoords!
-   if (texcoords2.num() == 0)
+   if (texcoords2.empty())
       return;
 
    d.id();
    *d << texcoords2;
    d.end_id();
-
 }
 
 
@@ -3838,21 +3825,18 @@ BMESH::put_render_style(TAGformat &d) const
 void
 BMESH::put_colors(TAGformat &d) const
 {
-
    // Assume if the first has color that they all do (bad assumption, probably)
    if ((nverts()==0) || (!_verts[0]->has_color()))
       return;
 
-
-   ARRAY<COLOR> colors(nverts());
+   vector<COLOR> colors(nverts());
 
    for (int i=0; i<nverts(); i++)
-      colors += bv(i)->color();
+      colors[i] = bv(i)->color();
 
    d.id();
    *d << colors;
    d.end_id();
-
 }
 
 void
@@ -3895,8 +3879,8 @@ BMESH::get_vertices(TAGformat &d)
             nverts(), locs.size());
       }
    } else {
-      _verts.realloc(locs.size());
-      _edges.realloc(3*locs.size());
+      _verts.reserve(locs.size());
+      _edges.reserve(3*locs.size());
 
       for (Wpt_list::size_type i=0; i < locs.size(); i++) {
          // Bverts might be derived type,
@@ -3916,20 +3900,20 @@ BMESH::get_faces(TAGformat &d)
 {
    assert(nfaces() == 0);
 
-   ARRAY<ARRAY<int> > faces;
+   vector<vector<int> > faces;
    *d >> faces;
 
-   _faces.realloc(faces.num());
+   _faces.reserve(faces.size());
 
    // Create default patch here and put all faces into it.
    // Later if Patches are specified in the file, faces will
    // be re-sorted into their correct patches and this default
    // patch will be removed:
    Patch* p = 0;  //new_patch();
-   for (int i=0; i<faces.num(); i++) {
-      CARRAY<int>& face = faces[i];
-      switch(face.num()) {
+   for (size_t i=0; i<faces.size(); i++) {
+      const vector<int>& face = faces[i];
 
+      switch (face.size()) {
        case 3:
          // triangle
          add_face(face[0], face[1], face[2], p);
@@ -3940,7 +3924,7 @@ BMESH::get_faces(TAGformat &d)
          break;
 
        default: {
-          err_msg("BMESH::get_faces: error: %d-gon found, skipping...", face.num());
+          err_msg("BMESH::get_faces: error: %d-gon found, skipping...", face.size());
 
           //XXX - This blows up on WIN32
           //STDdstream e((iostream*)&cerr);
@@ -3960,10 +3944,10 @@ BMESH::get_faces(TAGformat &d)
 void
 BMESH::get_creases(TAGformat &d)
 {
-   ARRAY<Point2i> creases;
+   vector<Point2i> creases;
    *d >> creases;
 
-   for (int i=0; i<creases.num(); i++)
+   for (vector<Point2i>::size_type i=0; i<creases.size(); i++)
       set_crease(creases[i][0],creases[i][1]);
 
    changed(CREASES_CHANGED);
@@ -3972,52 +3956,52 @@ BMESH::get_creases(TAGformat &d)
 void
 BMESH::get_polylines(TAGformat &d)
 {
-   ARRAY<Point2i> polylines;
+   vector<Point2i> polylines;
    *d >> polylines;
 
-   for (int i=0; i<polylines.num(); i++)
+   for (vector<Point2i>::size_type i=0; i<polylines.size(); i++)
       add_edge(polylines[i][0],polylines[i][1]);
 
    if (Config::get_var_bool("BMESH_BUILD_POLYSTRIPS",false) &&
-       polylines.num() > 0)
+       polylines.size() > 0)
       build_polyline_strips();
 }
 
 void
 BMESH::get_weak_edges(TAGformat &d)
 {
-   ARRAY<Point2i> weak_edges;
+   vector<Point2i> weak_edges;
    *d >> weak_edges;
 
    bool debug = Config::get_var_bool("DEBUG_WEAK_EDGES",false);
    err_adv(debug, "BMESH::get_weak_edges: reading %d weak edges",
-           weak_edges.num());
+           weak_edges.size());
 
    int count=0;
-   for (int i=0; i<weak_edges.num(); i++)
+   for (vector<Point2i>::size_type i=0; i<weak_edges.size(); i++)
       if (set_weak_edge(weak_edges[i][0],weak_edges[i][1]))
          count++;
-   err_adv(debug, "set %d/%d weak edges", count, weak_edges.num());
+   err_adv(debug, "set %d/%d weak edges", count, weak_edges.size());
 }
 
 void
 BMESH::get_sec_faces(TAGformat &d)
 {
-   int i;
-   ARRAY<Point3i> sec_faces;
+   vector<Point3i>::size_type i;
+   vector<Point3i> sec_faces;
 
    *d >> sec_faces;
 
    Bface_list sec_faces_list;
 
-   for (i=0; i<sec_faces.num(); i++) {
+   for (i=0; i<sec_faces.size(); i++) {
       Bface* face = lookup_face(sec_faces[i]);
 
       if (!face)
          cerr << "BMESH::get_sec_faces - error: could not find secondary face"
               << endl;
       else
-         sec_faces_list += face;
+         sec_faces_list.push_back(face);
    }
 
    if (sec_faces_list.empty())
@@ -4025,7 +4009,7 @@ BMESH::get_sec_faces(TAGformat &d)
 
    sec_faces_list.push_layer();
 
-   for (i=0; i<nedges(); i++)
+   for (i=0; (int)i<nedges(); i++)
       be(i)->fix_multi();
 }
 
@@ -4035,11 +4019,11 @@ BMESH::get_texcoords2(TAGformat &d)
 {
    static double UV_RESOLUTION = Config::get_var_dbl("UV_RESOLUTION",0,true);
 
-   ARRAY<UVforIO> texcoords2;
+   vector<UVforIO> texcoords2;
    *d >> texcoords2;
 
-   for (int i=0; i<texcoords2.num(); i++) {
-      if (_faces.valid_index(texcoords2[i]._face)) {
+   for (vector<UVforIO>::size_type i=0; i<texcoords2.size(); i++) {
+      if (0 <= texcoords2[i]._face && texcoords2[i]._face < (int)_faces.size()) {
          // Round UV's to nearest UV_RESOLUTION
          // A value of 0.00001 is nice...
          if (UV_RESOLUTION>0) {
@@ -4064,8 +4048,6 @@ BMESH::get_texcoords2(TAGformat &d)
          err_msg("BMESH::read_texcoords2() -  ERROR! Invalid face index %d",
                  texcoords2[i]._face);
       }
-
-
    }
 
    // N'existe pas...
@@ -4091,15 +4073,15 @@ void
 BMESH::get_colors(TAGformat &d)
 {
    // Read vertices
-   ARRAY<COLOR> colors;
+   vector<COLOR> colors;
    *d >> colors;
 
-   if (colors.num() != nverts()) {
+   if ((int)colors.size() != nverts()) {
       err_msg("BMESH::get_colors: warning: %d colors for %d verts",
-              colors.num(), nverts());
+              colors.size(), nverts());
       err_msg("   rejecting vert colors");
    } else {
-      for (int i=0; i < colors.num(); i++)
+      for (vector<COLOR>::size_type i=0; i < colors.size(); i++)
          _verts[i]->set_color(colors[i]);
       changed(VERT_COLORS_CHANGED);
    }
@@ -4186,10 +4168,10 @@ BMESH::avg_len() const
 {
    if (!_avg_edge_len_valid) {
       double ret = 0;
-      for (int k=_edges.num()-1; k>=0; k--)
+      for (Bedge_list::size_type k=0; k<_edges.size(); k++)
          ret += _edges[k]->length();
       if (!_edges.empty())
-         ret /= _edges.num();
+         ret /= _edges.size();
       ((BMESH*) this)->_avg_edge_len_valid = 1;
       ((BMESH*) this)->_avg_edge_len = ret;
    }
@@ -4316,10 +4298,9 @@ BMESH::_merge(BMESH* m)
 void
 BMESH::grow_mesh_equivalence_class(
    Bvert* v,
-   ARRAY<Bface*> &faces,
-   ARRAY<Bedge*> &edges,
-   ARRAY<Bvert*> &verts)
-
+   vector<Bface*> &faces,
+   vector<Bedge*> &edges,
+   vector<Bvert*> &verts)
 {
    if (v->flag() == 0)
       return;
@@ -4332,18 +4313,18 @@ BMESH::grow_mesh_equivalence_class(
          Bface *f = nbr_e->f(j);
          if (f && !f->flag()) {
             f->set_flag();
-            faces += f;
+            faces.push_back(f);
          }
       }
 
       if (!nbr_e->flag()) {
          nbr_e->set_flag();
-         edges += nbr_e;
+         edges.push_back(nbr_e);
       }
 
       if (!nbr_v->flag()) {
          nbr_v->set_flag();
-         verts += nbr_v;
+         verts.push_back(nbr_v);
 
          grow_mesh_equivalence_class(nbr_v, faces, edges, verts);
       }
@@ -4359,13 +4340,13 @@ BMESH::clear_flags()
    _faces.clear_flags();
 }
 
-ARRAY<BMESH*>
+vector<BMESH*>
 BMESH::split_components()
 {
    // Splits mesh into disconnected pieces.
    // Returns array of new meshes.
 
-   ARRAY<BMESH*> new_meshes;
+   vector<BMESH*> new_meshes;
 
    clear_flags();
 
@@ -4375,19 +4356,19 @@ BMESH::split_components()
    // get sucked out from under us otherwise:
    Bvert_list tmp_verts = _verts;
 
-   for (int i=0; i<tmp_verts.num(); i++) {
+   for (Bvert_list::size_type i=0; i<tmp_verts.size(); i++) {
       Bvert* v = tmp_verts[i];
       if (!v->flag()) {
 
          // Mesh elements reachable from v:
-         ARRAY<Bface*> faces;
-         ARRAY<Bedge*> edges;
-         ARRAY<Bvert*> verts;
+         vector<Bface*> faces;
+         vector<Bedge*> edges;
+         vector<Bvert*> verts;
 
          // The flag being set means the vertex (or edge or face)
          // is in the list:
          v->set_flag();
-         verts += v;
+         verts.push_back(v);
 
          // Collect all reachable elements:
          grow_mesh_equivalence_class(v, faces, edges, verts);
@@ -4398,25 +4379,34 @@ BMESH::split_components()
 
          // Make a new mesh after the first time.
          BMESH* m = (BMESH*)dup();
-         new_meshes += m;
+         new_meshes.push_back(m);
 
-         int t;
-         for (t=0; t<verts.num(); t++) {
-            _verts -= verts[t];         // remove from this mesh
-            m->add_vertex(verts[t]);    // add to the new mesh
+         size_t t;
+         for (t=0; t<verts.size(); t++) {
+            // remove from this mesh and add to the new mesh
+            Bvert_list::iterator it;
+            it = std::find(_verts.begin(), _verts.end(), verts[t]);
+            _verts.erase(it);
+            m->add_vertex(verts[t]);
          }
 
-         for (t=0; t<edges.num(); t++) {
-            _edges -= edges[t];         // remove from this mesh
-            m->add_edge(edges[t]);      // add to the new mesh
+         for (t=0; t<edges.size(); t++) {
+            // remove from this mesh and add to the new mesh
+            Bedge_list::iterator it;
+            it = std::find(_edges.begin(), _edges.end(), edges[t]);
+            _edges.erase(it);
+            m->add_edge(edges[t]);
          }
 
          // The new patch will take the face away from its
          // current patch, if any.
          Patch* p = m->new_patch();
-         for (t=0; t<faces.num(); t++) {
-            _faces -= faces[t];         // remove from this mesh
-            m->add_face(faces[t],p);    // add to the new mesh
+         for (t=0; t<faces.size(); t++) {
+            // remove from this mesh and add to the new mesh
+            Bface_list::iterator it;
+            it = std::find(_faces.begin(), _faces.end(), faces[t]);
+            _faces.erase(it);
+            m->add_face(faces[t],p);
          }
 
          if (m != this)
@@ -4450,7 +4440,7 @@ BMESH::split_patches()
    delete_patches();
 
    // check each face
-   for (int i=0; i<_faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<_faces.size(); i++) {
       // skip if already visited this face:
       if (_faces[i]->patch())
          continue;
@@ -4470,32 +4460,32 @@ BMESH::split_patches()
    changed(PATCHES_CHANGED);
 }
 
-ARRAY<Bface_list>
+vector<Bface_list>
 BMESH::get_components() const
 {
    // Returns separate Bface_lists, one for
    // each connected component of the mesh:
 
-   ARRAY<Bface_list> ret;
+   vector<Bface_list> ret;
 
    // before calling Bface_list::grow_connected(),
    // must set all face flags to 1:
    _faces.set_flags(1);
 
-   for (int i=0; i<_faces.num(); i++) {
+   for (Bface_list::size_type i=0; i<_faces.size(); i++) {
       Bface* f = bf(i);
       if (f->flag() == 1) {
          Bface_list component;
          component.grow_connected(f);
          assert(!component.empty());
-         ret += component;
+         ret.push_back(component);
       }
    }
    return ret;
 }
 
 void
-BMESH::split_tris(Bface* start_face, Wplane plane, ARRAY<Bvert*>& new_vs)
+BMESH::split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& new_vs)
 {
    Bedge* curr_edge = 0;
    for (int ed=1; ed<4; ed++)
@@ -4517,13 +4507,13 @@ BMESH::split_tris(Bface* start_face, Wplane plane, ARRAY<Bvert*>& new_vs)
       if (last_pt) {
          Bface_list faces;
          last_pt->get_faces(faces);
-         for (int i=0; i<faces.num(); i++) {
+         for (Bface_list::size_type i=0; i<faces.size(); i++) {
             curr_edge = faces[i]->opposite_edge(last_pt);
             if (curr_edge->which_side(plane) == 0) {
                if (new_vs.empty())
                   break;
                else {
-                  Bvert* oldv = new_vs[new_vs.num()-2];
+                  Bvert* oldv = new_vs[new_vs.size()-2];
                   if (!faces[i]->contains(oldv))
                      break;
                }
@@ -4538,22 +4528,22 @@ BMESH::split_tris(Bface* start_face, Wplane plane, ARRAY<Bvert*>& new_vs)
       Wpt pt = ((d1 * p1) + (d2 * p2)) / (d1+d2);
 
       new_pt = split_edge(curr_edge, pt);
-      new_vs += new_pt;
+      new_vs.push_back(new_pt);
 
       if (!last_pt)
          start_pt = new_pt;
 
       last_pt = new_pt;
-   } while (new_vs.num() < 3 || last_pt->lookup_edge(start_pt) == 0);
+   } while (new_vs.size() < 3 || last_pt->lookup_edge(start_pt) == 0);
 }
 
 
 void
 BMESH::kill_component(Bvert *start_vert)
 {
-   ARRAY<Bface*> faces;
-   ARRAY<Bedge*> edges;
-   ARRAY<Bvert*> verts;
+   vector<Bface*> faces;
+   vector<Bedge*> edges;
+   vector<Bvert*> verts;
 
    int i;
    for (i=0; i<nfaces(); i++)
@@ -4564,21 +4554,21 @@ BMESH::kill_component(Bvert *start_vert)
       _verts[i]->clear_flag();
 
    start_vert->set_flag();
-   verts += start_vert;
+   verts.push_back(start_vert);
 
    grow_mesh_equivalence_class(start_vert, faces, edges, verts);
 
-   cerr << "removed " << faces.num() << " faces, "
-        << edges.num() << " edges, " << verts.num() << " vertices" << endl;
+   cerr << "removed " << faces.size() << " faces, "
+        << edges.size() << " edges, " << verts.size() << " vertices" << endl;
 
-   int t;
-   for (t=0; t<faces.num(); t++)
+   size_t t;
+   for (t=0; t<faces.size(); t++)
       delete_face(faces[t]);
 
-   for (t=0; t<edges.num(); t++)
+   for (t=0; t<edges.size(); t++)
       delete_edge(edges[t]);
 
-   for (t=0; t<verts.num(); t++)
+   for (t=0; t<verts.size(); t++)
       delete_vert(verts[t]);
 
    changed(TOPOLOGY_CHANGED);
@@ -4780,7 +4770,7 @@ BMESHobs::broadcast_merge(BMESH* joined, BMESH* removed)
 }
 
 void
-BMESHobs::broadcast_split(BMESH* m, CARRAY<BMESH*>& new_meshes)
+BMESHobs::broadcast_split(BMESH* m, const vector<BMESH*>& new_meshes)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_split(m, new_meshes);
@@ -4864,7 +4854,7 @@ BMESHobs_list::notify_merge(BMESH* m1, BMESH* m2) const
 }
 
 void
-BMESHobs_list::notify_split(BMESH* mesh, CARRAY<BMESH*>& pieces) const
+BMESHobs_list::notify_split(BMESH* mesh, const vector<BMESH*>& pieces) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
