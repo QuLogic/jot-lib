@@ -3072,7 +3072,7 @@ SilUI::fps_display()
    static unsigned int     stamp;
    static int              tris;
 
-   int i;
+   size_t i;
 
    update_non_lives();
 
@@ -3129,7 +3129,7 @@ SilUI::fps_display()
       double new_tps = tris/elapsed_time;
 
 
-      for (vector<double>::size_type i=0; i<fps.size()-1; i++) {
+      for (i=0; i<fps.size()-1; i++) {
          fps[i]=fps[i+1];
          tps[i]=tps[i+1];
       }
