@@ -3027,10 +3027,14 @@ HatchingPositionFree::refine_placement_extent(
       lastk = k;
       if (k==endk) break;
 
-      if (_mapping->wrap_u())
-         k = (k>0) ? k-- : (num-2);
-      else
+      if (_mapping->wrap_u()) {
+         if (k > 0)
+            k--;
+         else
+            k = num - 2;
+      } else {
          k--;
+      }
    }
 
    leftu = _mapping->min_u() + du*leftk;
