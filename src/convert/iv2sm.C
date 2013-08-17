@@ -452,7 +452,7 @@ outputMesh(ostream &os)
       mesh->add_vertex(Wpt(data[0], data[1], data[2]));
    }
   
-   for (vector<Triangle> i = 0; i < tris.size(); i++) {
+   for (vector<Triangle>::size_type i = 0; i < tris.size(); i++) {
       const int *data = tris[i].data();
       mesh->add_face(data[0], data[1], data[2]);
    }
