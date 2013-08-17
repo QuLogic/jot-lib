@@ -92,7 +92,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
 {
    err_adv(debug, "OVERSKETCH::find_matching_sil");
 
-   const int MIN_GEST_PTS = 10;
+   const size_t MIN_GEST_PTS = 10;
    if (!(g && g->pts().size() >= MIN_GEST_PTS))
       return false;
 

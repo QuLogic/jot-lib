@@ -30,7 +30,7 @@ static const int    MAX_Q_ITERS           = 100;
 static const double BIG_DIST              = 10000.0;
 //static const double BIGGEST_VALID_DIST    = 500.0;
 static const double SMALLEST_VALID_DIST   = 0.0001;
-static const int    NUM_BUCKETS           = 32;
+static const size_t NUM_BUCKETS           = 32;
 
 
 StrokeGenerator::StrokeGenerator() {

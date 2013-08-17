@@ -153,7 +153,7 @@ check_tube_side(Bedge* e)
 }
 
 const double SIL_SEARCH_RAD = 12;
-const int MIN_GEST_PTS = 10;
+const size_t MIN_GEST_PTS = 10;
 
 // is it running along a cross section?
 bool
@@ -347,7 +347,7 @@ PROFILE::n_next_verts(Bvert* vert, int n, bool dir)
 bool
 PROFILE::do_xsec_match(PIXEL_list& pts)
 {
-   if ((int)pts.size() < max(MIN_GEST_PTS, 1)) {
+   if (pts.size() < max(MIN_GEST_PTS, (size_t)1)) {
       err_adv(debug, "   too few points");
       return false;
    }
