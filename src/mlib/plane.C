@@ -147,5 +147,5 @@ MLIB_INLINE
 L 
 mlib::Plane<PLANE,P,V,L>::project(const L& l) const
 {
-    return L(project(l.point()), project(l.vector()));
+    return L(project(l.point()), project(l.direction()));
 }

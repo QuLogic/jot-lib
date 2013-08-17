@@ -1775,8 +1775,8 @@ QuadCell::cache()
    Wplane pl;
    plane.get_best_fit_plane(pl);
 
-   Wvec t = tan1.vector().normalized();
-   Wvec b = tan2.vector().normalized();
+   Wvec t = tan1.direction().normalized();
+   Wvec b = tan2.direction().normalized();
    Wpt  o = pl.origin();
    Wvec n = cross(t,b).normalized();
 
@@ -1882,8 +1882,8 @@ QuadCell::orient_to_uv()
    UVline tan1(a,b);
    UVline tan2(a,d);
 
-   UVvec one = tan1.vector().normalized();
-   UVvec two = tan2.vector().normalized();
+   UVvec one = tan1.direction().normalized();
+   UVvec two = tan2.direction().normalized();
 
    //cerr << "UV VECS " << one << " " << two << endl;
    if(one[0] == 0){
@@ -1899,8 +1899,8 @@ QuadCell::orient_to_uv()
        //cerr << "d is " << d << endl;
        UVline tan12(a,b);
        UVline tan22(a,d);
-       one = tan12.vector().normalized();
-       two = tan22.vector().normalized();
+       one = tan12.direction().normalized();
+       two = tan22.direction().normalized();
    }
 
    if(one[0] < 0)

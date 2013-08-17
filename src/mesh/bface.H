@@ -527,7 +527,7 @@ class Bface  : public Bsimplex {
    // the face:
    bool ray_intersect(CWpt&, CWvec&, Wpt& ret, double& depth) const;
    bool ray_intersect(CWline& ray, Wpt& ret, double& depth) const {
-      return ray_intersect(ray.point(), ray.vector(), ret, depth);
+      return ray_intersect(ray.point(), ray.direction(), ret, depth);
    }
    // Similar to above, but return barycentric coords of hit point:
    bool ray_intersect(CWline& ray, Wvec& bc) const {

@@ -126,11 +126,11 @@ inline STDdstream &operator>>(STDdstream &ds, mlib::Point2<P,V> &v)
 
 template <class L, class P, class V>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Line<L,P,V> &l)
-       { return ds >> l.point() >> l.vector(); }
+       { return ds >> l.point() >> l.direction(); }
  
 template <class L, class P, class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Line<L,P,V> &l)
-       { return ds << l.point() << l.vector(); }
+       { return ds << l.point() << l.direction(); }
 
 template <class M, class P, class V, class L, class Q>
 inline STDdstream &operator>>(STDdstream &ds,  mlib::Mat4<M,P,V,L,Q> &mat)

@@ -310,7 +310,7 @@ bool
 mlib::Point2list<L,P,V,S>::intersects_line(const S& l) const
 {
    P o = l.point();
-   V v = l.vector().perpend();
+   V v = l.direction().perpend();
 
    for (typename vector<P>::size_type i=0; i<size()-1; i++)
       if (((pt(i) - o) * v) * ((pt(i+1) - o) * v) <= 0)

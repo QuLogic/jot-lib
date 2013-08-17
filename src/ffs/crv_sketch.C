@@ -1736,9 +1736,9 @@ CRV_SKETCH::build_curve(const vector<PIXEL_list>& spans,
          PIXEL isect;
          
          isect = dseg.intersect(pline);
-         double t = ((isect - plist[j]) * dseg.vector()) / (dseg.vector() * dseg.vector());
+         double t = ((isect - plist[j]) * dseg.direction()) / (dseg.direction() * dseg.direction());
          t = clamp(t, 0.0, 1.0);
-         isect = plist[j] + dseg.vector() * t;
+         isect = plist[j] + dseg.direction() * t;
          
          if ((pline.dist(isect) < pline.dist(best_intersection)) || first) {
             best_intersection = isect;

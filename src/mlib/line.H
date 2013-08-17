@@ -76,10 +76,10 @@ namespace mlib {
       //! \name Accessor Functions
       //@{
          
-      const P& point ()               const  { return _point; }
-      P&       point ()                      { return _point; }
-      const V& vector()               const  { return _vector; }
-      V&       vector()                      { return _vector; }
+      const P& point    ()            const  { return _point; }
+      P&       point    ()                   { return _point; }
+      const V& direction()            const  { return _vector; }
+      V&       direction()                   { return _vector; }
       
       //@}
       
@@ -160,7 +160,7 @@ namespace mlib {
 
 	  P reflection(const P& p) const {
 		Line temp(p,project(p));
-		temp.vector() *= 2.0;
+		temp.direction() *= 2.0;
 		
 		return temp.endpt();
 		
@@ -179,8 +179,8 @@ namespace mlib {
       P intersect(const L& l) const  {
          const P& A = point();
          const P& B = l.point();
-         const V  Y = vector().normalized();
-         const V  W = l.vector().normalized();
+         const V  Y = direction().normalized();
+         const V  W = l.direction().normalized();
          const V BA = B-A;
          const double vw = Y*W;
          const double vba= Y*BA;
@@ -208,11 +208,11 @@ namespace mlib {
             inter = ap;
    
             // Is ap on both segments?
-            double len1 = vector().length();
-            double len2 = l.vector().length();
-            double dot1 = (ap - point()) * vector() / len1;
+            double len1 = direction().length();
+            double len2 = l.direction().length();
+            double dot1 = (ap - point()) * direction() / len1;
             if (dot1 <= len1 && dot1 >= 0) {
-               double dot2 = (ap - l.point()) * l.vector() / len2;
+               double dot2 = (ap - l.point()) * l.direction() / len2;
                if (dot2 <= len2 && dot2 >= 0) 
                   return 1;
             } 
@@ -231,8 +231,8 @@ namespace mlib {
             inter = ap;
    
             // Is ap on both segments?
-            double len1 = vector().length();
-            double dot1 = (ap - point()) * vector() / len1;
+            double len1 = direction().length();
+            double dot1 = (ap - point()) * direction() / len1;
             if (dot1 <= len1 && dot1 >= 0) {
                return 1;
             } 
@@ -266,7 +266,7 @@ namespace mlib {
    template <class L, class P, class V>
    ostream& operator<<(ostream& os, const Line<L,P,V>& l) 
    {
-      return os << "Line("<<l.point()<<","<<l.vector()<<")";
+      return os << "Line("<<l.point()<<","<<l.direction()<<")";
    }
 
 } // namespace mlib

@@ -191,7 +191,7 @@ SWEEP_BASE::line_cb(CGESTUREptr& g, DrawState*& s)
    const double TRIM_MAX_LEN = 65;
    if (g->length() < TRIM_MAX_LEN) {
       const double TRIM_ANGLE_THRESH = 80; // degrees
-      double angle = line_angle(g->endpt_vec(), pix_line().vector());
+      double angle = line_angle(g->endpt_vec(), pix_line().direction());
       if (rad2deg(angle) > TRIM_ANGLE_THRESH) {
          // Nice angle. But did it cross?
          if (g->endpt_line().intersect_segs(pix_line()))
@@ -211,7 +211,7 @@ SWEEP_BASE::line_cb(CGESTUREptr& g, DrawState*& s)
    // and is nearly parallel:
    const double ALIGN_ANGLE_THRESH = 15; // degrees
    if (pix_line().endpt().dist(g->start()) < DIST_THRESH_PIXELS &&
-       rad2deg(g->endpt_vec().angle(pix_line().vector())) < ALIGN_ANGLE_THRESH)
+       rad2deg(g->endpt_vec().angle(pix_line().direction())) < ALIGN_ANGLE_THRESH)
       return extend_line_cb(g, s);
 
    return stroke_cb(g,s);

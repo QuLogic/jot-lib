@@ -911,7 +911,7 @@ BMESH::pick_face(
       err_msg("BMESH::pick_face: doing brute force intersection");
 
    Wpt  p = inv_xform() * world_ray.point();
-   Wvec n = inv_xform() * world_ray.vector();
+   Wvec n = inv_xform() * world_ray.direction();
 
    Bface* ret = 0;              // face to return
    double d, min_d = -1;        // distance, min distance

@@ -157,7 +157,7 @@ class Plane
       
       //! \brief Computes the intersection point of the given line and the plane.
       P        intersect(const L &l) const
-         { return plane_intersect(l.point(), l.vector(), origin(), _normal); }
+         { return plane_intersect(l.point(), l.direction(), origin(), _normal); }
 
 }; // class Plane
 

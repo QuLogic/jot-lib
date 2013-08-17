@@ -157,7 +157,7 @@ mlib::Mat4<M,P,V,L,Q>::Mat4(const L& axis)
 {
    // isError = false;
 
-   const V zDir = axis.vector().normalized();
+   const V zDir = axis.direction().normalized();
 
    if (zDir.is_null())
    {
@@ -232,7 +232,7 @@ MLIB_INLINE
 M
 mlib::Mat4<M,P,V,L,Q>::rotation(const L& axis, double angle)
 {
-   const V      v  = axis.vector().normalized();
+   const V      v  = axis.direction().normalized();
    const P      p  = axis.point();
    const double sa = sin(angle);
    const double ca = cos(angle);
@@ -391,7 +391,7 @@ mlib::Mat4<M,P,V,L,Q>::stretching(const L& axis)
    const M invt = t.inverse();
 
    P q = invt * axis.point();  
-   M mat = scaling(q, V(1,1,axis.vector().length()));
+   M mat = scaling(q, V(1,1,axis.direction().length()));
 
    return t * mat * invt;
 }
@@ -793,7 +793,7 @@ MLIB_INLINE
 L
 mlib::operator*(const Mat4<M,P,V,L,Q> &m, const Line<L,P,V>& l)
 {
-   return L(m * l.point(), m * l.vector());
+   return L(m * l.point(), m * l.direction());
 }
 
 
