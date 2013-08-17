@@ -2142,7 +2142,7 @@ Bcurve::normal() const
 }
 
 Wvec 
-Bcurve::vector() const
+Bcurve::displacement() const
 {
 	Wvec ret;
 	if((b1() == b2()) || is_closed()) {

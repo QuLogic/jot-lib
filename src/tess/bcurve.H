@@ -225,7 +225,7 @@ class Bcurve : public Bbase{
    Wvec normal() const;
 
    //! Returns vector from first point to second if not closed.
-   Wvec vector() const;
+   Wvec displacement() const;
 
    //! Local tangent, normal, and binormal (orthonormal vectors):
    Wvec t(CBvert* v) const;
