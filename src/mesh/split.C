@@ -27,6 +27,7 @@
  *      the files bar0.sm, bar1.sm, and bar2.sm.
  *
  **********************************************************************/
+#include <fstream>
 #include "std/config.H"
 #include "mi.H"
 
@@ -81,7 +82,7 @@ main(int argc, char *argv[])
 
    for (vector<BMESH*>::size_type i=0; i<meshes.size(); i++) {
       char tmp[32];
-      sprintf(tmp, "%d", i + 1);
+      sprintf(tmp, "%d", (int)(i + 1));
       out_mesh = mesh_path + tmp + string(".sm");
       cerr << "\nwriting " << out_mesh << endl;
       if (Config::get_var_bool("JOT_RECENTER"))

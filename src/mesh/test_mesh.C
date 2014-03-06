@@ -33,7 +33,7 @@ num_data(CBsimplex* s)
 {
    if (!(s && s->data_list()))
       return 0;
-   return (uint)s->data_list()->num();
+   return (uint)s->data_list()->size();
 }
 
 /*****************************************************************
@@ -59,9 +59,9 @@ typedef const NumSimplexDataFilter CNumSimplexDataFilter;
 inline void
 print_data_counts(CBvert_list& verts)
 {
-   cerr << "data counts for " << verts.num() << " vertices" << endl;
-   for (uint total=0, i=0, t=0; total < (uint)verts.num(); total += t, i++) {
-      t = verts.filter(NumSimplexDataFilter(i)).num();
+   cerr << "data counts for " << verts.size() << " vertices" << endl;
+   for (size_t total=0, i=0, t=0; total < verts.size(); total += t, i++) {
+      t = verts.filter(NumSimplexDataFilter(i)).size();
       cerr << "  " << i << ": " << t << endl;
    }
 }
@@ -69,14 +69,14 @@ print_data_counts(CBvert_list& verts)
 inline void
 check_indices(CBvert_list& verts)
 {
-   for (int i=0; i<verts.num(); i++) {
+   for (size_t i=0; i<verts.size(); i++) {
       if (verts.get_index(verts[i]) != i) {
-         cerr << "  index error: " << i << "/" << verts.num()
+         cerr << "  index error: " << i << "/" << verts.size()
               << " recorded as " << verts.get_index(verts[i]) << endl;
          return;
       }
    }
-   cerr << verts.num() << " indices okay" << endl;
+   cerr << verts.size() << " indices okay" << endl;
 }
 
 /*****************************************************************
@@ -109,7 +109,7 @@ main(int argc, char *argv[])
       return 1; // didn't work
 
 
-   Bvert_list verts = mesh->vert_list();
+   Bvert_list verts = mesh->verts();
    Bvert_list bak   = verts;
 
    cerr << "loaded mesh" << endl;
@@ -117,23 +117,19 @@ main(int argc, char *argv[])
 
    print_data_counts(verts);
 
-   cerr << "begin index" << endl;
-   verts.begin_index();
-
-   print_data_counts(verts);
-
    cerr << "verts reverse" << endl;
-   verts.reverse();
+   std::reverse(verts.begin(), verts.end());
 
    cerr << "check indices" << endl;
    check_indices(verts);
 
-   int n = verts.num();
+   size_t n = verts.size();
    cerr << "removing " << n/2 << " verts" << endl;
-   for (int i=0; i<n/2; i++) {
+   for (size_t i=0; i<n/2; i++) {
       Bvert* v = verts[i];
       uint b = num_data(v);     // before
-      verts -= v;
+      Bvert_list::iterator it = std::find(verts.begin(), verts.end(), v);
+      verts.erase(it);
       uint a = num_data(v);     // after
       if (!(b == 1) && (a == 0)) {
          err_msg("before: %d, after: %d", b, a);
@@ -141,17 +137,8 @@ main(int argc, char *argv[])
       }
    }
 
-   print_data_counts(verts);
-
    cerr << "bak:" << endl;
    print_data_counts(bak);
-
-   cerr << "bak with indexing:" << endl;
-   bak.begin_index();
-   print_data_counts(bak);
-
-   cerr << "turning off indexing" << endl;
-   verts.end_index();
 
    cerr << "verts: " << endl;
    print_data_counts(verts);

@@ -27,7 +27,7 @@ using namespace mlib;
 inline void
 set_base_colors(CBvert_list& verts, CCOLOR& col)
 {
-   for (int i=0; i<verts.num(); i++)
+   for (size_t i=0; i<verts.size(); i++)
       verts[i]->set_color(col, 1);
 }
 
@@ -37,7 +37,7 @@ add_shading(CBvert_list& verts, Wvec l, CCOLOR& col, double s = 1.0)
    // normalize the "light" vector:
 
    l = l.normalized();
-   for (int i=0; i<verts.num(); i++) {
+   for (size_t i=0; i<verts.size(); i++) {
       double a = pow(max(l * verts[i]->norm(), 0.0), s);
       if (a > 0)
          verts[i]->set_color(interp(verts[i]->color(), col, a), 1);

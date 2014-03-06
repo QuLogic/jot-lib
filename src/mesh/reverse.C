@@ -51,7 +51,7 @@ main(int argc, char *argv[])
       vector<Bface_list> components = mesh->get_components();
       for (vector<Bface_list>::size_type i=0; i<components.size(); i++) {
          if (components[i].volume() < 0) {
-            err_msg("reversing component: %d faces", components[i].num());
+            err_msg("reversing component: %d faces", components[i].size());
             reverse_faces(components[i]);
             changed = true;
          }

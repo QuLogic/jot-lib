@@ -36,7 +36,7 @@ qinv_locs(LMESHptr mesh)
    assert(mesh);
    Wpt_list ret(mesh->nverts());
    for (int i=0; i<mesh->nverts(); i++) {
-      ret += qinv_loc(mesh->bv(i));
+      ret.push_back(qinv_loc(mesh->bv(i)));
    }
    return ret;
 }
@@ -47,7 +47,7 @@ limit_locs(LMESHptr mesh)
    assert(mesh);
    Wpt_list ret(mesh->nverts());
    for (int i=0; i<mesh->nverts(); i++) {
-      ret += LoopLoc().limit_val(mesh->bv(i));
+      ret.push_back(LoopLoc().limit_val(mesh->bv(i)));
    }
    return ret;
 }
@@ -55,7 +55,7 @@ limit_locs(LMESHptr mesh)
 inline void
 set_locs(LMESHptr mesh, CWpt_list& pts)
 {
-   assert(mesh && mesh->nverts() == pts.num());
+   assert(mesh && mesh->nverts() == pts.size());
 
    for (int i=0; i<mesh->nverts(); i++)
       mesh->bv(i)->set_loc(pts[i]);

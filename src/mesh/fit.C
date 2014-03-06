@@ -52,8 +52,8 @@ fit(LMESHptr& mesh, bool do_gauss_seidel)
    Wpt_list C(n);   // original control points
    Wpt_list L(n);   // current limit points
    for (int i=0; i<n; i++) {
-      C += mesh->bv(i)->loc();
-      L += Wpt::Origin();
+      C.push_back(mesh->bv(i)->loc());
+      L.push_back(Wpt::Origin());
    }
 
    // do 50 iterations...
