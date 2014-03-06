@@ -490,7 +490,7 @@ class Mouse {
 #   define DEV_DFLT_SERIAL_PORT "placeholder"
 #elif sgi
 #   define DEV_DFLT_SERIAL_PORT "/dev/ttyd2"
-#elif linux
+#elif defined(__linux__) || defined(linux)
 #   define DEV_DFLT_SERIAL_PORT "/dev/ttyS1"
 #elif WIN32
 #   define DEV_DFLT_SERIAL_PORT "/dev/com1"

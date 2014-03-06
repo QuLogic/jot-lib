@@ -55,7 +55,7 @@
 
 
 /* Includes for ioctl (for num_bytes_to_read()) */
-#if defined(linux) || defined(_AIX)
+#if defined(__linux__) || defined(linux) || defined(_AIX)
 #include <sys/ioctl.h>
 #elif !defined(WIN32)
 #include <sys/filio.h>
@@ -77,7 +77,7 @@ extern "C" int gethostname(char *, int);
 #endif
 
 // AIX, Linux, and SunOS 5.7 have socklen_t, others don't
-#if !defined(_AIX) && !defined(_SOCKLEN_T) && !defined(linux)
+#if !defined(_AIX) && !defined(_SOCKLEN_T) && !defined(linux) && !defined(__linux__)
 typedef int socklen_t;
 #endif
 
