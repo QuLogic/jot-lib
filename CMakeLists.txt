@@ -4,10 +4,12 @@
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-PROJECT(jot)
+PROJECT(jot C CXX)
 
 SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter")
+
+INCLUDE(${PROJECT_SOURCE_DIR}/cmake/FindCXXFeatures.cmake)
 
 ## Check for things we need
 
