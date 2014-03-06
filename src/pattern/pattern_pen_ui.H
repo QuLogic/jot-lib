@@ -25,7 +25,7 @@
     Fall 2004
 ***************************************************************************/
 #ifndef _PATTERN_PEN_UI_H_IS_INCLUDED_
-#define _PETTERN_PEN_UI_H_IS_INCLUDED_
+#define _PATTERN_PEN_UI_H_IS_INCLUDED_
 
 #include <map>
 #include <string>
