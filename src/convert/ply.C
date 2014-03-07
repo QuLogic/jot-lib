@@ -218,6 +218,7 @@ PlyFile *open_for_writing_ply(
   /* open the file for writing */
 
   fp = fopen (name, "w");
+  free(name);
   if (fp == nullptr) {
     return nullptr;
   }
@@ -225,8 +226,10 @@ PlyFile *open_for_writing_ply(
   /* create the actual PlyFile structure */
 
   plyfile = ply_write (fp, nelems, elem_names, file_type);
-  if (plyfile == nullptr)
+  if (plyfile == nullptr) {
+    fclose(fp);
     return nullptr;
+  }
 
   /* return pointer to the file descriptor */
   return (plyfile);
@@ -647,24 +650,37 @@ PlyFile *ply_read(FILE *fp, int *nelems, char ***elem_names)
   /* read and parse the file's header */
 
   words = get_words (plyfile->fp, &nwords, &orig_line);
-  if (!words || strcmp(words[0], "ply") != 0)
+  if (!words) {
+    free_ply(plyfile);
     return nullptr;
+  }
+  if (strcmp(words[0], "ply") != 0) {
+    free(words);
+    free_ply(plyfile);
+    return nullptr;
+  }
 
   while (words) {
 
     /* parse words */
 
     if (strcmp(words[0], "format") == 0) {
-      if (nwords != 3)
+      if (nwords != 3) {
+        free(words);
+        free_ply(plyfile);
         return nullptr;
+      }
       if (strcmp(words[1], "ascii") == 0)
         plyfile->file_type = PLY_ASCII;
       else if (strcmp(words[1], "binary_big_endian") == 0)
         plyfile->file_type = PLY_BINARY_BE;
       else if (strcmp(words[1], "binary_little_endian") == 0)
         plyfile->file_type = PLY_BINARY_LE;
-      else
+      else {
+        free(words);
+        free_ply(plyfile);
         return nullptr;
+      }
       plyfile->version = atof (words[2]);
     }
     else if (strcmp(words[0], "element") == 0)
@@ -747,6 +763,7 @@ PlyFile *ply_open_for_reading(
   /* open the file for reading */
 
   fp = fopen (name, "r");
+  free(name);
   if (fp == nullptr)
     return nullptr;
 
@@ -2415,6 +2432,9 @@ PlyFile *read_ply(FILE *fp)
   char **elem_names;
 
   ply = ply_read (fp, &num_elems, &elem_names);
+  for (int i; i < num_elems; i++)
+    free(elem_names[i]);
+  free(elem_names);
 
   return (ply);
 }
@@ -3212,6 +3232,7 @@ PlyRuleList *append_prop_rule (
   else {
     fprintf (stderr, "Can't find property '%s' for rule '%s'\n",
              property, name);
+    free(str);
     return (rule_list);
   }
 
