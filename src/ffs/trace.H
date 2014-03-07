@@ -97,7 +97,7 @@ class TRACE : public DrawWidget {
   // hooray for coupling! (sigh)... need this for load dialog.
 
    //! The 2D Image that is going to be or is being used for "tracing"
-   TEXTUREgl* _texture;
+   TEXTUREglptr _texture;
 
    //! Filename of 2D image
    string      _filename;

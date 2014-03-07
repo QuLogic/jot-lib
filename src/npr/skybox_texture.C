@@ -75,8 +75,9 @@ init_params(TEXTUREglptr& tex)
 Skybox_Texture::Skybox_Texture(Patch* patch) :
    BasicTexture(patch, new StripTexCoordsCB)
 {
-   set_tex(new TEXTUREgl(gradient_filename()));
-   assert(_tex);
+   CTEXTUREglptr tex = make_shared<TEXTUREgl>(gradient_filename());
+   assert(tex);
+   set_tex(tex);
    if (!_tex->load_image()) {
       cerr << " Skybox_Texture : load_image failed on "
            << _tex->file() << endl;

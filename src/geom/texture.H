@@ -27,13 +27,12 @@
 #include "geom/image.H"
 #include "disp/bbox.H"
 
-MAKE_PTR_BASEC(TEXTURE);
-#define CTEXTUREptr const TEXTUREptr
+MAKE_SHARED_PTR(TEXTURE);
 
 /**********************************************************************
  * TEXTURE:
  **********************************************************************/
-class TEXTURE : public REFcounter {
+class TEXTURE {
  public:
    //******** MANAGERS ********
     TEXTURE() : _scale(Wtransf::scaling(1.0,1.0,1.0)), _image_not_available(false), _expand_image(true) {}

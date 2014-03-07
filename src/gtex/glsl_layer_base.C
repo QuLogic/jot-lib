@@ -333,7 +333,7 @@ GLSLShader_Layer_Base::set_texture_pattern(
    string pre_path = Config::JOT_ROOT() + dir;
    string path = pre_path + file_name;
    _patterns[tex_stage] =
-      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      make_shared<TEXTUREgl>(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _patterns[tex_stage]->set_save_img(true);
 
    if (!_patterns[tex_stage]->load_image()) {

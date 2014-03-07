@@ -260,7 +260,7 @@ Perlin::create_perlin_texture3(int tex_stage)
 
 
    //setup texture gl
-   perlin3d_tex = new TEXTUREgl("",GL_TEXTURE_3D,GL_TEXTURE0 + tex_stage); //bogus filename
+   perlin3d_tex = make_shared<TEXTUREgl>("", GL_TEXTURE_3D, GL_TEXTURE0 + tex_stage); //bogus filename
    perlin3d_tex->set_format(GL_RGBA);
    perlin3d_tex->set_wrap_r(GL_REPEAT);
    perlin3d_tex->set_wrap_s(GL_REPEAT);
@@ -374,8 +374,7 @@ Perlin::create_perlin_texture2(int tex_stage)
       return perlin2d_tex;
 
    //setup texture gl
-   perlin2d_tex = new TEXTUREgl("",GL_TEXTURE_2D,GL_TEXTURE0 + tex_stage);
-
+   perlin2d_tex = make_shared<TEXTUREgl>("", GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
 
    perlin2d_tex->set_format(GL_RGBA);
    perlin2d_tex->set_wrap_r(GL_REPEAT);

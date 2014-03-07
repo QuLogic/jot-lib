@@ -143,7 +143,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
       // program we can pick up the change and try again.
       if (path != _debug_tex_path) {
          _debug_tex_path = path;
-         TEXTUREglptr tex = new TEXTUREgl(_debug_tex_path);
+         TEXTUREglptr tex = make_shared<TEXTUREgl>(_debug_tex_path);
          bool do_mipmap = Config::get_var_bool("DEBUG_TEX_USE_MIPMAP",false);
          tex->set_mipmap(do_mipmap);
          _debug_uv_tex = tex;

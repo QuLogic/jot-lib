@@ -41,7 +41,7 @@ APPEAR::get_texture(TAGformat &d)
       // XXX - taken from CLI::get_file_relative
       if (texture_name[0] != '/' && texture_name[0] != '.')
          texture_name = Config::JOT_ROOT() + "/" + texture_name;
-      _texture = new TEXTUREgl(texture_name);
+      _texture = make_shared<TEXTUREgl>(texture_name);
    }
 }
 

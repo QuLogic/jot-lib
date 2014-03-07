@@ -123,7 +123,7 @@ TRACE::file_cbs(void *ptr, int idx, int action, string path, string file)
       TRACE* t = (TRACE*)ptr;
       t->_filename = path+file;
 
-      t->_texture = new TEXTUREgl(((TRACE*)ptr)->_filename);
+      t->_texture = make_shared<TEXTUREgl>(((TRACE*)ptr)->_filename);
       if(!(t->is_valid = t->_texture->load_texture())){
          t->_texture = nullptr;
          return; 
@@ -299,7 +299,7 @@ TRACE::init(CGESTUREptr&)
       // for now, hardcode 2D image name
       me->_filename = string("testfile.pnm");
 
-      me->_texture = new TEXTUREgl(me->_filename);
+      me->_texture = make_shared<TEXTUREgl>(me->_filename);
 
       if (!me->_texture->load_image() ) {
       cerr << "TRACE::init: could not load file" << me->_filename << endl;

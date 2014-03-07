@@ -126,7 +126,7 @@ SKY_BOX::test_perlin(CVIEWptr &v)
 {
    //test
    if (!perlin_tex) {
-      perlin_tex = new TEXTUREgl(
+      perlin_tex = make_shared<TEXTUREgl>(
          Config::JOT_ROOT() +
          "nprdata/other_textures/" +
          "perlin_tex_RGB.png"

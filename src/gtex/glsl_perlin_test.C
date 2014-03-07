@@ -58,7 +58,7 @@ GLSLPerlinTest::set_tex(const string& filename)
    if (_tex) {
       _tex->set_texture(filename);
    } else {
-      _tex = new TEXTUREgl(filename);
+      _tex = make_shared<TEXTUREgl>(filename);
       assert(_tex);
    }
 }

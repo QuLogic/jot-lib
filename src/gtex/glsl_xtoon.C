@@ -175,7 +175,7 @@ GLSLXToonShader::set_tex(const string& filename)
    if (_tex) {
       _tex->set_texture(Config::JOT_ROOT() + filename);
    } else {
-      _tex = new TEXTUREgl(Config::JOT_ROOT() + filename);
+      _tex = make_shared<TEXTUREgl>(Config::JOT_ROOT() + filename);
       assert(_tex);
       _tex->set_wrap_s(GL_CLAMP_TO_EDGE);
       _tex->set_wrap_t(GL_CLAMP_TO_EDGE);

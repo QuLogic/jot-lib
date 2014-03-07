@@ -255,7 +255,7 @@ Painterly::set_paper_texture(string file_name)
    string path = pre_path + file_name;
 
    _paper_textures[tex_stage] =
-      new TEXTUREgl(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
+      make_shared<TEXTUREgl>(path, GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage);
    _paper_textures[tex_stage]->set_save_img(true);
 
    if (!_paper_textures[tex_stage]->load_image()) {

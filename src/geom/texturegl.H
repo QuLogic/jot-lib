@@ -30,8 +30,7 @@
 /**********************************************************************
  * TEXTUREgl:
  **********************************************************************/
-MAKE_PTR_SUBC(TEXTUREgl, TEXTURE);
-typedef const TEXTUREglptr CTEXTUREglptr;
+MAKE_SHARED_PTR(TEXTUREgl);
 class TEXTUREgl : public TEXTURE {
  public:
    TEXTUREgl(const string & file    = "",

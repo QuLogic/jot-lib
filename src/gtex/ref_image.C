@@ -33,7 +33,7 @@ RefImage::RefImage(CVIEWptr& v) :
    _update_main_mem(false),
    _update_tex_mem(false)
 {  
-   _texture = new TEXTUREgl("", GL_TEXTURE_2D, TexUnit::REF_IMG + GL_TEXTURE0);
+   _texture = make_shared<TEXTUREgl>("", GL_TEXTURE_2D, TexUnit::REF_IMG + GL_TEXTURE0);
    assert(_texture);
 
     // let's try not doing power-of-2 expanding:
@@ -701,7 +701,7 @@ IDRefImage::IDRefImage(CVIEWptr& v) :
    _need_update(false),
    _pixels_to_patches(false)
 {
-   _texture = new TEXTUREgl("", GL_TEXTURE_2D, TexUnit::PERLIN + GL_TEXTURE0);
+   _texture = make_shared<TEXTUREgl>("", GL_TEXTURE_2D, TexUnit::PERLIN + GL_TEXTURE0);
    assert(_texture);
 
     // let's try not doing power-of-2 expanding:

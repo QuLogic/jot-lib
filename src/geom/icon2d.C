@@ -65,7 +65,8 @@ ICON2D::ICON2D(const string &n,
       cerr << "ICON2D::ICON2D: loading file: " << _filename << endl;
    
    //load "normal" state texture  
-   _texture.push_back(new TEXTUREgl(_filename + ".png", GL_TEXTURE_2D, GL_TEXTURE0));
+   CTEXTUREglptr normal = make_shared<TEXTUREgl>(_filename + ".png", GL_TEXTURE_2D, GL_TEXTURE0);
+   _texture.push_back(normal);
    assert(!_texture.empty() && _texture.back());;
    _texture.back()->set_tex_fn(GL_REPLACE);
 
@@ -78,8 +79,8 @@ ICON2D::ICON2D(const string &n,
 
    // load "active" state texture
    if (tog) {
-      _act_tex = new TEXTUREgl(_filename + "_active.png",
-                               GL_TEXTURE_2D, GL_TEXTURE0); 
+      _act_tex = make_shared<TEXTUREgl>(_filename + "_active.png",
+                                        GL_TEXTURE_2D, GL_TEXTURE0);
       assert(_act_tex);
       _act_tex->set_tex_fn(GL_REPLACE);
    
@@ -249,7 +250,8 @@ ICON2D::bbox2d(
 void 
 ICON2D::add_skin(const string &n)
 {
-   _texture.push_back(new TEXTUREgl(_filename + ".png"));
+   CTEXTUREglptr skintex = make_shared<TEXTUREgl>(_filename + ".png");
+   _texture.push_back(skintex);
    assert(!_texture.empty() && _texture.back());
    _texture.back()->set_tex_fn(GL_REPLACE);
 

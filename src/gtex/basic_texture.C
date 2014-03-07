@@ -325,7 +325,7 @@ OGLTexture::check_patch_texture_map()
    const string& n = _patch->texture_file();
 
    if (n != "") {
-      TEXTUREptr tex = new TEXTUREgl(n);
+      TEXTUREptr tex = make_shared<TEXTUREgl>(n);
 
       if (tex->load_texture()) {
          _patch->set_texture(tex);

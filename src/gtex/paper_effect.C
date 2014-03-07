@@ -1362,7 +1362,7 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
 
       //If the final name loads, store the cached texture...
       if (!i.empty()) {
-         TEXTUREglptr t = new TEXTUREgl();
+         TEXTUREglptr t = make_shared<TEXTUREgl>();
          
          t->set_save_img(true);
          t->set_image(i.copy(),i.width(),i.height(),i.bpp());

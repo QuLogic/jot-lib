@@ -34,7 +34,7 @@ HaloRefImage::HaloRefImage(CVIEWptr& v) : RefImage(v)
 
    _pass_color = Color::black;
 
-   _scratch_tex = new TEXTUREgl("", GL_TEXTURE_2D, TexUnit::REF_IMG + GL_TEXTURE0);
+   _scratch_tex = make_shared<TEXTUREgl>("", GL_TEXTURE_2D, TexUnit::REF_IMG + GL_TEXTURE0);
    assert(_scratch_tex);
 
     // let's try not doing power-of-2 expanding:

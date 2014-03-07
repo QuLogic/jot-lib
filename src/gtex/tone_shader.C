@@ -223,8 +223,9 @@ ToneShader::set_tex(const string& filename)
    if (_tex) {
       _tex->set_texture(filename);
    } else {
-      set_tex(new TEXTUREgl(filename));
-      assert(_tex);
+      CTEXTUREglptr tex = make_shared<TEXTUREgl>(filename);
+      assert(tex);
+      set_tex(tex);
    }
 }
 

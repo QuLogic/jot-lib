@@ -1010,7 +1010,7 @@ Halftone_TX::enable_tone_correction(int layer_num)
               << "Creating tone correction map at tex stage " << tex_stage
               << " for source at " << layer->_pattern_tex_stage << endl;
 
-      tone_correction_maps[tex_stage] = new TEXTUREgl(
+      tone_correction_maps[tex_stage] = make_shared<TEXTUREgl>(
          "", GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage
          );
 
@@ -1087,7 +1087,7 @@ Halftone_TX::enable_lod_only_correction(int layer_num)
       //create r function map for this stage
       GLint tex_stage = get_free_tex_stage();
 
-      r_function_maps[tex_stage] = new TEXTUREgl(
+      r_function_maps[tex_stage] = make_shared<TEXTUREgl>(
          "", GL_TEXTURE_2D, GL_TEXTURE0 + tex_stage
          );
 

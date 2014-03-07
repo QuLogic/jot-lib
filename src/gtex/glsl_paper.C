@@ -99,7 +99,7 @@ GLSLPaperShader::set_paper(const string& filename)
    if (_paper_tex) {
       _paper_tex->set_texture(filename);
    } else {
-      _paper_tex = new TEXTUREgl(filename);
+      _paper_tex = make_shared<TEXTUREgl>(filename);
       _paper_tex->set_tex_unit(GL_TEXTURE0 + TexUnit::PAPER);
       _paper_tex->set_wrap_s(GL_REPEAT);
       _paper_tex->set_wrap_t(GL_REPEAT);
@@ -115,7 +115,7 @@ GLSLPaperShader::set_tex(const string& filename)
    if (_tex) {
       _tex->set_texture(filename);
    } else {
-      _tex = new TEXTUREgl(filename);
+      _tex = make_shared<TEXTUREgl>(filename);
       _tex->set_tex_unit(GL_TEXTURE0 + TexUnit::APP);
       _tex->set_wrap_s(GL_REPEAT);
       _tex->set_wrap_t(GL_REPEAT);
@@ -230,7 +230,7 @@ GLSLPaperShader::get_texture()
 {
    if (!_paper_tex) {
       // create the TEXTUREgl and check for errors:
-      _paper_tex = new TEXTUREgl(_paper_tex_name);
+      _paper_tex = make_shared<TEXTUREgl>(_paper_tex_name);
       assert(_paper_tex);
    } else if (_paper_tex->is_valid()) {
       return _paper_tex;

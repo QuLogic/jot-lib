@@ -1182,7 +1182,7 @@ OBJReaderImpl::add_patches(BMESH *mesh) const
       if(materials[i].get_diffuse_texture_map().size() > 0){
          
          patch->set_texture_file(materials[i].get_diffuse_texture_map().c_str());
-         patch->set_texture(new TEXTUREgl(patch->texture_file()));
+         patch->set_texture(make_shared<TEXTUREgl>(patch->texture_file()));
          
       }
 */      

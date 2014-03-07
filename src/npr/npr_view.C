@@ -272,7 +272,7 @@ NPRview::draw_background()
          Image image(tex_name);
 
          if (!image.empty()) {
-            TEXTUREglptr t = new TEXTUREgl();
+            TEXTUREglptr t = make_shared<TEXTUREgl>();
             t->set_save_img(true);
             t->set_image(image.copy(),image.width(),image.height(),image.bpp());
             err_mesg(ERR_LEV_INFO, 
@@ -395,7 +395,7 @@ NPRview::draw_background()
          Image image(tex_name);
 
          if (!image.empty()) {
-            TEXTUREglptr t = new TEXTUREgl();
+            TEXTUREglptr t = make_shared<TEXTUREgl>();
             t->set_save_img(true);
             t->set_image(image.copy(),image.width(),image.height(),image.bpp());
               
