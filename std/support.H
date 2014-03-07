@@ -472,7 +472,7 @@ operator +(CARRAY<T>& a, CARRAY<S>& b)
 template <class T>
 class LIST : public ARRAY<T> {
  protected:
-   virtual void clear_ele  (int i)          { (*this)[i].Clear(); }
+   virtual void clear_ele  (int i)          { (*this)[i].reset(); }
    virtual void clear_range(int i, int j) {
       ARRAY<T>::clear_range(i,j);
       for (int k=i; k < j; k++)

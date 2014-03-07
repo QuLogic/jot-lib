@@ -178,14 +178,14 @@ class REFptr {
    ~REFptr()    { if (p_) REF_ME(p_)->Free(); }
 
    void Init()  { p_ = nullptr; }
-   void Clear() { if (p_) REF_ME(p_)->Free(); p_=nullptr; }
+   void reset() { if (p_) REF_ME(p_)->Free(); p_=nullptr; }
 
    //******** ASSIGNMENT ********
    REFptr<T> &operator=(T* o) {
       if (o != p_) {
          if (o)
             REF_ME(o)->Own(); 
-         Clear();  
+         reset();
          p_ = o; 
       }    
       return *this;
@@ -194,7 +194,7 @@ class REFptr {
       if (p.p_ != p_) {
          if (p.p_)
             REF_ME(p.p_)->Own();
-         Clear();  
+         reset();
          p_ = p.p_; 
       } 
       return *this;
