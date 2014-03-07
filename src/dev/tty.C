@@ -546,8 +546,8 @@ int TTYfd::nread(
    int    timeoutval  /* In millisecs, 0 for poll, -1 for indefinite */
    )
 {
-   register int    i, num = 0, howmany = 0;
-   char           *buf_save = buf;
+   int   i, num = 0, howmany = 0;
+   char *buf_save = buf;
 
    if (not_configured  (VMIN_CHARACTERS, VTIME_LENGTH) &&
        set_min_and_time(VMIN_CHARACTERS, VTIME_LENGTH) == -1) {
