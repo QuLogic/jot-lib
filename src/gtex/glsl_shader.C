@@ -113,7 +113,7 @@ GLSLShader::print_info(const string& gtex_name, GLuint obj)
    glGetInfoLogARB(obj, log_len, &chars_written, buf);
    cerr << "info log: " << endl
         << buf << endl;
-   delete buf;
+   delete[] buf;
 }
 
 bool
