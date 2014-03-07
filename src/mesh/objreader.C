@@ -930,14 +930,14 @@ OBJReaderImpl::read_mtl_files()
    
    MTLReader mtl_reader;
    
-   for(unsigned long i = 0; i < mtl_files.size(); ++i){
+   for (auto & file : mtl_files) {
       
-      ifstream mtl_stream(mtl_files[i].c_str());
+      ifstream mtl_stream(file.c_str());
       
-      if(!mtl_stream.is_open()){
+      if (!mtl_stream.is_open()) {
          
          cerr << "OBJReader::read_mtl_files() - Warning:  Couldn't open material file "
-              << mtl_files[i] << "!" << endl;
+              << file << "!" << endl;
          
          continue;
          
@@ -946,12 +946,10 @@ OBJReaderImpl::read_mtl_files()
       if(!mtl_reader.read(mtl_stream))
          return false;
       
-      for(unsigned long j = 0; j < materials.size(); ++j){
+      for (auto & mat : materials) {
          
-         if(mtl_reader.has_material(materials[j].get_name())){
-            
-            materials[j] = mtl_reader.get_material(materials[j].get_name());
-            
+         if (mtl_reader.has_material(mat.get_name())) {
+            mat = mtl_reader.get_material(mat.get_name());
          }
          
       }
@@ -1140,10 +1138,8 @@ void
 OBJReaderImpl::add_vertices(BMESH *mesh) const
 {
    
-   for(unsigned long i = 0; i < vertices.size(); ++i){
-      
-      mesh->add_vertex(vertices[i]);
-      
+   for (auto & vert : vertices) {
+      mesh->add_vertex(vert);
    }
    
 }
@@ -1190,8 +1186,8 @@ OBJReaderImpl::add_patches(BMESH *mesh) const
          
       }
 */      
-      for(unsigned long j = 0; j < material_faces[i].size(); ++j)
-         add_face(mesh, patch, material_faces[i][j]);
+      for (auto & face : material_faces[i])
+         add_face(mesh, patch, face);
       
    }
 }

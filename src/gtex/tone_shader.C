@@ -418,15 +418,13 @@ ToneShader::set_uniform_variables() const
    glUniform1i(_is_reciever_loc, mesh()->reciever());
 
    // send occluder data
-   for (vector<OccluderData>::size_type i=0; i<_occluders.size(); i++) {
-      glUniform1i(_occluders[i]._is_active_loc,
-                  _occluders[i]._is_active);
-      glUniformMatrix4fv(_occluders[i]._xf_loc,
+   for (auto & occl : _occluders) {
+      glUniform1i(occl._is_active_loc, occl._is_active);
+      glUniformMatrix4fv(occl._xf_loc,
                          1,
                          GL_TRUE,
-                         float16(_occluders[i]._shadow_xf));
-      glUniform1f(_occluders[i]._softness_loc,
-                  _occluders[i]._softness);
+                         float16(occl._shadow_xf));
+      glUniform1f(occl._softness_loc, occl._softness);
    }
 
    glUniform1f(_global_edge_len_loc, _global_edge_len);

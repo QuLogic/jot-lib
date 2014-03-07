@@ -127,17 +127,17 @@ PCell::shared_edges(const PCell_list& cells)
    vector<Bedge_list> boundaries = get_boundaries(cells);
 
    // clear all flags
-   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
-      boundaries[i].clear_flags();
+   for (auto & boundary : boundaries)
+      boundary.clear_flags();
 
    // increment all edge flags
-   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
-      boundaries[i].inc_flags();
+   for (auto & boundary : boundaries)
+      boundary.inc_flags();
 
    // the shared ones will have flag value = 2
    Bedge_list ret;
-   for (vector<Bedge_list>::size_type i=0; i<boundaries.size(); i++)
-      ret = ret + boundaries[i].filter(SimplexFlagFilter(2));
+   for (auto & boundary : boundaries)
+      ret = ret + boundary.filter(SimplexFlagFilter(2));
 
    return ret;
 }
@@ -202,9 +202,9 @@ Panel::draw_skeleton() const
       glDisable(GL_LIGHTING);                              // GL_ENABLE_BIT
       glBegin(GL_POINTS);
       glColor4fv(float4(Color::blue_pencil_d, 0.8));       // GL_CURRENT_BIT
-      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
-         if (!_cells[i]->is_empty()) {
-            glVertex3dv(_cells[i]->center().data());
+      for (auto & cell : _cells) {
+         if (!cell->is_empty()) {
+            glVertex3dv(cell->center().data());
          }
       }
       glEnd();
@@ -218,11 +218,11 @@ Panel::draw_skeleton() const
       glBegin(GL_LINES);
       // use medium blue for internal edges
       glColor4fv(float4(Color::blue_pencil_m, 0.8));    // GL_CURRENT_BIT
-      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
-         PCell_list nbrs = _cells[i]->internal_nbrs();
-         for (PCell_list::size_type j=0; j<nbrs.size(); j++) {
-            glVertex3dv(_cells[i]->center().data());
-            glVertex3dv(  nbrs[j]->center().data());
+      for (auto & cell : _cells) {
+         PCell_list nbrs = cell->internal_nbrs();
+         for (auto & nbr : nbrs) {
+            glVertex3dv(cell->center().data());
+            glVertex3dv( nbr->center().data());
          }
       }
       glEnd();
@@ -236,11 +236,11 @@ Panel::draw_skeleton() const
       glBegin(GL_LINES);
       // use light orange for internal edges
       glColor4fv(float4(Color::orange_pencil_l, 0.8));  // GL_CURRENT_BIT
-      for (PCell_list::size_type i=0; i<_cells.size(); i++) {
-         PCell_list nbrs = _cells[i]->external_nbrs();
-         for (PCell_list::size_type j=0; j<nbrs.size(); j++) {
-            glVertex3dv(_cells[i]->center().data());
-            glVertex3dv(  nbrs[j]->center().data());
+      for (auto & cell : _cells) {
+         PCell_list nbrs = cell->external_nbrs();
+         for (auto & nbr : nbrs) {
+            glVertex3dv(cell->center().data());
+            glVertex3dv( nbr->center().data());
          }
       }
       glEnd();
@@ -438,8 +438,8 @@ Panel::tessellate_disk(CBcurve_list& contour, const vector<int> ns)
 {
    if (ns.size()!=0 && (int)ns.size()!=contour.num())
       return false;
-   for (vector<int>::size_type i = 0; i < ns.size(); i++)
-      if (ns[i]<=0) return false;
+   for (auto & n : ns)
+      if (n<=0) return false;
    bool create_mode = ns.empty();
 
    // For "disk" tessellation we accept a closed chain of
@@ -799,8 +799,8 @@ Wpt_list
 Panel::skel_pts()
 {
    Wpt_list ret;
-   for (PCell_list::size_type i = 0; i < _cells.size(); i++)
-      ret.push_back(_cells[i]->center());
+   for (auto & cell : _cells)
+      ret.push_back(cell->center());
    return ret;
 }
 
@@ -1020,8 +1020,8 @@ Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
 {
    if (ns.size()!=0 && ns.size()!=3)
       return false;
-   for (vector<int>::size_type i = 0; i < ns.size(); i++)
-      if (ns[i]<=0) return false;
+   for (auto & n : ns)
+      if (n<=0) return false;
    bool create_mode = ns.empty();
    if (!create_mode && !(ns[0] == 1 || ns[1] == 1 || ns[2] == 1))
       return false;
@@ -1302,8 +1302,8 @@ Panel::tessellate_quad(CBcurve_list& c, const vector<int> ns)
 {
    if (ns.size()!=0 && ns.size()!=4)
       return false;
-   for (vector<int>::size_type i = 0; i < ns.size(); i++)
-      if (ns[i]<=0) return false;
+   for (auto & n : ns)
+      if (n<=0) return false;
    bool debug = Config::get_var_bool("DEBUG_QUAD_PANEL",false);
    err_adv(debug, "Panel::tessellate_quad: starting...");
 

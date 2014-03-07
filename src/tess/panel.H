@@ -161,9 +161,9 @@ class Panel:  public Bsurface {
    static PCell* find_cell(Bface* f) {
       Panel* p = Panel::find_owner(f);
       if (!p) return nullptr;
-      for (PCell_list::size_type i=0; i<p->_cells.size(); i++)
-         if (p->_cells[i]->contains(f))
-            return p->_cells[i];
+      for (auto & cell : p->_cells)
+         if (cell->contains(f))
+            return cell;
       return nullptr;
    }
 

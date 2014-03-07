@@ -246,9 +246,9 @@ ROOF::init(CGESTUREptr& g)
    // region has to be rectangular and consisted of quads
    vector<Bface_list> regions = get_regions(faces);
    vector<Bface_list> rect_regions;
-   for (vector<Bface_list>::size_type i = 0; i < regions.size(); i++) {
-      if (is_rect(regions[i]))
-         rect_regions.push_back(regions[i]);
+   for (auto & region : regions) {
+      if (is_rect(region))
+         rect_regions.push_back(region);
    }
    if (rect_regions.empty())
       return false;

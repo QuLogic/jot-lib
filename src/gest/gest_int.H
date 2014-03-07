@@ -169,8 +169,8 @@ class GestObs {
 inline void 
 GestObs_list::notify_gesture(GEST_INT* gi, CGESTUREptr& g)
 {
-   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
-      (*i)->notify_gesture(gi, g);
+   for (const auto & elem : *this) {
+      elem->notify_gesture(gi, g);
    }
 }
 
@@ -178,8 +178,8 @@ inline int
 GestObs_list::handle_event(CEvent& e, State*& s)
 {
    // first one to volunteer gets it:
-   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
-      if ((*i)->handle_event(e, s))
+   for (const auto & elem : *this) {
+      if (elem->handle_event(e, s))
          return 1;
    }
    return 0;
@@ -188,24 +188,24 @@ GestObs_list::handle_event(CEvent& e, State*& s)
 inline void 
 GestObs_list::notify_down()
 {
-   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
-      (*i)->notify_down();
+   for (const auto & elem : *this) {
+      elem->notify_down();
    }
 }
 
 inline void 
 GestObs_list::notify_move()
 {
-   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
-      (*i)->notify_move();
+   for (const auto & elem : *this) {
+      elem->notify_move();
    }
 }
 
 inline void 
 GestObs_list::notify_up()
 {
-   for (GestObs_list::iterator i=begin(); i!=end(); i++) {
-      (*i)->notify_up();
+   for (const auto & elem : *this) {
+      elem->notify_up();
    }
 }
 

@@ -596,8 +596,8 @@ public:
 
       _groups           = l._groups;
 
-      for (vector<VoteGroup>::size_type i=0; i<_groups.size(); i++)
-         _groups[i].lubo_path() = this;
+      for (auto & elem : _groups)
+         elem.lubo_path() = this;
 
       return *this;
    }

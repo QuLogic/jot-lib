@@ -2383,8 +2383,8 @@ split_mesh(const Event &e, State *&)
 
       vector<BMESH*> new_meshes = mesh->split_components();
 
-      for (vector<BMESH*>::size_type i=0; i<new_meshes.size(); i++)
-         WORLD::create(new TEXBODY(new_meshes[i],
+      for (auto & new_mesh : new_meshes)
+         WORLD::create(new TEXBODY(new_mesh,
                                    WORLD::unique_name(BMESH::static_name())));
 
    } else WORLD::message("Missed mesh");

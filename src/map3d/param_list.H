@@ -38,8 +38,8 @@ operator*=(param_list_t& params, double t)
 {
    // Multiply each value in the list by scalar t.
 
-   for (param_list_t::size_type i=0; i<params.size(); i++)
-      params[i] *= t;
+   for (auto & param : params)
+      param *= t;
    return params;
 }
 
@@ -123,8 +123,8 @@ make_uvpt_list(Cparam_list_t& uvals, double v)
    // given list and whose v-values all take the given value v.
 
    mlib::UVpt_list ret(uvals.size());
-   for (param_list_t::size_type i=0; i<uvals.size(); i++)
-      ret.push_back(mlib::UVpt(uvals[i], v));
+   for (auto & uval : uvals)
+      ret.push_back(mlib::UVpt(uval, v));
    ret.update_length();
    return ret;
 }
@@ -136,8 +136,8 @@ make_uvpt_list(double u, Cparam_list_t& vvals)
    // given list and whose u-values all take the given value u.
 
    mlib::UVpt_list ret(vvals.size());
-   for (param_list_t::size_type i=0; i<vvals.size(); i++)
-      ret.push_back(mlib::UVpt(u, vvals[i]));
+   for (auto & vval : vvals)
+      ret.push_back(mlib::UVpt(u, vval));
    ret.update_length();
    return ret;
 }

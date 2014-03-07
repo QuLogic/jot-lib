@@ -201,15 +201,15 @@ GLSLShader_Layer_Base::get_layers_variable_names()
 void
 GLSLShader_Layer_Base::send_layers_variables() const
 {
-   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++)
-      _layers[i]->send_to_glsl();
+   for (auto & layer : _layers)
+      layer->send_to_glsl();
 }
 
 bool
 GLSLShader_Layer_Base::is_used_tex_stage(int tex_stage)
 {
-   for (unsigned int i=0; i<_used_texture_stages.size(); i++) {
-      if ( tex_stage == _used_texture_stages[i] )
+   for (auto & stage : _used_texture_stages) {
+      if (tex_stage == stage)
          return true;
    }
    return false;
@@ -312,12 +312,12 @@ GLSLShader_Layer_Base::set_texture_pattern(
       return;
 
    // see if this texture is already loaded by another layer
-   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
-      assert(_layers[i]);
-      if (_layers[i]->_mode==1) {
-         if (_layers[i]->_pattern_name == file_name) {
+   for (auto & layer : _layers) {
+      assert(layer);
+      if (layer->_mode==1) {
+         if (layer->_pattern_name == file_name) {
             // found one already in use
-            layer->_pattern_tex_stage = _layers[i]->_pattern_tex_stage;
+            layer->_pattern_tex_stage = layer->_pattern_tex_stage;
             layer->_mode = 1;
             layer->_pattern_name = file_name;
             return;
@@ -370,8 +370,8 @@ GLSLShader_Layer_Base::cleanup_unused_textures(int tex_stage)
       return;
 
    // cleanup unused textures
-   for (vector<layer_base_t*>::size_type i=0; i<_layers.size(); i++) {
-      if (_layers[i]->_pattern_tex_stage == tex_stage) {
+   for (auto & layer : _layers) {
+      if (layer->_pattern_tex_stage == tex_stage) {
          // something else is still using this texture stage
          return;
       }

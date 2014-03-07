@@ -59,27 +59,19 @@ KeyMenu::KeyMenu(State *start_in)
 void
 KeyMenu::add_menu_item(char key, const string &desc, key_callback_t cb)
 {
-   
    // Remove the key if it is already in the menu:
-   for(unsigned i = 0; i < menu_items.size(); ++i){
-      
-      if(menu_items[i].key == key){
-         
+   for (auto & item : menu_items) {
+      if (item.key == key) {
          remove_menu_item(key);
          break;
-         
       }
-      
    }
-   
-   // Add the key to the menu:
-   
+
    // Add the FSA arc:
    *start += Arc(Event(nullptr, Evd(key,KEYD)), new CallFunc_t<Event>(cb, start));
-   
+
    // Add the KeyMenuItem to the list:
    menu_items.push_back(KeyMenuItem(key, desc, cb));
-   
 }
 
 /*!
@@ -97,14 +89,10 @@ KeyMenu::add_menu_item(char key, const string &desc, key_callback_t cb)
 void
 KeyMenu::add_menu_item(const char *keys, const string &desc, key_callback_t cb)
 {
-   
    // Loop over all characters in the string and add each one the menu:
-   for(; *keys; ++keys){
-      
+   for (; *keys; ++keys) {
       add_menu_item(*keys, desc, cb);
-      
    }
-   
 }
 
 /*!
@@ -116,32 +104,26 @@ KeyMenu::add_menu_item(const char *keys, const string &desc, key_callback_t cb)
 void
 KeyMenu::remove_menu_item(char key)
 {
-   
    unsigned key_index = (uint)-1;
    
    // Find the key:
-   for(unsigned i = 0; i < menu_items.size(); ++i){
-      
-      if(menu_items[i].key == key){
-         
+   for (unsigned i = 0; i < menu_items.size(); ++i) {
+      if (menu_items[i].key == key) {
          key_index = i;
          break;
-         
       }
-      
    }
-   
+
    // Do nothing if key is not found:
    if (key_index == (uint)-1)
       return;
-   
+
    // Remove the FSA arc:
    *start -= Arc(Event(nullptr, Evd(menu_items[key_index].key,KEYD)),
                  new CallFunc_t<Event>(menu_items[key_index].callback, start));
-   
+
    // Remove the KeyMenuItem from the list:
    menu_items.erase(menu_items.begin() + key_index);
-   
 }
 
 /*!
@@ -152,14 +134,10 @@ KeyMenu::remove_menu_item(char key)
 void
 KeyMenu::remove_menu_item(const char *keys)
 {
-   
    // Loop over all characters in the string and remove each one from the menu:
-   for(; *keys; ++keys){
-      
+   for (; *keys; ++keys) {
       remove_menu_item(*keys);
-      
    }
-   
 }
 
 /*!
@@ -172,23 +150,17 @@ KeyMenu::remove_menu_item(const char *keys)
 std::string
 KeyMenu::get_item_desc(char key)
 {
-   
    string desc;
-   
+
    // Find the key:
-   for(unsigned i = 0; i < menu_items.size(); ++i){
-      
-      if(menu_items[i].key == key){
-         
-         desc = menu_items[i].desc;
+   for (auto & item : menu_items) {
+      if (item.key == key) {
+         desc = item.desc;
          break;
-         
       }
-      
    }
-   
+
    return desc;
-   
 }
 
 /*!
@@ -198,11 +170,7 @@ KeyMenu::get_item_desc(char key)
 void
 KeyMenu::display_menu(ostream &out)
 {
-   
-   for (unsigned i = 0; i < menu_items.size(); ++i){
-      
-      out << menu_items[i].key << "\t" << menu_items[i].desc << endl;
-      
+   for (auto & item : menu_items) {
+      out << item.key << "\t" << item.desc << endl;
    }
-   
 }

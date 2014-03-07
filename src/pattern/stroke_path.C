@@ -461,13 +461,13 @@ StrokePaths::hausdorff_distance(CPIXEL& center1, CVEXEL& axis_a1, CVEXEL& axis_b
 
   // 3- for each corner, compute its distance to all edges and find the hausdorff distance
   double haus_dist = 0.0;
-  for (int i=0 ; i<4 ; i++){
-    if (inside_box(corners1[i], center2, axis_a2, axis_b2)){
+  for (auto & elem : corners1) {
+    if (inside_box(elem, center2, axis_a2, axis_b2)) {
       continue;
     }
     double min_dist = 1e19;
-    for (int j=0 ; j<4 ; j++){
-      double cur_dist = (corners1[i] - edges2[j].project_to_seg(corners1[i])).length();
+    for (auto & j : edges2) {
+      double cur_dist = (elem - j.project_to_seg(elem)).length();
       if (cur_dist<min_dist){
 	min_dist = cur_dist;
       }
@@ -539,8 +539,8 @@ StrokePaths::collinear_pair(CPIXEL& center1, CVEXEL& axis_a1, CVEXEL& axis_b1,
   corners2[1] = center2-0.5*axis_a2+0.5*axis_b2;
   corners2[2] = center2-0.5*axis_a2-0.5*axis_b2;
   corners2[3] = center2+0.5*axis_a2-0.5*axis_b2;
-  for (int i=0 ; i<4 ; i++){
-    VEXEL kDiff = corners2[i] - center1;
+  for (auto & elem : corners2) {
+    VEXEL kDiff = elem - center1;
     double proj_len = kDiff * axis_b1.normalized();
     if (abs(proj_len) > 0.5*_epsilon) {
       return false;
@@ -552,8 +552,8 @@ StrokePaths::collinear_pair(CPIXEL& center1, CVEXEL& axis_a1, CVEXEL& axis_b1,
   double max_proj1 = 0.5*axis_a1.length();
   double min_proj2 = 1e19;
   double max_proj2 = -1e19;
-  for (int i=0 ; i<4 ; i++){
-    VEXEL kDiff = corners2[i] - center1;
+  for (auto & elem : corners2) {
+    VEXEL kDiff = elem - center1;
     double proj_len = kDiff * axis_a1.normalized();
     if (proj_len<min_proj2) {
       min_proj2 = proj_len;

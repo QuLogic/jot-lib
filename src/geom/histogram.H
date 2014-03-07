@@ -83,8 +83,8 @@ class histogram_t {
 
    // revert to empty histogram:
    void reset() {
-      for (uint i=0; i<R; i++)
-         _bins[i] = 0;
+      for (auto & bin : _bins)
+         bin = 0;
       _size = 0;
    }
 
@@ -104,8 +104,8 @@ class histogram_t {
 
    void print() {
       cerr << "******** histogram ********" << endl;
-      for (int i=0; i<R; i++)
-         cerr << _bins[i] << endl;
+      for (auto & bin : _bins)
+         cerr << bin << endl;
       cerr << endl;
    }
 
@@ -158,8 +158,8 @@ class prob_fn_t {
    // reset to empty state:
    void reset() {
       _min_tone = _max_tone = 0;
-      for (uint i=0; i<histogram_t::R; i++)
-         _prob[i] = 0;
+      for (auto & elem : _prob)
+         elem = 0;
    }
 
    // build the cumulative probability function given a histogram:
@@ -199,8 +199,8 @@ class prob_fn_t {
 
    void print() {
       cerr << "******** cumulative probability ********" << endl;
-      for (int i=0; i<histogram_t::R; i++)
-         cerr << _prob[i] << endl;
+      for (auto & elem : _prob)
+         cerr << elem << endl;
       cerr << endl;
    }
 

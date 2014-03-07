@@ -207,12 +207,11 @@ CRV_SKETCH::draw(CVIEWptr& v)
          GL_VIEW::init_line_smooth(GLfloat(v->line_scale()*2));
       
          // draw the line strip
-         for (vector<PIXEL_list>::size_type i = 0; i < pl.size(); i++) {
-            PIXEL_list pts = pl[i];
+         for (PIXEL_list points : pl) {
             glBegin(GL_LINE_STRIP);
-            for (PIXEL_list::size_type k=0; k< pts.size(); k++) {
+            for (auto pt : points) {
                glColor3d(0.3, 0.3, 0.3);      // GL_CURRENT_BIT
-               glVertex2dv(pts[k].data());
+               glVertex2dv(pt.data());
             }
             glEnd();
          }

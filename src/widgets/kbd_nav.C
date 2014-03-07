@@ -47,8 +47,8 @@ kbd_nav::kbd_nav(
 {
    _speed_lr = _speed_fb = _speed_ud = _speed_tilt = _speed_rot = 0;
 
-   for (int i = 0; i < 256; i++)
-      _kmap[i] = 0;
+   for (auto & elem : _kmap)
+      elem = 0;
  
    for (const char *c = "1234567890"; *c; c++) {
       Event  down_ev(nullptr, Evd(*c, KEYD));

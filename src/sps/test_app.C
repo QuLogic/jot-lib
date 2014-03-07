@@ -156,11 +156,11 @@ TestSPSapp::load_scene()
       }
    }
 
-   for (vector<OctreeNode*>::iterator i = _nodes.begin(); i != _nodes.end(); ++i)
-      visit(*i);
+   for (auto & node : _nodes)
+      visit(node);
 
-   for (vector<Bvert_list>::iterator i = _pts.begin(); i != _pts.end(); ++i) {
-      for (Bvert_list::size_type j = 0; j < (*i).size(); j++) {
+   for (auto & point : _pts) {
+      for (Bvert_list::size_type j = 0; j < point.size(); j++) {
          _balls.push_back(new BALLwidget_anchor);
          GEOMptr _anchor = _balls.back();
          _anchor->set_pickable(0); // Don't allow picking of anchor

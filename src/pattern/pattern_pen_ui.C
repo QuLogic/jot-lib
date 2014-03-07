@@ -744,16 +744,16 @@ PatternPenUI::fill_preset_listbox(
    save_files.clear();
 
    vector<string> in_files = dir_list(full_path);
-   for (vector<string>::size_type i = 0; i < in_files.size(); i++) {
-      string::size_type len = in_files[i].length();
+   for (auto & file : in_files) {
+      string::size_type len = file.length();
 
-      if ( (len>3) && (in_files[i].substr(len-4) == ".pre"))
+      if ( (len>3) && (file.substr(len-4) == ".pre"))
       {
-         string basename = in_files[i].substr(0, len-4);
+         string basename = file.substr(0, len-4);
 
          if ( jot_check_glui_fit(listbox, basename.c_str()) )
          {
-            save_files.push_back(full_path + in_files[i]);
+            save_files.push_back(full_path + file);
             listbox->add_item(save_files.size(), basename.c_str());
          }
          else
@@ -761,9 +761,9 @@ PatternPenUI::fill_preset_listbox(
             err_mesg(ERR_LEV_WARN, "PatternPenUI::fill_preset_listbox - Discarding preset file (name too long for listbox): %s", basename.c_str());
          }
       }
-      else if (in_files[i] != "CVS")
+      else if (file != "CVS")
       {
-         err_mesg(ERR_LEV_WARN, "PatternPenUI::fill_preset_listbox - Discarding preset file (bad name): %s", in_files[i].c_str());
+         err_mesg(ERR_LEV_WARN, "PatternPenUI::fill_preset_listbox - Discarding preset file (bad name): %s", file.c_str());
       }
    }
 }

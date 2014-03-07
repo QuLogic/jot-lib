@@ -45,8 +45,8 @@ class OctreeNode : public BBOX {
       _neibors.clear();
       _intersects.clear();
       if (!_leaf) {
-         for (int i = 0; i < 8; i++) {
-            delete _children[i];
+         for (auto & elem : _children) {
+            delete elem;
          }
       }
    }
@@ -107,8 +107,8 @@ class QuadtreeNode {
    ~QuadtreeNode() { 
       _terms.clear();
       if (!_leaf) {
-         for (int i = 0; i < 4; i++) {
-            delete _children[i];
+         for (auto & elem : _children) {
+            delete elem;
          }
       }
    }

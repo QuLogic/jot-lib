@@ -384,10 +384,10 @@ ProxySurface::trim_proxy_surface()
       verts[i]->get_quad_faces(ret);
       // Make sure that all adjasent faces need to be deleted
       bool do_it=true;
-      for (vector<Bface*>::size_type k=0; k < ret.size(); ++k) {
-         if (ret[k]) {
-            assert(ret[k]->is_quad());            
-            if(!ProxyData::get_mark(ret[k], this) || !ProxyData::get_mark(ret[k]->quad_partner(), this)) {
+      for (auto & elem : ret) {
+         if (elem) {
+            assert(elem->is_quad());
+            if(!ProxyData::get_mark(elem, this) || !ProxyData::get_mark(elem->quad_partner(), this)) {
               // cerr << "vert degree " << verts[i]->p_degree() << endl;
                do_it = false;
                break;
@@ -558,18 +558,17 @@ ProxySurface::debug_grid()
 {
    cerr << "debug_grid: " << endl;
   
-   for(Grid_Map::iterator it = _grid_map.begin(); it != _grid_map.end(); ++it) {
-      for(Col_Map::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
-         cerr << "("<< it->first << ", " << it2->first << ") : ";
-         if(it2->second)
-            print_uv(it2->second);
+   for (auto & it1 : _grid_map) {
+      for (auto & it2 : it1.second) {
+         cerr << "("<< it1.first << ", " << it2.first << ") : ";
+         if (it2.second)
+            print_uv(it2.second);
          else
             cerr << "NULL" << endl;
          cerr << "   ";
       }
       cerr << endl;      
    }
- 
 }
 
 

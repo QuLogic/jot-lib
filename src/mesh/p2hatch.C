@@ -87,8 +87,8 @@ modulate_by_tone(Image& img)
 void
 modulate_by_tone(const vector<Image*>& imgs)
 {
-   for (vector<Image*>::size_type i=0; i<imgs.size(); i++)
-      modulate_by_tone(*imgs[i]);
+   for (auto & img : imgs)
+      modulate_by_tone(*img);
 }
 
 void

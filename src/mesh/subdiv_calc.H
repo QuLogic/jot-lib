@@ -479,8 +479,8 @@ class CatmullClarkCalc : public SubdivCalc<T> {
          err_msg("CatmullClarkCalc::fcentroids: error: empty face list");
          return ret;
       }
-      for (vector<Bface*>::size_type k=0; k<faces.size(); k++)
-         ret = ret + fcentroid(faces[k]);
+      for (auto & face : faces)
+         ret = ret + fcentroid(face);
       return ret / faces.size();
    }
    T smooth_centroid(CBvert* v) const {

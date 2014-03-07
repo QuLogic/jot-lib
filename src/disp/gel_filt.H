@@ -92,8 +92,8 @@ class GELFILTclass_desc : public GELFILTclass_name {
 
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) {
-      for (vector<string>::size_type i=0; i<_cn.size(); i++)
-         if (g->is_of_type(_cn[i]))
+      for (auto & elem : _cn)
+         if (g->is_of_type(elem))
             return true;
       return false;
    }

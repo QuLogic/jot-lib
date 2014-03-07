@@ -671,8 +671,8 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 			_mode=SLASH_SEL;  //go into pattern editing mode
 			end_face=0;		//prepare the 2nd step data
 			pattern=0;
-			for (int i=0; i<MAX_PATTERN_SIZE; i++)
-				pattern_array[i]=1; //fill the default pattern with ones
+			for (auto & elem : pattern_array)
+				elem=1; //fill the default pattern with ones
 		}
 		else
 			cerr << "This is not a quad" << endl;

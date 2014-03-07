@@ -724,8 +724,8 @@ Primitive::build_roof(
    // Stroke must start near the start of the strip:
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
       std::reverse(pixels.begin(), pixels.end()); // This is why 'pixels' is passed by copy
-      for (vector<int>::size_type i = 0; i < corners.size(); i++)
-         corners[i] = pixels.size() - 1 - corners[i];
+      for (auto & corner : corners)
+         corner = pixels.size() - 1 - corner;
    }
 
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
@@ -1670,8 +1670,8 @@ Primitive::extend(
    add_edge(v1.back(), side.last());
    v1.push_back(side.last());
    std::reverse(v1.begin(), v1.end());
-   for (vector<int>::size_type i = 0; i < crease_locs.size(); i++)
-      crease_locs[i] = v1.size() - 1 - crease_locs[i];
+   for (auto & crease : crease_locs)
+      crease = v1.size() - 1 - crease;
 
    // Compute local coords
    for (Bvert_list::size_type i = 1; i < v1.size()-1; i++)

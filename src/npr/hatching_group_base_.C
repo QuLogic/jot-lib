@@ -212,8 +212,8 @@ void
 HatchingGroupBase::level_draw_setup()
 {
    //Advance level animations, etc.
-   for (vector<HatchingLevelBase*>::size_type i=0; i<_level.size(); i++)
-      _level[i]->draw_setup();
+   for (auto & elem : _level)
+      elem->draw_setup();
 }
 
 /////////////////////////////////////
@@ -224,8 +224,8 @@ HatchingGroupBase::hatch_draw_setup()
 {
    //Causes hatches to update (we do this outside of level_draw_setup
    //in hopes of conglomerating code to leverage the cache)
-   for (vector<HatchingLevelBase*>::size_type i=0; i<_level.size(); i++)
-      _level[i]->hatch_draw_setup();
+   for (auto & elem : _level)
+      elem->hatch_draw_setup();
 }
 
 /////////////////////////////////////
@@ -437,8 +437,8 @@ HatchingGroupBase::update_levels()
                      (1.0 + (limit_adjust-1.0) * limit_scale);
    
    //Clear extinction flags from non transitioning levels
-   for (vector<HatchingLevelBase*>::size_type l=0 ; l<_level.size(); l++)
-      if (!_level[l]->in_trans()) _level[l]->clear_ext();
+   for (auto & elem : _level)
+      if (!elem->in_trans()) elem->clear_ext();
 
    //Set the new width targets for all levels below the base level
    for (l=0; l<base_level; l++)
@@ -596,10 +596,10 @@ HatchingGroupBase::update_levels()
    if (!keep_old_trans) {
       if (fabs(desired_level - _old_desired_level) > 1.0) {
          err_mesg(ERR_LEV_SPAM, "HatchingGroupBase::update_level() - Aborting out-of-date level transitions.");
-         for (vector<HatchingLevelBase*>::size_type l=0 ; l<_level.size(); l++) {
-            if (_level[l]->in_trans()) {
-               _level[l]->abort_transition();
-               _level[l]->clear_ext();
+         for (auto & elem : _level) {
+            if (elem->in_trans()) {
+               elem->abort_transition();
+               elem->clear_ext();
             }
          }
       }
@@ -2134,8 +2134,8 @@ HatchingBackboneBase::get_lengths(TAGformat &d)
 /////////////////////////////////////
 HatchingBackboneBase::~HatchingBackboneBase() 
 {
-   for (vector<Vertebrae*>::size_type i=0; i<_vertebrae.size(); i++)
-      delete _vertebrae[i];
+   for (auto & elem : _vertebrae)
+      delete elem;
 
    while (_geoms.num()>0)
       WORLD::destroy(_geoms.pop());

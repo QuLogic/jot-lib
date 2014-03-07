@@ -132,8 +132,8 @@ MMENU::up(
    )
 {
 //   DEVice_buttons *btns = (DEVice_buttons *)e._d;
-   for (vector<MMENUMenuItem>::size_type i=0; i<_items.size(); i++) {
-      if (GEOMptr gp = _items[i]._g)
+   for (auto & item : _items) {
+      if (GEOMptr gp = item._g)
          WORLD::undisplay(gp, false);
    }
 

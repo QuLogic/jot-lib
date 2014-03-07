@@ -73,11 +73,11 @@ DecalLineStroke::draw(CVIEWptr& v)
       OutlineStroke::clear();  // clears all the vertices
 
       // recompute the vertex ndc locations for the current frame
-      for ( vector<vert_loc>::size_type i=0; i<_vert_locs.size(); i++) {
+      for (auto & loc : _vert_locs) {
          // A null simplex indicates that this is a "bad" vert,
          // i.e., a break in the stroke.
 
-         if (!_vert_locs[i].sim) {
+         if (!loc.sim) {
             // XXX -- hack: add a "bad" dummy vert to cause a break
             // in the stroke when it's rendered.
             NDCZpt dummy;
@@ -85,7 +85,7 @@ DecalLineStroke::draw(CVIEWptr& v)
          }
          else {
             assert(_patch);
-            NDCZpt p(_vert_locs[i].loc, 
+            NDCZpt p(loc.loc,
                      _patch->mesh()->obj_to_ndc());
 
             // add vert with location p
@@ -94,13 +94,13 @@ DecalLineStroke::draw(CVIEWptr& v)
             BaseStrokeVertex& last_v = _verts[_verts.num()-1];
 
             if (_press_vary_width) 
-               last_v._width = (float)_vert_locs[i].press;
+               last_v._width = (float)loc.press;
 
             if (_press_vary_alpha) 
-               last_v._alpha = (float)_vert_locs[i].press;
+               last_v._alpha = (float)loc.press;
 
             ((DecalVertexData *)last_v._data)->sim
-               = _vert_locs[i].sim;
+               = loc.sim;
          }
       }
    }
@@ -412,8 +412,8 @@ DecalLineStroke::put_vertex_locs(TAGformat &d) const
 {
    // write out the vert locs
 
-   for (vector<vert_loc>::size_type i=0; i<_vert_locs.size(); i++) {
-      Wpt write_loc = _vert_locs[i].loc;
+   for (auto & elem : _vert_locs) {
+      Wpt write_loc = elem.loc;
 
       // XXX - Keep things in mesh space unless the
       // mesh's transform is 'applied' during serialization
@@ -426,9 +426,9 @@ DecalLineStroke::put_vertex_locs(TAGformat &d) const
       d.id();
 
       *d << write_loc;
-      *d << _vert_locs[i].press;
-      *d << (is_edge(_vert_locs[i].sim) ? ((Bedge*)_vert_locs[i].sim)->index() : -1);
-      *d << (is_face(_vert_locs[i].sim) ? ((Bface*)_vert_locs[i].sim)->index() : -1);
+      *d << elem.press;
+      *d << (is_edge(elem.sim) ? ((Bedge*)elem.sim)->index() : -1);
+      *d << (is_face(elem.sim) ? ((Bface*)elem.sim)->index() : -1);
       
       d.end_id();
    }
@@ -544,8 +544,8 @@ DecalLineStroke::interpolate_vert(
 void                
 DecalLineStroke::xform_locations(CWtransf& t)
 {
-   for ( vector<vert_loc>::size_type i=0; i < _vert_locs.size(); i++ ) {
-      _vert_locs[i].loc = t * _vert_locs[i].loc;
+   for (auto & elem : _vert_locs) {
+      elem.loc = t * elem.loc;
    }
 }
 

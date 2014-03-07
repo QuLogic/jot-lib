@@ -411,8 +411,8 @@ VertMeme::get_nbrs(vector<FaceMeme*>& ret) const
       vector<Bface*> faces;
       vert()->get_faces(faces);
       FaceMeme* m;
-      for (vector<Bface*>::size_type i=0; i<faces.size(); i++)
-         if ((m = _owner->find_face_meme(faces[i])))
+      for (auto & face : faces)
+         if ((m = _owner->find_face_meme(face)))
             ret.push_back(m);
    }
 }

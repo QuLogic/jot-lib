@@ -37,9 +37,9 @@ int
 GestureCellDrawer::draw(CVIEWptr& v) { 
   
   int n=0;
-  for(uint i=0; i < _strokes.size(); ++i)
+  for(auto & stroke : _strokes)
   {
-      n+= _strokes[i].draw(v);
+      n += stroke.draw(v);
   }
   return n;
 }

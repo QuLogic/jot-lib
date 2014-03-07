@@ -541,8 +541,8 @@ NPRTexture::read_stream(istream &is, vector<string> & leftover)
                new IOBlockMeth<NPRTexture>("GTEXTURE",
                                            &NPRTexture::read_gtexture, this));
          } else {
-            for (IOBlockList::size_type i = 0; i < blocklist.size(); i++)
-               ((IOBlockMeth<NPRTexture> *) blocklist[i])->set_obj(this);
+            for (auto & elem : blocklist)
+               ((IOBlockMeth<NPRTexture> *) elem)->set_obj(this);
          }
          retval = IOBlock::consume(is, blocklist, leftover);
          err_mesg(ERR_LEV_WARN, "NPRTexture::read_stream() - ******* <END> LOADING 'OLD' FORMAT FILE *******");
@@ -801,8 +801,8 @@ NPRTexture::old_format(STDdstream &ds) const
    (*d).write_open_delim();
 
    // the rest is the same
-   for (TAGlist::size_type i=0; i<tags().size(); i++)
-      tags()[i]->format(this, *d);  // write name value pair
+   for (auto & tag : tags())
+      tag->format(this, *d);   // write name value pair
    ds.write_newline();         // add carriage return
    d.end_id();            // write end_delimiter
 

@@ -219,8 +219,8 @@ offset_scale(CBvert* v, CSimplexFilter& filter)
    // the angle between n and norms[i]. but don't let the
    // cosine term get smaller than 0.5:
    RunningAvg<double> ret(0);
-   for (vector<Wvec>::size_type i=0; i<norms.size(); i++)
-      ret.add(1/max(n * norms[i], 0.5));
+   for (auto & norm : norms)
+      ret.add(1/max(n * norm, 0.5));
    return ret.val();
 }
 

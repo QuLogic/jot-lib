@@ -206,8 +206,8 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
       return false;
    }
 
-   for (vector<PIXEL_list>::size_type i = 0; i < pt_lists.size(); i++) {
-      if (!do_xsec_match(pt_lists[i])) {
+   for (auto & list : pt_lists) {
+      if (!do_xsec_match(list)) {
          err_adv(debug, "   gesture not aligned with cross section");
          return false;
       }

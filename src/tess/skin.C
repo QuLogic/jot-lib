@@ -742,8 +742,8 @@ show_polys(BMESH* m)
    EdgeStrip strip(m->edges(), unreached + poly);
    vector<Bvert_list> chains;
    strip.get_chains(chains);
-   for (vector<Bvert_list>::size_type i=0; i<chains.size(); i++)
-      WORLD::show_polyline(chains[i].pts(), 3, Color::blue_pencil_d, 0.5);
+   for (auto & chain : chains)
+      WORLD::show_polyline(chain.pts(), 3, Color::blue_pencil_d, 0.5);
 }
 
 inline bool
@@ -798,14 +798,14 @@ Skin::join_to_skel(CBface_list& interior, MULTI_CMDptr cmd)
 
    push(skel_region, cmd);
 
-   for (vector<Bvert_list>::size_type i=0; i<skel_chains.size(); i++) {
+   for (auto & skel_chain : skel_chains) {
       // chains repeat 1st vertex at end, so remove it
-      skel_chains[i].pop_back();
+      skel_chain.pop_back();
       // get matching skin chain
-      Bvert_list skin_chain = _mapper.a_to_b(skel_chains[i]);
+      Bvert_list skin_chain = _mapper.a_to_b(skel_chain);
       // put skin chain first; it is the "open" chain, meaning
       // its vertices will be kicked out, replaced by skel verts
-      if (!join(skin_chain, skel_chains[i], cmd, "skin to skel")) {
+      if (!join(skin_chain, skel_chain, cmd, "skin to skel")) {
          return false;
       }
    }

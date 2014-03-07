@@ -2976,15 +2976,13 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
 
       //cerr << "=====================\nNum Lubos: " << _lubo_samples.size() << "\n";
 
-      for (vector<LuboSample>::size_type i=0; i<_lubo_samples.size(); i++) {
+      for (LuboSample& lbsample : _lubo_samples) {
          //cerr << "\t\t" << i ;
 
          ids.clear();
          matching_paths.clear();
          matching_ids.clear();
          // Map old points/normals to new screen locations:
-
-         LuboSample& lbsample = _lubo_samples[i];
 
          lbsample.get_wpt( wp );
 
@@ -3043,17 +3041,17 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
                         _id_ref->val(cent) = 0x00ffffff;
                   }
                } else {
-                  for (vector<Vec2i>::size_type off = 0 ; off < offsets.size(); off++) {
-                     id = _id_ref->val(cent+offsets[off]);
+                  for (auto & offset : offsets) {
+                     id = _id_ref->val(cent + offset);
                      if  ( id_fits_sample(id, lbsample) )
                         ids.insert(id);
 
                      if (debug_lubo || draw_props) {
                         // draws a white dot at the hit point,greem if right vis
                         if  ( id_fits_sample(id, lbsample) )
-                           _id_ref->val(cent+offsets[off] ) = 0x0000ff00;
+                           _id_ref->val(cent + offset) = 0x0000ff00;
                         else
-                           _id_ref->val(cent+offsets[off] ) = 0x00ffffff;
+                           _id_ref->val(cent + offset) = 0x00ffffff;
                      }
                   }
                }
@@ -3074,16 +3072,16 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
             // find a path that owns that id:
             assert ( _use_new_idref_method );
             if ( _use_new_idref_method ) {
-               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+               for (const auto & id : ids) {
                   int x = 0;
-                  while ( (path= _paths.lookup(*k & 0xffffff00, x)) ) {
+                  while ( (path= _paths.lookup(id & 0xffffff00, x)) ) {
                      //cerr << "stype:" << lbsample._type << " svis: " << lbsample._vis;
                      //cerr << " ptype:" << path->type() << " pvis:" << path->vis() << endl;
-                     if ( sample_matches_path ( lbsample, path ) && path->in_range(*k) ) {
+                     if ( sample_matches_path ( lbsample, path ) && path->in_range(id) ) {
                         //cerr << "\tsample matches path" << endl;
                         //if ( matching_paths.add_uniquely(path) ) matching_ids.push_back(ids[k]);
                         matching_paths.push_back(path);
-                        matching_ids.push_back(*k);
+                        matching_ids.push_back(id);
                      }
                      x++;
                   }
@@ -3236,14 +3234,14 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
       //cerr << "Propagation::attempting to propagate %d votes " << _lubo_samples.size() << endl;
       //cerr << "Num Lubos = " << _lubo_samples.size() << "\n";
 
-      for (vector<LuboSample>::size_type i=0; i<_lubo_samples.size(); i++) {
+      for (auto & elem : _lubo_samples) {
          //cerr << "\t\t" << i ;
          ids.clear();
          matching_paths.clear();
          matching_ids.clear();
          // Map old points/normals to new screen locations:
 
-         _lubo_samples[i].get_wpt ( wp );
+         elem.get_wpt ( wp );
 
 
          NDCZpt p(xfp * /* TFMULTFIX */ wp);
@@ -3251,9 +3249,9 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
          if ( !p.in_frustum() )
             continue; // cull samples out of frustum
 
-         if(!get_bface(_lubo_samples[i]._s)) continue; 
+         if(!get_bface(elem._s)) continue;
        
-         (get_bface(_lubo_samples[i]._s))->bc2norm_blend(_lubo_samples[i]._bc, wn);
+         (get_bface(elem._s))->bc2norm_blend(elem._bc, wn);
 
          NDCZvec n( /*xfn **/ wn , obj.derivative(wp) );
 
@@ -3286,8 +3284,8 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
                   if ( is_path_id(id) )
                      ids.insert(id);
                } else {
-                  for (vector<Vec2i>::size_type off = 0; off < offsets.size(); off++) {
-                     tmp_id = _id_ref->val(cent+offsets[off]);
+                  for (auto & offset : offsets) {
+                     tmp_id = _id_ref->val(cent + offset);
                      if  ( is_path_id ( tmp_id ) ) {
                         if ( debug_lubo && is_path_id ( id ) && tmp_id != id )
                            cerr << "XXXmultiple ids found!" << endl;
@@ -3298,9 +3296,9 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
                      if (debug_lubo || draw_props) {
                         // draws a white dot at the hit point
-                        _id_ref->val(cent+offsets[off] ) = 0x009f9f9f;
+                        _id_ref->val(cent + offset) = 0x009f9f9f;
                         if ( id == 0 )
-                           _id_ref->val(cent+offsets[off] ) = 0x00ffffff;
+                           _id_ref->val(cent + offset) = 0x00ffffff;
                      }
                   }
                }
@@ -3321,20 +3319,20 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
             // find a path that owns that id:
 
             if ( _use_new_idref_method ) {
-               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+               for (const auto & id : ids) {
                   int x = 0;
-                  while ( (path= _paths.lookup(*k & 0xffffff00, x)) ) {
-                     if ( path->in_range(*k) ) {
+                  while ( (path = _paths.lookup(id & 0xffffff00, x)) ) {
+                     if ( path->in_range(id) ) {
                         matching_paths.push_back(path);
-                        matching_ids.push_back(*k);
+                        matching_ids.push_back(id);
                      }
                      x++;
                   }
                }
             } else {
-               for (set<uint>::iterator k = ids.begin(); k != ids.end(); ++k) {
+               for (const auto & id : ids) {
                   int x = 0;
-                  while ( (path= _paths.lookup(*k, x)) ) {
+                  while ( (path = _paths.lookup(id, x)) ) {
                      vector<LuboPath*>::iterator it;
                      it = std::find(matching_paths.begin(), matching_paths.end(), path);
                      if (it == matching_paths.end())
@@ -3387,7 +3385,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
             if ( closest_path ) {
 
-               closest_path->register_vote( _lubo_samples[i], _lubo_samples[i]._path_id , intersection_point, segment_index );
+               closest_path->register_vote( elem, elem._path_id , intersection_point, segment_index );
 
             } else
                num_missed++;
@@ -3545,8 +3543,8 @@ LuboPathList::votepath_id_to_index(uint id) const
    for (LuboPathList::size_type i=0; i < size(); i++) {
       LuboPath * lp = (*this)[i];
       int count = 0;
-      for (vector<LuboVote>::size_type j = 0; j < lp->votes().size(); j++) {
-         if ( lp->votes()[j]._path_id == id )
+      for (auto & elem : lp->votes()) {
+         if ( elem._path_id == id )
             count++;
       }
       if ( count > max_count ) { max_count = count; max_ind = i;}
@@ -3809,8 +3807,8 @@ LuboPath::put_faces(TAGformat &d) const
 
    d.id();
    *d << _simplexes.size();
-   for (vector<Bsimplex*>::size_type i=0; i<_simplexes.size(); i++) {
-      *d << (uintptr_t)_simplexes[i];
+   for (auto & elem : _simplexes) {
+      *d << (uintptr_t)elem;
    }
    d.end_id();
 }
@@ -4048,11 +4046,9 @@ LuboPath::gen_group_samples( double spacing , int path_index, vector<LuboSample>
 
    int b = 0 ;          // buf;
    int n = num()-1 ;    // size()-buf;
-   for (vector<VoteGroup>::size_type i=0; i < _groups.size(); i++) {
+   for (VoteGroup& g : _groups) {
       //create a set of samples for each stroke that we drew along this path
       //each remaining votegroup in the groups array represents a drawn stroke
-
-      VoteGroup& g = _groups[i];
 
       if (g.status() != VoteGroup::VOTE_GROUP_GOOD)
          continue;

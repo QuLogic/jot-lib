@@ -191,9 +191,9 @@ DATA_ITEM::decode(STDdstream &ds)
                   if (!count && s[0] != '{')  // tag is single-valued
                      break;
                   // skip over matching { }'s
-                  for (string::size_type x=0; x < s.length(); x++) {
-                     if (s[x] == '{')   count++;
-                     if (s[x] == '}') { count--; if (count == 0) finished=1; }
+                  for (auto & elem : s) {
+                     if (elem == '{')   count++;
+                     if (elem == '}') { count--; if (count == 0) finished=1; }
                   }
                }
                cerr << "DATA_ITEM::decode - unrecognized tag '" << tag_name
@@ -219,8 +219,8 @@ DATA_ITEM::format(STDdstream &ds) const
       cerr << "Formatting " << class_name() << endl;
 
    d.id();                          // write OBJECT_NAME start_delimiter
-   for (TAGlist::size_type i=0; i<tags().size(); i++)
-      tags()[i]->format(this, *d);  // write name value pair
+   for (auto & tag : tags())
+      tag->format(this, *d);  // write name value pair
    ds.write_newline();              // add carriage return
    d.end_id();                      // write end_delimiter
 

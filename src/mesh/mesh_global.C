@@ -523,29 +523,29 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
       // if all descendents of a parent component were selected at the old level, 
       // select the parent
       
-      for (set<Bface*>::iterator it=parent_faces.begin(); it!=parent_faces.end(); ++it) {
+      for (const auto & parent_face : parent_faces) {
          // get all the parent's children at the old edit level
          Bface_list child_faces; 
-         ((Lface*)(*it))->append_subdiv_faces(-diff, child_faces);
+         ((Lface*)parent_face)->append_subdiv_faces(-diff, child_faces);
 
          if (all_selected(child_faces)) {
-            new_selected_faces.push_back(*it);
+            new_selected_faces.push_back(parent_face);
          }
       }
 
-      for (set<Bedge*>::iterator it=parent_edges.begin(); it!=parent_edges.end(); ++it) {
+      for (const auto & parent_edge : parent_edges) {
          // get all the parent's children at the old edit level
          Bedge_list child_edges; 
-         ((Ledge*)(*it))->append_subdiv_edges(-diff, child_edges);
+         ((Ledge*)parent_edge)->append_subdiv_edges(-diff, child_edges);
 
          if (all_selected(child_edges)) {
-            new_selected_edges.push_back(*it);
+            new_selected_edges.push_back(parent_edge);
          }
       }
 
-      for (set<Bvert*>::iterator it=parent_verts.begin(); it!=parent_verts.end(); ++it) {
+      for (const auto & parent_vert : parent_verts) {
          // this case is simpler: verts have 1 child vert
-         new_selected_verts.push_back(*it);
+         new_selected_verts.push_back(parent_vert);
       }
    }
 

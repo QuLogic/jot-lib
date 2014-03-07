@@ -66,8 +66,8 @@ class CameraPath {
 
    }
    ~CameraPath () { 
-      for ( vector<CamState*>::size_type i=0; i < state_list.size() ; i++ )
-         delete state_list[i];
+      for (auto & elem : state_list)
+         delete elem;
    }
 
    CameraPath(const string &name) {

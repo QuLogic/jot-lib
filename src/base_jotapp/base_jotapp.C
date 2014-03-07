@@ -405,10 +405,8 @@ BaseJOTapp::init_buttons(CVIEWptr &view)
    WORLD::create(_buttons.back(), false);
 
    // make them initially hidden:
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       but->toggle_hidden();
    }
 }
@@ -479,10 +477,8 @@ BaseJOTapp::load_scene()
    //   (1) the camera was not specified in file, and
    //   (2) at least one 3D object is outside the view frustum.
 
-   for (vector<WINDOW *>::iterator it = _windows.begin();
-        it != _windows.end(); ++it)
+   for (auto win : _windows)
    {
-      WINDOW *win = *it;
       if (win->_view->cam()->data()->loaded_from_file())
          return;
    }
@@ -622,10 +618,8 @@ BaseJOTapp::load_jot_file(const string &file)
 void 
 BaseJOTapp::activate_button(const string &file)
 {
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       if (but->name() == file)
          but->activate();
    }
@@ -637,10 +631,8 @@ BaseJOTapp::activate_button(const string &file)
 void 
 BaseJOTapp::update_button(const string &file)
 {
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       if (but->name() == file)
          but->update_skin();
    }
@@ -652,10 +644,8 @@ BaseJOTapp::update_button(const string &file)
 void 
 BaseJOTapp::deactivate_button()
 {
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       but->deactivate();
    }
 }
@@ -666,10 +656,8 @@ BaseJOTapp::deactivate_button()
 void 
 BaseJOTapp::toggle_button(const string &file)
 {
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       if (but->name() == file)
          but->toggle_active();
    }
@@ -744,8 +732,8 @@ inline void
 add_render_styles(CVIEWptr& view, MoveMenu* menu)
 {
    vector<string> rend_modes = view->rend_list();
-   for (vector<string>::size_type i = 0; i < rend_modes.size(); i++) {
-      menu->items().push_back( new RenderSet(view, rend_modes[i]) );
+   for (auto & rend_mode : rend_modes) {
+      menu->items().push_back( new RenderSet(view, rend_mode) );
    }
 }
 
@@ -862,10 +850,8 @@ BaseJOTapp::init_kbd_nav(WINDOW &win)
 void
 BaseJOTapp::init_fsa()
 {
-   for (vector<WINDOW *>::iterator it = _windows.begin();
-        it != _windows.end(); ++it)
+   for (auto win : _windows)
    {
-      WINDOW *win = *it;
       VIEWint_list::add(win->_view, &win->_start);
    }
 }
@@ -881,10 +867,8 @@ BaseJOTapp::Run()
       cerr << "BaseJOTapp::Run" << endl;
    }
 
-   for (vector<WINDOW *>::iterator it = _windows.begin();
-        it != _windows.end(); ++it)
+   for (auto win : _windows)
    {
-      WINDOW *win = *it;
       win->_win->mouse()->add_handler(
          VIEWint_list::get(win->_view)
          );
@@ -1026,8 +1010,8 @@ BaseJOTapp::cam_switch(const Event&, State *&)
       cerr << "BaseJOTapp::cam_switch: before switch: start: "
            << "(" << get_name(start) << ")"
            << endl;
-      for (size_t i=0; i<start->arcs().size(); i++) {
-         cerr << "  " << get_name(start->arcs()[i].next()) << endl;
+      for (auto & elem : start->arcs()) {
+         cerr << "  " << get_name(elem.next()) << endl;
       }
       cerr << endl;
    }
@@ -1071,8 +1055,8 @@ BaseJOTapp::cam_switch(const Event&, State *&)
       cerr << "BaseJOTapp::cam_switch: after switch: start: "
            << "(" << get_name(start) << ")"
            << endl;
-      for (size_t i=0; i<start->arcs().size(); i++) {
-         cerr << "  " << get_name(start->arcs()[i].next()) << endl;
+      for (auto & elem : start->arcs()) {
+         cerr << "  " << get_name(elem.next()) << endl;
       }
       cerr << endl;
    }
@@ -1084,10 +1068,8 @@ BaseJOTapp::cam_switch(const Event&, State *&)
 int
 BaseJOTapp::button_toggle(const Event&, State *&)
 {
-   for (vector<ICON2D *>::iterator it = BaseJOTapp::instance()->_buttons.begin();
-        it != BaseJOTapp::instance()->_buttons.end(); ++it)
+   for (auto but : BaseJOTapp::instance()->_buttons)
    {
-      ICON2D *but = *it;
       but->toggle_hidden();
    }
 

@@ -211,8 +211,8 @@ GLSLShader::delete_shader(GLuint shader)
 void
 GLSLShader::delete_shaders(const vector<GLuint>& shaders)
 {
-   for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
-      delete_shader(shaders[i]);
+   for (auto & shader : shaders)
+      delete_shader(shader);
 }
 
 GLuint
@@ -285,12 +285,12 @@ GLSLShader::load_shaders(
    vector<GLuint>& shaders,
    GLenum type)
 {
-   for (vector<string>::size_type i=0; i<filenames.size(); i++) {
-      GLuint shader = load_shader(gtex_name, filenames[i], type);
+   for (auto & filename : filenames) {
+      GLuint shader = load_shader(gtex_name, filename, type);
       if (shader == 0) {
          cerr << gtex_name
               << "::load_shaders: failed to load file: "
-              << filenames[i]
+              << filename
               << endl;
          // if one failed, delete them all:
          delete_shaders(shaders);
@@ -312,11 +312,11 @@ bool
 GLSLShader::attach_shaders(const vector<GLuint>& shaders, GLuint prog)
 {
    if (need_arb_ext) {
-      for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
-         glAttachObjectARB(prog, shaders[i]);
+      for (auto & shader : shaders)
+         glAttachObjectARB(prog, shader);
    } else {
-      for (vector<GLuint>::size_type i=0; i<shaders.size(); i++)
-         glAttachShader(prog, shaders[i]);
+      for (auto & shader : shaders)
+         glAttachShader(prog, shader);
    }
    return true;
 }

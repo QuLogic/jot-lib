@@ -14,6 +14,9 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_COMPILER_FLAGS}")
 IF(NOT(CXXFeatures_nullptr_FOUND))
 	MESSAGE(FATAL_ERROR "jot-lib requires a compiler that supports nullptr.")
 ENDIF(NOT(CXXFeatures_nullptr_FOUND))
+IF(NOT(CXXFeatures_auto_FOUND))
+	MESSAGE(FATAL_ERROR "jot-lib requires a compiler that supports auto.")
+ENDIF(NOT(CXXFeatures_auto_FOUND))
 
 ## Check for things we need
 

@@ -35,9 +35,9 @@ CamIcon*        CamIcon::_orig_icon;
 CamIcon*
 CamIcon::intersect_all(CXYpt &pt)
 {
-   for (vector<CamIcon*>::size_type i=0; i<_icons.size(); i++)
-      if (_icons[i]->intersect_icon(pt)) 
-         return _icons[i];
+   for (auto & icon : _icons)
+      if (icon->intersect_icon(pt))
+         return icon;
    return nullptr;
 }
 

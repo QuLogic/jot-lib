@@ -252,19 +252,19 @@ ImgLineTexture::build_strokes(CVIEWptr &v)
 
    double radius;
 
-   for (vector<uint>::size_type i=0; i<pixels.size(); i++) {
-      int grey_val = _col_ref->alpha(pixels[i]);
-      int red_val = _col_ref->red(pixels[i]);
+   for (auto & pixel : pixels) {
+      int grey_val = _col_ref->alpha(pixel);
+      int red_val = _col_ref->red(pixel);
 
       if (grey_val == 0 || red_val == 0) {
          continue;
       }
 
-      radius = get_radius(pixels[i]);
+      radius = get_radius(pixel);
 
       PriorityPixel p;
       p._priority = radius;
-      p._pixel = pixels[i];
+      p._pixel = pixel;
       queue.push(p);
    }
 

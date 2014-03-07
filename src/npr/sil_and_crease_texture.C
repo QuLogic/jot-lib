@@ -295,9 +295,9 @@ SilAndCreaseTexture::put_crease_pools(TAGformat &d) const
             "SilAndCreaseTexture::put_crease_pools() - Putting %d pools.",
             _crease_stroke_pools.size());
 
-   for (vector<EdgeStrokePool*>::size_type i = 0; i < _crease_stroke_pools.size(); i++) {
+   for (auto & elem : _crease_stroke_pools) {
       d.id();
-      _crease_stroke_pools[i]->format(*d);
+      elem->format(*d);
       d.end_id();
    }
 }
@@ -380,8 +380,8 @@ SilAndCreaseTexture::request_ref_imgs()
 
 SilAndCreaseTexture::~SilAndCreaseTexture()
 {
-   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
-      delete _crease_stroke_pools[i];
+   for (auto & elem : _crease_stroke_pools) {
+      delete elem;
    }
 
    while (_sil_stroke_pools.size() > 0) {
@@ -742,8 +742,8 @@ SilAndCreaseTexture::recreate_creases()
    if (!_patch)
       return;
 
-   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
-      delete _crease_stroke_pools[i];
+   for (auto & elem : _crease_stroke_pools) {
+      delete elem;
    }
 
    _crease_stroke_pools.clear();
@@ -767,9 +767,7 @@ SilAndCreaseTexture::set_crease_vis_step_size(double s)
 {
    _crease_vis_step_size = s;
 
-   for (vector<EdgeStrokePool*>::size_type i=0; i<_crease_stroke_pools.size(); i++) {
-      EdgeStrokePool* cur_pool = _crease_stroke_pools[i];
-
+   for (EdgeStrokePool* cur_pool : _crease_stroke_pools) {
       OutlineStroke* cur_stroke = cur_pool->get_prototype();
       if (cur_stroke) {
          assert(cur_stroke->is_of_type(EdgeStroke::static_name()));

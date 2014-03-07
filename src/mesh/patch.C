@@ -466,8 +466,8 @@ Patch::draw_tri_strips(StripCB* cb)
 {
    build_tri_strips();
 
-   for (vector<TriStrip*>::size_type k=0; k<_tri_strips.size(); k++)
-      _tri_strips[k]->draw(cb);
+   for (auto & strip : _tri_strips)
+      strip->draw(cb);
 
    return _faces.size();
 }
@@ -517,9 +517,9 @@ Patch::draw_edge_strips(StripCB *cb)
    int ret=0;
 
    // draw edges as line strips
-   for (vector<EdgeStrip*>::size_type i=0; i<_edge_strips.size(); i++) {
-      _edge_strips[i]->draw(cb);
-      ret += _edge_strips[i]->num();
+   for (auto & strip : _edge_strips) {
+      strip->draw(cb);
+      ret += strip->num();
    }
 
    return ret;
@@ -531,9 +531,9 @@ Patch::draw_vert_strips(StripCB *cb)
    int ret=0;
 
    // draw point strips (vertices as dots):
-   for (vector<VertStrip*>::size_type i=0; i<_vert_strips.size(); i++) {
-      _vert_strips[i]->draw(cb);
-      ret += _vert_strips[i]->num();
+   for (auto & strip : _vert_strips) {
+      strip->draw(cb);
+      ret += strip->num();
    }
 
    return ret;
@@ -840,8 +840,8 @@ Patch::read_stream(istream &is, vector<string> &leftover)
       blocklist.push_back(new IOBlockMeth<Patch>("PATCHNAME",&Patch::read_patchname,
                                                  this));
    } else {
-      for (IOBlockList::size_type i = 0; i < blocklist.size(); i++) {
-         ((IOBlockMeth<Patch> *) blocklist[i])->set_obj(this);
+      for (auto & elem : blocklist) {
+         ((IOBlockMeth<Patch> *) elem)->set_obj(this);
       }
    }
    int ret = IOBlock::consume(is, blocklist, leftover);
@@ -1142,11 +1142,11 @@ Patch::get_faces(TAGformat &d)
    *d >> faces;
 
    // for each face...
-   for (vector<int>::size_type f = 0; f < faces.size(); f++) {
-      if (faces[f] < _mesh->nfaces()) {
-         add(_mesh->bf(faces[f]));
+   for (auto & face : faces) {
+      if (face < _mesh->nfaces()) {
+         add(_mesh->bf(face));
       } else {
-         err_msg("Patch::get_faces() - ERROR! face #%d > %d.", faces[f], _mesh->nfaces());
+         err_msg("Patch::get_faces() - ERROR! face #%d > %d.", face, _mesh->nfaces());
       }
    }
 }
@@ -1350,17 +1350,17 @@ Patch::update_dynamic_samples(const VisibilityTest& vis)
 
    // create the new samples:
    vector<DynamicSample>  new_samples;
-   for (uint i=0; i< _old_samples.size(); ++i) {
+   for (auto & sample : _old_samples) {
       // sample location in world space:
-      Wpt p = xf*_old_samples[i].get_pos();
+      Wpt p = xf * sample.get_pos();
       // surface normal at sample, in world space:
-      Wvec n = (xfn*_old_samples[i].get_norm()).normalized();
+      Wvec n = (xfn * sample.get_norm()).normalized();
       // compute the weight:
       double weight = compute_weight(
          p, n, eye, right_v, r, _use_weighted_ls, vis
          );
       // store the sample info:
-      new_samples.push_back(DynamicSample(_old_samples[i], PIXEL(p), weight));
+      new_samples.push_back(DynamicSample(sample, PIXEL(p), weight));
    }
    assert(new_samples.size() == _old_samples.size()); // obviously true
 
@@ -1553,18 +1553,18 @@ Patch::get_z_dynamic_samples(const vector<DynamicSample>& old_samples)
 
    // create the new samples:
    vector<DynamicSample>  new_samples; 
-   for (uint i=0; i< old_samples.size(); ++i) {
+   for (auto & sample : old_samples) {
       // sample location in world space:
-      Wpt p = xf*old_samples[i].get_pos();
+      Wpt p = xf * sample.get_pos();
       // surface normal at sample, in world space:
-      Wvec n = (xfn*old_samples[i].get_norm()).normalized();
+      Wvec n = (xfn * sample.get_norm()).normalized();
       // compute the weight:
       // XXX not doing visibility here
       double weight = compute_weight(
          p, n, eye, right_v, r, _use_weighted_ls, VisibilityTest()
          );
       // store the sample info:
-      new_samples.push_back(DynamicSample(old_samples[i], PIXEL(p), weight));
+      new_samples.push_back(DynamicSample(sample, PIXEL(p), weight));
    }
    assert(new_samples.size() == old_samples.size()); // obviously true
 

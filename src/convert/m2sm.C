@@ -91,10 +91,10 @@ main(int argc, char *argv[])
      mesh->add_vertex(pts[i]);
    }
 
-   for (vector<Point3i>::size_type i=0; i<faces.size(); i++) {
-     mesh->add_face(faces[i][0]-1,
-                    faces[i][1]-1,
-                    faces[i][2]-1);
+   for (auto & face : faces) {
+     mesh->add_face(face[0]-1,
+                    face[1]-1,
+                    face[2]-1);
    }
 
    int i;

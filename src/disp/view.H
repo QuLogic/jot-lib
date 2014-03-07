@@ -607,8 +607,8 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
    // Return true if any light is enabled:
    bool lights_on() const {
-      for (int i=0; i<MAX_LIGHTS; i++)
-         if (_lights[i]._is_enabled)
+      for (auto & elem : _lights)
+         if (elem._is_enabled)
             return true;
       return false;
    }
@@ -637,7 +637,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
 
  public:
    VIEW (const string &s, WINSYS *win, VIEWimpl *i);
-   virtual              ~VIEW () { for (size_t i = 0; i < _jitters.size(); i++) delete _jitters[i]; }
+   virtual              ~VIEW () { for (auto & _jitter : _jitters) delete _jitter; }
 
    static int           stack_size()               { return _views.num(); }
    static void          push(CVIEWptr &view)       { _views += view; }

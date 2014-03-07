@@ -64,12 +64,12 @@ class CoordFrameObs_list : public set<CoordFrameObs*> {
  public:
    // convenience methods:
    void notify_frame_changed(CoordFrame* f) {
-      for (set<CoordFrameObs*>::iterator k=begin(); k!=end(); ++k)
-         (*k)->notify_frame_changed(f);
+      for (const auto & elem : *this)
+         elem->notify_frame_changed(f);
    }
    void notify_frame_deleted(CoordFrame* f) {
-      for (set<CoordFrameObs*>::iterator k=begin(); k!=end(); ++k)
-         (*k)->notify_frame_deleted(f);
+      for (const auto & elem : *this)
+         elem->notify_frame_deleted(f);
    }
 };
 

@@ -60,15 +60,15 @@ VIEWint::handle_event(
 {
    VIEW::push(_view);
    Event  ev(_view, e);
-   for (vector<FSA*>::size_type i=0; i < _cur_states.size(); i++) {
-      _cur_states[i]->handle_event(ev);
+   for (auto & state : _cur_states) {
+      state->handle_event(ev);
    }
 
    while (!_events.empty()) {
       ev = Event(_view, _events.back());
       _events.pop_back();
-      for (vector<FSA*>::size_type t=0; t < _cur_states.size(); t++) {
-         _cur_states[t]->handle_event(ev);
+      for (auto & state : _cur_states) {
+         state->handle_event(ev);
       }
    }
    VIEW::pop();

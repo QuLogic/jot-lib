@@ -119,8 +119,8 @@ class SHOW_TRIS : public GEL {
       glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);  // GL_LIGHTING_BIT
       GL_COL(_fill_color, _alpha);                      // GL_CURRENT_BIT
       glBegin(GL_TRIANGLES);
-      for (Triangle_list::size_type i=0; i<_tris.size(); i++) {
-         draw_flat_tri(_tris[i]);
+      for (auto & tri : _tris) {
+         draw_flat_tri(tri);
       }
       glEnd();
       GL_VIEW::end_polygon_offset();                    // GL_ENABLE_BIT
@@ -138,8 +138,8 @@ class SHOW_TRIS : public GEL {
       glDisable(GL_LIGHTING);           // GL_ENABLE_BIT
       GL_COL(_line_color, _alpha);      // GL_CURRENT_BIT
       glBegin(GL_LINES);
-      for (Triangle_list::size_type i=0; i<_tris.size(); i++) {
-         draw_wire_tri(_tris[i]);
+      for (auto & tri : _tris) {
+         draw_wire_tri(tri);
       }
       glEnd();
       GL_VIEW::end_line_smooth();

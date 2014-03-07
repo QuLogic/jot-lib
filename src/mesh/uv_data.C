@@ -200,8 +200,8 @@ UVdata::split(CEdgeStrip& strip)
 {
    vector<Bvert_list> chains;
    strip.get_chains(chains);
-   for (vector<Bvert_list>::size_type i=0; i<chains.size(); i++)
-      split_chain(chains[i]);
+   for (auto & chain : chains)
+      split_chain(chain);
 }
 
 bool

@@ -34,11 +34,9 @@ using namespace std;
 PenManager::~PenManager()
 {
    
-   for(unsigned long i = 0; i < pens.size(); ++i){
-      
-      delete pens[i];
-      pens[i] = nullptr;
-      
+   for (auto & p : pens) {
+      delete p;
+      p = nullptr;
    }
    
    pens.clear();

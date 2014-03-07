@@ -1830,15 +1830,14 @@ BMESH::read_blocks(istream &is)
                                                  &BMESH::read_include, this));
 
    } else {
-      for (IOBlockList::size_type i = 0; i < blocklist.size(); i++) {
-         ((IOBlockMeth<BMESH> *) blocklist[i])->set_obj(this);
+      for (auto & elem : blocklist) {
+         ((IOBlockMeth<BMESH> *) elem)->set_obj(this);
       }
    }
    vector<string> leftover;
    int ret = IOBlock::consume(is, blocklist, leftover);
    // Put leftover words back on stream
-   for (vector<string>::size_type w = 0; w < leftover.size(); w++) {
-      string str = leftover[w];
+   for (string & str : leftover) {
       is.putback(' ');
       for (string::size_type i = str.length(); i > 0; i--) {
          is.putback(str[i-1]);
@@ -2049,14 +2048,16 @@ BMESH::read_texcoords2(istream& is, vector<string> &leftover)
          // Round UV's to nearest UV_RESOLUTION
          // A value of 0.00001 is nice...
          if (UV_RESOLUTION>0) {
-            for (int j=0; j<3; j++) {
+            for (auto & elem : uv) {
                double r;
-               uv[j][0] -= r = fmod(uv[j][0],UV_RESOLUTION);
+               r = fmod(elem[0], UV_RESOLUTION);
+               elem[0] -= r;
                if (2.0*fabs(r) > UV_RESOLUTION)
-                  uv[j][0] += ((r>0)?(UV_RESOLUTION):(-UV_RESOLUTION));
-               uv[j][1] -= r = fmod(uv[j][1],UV_RESOLUTION);
+                  elem[0] += (r > 0) ? UV_RESOLUTION : -UV_RESOLUTION;
+               r = fmod(elem[1],UV_RESOLUTION);
+               elem[1] -= r;
                if (2.0*fabs(r) > UV_RESOLUTION)
-                  uv[j][1] += ((r>0)?(UV_RESOLUTION):(-UV_RESOLUTION));
+                  elem[1] += (r > 0) ? UV_RESOLUTION : -UV_RESOLUTION;
             }
          }
 
@@ -3494,8 +3495,8 @@ BMESH::put_faces(TAGformat &d) const
    } else {
       (*d) << faces.size();
    }
-   for (size_t i=0; i<faces.size();i++) {
-      (*d) << " " << faces[i];
+   for (auto & face : faces) {
+      (*d) << " " << face;
       (*d).write_newline();
    }
    if ((*d).ascii()) {
@@ -3625,8 +3626,7 @@ BMESH::get_uvfaces(TAGformat &d)
       return;
 
    Patch* p = nullptr;
-   for (vector<UVforIO2>::size_type i=0; i<uvs.size(); i++) {
-      const UVforIO2& uv = uvs[i];
+   for (const UVforIO2& uv : uvs) {
       if (!uv.is_good()) {
          err_msg("BMESH::get_uvfaces: skipping bad face:");
 
@@ -3910,9 +3910,7 @@ BMESH::get_faces(TAGformat &d)
    // be re-sorted into their correct patches and this default
    // patch will be removed:
    Patch* p = nullptr;  //new_patch();
-   for (size_t i=0; i<faces.size(); i++) {
-      const vector<int>& face = faces[i];
-
+   for (const vector<int>& face : faces) {
       switch (face.size()) {
        case 3:
          // triangle
@@ -3947,8 +3945,8 @@ BMESH::get_creases(TAGformat &d)
    vector<Point2i> creases;
    *d >> creases;
 
-   for (vector<Point2i>::size_type i=0; i<creases.size(); i++)
-      set_crease(creases[i][0],creases[i][1]);
+   for (auto & crease : creases)
+      set_crease(crease[0], crease[1]);
 
    changed(CREASES_CHANGED);
 }
@@ -3959,8 +3957,8 @@ BMESH::get_polylines(TAGformat &d)
    vector<Point2i> polylines;
    *d >> polylines;
 
-   for (vector<Point2i>::size_type i=0; i<polylines.size(); i++)
-      add_edge(polylines[i][0],polylines[i][1]);
+   for (auto & polyline : polylines)
+      add_edge(polyline[0], polyline[1]);
 
    if (Config::get_var_bool("BMESH_BUILD_POLYSTRIPS",false) &&
        polylines.size() > 0)
@@ -3978,8 +3976,8 @@ BMESH::get_weak_edges(TAGformat &d)
            weak_edges.size());
 
    int count=0;
-   for (vector<Point2i>::size_type i=0; i<weak_edges.size(); i++)
-      if (set_weak_edge(weak_edges[i][0],weak_edges[i][1]))
+   for (auto & weak_edge : weak_edges)
+      if (set_weak_edge(weak_edge[0], weak_edge[1]))
          count++;
    err_adv(debug, "set %d/%d weak edges", count, weak_edges.size());
 }
@@ -4022,13 +4020,13 @@ BMESH::get_texcoords2(TAGformat &d)
    vector<UVforIO> texcoords2;
    *d >> texcoords2;
 
-   for (vector<UVforIO>::size_type i=0; i<texcoords2.size(); i++) {
-      if (0 <= texcoords2[i]._face && texcoords2[i]._face < (int)_faces.size()) {
+   for (auto & coord : texcoords2) {
+      if (0 <= coord._face && coord._face < (int)_faces.size()) {
          // Round UV's to nearest UV_RESOLUTION
          // A value of 0.00001 is nice...
          if (UV_RESOLUTION>0) {
             for (int j=1; j<4; j++) {
-               UVpt &uv = texcoords2[i].uv(j);
+               UVpt &uv = coord.uv(j);
                double r;
                uv[0] -= r = fmod(uv[0],UV_RESOLUTION);
                if (2.0*fabs(r) > UV_RESOLUTION)
@@ -4040,13 +4038,13 @@ BMESH::get_texcoords2(TAGformat &d)
          }
 
          UVdata::set
-            (bf(texcoords2[i]._face),
-             texcoords2[i]._uv1,
-             texcoords2[i]._uv2,
-             texcoords2[i]._uv3);
+            (bf(coord._face),
+             coord._uv1,
+             coord._uv2,
+             coord._uv3);
       } else {
          err_msg("BMESH::read_texcoords2() -  ERROR! Invalid face index %d",
-                 texcoords2[i]._face);
+                 coord._face);
       }
    }
 

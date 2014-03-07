@@ -112,9 +112,9 @@ ProxyTexture::draw_samples(CVIEWptr& v)
 {
    const vector<DynamicSample>& samples = _patch->get_samples();
    Wpt_list pts;
-   for (uint i=0; i < samples.size(); ++i) {
-      if (samples[i].get_weight() > 0.0)
-         pts.push_back(samples[i].get_pos());
+   for (auto & sample : samples) {
+      if (sample.get_weight() > 0.0)
+         pts.push_back(sample.get_pos());
    }
    GL_VIEW::draw_pts(pts,Color::red,1.0,10);
 }
@@ -322,8 +322,8 @@ void
 ProxyTexture::move_old_samples(double pos)
 {
    _tmp_debug_sample.clear();   
-   for (vector<DynamicSample>::size_type i=0; i < _old_samples.size(); ++i) {
-      _tmp_debug_sample.push_back(get_new_pixel(_old_samples[i].get_pix(), pos));
+   for (auto & elem : _old_samples) {
+      _tmp_debug_sample.push_back(get_new_pixel(elem.get_pix(), pos));
    }
 }
 

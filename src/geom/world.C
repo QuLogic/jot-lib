@@ -127,8 +127,8 @@ void
 WORLD::poll(void)
 {
    vector<DEVpoll *> &p = DEVpoll::pollable();
-   for (vector<DEVpoll *>::iterator i=p.begin();i!=p.end();++i)
-      (*i)->exec_poll();
+   for (auto & elem : p)
+      elem->exec_poll();
 }
 
 #ifdef USE_PTHREAD
@@ -237,8 +237,8 @@ WORLD::clean_on_exit() const
       destroy(g, false);
    }
 
-   for (vector<TTYfd*>::size_type i = 0; i<_fds.size(); i++)
-      _fds[i]->deactivate();
+   for (auto & elem : _fds)
+      elem->deactivate();
    for (int i = 0; i < VIEWS.num(); i++)
       VIEWS[i]->stereo(VIEWimpl::NONE);
 }

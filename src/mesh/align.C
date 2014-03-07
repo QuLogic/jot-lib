@@ -29,8 +29,8 @@ inline double
 cross_mult(int i, int j, const vector<Wvec>& v)
 {
    double ret = 0;
-   for (vector<Wvec>::size_type k=0; k<v.size(); k++)
-      ret += v[k][i] * v[k][j];
+   for (auto & elem : v)
+      ret += elem[i] * elem[j];
    return ret;
 }
 

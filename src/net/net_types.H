@@ -228,8 +228,8 @@ inline STDdstream  &operator<<(STDdstream &ds, const vector<T> &list) {
       ds << "{";
    else
       ds << list.size();
-   for (typename vector<T>::size_type i=0; i<list.size();i++) {
-      ds << list[i];
+   for (auto & elem : list) {
+      ds << elem;
    }
    if (ds.ascii())
       ds << "}";

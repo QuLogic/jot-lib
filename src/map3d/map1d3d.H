@@ -171,8 +171,8 @@ class Map1D3D : public Map {
 
    mlib::Wpt_list map_all(const vector<double>& tvals) {
       mlib::Wpt_list ret(tvals.size());
-      for (vector<double>::size_type k=0; k<tvals.size(); k++)
-         ret.push_back(map(tvals[k]));
+      for (auto & tval : tvals)
+         ret.push_back(map(tval));
       ret.update_length();
       return ret;
    }
@@ -218,8 +218,8 @@ class ReverseMap1D3D : public Map1D3D {
 
    static void reverse_tvals(vector<double>& tvals) {
       std::reverse(tvals.begin(), tvals.end());
-      for (vector<double>::size_type k=0; k<tvals.size(); k++)
-         tvals[k] = (1 - tvals[k]);
+      for (auto & tval : tvals)
+         tval = (1 - tval);
    }
 
    //******** RUN-TIME TYPE ID ********

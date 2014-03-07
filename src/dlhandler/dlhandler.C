@@ -85,8 +85,8 @@ DLhandler::valid(CVIEWptr &v, int cmp_stamp) const
 void
 DLhandler::invalidate() 
 {
-   for (vector<int>::size_type i = 0; i< _dl_stamp_array.size(); i++) {
-      _dl_stamp_array[i] = -1;
+   for (auto & elem : _dl_stamp_array) {
+      elem = -1;
    }
 }
 

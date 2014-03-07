@@ -314,8 +314,8 @@ visit(OctreeNode* node,
             node->set_point(bc);
          }
 
-         for (vector<QuadtreeNode*>::size_type i = 0; i < fs.size(); i++)
-            delete fs[i];
+         for (auto & f : fs)
+            delete f;
          fs.clear();
       }
    } else {
@@ -338,8 +338,8 @@ OctreeNode::set_neibors()
          }
       }
 
-      for (vector<OctreeNode*>::iterator i = _parent->neibors().begin(); i != _parent->neibors().end(); ++i) {
-         n = *i;
+      for (auto & elem : _parent->neibors()) {
+         n = elem;
          if (!n->get_leaf()) {
             for (int j = 0; j < 8; j++) {
                if (n->get_children()[j]->overlaps(test_box) &&
@@ -355,8 +355,8 @@ OctreeNode::set_neibors()
    }
 
    if (!_leaf) {
-      for (int i = 0; i < 8; i++) {
-         _children[i]->set_neibors();
+      for (auto & elem : _children) {
+         elem->set_neibors();
       }
    }
 }
@@ -371,8 +371,8 @@ OctreeNode::set_terms(vector<OctreeNode*>& terms, int& count)
          count++;
       }
    } else {
-      for (int i = 0; i < 8; i++)
-         _children[i]->set_terms(terms, count);
+      for (auto & elem : _children)
+         elem->set_terms(terms, count);
    }
 }
 
@@ -392,8 +392,8 @@ QuadtreeNode::set_terms(vector<QuadtreeNode*>& terms)
          terms.push_back(this);
       }
    } else {
-      for (int i = 0; i < 4; i++)
-         _children[i]->set_terms(terms);
+      for (auto & elem : _children)
+         elem->set_terms(terms);
    }
 }
 

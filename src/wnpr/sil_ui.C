@@ -2714,14 +2714,12 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
 
 
       int j = 0;
-      for (set<unsigned int>::iterator it=path_ids.begin(); it!=path_ids.end(); ++it, ++j) {
+      for (auto id : path_ids) {
          int cnt = 0;
 
-         for (vector<VoteGroup>::size_type i=0; i<gs.size(); i++) {
-            VoteGroup &g = gs[i];
-            
+         for (VoteGroup& g : gs) {
             if (g.num() > 0) {
-               if (*it == g.vote(0)._path_id) {
+               if (id == g.vote(0)._path_id) {
                   total--;
 
                   x.clear(); y.clear();
@@ -2832,7 +2830,7 @@ SilUI::notify_draw(SilAndCreaseTexture *t)
                }
             }
          }
-      
+         j++;
       }
       
       assert(total == 0);

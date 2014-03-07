@@ -517,9 +517,9 @@ get_c_verts(Bvert_list& b_verts)
 inline Skin*
 get_skin(const vector<Skin*>& skins, Bface_list& region)
 {
-   for (vector<Skin*>::size_type i = 0; i < skins.size(); i++) {
-      if (skins[i]->skel_faces().contains_all(region))
-         return skins[i];
+   for (auto & skin : skins) {
+      if (skin->skel_faces().contains_all(region))
+         return skin;
    }
    return nullptr;
 }
@@ -756,8 +756,8 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       vector<Bvert_list> templists;
       p_region.get_boundary().get_chains(templists);
       templists = get_c_verts(templists[0]);
-      for (vector<Bvert_list>::size_type i = 0; i < templists.size(); i++) {
-         Bcurve* b_curve = new Bcurve(templists[i], c_p_skin,
+      for (auto & list : templists) {
+         Bcurve* b_curve = new Bcurve(list, c_p_skin,
                                     (LMESH::upcast(region.mesh()))->subdiv_level());
          cmd->add(new SHOW_BBASE_CMD(b_curve));
       }
@@ -839,8 +839,8 @@ try_punch(CBface_list& region, bool debug)
       regions[i].get_boundary().get_chains(b_verts_lists);
 
       vector<Bvert_list> curve_verts_lists;
-      for (vector<Bvert_list>::size_type j = 0; j < b_verts_lists.size(); j++) {
-         vector<Bvert_list> tmp = get_c_verts(b_verts_lists[j]);
+      for (auto & vlist : b_verts_lists) {
+         vector<Bvert_list> tmp = get_c_verts(vlist);
          curve_verts_lists.insert(curve_verts_lists.end(), tmp.begin(), tmp.end());
       }
 
@@ -853,18 +853,18 @@ try_punch(CBface_list& region, bool debug)
       if ((Bsurface::get_surfaces(regions[i]).num() != 0) && 
           (UVsurface::isa(Bsurface::get_surfaces(regions[i])[0]))) {
          UVsurface* surf = (UVsurface*)(Bsurface::get_surfaces(regions[i])[0]);
-         
+
          UVpt_list uvpts;
          UVpt pt;
-         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
+         for (auto & cvlist : curve_verts_lists) {
             uvpts.clear();
-            for (Bvert_list::size_type k = 0; k < curve_verts_lists[j].size(); k++) {
-               surf->get_uv(curve_verts_lists[j][k], pt);
+            for (auto & bvlist : cvlist) {
+               surf->get_uv(bvlist, pt);
                uvpts.push_back(pt);
             }
             uvpts.update_length();
             Bcurve* new_curve =
-               new Bcurve(curve_verts_lists[j], uvpts, surf->map(),
+               new Bcurve(cvlist, uvpts, surf->map(),
                           (LMESH::upcast(mesh))->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(new_curve));
          }
@@ -879,9 +879,9 @@ try_punch(CBface_list& region, bool debug)
          push(regions[i], cmd);
          cov_inf_punch(c_skin, regions[i], cmd);//punch on the cover of either side of the inflation
 
-         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
+         for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
-               new Bcurve(curve_verts_lists[j], c_skin,
+               new Bcurve(list, c_skin,
                           (LMESH::upcast(mesh))->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(b_curve));
          }
@@ -893,9 +893,9 @@ try_punch(CBface_list& region, bool debug)
          push(map_skel_to_skin(c_skin, regions[i]), cmd);
          cov_inf_punch(c_skin, map_skel_to_skin(c_skin, regions[i]), cmd);
 
-         for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
+         for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
-               new Bcurve(curve_verts_lists[j], c_skin,
+               new Bcurve(list, c_skin,
                           (LMESH::upcast(mesh))->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(b_curve));
          }
@@ -913,8 +913,8 @@ try_punch(CBface_list& region, bool debug)
             push(map_skel_to_skin(c_skin, regions[i]), cmd);
             cov_inf_punch(c_skin, map_skel_to_skin(c_skin, regions[i]), cmd);
 
-            for (vector<Bvert_list>::size_type j = 0; j < curve_verts_lists.size(); j++) {
-               Bcurve* b_curve = new Bcurve(curve_verts_lists[j], c_skin, 
+            for (auto & list : curve_verts_lists) {
+               Bcurve* b_curve = new Bcurve(list, c_skin,
                   (LMESH::upcast(mesh))->subdiv_level());
                cmd->add(new SHOW_BBASE_CMD(b_curve));
             }

@@ -1013,9 +1013,9 @@ GL_VIEW::draw_lines(
 
    glBegin(GL_LINES);
 
-   for (vector<Wline>::size_type i=0; i<lines.size(); i++) {
-      glVertex3dv(lines[i].point().data());
-      glVertex3dv(lines[i].endpt().data());
+   for (auto & line : lines) {
+      glVertex3dv(line.point().data());
+      glVertex3dv(line.endpt().data());
    }
   
    glEnd();

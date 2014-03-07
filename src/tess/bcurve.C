@@ -2591,8 +2591,8 @@ can_fill_ccw(vector<Bvert_list>& contour)
    // assumes the contour is legitimate
    // (it forms a closed chain of vertices).
 
-   for (vector<Bvert_list>::size_type i=0; i<contour.size(); i++)
-      if (!can_fill_ccw(contour[i]))
+   for (auto & elem : contour)
+      if (!can_fill_ccw(elem))
          return false;
    return true;
 }
@@ -2620,8 +2620,8 @@ do_reverse(vector<Bvert_list>& ret)
 
    assert(ret.size() > 0);
    std::reverse(ret.begin() + 1, ret.end());
-   for (vector<Bvert_list>::size_type i=0; i<ret.size(); i++)
-      std::reverse(ret[i].begin(), ret[i].end());
+   for (auto & elem : ret)
+      std::reverse(elem.begin(), elem.end());
 }
 
 inline bool

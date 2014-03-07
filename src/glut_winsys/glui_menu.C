@@ -92,8 +92,8 @@ GLUIMoveMenu::create_menu()
    }
 
    // If we're recreating the menu, must unmap previously mapped item ids
-   for (vector<int>::size_type k=0; k < _item_ids.size(); k++) {
-      unmap_menu_item(_item_ids[k]);
+   for (auto & item : _item_ids) {
+      unmap_menu_item(item);
    }
    
    _item_ids.clear();
@@ -116,17 +116,17 @@ GLUIMoveMenu::create_menu()
 
    // create a button for every menu item
    if (!_item_list.empty()) {
-      for (MenuList::size_type i = 0; i < _item_list.size(); i++) {
+      for (auto & item : _item_list) {
          // Tell the menu item which menu it belongs to
-         _item_list[i]->menu(this);
+         item->menu(this);
          const char *label = nullptr;
          // Make default label if one doesn't exist
-         if (_item_list[i]->label().empty()) {
+         if (item->label().empty()) {
             label = "----";
-         } else label = _item_list[i]->label().c_str();
+         } else label = item->label().c_str();
 
          // set the menu item in the global list used for callbacks
-         int item_id = map_menu_item(_item_list[i]);
+         int item_id = map_menu_item(item);
          // record this menu's item id's
          _item_ids.push_back(item_id);
 

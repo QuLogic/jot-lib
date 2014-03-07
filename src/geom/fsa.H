@@ -282,8 +282,8 @@ class State_t {
                                                 _arcs.erase(it); }
       
       int consumes(const EVENT   &e) const
-         { for (typename vector<arc_type>::size_type i = 0; i < _arcs.size(); ++i)
-              if (_arcs[i].match(e))
+         { for (auto & elem : _arcs)
+              if (elem.match(e))
                  return 1;
            return 0; }
 
@@ -314,23 +314,23 @@ template <class EVENT>
 void
 State_t<EVENT>::operator+=(const State_t<EVENT>&s)
 {
-   for (typename vector<arc_type>::size_type i = 0; i < s._arcs.size(); ++i) {
+   for (auto & new_arc : s._arcs) {
       typename vector<arc_type>::size_type j = 0;
 
       for (; j < _arcs.size(); ++j) {
-         if (_arcs[j].match(s._arcs[i].event())) {
-            _arcs[j] = s._arcs[i];
+         if (_arcs[j].match(new_arc.event())) {
+            _arcs[j] = new_arc;
             break;
          }
       }
 
       if (j == _arcs.size()) {
-         if (!s._arcs[i].guarded()) {
-            _arcs.push_back(s._arcs[i]);
+         if (!new_arc.guarded()) {
+            _arcs.push_back(new_arc);
          } else {
             // arcs w/guards come first for priority
             // over more general arcs
-            _arcs.insert(_arcs.begin(), s._arcs[i]);
+            _arcs.insert(_arcs.begin(), new_arc);
          }
       }
    }
@@ -340,11 +340,11 @@ template <class EVENT>
 void
 State_t<EVENT>::operator-=(const State_t<EVENT>&s)
 {
-   for (typename vector<arc_type>::size_type i = 0; i < s._arcs.size(); i++) {
+   for (auto & elem : s._arcs) {
       typename vector<arc_type>::reverse_iterator j;
 
       for (j = _arcs.rbegin(); j != _arcs.rend(); ++j) {
-         if (j->match(s._arcs[i].event())) {
+         if (j->match(elem.event())) {
             _arcs.erase(j.base() - 1);
             break;
          }
@@ -358,9 +358,9 @@ State_t<EVENT>::event(const EVENT& e, State_t<EVENT>* start, int* ret) const
 {
    State_t<EVENT> *next = (State_t<EVENT>*)this;
 
-   for (typename vector<arc_type>::size_type i = 0; i < _arcs.size(); i++) {
-      if (_arcs[i].match(e)) {
-         int k = _arcs[i].execute(next, e, start);
+   for (auto & elem : _arcs) {
+      if (elem.match(e)) {
+         int k = elem.execute(next, e, start);
          if (ret) *ret = k;
          break;
       }

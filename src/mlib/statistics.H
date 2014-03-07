@@ -61,11 +61,11 @@ statistics(
    T max=0;
    T min=DBL_MAX;
 
-   for (typename vector<T>::size_type i=0;i<list.size();i++) {
-      sum+=list[i]; 
-      sqr_sum+=(list[i]*list[i]);
-      if(list[i]>max) max=list[i];
-      if(list[i]<min) min=list[i];
+   for (auto & elem : list) {
+      sum += elem;
+      sqr_sum += elem * elem;
+      if (elem>max) max = elem;
+      if (elem<min) min = elem;
    }
    double avg = sum/list.size();
    double std = sqrt(sqr_sum/list.size() - avg*avg);

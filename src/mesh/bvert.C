@@ -527,8 +527,8 @@ Bvert::compute_normal(const vector<Bface*>& faces) const
    // Computes angle-weighted average normal from the given faces:
 
    Wvec ret;
-   for (vector<Bface*>::size_type k=0; k<faces.size(); k++)
-      ret += weighted_vnorm(faces[k], this);
+   for (auto & face : faces)
+      ret += weighted_vnorm(face, this);
    return ret.normalized();
 }
 

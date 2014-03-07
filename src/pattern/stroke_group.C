@@ -624,8 +624,8 @@ StrokeGroup::synthesize_Efros(GestureCell* target_cell){
   
   // debug
   cerr << "ordered elements: (" << ordered_elements.size() << " / " << _target_positions.size() << " ): ";
-  for (unsigned int i=0 ; i<ordered_elements.size() ; i++){
-    cerr << ordered_elements[i] << " ";
+  for (auto & elem : ordered_elements) {
+    cerr << elem << " ";
   }
   cerr << endl;
 

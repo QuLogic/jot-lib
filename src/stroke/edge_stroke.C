@@ -407,8 +407,8 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
       // get the edges adjacent to this vertex
       const vector<Bedge*>& adj_e = mesh_v->get_adj();
 
-      for (vector<Bedge*>::size_type i=0; i<adj_e.size(); i++) {
-         front_facing_face = adj_e[i]->frontfacing_face();
+      for (auto & elem : adj_e) {
+         front_facing_face = elem->frontfacing_face();
          if (front_facing_face) {      
             break;
          }
@@ -420,9 +420,7 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
          return false;
 
 
-      for (vector<Bedge*>::size_type j=0; j<adj_e.size(); j++) {
-         Bedge* e = adj_e[j];
-
+      for (Bedge* e : adj_e) {
          if ( e->is_crease() ) {
 
             // If we find edge nearby in the id ref image, then

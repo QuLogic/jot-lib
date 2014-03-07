@@ -83,8 +83,8 @@ VertNormalsTexture::draw(CVIEWptr& v)
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
       CBvert* bv = verts[i];
       bv->get_normals(norms);
-      for (vector<Wvec>::size_type k=0; k<norms.size(); k++)
-         draw_seg(bv->loc(), norms[k]*scale);
+      for (auto & norm : norms)
+         draw_seg(bv->loc(), norm*scale);
    }
    glEnd();
 

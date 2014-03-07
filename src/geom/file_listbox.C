@@ -89,14 +89,14 @@ FileListbox::fill_listbox(
 {
    int j = 0;
    vector<string> in_files = dir_list(full_path);
-   for (vector<string>::size_type i = 0; i < in_files.size(); i++)
+   for (auto & in_file : in_files)
    {
-      string::size_type len = in_files[i].length();
+      string::size_type len = in_file.length();
       if ( (extension) && (len>3) && 
-            (in_files[i].substr(len-4) == extension))
+            (in_file.substr(len-4) == extension))
       {
-         save_files.push_back(save_path + in_files[i]);
-         listbox->add_item(j++, in_files[i].c_str());
+         save_files.push_back(save_path + in_file);
+         listbox->add_item(j++, in_file.c_str());
       }
    }
 }

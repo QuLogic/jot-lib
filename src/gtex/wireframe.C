@@ -147,11 +147,11 @@ WireframeTexture::draw_d2d_samples()
    glColor3fv(float3(Color::red_pencil));
 
    const vector<DynamicSample>& samples = _patch->get_samples();
-   for (uint i=0; i<samples.size(); i++) {
+   for (auto & sample : samples) {
       // we want to set the size of each point separately:
-      Wpt p = samples[i].get_pos(); // object space
+      Wpt p = sample.get_pos(); // object space
       Wpt w = xf*p; // world space
-      Wvec n = (xfn*samples[i].get_norm()).normalized(); // normal, world space
+      Wvec n = (xfn*sample.get_norm()).normalized(); // normal, world space
       double nv = (eye - w).normalized() * n;
 
       if (1) { //_patch->get_use_visibility_test()) {

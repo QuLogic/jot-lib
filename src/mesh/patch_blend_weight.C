@@ -108,8 +108,8 @@ PatchBlendWeight::total_weight() const
 {
    // sum of weights at the vertex
    double ret = 0;
-   for (citer_t i=_map.begin(); i != _map.end(); ++i)
-      ret += i->second;
+   for (const auto & elem : _map)
+      ret += elem.second;
    return ret;
 }
 
@@ -133,8 +133,8 @@ PatchBlendWeight::normalize()
       cerr << "PatchBlendWeight::normalize: error: total weight is 0"
            << endl;
    } else {
-      for (iter_t i=_map.begin(); i != _map.end(); ++i) {
-         i->second /= total;
+      for (auto & elem : _map) {
+         elem.second /= total;
       }
       assert(is_equal(total_weight(), 1.0));
    }

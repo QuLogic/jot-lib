@@ -88,8 +88,8 @@ EdgeStrokePool::get_edge_strip(TAGformat &d)
    vector<Point2i> edge_strip;
    *d >> edge_strip;
 
-   for (vector<Point2i>::size_type i=0; i<edge_strip.size(); i++)
-      add_to_strip(_mesh->bv(edge_strip[i][0]), _mesh->be(edge_strip[i][1]));
+   for (auto & elem : edge_strip)
+      add_to_strip(_mesh->bv(elem[0]), _mesh->be(elem[1]));
 }
 
 /////////////////////////////////////

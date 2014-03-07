@@ -839,9 +839,9 @@ PatternPen::resynthesize()
 	
    _synthesized_strokes->clear();
     
-   for(uint k=0; k < cells.size(); ++k) {
-      _target_cell = cells[k];
-      if(_target_cell){
+   for (auto & cell : cells) {
+      _target_cell = cell;
+      if (_target_cell) {
          _target_cell->clear();
          _target_cell->set_global_scale(_current_global_scale);
       }

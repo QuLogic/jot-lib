@@ -255,8 +255,8 @@ Wpt_list
 Map2D3D::ucurve(const vector<double>& uvals, double v) const
 {
    Wpt_list ret(uvals.size());
-   for (vector<double>::size_type i=0; i<uvals.size(); i++)
-      ret.push_back(map(UVpt(uvals[i], v)));
+   for (auto & uval : uvals)
+      ret.push_back(map(UVpt(uval, v)));
    ret.update_length();
    return ret;
 }
@@ -265,8 +265,8 @@ Wpt_list
 Map2D3D::vcurve(double u, const vector<double>& vvals) const
 {
    Wpt_list ret(vvals.size());
-   for (vector<double>::size_type j=0; j<vvals.size(); j++)
-      ret.push_back(map(UVpt(u, vvals[j])));
+   for (auto & vval : vvals)
+      ret.push_back(map(UVpt(u, vval)));
    ret.update_length();
    return ret;
 }
