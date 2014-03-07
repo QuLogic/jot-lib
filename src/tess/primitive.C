@@ -71,7 +71,7 @@ class SHOW_COORD_FRAME : public GEL {
 
    //******** DATA_ITEM VIRTUAL METHODS ********
 
-   virtual DATA_ITEM* dup() const { return 0; }
+   virtual DATA_ITEM* dup() const { return nullptr; }
 
  protected:
    CoordFrame*  _frame;
@@ -297,7 +297,7 @@ copy_edges(CBedge_list& edges, CVertMapper& vmap)
 }
 
 inline Bface*
-gen_flip_face(Bface* f, CVertMapper& vmap, Lpatch* p=0)
+gen_flip_face(Bface* f, CVertMapper& vmap, Lpatch* p=nullptr)
 {
    assert(f && f->mesh() && f->patch());
    Bvert* v1 = vmap.a_to_b(f->v1());
@@ -446,7 +446,7 @@ Primitive::init(LMESH* skel_mesh, Wpt_list pts, CWvec& n, MULTI_CMDptr cmd)
       return ret;
    }
    assert(0);
-   return 0;
+   return nullptr;
 }
 
 //! If conditions are favorable, create a ball primitive with given
@@ -460,31 +460,31 @@ Primitive::create_ball(Bpoint* skel, double pix_rad, MULTI_CMDptr cmd)
    // Check out this so-called "skeleton"
    if (!(skel && skel->mesh())) {
       err_adv(debug, "Primitive::create_ball: bad skeleton/mesh");
-      return 0;
+      return nullptr;
    } else if (!(skel->vert() && skel->vert() && skel->vert()->degree() == 0)) {
       err_adv(debug, "Primitive::create_ball: non-isolated  skeleton");
-      return 0;
+      return nullptr;
    } else if (!skel->ndc().in_frustum()) {
       err_adv(debug, "Primitive::create_ball: skeleton outside frustum");
-      return 0;
+      return nullptr;
    }
 
    LMESHptr mesh = skel->get_inflate_mesh();
    if (!mesh) {
       err_adv(debug, "Primitive::create_ball: can't get inflate mesh");
-      return 0;
+      return nullptr;
    }
 
    Primitive* ret = new Primitive(mesh, skel->mesh());
    if (!ret) {
       err_ret("Primitive::create_ball: can't allocate Primitive");
-      return 0;
+      return nullptr;
    }
 
    if (!ret->build_ball(skel, pix_rad)) {
       assert(0); // the plan cannot fail
       delete ret;
-      return 0;
+      return nullptr;
    }
 
    // Succeeded
@@ -552,7 +552,7 @@ Primitive::build_ball(Bpoint* skel, double pix_rad)
    add_face_memes(_mesh->faces());
 
    // where is the command??
-   finish_build(0);
+   finish_build(nullptr);
 
    if (debug) {
       cerr << "Primitive::build_ball: inputs for " << identifier() << ":"
@@ -576,21 +576,21 @@ Primitive::get_primitive(BMESH* mesh)
    // Ensure it is an LMESH:
    if (!LMESH::isa(mesh)) {
       err_adv(debug, "Primitive::get_primitive: error: non LMESH");
-      return 0;
+      return nullptr;
    }
 
    // To find the skeleton we first need the TEXBODY owning the mesh.
    TEXBODY* tex = TEXBODY::upcast(mesh->geom());
    if (!tex) {
       err_adv(debug, "Primitive::get_primitive: error: non TEXBODY");
-      return 0;
+      return nullptr;
    }
 
    // Check all the meshes in the TEXBODY looking for one to use
    // as the skeleton mesh:
-   LMESH* skel = 0;
+   LMESH* skel = nullptr;
    CBMESH_list& meshes = tex->meshes();
-   for (int i=0; i<meshes.num() && skel==0; i++) {
+   for (int i=0; i<meshes.num() && skel==nullptr; i++) {
       if (meshes[i] != mesh &&
          !meshes[i]->is_surface() &&
           (skel = LMESH::upcast(meshes[i]))) {
@@ -618,7 +618,7 @@ Primitive::get_primitive(BMESH* mesh)
 Bpoint*
 Primitive::find_skel_point(CPIXEL& p, double rad) const 
 {
-   Bpoint* ret = 0;
+   Bpoint* ret = nullptr;
    VIEWptr v = VIEW::peek();
    double min_dist = 0, d;
    for (int k=0; k<_skel_points.num(); k++) {
@@ -646,7 +646,7 @@ Primitive::find_skel_curve(CPIXEL_list& crv, double err_thresh) const
       Config::get_var_bool("DEBUG_PRIMITIVE_FIND_SKEL_CURVE",false);
    err_adv(debug, "Primitive::find_skel_curve: err thresh %f", err_thresh);
 
-   Bcurve* ret = 0;
+   Bcurve* ret = nullptr;
    double min_err = 0, d;
    for (int k=0; k<_skel_curves.num(); k++) {
       PIXEL_list skel;
@@ -704,19 +704,19 @@ Primitive::build_roof(
 
    if (!cmd) {
       err_adv(debug, "Primitive::build_roof: multi-command is NULL");
-      return 0;
+      return nullptr;
    }
 
    // Need > 1 point:
    if (pixels.size() < 2) {
       err_adv(debug, "Primitive::build_roof: too few pixels");
-      return 0;
+      return nullptr;
    }
 
    // Shouldn't happen:
    if (bases.empty() || side.empty()) {
       err_adv(debug, "Primitive::build_roof: no base or side");
-      return 0;
+      return nullptr;
    }
 
    // The stroke must have point(s) that are near the end of the strip
@@ -730,12 +730,12 @@ Primitive::build_roof(
 
    if (!(pixels[0].dist(side.first()->wloc()) < 10)) {
       err_adv(debug, "Primitive::build_roof: stroke too far from the side");
-      return 0;
+      return nullptr;
    }
    // stroke must end near the end of the strip:
    if (!(pixels.back().dist(side.last()->wloc()) < 10)) {
       err_adv(debug, "Primitive::build_roof: stroke too far from the side");
-      return 0;
+      return nullptr;
    }
 
    // Create a Primitive
@@ -745,7 +745,7 @@ Primitive::build_roof(
       err_adv(debug, "Primitive::extend_branch: no %s found",
               ret ? "skeleton" : "Primitive");
       delete ret;
-      return 0;
+      return nullptr;
    }
 
    // Looks good -- hand off to the Primitive
@@ -753,7 +753,7 @@ Primitive::build_roof(
       return ret;
 
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 //! Define a new branch of the Primitive from the given pixel
@@ -776,19 +776,19 @@ Primitive::extend_branch(
 
    if (!cmd) {
       err_adv(debug, "Primitive::extend_branch: multi-command is NULL");
-      return 0;
+      return nullptr;
    }
 
    // Need > 1 point:
    if (pixels.size() < 2) {
       err_adv(debug, "Primitive::extend_branch: too few pixels");
-      return 0;
+      return nullptr;
    }
 
    // Shouldn't happen:
    if (base1.empty()) {
       err_adv(debug, "Primitive::extend_branch: no base");
-      return 0;
+      return nullptr;
    }
 
    // Check base 2
@@ -797,7 +797,7 @@ Primitive::extend_branch(
             (!base2.contains_any(base1)) &&  // distinct from base1
             base2.boundary_edges().size() == base1.boundary_edges().size())) { // matching bases
          err_adv(debug, "Primitive::extend_branch: bad base 2");
-         return 0;
+         return nullptr;
       }
    }
 
@@ -811,23 +811,23 @@ Primitive::extend_branch(
 
    if (!near_base_center(base1, pixels[0])) {
       err_adv(debug, "Primitive::extend_branch: stroke too far from base");
-      return 0;
+      return nullptr;
    }
    // If second base is not empty, stroke must end there:
    if (!base2.empty() && !near_base_center(base2, pixels.back())) {
       err_adv(debug, "Primitive::extend_branch: stroke too far from base");
-      return 0;
+      return nullptr;
    }
 
    // get best fit planes
    Wplane P1, P2;
    if (!base1.get_boundary().verts().pts().get_plane(P1, 0.1)) {
       err_adv(debug, "Primitive::extend_branch: base1 not planar enough");
-      return 0;
+      return nullptr;
    }
    if (!base2.empty() && !base2.get_boundary().verts().pts().get_plane(P2, 0.1)) {
       err_adv(debug, "Primitive::extend_branch: base2 not planar enough");
-      return 0;
+      return nullptr;
    }
 
    // Base normal(s) must be reasonably perpendicular to the
@@ -836,7 +836,7 @@ Primitive::extend_branch(
    if (fabs(P1.normal() * n) > MAXDOT ||
       (!base2.empty() && fabs(P2.normal() * n) > MAXDOT)) {
       err_adv(debug, "Primitive::extend_branch: surface normals too incompatible");
-      return 0;
+      return nullptr;
    }
 
    // Create a Primitive
@@ -846,7 +846,7 @@ Primitive::extend_branch(
       err_adv(debug, "Primitive::extend_branch: no %s found",
               ret ? "skeleton" : "Primitive");
       delete ret;
-      return 0;
+      return nullptr;
    }
 
    // Find length of projected stroke compared to base dimensions
@@ -858,7 +858,7 @@ Primitive::extend_branch(
    pixels.project_to_plane(Wplane(base1.get_verts().center(), n), pts);
    if (pts.length() < 0.7* (w1 + w2)/2) {
       err_adv(debug, "Primitive::extend_branch: input stroke too short");
-      return 0;
+      return nullptr;
    }
 
    // Looks good -- hand off to the Primitive
@@ -866,7 +866,7 @@ Primitive::extend_branch(
       return ret;
 
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 //! Chop off the first part of the Wpt_list up to length d.
@@ -891,7 +891,7 @@ chop(Wpt_list& pts, double d)
    Wpt_list foo;        // temporary Wpt_list
 
    // Add 1st point
-   foo.push_back(pts.interpolate(s, 0, &seg));
+   foo.push_back(pts.interpolate(s, nullptr, &seg));
 
    // Add vertices following trim location
    for (Wpt_list::size_type i=seg+1; i<pts.size(); i++)
@@ -924,7 +924,7 @@ trim(Wpt_list& pts, double d)
 
    // Find out where to do the trim:
    int seg; // Index of last point before the trim
-   Wpt foo = pts.interpolate(1 - s, 0, &seg);
+   Wpt foo = pts.interpolate(1 - s, nullptr, &seg);
 
    // Chop off the vertices after the trim:
    if (++seg < (int)pts.size())
@@ -1191,7 +1191,7 @@ get_end_frame(uintptr_t key, Bpoint* b, Bcurve* c, int bnum, CWvec& n)
       Bedge* e = (bnum == 1) ? c->edges().front() : c->edges().back();
       return new SkelFrame(key, b->vert(), n, e);
    }
-   return 0;
+   return nullptr;
 }
 
 inline void
@@ -1577,7 +1577,7 @@ Primitive::extend(
    // for the roof.
 
    assert(!bases.empty() && !side.empty());
-   assert(cmd != NULL);
+   assert(cmd != nullptr);
 
    static int roof_num=0;
    char tmp[64];
@@ -1806,7 +1806,7 @@ Primitive::extend(
    // optionally at b2.
 
    assert(!b1.empty());
-   assert(cmd != NULL);
+   assert(cmd != nullptr);
 
    static int branch_num=0;
    char tmp[64];
@@ -1851,8 +1851,8 @@ Primitive::extend(
    // 2. Create a skeleton curve (or single point)
    //
 
-   Bpoint* skel_point = 0;
-   Bcurve* skel_curve = 0;
+   Bpoint* skel_point = nullptr;
+   Bcurve* skel_curve = nullptr;
    param_list_t tvals;
    Bedge_list edges;
 
@@ -1871,7 +1871,7 @@ Primitive::extend(
       cmd->add(new SHOW_BBASE_CMD(skel_point));
    } else {
       Bpoint* bp1 = create_skel_point(_skel_mesh, _base1, n, pts.front());
-      Bpoint* bp2 = 0;
+      Bpoint* bp2 = nullptr;
       if (!b2.empty()) {
          // make the last bpoint relative to the base at end 2:
          bp2 = create_skel_point(_skel_mesh, _base2, n, pts.back());
@@ -1927,7 +1927,7 @@ Primitive::extend(
    u1 = f1->inv() * v1.pts();
 
    //******** Base 2 ********
-   DiskMap* f2 = 0;
+   DiskMap* f2 = nullptr;
    if (!b2.empty()) {
       // get vertices of base 2,
       // reverse order to match b1 verts if needed,
@@ -2024,7 +2024,7 @@ Primitive::build_simple_tube(
 
    if (!(mesh && b1 && rad>0 && !n.is_null() && cmd)) {
       err_adv(debug, "  bad input");
-      return 0;
+      return nullptr;
    }
 
    // Project screen points to the world-space plane:
@@ -2041,7 +2041,7 @@ Primitive::build_simple_tube(
 
    if (pts.length() < w) {
       err_adv(debug, "  stroke too short compared to ball size");
-      return 0;
+      return nullptr;
    }
 
    // Need a correction so the skel curve actually begins at b1
@@ -2052,7 +2052,7 @@ Primitive::build_simple_tube(
    Primitive* ret = new Primitive(mesh, b1->mesh());
    if (!ret) {
       err_adv(debug, "  can't allocate new Primitive");
-      return 0;
+      return nullptr;
    }
 
    if (ret->build_simple_tube(b1, rad, n, pts, cmd)) {
@@ -2061,7 +2061,7 @@ Primitive::build_simple_tube(
 
    err_adv(debug, "  can't build tube");
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 //! generate 4 local coords in [t,b,n] frame,
@@ -2121,7 +2121,7 @@ Primitive::build_simple_tube(
    Bvert_list cur (u.size());
 
    // build 1st ring, add end cap
-   CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, 0, edges.front());
+   CoordFrame* f1 = new SkelFrame((uintptr_t)this, b1->vert(), n, nullptr, edges.front());
    build_ring(f1, Wtransf::translation(Wvec(-w/2,0,0)) * u, prev);
    build_cap(prev[1], prev[0], prev[3], prev[2]);
 
@@ -2134,7 +2134,7 @@ Primitive::build_simple_tube(
    }
 
    // build last ring, add end cap
-   CoordFrame* f2 = new SkelFrame((uintptr_t)this, b2->vert(), n, edges.back(), 0);
+   CoordFrame* f2 = new SkelFrame((uintptr_t)this, b2->vert(), n, edges.back(), nullptr);
    build_ring(f2, Wtransf::translation(Wvec(w/2,0,0)) * u, cur);
    build_cap(cur[0], cur[1], cur[2], cur[3]);
 

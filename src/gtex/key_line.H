@@ -38,7 +38,7 @@ class KeyLineTexture : public OGLTexture {
 
    //******** MANAGERS ********
 
-   KeyLineTexture(Patch* patch = 0);
+   KeyLineTexture(Patch* patch = nullptr);
    virtual ~KeyLineTexture();
 
    //******** RUN-TIME TYPE ID ********

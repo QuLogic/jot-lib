@@ -64,7 +64,7 @@ FFS::get_draw_plane(CPIXEL_list& p, Wvec& t, Wvec& b)
       view->intersect(ray);
       if (ray.success() && ray_geom(ray, FLOOR::null)) {
          FLOORptr floor = FLOOR::lookup();
-         assert(floor != 0);
+         assert(floor != nullptr);
          t = floor->t();
          b = floor->b();
          return check_plane(floor->plane());

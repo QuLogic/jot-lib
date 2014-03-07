@@ -28,7 +28,7 @@
 
 using namespace mlib;
 
-BODY*       BODY::_factory = 0;
+BODY*       BODY::_factory = nullptr;
 CXYpt_list  BODY::_dummy(0);
 
 int         MOD::_TICK              = 0;
@@ -57,7 +57,7 @@ operator>>(STDdstream &ds, GEOMptr &p)
       p = (GEOM *)d;
    else {
       cerr << "operator >> Couldn't find GEOM in stream" << endl;
-      p = 0;
+      p = nullptr;
    }
      
    return ds;
@@ -79,7 +79,7 @@ GEOM::set_body(CBODYptr& b)
    if (b == _body)
       return;
    if (_body)
-      _body->set_geom(0);    // clear GEOM* in old body
+      _body->set_geom(nullptr);    // clear GEOM* in old body
    _body = b;
    if (_body)
       _body->set_geom(this); // set GEOM* in new body
@@ -211,7 +211,7 @@ GEOM::GEOM(
    _do_halo = false;
    if (o && o->body()) {
       _body = (BODY*)o->body()->dup();
-      assert(_body != 0);
+      assert(_body != nullptr);
       _body->set_geom(this);
       *_body = *o->body();
    }
@@ -431,11 +431,11 @@ TRANSPobs_list TRANSPobs::_all_transp;
 
 /* ---- COLORobs routines ----- */
 
-COLORobs_list   *COLORobs::_all_col = 0;
+COLORobs_list   *COLORobs::_all_col = nullptr;
 
 /* ---- TEXTUREobs routines ----- */
 
-TEXTUREobs_list *TEXTUREobs::_all_texture = 0;
+TEXTUREobs_list *TEXTUREobs::_all_texture = nullptr;
 
 /* ---- XFORMobs routines ----- */
 

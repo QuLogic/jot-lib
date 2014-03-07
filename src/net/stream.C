@@ -35,9 +35,9 @@ static const int DSTREAM_READ_AHEAD_FACTOR = 4;
 
 /* -----------------------  Public Methods   ------------------------------- */
 STDdstream::STDdstream():
-   _iostream(0),
-   _istream(0),
-   _ostream(0),
+   _iostream(nullptr),
+   _istream(nullptr),
+   _ostream(nullptr),
    _indent(0),
    _fail(false),
    _block(true)
@@ -46,8 +46,8 @@ STDdstream::STDdstream():
 
 STDdstream::STDdstream(iostream* s):
    _iostream(s),
-   _istream(0),
-   _ostream(0),
+   _istream(nullptr),
+   _ostream(nullptr),
    _indent(0),
    _fail(false),
    _block(true)
@@ -55,9 +55,9 @@ STDdstream::STDdstream(iostream* s):
 }
 
 STDdstream::STDdstream(istream* s):
-   _iostream(0),
+   _iostream(nullptr),
    _istream(s),
-   _ostream(0),
+   _ostream(nullptr),
    _indent(0),
    _fail(false),
    _block(true)
@@ -65,8 +65,8 @@ STDdstream::STDdstream(istream* s):
 }
 
 STDdstream::STDdstream(ostream* s):
-   _iostream(0),
-   _istream(0),
+   _iostream(nullptr),
+   _istream(nullptr),
    _ostream(s),
    _indent(0),
    _fail(false),
@@ -132,7 +132,7 @@ STDdstream::read (
    int    pop    // flag for removing the read characters from input buffer
    )
 {
-   char *buffer = NULL;
+   char *buffer = nullptr;
    size_t recv_request, recv_result;
 
    while ((int)_in_queue.in_avail() < count) {
@@ -175,7 +175,7 @@ STDdstream::read (
 void
 STDdstream::flush (void)
 {
-   char *buffer = NULL;
+   char *buffer = nullptr;
    size_t send_request, send_result;
 
    while (_out_queue.in_avail() > 0) {

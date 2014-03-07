@@ -24,7 +24,7 @@
 #include "perlin.H"
 
 
-Perlin* Perlin:: _instance=0;
+Perlin* Perlin:: _instance=nullptr;
 
 
 //**************** Perlin Noise Generation ************
@@ -41,8 +41,8 @@ Perlin::Perlin()
   _instance = this;
 
 
-   perlin2d_tex=0;
-   perlin3d_tex=0;
+   perlin2d_tex=nullptr;
+   perlin3d_tex=nullptr;
 }
 
 Perlin::~Perlin()
@@ -287,7 +287,7 @@ Perlin::create_perlin_texture3(int tex_stage)
    int f, i, j, k, inc;
 
    if ((noise3DTexPtr = new GLubyte[noise3DTexSize*noise3DTexSize*
-      noise3DTexSize* 4]) == NULL)
+      noise3DTexSize* 4]) == nullptr)
    {
       cerr << "Could not allocate Perlin Noise Texture" << endl;
    } 
@@ -405,7 +405,7 @@ Perlin::create_perlin_texture2(int tex_stage)
    int f, i, j, inc;
 
 
-   if ((noise2DTexPtr = new GLubyte[noise2DTexSize*noise2DTexSize*4]) == NULL) {
+   if ((noise2DTexPtr = new GLubyte[noise2DTexSize*noise2DTexSize*4]) == nullptr) {
       cerr << "Could not allocate Perlin Noise Texture" << endl;
    } else
       cerr << "Texture memory allocated " << endl;

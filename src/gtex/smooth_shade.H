@@ -81,7 +81,7 @@ class SmoothShadeTexture : public BasicTexture {
    
    public:
 
-      SmoothShadeTexture(Patch* patch = 0, StripCB* cb=0) :
+      SmoothShadeTexture(Patch* patch = nullptr, StripCB* cb=nullptr) :
          BasicTexture(patch, cb ? cb : new SmoothShadeStripCB) {}
       
       //! \name Run-Time Type Id

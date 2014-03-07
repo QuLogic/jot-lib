@@ -34,7 +34,7 @@ class SkinMeme : public VertMeme {
 
    //******** MANAGERS ********
 
-   SkinMeme(Skin* skin, Lvert* v, Bsimplex* t=0);
+   SkinMeme(Skin* skin, Lvert* v, Bsimplex* t=nullptr);
 
    //******** RUN-TIME TYPE ID ********
 
@@ -49,7 +49,7 @@ class SkinMeme : public VertMeme {
    SkinMeme* child()    const { return (SkinMeme*)VertMeme::child(); }
 
    Bsimplex* track_simplex() const {
-      return _trackers.empty() ? 0 : _trackers.front();
+      return _trackers.empty() ? nullptr : _trackers.front();
    }
 
    void set_track_simplex(Bsimplex* s);

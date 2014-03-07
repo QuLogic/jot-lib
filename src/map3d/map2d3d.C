@@ -554,7 +554,7 @@ TubeMap::TubeMap(
    Wtransf M = _a->F(1) * Wtransf::scaling(0,s,s) * _a->Finv(0);
 
    // map for the top cross-section:
-   _c1 = new Wpt_listMap(M *_c0->get_wpts(), 0, 0, _a->tan(1));
+   _c1 = new Wpt_listMap(M *_c0->get_wpts(), nullptr, nullptr, _a->tan(1));
 
    hookup();
 }
@@ -608,7 +608,7 @@ TubeMap::set_pts(CWpt_list &pts)
 {
    _s = pts; 
    _s.update_length();
-   if (false && !pts.empty() && _c1 != NULL) {
+   if (false && !pts.empty() && _c1 != nullptr) {
 
       //Wpt_listMap* axis = Wpt_listMap::upcast(_a);
       //Wpt_list apts = axis->pts();

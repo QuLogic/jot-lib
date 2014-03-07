@@ -76,7 +76,7 @@ ROOF::ROOF() :
 void 
 ROOF::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 // get connected sub regions
@@ -227,8 +227,8 @@ ROOF::init(CGESTUREptr& g)
    if (!(g && g->is_dslash()))
       return false;
 
-   Bedge* e = 0;
-   BMESH* m = 0;
+   Bedge* e = nullptr;
+   BMESH* m = nullptr;
    CPIXEL p = g->start();
    ROOFptr me = get_instance();
 

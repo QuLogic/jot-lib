@@ -23,7 +23,7 @@
  * SilStrokePool
  *****************************************************************/
 
-TAGlist*  SilStrokePool::_ssp_tags = 0;
+TAGlist*  SilStrokePool::_ssp_tags = nullptr;
 
 /////////////////////////////////////////////////////////////////
 // SilStrokePool Methods

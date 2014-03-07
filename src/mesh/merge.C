@@ -34,7 +34,7 @@ read_mesh(char* infile)
 {
    BMESHptr ret = new BMESH;
    if (!ret->read_file(infile))
-      return 0;
+      return nullptr;
    return ret;
 }
 

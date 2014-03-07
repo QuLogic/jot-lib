@@ -138,7 +138,7 @@ class VertMeme : public Meme {
    Bsimplex* parent_simplex() const { return vert()->parent(); }
    Lvert*    parent_vert()    const {
       Bsimplex* s = parent_simplex();
-      return is_vert(s) ? ((Lvert*)s) : 0;
+      return is_vert(s) ? ((Lvert*)s) : nullptr;
    }
 
    // the meme is requested to move to the given location
@@ -356,14 +356,14 @@ class VertMeme : public Meme {
    //       memes of a quad, where the subdiv vert to be generated
    //       is associated with the interior edge of the quad.
    virtual VertMeme* _gen_child(Lvert*) const {
-      return 0;
+      return nullptr;
    }
    virtual VertMeme* _gen_child(Lvert*, VertMeme*) const {
-      return 0;
+      return nullptr;
    }
    virtual VertMeme* _gen_child(
       Lvert*, VertMeme*, VertMeme*, VertMeme*) const {
-      return 0;
+      return nullptr;
    }
 
    // Subclasses can override the following virtual
@@ -431,7 +431,7 @@ class EdgeMeme : public Meme {
 
    // Returns a vertex with the same owner as this edge:
    virtual Bvert* get_collapsable_vert() {
-      return v1() ? edge()->v1() : v2() ? edge()->v2() : (Bvert*)0;
+      return v1() ? edge()->v1() : v2() ? edge()->v2() : nullptr;
    }
 
    // The desired length for edges:
@@ -516,7 +516,7 @@ class FaceMeme : public Meme {
    VertMeme* v3() const;
 
    // If the face is a quad, returns the vert meme for the
-   // 4th vertex (NULL otherwise):
+   // 4th vertex (nullptr otherwise):
    VertMeme* vq() const;
 
    // Subdiv elements

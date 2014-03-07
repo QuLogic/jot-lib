@@ -32,7 +32,7 @@ static bool debug = Config::get_var_bool("DEBUG_BLUR_SHADER", false);
 GLuint          HaloBlurShader::_program = 0;
 bool            HaloBlurShader::_did_init = false;
 
-HaloBlurShader* HaloBlurShader::_instance(0);
+HaloBlurShader* HaloBlurShader::_instance(nullptr);
 
 HaloBlurShader::HaloBlurShader(Patch* p) : GLSLShader(p)
 {
@@ -40,7 +40,7 @@ HaloBlurShader::HaloBlurShader(Patch* p) : GLSLShader(p)
     cerr<<"Halo Blur Debug's working"<<endl;
   }
 
-  _input_tex = 0;
+  _input_tex = nullptr;
   _kernel_size = 20; 
 
 }

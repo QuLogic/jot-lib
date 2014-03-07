@@ -51,7 +51,7 @@ class Bnode_list : public ARRAY<Bnode*>{
       // Prevent duplicates:
       set_unique();
    }
-   Bnode_list(Bnode* b1, Bnode* b2=0, Bnode* b3=0, Bnode* b4=0) :
+   Bnode_list(Bnode* b1, Bnode* b2=nullptr, Bnode* b3=nullptr, Bnode* b4=nullptr) :
       ARRAY<Bnode*>(4) {
       // Prevent duplicates:
       set_unique();
@@ -257,7 +257,7 @@ class Bnode : public DATA_ITEM {
 
    //******** data_item METHODS ********
 
-   virtual DATA_ITEM   *dup()  const { return 0;}
+   virtual DATA_ITEM   *dup()  const { return nullptr;}
 
    //*******************************************************
    // PROTECTED

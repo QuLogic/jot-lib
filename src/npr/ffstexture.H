@@ -31,7 +31,7 @@ class FFSTexture : public NPRTexture  {
 
    //******** MANAGERS ********
 
-   FFSTexture(Patch* patch = 0);
+   FFSTexture(Patch* patch = nullptr);
       
    virtual ~FFSTexture();
 

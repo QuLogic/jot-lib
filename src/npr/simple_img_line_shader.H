@@ -36,7 +36,7 @@
 class SimpleImageLineShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   SimpleImageLineShader(Patch* patch = 0);
+   SimpleImageLineShader(Patch* patch = nullptr);
    virtual ~SimpleImageLineShader();
 
    //******** RUN-TIME TYPE ID ********

@@ -98,7 +98,7 @@ find_face(CPIXEL& pix, double rad, Wvec& bc)
 
    // Only select faces belonging to a TEXBODY
    if (!(f && f->mesh() && TEXBODY::isa(f->mesh()->geom())))
-      return 0;
+      return nullptr;
 
    return f;
 }
@@ -116,9 +116,9 @@ find_face(CPIXEL& pix, double margin, double min_area)
    Wvec bc;
    Bface* f = find_face(pix, 1, bc);
    if (!is_near_center(f, bc, margin))
-      return 0;
+      return nullptr;
    if (pix_area(f) < min_area)
-      return 0;
+      return nullptr;
    return f;
 }
 
@@ -132,12 +132,12 @@ near_edge(Bface* f, CWvec& bc)
 {
 
    if (!f)
-      return 0;
+      return nullptr;
    if (max(max(bc[0],bc[1]),bc[2]) > 0.75)
-      return 0;     // too near a vertex
+      return nullptr;     // too near a vertex
    double m = min(min(bc[0],bc[1]),bc[2]);
    if (m > 0.25)
-      return 0;         // too near the center
+      return nullptr;     // too near the center
 
    // If min barycentric coord is bc[0] ( == v1), then
    // nearest edge is the one across, i.e. e2, etc.
@@ -154,7 +154,7 @@ find_edge(CPIXEL& pix)
    Wvec bc;
    Bedge* e = near_edge(find_face(pix, 1, bc), bc);
    if (e && e->is_weak())
-      return 0;
+      return nullptr;
    return e;
 }
 
@@ -165,10 +165,10 @@ near_vert(Bface* f, CWvec& bc)
 {
 
    if (!f)
-      return 0;
+      return nullptr;
    double m = max(max(bc[0],bc[1]),bc[2]);
    if (m < 0.75)
-      return 0;     // too far from any vertex
+      return nullptr;     // too far from any vertex
 
    // If max barycentric coord is bc[0] ( == v1), then
    // nearest vert is v1, etc.
@@ -188,7 +188,7 @@ inline Bvert*
 vert_min_subdiv_dist(Bface* f, CPIXEL& p)
 {
 
-   if (!f) return 0;
+   if (!f) return nullptr;
 
    if (!LMESH::isa(f->mesh()))
       return closest_vert(f, p);
@@ -198,7 +198,7 @@ vert_min_subdiv_dist(Bface* f, CPIXEL& p)
    Lvert* v3 = ((Lvert*)f->v3())->cur_subdiv_vert();
 
    if (!(v1 && v2 && v3))
-      return 0;
+      return nullptr;
 
    double d1 = p.dist(PIXEL(v1->wloc()));
    double d2 = p.dist(PIXEL(v2->wloc()));
@@ -377,7 +377,7 @@ SELECT_WIDGET::SELECT_WIDGET() :
 void
 SELECT_WIDGET::clean_on_exit()
 {
-   _instance = 0;
+   _instance = nullptr;
 }
 
 SELECT_WIDGETptr
@@ -607,7 +607,7 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 		PIXELline slash(gest->start(),gest->end());
 
 		Bedge *e1,*e2,*e3,*e4;
-		Bedge* edge = 0;
+		Bedge* edge = nullptr;
 		
 		//get and test the quad edges against the stroke line 
 		f->get_quad_edges(e1,e2,e3,e4);
@@ -870,7 +870,7 @@ match_span(Bvert* v, CPIXEL_list& trail, int& k)
 
    if (!(v && 0 <= k && k < (int)trail.size())) {
       err_adv(debug, "match_span: bad setup");
-      return 0;
+      return nullptr;
    }
 
    // Find next edge within front-facing surface regions;
@@ -891,7 +891,7 @@ match_span(Bvert* v, CPIXEL_list& trail, int& k)
    }
 
    k = -1;
-   return 0;
+   return nullptr;
 }
 
 bool
@@ -953,7 +953,7 @@ SELECT_WIDGET::select_edges(CPIXEL_list& pts)
 
    int k = 0;                           // index of cur position in gesture
    Bvert* cur = v;                      // current vertex
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    while ((e = match_span(cur, pts, k))) {
       if (!e->is_selected()) chain.push_back(e);
       cur = e->other_vertex(cur);

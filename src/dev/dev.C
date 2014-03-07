@@ -22,10 +22,10 @@
 using namespace mlib;
 
 DEVmod_desc_list   DEVmod_gen::_mods;
-DEVmod_gen        *DEVmod_gen::_gen         = 0;
+DEVmod_gen        *DEVmod_gen::_gen         = nullptr;
 Evd::DEVmod        DEVmod_gen::_forced_mods = Evd::EMPTY;
 
-DEVice_2d *DEVice_2d::last = 0;
+DEVice_2d *DEVice_2d::last = nullptr;
 
 // Wtransf DEVice::booth_to_room;
 // Wtransf DEVice::room_to_booth;

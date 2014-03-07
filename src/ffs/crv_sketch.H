@@ -93,8 +93,8 @@ class CRV_SKETCH : public DrawWidget {
 
    //******** DrawWidget METHODS ********
 
-   virtual BMESHptr bmesh() const { return _curve ? _curve->mesh() : 0; }
-   virtual LMESH* lmesh()   const { return _curve ? _curve->mesh() : 0; }
+   virtual BMESHptr bmesh() const { return _curve ? _curve->mesh() : nullptr; }
+   virtual LMESH* lmesh()   const { return _curve ? _curve->mesh() : nullptr; }
 
    virtual PIXEL_list shadow_pix() const { return _shadow_pixels; }
    virtual Bcurve* curve() const { return _curve; }
@@ -274,7 +274,7 @@ class CRV_SKETCH_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   CRV_SKETCH_CMD(Bcurve* curve, CWpt_list& new_pts) : _map(0) {
+   CRV_SKETCH_CMD(Bcurve* curve, CWpt_list& new_pts) : _map(nullptr) {
       assert(curve);
       _curve = curve;
       _map       = (SurfaceCurveMap*)(curve->map());
@@ -285,7 +285,7 @@ class CRV_SKETCH_CMD : public COMMAND {
       _type = false;
    }
 
-   CRV_SKETCH_CMD(Bcurve* curve, CUVpt_list& new_pts, Wpt new_b1, Wpt new_b2) : _map(0) {
+   CRV_SKETCH_CMD(Bcurve* curve, CUVpt_list& new_pts, Wpt new_b1, Wpt new_b2) : _map(nullptr) {
       assert(curve);
       _curve = curve;
       _map       = (SurfaceCurveMap*)(curve->map());

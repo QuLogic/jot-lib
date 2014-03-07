@@ -145,8 +145,8 @@ ZcrossPath::start_sil(Bface *f )
    //never check across a crease boundary ()
    //it's a discontinuity in the isosurface
 
-   f1 = ( f->e(ex1+1)->is_crease()) ? NULL : f->nbr(ex1+1);
-   f2 = ( f->e(ex2+1)->is_crease()) ? NULL : f->nbr(ex2+1);
+   f1 = ( f->e(ex1+1)->is_crease()) ? nullptr : f->nbr(ex1+1);
+   f2 = ( f->e(ex2+1)->is_crease()) ? nullptr : f->nbr(ex2+1);
 
 
    //case 1 - we search and close the loop
@@ -225,7 +225,7 @@ ZcrossPath::start_sil(Bface *f )
                //cerr << "diff:" << (a-b).length() << endl;
                _segs.back().p() = _segs[cstart].p() ;
             }
-            _segs.back().setf( NULL );
+            _segs.back().setf( nullptr );
             _segs.back().set_end();
             _segs.back().set_bary(f2);
 
@@ -234,7 +234,7 @@ ZcrossPath::start_sil(Bface *f )
 
       }
    } else {
-      add_seg ( NULL , pt1, f->v(ex1+1), bgrad, f);
+      add_seg ( nullptr , pt1, f->v(ex1+1), bgrad, f);
    }
 
    //if we are this far, we have a section of
@@ -246,7 +246,7 @@ ZcrossPath::start_sil(Bface *f )
    int chain2start = num(); // index of start of next chain
 
    if ( !f2 )
-      return; // first face in reverse direction is NULL, we are done.
+      return; // first face in reverse direction is nullptr, we are done.
 
    //find second chain, which needs to be reversed
    //starts at pt2;
@@ -356,8 +356,8 @@ ZcrossPath::sil_walk_search ( Bface *f, Bvert * vrt[3], double g[3] )
    if ( !next_f || f->shared_edge(next_f)->is_crease() ) {
       bc[f->vindex(vrt[2])-1]      = 1.0-alph;
       bc[f->vindex(vrt[cross_vrt])-1] = alph;
-      add_seg (NULL  , new_pt, vrt[2], bgrad, f );
-      next_f = NULL; //adding a proper null terminator
+      add_seg(nullptr, new_pt, vrt[2], bgrad, f);
+      next_f = nullptr; //adding a proper null terminator
    } else {
       bc[next_f->vindex(vrt[2])-1]   = 1.0-alph;
       bc[next_f->vindex(vrt[cross_vrt])-1] = alph;
@@ -368,7 +368,7 @@ ZcrossPath::sil_walk_search ( Bface *f, Bvert * vrt[3], double g[3] )
    //update the state for the next iteration
    vrt[1-cross_vrt] = vrt[2];
    g[1-cross_vrt] = g[2];
-   vrt[2] = NULL;
+   vrt[2] = nullptr;
    g[2] = 0;
    return next_f;
 }

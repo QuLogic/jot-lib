@@ -50,7 +50,7 @@ stroke_tex_name()
 /*****************************************************************
  * GLSLPaperShader:
  *****************************************************************/
-GLSLPaperShader* GLSLPaperShader::_instance(0);
+GLSLPaperShader* GLSLPaperShader::_instance(nullptr);
 TEXTUREglptr     GLSLPaperShader::_paper_tex;
 string           GLSLPaperShader::_paper_tex_name;
 
@@ -87,7 +87,7 @@ GLSLPaperShader*
 GLSLPaperShader::instance() 
 {
    if (!_instance)
-      _instance = new GLSLPaperShader(0);
+      _instance = new GLSLPaperShader(nullptr);
    return _instance;      
 }
 
@@ -237,7 +237,7 @@ GLSLPaperShader::get_texture()
    } else if (_paper_tex->load_attempt_failed()) {
       // we previously tried to load this texture and failed.
       // no sense trying again with the same filename.
-      return 0;
+      return nullptr;
    }
 
    return _paper_tex;
@@ -294,7 +294,7 @@ GLSLPaperShader::end_glsl_paper()
    // restore GL state
    //glPopAttrib();
   
-   paper->set_patch(0);
+   paper->set_patch(nullptr);
    GL_VIEW_PRINT_GL_ERRORS("end");
 }
 

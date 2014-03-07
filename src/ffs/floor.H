@@ -88,9 +88,9 @@ class FLOOR : public DrawWidget {
       return _instance && DRAWN.contains(_instance);
    }
 
-   static FLOORptr lookup()      { return is_active() ? _instance : 0; }
+   static FLOORptr lookup()      { return is_active() ? _instance : nullptr; }
    static BMESHptr lookup_mesh() {
-      return lookup() ? lookup()->mesh() : BMESHptr(0);
+      return lookup() ? lookup()->mesh() : BMESHptr(nullptr);
    }
 
    //! display or undisplay the floor:
@@ -130,7 +130,7 @@ class FLOOR : public DrawWidget {
    static void clean_on_exit() {
       if (Config::get_var_bool("DEBUG_CLEAN_ON_EXIT",false))
          cerr << "FLOOR::clean_on_exit()\n";
-      _instance = 0;
+      _instance = nullptr;
    }
 
    // prevent warnings
@@ -142,13 +142,13 @@ class FLOOR : public DrawWidget {
 
    virtual void    write_xform(CWtransf&, CWtransf&, CMOD &);
    virtual RAYhit &intersect  (RAYhit&, CWtransf& =Identity, int=0)const;
-   virtual int     interactive(CEvent&, State*&, RAYhit* =0) const;
+   virtual int     interactive(CEvent&, State*&, RAYhit* =nullptr) const;
    virtual int     draw       (CVIEWptr &v);
    virtual BBOX    bbox       (int i=0) const;
 
    //******** GEL METHODS ********
 
-   virtual DATA_ITEM* dup() const { return 0; } // there's only one
+   virtual DATA_ITEM* dup() const { return nullptr; } // there's only one
 
    //******** RefImageClient METHODS ********
 

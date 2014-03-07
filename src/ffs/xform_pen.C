@@ -74,7 +74,7 @@ XformPen::tap_cb(CGESTUREptr& tap, DrawState*& s)
    }
 
    // tap on mesh?
-   _mesh = 0;
+   _mesh = nullptr;
    Bface* f = cur_face();
    if (!f) {
       err_adv(debug, "XformPen::tap_cb: missed face");
@@ -101,7 +101,7 @@ XformPen::tap_cb(CGESTUREptr& tap, DrawState*& s)
    assert(_mesh);
    BMESH::set_focus(_mesh, f->patch());
    FLOOR::show();
-   FLOOR::realign(_mesh,0); // 0 = no undo command
+   FLOOR::realign(_mesh,nullptr); // nullptr = no undo command
 
    Cursor3D::attach(g);
 
@@ -141,7 +141,7 @@ XformPen::cancel_cb(CGESTUREptr&, DrawState*&)
       c->detach();
       c->deactivate();
    }
-   _mesh = 0;
+   _mesh = nullptr;
    return 0;
 }
 // end of file xform_pen.C

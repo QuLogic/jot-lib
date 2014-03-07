@@ -91,7 +91,7 @@ class BaseUI
    // Really should not be in the base class, only used by hatching and halftone ui's, but whatever...
    virtual int          get_current_layer() { return 0; }
    virtual int          get_current_channel() { return 0; }
-   virtual ToneShader*  get_tone_shader() { return 0; }
+   virtual ToneShader*  get_tone_shader() { return nullptr; }
  protected:
    
    void fill_listbox(GLUI_Listbox* listbox, const vector<string>& list);

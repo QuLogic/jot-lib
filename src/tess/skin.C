@@ -35,7 +35,7 @@ static bool debug = Config::get_var_bool("DEBUG_SKIN",false);
 
 static int skin_num = 0; // for naming
 
-Skin* Skin::_debug_instance = 0;
+Skin* Skin::_debug_instance = nullptr;
 
 /*****************************************************************
  * InflateCreaseFilter:
@@ -194,14 +194,14 @@ Skin::create_cover_skin(
    debug = false;
    err_adv(debug, "Skin::create_cover_skin");
 
-   assert(cmd != 0);
+   assert(cmd != nullptr);
 
    BMESH* b_mesh = region.mesh();
    VertMapper b_map(true);
 
    if (!b_map.is_valid()) {
       err_msg("Skin::create_cover_skin: invalid skel map");
-      return 0;
+      return nullptr;
    }
 
    // need an LMESH that contains all faces
@@ -243,11 +243,11 @@ Skin::create_multi_sleeve(
    err_adv(debug, "Skin::create_multi_sleeve");
 
    //assert(!has_secondary_any_level(interior));
-   assert(cmd != 0);
+   assert(cmd != nullptr);
 
    if (!skel_map.is_valid()) {
       err_msg("Skin::create_multi_sleeve: invalid skel map");
-      return 0;
+      return nullptr;
    }
 
    Bface_list exterior       = interior.exterior_faces();
@@ -257,7 +257,7 @@ Skin::create_multi_sleeve(
    LMESH* mesh = LMESH::upcast(all_skel_faces.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
-      return 0;
+      return nullptr;
    }
 
    // Get relative refinement level
@@ -375,8 +375,8 @@ Skin::Skin(
    MULTI_CMDptr cmd
    ) :
    _skel_faces(skel_faces),
-   _updater(0),
-   _partner(0),
+   _updater(nullptr),
+   _partner(nullptr),
    _reverse(reverse)
 {
    _inflate = false;
@@ -386,7 +386,7 @@ Skin::Skin(
       report(skel_map, "skel map");
    }
 
-   assert(mesh != 0);
+   assert(mesh != nullptr);
    assert(R >= 0);
 
    set_mesh(mesh);
@@ -411,8 +411,8 @@ Skin::Skin(
    CBface_list& skel_faces,
    MULTI_CMDptr cmd) :
    _skel_faces(skel_faces),
-   _updater(0),
-   _partner(0),
+   _updater(nullptr),
+   _partner(nullptr),
    _reverse(false)
 {
    _inflate = parent->_inflate;
@@ -496,7 +496,7 @@ Skin::~Skin()
    destructor();
 
    delete _updater;
-   _updater=0;
+   _updater=nullptr;
 }
 
 Bnode_list 
@@ -573,7 +573,7 @@ Skin::create_subdiv_updater()
       // mesh only happen via Bnodes (Bsurfaces etc.).
       err_adv(debug, "%s: not using SubdivUpdater", identifier().c_str());
       delete su;
-      su = 0;
+      su = nullptr;
    } else {
       _updater = su;
       su->set_name("su-" + name());
@@ -586,13 +586,13 @@ Skin::gen_face(Bface* f)
 {
    if (!f) {
       err_adv(debug, "Skin::gen_face: null face");
-      return 0;
+      return nullptr;
    }
    Bvert* v1 = _mapper.a_to_b(f->v1());
    Bvert* v2 = _mapper.a_to_b(f->v2());
    Bvert* v3 = _mapper.a_to_b(f->v3());
 
-   FaceMeme* fm = 0;
+   FaceMeme* fm = nullptr;
    UVpt a, b, c;
 
    // if the new face exists, the following does not re-create it:
@@ -607,7 +607,7 @@ Skin::gen_face(Bface* f)
       else
          fm = add_face(v1, v2, v3);
    }
-   return fm ? fm->face() : 0;
+   return fm ? fm->face() : nullptr;
 }
 
 bool
@@ -768,7 +768,7 @@ Skin::join_to_skel(CBface_list& interior, MULTI_CMDptr cmd)
 {
    // Join external seams to connect skin to the base surfaces
 
-   assert(cmd != 0);
+   assert(cmd != nullptr);
 
    err_adv(debug, "Skin::join_to_skel");
 
@@ -838,11 +838,11 @@ inline Bedge*
 boundary_connector(CBface* f)
 {
    if (num_edge_flags_set(f) != 2)
-      return 0;
+      return nullptr;
    if (!f->e1()->flag()) return f->e1();
    if (!f->e2()->flag()) return f->e2();
    if (!f->e3()->flag()) return f->e3();
-   return 0;
+   return nullptr;
 }
 
 bool
@@ -1225,23 +1225,23 @@ Skin::create_inflate(
    err_adv(debug, "Skin::create_inflate: R = %d", R);
 
 //   assert(!has_secondary_any_level(skel));
-   assert(cmd != 0);
+   assert(cmd != nullptr);
 
    // need an LMESH that contains all faces
    LMESH* mesh = LMESH::upcast(skel.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
-      return 0;
+      return nullptr;
    }
 
-   Skin* ret = 0;
+   Skin* ret = nullptr;
 
    Bface_list parent_faces = get_parent_faces(skel, 1);
    if (!parent_faces.empty() && !mode) {
       Skin* parent = create_inflate(parent_faces, h, R+1, reverse, mode, cmd);
       if (!parent) {
          err_adv(debug, "  create parent failed");
-         return 0;
+         return nullptr;
       }
       ret = new Skin(parent, skel, cmd);
    } else {
@@ -1249,7 +1249,7 @@ Skin::create_inflate(
    }
    if (!ret) {
       err_adv(debug, "  can't allocate Skin");
-      return 0;
+      return nullptr;
    }
 
    if (debug) {

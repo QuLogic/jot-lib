@@ -40,7 +40,7 @@ public:
   virtual ~RefFrameDrawer() {}
   virtual int draw(CVIEWptr& view);
   virtual int  draw_final(CVIEWptr & v);
-  virtual DATA_ITEM *dup() const { return 0; }
+  virtual DATA_ITEM *dup() const { return nullptr; }
   void set_ref_frame(int ref_frame) { _ref_frame = ref_frame; }
   
   

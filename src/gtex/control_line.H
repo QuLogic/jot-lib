@@ -36,7 +36,7 @@ class ControlLineTexture : public OGLTexture {
 
    //******** MANAGERS ********
 
-   ControlLineTexture(Patch* patch = 0);
+   ControlLineTexture(Patch* patch = nullptr);
 
    virtual ~ControlLineTexture();
 

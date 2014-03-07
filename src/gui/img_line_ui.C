@@ -61,7 +61,7 @@ BaseUI(parent,"Image Line UI"), _color_sel(0)
    _texture_selection_ui = new PatchSelectionUI(this, true);
    _tone_shader_ui = new ToneShaderUI(this);
    _light_ui = new LightUI(VIEW::peek());
-   _current_tex = 0;  
+   _current_tex = nullptr;
    _color_ui = new ColorUI(this);
    _detail_ctrl_ui = new DetailCtrlUI(this); 
    _basecoat_ui = new BasecoatUI(this); 
@@ -90,7 +90,7 @@ ImageLineUI::get_tone_shader()
       _current_tex = get_current_image_line_shader(VIEW::peek());
 
       if(!_current_tex)
-	 return 0;
+	 return nullptr;
    }
 
    return _current_tex->get_tone_shader();
@@ -122,7 +122,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_CONFIDENCE] = new GLUI_RadioGroup(
 				       _panel[PANEL_CONFIDENCE],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_CONFIDENCE, radiogroup_cb);
 
    _radbutton[RADBUT_CONFIDENCE_NONE] = new GLUI_RadioButton(
@@ -139,7 +139,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_SILHOUETTE] = new GLUI_RadioGroup(
 				       _panel[PANEL_SILHOUETTE],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_SILHOUETTE, radiogroup_cb);
 
    _radbutton[RADBUT_SILHOUETTE_NONE] = new GLUI_RadioButton(
@@ -152,21 +152,21 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_DRAW_SILHOUETTE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Draw Silhouettes",
-                                NULL,
+                                nullptr,
                                 CHECK_DRAW_SILHOUETTE,
                                 checkbox_cb);
 
    _checkbox[CHECK_TAPERING_MODE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Tapering",
-                                NULL,
+                                nullptr,
                                 CHECK_TAPERING_MODE,
                                 checkbox_cb);
 
    _checkbox[CHECK_TONE_EFFECT] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE2],
                                 "Alpha with Tone",
-                                NULL,
+                                nullptr,
                                 CHECK_TONE_EFFECT,
                                 checkbox_cb);
 
@@ -175,70 +175,70 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _slider[SLIDE_CURV_THRESHOLD0] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Curvature Threshold0",
       id+SLIDE_CURV_THRESHOLD0, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.000, 0.03, NULL);
+      GLUI_SLIDER_FLOAT, 0.000, 0.03, nullptr);
    _slider[SLIDE_CURV_THRESHOLD0]->set_num_graduations(100);
    _slider[SLIDE_CURV_THRESHOLD0]->set_w(200);
 
    _slider[SLIDE_CURV_THRESHOLD1] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Curvature Threshold1",
       id+SLIDE_CURV_THRESHOLD1, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.000, 0.03, NULL);
+      GLUI_SLIDER_FLOAT, 0.000, 0.03, nullptr);
    _slider[SLIDE_CURV_THRESHOLD1]->set_num_graduations(100);
    _slider[SLIDE_CURV_THRESHOLD1]->set_w(200);
 
    _slider[SLIDE_LIGHT_CONTROL] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Light color control",
       id+SLIDE_LIGHT_CONTROL, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.5, 2.50, NULL);
+      GLUI_SLIDER_FLOAT, 0.5, 2.50, nullptr);
    _slider[SLIDE_LIGHT_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_LIGHT_CONTROL]->set_w(200);
 
    _slider[SLIDE_HIGHLIGHT_CONTROL] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Highlight control",
       id+SLIDE_HIGHLIGHT_CONTROL, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.5, 2.50, NULL);
+      GLUI_SLIDER_FLOAT, 0.5, 2.50, nullptr);
    _slider[SLIDE_HIGHLIGHT_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_HIGHLIGHT_CONTROL]->set_w(200);
 
    _slider[SLIDE_LINE_WIDTH] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Line Width",
       id+SLIDE_LINE_WIDTH, slider_cb,
-      GLUI_SLIDER_FLOAT, 1.0, 10.0, NULL);
+      GLUI_SLIDER_FLOAT, 1.0, 10.0, nullptr);
    _slider[SLIDE_LINE_WIDTH]->set_num_graduations(100);
    _slider[SLIDE_LINE_WIDTH]->set_w(200);
 
    _slider[SLIDE_ALPHA_OFFSET] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Alpha Offset",
       id+SLIDE_ALPHA_OFFSET, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.0, 1.0, NULL);
+      GLUI_SLIDER_FLOAT, 0.0, 1.0, nullptr);
    _slider[SLIDE_ALPHA_OFFSET]->set_num_graduations(100);
    _slider[SLIDE_ALPHA_OFFSET]->set_w(200);
 
    _slider[SLIDE_BLUR_SIZE] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Blur Size",
       id+SLIDE_BLUR_SIZE, slider_cb,
-      GLUI_SLIDER_FLOAT, 0, 2.0, NULL);
+      GLUI_SLIDER_FLOAT, 0, 2.0, nullptr);
    _slider[SLIDE_BLUR_SIZE]->set_num_graduations(100);
    _slider[SLIDE_BLUR_SIZE]->set_w(200);
 
    _slider[SLIDE_MOVING_FACTOR] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Moving Factor",
       id+SLIDE_MOVING_FACTOR, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.0, 1.0, NULL);
+      GLUI_SLIDER_FLOAT, 0.0, 1.0, nullptr);
    _slider[SLIDE_MOVING_FACTOR]->set_num_graduations(100);
    _slider[SLIDE_MOVING_FACTOR]->set_w(200);
 
    _slider[SLIDE_SHININESS] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Shininess",
       id+SLIDE_SHININESS, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.0, 100.0, NULL);
+      GLUI_SLIDER_FLOAT, 0.0, 100.0, nullptr);
    _slider[SLIDE_SHININESS]->set_num_graduations(100);
    _slider[SLIDE_SHININESS]->set_w(200);
 
    _slider[SLIDE_HT_WIDTH_CONTROL] = new GLUI_Slider(
       _rollout[ROLLOUT_LINE2], "Highlight width control",
       id+SLIDE_HT_WIDTH_CONTROL, slider_cb,
-      GLUI_SLIDER_FLOAT, 0.0, 2.0, NULL);
+      GLUI_SLIDER_FLOAT, 0.0, 2.0, nullptr);
    _slider[SLIDE_HT_WIDTH_CONTROL]->set_num_graduations(100);
    _slider[SLIDE_HT_WIDTH_CONTROL]->set_w(200);
 
@@ -246,7 +246,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_REF_IMG] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_REF_IMG],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_REF_IMG, radiogroup_cb);
 
    _radbutton[RADBUT_REF_IMG_NONE] = new GLUI_RadioButton(
@@ -264,7 +264,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_SHOW_CHANNEL] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_REF_IMG],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_SHOW_CHANNEL, radiogroup_cb);
 
    _radbutton[RADBUT_CHANNEL_ALL] = new GLUI_RadioButton(
@@ -285,7 +285,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_DEBUG_SHADER] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_DEBUG_SHADER],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_DEBUG_SHADER, radiogroup_cb);
 
    _radbutton[RADBUT_DEBUG_NONE] = new GLUI_RadioButton(
@@ -318,7 +318,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _rollout[ROLLOUT_LINE] = new GLUI_Rollout( _rollout[ROLLOUT_MAIN], "Line mode",false);
    _radgroup[RADGROUP_LINE] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_LINE],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_LINE, radiogroup_cb);
 
    _radbutton[RADBUT_LINE_NONE] = new GLUI_RadioButton(
@@ -360,7 +360,7 @@ ImageLineUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_COLOR] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_COLOR_SELECTION],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_COLOR, radiogroup_cb);
 
    _radbutton[RADBUT_COLOR_BASE0] = new GLUI_RadioButton(
@@ -740,11 +740,11 @@ ImageLineUI::fetch(CVIEWptr& v)
 {
    if (!v) {
       err_msg("ImageLineUI::fetch() - Error! view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg("ImageLineUI::fetch() - Error! view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself

@@ -33,7 +33,7 @@
 class VertNormalsTexture : public BasicTexture {
  public:
    //******** MANAGERS ********
-   VertNormalsTexture(Patch* patch = 0) : BasicTexture(patch) {}
+   VertNormalsTexture(Patch* patch = nullptr) : BasicTexture(patch) {}
 
    virtual ~VertNormalsTexture() {}
 
@@ -70,7 +70,7 @@ public :
 class VertUVTexture : public BasicTexture {
  public:
    //******** MANAGERS ********
-   VertUVTexture(Patch* patch = 0) : BasicTexture(patch) {}
+   VertUVTexture(Patch* patch = nullptr) : BasicTexture(patch) {}
 
    virtual ~VertUVTexture() {}
 
@@ -105,7 +105,7 @@ protected:
 class NormalsTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   NormalsTexture(Patch* patch = 0) :
+   NormalsTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _smooth(new SmoothShadeTexture(patch)),
       _normals(new VertNormalsTexture(patch)),

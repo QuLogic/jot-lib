@@ -41,7 +41,7 @@ class NPRBkgTexture : public BasicTexture {
 
  public:
     // ******** CONSTRUCTOR ********
-   NPRBkgTexture(Patch* patch = 0) :
+   NPRBkgTexture(Patch* patch = nullptr) :
       BasicTexture(patch, new NPRBkgTexCB), _transparent(1), _annotate(1) {}
 
    //******** Member Methods ********

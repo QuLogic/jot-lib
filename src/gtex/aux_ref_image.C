@@ -32,18 +32,18 @@ AuxRefImage::lookup(CVIEWptr& v)
 {
    if (!v) {
       err_msg( "AuxRefImage::lookup: error -- view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg( "AuxRefImage::lookup: error -- view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    VIEWimpl *key = v->impl();
    map<VIEWimpl*,AuxRefImage*>::iterator it;
    it = _hash.find(key);
-   AuxRefImage *ret = 0;
+   AuxRefImage *ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if ((ret = new AuxRefImage(v)))

@@ -28,10 +28,10 @@ using namespace mlib;
 static int es = DECODER_ADD(EdgeStroke);
 
 // XXX hack for serialization
-BMESH *EdgeStroke::_mesh = 0;
+BMESH *EdgeStroke::_mesh = nullptr;
 
 EdgeStroke::EdgeStroke() : 
-   _strip(0),
+   _strip(nullptr),
    _vis_step_pix_size(15.0)
 {
    _vis_type = VIS_TYPE_SCREEN | VIS_TYPE_SUBCLASS;
@@ -230,7 +230,7 @@ EdgeStroke::interpolate_refinement_vert(
 
    EdgeStrokeVertexData* d 
       = (EdgeStrokeVertexData*) v->_data;
-   d->sim = 0;  
+   d->sim = nullptr;
 
    EdgeStrokeVertexData* v1_d 
       = (EdgeStrokeVertexData*)(vl[1]->_data);
@@ -374,7 +374,7 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
       return false;
    }
 
-   static IDRefImage* id_ref       = 0;
+   static IDRefImage* id_ref       = nullptr;
    static uint        id_ref_stamp = UINT_MAX;
 
    // cache id ref image for the current frame
@@ -395,7 +395,7 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
    // If quick visibility check fails, we will record a frontfacing
    // face adjacent to the simplex to do the "walking" visibility
    // test.
-   Bface* front_facing_face = 0;  
+   Bface* front_facing_face = nullptr;
 
    // First, try the quick visibility test, through backface
    // culling and ref image test.

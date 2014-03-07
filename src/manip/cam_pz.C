@@ -38,7 +38,7 @@ CamIcon::intersect_all(CXYpt &pt)
    for (vector<CamIcon*>::size_type i=0; i<_icons.size(); i++)
       if (_icons[i]->intersect_icon(pt)) 
          return _icons[i];
-   return 0;
+   return nullptr;
 }
 
 /*****************************************************************
@@ -639,8 +639,8 @@ Cam_int::moveup(
    set<UPobs*>::iterator i;
    for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
       (*i)->reset(_do_reset);  // reset everyone watching us
-   _geom = 0;
-   _icon = 0;
+   _geom = nullptr;
+   _icon = nullptr;
    return 0;
 }
 
@@ -671,7 +671,7 @@ Cam_int::iconup(
    if (_resizing) {
       _resizing = false;
       const int retval = _icon->resize_up(e, s);
-      _icon = 0;
+      _icon = nullptr;
       return retval;
    }
    DEVice_buttons *btns=(DEVice_buttons *)e._d;
@@ -683,7 +683,7 @@ Cam_int::iconup(
        (curpt - _start_pix).length() > 20 &&
        (curpt - _start_pix).normalized() * VEXEL(1,1).normalized() > 0.5) {
       _icon->remove_icon();
-      _icon = 0;
+      _icon = nullptr;
       return 0;
    }
 
@@ -806,7 +806,7 @@ Cam_int::make_view(
 {
    // Create new cam icon
    _icon = CamIcon::create(curpt, _view->cam());
-   _geom = 0;
+   _geom = nullptr;
    
    reset(1);
 }

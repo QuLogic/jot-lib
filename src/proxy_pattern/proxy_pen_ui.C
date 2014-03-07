@@ -64,11 +64,11 @@ ProxyPenUI::update_non_lives()
 void
 ProxyPenUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 {   
-   _patch_ui->build(glui,NULL, true);
-   _light_ui->build(glui,NULL, false);
-   _hatching_ui->build(glui,NULL, false);
-   _halftone_ui->build(glui,NULL, false);
-   //_tone_shader_ui->build(glui,NULL, false); 
-   _proxy_texture_ui->build(glui, NULL, false);
-   _painterly_ui->build(glui, NULL, false);
+   _patch_ui->build(glui, nullptr, true);
+   _light_ui->build(glui, nullptr, false);
+   _hatching_ui->build(glui, nullptr, false);
+   _halftone_ui->build(glui, nullptr, false);
+   //_tone_shader_ui->build(glui, nullptr, false);
+   _proxy_texture_ui->build(glui, nullptr, false);
+   _painterly_ui->build(glui, nullptr, false);
 }

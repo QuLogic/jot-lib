@@ -34,7 +34,7 @@
 class Skybox_Texture : public BasicTexture {
  public:
    //******** MANAGERS ********
-   Skybox_Texture(Patch* patch =0);
+   Skybox_Texture(Patch* patch =nullptr);
    virtual ~Skybox_Texture() {} 
 
    //******** RUN-TIME TYPE ID ********

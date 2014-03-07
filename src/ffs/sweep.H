@@ -292,14 +292,14 @@ class SWEEP_DISK : public SWEEP_BASE {
    bool do_sweep(mlib::CWpt& o, mlib::Wvec t, mlib::Wvec n, mlib::Wvec b, mlib::Wpt_list spts);
 
    //! base region has corners; build a "box"
-   bool build_box(mlib::CWpt& o, mlib::CWvec& t, mlib::CWpt_list& spts, MULTI_CMDptr cmd=0);
+   bool build_box(mlib::CWpt& o, mlib::CWvec& t, mlib::CWpt_list& spts, MULTI_CMDptr cmd=nullptr);
 
    //! base region has no corners; build a "revolve"
    UVsurface* build_revolve(
       mlib::CWpt_list&        apts,           //!< axis points
       mlib::CWvec&            n,              //!< normal to axis points
       mlib::CWpt_list&        spts,           //!< sweep points
-      MULTI_CMDptr      cmd=0           //!< holder for commands generated
+      MULTI_CMDptr      cmd=nullptr           //!< holder for commands generated
       );
 
    //******** DrawWidget METHODS ********

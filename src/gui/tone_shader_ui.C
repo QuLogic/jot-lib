@@ -65,13 +65,13 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_ENABLED] = new GLUI_Checkbox(
       _rollout[ROLLOUT_MAIN],
       "Enabled",
-      NULL,
+      nullptr,
       id+CHECK_ENABLED,
       checkbox_cb);
    _checkbox[CHECK_REMAP_NL] = new GLUI_Checkbox(
       _rollout[ROLLOUT_MAIN],
       "Remap NL",
-      NULL,
+      nullptr,
       id+CHECK_REMAP_NL,
       checkbox_cb);
 
@@ -81,7 +81,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _panel[PANEL_REMAP] = new GLUI_Panel(_panel[PANEL_GROUPS], "Remap");
    _radgroup[RADGROUP_REMAP] = new GLUI_RadioGroup(
        _panel[PANEL_REMAP],
-      NULL,
+      nullptr,
       id+RADGROUP_REMAP, radiogroup_cb);
    _radbutton[RADBUT_REMAP_NONE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_REMAP],
@@ -99,7 +99,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _panel[PANEL_BACKLIGHT] = new GLUI_Panel(_panel[PANEL_GROUPS], "Backlight");
    _radgroup[RADGROUP_BACKLIGHT] = new GLUI_RadioGroup(
        _panel[PANEL_BACKLIGHT],
-      NULL,
+      nullptr,
       id+RADGROUP_BACKLIGHT, radiogroup_cb);
    _radbutton[RADBUT_BACKLIGHT_NONE] = new GLUI_RadioButton(
       _radgroup[RADGROUP_BACKLIGHT],
@@ -118,7 +118,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_REMAP_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_REMAP_A]->set_num_graduations(100);
    _slider[SLIDE_REMAP_A]->set_w(200);
 
@@ -128,7 +128,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_REMAP_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_REMAP_B]->set_num_graduations(100);
    _slider[SLIDE_REMAP_B]->set_w(200);
 
@@ -138,7 +138,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_BACKLIGHT_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_BACKLIGHT_A]->set_num_graduations(100);
    _slider[SLIDE_BACKLIGHT_A]->set_w(200);
    _slider[SLIDE_BACKLIGHT_B] = new GLUI_Slider(
@@ -147,7 +147,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_BACKLIGHT_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_BACKLIGHT_B]->set_num_graduations(100);
    _slider[SLIDE_BACKLIGHT_B]->set_w(200);
 
@@ -157,7 +157,7 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _listbox[LIST_TEXTURE] = new GLUI_Listbox(
                                _rollout[ROLLOUT_MAIN],
                                "Toon Map",
-                               0,
+                               nullptr,
                                id+LIST_TEXTURE,
                                listbox_cb);
    

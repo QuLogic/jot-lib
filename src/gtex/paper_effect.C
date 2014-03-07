@@ -98,7 +98,7 @@ const char *paper_remap_fnames[][2] =
    {"watercolor_big_bumpy.png",  "p-rough-6.png"},
    {"watercolor_bumpy.png",      "p-rough-6a.png"},
    {"wool.png",                  "p-weird-4.png"},
-   { NULL,                        NULL}
+   { nullptr,                     nullptr}
 };
 
 
@@ -110,8 +110,8 @@ int               PaperEffect::_implementation = PaperEffect::IMPLEMENTATION__NO
 
 TEXTUREptr        PaperEffect::_paper_texture;
 
-map<string,TEXTUREptr>* PaperEffect::_paper_texture_map = 0;
-map<string,string>*     PaperEffect::_paper_texture_remap = 0;
+map<string,TEXTUREptr>* PaperEffect::_paper_texture_map = nullptr;
+map<string,string>*     PaperEffect::_paper_texture_remap = nullptr;
 
 GLuint            PaperEffect::_disabled_no_frag_prog_arb;
 GLuint            PaperEffect::_disabled_1d_frag_prog_arb;
@@ -450,7 +450,7 @@ void
 PaperEffect::begin_paper_effect(bool apply, double x, double y)
 {
    check_new_paper(); 
-   begin_paper_effect(((apply)?(_paper_texture):(NULL)), _cont, _brig, x, y);
+   begin_paper_effect(apply ? _paper_texture : nullptr, _cont, _brig, x, y);
 }
 
 /////////////////////////////////////
@@ -462,7 +462,7 @@ PaperEffect::end_paper_effect(bool apply)
 { 
    //XXX - Check again?
    check_new_paper(); 
-   end_paper_effect(((apply)?(_paper_texture):(NULL)));
+   end_paper_effect(apply ? _paper_texture : nullptr);
 }
 
 /////////////////////////////////////
@@ -541,7 +541,7 @@ PaperEffect::begin_paper_effect_nv(TEXTUREptr t, float cont, float brig, double 
    assert(_implementation & IMPLEMENTATION__GL_NV);
 
    //If not active, or no texture, then just premultiply alpha...
-   if (!_is_active || t==NULL) 
+   if (!_is_active || t==nullptr)
    {
 #ifdef GL_NV_register_combiners
 
@@ -904,7 +904,7 @@ PaperEffect::begin_paper_effect_ati(TEXTUREptr t, float cont, float brig, double
    }
 
    // See if we're actually doing ye olde paper effect...
-   bool using_texture1 = _is_active && (t != NULL);
+   bool using_texture1 = _is_active && (t != nullptr);
 
    if (using_texture1)
    {
@@ -1021,7 +1021,7 @@ PaperEffect::begin_paper_effect_arb(TEXTUREptr t, float cont, float brig, double
    }
 
    // See if we're actually doing ye olde paper effect...
-   bool using_texture1 = _is_active && (t != NULL);
+   bool using_texture1 = _is_active && (t != nullptr);
 
    if (using_texture1)
    {
@@ -1124,7 +1124,7 @@ PaperEffect::end_paper_effect_nv(TEXTUREptr t)
    assert(_implementation & IMPLEMENTATION__GL_NV);
 
    //If not active, or no texture, then just premultiply alpha...
-   if (!_is_active || t==NULL) 
+   if (!_is_active || t==nullptr)
    {
 #ifdef GL_NV_register_combiners
 
@@ -1190,7 +1190,7 @@ PaperEffect::end_paper_effect_ati(TEXTUREptr t)
    assert(query == GL_TEXTURE0_ARB);
 
    // Turn off paper texture...
-   bool using_texture1 = _is_active && (t != NULL);
+   bool using_texture1 = _is_active && (t != nullptr);
    if (using_texture1)
    {
       // Now change to 2nd unit
@@ -1240,7 +1240,7 @@ PaperEffect::end_paper_effect_arb(TEXTUREptr t)
    assert(query == GL_TEXTURE0_ARB);
 
    // Turn off paper texture...
-   bool using_texture1 = _is_active && (t != NULL);
+   bool using_texture1 = _is_active && (t != nullptr);
    if (using_texture1)
    {
       // Now change to 2nd unit
@@ -1288,7 +1288,7 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
       _paper_texture_remap = new map<string,string>; assert(_paper_texture_remap);
 
       int i = 0;
-      while (paper_remap_fnames[i][0] != NULL) {
+      while (paper_remap_fnames[i][0] != nullptr) {
          (*_paper_texture_remap)[Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][0]] =
                                  Config::JOT_ROOT() + paper_remap_base + paper_remap_fnames[i][1];
          i++;
@@ -1298,13 +1298,13 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
    //No paper
    if (tf == "") {
       tf = "";
-      return NULL;
+      return nullptr;
 
    } else if ((ind = _paper_texture_map->find(tf)) != _paper_texture_map->end()) {
       //Finding original name in cache...
 
       //If it's a failed texture...
-      if (ind->second == NULL) {
+      if (ind->second == nullptr) {
          //...see if it was remapped...
          map<string,string>::iterator ii = _paper_texture_remap->find(tf);
          //...and change to looking up the remapped name            
@@ -1321,7 +1321,7 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
       }
 
       //Now see if the final name yields a good texture...
-      if (ind->second != NULL) {
+      if (ind->second != nullptr) {
          err_mesg(ERR_LEV_SPAM, "PaperEffect::get_texture() - Using cached copy of texture.");
          tf = tf;
          return ind->second;
@@ -1329,7 +1329,7 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
       } else {
          err_mesg(ERR_LEV_INFO, "PaperEffect::get_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
          tf = "";
-         return NULL;
+         return nullptr;
       }
 
    //Haven't seen this name before...
@@ -1347,7 +1347,7 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
          if (ii != _paper_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            (*_paper_texture_map)[tf] = NULL;
+            (*_paper_texture_map)[tf] = nullptr;
 
             string old_tf = tf;
             tf = ii->second;
@@ -1376,18 +1376,18 @@ PaperEffect::get_texture(const string &in_tf, string &tf)
          tf = tf;
          return t;
 
-      //Otherwise insert a failed NULL...
+      //Otherwise insert a failed nullptr...
       } else {
          err_mesg(ERR_LEV_ERROR, "PaperEffect::get_texture() - *****ERROR***** Failed loading to cache: '%s'", tf.c_str());
 
-         (*_paper_texture_map)[tf] = NULL;
+         (*_paper_texture_map)[tf] = nullptr;
 
          tf = "";
-         return NULL;
+         return nullptr;
       }
    }
    // g++ 4.0 on macosx needs the following:
-   return NULL;
+   return nullptr;
 }
 
 /////////////////////////////////////

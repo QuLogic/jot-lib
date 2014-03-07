@@ -61,7 +61,7 @@ vector<GLUIPopUp*>    GLUIPopUp::_ui;
 //////////////////////////////////////////////////////
 GLUIPopUp::GLUIPopUp(GLUT_WINSYS *w) :
    _glut_winsys(w),
-   _glui(NULL),
+   _glui(nullptr),
    _blocking(true)
 {
    _ui.push_back(this);
@@ -157,7 +157,7 @@ GLUIPopUp::unbuild_glui()
 
    _glui->close();
 
-   _glui = NULL;
+   _glui = nullptr;
 
 }
 
@@ -279,9 +279,9 @@ GLUIAlertBox::IconBitmap   GLUIAlertBox::_icons[ICON_NUM];
 //////////////////////////////////////////////////////
 GLUIAlertBox::GLUIAlertBox(GLUT_WINSYS *w) :
    GLUIPopUp(w),
-      _cb(NULL),
-      _vp(NULL),
-      _vpd(NULL),
+      _cb(nullptr),
+      _vp(nullptr),
+      _vpd(nullptr),
       _idx(-1)
 {
    if (!_icon_init)
@@ -331,9 +331,9 @@ GLUIAlertBox::display(bool blocking, alert_cb_t cb, void *vp, void *vpd, int idx
       return false;
    }
 
-   assert(_cb == NULL);
-   assert(_vp == NULL);
-   assert(_vpd == NULL);
+   assert(_cb == nullptr);
+   assert(_vp == nullptr);
+   assert(_vpd == nullptr);
    assert(_idx == -1);
 
    if (!show_glui(blocking))
@@ -379,9 +379,9 @@ GLUIAlertBox::undisplay(int button)
    void        *vpd = _vpd;
    int         idx  = _idx;
 
-   _cb  = NULL;
-   _vp  = NULL;
-   _vpd = NULL;
+   _cb  = nullptr;
+   _vp  = nullptr;
+   _vpd = nullptr;
    _idx = -1;
 
    if (cb)
@@ -406,10 +406,10 @@ GLUIAlertBox::build_glui()
 
    _glui->rename(_title);
 
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, 0);
-   assert(_button.empty());       _button.resize(_buttons.size(), 0);
-   assert(_statictext.empty());   _statictext.resize(_text.size() ? _text.size() : 1, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, nullptr);
+   assert(_button.empty());       _button.resize(_buttons.size(), nullptr);
+   assert(_statictext.empty());   _statictext.resize(_text.size() ? _text.size() : 1, nullptr);
    
    if ((_icon != NO_ICON) || !_text.empty())
    {
@@ -548,10 +548,10 @@ GLUIFileSelect::IconBitmap GLUIFileSelect::_bitmaps[BITMAP_NUM];
 //////////////////////////////////////////////////////
 GLUIFileSelect::GLUIFileSelect(GLUT_WINSYS *w) :
    GLUIPopUp(w),
-      _cb(NULL),
-      _vp(NULL),
+      _cb(nullptr),
+      _vp(nullptr),
       _idx(-1),
-      _current_path(NULL),
+      _current_path(nullptr),
       _current_mode(MODE_NORMAL),
       _current_sort(SORT_NAME_UP),
       _current_selection(-1),
@@ -622,8 +622,8 @@ GLUIFileSelect::display(bool blocking, file_cb_t cb, void *vp, int idx)
       return false;
    }
 
-   assert(_cb == NULL);
-   assert(_vp == NULL);
+   assert(_cb == nullptr);
+   assert(_vp == nullptr);
    assert(_idx == -1);
 
    if (!show_glui(blocking))
@@ -684,8 +684,8 @@ GLUIFileSelect::undisplay(int button, string path, string file)
    void        *vp = _vp;
    int         idx = _idx;
 
-   _cb = NULL;
-   _vp = NULL;
+   _cb = nullptr;
+   _vp = nullptr;
    _idx = -1;
 
    if (cb)
@@ -710,14 +710,14 @@ GLUIFileSelect::build_glui()
 
    _glui->rename(_title);
 
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECKBOX_NUM, 0);
-   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
-   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM   +   GLUI_FILE_SELECT_NUM_FILES, 0);
-   assert(_statictext.empty());   _statictext.resize(STATICTEXT_NUM + 2*GLUI_FILE_SELECT_NUM_FILES, 0);
-   assert(_activetext.empty());   _activetext.resize(ACTIVETEXT_NUM +   GLUI_FILE_SELECT_NUM_FILES, 0);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECKBOX_NUM, nullptr);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, nullptr);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM   +   GLUI_FILE_SELECT_NUM_FILES, nullptr);
+   assert(_statictext.empty());   _statictext.resize(STATICTEXT_NUM + 2*GLUI_FILE_SELECT_NUM_FILES, nullptr);
+   assert(_activetext.empty());   _activetext.resize(ACTIVETEXT_NUM +   GLUI_FILE_SELECT_NUM_FILES, nullptr);
 
    //Controls
 
@@ -748,7 +748,7 @@ GLUIFileSelect::build_glui()
    //Path
    _listbox[LIST_PATH] = new GLUI_Listbox(
       _panel[PANEL_PATH], 
-      "Path ", NULL,
+      "Path ", nullptr,
       id+LIST_PATH, listbox_cbs);
    assert(_listbox[LIST_PATH]);
    _listbox[LIST_PATH]->set_w(GLUI_FILE_SELECT_PATH_WIDTH);
@@ -1090,7 +1090,7 @@ GLUIFileSelect::build_glui()
 
    _edittext[EDITTEXT_FILE] = new GLUI_EditText(
       _panel[PANEL_ACTION], "Filename ", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+EDITTEXT_FILE, edittext_cbs);
    assert(_edittext[EDITTEXT_FILE]);
    _edittext[EDITTEXT_FILE]->set_alignment(GLUI_ALIGN_RIGHT);
@@ -1098,7 +1098,7 @@ GLUIFileSelect::build_glui()
 
    _listbox[LIST_FILTER] = new GLUI_Listbox(
       _panel[PANEL_ACTION], 
-      "Filter Mask ", NULL,
+      "Filter Mask ", nullptr,
       id+LIST_FILTER, listbox_cbs);
    assert(_listbox[LIST_FILTER]);
    _listbox[LIST_FILTER]->set_alignment(GLUI_ALIGN_RIGHT);
@@ -1115,7 +1115,7 @@ GLUIFileSelect::build_glui()
    _statictext[STATICTEXT_LABEL_DOT]->set_alignment(GLUI_ALIGN_LEFT);
 
    _checkbox[CHECKBOX_DOT] = new GLUI_Checkbox(
-      _panel[PANEL_ACTION], "", NULL,
+      _panel[PANEL_ACTION], "", nullptr,
       id+CHECKBOX_DOT, checkbox_cbs);
    assert(_checkbox[CHECKBOX_DOT]);
    _checkbox[CHECKBOX_DOT]->set_show_name(false);  
@@ -1295,12 +1295,12 @@ GLUIFileSelect::readdir_(const string &path, const string &filter)
       FindClose(hFile);
    }
 #else
-   DIR *dir = 0;
+   DIR *dir = nullptr;
    struct dirent *direntry;
 
-   if ((dir = opendir(path.c_str())) != NULL) {
+   if ((dir = opendir(path.c_str())) != nullptr) {
       struct stat statbuf;
-      while ((direntry = readdir(dir)) != NULL) {
+      while ((direntry = readdir(dir)) != nullptr) {
          string file(direntry->d_name), full_path = path + "/" + file;
          
          if (!stat(full_path.c_str(), &statbuf)) {
@@ -1403,8 +1403,8 @@ GLUIFileSelect::stat_(const string &cpath, DIR_ENTRYptr &ret)
       //Ignores error if media not present to avoid the pop-up prompt to insert disc...
       unsigned int old_mode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS); 
       //XXX - Floppy seek is so slow, it really chokes... Forget it.
-      if ((drive_type != DRIVE_REMOVABLE) && (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, NULL)))
-//      if (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, NULL))
+      if ((drive_type != DRIVE_REMOVABLE) && (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, nullptr)))
+//      if (GetDiskFreeSpaceEx(path.c_str(), &free_space, &total_space, nullptr))
       {
          ret->_size = (LONGLONG)(total_space.QuadPart-free_space.QuadPart);
       }
@@ -1616,14 +1616,14 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
          if (drives & 1<<i) {
             string drv((char)('A'+i));
             e = generate_dir_entry(drv + ":\\", drv + ": ");
-            assert((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
+            assert((e != nullptr) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
             dir->_contents.push_back(e);
          }
       }
 #else
       // XXX - Should this be more forgiving under failure? Nah
       e = generate_dir_entry("/", "/ ");
-      assert( (e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
+      assert( (e != nullptr) && (e->_type == DIR_ENTRY::DIR_ENTRY_DRIVE));
       dir->_contents.push_back(e);
 #endif
 
@@ -1634,7 +1634,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
       if (chdir_(Config::JOT_ROOT())) {
          if ((jotroot_cwd = getcwd_()) != "") {
             e = generate_dir_entry(jotroot_cwd, "");
-            if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
+            if ((e != nullptr) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
                dir->_contents.push_back(e);
             }
          }
@@ -1645,7 +1645,7 @@ GLUIFileSelect::generate_dir_contents(DIR_ENTRYptr &dir)
       //and reading back the getcwd... They're 'safe'
       for (i=0; i<_current_recent_paths.size(); i++) {
          e = generate_dir_entry(_current_recent_paths[i], "");
-         if ((e != NULL) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
+         if ((e != nullptr) && (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)) {
             dir->_contents.push_back(e);
          }
       }
@@ -1694,7 +1694,7 @@ static bool sort_by_size_down(CDIR_ENTRYptr va, CDIR_ENTRYptr vb) { return sort_
 void
 GLUIFileSelect::sort_dir_contents(DIR_ENTRYptr &dir, sort_t sort)
 {
-   assert(dir != NULL);
+   assert(dir != nullptr);
 
    bool (*func)(CDIR_ENTRYptr, CDIR_ENTRYptr);
 
@@ -1720,9 +1720,9 @@ GLUIFileSelect::sort_dir_contents(DIR_ENTRYptr &dir, sort_t sort)
 DIR_ENTRYptr
 GLUIFileSelect::get_selected_entry()
 {
-   if (_current_selection == -1) return NULL;
+   if (_current_selection == -1) return nullptr;
 
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
    assert( (_current_scroll + _current_selection) < (int)_current_path->_contents.size());
 
    return _current_path->_contents[_current_scroll + _current_selection];
@@ -1734,13 +1734,13 @@ GLUIFileSelect::get_selected_entry()
 void
 GLUIFileSelect::set_selected_entry(DIR_ENTRYptr e)
 {
-   if (e == NULL)
+   if (e == nullptr)
    {
       _current_selection = -1;
    }
    else
    {
-      assert(_current_path != NULL);
+      assert(_current_path != nullptr);
 
       DIR_ENTRYlist::iterator it = std::find(_current_path->_contents.begin(), _current_path->_contents.end(), e);
 
@@ -1776,7 +1776,7 @@ GLUIFileSelect::do_scroll_delta(int delta)
 void
 GLUIFileSelect::do_scroll_set(int scroll)
 {
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
    assert((_current_scroll >= 0) &&
           (_current_scroll <= max(0,(int)_current_path->_contents.size() - GLUI_FILE_SELECT_NUM_FILES + 1)));
 
@@ -2055,7 +2055,7 @@ GLUIFileSelect::do_delete_mode()
 {
    DIR_ENTRYptr e = get_selected_entry(); 
    
-   assert(e != NULL);
+   assert(e != nullptr);
    assert((e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
           (e->_type == DIR_ENTRY::DIR_ENTRY_FILE) );
 
@@ -2084,7 +2084,7 @@ GLUIFileSelect::do_rename_mode()
 {
    DIR_ENTRYptr e = get_selected_entry(); 
 
-   assert(e != NULL);
+   assert(e != nullptr);
    assert((e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
           (e->_type == DIR_ENTRY::DIR_ENTRY_FILE) );
 
@@ -2104,7 +2104,7 @@ GLUIFileSelect::do_rename_mode()
 void
 GLUIFileSelect::do_add_mode()
 {
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
    assert(_current_path->_type != DIR_ENTRY::DIR_ENTRY_ROOT);
 
    _current_mode_saved_file = _edittext[EDITTEXT_FILE]->get_text();
@@ -2123,7 +2123,7 @@ GLUIFileSelect::do_add_mode()
 void
 GLUIFileSelect::do_delete_action()
 {
-   DIR_ENTRYptr e = get_selected_entry();   assert(e != NULL);
+   DIR_ENTRYptr e = get_selected_entry();   assert(e != nullptr);
 
    if (e->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY)
    {
@@ -2157,9 +2157,9 @@ GLUIFileSelect::do_delete_action()
 void
 GLUIFileSelect::do_rename_action()
 {
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
 
-   DIR_ENTRYptr e = get_selected_entry();   assert(e != NULL);
+   DIR_ENTRYptr e = get_selected_entry();   assert(e != nullptr);
 
    string new_name = _current_path->_full_path +
                           (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") +
@@ -2185,7 +2185,7 @@ GLUIFileSelect::do_rename_action()
 void
 GLUIFileSelect::do_add_action()
 {
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
 
    string new_folder = _current_path->_full_path +
                            (_current_path->_type == DIR_ENTRY::DIR_ENTRY_DRIVE?"":"/") +
@@ -2326,7 +2326,7 @@ GLUIFileSelect::do_entry_select(int ind)
       _current_selection = ind;      
       e = get_selected_entry();
 
-      if (e == NULL)
+      if (e == nullptr)
       {
          _current_selection_time = 0.0;
       }
@@ -2353,7 +2353,7 @@ GLUIFileSelect::do_entry_select(int ind)
       _current_selection = ind;      
       e = get_selected_entry();
 
-      if (e == NULL)
+      if (e == nullptr)
       {
          _current_selection_time = 0.0;
          update();
@@ -2381,7 +2381,7 @@ GLUIFileSelect::do_entry_select(int ind)
       _current_selection = ind;      
       e = get_selected_entry();
 
-      if (e == NULL)
+      if (e == nullptr)
       {
          _current_selection_time = 0.0;
       }
@@ -2474,7 +2474,7 @@ GLUIFileSelect::do_sort_toggle(int button)
       break;
    }
 
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
 
    sort_dir_contents(_current_path,_current_sort);
    
@@ -2502,11 +2502,11 @@ GLUIFileSelect::generate_dir_entry(const string &full_path, const string &name)
    {
       if (!stat_(full_path,ret))
       {
-         ret = NULL;
+         ret = nullptr;
       }
    }
 
-   if (ret != NULL)
+   if (ret != nullptr)
    {
       //Assign the given name and append with
       //any existing name...
@@ -2557,10 +2557,10 @@ GLUIFileSelect::do_directory_change(const string &dir)
 
    DIR_ENTRYptr new_path = generate_dir_tree(dir);
 
-   if (new_path == NULL)
+   if (new_path == nullptr)
    {
       new_path = generate_dir_tree("");
-      assert(new_path != NULL);
+      assert(new_path != nullptr);
       cerr << "GLUIFileSelect::do_directory_change() - Failed to open: '" << dir << 
                   "'. Falling back to '" << new_path->_name << "'\n";
       ret = false;
@@ -2615,7 +2615,7 @@ GLUIFileSelect::generate_dir_tree(const string &new_path)
       string tmp_cwd, cur_cwd;
 
       cur_cwd   = getcwd_();                          assert(cur_cwd != "");
-      ret_entry = generate_dir_entry(cur_cwd, "");    assert(ret_entry != NULL);
+      ret_entry = generate_dir_entry(cur_cwd, "");    assert(ret_entry != nullptr);
       cur_entry = ret_entry;
 
       while (1)
@@ -2625,7 +2625,7 @@ GLUIFileSelect::generate_dir_tree(const string &new_path)
 
          if (tmp_cwd == cur_cwd) break;
 
-         cur_entry->_parent = generate_dir_entry(tmp_cwd, ""); assert(cur_entry->_parent != NULL);
+         cur_entry->_parent = generate_dir_entry(tmp_cwd, ""); assert(cur_entry->_parent != nullptr);
 
          cur_entry = cur_entry->_parent;
          cur_cwd = tmp_cwd;
@@ -2644,7 +2644,7 @@ GLUIFileSelect::generate_dir_tree(const string &new_path)
    }
    else
    {
-      ret_entry = NULL;
+      ret_entry = nullptr;
    }
 
 
@@ -2810,9 +2810,9 @@ GLUIFileSelect::update_icons()
       // -refresh
       _bitmapbox[BITMAPBOX_DOT]->enable();
       
-      assert(_current_path != NULL);
+      assert(_current_path != nullptr);
       // -up dir
-      if (_current_path->_parent != NULL)
+      if (_current_path->_parent != nullptr)
       {
          assert(_current_path->_type != DIR_ENTRY::DIR_ENTRY_ROOT);
          _bitmapbox[BITMAPBOX_UP]->enable();
@@ -2835,7 +2835,7 @@ GLUIFileSelect::update_icons()
 
       // -rename/-delete
       DIR_ENTRYptr selected_entry = get_selected_entry();
-      if ((selected_entry != NULL) &&
+      if ((selected_entry != nullptr) &&
           (_current_path->_type != DIR_ENTRY::DIR_ENTRY_ROOT) &&
             ( (selected_entry->_type == DIR_ENTRY::DIR_ENTRY_DIRECTORY) ||
               (selected_entry->_type == DIR_ENTRY::DIR_ENTRY_FILE)))
@@ -2883,7 +2883,7 @@ GLUIFileSelect::update_headings()
       assert(_current_mode == MODE_NORMAL);
 
       //Re-set button labels
-      assert(_current_path != NULL);
+      assert(_current_path != nullptr);
 
       _button[BUT_HEADING_NAME]->set_name("Name");
       _button[BUT_HEADING_SIZE]->set_name("Size");
@@ -2982,14 +2982,14 @@ GLUIFileSelect::update_listing()
 
       for (i=0;i<GLUI_FILE_SELECT_NUM_FILES;i++)
       {
-         if ( (_current_path != NULL) && 
+         if ( (_current_path != nullptr) &&
               (_current_scroll+i < (int)_current_path->_contents.size()) )
          {
             int         ret;
             char        chr_buf[CHR_BUF_SIZE];
             string      foo, bar;
             IconBitmap  *bm;
-            DIR_ENTRYptr e = _current_path->_contents[_current_scroll+i]; assert(e != NULL);
+            DIR_ENTRYptr e = _current_path->_contents[_current_scroll+i]; assert(e != nullptr);
 
             switch(e->_type)
             {
@@ -3197,7 +3197,7 @@ void
 GLUIFileSelect::compute_scroll_geometry(int h, int &pix_below, int &pix_showing, int &pix_above,
                                                int &num_below, int &num_showing, int &num_above)
 {
-   assert(_current_path != NULL);
+   assert(_current_path != nullptr);
    assert((_current_scroll >= 0) &&
           (_current_scroll <= max(0,(int)_current_path->_contents.size() - GLUI_FILE_SELECT_NUM_FILES + 1)));
 
@@ -3318,7 +3318,7 @@ GLUIFileSelect::update_actions()
    {
       assert(_current_mode == MODE_NORMAL);
 
-      assert(_current_path != NULL);
+      assert(_current_path != nullptr);
 
       if (_current_path->_type == DIR_ENTRY::DIR_ENTRY_ROOT)
       {
@@ -3479,7 +3479,7 @@ GLUIFileSelect::button_cb(int id)
    }
    else
    {
-      assert(_current_path != NULL);
+      assert(_current_path != nullptr);
 
       string text;
       string filter_chars, bad_chars;

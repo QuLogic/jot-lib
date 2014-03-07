@@ -32,10 +32,10 @@ class ControlFrameTexture : public BasicTexture {
 
    //******** MANAGERS ********
 
-   ControlFrameTexture(Patch* patch = 0, CCOLOR& col = Color::blue_pencil_d) :
+   ControlFrameTexture(Patch* patch = nullptr, CCOLOR& col = Color::blue_pencil_d) :
       BasicTexture(patch, new GLStripCB),
       _color(col),
-      _strip(0) {}
+      _strip(nullptr) {}
 
    //******** RUN-TIME TYPE ID ********
 

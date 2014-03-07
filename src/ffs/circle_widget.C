@@ -76,8 +76,8 @@ CIRCLE_WIDGET::CIRCLE_WIDGET() :
    _draw_start += DrawArc(new StrokeGuard,      drawCB(&CIRCLE_WIDGET::stroke_cb));
 
    _init_stamp = 0;
-   _circle = 0;
-   _cmd = 0;
+   _circle = nullptr;
+   _cmd = nullptr;
    _suggest_active = false;
 
    // Set up the clean up routine
@@ -92,7 +92,7 @@ CIRCLE_WIDGET::~CIRCLE_WIDGET()
 void
 CIRCLE_WIDGET::clean_on_exit()
 {
-   _instance = 0;
+   _instance = nullptr;
 }
 
 int
@@ -155,7 +155,7 @@ CIRCLE_WIDGET::stroke_cb(CGESTUREptr& g, DrawState*&)
        g->start().dist(_center) < PIXEL_DIST_THRESH  ) {
       if ( _circle ) {
          Bcurve *border = Bcurve::lookup(_circle->bfaces().get_boundary().edges());
-         if ( border != 0 ) {
+         if ( border != nullptr ) {
             Wplane plane = border->plane();
             _radius = _center.dist(Wpt(plane, Wline(XYpt(g->end()))));
          }
@@ -277,8 +277,8 @@ CIRCLE_WIDGET::reset()
 {
    err_adv(debug_all, "CIRCLE_WIDGET::reset()");
    _init_stamp = 0;
-   _circle = 0;
-   _cmd = 0;
+   _circle = nullptr;
+   _cmd = nullptr;
    //_border = 0;
 
 }
@@ -295,7 +295,7 @@ CIRCLE_WIDGET::create_literal(GESTUREptr gest)
    // film plane.
    Wplane P = get_plane(b1, b2);
    if (!P.is_valid()) {
-      b1 = b2 = 0;
+      b1 = b2 = nullptr;
       // Ignoring the endpoints, try for a plane from the FLOOR
       // or AxisWidget:
       P = get_draw_plane(gest->pts());
@@ -338,7 +338,7 @@ CIRCLE_WIDGET::finish_literal(void)
 
    // Get a mesh to put the new curve into.
    LMESHptr mesh = TEXBODY::get_skel_mesh(cmd);
-   assert(mesh != 0);
+   assert(mesh != nullptr);
 
    Wplane P = get_draw_plane(_literal_shape);
 
@@ -347,7 +347,7 @@ CIRCLE_WIDGET::finish_literal(void)
    // Create the curve
 
    Bcurve* curve = BcurveAction::create(
-      mesh, _literal_shape, P.normal(), num_edges, res_level, 0, 0, cmd
+      mesh, _literal_shape, P.normal(), num_edges, res_level, nullptr, nullptr, cmd
       );
    curve->mesh()->update_subdivision(res_level);
 
@@ -409,14 +409,14 @@ CIRCLE_WIDGET::make_preview( void )
       return;
    }
 
-   if( _circle == 0 ) {
+   if( _circle == nullptr ) {
       // XXX - no undo! should fix
       _circle = PanelAction::create(
-         _plane, _center, _radius, TEXBODY::get_skel_mesh(0), _disk_res, 0
+         _plane, _center, _radius, TEXBODY::get_skel_mesh(nullptr), _disk_res, nullptr
          );
    } else {
       Bcurve *border = Bcurve::lookup(_circle->bfaces().get_boundary().edges());
-      if( border != 0 ) {
+      if( border != nullptr ) {
          Wpt_listMap *map = Wpt_listMap::upcast(border->map());
          if( map )
             map->set_pts(_preview);

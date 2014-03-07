@@ -163,7 +163,7 @@ ProxyStroke::check_vert_visibility(CBaseStrokeVertex &v)
    if(taggle_vis)     
       return true;
 
-   static IDRefImage* id_ref       = 0;
+   static IDRefImage* id_ref       = nullptr;
    static uint        id_ref_stamp = UINT_MAX;
    // cache id ref image for the current frame
     

@@ -60,10 +60,10 @@ class Ledge : public Bedge {
 
    Ledge(Lvert* u, Lvert* v) :
       Bedge((Bvert*)u,(Bvert*)v),
-      _subdiv_vertex(0),
+      _subdiv_vertex(nullptr),
       _crease(0),
       _mask(REGULAR_SMOOTH_EDGE),
-      _parent(0) {}
+      _parent(nullptr) {}
    
    virtual ~Ledge();
 
@@ -119,7 +119,7 @@ class Ledge : public Bedge {
    // available primary slot (_f1 or _f2).  In Ledge, all child
    // edges must also have available slots.
    virtual bool can_promote() const {
-      Ledge* s = 0;
+      Ledge* s = nullptr;
       return (Bedge::can_promote() &&
               (!(s = subdiv_edge1()) || s->can_promote()) &&
               (!(s = subdiv_edge2()) || s->can_promote()));
@@ -151,7 +151,7 @@ class Ledge : public Bedge {
    // convenience method - casts control element to Ledge if valid:
    Ledge* ctrl_edge() const {
       Bsimplex* sim = ctrl_element();
-      return is_edge(sim) ? (Ledge*)sim : (Ledge*)0;
+      return is_edge(sim) ? (Ledge*)sim : nullptr;
    }
    Lface* ctrl_face() const;    // defined in bface.H
 

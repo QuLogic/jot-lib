@@ -812,7 +812,7 @@ PatternPen::print_target_cell(){
    // Hack, Lets ensure that we have something in GELset so that draw
    // will execute
    if(_synthesized_strokes->num() < 1) {
-      GESTUREptr dummy_gest = new GESTURE(NULL, -1, PIXEL(0.0, 0.0), 1.0);
+      GESTUREptr dummy_gest = new GESTURE(nullptr, -1, PIXEL(0.0, 0.0), 1.0);
       *_synthesized_strokes += dummy_gest;
    }
 

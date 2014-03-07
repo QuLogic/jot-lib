@@ -27,7 +27,7 @@ class WIN_MANAGER : public FD_MANAGER {
       class tty_to_id {
          public :
           FD_EVENT    *_fd;
-          tty_to_id() : _fd(0) { }
+          tty_to_id() : _fd(nullptr) { }
           tty_to_id(FD_EVENT *fd) : _fd(fd) { }
 	  int ready() {
              COMSTAT stat;
@@ -45,7 +45,7 @@ class WIN_MANAGER : public FD_MANAGER {
                 FD_SET(_fd->fd(), &fd);
                 tm.tv_usec = 0;
                 tm.tv_sec = 0;
-                if (select(_fd->fd()+1, &fd, NULL, NULL, &tm) != SOCKET_ERROR)
+                if (select(_fd->fd()+1, &fd, nullptr, nullptr, &tm) != SOCKET_ERROR)
                    return FD_ISSET(_fd->fd(), &fd);
              }
              return 0;

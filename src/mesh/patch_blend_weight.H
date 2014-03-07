@@ -82,12 +82,12 @@ class PatchBlendWeight : public SimplexData {
 
    // Lookup a PatchBlendWeight* from a Bvert
    static PatchBlendWeight* lookup(CBvert* v) {
-      return v ? dynamic_cast<PatchBlendWeight*>(v->find_data(key())) : 0;
+      return v ? dynamic_cast<PatchBlendWeight*>(v->find_data(key())) : nullptr;
    }
    // Similar to lookup, but creates a PatchBlendWeight if it wasn't found
    static PatchBlendWeight* get_data(Bvert* v) {
       PatchBlendWeight* ret = lookup(v);
-      return ret ? ret : v ? new PatchBlendWeight(v) : 0;
+      return ret ? ret : v ? new PatchBlendWeight(v) : nullptr;
    }
 
    //******** COMPUTING WEIGHTS ********

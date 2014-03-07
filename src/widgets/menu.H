@@ -26,7 +26,7 @@
 class MoveMenu;
 class MenuItem {
   public :
-     MenuItem() : _menu(0) {}
+     MenuItem() : _menu(nullptr) {}
      MenuItem(const string &label) : _label(label) { }
      virtual ~MenuItem() {}
 

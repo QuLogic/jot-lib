@@ -40,8 +40,8 @@ Pen::Pen(const string& pen_name,
          CEvent &ctrl_d,  CEvent &ctrl_u) :
    Simple_int(d, m, u),
    _gest_int(gest_int),
-   _shift_fsa(0),
-   _ctrl_fsa(0),
+   _shift_fsa(nullptr),
+   _ctrl_fsa(nullptr),
    _pen_name(pen_name),
    _view(VIEW::peek()),
    _fsa(&_draw_start)

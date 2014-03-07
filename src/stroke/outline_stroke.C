@@ -23,7 +23,7 @@ static bool use_glsl_paper = Config::get_var_bool("ENABLE_GLSL_PAPER",true);
 
 static int ols = DECODER_ADD(OutlineStroke);
 
-TAGlist*            OutlineStroke::_os_tags = 0;
+TAGlist*            OutlineStroke::_os_tags = nullptr;
 
 CTAGlist &
 OutlineStroke::tags() const

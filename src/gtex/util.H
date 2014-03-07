@@ -134,7 +134,7 @@ namespace GtexUtil {
       double width,     // width for gl lines
       CCOLOR& color,    // color 
       double alpha=1,   // alpha
-      StripCB* cb=0     // callback for edge strip (uses GLStripCB by default)
+      StripCB* cb=nullptr     // callback for edge strip (uses GLStripCB by default)
       )
    {
       VIEWptr v = VIEW::peek();
@@ -148,7 +148,7 @@ namespace GtexUtil {
 
       GL_VIEW::end_line_smooth();
    }
-   inline void draw_strip(EdgeStrip& strip, double width=1, StripCB* cb=0) {
+   inline void draw_strip(EdgeStrip& strip, double width=1, StripCB* cb=nullptr) {
       return draw_strip(strip, width, Color::black, 1, cb);
    }
 
@@ -177,7 +177,7 @@ namespace GtexUtil {
       double            alpha=1,
       bool              depth_test=true
       ) {
-      if (!e) return 0;
+      if (!e) return nullptr;
       return WORLD::show(
          e->v1()->wloc(), e->v2()->wloc(), width, col, alpha, depth_test
          );

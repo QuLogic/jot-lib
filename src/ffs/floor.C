@@ -40,7 +40,7 @@
 using namespace mlib;
 
 FLOORptr FLOOR::_instance;
-FLOOR*   FLOOR::null=0;         // for use in ray_geom()
+FLOOR*   FLOOR::null=nullptr;         // for use in ray_geom()
 
 inline KeyLineTexture*
 get_keyline(Patch* p)
@@ -52,14 +52,14 @@ inline SilFrameTexture*
 get_silframe(Patch* p)
 {
    KeyLineTexture* key = get_keyline(p);
-   return key ? key->sil_frame() : 0;
+   return key ? key->sil_frame() : nullptr;
 }
 
 inline SolidColorTexture*
 get_solidcolor(Patch* p)
 {
    KeyLineTexture* key = get_keyline(p);
-   return key ? key->solidcolor() : 0;
+   return key ? key->solidcolor() : nullptr;
 }
 
 FLOOR::FLOOR(
@@ -82,7 +82,7 @@ FLOOR::FLOOR(
 
    KeyLineTexture* key = get_keyline(p);
    assert(key);
-   key->set_toon(0); // disable the toon part
+   key->set_toon(nullptr); // disable the toon part
 
    // dimensions of floor:
    _sx = _sz = 24;
@@ -161,7 +161,7 @@ FLOOR::draw(CVIEWptr &v)
    if (!should_draw()) {
       return 0;
    }
-   assert(mesh() != 0);
+   assert(mesh() != nullptr);
 
    // set the base color from the current background color, only lighter
    SolidColorTexture* sol = get_solidcolor(mesh()->patches().first());
@@ -195,7 +195,7 @@ class FLOOR_XFORM_CMD : public COMMAND {
    virtual bool doit() {
       if (is_done())
          return true;
-      _floor->transform(_xf, 0);
+      _floor->transform(_xf, nullptr);
       return COMMAND::doit();   // update state in COMMAND
    }
 
@@ -203,7 +203,7 @@ class FLOOR_XFORM_CMD : public COMMAND {
    virtual bool undoit() {
       if (!is_done())
          return true;
-      _floor->transform(_xf.inverse(), 0);
+      _floor->transform(_xf.inverse(), nullptr);
       return COMMAND::undoit(); // update state in COMMAND
    }
 
@@ -256,7 +256,7 @@ FLOOR::realign(BMESH* m, MULTI_CMDptr cmd)
    if (min_d >= 0)
       return;
 
-   if( cmd == NULL) {
+   if( cmd == nullptr) {
       cmd  = new MULTI_CMD;
       _instance->_transform(Wtransf::translation(n*min_d), cmd);
       WORLD::add_command(cmd);

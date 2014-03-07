@@ -48,7 +48,7 @@ class Halftone_TX;
 class ProxyTexture : public BasicTexture, public CAMobs {
  public:
    //******** MANAGERS ********
-   ProxyTexture(Patch* patch = 0);
+   ProxyTexture(Patch* patch = nullptr);
    virtual ~ProxyTexture();
    
    enum base_textures_t {     
@@ -61,7 +61,7 @@ class ProxyTexture : public BasicTexture, public CAMobs {
 
    int        get_base() const { return (int)_base_enum; }
    void       set_base(int base);
-   GTexture*  get_base_texture()const { return (_base) ? _base : 0; }
+   GTexture*  get_base_texture()const { return (_base) ? _base : nullptr; }
 
    static std::vector<std::string>&  base_names() {
       static std::vector<std::string> b_names;

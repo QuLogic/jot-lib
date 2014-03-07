@@ -41,8 +41,8 @@ GLuint   nst_solid_prog_arb;
 GLuint   nst_lit_solid_prog_nv;
 GLuint   nst_solid_prog_nv;
 
-map<string,TEXTUREptr>* NPRSolidTexture::_solid_texture_map = 0;
-map<string,string>*     NPRSolidTexture::_solid_texture_remap = 0;
+map<string,TEXTUREptr>* NPRSolidTexture::_solid_texture_map = nullptr;
+map<string,string>*     NPRSolidTexture::_solid_texture_remap = nullptr;
 
 /*****************************************************************
  * Texture Remapping
@@ -58,7 +58,7 @@ const char *solid_remap_fnames[][2] =
    {"pear5.png",        "o-still-pear.png"},
    {"plate.png",        "o-still-bowl.png"},
    {"table4.png",       "o-still-table.png"},
-   {NULL,            NULL}
+   {nullptr,            nullptr}
 };
 
 /////////////////////////////////////
@@ -1014,7 +1014,7 @@ NPRSolidTexCB::faceCB(CBvert* v, CBface*f)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       NPRSolidTexture::_nst_tags = 0;
+TAGlist *       NPRSolidTexture::_nst_tags = nullptr;
 
 
 /////////////////////////////////////
@@ -1245,7 +1245,7 @@ NPRSolidTexture::update_tex(void)
       _solid_texture_remap = new map<string,string>; assert(_solid_texture_remap);
 
       int i = 0;
-      while (solid_remap_fnames[i][0] != NULL) {
+      while (solid_remap_fnames[i][0] != nullptr) {
          (*_solid_texture_remap)[string(solid_remap_base) + solid_remap_fnames[i][0]] =
                                  string(solid_remap_base) + solid_remap_fnames[i][1];
          i++;
@@ -1255,16 +1255,16 @@ NPRSolidTexture::update_tex(void)
    string tf = _tex_name;
 
    if (tf == "") {
-      assert(_tex == NULL);
+      assert(_tex == nullptr);
       //_tex_name = "";
-      //_tex = NULL;
+      //_tex = nullptr;
 
-   } else if (_tex == NULL) {
+   } else if (_tex == nullptr) {
       if ((ind = _solid_texture_map->find(tf)) != _solid_texture_map->end()) {
          //Finding original name in cache...
 
          //If its a failed texture...
-         if (ind->second == NULL) {
+         if (ind->second == nullptr) {
             //...see if it was remapped...
             map<string,string>::iterator ii = _solid_texture_remap->find(tf);
             //...and change to looking up the remapped name            
@@ -1281,14 +1281,14 @@ NPRSolidTexture::update_tex(void)
          }
 
          //Now see if the final name yields a good texture...
-         if (ind->second != NULL) {
+         if (ind->second != nullptr) {
             _tex = ind->second;
             _tex_name = tf;
             err_mesg(ERR_LEV_SPAM, "NPRSolidTexture::set_texture() - Using cached copy of texture.");
 
          } else {
             err_mesg(ERR_LEV_INFO, "NPRSolidTexture::set_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
-            _tex = NULL;
+            _tex = nullptr;
             _tex_name = "";
          }
 
@@ -1307,7 +1307,7 @@ NPRSolidTexture::update_tex(void)
             if (ii != _solid_texture_remap->end()) {
                //...but also indicate that the original name is bad...
 
-               (*_solid_texture_map)[tf] = NULL;
+               (*_solid_texture_map)[tf] = nullptr;
 
                string old_tf = tf;
                tf = ii->second;
@@ -1335,13 +1335,13 @@ NPRSolidTexture::update_tex(void)
             _tex = t;
             _tex_name = tf;
 
-         //Otherwise insert a failed NULL
+         //Otherwise insert a failed nullptr
          } else {
             err_mesg(ERR_LEV_ERROR, "NPRSolidTexture::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", (Config::JOT_ROOT()+tf).c_str());
 
-            (*_solid_texture_map)[tf] = NULL;
+            (*_solid_texture_map)[tf] = nullptr;
 
-            _tex = NULL;
+            _tex = nullptr;
             _tex_name = "";
          }
       }   

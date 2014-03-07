@@ -50,7 +50,7 @@ class HaloRefImage :  public RefImage {
  // lookup the ColorRefImage and return a pointer to its internal texture:
    static TEXTUREglptr lookup_texture( CVIEWptr& v = VIEW::peek()) {
       RefImage* c = lookup(v);
-      return c ? c->get_texture() : 0;
+      return c ? c->get_texture() : nullptr;
    }
    
    // lookup the texture unit used by the current ColorRefImage;

@@ -51,7 +51,7 @@ TRACE::get_instance(VIEWptr v)
 void
 TRACE::clear_instance()
 {
-   _instance = NULL;
+   _instance = nullptr;
 }
 
 bool
@@ -74,7 +74,7 @@ TRACE::TRACE(VIEWptr v) : DrawWidget(), _view(v), _init_stamp(0)
    _draw_start += DrawArc(new TapGuard,     drawCB(&TRACE::tap_cb));
    _draw_start += DrawArc(new StrokeGuard,  drawCB(&TRACE::stroke_cb));
 
-   _texture = NULL;
+   _texture = nullptr;
 
    _calibrated = false;
    _calib_mode_flag = true;
@@ -90,7 +90,7 @@ TRACE::TRACE(VIEWptr v) : DrawWidget(), _view(v), _init_stamp(0)
 
 TRACE::~TRACE() 
 {
-   _texture = NULL;
+   _texture = nullptr;
 }
 
 // note... might want to have a method to just load a general
@@ -125,7 +125,7 @@ TRACE::file_cbs(void *ptr, int idx, int action, string path, string file)
 
       t->_texture = new TEXTUREgl(((TRACE*)ptr)->_filename);
       if(!(t->is_valid = t->_texture->load_texture())){
-         t->_texture = NULL;
+         t->_texture = nullptr;
          return; 
       }
       t->_texture->set_tex_fn(GL_REPLACE);

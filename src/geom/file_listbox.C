@@ -30,7 +30,7 @@ FileListbox::FileListbox(
    const string &label,
    const string &listbox_name,
    const string &button_name
-   ) : _glui(0), _listbox(0), _selected(0), _shown(false)
+   ) : _glui(nullptr), _listbox(nullptr), _selected(0), _shown(false)
 {
   _file_list_boxes.push_back(this);
   init(label, listbox_name, button_name);
@@ -57,7 +57,7 @@ FileListbox::init(
 
    // Create the texture list box
    _listbox = new GLUI_Listbox(_glui, listbox_name.c_str(),
-                               NULL, // not using live var
+                               nullptr, // not using live var
                                _file_list_boxes.size()-1,
                                FileListbox::listbox_cb
                                // registering the callback func

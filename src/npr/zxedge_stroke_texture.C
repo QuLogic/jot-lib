@@ -83,8 +83,8 @@ bool ZXedgeStrokeTexture::_use_new_idref_method = ( Config::get_var_bool("NEW_ID
 
 ZXedgeStrokeTexture::ZXedgeStrokeTexture(Patch* patch) :
       OGLTexture(patch),
-	  _stroke_3d(NULL), // added by alexni, bug fix
-      _polyline(NULL),
+      _stroke_3d(nullptr),
+      _polyline(nullptr),
       _pix_to_ndc_scale(0),
       _vis_sampling(2),
       _stroke_sampling(6),
@@ -101,7 +101,7 @@ ZXedgeStrokeTexture::ZXedgeStrokeTexture(Patch* patch) :
       _paths_created_stamp(0),
       _groups_created_stamp(0),
       _crease_max_bend_angle(180),
-      _mesh(NULL)
+      _mesh(nullptr)
 {
    _prototype.set_flare((float)1.0);
    _prototype.set_taper(100);
@@ -113,15 +113,15 @@ ZXedgeStrokeTexture::ZXedgeStrokeTexture(Patch* patch) :
    _render_flags[0] = true;
    for ( int i=1 ; i < ZXFLAG_NUM; i++ )
       _render_flags[i]=false;
-   _offsets = NULL;
+   _offsets = nullptr;
 
    _vis_sampling = Config::get_var_dbl("SIL_VIS_SAMPLE_SPACING",2.0,true);
 }
 
 ZXedgeStrokeTexture::ZXedgeStrokeTexture(CLMESHptr& mesh) :
-      OGLTexture(NULL),
-	  _stroke_3d(NULL), // added by alexni, bug fix
-      _polyline(NULL),
+      OGLTexture(nullptr),
+      _stroke_3d(nullptr),
+      _polyline(nullptr),
       _pix_to_ndc_scale(0),
       _vis_sampling(2),
       _stroke_sampling(6),
@@ -150,7 +150,7 @@ ZXedgeStrokeTexture::ZXedgeStrokeTexture(CLMESHptr& mesh) :
    _render_flags[0] = true;
    for ( int i=1 ; i < ZXFLAG_NUM; i++ )
       _render_flags[i]=false;
-   _offsets = NULL;
+   _offsets = nullptr;
 
    _vis_sampling = Config::get_var_dbl("SIL_VIS_SAMPLE_SPACING",2.0,true);
 }
@@ -941,7 +941,7 @@ ZXedgeStrokeTexture::draw_id_ref()
       return 0;
 
    // XXX - hack to avoid assert below
-   //if ( _pre_zx_segs.size() > 0 && _pre_zx_segs.back().f() != NULL)
+   //if ( _pre_zx_segs.size() > 0 && _pre_zx_segs.back().f() != nullptr)
    //   return 0;
 
    _path_ids.reserve(_pre_zx_segs.size());
@@ -968,7 +968,7 @@ ZXedgeStrokeTexture::draw_id_ref()
    setIDcolor(path_id);
 
    //if ( _pre_zx_segs.size() > 0 )
-   //   assert(_pre_zx_segs[_pre_zx_segs.size()-1].f() == NULL);
+   //   assert(_pre_zx_segs[_pre_zx_segs.size()-1].f() == nullptr);
 
 
    for ( i=0; i < _pre_zx_segs.size(); i++) {
@@ -1464,7 +1464,7 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
             _pre_zx_segs.back().settype(mark_type);
             _pre_zx_segs.back().setg(mark_grad);
             _pre_zx_segs.back().set_bary(zx_segs[i-1].s());
-            _pre_zx_segs.back().setf(NULL);
+            _pre_zx_segs.back().setf(nullptr);
             _pre_zx_segs.back().set_end();
             
             assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[ _pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
@@ -1488,7 +1488,7 @@ ZXedgeStrokeTexture::sils_split_on_gradient()
          _pre_zx_segs.back().setg(zx_segs[loop_start].g());
          _pre_zx_segs.back().set_bary(zx_segs[i-1].s());
          _pre_zx_segs.back().settype(mark_type);
-         _pre_zx_segs.back().setf(NULL);
+         _pre_zx_segs.back().setf(nullptr);
          _pre_zx_segs.back().set_end();
                   
          assert ( _pre_zx_segs.size() < 2 || !( _pre_zx_segs[_pre_zx_segs.size()-2].s() && (_pre_zx_segs[_pre_zx_segs.size()-2].g() != _pre_zx_segs.back().g() ) ) );
@@ -1581,7 +1581,7 @@ ZXedgeStrokeTexture::add_to_sils(CEdgeStrip& strip, int type, double angle_thres
       if ( strip.has_break(i+1) || ((angle_thresh>=0) &&
             my_angle(v, strip.vert(i+1), strip.next_vert(i+1)) > angle_thresh)) {
          v = strip.next_vert(i);
-         _pre_zx_segs.push_back(ZXseg(NULL, v->loc(), v, true, s , type, true));
+         _pre_zx_segs.push_back(ZXseg(nullptr, v->loc(), v, true, s , type, true));
       }
    }
 }
@@ -1638,9 +1638,9 @@ ZXedgeStrokeTexture::add_polyline_to_sils()
  
    for (Wpt_list::size_type i=0; i < _polyline->size(); i++) {
       if (i < _polyline->size()-1)
-         _pre_zx_segs.push_back(ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, false));
+         _pre_zx_segs.push_back(ZXseg(nullptr, (*_polyline)[i], nullptr, true, nullptr , 0, false));
       else
-         _pre_zx_segs.push_back(ZXseg(NULL, (*_polyline)[i], NULL, true, NULL , 0, true));
+         _pre_zx_segs.push_back(ZXseg(nullptr, (*_polyline)[i], nullptr, true, nullptr , 0, true));
          //end of the strip
    }
 }
@@ -3014,7 +3014,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
             delt *= -1.0;
 
          //       NDCvec perp = delt.perpend() ;
-         LuboPath* path = 0;    // path to be found
+         LuboPath* path = nullptr;    // path to be found
          uint id = 0;
          NDCpt cur;             // location where found
          //         int x = 0;
@@ -3115,7 +3115,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization_seethru()
 
          // if matching_paths isn't empty, search for the closest one to this point
          if (!matching_paths.empty()) {
-            LuboPath*   closest_path = NULL;
+            LuboPath*   closest_path = nullptr;
             double      min_dist = DBL_MAX;
             double      tmp_dist = 0;
             NDCpt       intersection_point;
@@ -3264,7 +3264,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
          NDCvec delt = NDCvec(n).normalized()*step;
          //         NDCvec perp = delt.perpend() ;
-         LuboPath* path = 0;    // path to be found
+         LuboPath* path = nullptr;    // path to be found
          uint id = 0;
          uint tmp_id =0;               // matching path ID found in id ref
          NDCpt cur;             // location where found
@@ -3359,7 +3359,7 @@ ZXedgeStrokeTexture::propagate_sil_parameterization()
 
          // if matching_paths isn't empty, search for the closest one to this point
          if (!matching_paths.empty()) {
-            LuboPath*   closest_path = NULL;
+            LuboPath*   closest_path = nullptr;
             double      min_dist = DBL_MAX;
             double      tmp_dist = 0;
             NDCpt       intersection_point;
@@ -3457,7 +3457,7 @@ LuboVote::put_status(TAGformat &d) const
 * LuboPathList
 *****************************************************************/
 
-TAGlist* LuboPathList::_lpl_tags = 0;
+TAGlist* LuboPathList::_lpl_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -3626,7 +3626,7 @@ LuboPathList::strokepath_id_to_indices(uint id, int* path_index, int* stroke_ind
 * LuboPath
 *****************************************************************/
 
-TAGlist* LuboPath::_lp_tags = 0;
+TAGlist* LuboPath::_lp_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -4550,7 +4550,7 @@ x_compare_samples(const XYpt &a, const XYpt &b)
 * VoteGroup
 *****************************************************************/
 
-TAGlist* VoteGroup::_vg_tags = 0;
+TAGlist* VoteGroup::_vg_tags = nullptr;
 
 /////////////////////////////////////
 // tags()

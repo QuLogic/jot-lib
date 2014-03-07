@@ -131,8 +131,8 @@ StrokeUI::StrokeUI(VIEWptr v) :
    _id(0),
    _init(false),
    _view(v),
-   _client(0),
-   _glui(0)
+   _client(nullptr),
+   _glui(nullptr)
 {
    _ui.push_back(this);
    _id = (_ui.size()-1);
@@ -257,11 +257,11 @@ StrokeUI::fetch(CVIEWptr& v)
    if (!v) 
    {
       err_msg("StrokeUI::fetch() - Error! view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg("StrokeUI::fetch() - Error! view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
@@ -497,19 +497,19 @@ StrokeUI::get_params(CVIEWptr& v, StrokeUIClient *suic)
    if (!(sui = StrokeUI::fetch(v)))
       {
          err_msg("StrokeUI::get_params() - Error! Failed to fetch StrokeUI!");
-         return 0;
+         return nullptr;
       }
 
    if (!sui->internal_verify(suic))
       {
          err_msg("StrokeUI::get_params() - Error! This StrokeUIClient is not authorized on this StrokeUI!");
-         return 0;
+         return nullptr;
       }
 
    if (!(sp=sui->internal_get_params()))
       {
          err_msg("StrokeUI::get_params() - Error! Failed to get params of StrokeUI!");
-         return 0;
+         return nullptr;
       }
    else 
       {
@@ -599,7 +599,7 @@ StrokeUI::internal_release()
          return false;
       }
 
-   _client = NULL;
+   _client = nullptr;
 
    return true;
 
@@ -640,13 +640,13 @@ StrokeUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
-   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, 0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, nullptr);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
+   assert(_bitmapbox.empty());    _bitmapbox.resize(BITMAPBOX_NUM, nullptr);
 
    assert(_texture_filenames.empty());
    assert(_paper_filenames.empty());
@@ -681,7 +681,7 @@ StrokeUI::build()
    //Preset list
    _listbox[LIST_PRESET] = new GLUI_Listbox(
       _panel[PANEL_PRESET], 
-      "", NULL, 
+      "", nullptr,
       id+LIST_PRESET, listbox_cb);
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(STROKE_PREVIEW_W);
@@ -693,7 +693,7 @@ StrokeUI::build()
    //New preset name box
    _edittext[EDITTEXT_SAVE] = new GLUI_EditText(
       _panel[PANEL_PRESET], "", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+LIST_PRESET, edittext_cb);
 //XXX XXX - Wrong id! Fix this and see what breaks...
    assert(_edittext[EDITTEXT_SAVE]);
@@ -747,7 +747,7 @@ StrokeUI::build()
       id+SLIDE_H, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_H]);
    _slider[SLIDE_H]->set_num_graduations(201);
 
@@ -756,7 +756,7 @@ StrokeUI::build()
       id+SLIDE_S, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_S]);
    _slider[SLIDE_S]->set_num_graduations(201);
 
@@ -765,7 +765,7 @@ StrokeUI::build()
       id+SLIDE_V, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_V]);
    _slider[SLIDE_V]->set_num_graduations(201);
 
@@ -784,7 +784,7 @@ StrokeUI::build()
    _panel[PANEL_TEXTURE] = new GLUI_Panel(_rollout[ROLLOUT_COLORTEXTURE], "Texture");
    _listbox[LIST_TEXTURE] = new GLUI_Listbox(
       _panel[PANEL_TEXTURE], 
-      "", NULL,
+      "", nullptr,
       id+LIST_TEXTURE, listbox_cb);
    assert(_listbox[LIST_TEXTURE]);
    _listbox[LIST_TEXTURE]->set_w(STROKE_PARAMS_MIN_W);
@@ -814,7 +814,7 @@ StrokeUI::build()
       id+SLIDE_FOO2, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 10,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_FOO2]);
    _slider[SLIDE_FOO2]->set_num_graduations(100);
    _slider[SLIDE_FOO2]->disable();
@@ -825,7 +825,7 @@ StrokeUI::build()
    _panel[PANEL_PAPER] = new GLUI_Panel(_rollout[ROLLOUT_COLORTEXTURE], "Paper");
    _listbox[LIST_PAPER] = new GLUI_Listbox(
       _panel[PANEL_PAPER], 
-      "", NULL,
+      "", nullptr,
       id+LIST_PAPER, listbox_cb);
    assert(_listbox[LIST_PAPER]);
    _listbox[LIST_PAPER]->set_w(STROKE_PARAMS_MIN_W);
@@ -855,7 +855,7 @@ StrokeUI::build()
       id+SLIDE_FOO, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_FOO]);
    _slider[SLIDE_FOO]->set_num_graduations(101);
    _slider[SLIDE_FOO]->disable();
@@ -1007,7 +1007,7 @@ StrokeUI::destroy()
    //Recursively kills off all controls, and itself
    _glui->close();
 
-   _glui = NULL;
+   _glui = nullptr;
 
 
 }
@@ -1480,7 +1480,7 @@ StrokeUI::load_preset(const char *f)
    if (str == BaseStroke::static_name()) {
       //In case we're testing offsets, let
       //trash the old ones
-      _params.set_offsets(NULL);
+      _params.set_offsets(nullptr);
       _params.decode(d);
    }
    else

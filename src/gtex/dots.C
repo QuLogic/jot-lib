@@ -51,7 +51,7 @@ GLint   DotsShader::_height_loc(-1);
 
 DotsShader::DotsShader(Patch* p) :
    GLSLShader(p),
-   _tone_shader(0),
+   _tone_shader(nullptr),
    _style(0)
 {
    set_tone_shader(get_tone_shader(p));

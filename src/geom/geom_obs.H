@@ -99,7 +99,7 @@ class COLORobs {
  public:
    virtual ~COLORobs() {}
    virtual void notify_color    (CGEOMptr &, APPEAR *app) = 0;
-   static  void notify_color_obs(CGEOMptr &g, APPEAR *app = 0) {
+   static  void notify_color_obs(CGEOMptr &g, APPEAR *app = nullptr) {
      COLORobs_list::iterator i;
      for (i=col_list()->begin(); i!=col_list()->end(); ++i)
        (*i)->notify_color(g, app ? app : (APPEAR *) &*g);

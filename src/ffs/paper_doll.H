@@ -53,8 +53,8 @@ class PAPER_DOLL : public DrawWidget {
 
    //******** DrawWidget METHODS ********
 
-   virtual BMESHptr bmesh() const { return _prim ? _prim->mesh() : 0; }
-   virtual LMESH* lmesh()   const { return _prim ? _prim->mesh() : 0; }
+   virtual BMESHptr bmesh() const { return _prim ? _prim->mesh() : nullptr; }
+   virtual LMESH* lmesh()   const { return _prim ? _prim->mesh() : nullptr; }
 
    //******** GEL METHODS ******** 
 
@@ -100,7 +100,7 @@ class PAPER_DOLL : public DrawWidget {
 
    //******** UTILITY METHODS ********
 
-   LMESHptr mesh() const { return _prim ? _prim->mesh() : 0; }
+   LMESHptr mesh() const { return _prim ? _prim->mesh() : nullptr; }
 
    Primitive* build_primitive(CBface_list& o_faces);
 

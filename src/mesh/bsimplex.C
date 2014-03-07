@@ -29,7 +29,7 @@ Bsimplex::~Bsimplex()
    if (_data_list) {
       _data_list->notify_simplex_deleted();
       delete _data_list;
-      _data_list = 0;
+      _data_list = nullptr;
    }
 }
 
@@ -106,7 +106,7 @@ Bsimplex::normal_changed()
 void 
 Bsimplex::add_simplex_data(SimplexData* sd) 
 {
-   // Quietly ignore NULL pointers:
+   // Quietly ignore nullptrs:
    if (!sd)
       return;
 

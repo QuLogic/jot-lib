@@ -48,7 +48,7 @@ namespace mlib {
 //! \brief LU decomposition.
 template <class T, int N>
 inline bool
-ludcmp(T a[N][N], int indx[N], T *d = NULL)
+ludcmp(T a[N][N], int indx[N], T *d = nullptr)
 {
    int i, j, k;
    T vv[N];

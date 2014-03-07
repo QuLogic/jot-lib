@@ -45,7 +45,7 @@ static bool debug = true; // "for now"
 /*****************************************************************
  * Animator
  *****************************************************************/
-TAGlist* Animator::_a_tags = 0;
+TAGlist* Animator::_a_tags = nullptr;
 
 Animator::Animator(VIEWptr view) :
    _view(view),

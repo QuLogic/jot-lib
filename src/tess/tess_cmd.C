@@ -350,7 +350,7 @@ gen_interp_row(CBvert_list& r, CBvert_list& s, double v)
    if (r.empty())
       return ret;
    BMESH* mesh = r.mesh();
-   assert(mesh != 0 && s.mesh() == mesh);
+   assert(mesh != nullptr && s.mesh() == mesh);
    assert(v > 0 && v < 1);
 
    // XXX - Usually this is called for chains of vertices that
@@ -395,7 +395,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    assert(a.size() > 1 && a.size() == b.size());
 
    BMESH* mesh = a.mesh();
-   assert(mesh != 0 && b.mesh() == mesh && p != 0 && p->mesh() == mesh);
+   assert(mesh != nullptr && b.mesh() == mesh && p != nullptr && p->mesh() == mesh);
    
    // Average vertical separation (WRT diagram above):
 //   double h = avg_dist(a,b);
@@ -452,7 +452,7 @@ CREATE_RIBBONS_CMD::gen_ribbons(CEdgeStrip& a, CEdgeStrip& b, Patch* p)
    // independently.
 
    BMESH* mesh = a.mesh();
-   assert(mesh != 0 && b.mesh() == mesh && p != 0 && p->mesh() == mesh);
+   assert(mesh != nullptr && b.mesh() == mesh && p != nullptr && p->mesh() == mesh);
    assert(_ribbon.empty());
 
    // Each "chain" is a separate connected component of the boundary:
@@ -550,7 +550,7 @@ CREATE_RIBBONS_CMD::doit()
    // drawn by putting in in the drawables list of the control mesh
    if (!_patch) {
       LMESHptr mesh = LMESH::upcast(_a.mesh());
-      assert(mesh != 0);
+      assert(mesh != nullptr);
       _patch = mesh->new_patch();
       assert(_patch && _patch->mesh() == mesh);
       if (!mesh->is_control_mesh())

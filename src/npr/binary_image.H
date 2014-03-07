@@ -34,7 +34,7 @@
 class BinaryImageShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   BinaryImageShader(Patch* patch = 0);
+   BinaryImageShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("Binary Image",

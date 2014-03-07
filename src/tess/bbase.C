@@ -40,17 +40,17 @@ using namespace mlib;
  **********************************************************************/
 bool            Bbase::_show_memes = Config::get_var_bool("DEBUG_MEMES",false);
 egg_timer       Bbase::_fade_timer(0);
-Bbase*          Bbase::_last(0);
+Bbase*          Bbase::_last(nullptr);
 Bbase_list      Bbase::_selection_list(32);
 
 Bbase::Bbase(CLMESHptr& m) :
    _selected(false),
-   _parent(0),
-   _child(0),
+   _parent(nullptr),
+   _child(nullptr),
    _bbase_level(0),
    _res_level(0),
    _is_shown(true),
-   _action(0)
+   _action(nullptr)
 {
    set_mesh(m);
    _last = this;
@@ -63,17 +63,17 @@ Bbase::~Bbase()
    delete_child();
 
    // Parent may persist, unhook from it:
-   set_parent(0);
-   set_mesh(0);
+   set_parent(nullptr);
+   set_mesh(nullptr);
 
-   set_action(0);
+   set_action(nullptr);
 
    // Delete all the vert memes, which also removes them from the
    // vertices they are attached to:
    _vmemes.delete_all();
 
    if (_last == this)
-      _last = 0;
+      _last = nullptr;
 }
 
 bool 
@@ -136,10 +136,10 @@ Bbase::set_parent(Bbase* parent)
 
    // If there is an existing parent, we have to undo some stuff:
    if (_parent) {
-      _parent = 0;
+      _parent = nullptr;
       _bbase_level = 0;
       assert(_mesh);    // how could we have a parent and no mesh??
-      set_mesh(0);
+      set_mesh(nullptr);
    }
 
    // If the new parent is null, we're done:
@@ -154,13 +154,13 @@ Bbase::set_parent(Bbase* parent)
    _parent = parent;
 
    // One-child families only in this world:
-   assert(_parent->_child == NULL || _parent->_child == this);
+   assert(_parent->_child == nullptr || _parent->_child == this);
    _parent->_child = this;
 
    // Set each Bbase level to its parent level + 1.
    // (Tells how deep we are in Bbase hierarchy):
    if (_bbase_level != _parent->_bbase_level + 1) {
-      for (Bbase* b = this; b != NULL; b = b->_child)
+      for (Bbase* b = this; b != nullptr; b = b->_child)
          b->_bbase_level = b->_parent->_bbase_level + 1;
    }
 
@@ -214,7 +214,7 @@ Bbase::set_mesh(CLMESHptr& mesh)
       // They have to get in the control mesh drawables list.
       enter_drawables();
 
-      BMESH::set_focus(_mesh->cur_mesh(), 0);
+      BMESH::set_focus(_mesh->cur_mesh(), nullptr);
    }
 }
 
@@ -261,7 +261,7 @@ Bbase::set_res_level(int r)
       } else {
          _child->set_res_level(_res_level - 1);
       }
-   } else if (_res_level > 0 && _mesh && _mesh->subdiv_mesh() != NULL) {
+   } else if (_res_level > 0 && _mesh && _mesh->subdiv_mesh() != nullptr) {
       // If we got in the game late, after subdivision has been
       // going on, get our subdiv children set up:
 
@@ -296,12 +296,12 @@ Bbase::get_inflate_mesh() const
    TEXBODY* tex = texbody();
    if (!tex) {
       err_msg("Bbase::get_inflate_mesh: Error: geom is non-TEXBODY");
-      return 0;
+      return nullptr;
    }
 
    LMESHptr ret = LMESH::upcast(tex->get_inflate_mesh(mesh()));
    if (!ret) {
-      return 0;
+      return nullptr;
    }
 
    // Use the same subdivision scheme:
@@ -386,7 +386,7 @@ Bbase::find_controller(CBsimplex* s)
    // continuing up the subdivision hierarchy until we find a
    // Bbase owner or hit the top trying.
 
-   Bbase* ret = 0;
+   Bbase* ret = nullptr;
    while (s && !(ret = find_owner(s)))
       s = get_parent_simplex(s);
    return ret;
@@ -399,7 +399,7 @@ template <class T>
 void
 _find_controllers(const T& set, Bbase_list& ret)
 {
-   Bbase* bb=0;
+   Bbase* bb=nullptr;
    for (size_t i=0; i<set.size(); i++)
       if ((bb = Bbase::find_controller(set[i])))
          ret.add_uniquely(bb);
@@ -435,7 +435,7 @@ Bbase::find_meme(CBsimplex* s) const
    // Returns the meme (if any) put on the simplex by *this* Bbase:
 
    if (!s)
-      return 0;
+      return nullptr;
 
    // Try the boss meme first:
    Meme* ret = find_boss_meme(s);
@@ -481,7 +481,7 @@ template <class T>
 void
 _find_owners(const T& set, Bbase_list& ret)
 {
-   Bbase* bb=0;
+   Bbase* bb=nullptr;
    for (size_t i=0; i<set.size(); i++)
       if ((bb = Bbase::find_owner(set[i])))
          ret.add_uniquely(bb);
@@ -531,7 +531,7 @@ Bbase*
 _find_owner(const T& set)
 {
    Bbase_list owners = Bbase::find_owners(set);
-   return (owners.num() == 1) ? owners[0] : 0;
+   return (owners.num() == 1) ? owners[0] : nullptr;
 }
 
 Bbase*
@@ -560,7 +560,7 @@ Bbase::add_vert_meme(VertMeme* v)
       _vmemes.push_back(v);
       return v;
    }
-   return 0;
+   return nullptr;
 }
 
 void 
@@ -693,7 +693,7 @@ Bbase::set_selected()
       _selection_list += this;
       selection_changed();
    }
-   BMESH::set_focus(cur_mesh(), 0);
+   BMESH::set_focus(cur_mesh(), nullptr);
 
    // Reset timer for the default timeout
    hold();
@@ -771,7 +771,7 @@ void
 Bbase::notify_delete(BMESH*)
 {
    err_msg("Bbase::notify_delete: not implemented");
-   set_mesh(0);
+   set_mesh(nullptr);
 }
 
 void
@@ -831,7 +831,7 @@ class BbaseFilter : public SimplexFilter {
  public:
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
-      return Bbase::find_controller(s) != 0;
+      return Bbase::find_controller(s) != nullptr;
    }
 };
 
@@ -842,7 +842,7 @@ Bbase::hit_bbase(CNDCpt& p, double rad, Wpt& hit, Bsimplex** simplex)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_msg("Bbase::hit_bbase: Error: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
    vis_ref->update();
 

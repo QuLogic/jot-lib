@@ -32,9 +32,9 @@ using namespace mlib;
 Bedge::Bedge(Bvert* u, Bvert* v) :
    _v1(u),
    _v2(v),
-   _f1(0),
-   _f2(0),
-   _adj(0),
+   _f1(nullptr),
+   _f2(nullptr),
+   _adj(nullptr),
    _sil_stamp(0)
 {
    *_v1 += this;
@@ -101,7 +101,7 @@ Bedge::f(int k) const
     case 2: return _f2;
    }
    k -= 3;
-   return (_adj && 0 <= k && k < (int)_adj->size()) ? (*_adj)[k] : 0;
+   return (_adj && 0 <= k && k < (int)_adj->size()) ? (*_adj)[k] : nullptr;
 }
 
 int
@@ -119,7 +119,7 @@ Bedge::lookup_face(CBvert *v) const
    // Also, it's not helpful if the vertex belongs
    // to this edge.
    if (!v || this->contains(v))
-      return 0;
+      return nullptr;
    // Return an adjacent Bface containing the vertex
    
    if (_f1 && _f1->contains(v))
@@ -133,7 +133,7 @@ Bedge::lookup_face(CBvert *v) const
             return f;
       }
    }
-   return 0;
+   return nullptr;
 }
 
 Bface* 
@@ -142,7 +142,7 @@ Bedge::lookup_face(CBedge *e) const
    // Reject null pointers.
    // Also, it's not helpful if the edge is this one.
    if (!e || this == e)
-      return 0;
+      return nullptr;
 
    // Return an adjacent Bface containing the edge
    
@@ -157,7 +157,7 @@ Bedge::lookup_face(CBedge *e) const
             return f;
       }
    }
-   return 0;
+   return nullptr;
 }
 
 int 
@@ -283,9 +283,9 @@ bool
 Bedge::operator -=(Bface* f) 
 {
    if (f == _f1)
-      _f1 = 0;
+      _f1 = nullptr;
    else if (f == _f2)
-      _f2 = 0;
+      _f2 = nullptr;
    else if (is_multi(f)) {
       Bface_list::iterator it;
       it = std::find(_adj->begin(), _adj->end(), f);
@@ -348,7 +348,7 @@ Bedge::patch() const
 {
    Bface* f = frontfacing_face();
    f = f ? f : _f1 ? _f1 : _f2;
-   return f ? f->patch() : 0;
+   return f ? f->patch() : nullptr;
 }
 
 Wvec 
@@ -409,9 +409,9 @@ Bedge::demote(Bface* f)
 //   UVdata::split(this);
 
    if (_f1 == f) {
-      _f1 = 0;
+      _f1 = nullptr;
    } else if (_f2 == f) {
-      _f2 = 0;
+      _f2 = nullptr;
    } else {
       assert(_adj && std::find(_adj->begin(), _adj->end(), f) != _adj->end());
 
@@ -545,9 +545,9 @@ Bedge::ccw_face(CBvert* v) const
    // face (_f1 or _f2) for which this edge follows v in CCW
    // order within the face.
 
-   return (!contains(v) ? 0 :
+   return (!contains(v) ? nullptr :
            (_f1 && _f1->edge_from_vert(v) == this) ? _f1 :
-           (_f2 && _f2->edge_from_vert(v) == this) ? _f2 : 0
+           (_f2 && _f2->edge_from_vert(v) == this) ? _f2 : nullptr
       );
 }
 
@@ -600,7 +600,7 @@ Bedge::redefine(Bvert *v, Bvert *u)
    if (contains(u))
       return 0;
 
-   Bedge* dup = 0;
+   Bedge* dup = nullptr;
    if (v == _v1) {
       if ((dup = u->lookup_edge(_v2))) {
          // can't redefine, but if this is a crease edge
@@ -886,7 +886,7 @@ Bedge::frontfacing_face() const
 
    return ((_f1 && _f1->front_facing()) ? _f1 :
            (_f2 && _f2->front_facing()) ? _f2 :
-           0);
+           nullptr);
 }
 
 ostream& operator <<(ostream &os, CBedge &e) 

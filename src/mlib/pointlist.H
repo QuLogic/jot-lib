@@ -195,7 +195,7 @@ class Pointlist : public vector<P> {
       //@{
       
       //! \brief Computes interpolated values over the polyline.
-      P interpolate(double s, V *tan=0, int *segp=0, double *tp=0) const;
+      P interpolate(double s, V *tan=0, int *segp=nullptr, double *tp=nullptr) const;
       
       
       //! \brief Finds the segment containing the interpolation paramenter \p s

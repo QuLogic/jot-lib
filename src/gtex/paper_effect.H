@@ -85,7 +85,7 @@ class PaperEffect : public PaperEffectBase {
    static TEXTUREptr    get_texture(const string &tf, string &ret);
 
    // Encloses objects being drawn in non-postprocess mode
-   // If t==NULL then the paper effect is not invoked
+   // If t==nullptr then the paper effect is not invoked
    static void    begin_paper_effect(TEXTUREptr t, float cont, float bri, double x=0.0, double y=0.0);
    static void    end_paper_effect(TEXTUREptr t);
 

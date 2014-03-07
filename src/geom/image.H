@@ -58,7 +58,7 @@ class Image {
    //******** MANAGERS ********
    Image();
    Image(const string& file);
-   Image(uint w, uint h, uint bpp, uchar* data=0, bool nd=1);
+   Image(uint w, uint h, uint bpp, uchar* data=nullptr, bool nd=1);
    Image(const Image& img);
    virtual ~Image() { clear(); }
 

@@ -47,7 +47,7 @@ get_common_mesh(Bpoint* b1, Bpoint* b2, MULTI_CMDptr cmd)
       return TEXBODY::get_skel_mesh(cmd);
    } else if (b1 && b2) {
       // both exist: same mesh that is not null?
-      return (b1->mesh() && b1->mesh() == b2->mesh()) ? b1->mesh() : 0;
+      return (b1->mesh() && b1->mesh() == b2->mesh()) ? b1->mesh() : nullptr;
    } else if (b1) {
       return b1->mesh();
    } else {

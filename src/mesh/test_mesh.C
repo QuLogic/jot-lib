@@ -94,12 +94,12 @@ main(int argc, char *argv[])
    BMESH* lmesh = new LMESH;
 
    cerr << "dynamic cast from BMESH* to BMESH* does ";
-   if (dynamic_cast<BMESH*>(bmesh) == NULL)
+   if (dynamic_cast<BMESH*>(bmesh) == nullptr)
       cerr << "NOT ";
    cerr << "work" << endl;
 
    cerr << "dynamic cast from LMESH* to LMESH* does ";
-   if (dynamic_cast<LMESH*>(lmesh) == NULL)
+   if (dynamic_cast<LMESH*>(lmesh) == nullptr)
       cerr << "NOT ";
    cerr << "work" << endl;
    return 0;

@@ -75,7 +75,7 @@ KeyMenu::add_menu_item(char key, const string &desc, key_callback_t cb)
    // Add the key to the menu:
    
    // Add the FSA arc:
-   *start += Arc(Event(NULL, Evd(key,KEYD)), new CallFunc_t<Event>(cb, start));
+   *start += Arc(Event(nullptr, Evd(key,KEYD)), new CallFunc_t<Event>(cb, start));
    
    // Add the KeyMenuItem to the list:
    menu_items.push_back(KeyMenuItem(key, desc, cb));
@@ -136,7 +136,7 @@ KeyMenu::remove_menu_item(char key)
       return;
    
    // Remove the FSA arc:
-   *start -= Arc(Event(NULL, Evd(menu_items[key_index].key,KEYD)),
+   *start -= Arc(Event(nullptr, Evd(menu_items[key_index].key,KEYD)),
                  new CallFunc_t<Event>(menu_items[key_index].callback, start));
    
    // Remove the KeyMenuItem from the list:

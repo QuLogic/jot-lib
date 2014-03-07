@@ -30,7 +30,7 @@ using namespace mlib;
  * Meme
  *******************************************************/
 Meme::Meme(Bbase* base, Bsimplex* s, bool force_boss) :
-   SimplexData(0, 0),
+   SimplexData(0, nullptr),
    _owner(base) 
 {
    if (s) {
@@ -39,7 +39,7 @@ Meme::Meme(Bbase* base, Bsimplex* s, bool force_boss) :
       // kick out the old boss if needed
       if (force_boss && cur_boss) {
          cur_boss->get_demoted();
-         cur_boss = 0;
+         cur_boss = nullptr;
       }
       SimplexData::set(cur_boss ? (uintptr_t)_owner : Bbase::key(), s);
    }
@@ -557,7 +557,7 @@ VertMeme::target_delt() const
 void
 VertMeme::notify_simplex_deleted()
 {
-   assert(bbase() != NULL);
+   assert(bbase() != nullptr);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
            class_name().c_str(), class_name().c_str(), bbase()->bbase_level());
@@ -570,9 +570,9 @@ VertMeme::parent() const
    // Return the "parent" vert meme if it exists.
 
    Lvert* v = parent_vert();
-   if (!v) return 0;
+   if (!v) return nullptr;
    Bbase* c = bbase()->parent();
-   return c ? c->find_vert_meme(v) : 0;
+   return c ? c->find_vert_meme(v) : nullptr;
 }
 
 VertMeme*
@@ -582,7 +582,7 @@ VertMeme::child() const
    // (I.e., the meme created by this meme, on the subdiv vert)
 
    Bbase* c = bbase()->child();
-   return c ? c->find_vert_meme(subdiv_vert()) : 0;
+   return c ? c->find_vert_meme(subdiv_vert()) : nullptr;
 }
 
 VertMeme*
@@ -595,7 +595,7 @@ VertMeme::get_child() const
    Bbase* cbase = bbase()->child();
    Lvert* svert = subdiv_vert();
    if (!(cbase && svert))
-      return 0;
+      return nullptr;
 
    // Return the child meme if it's there:
    VertMeme* ret = child();
@@ -714,15 +714,15 @@ VertMeme::gen_child(Lvert* lv, VertMeme* v1, VertMeme* v2)
    // strong edge. (I.e. not a quad diagonal).
 
    if (!(lv && v1 && v2))
-      return 0;
+      return nullptr;
 
    // This is already screened in EdgeMeme::notify_subdiv_gen(),
    // but assert it anyway:
-   assert(v1->bbase() == v2->bbase() && v1->bbase()->child() != NULL);
+   assert(v1->bbase() == v2->bbase() && v1->bbase()->child() != nullptr);
 
    // They have to be the same type.
    if (v1->class_name() != v2->class_name())
-      return 0;
+      return nullptr;
 
    Bbase* c = v1->bbase()->child();
    VertMeme* ret = c->find_vert_meme(lv);
@@ -764,7 +764,7 @@ VertMeme::gen_child(
 
    if (!(lv && v1 && v2 && v3 && v4)) {
       err_adv(debug, "VertMeme::gen_child: rejecting null pointer(s)");
-      return 0;
+      return nullptr;
    }
 
    // This is already screened in EdgeMeme::notify_subdiv_gen(),
@@ -772,19 +772,19 @@ VertMeme::gen_child(
    assert(v1->bbase() == v2->bbase() &&
           v1->bbase() == v3->bbase() &&
           v1->bbase() == v4->bbase() &&
-          v1->bbase()->child() != NULL);
+          v1->bbase()->child() != nullptr);
 
    // They have to be the same type.
    if (v1->class_name() != v2->class_name() ||
        v1->class_name() != v3->class_name() ||
        v1->class_name() != v4->class_name()) {
       err_adv(debug, "VertMeme::gen_child: rejecting mixed meme types");
-      return 0;
+      return nullptr;
    }
 
    Bbase* c = v1->bbase()->child();
    if (!c)
-      return 0;
+      return nullptr;
    VertMeme* ret = c->find_vert_meme(lv);
    if (!ret)
       ret = v1->_gen_child(lv, v2, v3, v4);
@@ -810,7 +810,7 @@ VertMeme::gen_child(
 double 
 VertMeme::lookup_rest_length(CBedge* e) const
 {
-   EdgeMeme* em = 0;
+   EdgeMeme* em = nullptr;
    if (bbase() && (em = bbase()->find_edge_meme(e)))
       return em->rest_length();
    return EdgeMeme::lookup_rest_length(e);
@@ -884,7 +884,7 @@ EdgeMeme::vf2() const
 void
 EdgeMeme::notify_simplex_deleted()
 {
-   assert(bbase() != NULL);
+   assert(bbase() != nullptr);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
            class_name().c_str(), class_name().c_str(), bbase()->bbase_level());
@@ -898,7 +898,7 @@ EdgeMeme::child() const
    // (I.e., the vert meme on the subdiv vert of this edge)
 
    Bbase* c = bbase()->child();
-   return c ? c->find_vert_meme(subdiv_vert()) : 0;
+   return c ? c->find_vert_meme(subdiv_vert()) : nullptr;
 }
 
 EdgeMeme*
@@ -908,7 +908,7 @@ EdgeMeme::child_e1() const
    // (I.e., the edge meme on subdiv_e1() of this edge)
 
    Bbase* c = bbase()->child();
-   return c ? c->find_edge_meme(subdiv_e1()) : 0;
+   return c ? c->find_edge_meme(subdiv_e1()) : nullptr;
 }
 
 EdgeMeme*
@@ -918,7 +918,7 @@ EdgeMeme::child_e2() const
    // (I.e., the edge meme on subdiv_e2() of this edge)
 
    Bbase* c = bbase()->child();
-   return c ? c->find_edge_meme(subdiv_e2()) : 0;
+   return c ? c->find_edge_meme(subdiv_e2()) : nullptr;
 }
 
 VertMeme*
@@ -995,7 +995,7 @@ EdgeMeme::propagate_length(double len) const
 {
    // Pass on the given rest length to both child edges
 
-   EdgeMeme* e = 0;
+   EdgeMeme* e = nullptr;
    if ((e = child_e1()))
       e->set_rest_length(len);
    if ((e = child_e1()))
@@ -1042,7 +1042,7 @@ EdgeMeme::gen_subdiv_memes() const
       propagate_length(_rest_length/2);
 
    // Propagate a vert meme:
-   VertMeme* vm = 0;
+   VertMeme* vm = nullptr;
    if (edge()->is_weak()) {
       // It's the interior edge of a quad.
       // Do 4-way averaging of the quad vert memes:
@@ -1111,14 +1111,14 @@ FaceMeme::v3() const
 VertMeme*
 FaceMeme::vq() const
 {
-   // Returns NULL if the face is not a quad:
+   // Returns nullptr if the face is not a quad:
    return bbase()->find_vert_meme(face()->quad_vert());
 }
 
 void
 FaceMeme::notify_simplex_deleted()
 {
-   assert(bbase() != NULL);
+   assert(bbase() != nullptr);
    err_adv(Config::get_var_bool("DEBUG_MEME_DESTRUCTOR", false),
            "%s::~%s: level %d",
            class_name().c_str(), class_name().c_str(), bbase()->bbase_level());

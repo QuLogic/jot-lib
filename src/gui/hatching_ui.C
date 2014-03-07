@@ -64,7 +64,7 @@ HatchingUI::HatchingUI(BaseUI* parent) :
    _presets_ui = new PresetsUI(this, "nprdata/hatching_presets/", ".hatch");
    _texture_selection_ui = new PatchSelectionUI(this, true);
    _tone_shader_ui = new ToneShaderUI(this);
-   _current_hatching = 0;  
+   _current_hatching = nullptr;
 }
 
 
@@ -92,14 +92,14 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _listbox[LIST_PATTERN] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
-      "Pattern", NULL, 
+      "Pattern", nullptr,
       id+LIST_PATTERN, listbox_cb);
    
    fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, Config::JOT_ROOT() + "/nprdata/hatching_textures/", ".png", false);
                            
     _listbox[LIST_PAPER] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
-      "Paper", NULL, 
+      "Paper", nullptr,
       id+LIST_PAPER, listbox_cb);
    
    fill_directory_listbox(_listbox[LIST_PAPER], _paper_filenames, Config::JOT_ROOT() + "/nprdata/paper_textures/", ".png", false);
@@ -108,13 +108,13 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _checkbox[CHECK_ENABLE]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Enable",
-                              NULL,
+                              nullptr,
                               id+CHECK_ENABLE,
                               checkbox_cb);
    _checkbox[CHECK_HIGHLIGHT]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Highlight",
-                              NULL,
+                              nullptr,
                               id+CHECK_HIGHLIGHT,
                               checkbox_cb);
 
@@ -123,7 +123,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDER_ANGLE, slider_cb,
       GLUI_SLIDER_INT, 
       0, 360, 
-      NULL);
+      nullptr);
    _slider[SLIDER_ANGLE]->set_w(150);
    _slider[SLIDER_ANGLE]->set_num_graduations(360);
 
@@ -133,7 +133,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       GLUI_SLIDER_FLOAT, 
       1.0,
       100.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_SCALE]->set_w(150);
    _slider[SLIDER_SCALE]->set_num_graduations(200);
 
@@ -143,7 +143,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       GLUI_SLIDER_FLOAT, 
       0.0,
       5.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_PAPER_CONTRAST]->set_w(150);
    _slider[SLIDER_PAPER_CONTRAST]->set_num_graduations(100);
 
@@ -153,7 +153,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       GLUI_SLIDER_FLOAT, 
       1.0,
       100.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_PAPER_SCALE]->set_w(150);
    _slider[SLIDER_PAPER_SCALE]->set_num_graduations(100);
 
@@ -163,7 +163,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       GLUI_SLIDER_FLOAT, 
       -1.0,
       1.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_TONE_PUSH]->set_w(150);
    _slider[SLIDER_TONE_PUSH]->set_num_graduations(100);
    
@@ -172,7 +172,7 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     
    _radgroup[RADGROUP_COLOR_SEL] = new GLUI_RadioGroup(
                                      _panel[PANEL_COLOR_SWITCH],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_COLOR_SEL, radiogroup_cb);
    
    _radbutton[RADBUT_STROKE_COL] = new GLUI_RadioButton(

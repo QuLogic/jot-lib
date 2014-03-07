@@ -26,7 +26,7 @@
 
 #include "painterly.H"
 
-TAGlist* Painterly::_painterly_tags = 0;
+TAGlist* Painterly::_painterly_tags = nullptr;
 
 GLuint   Painterly::_program(0);
 bool     Painterly::_init(false);
@@ -313,7 +313,7 @@ Painterly::draw_triangles()
    } else {
       
       // patch = null means skip blending, send weight = 1 always
-      s->set_patch(0);
+      s->set_patch(nullptr);
       _patch->draw_tri_strips(_cb);
    }
 }
@@ -406,7 +406,7 @@ Painterly::put_paper_name (TAGformat &d) const
 /**********************************************************************
  * layer_paint_t
  **********************************************************************/
-TAGlist* layer_paint_t::_lh_tags = 0;
+TAGlist* layer_paint_t::_lh_tags = nullptr;
 
 layer_paint_t::layer_paint_t() :
    layer_base_t(),      

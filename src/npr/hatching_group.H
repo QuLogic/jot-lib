@@ -244,7 +244,7 @@ class HatchingGroup : public DATA_ITEM, public BMESHobs {
 
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
-   HatchingGroup(Patch *p=0) : 
+   HatchingGroup(Patch *p=nullptr) :
       _patch(p), 
       _complete(false),
       _random_seed((long)the_time()) { _stamp = VIEW::stamp()-1; update_prototype(); }

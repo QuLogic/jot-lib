@@ -95,7 +95,7 @@ class BaseJOTappConfig : public DATA_ITEM, public Config
 // BaseJOTappConfig Static Variables Initialization
 //////////////////////////////////////////////////////
 
-TAGlist*             BaseJOTappConfig::_bja_tags   = NULL;
+TAGlist*             BaseJOTappConfig::_bja_tags   = nullptr;
 
 //////////////////////////////////////////////////////
 // BaseJOTappConfig Methods
@@ -153,7 +153,7 @@ BaseJOTappConfig::load(const string &filename)
 {
    assert(_instance);
    if (filename == "") {
-      cerr << "BaseJOTappConfig::load: error: filename is NULL" << endl;
+      cerr << "BaseJOTappConfig::load: error: filename is empty" << endl;
       return false;
    }
 
@@ -435,7 +435,7 @@ class JOTappConfig : public BaseJOTappConfig
  * JOTappConfig Static Data
  *****************************************************************/
 
-TAGlist*    JOTappConfig::_ja_tags = NULL;
+TAGlist*    JOTappConfig::_ja_tags = nullptr;
 
 /*****************************************************************
  * JOTappConfig Methods
@@ -918,7 +918,7 @@ JOTappConfig::tags() const
 void
 main_config(bool init)
 {
-   static JOTappConfig* config = NULL;
+   static JOTappConfig* config = nullptr;
 
    if (init) {
       //Variables that shouldn't raise warnings if they
@@ -960,7 +960,7 @@ main_config(bool init)
       err_mesg(ERR_LEV_SPAM, "main_config: Cleanup...");
       assert(config);
       delete config;
-      config = NULL;
+      config = nullptr;
    }
 }
 

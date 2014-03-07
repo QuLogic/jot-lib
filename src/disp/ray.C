@@ -25,9 +25,9 @@ RAYhit::RAYhit(
        _is_surf(0),
        _d(-1),
        _d_2d(-1),
-       _g(0),
+       _g(nullptr),
        _visibility(1),
-       _appear(0),
+       _appear(nullptr),
        _tolerance(12),
        _from_camera(1)
 {
@@ -109,9 +109,9 @@ RAYhit::clear(void)
 {
    _d      = 0;
    _d_2d   = -1;
-   _g      = 0;
+   _g      = nullptr;
    _s      = false;
-   _appear = 0;
+   _appear = nullptr;
 }
 
 RAYnear::RAYnear(
@@ -158,6 +158,6 @@ void
 RAYnear::clear(void)
 {
    _d_for_geom = -1;
-   _g = 0;
+   _g = nullptr;
    _s = false;
 }

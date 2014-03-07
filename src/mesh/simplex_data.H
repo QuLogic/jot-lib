@@ -49,8 +49,8 @@ class SimplexData {
    void set(uintptr_t id, Bsimplex* s);
    void set(const string& str, Bsimplex* s) { set((uintptr_t)str.c_str(), s); }
 
-   SimplexData(uintptr_t key, Bsimplex* s): _id(0), _simplex(0) { set(key, s);}
-   SimplexData(const string& str, Bsimplex* s): _id(0), _simplex(0) { set(str, s);}
+   SimplexData(uintptr_t key, Bsimplex* s): _id(0), _simplex(nullptr) { set(key, s);}
+   SimplexData(const string& str, Bsimplex* s): _id(0), _simplex(nullptr) { set(str, s);}
   
    virtual ~SimplexData();
 
@@ -88,7 +88,7 @@ class SimplexData {
    virtual void notify_simplex_xformed(CWtransf&) {}
 
    // Notification that the simplex has been deleted:
-   virtual void notify_simplex_deleted()  { _simplex = 0; delete this; }
+   virtual void notify_simplex_deleted()  { _simplex = nullptr; delete this; }
 
    // Notification that the simplex was split, generating the
    // given simplex.  E.g., when an edge is split, it generates a
@@ -130,7 +130,7 @@ class SimplexDataList : public vector<SimplexData*> {
       for (vector<SimplexData*>::size_type k=0; k<size(); k++)
          if (at(k)->id() == key)
             return at(k);
-      return 0;
+      return nullptr;
    }
 
    //******** CONVENIENCE METHODS ********

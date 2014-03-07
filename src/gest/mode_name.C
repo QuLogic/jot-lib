@@ -67,14 +67,14 @@ class MODE_TEXT : public TEXT2D {
       
          // Check 2d intersection
          XYpt p = r.screen_point();
-         BBOX2D bbox = bbox2d(0, 0, 1);
+         BBOX2D bbox = bbox2d(0, nullptr, 1);
          if( bbox.contains(p) ){
             Wpt      nearpt;
             Wvec     n;
             XYpt     uvc;
             Wpt obj_pt;
             // don't know what d value (first param) to use here
-            r.check(1.0, 0, 0.0, (GEOM*)this, n, nearpt, obj_pt, NULL, uvc); 
+            r.check(1.0, 0, 0.0, (GEOM*)this, n, nearpt, obj_pt, nullptr, uvc);
             //r.check(1.0, *this); 
          }
       

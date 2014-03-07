@@ -89,7 +89,7 @@ FFSControlFrameTexture::draw_level(CVIEWptr& v, int k)
    if (!build_strip(k))
       return;
 
-   assert(_strip != NULL);
+   assert(_strip != nullptr);
 
    // Set line thickness and color
 

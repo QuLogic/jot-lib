@@ -28,10 +28,10 @@
 //////////////////////////////////////////////////////
 
 int          ConfigInit::count = 0;
-Config*      Config::_instance = NULL;
+Config*      Config::_instance = nullptr;
 bool         Config::_replace  = true;
 bool         Config::_loaded   = false;
-set<string> *Config::_no_warn  = NULL;
+set<string> *Config::_no_warn  = nullptr;
 
 //////////////////////////////////////////////////////
 // Config Methods
@@ -53,7 +53,7 @@ Config::Config(const string& j) : _jot_root(j)
 Config::~Config()                          
 { 
    err_mesg(ERR_LEV_SPAM, "Config::~Config() - Closing down...");
-   _instance = NULL;  
+   _instance = nullptr;
 }
 
 

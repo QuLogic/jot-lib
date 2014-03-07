@@ -113,7 +113,7 @@ PatchPen::deactivate(State* s)
 void
 PatchPen::notify_down()
 {
-   _cmd = 0; // start a new command
+   _cmd = nullptr; // start a new command
    Bface* f = cur_face();
    if (f) {
       _cmd = new CHANGE_PATCH_CMD(f->patch());

@@ -113,7 +113,7 @@ class HalftoneUI : public BaseUI {
    DEFINE_RTTI_METHODS3("HalftoneUI", HalftoneUI*, HalftoneUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   HalftoneUI(BaseUI* parent=0);
+   HalftoneUI(BaseUI* parent=nullptr);
    virtual ~HalftoneUI(){}
 
    /******** MEMBERS METHODS ********/
@@ -123,7 +123,7 @@ class HalftoneUI : public BaseUI {
 
    int          get_current_layer() { return _texture_selection_ui->get_layer_num(); }
    int          get_current_channel() { return _texture_selection_ui->get_channel_num(); }
-   ToneShader*  get_tone_shader() { return (_current_halftone) ? _current_halftone->get_tone_shader() : 0; }
+   ToneShader*  get_tone_shader() { return (_current_halftone) ? _current_halftone->get_tone_shader() : nullptr; }
    bool         load_preset();
    bool         save_preset();
  protected:   

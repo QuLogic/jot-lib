@@ -53,13 +53,13 @@ class TEXTUREgl : public TEXTURE {
    GLuint     get_tex_id()      const   { return _dl; }   
    bool       is_valid()        const   { return _dl_valid; }
 
-   virtual bool load_texture(unsigned char **copy = 0);
+   virtual bool load_texture(unsigned char **copy = nullptr);
    virtual bool load_cube_map();
 
    // Activates the texture and calls glEnable() to enable texturing.
    // NOTE: this should be called between glPushAttrib(GL_ENABLE_BIT)
    // and glPopAttrib()
-   virtual void apply_texture(const mlib::Wtransf *xf = 0);
+   virtual void apply_texture(const mlib::Wtransf *xf = nullptr);
         
    void copy_texture(CBBOX2D &bb, CVIEWptr &v);
 

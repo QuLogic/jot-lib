@@ -2242,7 +2242,7 @@ WpathStroke::generate_strokes_from_groups()
    selection_changed = _coher_stroke->update_selection(paths);
   
    if (selection_changed) {
-      LinePen *line_pen = 0;
+      LinePen *line_pen = nullptr;
       if (BaseJOTapp::instance() &&
           (line_pen = dynamic_cast<LinePen*>(BaseJOTapp::instance()->cur_pen()))){
          line_pen->selection_changed(LinePen::LINE_PEN_SELECTION_CHANGED__SIL_TRACKING);

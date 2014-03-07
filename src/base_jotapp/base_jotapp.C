@@ -56,7 +56,7 @@ using namespace mlib;
 //////////////////////////////////////////////////////
 
 vector<BaseJOTapp::WINDOW *>  BaseJOTapp::_windows;
-BaseJOTapp*                   BaseJOTapp::_instance = 0;
+BaseJOTapp*                   BaseJOTapp::_instance = nullptr;
 
 //////////////////////////////////////////////////////
 // BaseJOTapp Methods
@@ -69,8 +69,8 @@ BaseJOTapp::BaseJOTapp(int argc, char** argv) :
    _prog_name(argv[0]),
    _argv(argv),
    _argc(argc),
-   _pen_manager(0),
-   _key_menu(0)
+   _pen_manager(nullptr),
+   _key_menu(nullptr)
 {
    assert(!_instance);
 
@@ -84,10 +84,10 @@ BaseJOTapp::BaseJOTapp(int argc, char** argv) :
 /////////////////////////////////////
 BaseJOTapp::BaseJOTapp(const string& name) :
    _prog_name(name),
-   _argv(0),
+   _argv(nullptr),
    _argc(0),
-   _pen_manager(0),
-   _key_menu(0)
+   _pen_manager(nullptr),
+   _key_menu(nullptr)
 {
    assert(!_instance);
    
@@ -195,7 +195,7 @@ void
 BaseJOTapp::init_view(WINDOW &win)
 {
    VIEWptr v = new_view(win._win);
-   assert(v != NULL);
+   assert(v != nullptr);
    v->set_screen(new SCREENbasic(v->cam()));
    v->set_color(Color::get_var_color("BGCOLOR", Color::tan));
    win._view = v;
@@ -585,14 +585,14 @@ BaseJOTapp::load_obj_file(const string &file)
    if (!obj_stream.is_open()) {
       cerr << "BaseJOTapp::load_obj_file: error: couldn't open .obj file"
            << endl;
-      return 0;
+      return false;
    }
 
    OBJReader reader;
    if (!reader.read(obj_stream)) {
       cerr << "BaseJOTapp::load_obj_file: error: couldn't understand .obj file"
            << endl;
-      return 0;
+      return false;
    }
 
    BMESHptr mesh = new_mesh();
@@ -708,7 +708,7 @@ BaseJOTapp::init_dev_cb(WINDOW &window)
 void
 BaseJOTapp::init_interact_cb(WINDOW &win)
 {
-   static MoveMenu *menu = 0;
+   static MoveMenu *menu = nullptr;
 
    if (win._view->view_id() == 0){
       init_kbd_nav(win);
@@ -840,7 +840,7 @@ BaseJOTapp::init_pens(WINDOW &win)
    // Make sure we only create one PenManager
    // XXX - This may need to be remove at some point if we need to support
    // Pens on multiple windows.
-   assert(_pen_manager == 0);
+   assert(_pen_manager == nullptr);
    
    // Create the PenManager and link it to the supplied window:
    _pen_manager = new PenManager(&win._start);

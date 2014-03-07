@@ -28,12 +28,12 @@
 
 #include "fsa.H"
 
-map<CVIEWptr,VIEWint*> *VIEWint_list::_dhash = 0;
+map<CVIEWptr,VIEWint*> *VIEWint_list::_dhash = nullptr;
 
 void 
 VIEWint::rem_interactor(State *s)
 {
-   FSA* fsa = 0;
+   FSA* fsa = nullptr;
    vector<FSA*>::iterator it;
    for (it=_cur_states.begin(); it!=_cur_states.end(); ++it) {
       fsa = *it;

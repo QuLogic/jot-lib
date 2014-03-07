@@ -49,7 +49,7 @@ class FaderTexture : public GTexture {
    virtual int draw(CVIEWptr& v);
 
    //******** DATA_ITEM VIRTUAL METHODS ********
-   virtual DATA_ITEM  *dup() const { return 0; }
+   virtual DATA_ITEM  *dup() const { return nullptr; }
 
  protected:
    GTexture*    _base;          // texture that is fading in

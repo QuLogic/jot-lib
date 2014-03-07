@@ -51,7 +51,7 @@ pressure_to_grey(double p)
 
 GestureStrokeDrawer::GestureStrokeDrawer()
 {
-   _base_stroke_proto = 0;
+   _base_stroke_proto = nullptr;
 }
 
 GestureStrokeDrawer::~GestureStrokeDrawer()

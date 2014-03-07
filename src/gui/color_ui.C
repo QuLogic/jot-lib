@@ -90,7 +90,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _button[BUT_LAST]->set_h(40);
    _radgroup[RADGROUP_COLOR] = new GLUI_RadioGroup(
                                      _rollout[ROLLOUT_MAIN],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_COLOR, radiogroup_cb);
    _radbutton[RADBUT_HSV] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_COLOR],
@@ -106,7 +106,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDER_R, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_R]->set_w(150);
    _slider[SLIDER_R]->set_num_graduations(200);
   
@@ -115,7 +115,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDER_G, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_G]->set_w(150);
    _slider[SLIDER_G]->set_num_graduations(200);
 
@@ -124,7 +124,7 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDER_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL);
+      nullptr);
    _slider[SLIDER_B]->set_w(150);
    _slider[SLIDER_B]->set_num_graduations(200);
 
@@ -134,33 +134,33 @@ ColorUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       _rollout[ROLLOUT_MAIN], 
       "H", 
 		GLUI_EDITTEXT_INT, 
-      NULL,
+      nullptr,
 		id+EDITTEXT_R, edittext_cb);
    _edittext[EDITTEXT_R]->set_w(40);
    _edittext[EDITTEXT_R]->set_int_limits(0,100);
    _edittext[EDITTEXT_G] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "S", 
-		GLUI_EDITTEXT_INT, 
-      NULL,
-		id+EDITTEXT_G, edittext_cb);
+      GLUI_EDITTEXT_INT,
+      nullptr,
+      id+EDITTEXT_G, edittext_cb);
    _edittext[EDITTEXT_G]->set_w(40);
    _edittext[EDITTEXT_G]->set_int_limits( 0,100);
    _edittext[EDITTEXT_B] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "V", 
-		GLUI_EDITTEXT_INT, 
-      NULL,
-		id+EDITTEXT_B, edittext_cb);
+      GLUI_EDITTEXT_INT,
+      nullptr,
+      id+EDITTEXT_B, edittext_cb);
    _edittext[EDITTEXT_B]->set_w(40);
    _edittext[EDITTEXT_B]->set_int_limits( 0,100);
 
     _edittext[EDITTEXT_A] =  new GLUI_EditText(
       _rollout[ROLLOUT_MAIN], 
       "A", 
-		GLUI_EDITTEXT_INT, 
-      NULL,
-		id+EDITTEXT_A, edittext_cb);
+      GLUI_EDITTEXT_INT,
+      nullptr,
+      id+EDITTEXT_A, edittext_cb);
    _edittext[EDITTEXT_A]->set_w(40);
    _edittext[EDITTEXT_A]->set_int_limits( 0,100);
 

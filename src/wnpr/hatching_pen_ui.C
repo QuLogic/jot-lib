@@ -63,7 +63,7 @@ vector<HatchingPenUI*> HatchingPenUI::_ui;
 
 HatchingPenUI::HatchingPenUI(
    HatchingPen* pen) :
-   _pen(0)
+   _pen(nullptr)
 {
                         
    assert(pen);
@@ -99,11 +99,11 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
    int i;
    int id = _id << ID_SHIFT;
 
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
 
    //Sub-panel containing animation controls
    _rollout[ROLLOUT_ANIM] = new GLUI_Rollout(p, "Animation Settings", true);
@@ -206,7 +206,7 @@ HatchingPenUI::build(GLUI* glui, GLUI_Panel *p, int panel_width)
       id+SLIDE_FOO, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0, 
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_FOO]);
    _slider[SLIDE_FOO]->set_w(HATCHING_SLIDER_W);
    _slider[SLIDE_FOO]->set_num_graduations(11);

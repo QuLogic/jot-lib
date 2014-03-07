@@ -28,7 +28,7 @@ using namespace mlib;
 
 static int foobag = DECODER_ADD(BStrokePool);
 
-TAGlist*    BStrokePool::_bsp_tags   = NULL;
+TAGlist*    BStrokePool::_bsp_tags   = nullptr;
 
 /////////////////////////////////////////////////////////////////
 // BStrokePool Methods
@@ -420,7 +420,7 @@ BStrokePool::stroke_at(int i)
    // sanity check
    assert((i >= -1) && (i < _num_strokes_used));
 
-   if (i == -1)   return NULL;
+   if (i == -1)   return nullptr;
    else           return at(i);
 }
 
@@ -430,7 +430,7 @@ BStrokePool::internal_stroke_at(int i)
    // sanity check
    assert(i >= -1);
 
-   if (i == -1) return NULL;
+   if (i == -1) return nullptr;
 
    // If i is an index to a slot that doesn't exist,
    // add slots and fill them with a copy of the prototype
@@ -489,7 +489,7 @@ BStrokePool::remove_stroke(OutlineStroke* s)
    OutlineStroke *ss = get_selected_stroke();
 
    if (s == ss) {
-      ss = NULL;
+      ss = nullptr;
    }
    internal_deselect();
 
@@ -601,7 +601,7 @@ BStrokePool::read_stream(istream &is)
 
    // Must read in the specified number of strokes in the pool
    for (int i = 0; i < num_strokes; i++) {
-      OutlineStroke* x = 0; 
+      OutlineStroke* x = nullptr;
       read_stroke(is, x);
       if (x) push_back(x);
    }
@@ -657,7 +657,7 @@ BStrokePool::pick_stroke(
    double ndc_thresh = VIEW::pix_to_ndc_scale() * thresh;
 
    double         min_dist    = DBL_MAX;
-   OutlineStroke* min_stroke  = 0;
+   OutlineStroke* min_stroke  = nullptr;
 
    for (int i=0; i<_num_strokes_used; i++) {
       NDCpt nearest;
@@ -675,7 +675,7 @@ BStrokePool::pick_stroke(
       dist = min_dist;
       return min_stroke;
    } else {
-      return 0;
+      return nullptr;
    }
 }
 

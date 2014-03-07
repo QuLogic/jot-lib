@@ -281,11 +281,11 @@ GLint GLSLHatching::_min_tone_loc(-1);
 GLint GLSLHatching::_highlight_loc(-1);
 GLint GLSLHatching::_channel_loc(-1);
 
-GLSLHatching::GLSLHatching(Patch* p) : GLSLPaperShader(p), _tone_shader(0)
+GLSLHatching::GLSLHatching(Patch* p) : GLSLPaperShader(p), _tone_shader(nullptr)
 {
    set_tone_shader(get_tone_shader(p));
 
-   _perlin = 0;
+   _perlin = nullptr;
    _perlin_generator= Perlin::get_instance();
    if (!_perlin_generator)
       _perlin_generator= new Perlin();

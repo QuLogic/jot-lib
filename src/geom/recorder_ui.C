@@ -20,28 +20,28 @@
 
 #include "recorder_ui.H"
 
-Recorder*        	RecorderUI::_rec = 0;
-RecorderUI*             RecorderUI::_instance = 0;
+Recorder*               RecorderUI::_rec            = nullptr;
+RecorderUI*             RecorderUI::_instance       = nullptr;
 
-GLUI_Listbox*     	RecorderUI::_path_listbox 	= 0;
-GLUI_EditText*     	RecorderUI::_name_edittext 	= 0;
-GLUI_EditText*     	RecorderUI::_fnum_edittext 	= 0;
-GLUI_Spinner*       	RecorderUI::_fps_spin 		= 0;
+GLUI_Listbox*           RecorderUI::_path_listbox   = nullptr;
+GLUI_EditText*          RecorderUI::_name_edittext  = nullptr;
+GLUI_EditText*          RecorderUI::_fnum_edittext  = nullptr;
+GLUI_Spinner*           RecorderUI::_fps_spin       = nullptr;
 
-GLUI_Checkbox*       	RecorderUI::_check_rec 		= 0;
-GLUI_Checkbox*       	RecorderUI::_check_play 	= 0;
-GLUI_Checkbox*       	RecorderUI::_check_pause 	= 0;
-GLUI_Checkbox*          RecorderUI::_check_sync         = 0;
-GLUI_RadioGroup*       	RecorderUI::_radio_render 	= 0;
-GLUI_RadioGroup*       	RecorderUI::_radio_frames 	= 0;
+GLUI_Checkbox*          RecorderUI::_check_rec      = nullptr;
+GLUI_Checkbox*          RecorderUI::_check_play     = nullptr;
+GLUI_Checkbox*          RecorderUI::_check_pause    = nullptr;
+GLUI_Checkbox*          RecorderUI::_check_sync     = nullptr;
+GLUI_RadioGroup*        RecorderUI::_radio_render   = nullptr;
+GLUI_RadioGroup*        RecorderUI::_radio_frames   = nullptr;
 
 
 RecorderUI::RecorderUI(Recorder* rec) :
-   _glui(0)
+   _glui(nullptr)
 {
    assert(rec);
 
-   assert(_rec == 0);  // As per the note in the header file, there should
+   assert(_rec == nullptr);  // As per the note in the header file, there should
    // be only one UI and one rec in existence, so _rec should
    // still be null.
 
@@ -74,7 +74,7 @@ RecorderUI::init()
   //RECORD
    GLUI_Panel* _rec_panel = _glui->add_panel ( "rec", GLUI_PANEL_NONE );
 
-   _check_rec = _glui->add_checkbox_to_panel(_rec_panel, "", NULL, -1, 
+   _check_rec = _glui->add_checkbox_to_panel(_rec_panel, "", nullptr, -1,
                                              RecorderUI::button_cb );
    _check_rec->disable();
    _glui->add_column_to_panel( _rec_panel, false );
@@ -84,7 +84,7 @@ RecorderUI::init()
    //PLAY
    GLUI_Panel* _play_panel = _glui->add_panel ( "play", GLUI_PANEL_NONE );
 
-   _check_play = _glui->add_checkbox_to_panel (_play_panel, "" , NULL, -1,
+   _check_play = _glui->add_checkbox_to_panel (_play_panel, "" , nullptr, -1,
                                                RecorderUI::button_cb );  
    _check_play->disable();
    _glui->add_column_to_panel( _play_panel, false );
@@ -95,7 +95,7 @@ RecorderUI::init()
    //PAUSE
    GLUI_Panel* _pause_panel = _glui->add_panel ( "pause", GLUI_PANEL_NONE );
 
-   _check_pause = _glui->add_checkbox_to_panel ( _pause_panel, "", NULL, -1,
+   _check_pause = _glui->add_checkbox_to_panel ( _pause_panel, "", nullptr, -1,
                                                  RecorderUI::button_cb );
    _check_pause->disable();
    _glui->add_column_to_panel( _pause_panel, false );  
@@ -110,13 +110,13 @@ RecorderUI::init()
    _fnum_edittext = _glui->add_edittext_to_panel ( _frame_panel,
                                                    "Frame " , 
                                                    GLUI_EDITTEXT_INT, 
-                                                   NULL, 
+                                                   nullptr,
                                                    -1,
                                                    RecorderUI::set_framenum_cb);
   
    _check_sync  =  _glui->add_checkbox_to_panel(    _frame_panel, 
                                                     "synchronize", 
-                                                    NULL, 
+                                                    nullptr,
                                                     -1, 
                                                     RecorderUI::resync_cb );
 
@@ -135,7 +135,7 @@ RecorderUI::init()
  
    GLUI_Panel* _renderpane = _glui->add_panel ( "render to disk" );
 
-   _radio_render = _glui->add_radiogroup_to_panel ( _renderpane,  NULL, RENDER_ON_BUTTON_ID, RecorderUI::button_cb );
+   _radio_render = _glui->add_radiogroup_to_panel ( _renderpane,  nullptr, RENDER_ON_BUTTON_ID, RecorderUI::button_cb );
    assert(_radio_render);
    _glui->add_radiobutton_to_group ( _radio_render , "off" );
    _glui->add_column_to_panel      ( _renderpane, false ) ;
@@ -145,7 +145,7 @@ RecorderUI::init()
    _glui->add_separator();
 
    GLUI_Panel* _framepane = _glui->add_panel ( "play all frames" );
-   _radio_frames = _glui->add_radiogroup_to_panel ( _framepane,  NULL, PLAY_FRAMES_BUTTON_ID, RecorderUI::button_cb );
+   _radio_frames = _glui->add_radiogroup_to_panel ( _framepane,  nullptr, PLAY_FRAMES_BUTTON_ID, RecorderUI::button_cb );
    _glui->add_radiobutton_to_group ( _radio_frames , "off" );
    _glui->add_column_to_panel      ( _framepane, false ) ;
    _glui->add_radiobutton_to_group ( _radio_frames, "on" );
@@ -164,7 +164,7 @@ RecorderUI::init()
    //cerr << "edittext\n";
    _name_edittext = _glui->add_edittext ("filename",
                                          GLUI_EDITTEXT_TEXT,
-                                         NULL, -1,
+                                         nullptr, -1,
                                          RecorderUI::name_edittext_cb
       );
 
@@ -261,7 +261,7 @@ RecorderUI::hide()
 void
 RecorderUI::button_cb(int id)
 {
-   if(_rec == NULL) return;
+   if(_rec == nullptr) return;
 
    switch(id) {
     case(RECORD_BUTTON_ID):
@@ -324,7 +324,7 @@ RecorderUI::button_cb(int id)
 void 
 RecorderUI::path_listbox_cb(int /* id */) 
 { 
-   if(_rec == NULL) return;
+   if(_rec == nullptr) return;
    int pathnum = _path_listbox->get_int_val();
    _rec->set_path(pathnum);
 }
@@ -332,14 +332,14 @@ RecorderUI::path_listbox_cb(int /* id */)
 void 
 RecorderUI::set_fps_cb(int /* id */) 
 { 
-   if(_rec == NULL) return;
+   if(_rec == nullptr) return;
    _rec->set_fps(_fps_spin->get_int_val());
 }
 
 void 
 RecorderUI::name_edittext_cb(int /* id */)
 { 
-   if(_rec == NULL) return;
+   if(_rec == nullptr) return;
    _rec->_name_buf = _name_edittext->get_text();
 }
 
@@ -353,7 +353,7 @@ RecorderUI::resync_cb( int /*id*/)
 void 
 RecorderUI::set_framenum_cb(int /* id */)
 { 
-   if(_rec == NULL) return;
+   if(_rec == nullptr) return;
 
    _rec->set_pos ( atoi(  _fnum_edittext->get_text() ) );
    _instance->set_frame_num(_rec->path_pos());

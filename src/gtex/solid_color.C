@@ -49,7 +49,7 @@ class PatchBlendStripCB : public GLStripCB {
 /**********************************************************************
  * SolidColorTexture:
  **********************************************************************/
-TAGlist*  SolidColorTexture::_solid_color_texture_tags   = NULL;
+TAGlist*  SolidColorTexture::_solid_color_texture_tags   = nullptr;
 
 CTAGlist &
 SolidColorTexture::tags() const
@@ -78,7 +78,7 @@ SolidColorTexture::draw(CVIEWptr& v)
          assert(dynamic_cast<PatchBlendStripCB*>(cb()));
       }
    } else if (dynamic_cast<PatchBlendStripCB*>(cb())) {
-      dynamic_cast<PatchBlendStripCB*>(cb())->set_patch(0);
+      dynamic_cast<PatchBlendStripCB*>(cb())->set_patch(nullptr);
    }
 
    // push GL state before changing things
@@ -128,7 +128,7 @@ SolidColorTexture::draw(CVIEWptr& v)
       GtexUtil::draw_strip(bdry, 2, Color::yellow);
    } else {
       if (pbcb)
-         pbcb->set_patch(0);
+         pbcb->set_patch(nullptr);
       _patch->draw_tri_strips(_cb);
    }
 

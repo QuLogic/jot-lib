@@ -31,7 +31,7 @@ class FFSControlFrameTexture : public ControlFrameTexture {
 
    //******** MANAGERS ********
 
-   FFSControlFrameTexture(Patch* patch = 0, CCOLOR& col = COLOR::blue) :
+   FFSControlFrameTexture(Patch* patch = nullptr, CCOLOR& col = COLOR::blue) :
       ControlFrameTexture(patch, col)
       {}
 

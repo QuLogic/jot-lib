@@ -26,7 +26,7 @@ return and new velocity that doesn't run through objects
 CWvec
 Collide::_get_move(CWpt& s, CWvec& vel)
 {
-   if (_land == NULL)
+   if (_land == nullptr)
       return vel;
 
    //transform source/velocty to object space
@@ -230,7 +230,7 @@ Gravity::_get_dir(CWpt& p)
 {
 
 //If Gravity hasn't been set
-   if (_ground == NULL)
+   if (_ground == nullptr)
       return Wvec(0,0,0);
    Wpt cent = _ground->bbox().center();
    Wpt max  = _ground->bbox().max();

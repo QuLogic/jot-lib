@@ -27,12 +27,12 @@ DiskMap::create(CBface_list& disk, bool flip_tan, Bvert* v)
    // Check topology conditions:
    if (!disk.is_disk()) {
       err_adv(debug, " %d faces do not form disk", disk.size());
-      return 0;
+      return nullptr;
    }
 
    if (v && std::find(disk.get_verts().begin(), disk.get_verts().end(), v) == disk.get_verts().end()) {
       err_adv(debug, " input vert not on the input faces");
-      return 0;
+      return nullptr;
    }
 
    DiskMap* ret = new DiskMap;
@@ -49,7 +49,7 @@ DiskMap::create(CBface_list& disk, bool flip_tan, Bvert* v)
       // mesh only happen via Bnodes (Bsurfaces etc.).
       err_adv(debug, " not using SubdivUpdater");
       delete su;
-      su = 0;
+      su = nullptr;
    } else {
       ret->_updater = su;
       ret->hookup();
@@ -69,7 +69,7 @@ DiskMap::~DiskMap()
 {
    destructor();
    delete _updater;     // we created it, we delete it
-   _updater = 0;
+   _updater = nullptr;
 }
 
 void

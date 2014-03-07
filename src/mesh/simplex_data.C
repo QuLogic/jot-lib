@@ -37,7 +37,7 @@ SimplexData::set(uintptr_t id, Bsimplex* s)
 SimplexData::~SimplexData()
 {
    // Get out of the data list on the simplex:
-   set(0,0);
+   set(0,nullptr);
 }
 
 SimplexDataList::~SimplexDataList() 

@@ -149,12 +149,12 @@ leading_ccw_edge(CBvert* v)
    // edge for a fan of triangles running in CCW order
    // around v.
 
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    for (int i=0; i<v->degree(); i++)
       if ((e = v->e(i))->is_border() && ccw_face(e, v))
          return e;
 
-   return 0;
+   return nullptr;
 }
 
 Bedge_list
@@ -192,7 +192,7 @@ Bvert::get_ccw_edges() const
    // Repeatedly advance to next face and next edge going CCW.
    // Add edges to the list until we reach the start edge.
    Bedge* e = start;
-   Bface* f = 0;
+   Bface* f = nullptr;
    while ((f = ccw_face(e, this)) &&
           (e = f->opposite_edge(e->other_vertex(this))) &&
           (e != start))
@@ -405,7 +405,7 @@ next_border_edge_cw(CBvert* v, CBedge_list& edges)
       if (e->is_border() && e->cw_face(v))
          return e;
    }
-   return 0;
+   return nullptr;
 }
 
 Bedge* 
@@ -432,7 +432,7 @@ Bvert::get_all_faces(vector<Bface*>& ret) const
 
    // collect up additional faces from multi-edges
    for (int i=0; i<degree(); i++) {
-      if (e(i)->adj() != NULL) {
+      if (e(i)->adj() != nullptr) {
          Bface_list b = e(i)->get_all_faces();
          for (Bface_list::size_type j=0; j<b.size(); j++)
             add_face(ret, unique, b[j]);
@@ -508,11 +508,11 @@ Bvert::face_degree(CSimplexFilter& f) const
 Bface* 
 Bvert::get_face() const
 {
-   Bface* ret = 0;
+   Bface* ret = nullptr;
    for (Bedge_list::size_type k=0; k<_adj.size(); k++)
       if ((ret = e(k)->get_face()))
          return ret;
-   return 0;
+   return nullptr;
 }
 
 bool

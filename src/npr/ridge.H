@@ -36,7 +36,7 @@
 class RidgeShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   RidgeShader(Patch* patch = 0);
+   RidgeShader(Patch* patch = nullptr);
 
    virtual ~RidgeShader();
 

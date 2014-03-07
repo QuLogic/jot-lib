@@ -54,26 +54,26 @@ class BODY : public REFcounter,
       BBOX          _bb;
       mlib::EDGElist      _edges;
 
-     virtual BODYptr create_cube()     {return 0;}
-     virtual BODYptr create_cone()     {return 0;}
-     virtual BODYptr create_cylinder() {return 0;}
-     virtual BODYptr create_sphere()   {return 0;}
+     virtual BODYptr create_cube()     {return nullptr;}
+     virtual BODYptr create_cone()     {return nullptr;}
+     virtual BODYptr create_cylinder() {return nullptr;}
+     virtual BODYptr create_sphere()   {return nullptr;}
      
-     virtual BODYptr create_torus     (double        /*radius*/) {return 0;}
-     virtual BODYptr create_trunc_cone(double        /*radius */) {return 0;}
+     virtual BODYptr create_torus     (double        /*radius*/) {return nullptr;}
+     virtual BODYptr create_trunc_cone(double        /*radius*/) {return nullptr;}
      virtual BODYptr create_revolve   (mlib::CWpt_list &/*profile*/,
                                        BODYptr       &/*ob*/)
-        {return 0;}
+        {return nullptr;}
      virtual BODYptr create_extrusion(mlib::CWpt_list &/*profile*/,
                                       BODYptr       &/*ob*/)
-        {return 0;}
+        {return nullptr;}
      virtual BODYptr create_extrusion(mlib::CWpt_list &/*profile*/,
                                       mlib::CWpt_list &/*path*/,
                                       BODYptr       &/*ob*/)
-        {return 0;}
+        {return nullptr;}
      virtual BODYptr create_trunc_pyr(CMVEC2        &/*taper*/,
                                       CMVEC2        &/*shear*/)
-        {return 0;}
+        {return nullptr;}
      static  BODY   *_factory;
      static  string  _base_name;
      static  TAGlist _body_tags;
@@ -148,7 +148,7 @@ class BODY : public REFcounter,
      static BODYptr trunc_pyr (CMVEC2        &taper,    CMVEC2  &shear)
             {return _factory->create_trunc_pyr(taper, shear);}
      virtual BODYptr body_copy(int y = 1) {return copy(y);}
-     static int set_factory(BODY *b) {_factory = b; return _factory != 0;}
+     static int set_factory(BODY *b) {_factory = b; return _factory != nullptr;}
 
      virtual CBBOX &get_bb() = 0;
      bool bb_valid() const { return _bb.valid();}

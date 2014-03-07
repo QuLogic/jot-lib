@@ -53,7 +53,7 @@ class BStrokePool : protected vector<OutlineStroke*>, public DATA_ITEM {
    double      _cur_period;
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
-   BStrokePool(OutlineStroke* proto = 0);
+   BStrokePool(OutlineStroke* proto = nullptr);
    virtual ~BStrokePool();
 
    /******** DATA_ITEM METHODS ********/
@@ -244,7 +244,7 @@ class BStrokePool : protected vector<OutlineStroke*>, public DATA_ITEM {
    {
       assert((_selected_stroke >= -1) && (_selected_stroke < _num_strokes_used));
 
-      if (_num_strokes_used == 0) return NULL;
+      if (_num_strokes_used == 0) return nullptr;
       
       int i = (_selected_stroke+1) % _num_strokes_used;
 

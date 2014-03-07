@@ -55,7 +55,7 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
       const string proto_tex_file = prot->get_texture_file();
 
       if (prot->get_texture()) {
-         prot->set_texture(NULL, "");
+         prot->set_texture(nullptr, "");
       }
 
       prot->draw_start();

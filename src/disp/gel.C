@@ -40,24 +40,24 @@ MAKE_NET_HASHVAR(CONSTRAINT_VECTOR, Wvec, Wvec(0,1,0));
 MAKE_NET_HASHVAR(CONSTRAINT_POINT,  Wpt,  Wpt (0,0,0));
 
 const string GEL::_name("work'er");
-TAGlist  *GEL::_gel_tags = 0;
+TAGlist  *GEL::_gel_tags = nullptr;
 
 // Static constructors can be the spawn of satan.
 // We don't know when someone will reference distobs_list or existobs_list,
 // so we have to protect by making the class allocate these objects as
 // soon as they are referenced (during static initialization).
-GELdistobs_list *GELdistobs::_dist_obs = 0;
-EXISTobs_list   *EXISTobs::_exist_obs  = 0;
-DUPobs_list     *DUPobs::_dup_obs      = 0;
-GRABobs_list    *GRABobs::_grab_obs    = 0;
-SAVEobs_list    *SAVEobs::_save_obs    = 0;
-SAVEobs_list    *SAVEobs::_presave_obs = 0;
-SAVEobs_list    *SAVEobs::_postsave_obs= 0;
-LOADobs_list    *LOADobs::_load_obs    = 0;
-LOADobs_list    *LOADobs::_preload_obs = 0;
-LOADobs_list    *LOADobs::_postload_obs= 0;
-HASHobs_list    *HASHobs::_hash_obs_list=0;
-JOTvar_obs_list *JOTvar_obs::_jot_var_obs_list = 0;
+GELdistobs_list *GELdistobs::_dist_obs = nullptr;
+EXISTobs_list   *EXISTobs::_exist_obs  = nullptr;
+DUPobs_list     *DUPobs::_dup_obs      = nullptr;
+GRABobs_list    *GRABobs::_grab_obs    = nullptr;
+SAVEobs_list    *SAVEobs::_save_obs    = nullptr;
+SAVEobs_list    *SAVEobs::_presave_obs = nullptr;
+SAVEobs_list    *SAVEobs::_postsave_obs= nullptr;
+LOADobs_list    *LOADobs::_load_obs    = nullptr;
+LOADobs_list    *LOADobs::_preload_obs = nullptr;
+LOADobs_list    *LOADobs::_postload_obs= nullptr;
+HASHobs_list    *HASHobs::_hash_obs_list=nullptr;
+JOTvar_obs_list *JOTvar_obs::_jot_var_obs_list = nullptr;
 
 
 GEL::GEL():DATA_ITEM(1) 
@@ -112,7 +112,7 @@ operator>>(STDdstream &ds, GELptr &p)
       p = (GEL *)d;
    else  {
       cerr << "operator >> Couldn't find GEL in stream" << endl;
-      p = 0;
+      p = nullptr;
    }
       
    return ds;

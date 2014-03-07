@@ -59,7 +59,7 @@ class UVdata : public SimplexData {
    //******** CHECKING FOR UV-COORDS ********
 
    // Determine if the face has uv-coords:
-   static bool has_uv(CBface* f) { return lookup(f) != NULL; }
+   static bool has_uv(CBface* f) { return lookup(f) != nullptr; }
 
    // Determine if it's a quad with continuous UV-coordinates:
    static bool quad_has_uv(CBface* quad);
@@ -178,13 +178,13 @@ class UVdata : public SimplexData {
    //******** LOOKUP ********
    // Lookup a UVdata* from a Bsimplex:
    static UVdata* lookup(CBsimplex* s) {
-      return s ? (UVdata*)s->find_data(key()) : 0;
+      return s ? (UVdata*)s->find_data(key()) : nullptr;
    }
 
    // Similar to above, but creates a UVdata if it wasn't found
    static UVdata* get_data(Bsimplex* s) {
       UVdata* ret = lookup(s);
-      return ret ? ret : s ? new UVdata(s) : 0;
+      return ret ? ret : s ? new UVdata(s) : nullptr;
    }
 
    /*******************************************************

@@ -45,7 +45,7 @@ using namespace mlib;
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       NPRTexture::_nt_tags = 0;
+TAGlist *       NPRTexture::_nt_tags = nullptr;
 
 bool NPRTexture::_show_strokes = true;
 bool NPRTexture::_show_coats = true;
@@ -1537,7 +1537,7 @@ void
 NPRTexture::get_view_color (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    COLOR c;
 
@@ -1554,7 +1554,7 @@ NPRTexture::put_view_color (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       d.id();
       *d << v->color();
@@ -1569,7 +1569,7 @@ void
 NPRTexture::get_view_alpha (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    double a;
 
@@ -1586,7 +1586,7 @@ NPRTexture::put_view_alpha (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       d.id();
       *d << v->get_alpha();
@@ -1601,7 +1601,7 @@ void
 NPRTexture::get_view_paper_use (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    int p;
 
@@ -1618,7 +1618,7 @@ NPRTexture::put_view_paper_use (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       d.id();
       *d << (v->get_use_paper() ? 1 : 0);
@@ -1705,7 +1705,7 @@ void
 NPRTexture::get_view_texture (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    string str;
    *d >> str;
@@ -1728,7 +1728,7 @@ NPRTexture::put_view_texture (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       //XXX - May need something to handle filenames with spaces
 
@@ -1757,7 +1757,7 @@ void
 NPRTexture::get_view_light_coords (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<Wvec> c;
 
@@ -1777,7 +1777,7 @@ NPRTexture::put_view_light_coords (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<Wvec> c;
 
@@ -1797,7 +1797,7 @@ void
 NPRTexture::get_view_light_positional (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<int> p;
 
@@ -1817,7 +1817,7 @@ NPRTexture::put_view_light_positional (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<int> p;
 
@@ -1837,7 +1837,7 @@ void
 NPRTexture::get_view_light_cam_space (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<int> c;
 
@@ -1857,7 +1857,7 @@ NPRTexture::put_view_light_cam_space (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<int> c;
 
@@ -1877,7 +1877,7 @@ void
 NPRTexture::get_view_light_color_diff (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<COLOR> c;
 
@@ -1897,7 +1897,7 @@ NPRTexture::put_view_light_color_diff (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<COLOR> c;
 
@@ -1917,7 +1917,7 @@ void
 NPRTexture::get_view_light_color_amb (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<COLOR> a;
 
@@ -1937,7 +1937,7 @@ NPRTexture::put_view_light_color_amb (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<COLOR> a;
 
@@ -1957,7 +1957,7 @@ void
 NPRTexture::get_view_light_color_global (TAGformat &d)
 {
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    COLOR g;
 
@@ -1975,7 +1975,7 @@ NPRTexture::put_view_light_color_global (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       d.id();
       *d << v->light_get_global_ambient();
@@ -1991,7 +1991,7 @@ NPRTexture::get_view_light_enable (TAGformat &d)
 {
 
    VIEWptr v = VIEW::peek();
-   assert(v != NULL);
+   assert(v != nullptr);
 
    vector<int> e;
 
@@ -2011,7 +2011,7 @@ NPRTexture::put_view_light_enable (TAGformat &d) const
 {
    if (put_view_stuff) {
       VIEWptr v = VIEW::peek();
-      assert(v != NULL);
+      assert(v != nullptr);
 
       vector<int> e;
 

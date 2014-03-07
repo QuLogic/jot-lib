@@ -39,7 +39,7 @@
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingGroupParams::_hp_tags = 0;
+TAGlist *       HatchingGroupParams::_hp_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -131,7 +131,7 @@ HatchingGroupParams::get_base_stroke(TAGformat &d)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingGroup::_hg_tags = 0;
+TAGlist *       HatchingGroup::_hg_tags = nullptr;
 
 /////////////////////////////////////
 // tags()

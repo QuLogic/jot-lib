@@ -670,7 +670,7 @@ inline RenderingMode*
 CurvatureRenderingModeSelectionPolicy::SelectRenderingMode()
 {
    
-   RenderingMode *mode = 0;
+   RenderingMode *mode = nullptr;
    
    if(GLExtensions::gl_arb_vertex_program_supported()){
       
@@ -718,7 +718,7 @@ int
 CurvatureTexture::draw(CVIEWptr& v)
 {
    
-   assert(cb() != 0);
+   assert(cb() != nullptr);
    
    // XXX - This is a temporary hack to remove use of the CurvatureModeSingleton
    // from the CurvatureTexture constructor due to static initialization

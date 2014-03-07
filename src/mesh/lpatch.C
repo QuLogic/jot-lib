@@ -20,7 +20,7 @@
 
 
 static bool debug = Config::get_var_bool("DEBUG_LPATCH",false);
-TAGlist* Lpatch::_lpatch_tags = NULL;
+TAGlist* Lpatch::_lpatch_tags = nullptr;
 
 Lpatch::~Lpatch() 
 {
@@ -73,13 +73,13 @@ Lpatch::get_child()
 
       if (!lmesh()) {
          err_msg("Lpatch::get_child: error: mesh is NULL");
-         return 0;
+         return nullptr;
       }
 
       LMESH* child_mesh = lmesh()->subdiv_mesh();
       if (!child_mesh) {
          err_msg("Lpatch::get_child: error: child mesh is NULL");
-         return 0;
+         return nullptr;
       }
 
       // The mesh creates the child and adds it to its list of
@@ -239,7 +239,7 @@ Lpatch::dup() const
 {
    // to be filled in...
 	
-   return 0;
+   return nullptr;
 }
 
 void
@@ -281,9 +281,9 @@ Lpatch::get_parent_patch(TAGformat &d)
 	*d >> parent_index;
 	
 	if (parent_index == -1)
-		_parent = 0;
+		_parent = nullptr;
 	else if(set_parent(lmesh()->parent_mesh()->patch(parent_index)) != true)
-		_parent = 0;
+		_parent = nullptr;
 	
 }
 

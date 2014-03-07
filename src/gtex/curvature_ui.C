@@ -268,11 +268,11 @@ CurvatureUISingleton::fetch(CVIEWptr& v)
    
    if (!v) {
       err_msg("CurvatureUISingleton::fetch() - Error! view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg("CurvatureUISingleton::fetch() - Error! view->impl() is nil");
-      return 0;
+      return nullptr;
    }
    
    view2ui_map_t::iterator v2ui_itor = view2ui_map.find(v->impl());
@@ -296,7 +296,7 @@ CurvatureUISingleton::fetch(CVIEWptr& v)
 //----------------------------------------------------------------------------//
 
 CurvatureUI::CurvatureUI(VIEWptr v)
-   : view(v), glui(0)
+   : view(v), glui(nullptr)
 {
    
 }
@@ -312,7 +312,7 @@ bool
 CurvatureUI::is_vis()
 {
    
-   return glui != 0;
+   return glui != nullptr;
    
 }
 
@@ -713,6 +713,6 @@ CurvatureUI::destroy()
    //Recursively kills off all controls, and itself
    glui->close();
 
-   glui = 0;
+   glui = nullptr;
    
 }

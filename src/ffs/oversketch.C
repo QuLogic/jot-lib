@@ -57,7 +57,7 @@ OVERSKETCH::OVERSKETCH() :
 void 
 OVERSKETCH::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 OVERSKETCHptr
@@ -108,7 +108,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
 
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
-   BMESH* mesh = 0;
+   BMESH* mesh = nullptr;
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
@@ -205,7 +205,7 @@ OVERSKETCH::reset()
 {
    _selected_sils.reset();
    _selected_region.clear();
-   _mesh = 0;
+   _mesh = nullptr;
 }
 
 int  

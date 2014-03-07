@@ -97,7 +97,7 @@ class DrawWidget : public GEOM,
       // return a pointer to the mesh here. This is used in the virtual
       // method DISPobs::notify() to check whether the mesh has been
       // undisplayed (and if so, deactivate the widget).
-      virtual BMESHptr bmesh() const { return 0; }
+      virtual BMESHptr bmesh() const { return nullptr; }
       virtual LMESH* lmesh()   const { return LMESH::upcast(bmesh()); }
    
       //******** MODE NAME ********

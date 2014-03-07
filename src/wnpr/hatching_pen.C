@@ -71,14 +71,14 @@ HatchingPen::HatchingPen(
 
    _gesture_drawer->set_base_stroke_proto(h);
         
-   _prev_gesture_drawer = 0;
+   _prev_gesture_drawer = nullptr;
 
    // ui vars:
-   _curr_hatching_group = 0;
+   _curr_hatching_group = nullptr;
    _curr_create_type = HatchingGroup::FIXED_HATCHING_GROUP;
    _curr_curve_mode = HatchingGroup::CURVE_MODE_PLANE;
 
-   _curr_npr_texture = 0;
+   _curr_npr_texture = nullptr;
 
    _ui = new HatchingPenUI(this);
    assert(_ui);
@@ -160,7 +160,7 @@ HatchingPen::deactivate(State* s)
       }
    }
    else
-      select_tex(0);
+      select_tex(nullptr);
 
    if(_ui) _ui->hide();
 
@@ -170,7 +170,7 @@ HatchingPen::deactivate(State* s)
    if(_gest_int && _prev_gesture_drawer)
    {
       _gest_int->set_drawer(_prev_gesture_drawer);   
-      _prev_gesture_drawer = 0;
+      _prev_gesture_drawer = nullptr;
    }
    return true;
 
@@ -242,7 +242,7 @@ dup_group(HatchingGroup* g)
 {
    if (!g) {
       err_msg("dup_group: error: group is null");
-      return 0;
+      return nullptr;
    }
 
    // choose a name for a tmp file:
@@ -256,7 +256,7 @@ dup_group(HatchingGroup* g)
       NetStream out(tmp, NetStream::ascii_w);
       if (out.fd() < 0) {
          err_ret("dup_group: error: can't open %s for writing", tmp.c_str());
-         return 0;
+         return nullptr;
       }
 
       // write g to file:
@@ -268,14 +268,14 @@ dup_group(HatchingGroup* g)
    NetStream in(tmp, NetStream::ascii_r);
    if (in.fd() < 0) {
       err_ret("dup_group: error: can't open %s for reading", tmp.c_str());
-      return 0;
+      return nullptr;
    }
 
    // create a new instance of the same type as g:
    HatchingGroup* ret = (HatchingGroup*)g->dup();
    if (!ret) {
       err_ret("dup_group: error: dup failed");
-      return 0;
+      return nullptr;
    }
 
    // XXX - need this or it crashes
@@ -306,7 +306,7 @@ HatchingPen::tap_cb(CGESTUREptr& gest, DrawState*&)
 
    //f = VisRefImage::Intersect(gest->center());
    
-   f = 0; //quick hack to fix the case where the scene fills the entire screen
+   f = nullptr; //quick hack to fix the case where the scene fills the entire screen
 		  //a more sophisticated fix may be needed
 
    if ( (_curr_hatching_group) && (!_curr_hatching_group->is_complete()) )
@@ -374,7 +374,7 @@ HatchingPen::tap_cb(CGESTUREptr& gest, DrawState*&)
    if (!(f && p))
    {
       if (_curr_hatching_group) deselect_current();
-      else select_tex(0);
+      else select_tex(nullptr);
       return 0;
    }
 
@@ -626,9 +626,9 @@ HatchingPen::deselect_current()
    cerr << "HatchingPen:deselect - Deselecting current hatch group.\n";
 
    if (_curr_hatching_group) _curr_hatching_group->deselect();
-   _curr_hatching_group = 0;
+   _curr_hatching_group = nullptr;
 
-   select_tex(0);
+   select_tex(nullptr);
 }
 
 /////////////////////////////////////
@@ -653,7 +653,7 @@ HatchingPen::destroy_current()
 
    assert(ret);
 
-   _curr_hatching_group = 0;
+   _curr_hatching_group = nullptr;
 
 }
 

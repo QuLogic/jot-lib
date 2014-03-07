@@ -30,18 +30,18 @@ BufferRefImage::lookup(CVIEWptr& v)
 {
    if (!v) {
       err_msg( "BufferRefImage::lookup: error -- view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg( "BufferImage::lookup: error -- view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    VIEWimpl *key = v->impl();
    map<VIEWimpl*,BufferRefImage*>::iterator it;
    it = _hash.find(key);
-   BufferRefImage *ret = 0;
+   BufferRefImage *ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if ((ret = new BufferRefImage(v)))
@@ -72,9 +72,9 @@ BufferRefImage::update()
 
    cerr << "BufferRefImage: Updated!\n";
 
-   assert (_view != 0);
+   assert (_view != nullptr);
    VIEWimpl *impl = _view->impl();
-   assert(impl != 0);
+   assert(impl != nullptr);
 
    _observing = false;
    impl->draw_setup();
@@ -90,7 +90,7 @@ BufferRefImage::update()
 
 BufferRefImage::BufferRefImage(CVIEWptr& v) : RefImage(v)  
 {
-   _f = NULL;
+   _f = nullptr;
    reset();
    _observing=false;
 
@@ -130,7 +130,7 @@ BufferRefImage::unobserve()
    {
       WORLD::display(_f, false);
       rem(_f);
-      _f = NULL;
+      _f = nullptr;
    }
 
    if (_list.num() > 0)  {

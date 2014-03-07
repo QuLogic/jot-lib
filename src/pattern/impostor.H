@@ -27,7 +27,7 @@
 class Impostor : public GEL {
  public:
    //******** MANAGERS ********
-   Impostor(BMESH* m=0);
+   Impostor(BMESH* m=nullptr);
    virtual ~Impostor();
 
    //******** GEL METHODS ********

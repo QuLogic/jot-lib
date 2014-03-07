@@ -96,7 +96,7 @@ class NPRTexture : public OGLTexture {
    set<SilDebugObs *>            _sdolist;
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
-   NPRTexture(Patch* patch = 0);
+   NPRTexture(Patch* patch = nullptr);
    virtual ~NPRTexture() { 
       delete   _hatching_collection;
       gtextures().delete_all();
@@ -129,7 +129,7 @@ class NPRTexture : public OGLTexture {
 
    /***Interfaces to backcoats***/
    int                  get_basecoat_num() const            { return _basecoats.num(); }
-   GTexture*            get_basecoat(int i) const           { return (_basecoats.valid_index(i))?(_basecoats[i]):(NULL); }
+   GTexture*            get_basecoat(int i) const           { return _basecoats.valid_index(i) ? _basecoats[i] : nullptr; }
    void                 insert_basecoat(int i, GTexture* t);
    void                 remove_basecoat(int i);
 

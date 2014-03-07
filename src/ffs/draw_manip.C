@@ -192,7 +192,7 @@ DrawManip::down(CEvent& e, State*& s)
       }
    }
 
-   assert(e.view() != 0);
+   assert(e.view() != nullptr);
    BMESHray ray(ptr_cur());
    e.view()->intersect(ray);
    GEOMptr geom;
@@ -286,7 +286,7 @@ DrawManip::up(CEvent &e, State *&s)
    _down = false;
    if (_cmd)
       _cmd->notify_xf_obs(XFORMobs::END);
-   _cmd = 0;
+   _cmd = nullptr;
    return 0; 
 }
 

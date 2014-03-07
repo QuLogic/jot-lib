@@ -118,7 +118,7 @@ protected:
 
 public :
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/  
-   WpathStroke(CLMESHptr& mesh=0);
+   WpathStroke(CLMESHptr& mesh=nullptr);
    virtual ~WpathStroke();
 
    /******** MEMBER METHODS ********/
@@ -235,7 +235,7 @@ protected:
          break;
       default:
          assert(0);
-         return NULL;
+         return nullptr;
          break;
       }
    }
@@ -256,7 +256,7 @@ protected:
          break;
       default:
          assert(0);
-         return NULL;
+         return nullptr;
          break;
       }
    }

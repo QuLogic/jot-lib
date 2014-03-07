@@ -49,11 +49,11 @@ class RAYhit {
    RAYhit(CWpt  &p, CWvec &v):_s(false), _p(p), _v(v.normalized()),
                               _is_surf(0),
                               _d(-1),_d_2d(-1), _uv_valid(0), _visibility(1),
-                              _appear(0), _tolerance(12),_from_camera(0) {}
+                              _appear(nullptr), _tolerance(12),_from_camera(0) {}
    RAYhit(CWpt  &a, CWpt  &b):_s(false), _p(a), _v((b-a).normalized()),
                               _is_surf(0),
                               _d(-1),_d_2d(-1), _uv_valid(0), _visibility(1),
-                              _appear(0), _tolerance(12),_from_camera(0) {}
+                              _appear(nullptr), _tolerance(12),_from_camera(0) {}
    RAYhit(CXYpt &p);
    virtual ~RAYhit() {}
 

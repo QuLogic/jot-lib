@@ -92,7 +92,7 @@ GLSLShader::print_shader_source(GLuint shader)
          return;
       }
       GLchar* buf = new GLchar [ src_len ];
-      glGetShaderSource(shader, src_len, NULL, buf);
+      glGetShaderSource(shader, src_len, nullptr, buf);
       cerr << buf << endl;
    }
 }
@@ -180,7 +180,7 @@ GLSLShader::read_file(
 )
 {
    // Read characters from file into buffer
-   char* buf = 0;
+   char* buf = nullptr;
    ifstream in(filename.c_str(), ifstream::in | ifstream::binary);
    if (in.is_open()) {
       in.seekg(0, ios::end);

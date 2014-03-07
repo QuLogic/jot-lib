@@ -32,7 +32,7 @@
 class WireframeTexture : public BasicTexture {
  public:
    //******** MANAGERS ********
-   WireframeTexture(Patch* patch = 0, CCOLOR& col = default_line_color()) :
+   WireframeTexture(Patch* patch = nullptr, CCOLOR& col = default_line_color()) :
       BasicTexture(patch, new GLStripCB),
       _width(0.5),
       _color(col),

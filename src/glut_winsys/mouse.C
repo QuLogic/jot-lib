@@ -333,7 +333,7 @@ mouse_button_callback(
 GLUT_MOUSE::GLUT_MOUSE(GLUT_WINSYS *winsys) :
    _winsys(winsys)
 {
-   _mice.resize(winsys->id() + 1, 0);
+   _mice.resize(winsys->id() + 1, nullptr);
    _mice[winsys->id()] = this;
 
 #ifdef USE_GLUT_WACOM
@@ -358,7 +358,7 @@ GLUT_MOUSE::GLUT_MOUSE(GLUT_WINSYS *winsys) :
 GLUT_MOUSE::~GLUT_MOUSE()
 {
    cerr << "~GLUT_MOUSE" << endl;
-   _mice[_winsys->id()] = 0;
+   _mice[_winsys->id()] = nullptr;
 }
 
 GLUT_MOUSE *

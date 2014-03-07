@@ -29,7 +29,7 @@
 class CreasesTexture : public BasicTexture {
  public:
    //******** MANAGERS ********
-   CreasesTexture(Patch* patch = 0) :
+   CreasesTexture(Patch* patch = nullptr) :
       BasicTexture(patch),
       _width(1),
       _color(0,0,0) // XXX g++ 2.97 workaround

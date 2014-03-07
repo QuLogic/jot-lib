@@ -32,7 +32,7 @@ GLuint          GLSLHaloShader::_program = 0;
 GLint           GLSLHaloShader::_pixel_width_loc = -1;
 //GLint           GLSLHaloShader::_distance_loc = -1;
 bool            GLSLHaloShader::_did_init = false;
-GLSLHaloShader* GLSLHaloShader::_instance(0);
+GLSLHaloShader* GLSLHaloShader::_instance(nullptr);
 
 
 GLSLHaloShader::GLSLHaloShader(Patch* p) :

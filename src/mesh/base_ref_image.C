@@ -21,7 +21,7 @@
 #include "base_ref_image.H"
 
 map<VIEWimpl*,BaseVisRefImage*> BaseVisRefImage::_hash;
-BaseVisRefImageFactory*         BaseVisRefImage::_factory = 0;
+BaseVisRefImageFactory*         BaseVisRefImage::_factory = nullptr;
 
 BaseVisRefImage* 
 BaseVisRefImage::lookup(CVIEWptr& v) 
@@ -32,14 +32,14 @@ BaseVisRefImage::lookup(CVIEWptr& v)
 
    if (!v) {
       err_msg("BaseVisRefImage::lookup: error -- view is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    map<VIEWimpl*,BaseVisRefImage*>::iterator it;
    VIEWimpl *key = v->impl();
    it = _hash.find(key);
-   BaseVisRefImage *ret = 0;
+   BaseVisRefImage *ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if (_factory && (ret = _factory->produce(v)))

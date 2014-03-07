@@ -52,7 +52,7 @@ class PenManager {
          { return pens.size(); }
       
       Pen *cur_pen() const
-         { return pens.size() > 0 ? pens[cur_pen_idx] : 0; }
+         { return pens.size() > 0 ? pens[cur_pen_idx] : nullptr; }
       
       void next_pen()
          { cycle_pen(1); }

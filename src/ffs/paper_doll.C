@@ -70,7 +70,7 @@ copy_face(Bface* f, CVertMapper& vmap, Primitive* p, bool reverse)
    Bvert* v3 = vmap.a_to_b(f->v3());
    assert(v1 && v2 && v3);
 
-   FaceMeme* fm = 0;
+   FaceMeme* fm = nullptr;
    UVpt a, b, c;
    if (UVdata::get_uvs(f, a, b, c)) {
       Panel* r = Panel::upcast(Bsurface::find_controller(f));
@@ -90,7 +90,7 @@ copy_face(Bface* f, CVertMapper& vmap, Primitive* p, bool reverse)
       else
          fm = p->add_face(v1, v2, v3);
    }
-   return fm ? fm->face() : 0;
+   return fm ? fm->face() : nullptr;
    
 }
 
@@ -138,10 +138,10 @@ inline LMESHptr
 get_inflate_mesh(LMESHptr skel_mesh)
 {
    if (!skel_mesh)
-      return 0;
+      return nullptr;
    TEXBODY* tex = TEXBODY::upcast(skel_mesh->geom());
    if (!tex)
-      return 0;
+      return nullptr;
    return LMESH::upcast(tex->get_inflate_mesh(skel_mesh));
 }
 
@@ -398,7 +398,7 @@ PAPER_DOLL::PAPER_DOLL() :
 void 
 PAPER_DOLL::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 PAPER_DOLLptr
@@ -611,7 +611,7 @@ PAPER_DOLL::draw(CVIEWptr& v)
 void
 PAPER_DOLL::reset()
 {
-   _prim = 0;
+   _prim = nullptr;
 }
 
 int  

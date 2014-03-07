@@ -28,7 +28,7 @@ leading_faces(CBvert* v, CSimplexFilter& filter)
    if (!v)
       return ret;
 
-   Bface* f = 0;
+   Bface* f = nullptr;
    for (int i=0; i<v->degree(); i++) {
       Bedge* e = v->e(i);
       if ((e->is_border() || filter.accept(e)) &&
@@ -53,7 +53,7 @@ vert_normal(CBvert* v, CBface* f, CSimplexFilter& filter)
       return v->norm();
 
    Wvec ret;
-   Bedge* e=0;
+   Bedge* e=nullptr;
    Bface* cur = rewind_cw(v, f, filter);
    do {
       ret += weighted_vnorm(cur, v);

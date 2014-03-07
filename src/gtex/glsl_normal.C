@@ -34,7 +34,7 @@ static bool debug = Config::get_var_bool("DEBUG_GLSL_NORMAL", false);
 GLuint          GLSLNormalShader::_program = 0;
 bool            GLSLNormalShader::_did_init = false;
 
-GLSLNormalShader* GLSLNormalShader::_instance(0);
+GLSLNormalShader* GLSLNormalShader::_instance(nullptr);
 
 GLSLNormalShader::GLSLNormalShader(Patch* p) : GLSLShader(p)
 {

@@ -42,7 +42,7 @@ Image::Image() :
    _width(0),
    _height(0),
    _bpp(0),
-   _data(0),
+   _data(nullptr),
    _no_delete(false) 
 {
 }
@@ -51,7 +51,7 @@ Image::Image(const string& file) :
    _width(0),
    _height(0),
    _bpp(0),
-   _data(0),
+   _data(nullptr),
    _no_delete(false) 
 {
    if (!file.empty())
@@ -62,7 +62,7 @@ Image::Image(uint w, uint h, uint bpp, uchar* data, bool nd) :
    _width(0),
    _height(0),
    _bpp(0),
-   _data(0),
+   _data(nullptr),
    _no_delete(false) 
 {
    if (data)
@@ -75,7 +75,7 @@ Image::Image(const Image& img) :
    _width(0),
    _height(0),
    _bpp(0),
-   _data(0),
+   _data(nullptr),
    _no_delete(false) 
 {
    *this = img;
@@ -110,7 +110,7 @@ Image::freedata()
    if (!_no_delete) {
       delete [] _data;
    }
-   _data = 0;
+   _data = nullptr;
 }
    
 void 
@@ -136,9 +136,9 @@ Image::resize(uint w, uint h, uint b)
       _bpp = b;
       if (!_no_delete)
          delete [] _data;
-      _data = 0;
+      _data = nullptr;
       _no_delete = 0;
-      if ((_data = new uchar [ size() ]) == 0) {
+      if ((_data = new uchar [ size() ]) == nullptr) {
          err_ret("Image::resize: can't allocate data");
          return 0;
       }
@@ -150,7 +150,7 @@ uchar*
 Image::copy()
 {
    if (empty())
-      return 0;
+      return nullptr;
 
    uchar* ret = new uchar [ size() ];
 
@@ -167,8 +167,8 @@ Image::resize_rows_mult_4()
       return 1;
 
    uint   new_w = _width + 4 - _width%4;
-   uchar* new_d = 0;
-   if ((new_d = new uchar [ new_w * _height * _bpp ]) == 0) {
+   uchar* new_d = nullptr;
+   if ((new_d = new uchar [ new_w * _height * _bpp ]) == nullptr) {
       err_ret("Image::resize_rows_mult_4: can't allocate data");
       return 0;
    }
@@ -317,7 +317,7 @@ Image::read_pgm(istream& in, bool ascii)
       err_ret("Image::read_pgm: error reading stream");
       clear();
       return 0;
-   } else if ((_data = new uchar [ _width*_height*_bpp ]) == 0) {
+   } else if ((_data = new uchar [ _width*_height*_bpp ]) == nullptr) {
       err_ret("Image::read_pgm: can't allocate data");
       clear();
       return 0;
@@ -373,7 +373,7 @@ Image::read_ppm(istream& in, bool ascii)
       err_ret("Image::read_ppm: error reading from stream");
       clear();
       return 0;
-   } else if ((_data = new uchar [ size() ]) == 0) {
+   } else if ((_data = new uchar [ size() ]) == nullptr) {
       err_ret("Image::read_ppm: can't allocate data");
       clear();
       return 0;
@@ -465,7 +465,7 @@ Image::expand_power2()
       return false;
 
    uchar *data;
-   if ((data = new uchar [ (w*h*_bpp) ]) == 0) {
+   if ((data = new uchar [ (w*h*_bpp) ]) == nullptr) {
       err_ret("Image::expand_power2: can't allocate data");
       return false;
    }
@@ -498,14 +498,14 @@ Image::open_png(const string &file_name)
    FILE* fp = fopen(file_name.c_str(), "rb");
    if (!fp) {
       err_ret("Image::open_png() - ERROR! Can't open file %s", file_name.c_str());
-      return 0;
+      return nullptr;
    }
 
    // Read in the signature bytes:
    unsigned char buf[PNG_BYTES_TO_CHECK];
    if (fread(buf, 1, PNG_BYTES_TO_CHECK, fp) != PNG_BYTES_TO_CHECK) {
       err_ret("Image::open_png: can't read file %s", file_name.c_str());
-      return 0;
+      return nullptr;
    }
 
    // Compare the first PNG_BYTES_TO_CHECK bytes of the signature:
@@ -514,9 +514,9 @@ Image::open_png(const string &file_name)
       return fp;
    } else {
       // it is not a PNG file
-      // close the file, return NULL:
+      // close the file, return nullptr:
       fclose(fp);
-      return 0;
+      return nullptr;
    }
 }
 
@@ -549,7 +549,7 @@ Image::read_png(FILE* fp)
    // reset and free up memory:
    clear();
 
-   png_structp  png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,0,0,0);
+   png_structp  png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING,nullptr,nullptr,nullptr);
    if (!png_ptr) {
       err_msg("Image::read_png: png_create_read_struct() failed");
       return 0;
@@ -558,7 +558,7 @@ Image::read_png(FILE* fp)
    // Allocate/initialize the memory for image information
    png_infop info_ptr = png_create_info_struct(png_ptr);
    if (!info_ptr) {
-      png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+      png_destroy_read_struct(&png_ptr, nullptr, nullptr);
       err_msg("Image::read_png: png_create_info_struct() failed");
       return 0;
    }
@@ -567,7 +567,7 @@ Image::read_png(FILE* fp)
    if (setjmp(png_jmpbuf(png_ptr))) {
       // jump here from error encountered inside PNG code...
       // free all memory associated with the png_ptr and info_ptr
-      png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+      png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
       err_adv(debug, "Image::read_png: error in PNG code, bailing out");
       return 0;
    }
@@ -597,7 +597,7 @@ Image::read_png(FILE* fp)
                 &bit_depth,
                 &color_type,
                 &interlace_type,
-                NULL, NULL);
+                nullptr, nullptr);
 
    // tell libpng to strip 16 bit/color files down to 8 bits/channel
    png_set_strip_16(png_ptr);
@@ -632,14 +632,14 @@ Image::read_png(FILE* fp)
    } else if (interlace_type != PNG_INTERLACE_NONE) {
       err_msg("Image::read_png: unsupported interlace type (%d)",
               interlace_type);
-   } else if ((_data = new uchar [ size() ]) == 0) {
+   } else if ((_data = new uchar [ size() ]) == nullptr) {
       err_ret("Image::read_png: can't allocate data");
    } else {
       _no_delete = 0;
 
       // no more excuses: read the image (inverted vertically):
       for (int y=_height-1; y>=0; y--)
-         png_read_row(png_ptr, _data + y*row_bytes, 0);
+         png_read_row(png_ptr, _data + y*row_bytes, nullptr);
 
       // read rest of file, and get additional
       // chunks in info_ptr - REQUIRED
@@ -647,7 +647,7 @@ Image::read_png(FILE* fp)
    }
 
    // clean up after the read, and free any memory allocated - REQUIRED
-   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
+   png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
 
    // return pixel data:
    if (_data) {
@@ -668,7 +668,7 @@ Image::read_png(FILE* fp)
 int
 Image::write_png(const string &file) const
 {
-   if (_width == 0 || _height == 0 || _data == 0) {
+   if (_width == 0 || _height == 0 || _data == nullptr) {
       err_msg("Image::write_png: image has no data");
       return 0;
    } else if (_bpp < 1 || _bpp > 4) {
@@ -678,17 +678,17 @@ Image::write_png(const string &file) const
    }
 
    FILE* fp;
-   if ((fp = fopen(file.c_str(), "wb")) == 0) {
+   if ((fp = fopen(file.c_str(), "wb")) == nullptr) {
       err_ret("Image::write_png: can't open file %s", file.c_str());
       return 0;
    }
 
    // Create and initialize the png_struct with the desired error handler
    // functions.  If you want to use the default stderr and longjump method,
-   // you can supply NULL for the last three parameters.  We also check that
+   // you can supply nullptr for the last three parameters.  We also check that
    // the library version is compatible with the one used at compile time,
    // in case we are using dynamically linked libraries.  REQUIRED.
-   png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,0,0,0);
+   png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,nullptr,nullptr,nullptr);
    if (!png_ptr) {
       fclose(fp);
       err_msg("Image::write_png: png_create_write_struct() failed");
@@ -699,7 +699,7 @@ Image::write_png(const string &file) const
    png_infop info_ptr = png_create_info_struct(png_ptr);
    if (!info_ptr) {
       fclose(fp);
-      png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
+      png_destroy_write_struct(&png_ptr, nullptr);
       err_msg("Image::write_png: png_create_info_struct() failed");
       return 0;
    }
@@ -709,7 +709,7 @@ Image::write_png(const string &file) const
       // jump here from error encountered inside PNG code...
       // free all memory associated with the png_ptr and info_ptr
       fclose(fp);
-      png_destroy_write_struct(&png_ptr,  (png_infopp)NULL);
+      png_destroy_write_struct(&png_ptr, nullptr);
       err_msg("Image::write_png: error writing file %s", file.c_str());
       return 0;
    }
@@ -749,7 +749,7 @@ Image::write_png(const string &file) const
    png_write_end(png_ptr, info_ptr);
 
    // clean up after the write, and free any memory allocated
-   png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+   png_destroy_write_struct(&png_ptr, nullptr);
 
    // close the file
    fclose(fp);

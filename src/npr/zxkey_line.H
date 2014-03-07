@@ -28,7 +28,7 @@ class ZXedgeStrokeTexture;
 class ZkeyLineTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   ZkeyLineTexture(Patch* patch = 0);
+   ZkeyLineTexture(Patch* patch = nullptr);
    virtual ~ZkeyLineTexture();
 
    //******** RUN-TIME TYPE ID ********

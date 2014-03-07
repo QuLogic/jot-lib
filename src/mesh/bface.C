@@ -30,12 +30,12 @@ Bface::Bface(Bvert* u, Bvert* v, Bvert* w,
    _v1(u), _v2(v), _v3(w),
    _e1(e), _e2(f), _e3(g),
    _area(0),
-   _patch(0),
+   _patch(nullptr),
    _patch_index(-1),
-   _orient(0),
+   _orient(nullptr),
    _ff_stamp(0),
    _zx_stamp(0),
-   _tc(0),
+   _tc(nullptr),
    _layer(0)
 {
    *_e1 += this;
@@ -220,7 +220,7 @@ Bface::ndc_walk(
 
    if (is_edge(sim)) {
       Bedge* e = (Bedge*)sim;
-      Bface* f = e->is_sil() ? (Bface*)0 : e->other_face(this);
+      Bface* f = e->is_sil() ? nullptr : e->other_face(this);
       if (f) {
          Wvec new_bc;
          int  new_on_tri;
@@ -228,9 +228,9 @@ Bface::ndc_walk(
          if (new_best.dist_sqrd(target) < y.dist_sqrd(target))
             return f->ndc_walk(target, new_bc, new_best, new_on_tri, true); 
          else 
-            return 0;
+            return nullptr;
       } else {
-         return 0;
+         return nullptr;
       }
    }
 
@@ -238,12 +238,12 @@ Bface::ndc_walk(
    assert(is_vert(sim));
    Bvert* v = (Bvert*)sim;
    if (v->degree(SilEdgeFilter()) > 0)
-      return 0;
+      return nullptr;
 
    Bface_list nbrs(16);
    ((Bvert*)sim)->get_faces(nbrs);
    double dist_sqrd = 1e50;
-   Bface* best = 0;
+   Bface* best = nullptr;
    Wvec   best_bc;
    NDCpt  best_nearest;
    int    best_on_tri = 0;
@@ -268,21 +268,21 @@ Bface::ndc_walk(
       return best->ndc_walk(target, best_bc, best_nearest, best_on_tri, true); 
    }
 
-   return 0;
+   return nullptr;
 }
 
 Bface*
 Bface::plane_walk(Bedge* cur_edge, CWplane& plane, Bedge*& next_edge) const
 {
    int i;
-   assert(cur_edge == 0 || cur_edge->which_side(plane) == 0);
+   assert(cur_edge == nullptr || cur_edge->which_side(plane) == 0);
 
    for (i=1; i<4; i++)
       if (e(i) != cur_edge && e(i)->which_side(plane)==0)
          break;
    
    if (i==4)
-      return 0;
+      return nullptr;
 
    assert(e(i)->which_side(plane)==0);
    
@@ -690,7 +690,7 @@ Bface::detach()
    if (_e2) ret = (*_e2 -= this) && ret;
    if (_e3) ret = (*_e3 -= this) && ret;
 
-   _e1 = _e2 = _e3 = 0;
+   _e1 = _e2 = _e3 = nullptr;
 
    return ret;
 }
@@ -707,7 +707,7 @@ Bface::reverse()
    // tell patch tri strips are invalid:
    if (_patch)
       _patch->triangulation_changed();
-   _orient = 0;
+   _orient = nullptr;
 
    geometry_changed();
 }
@@ -805,7 +805,7 @@ Bface::redef2(Bvert *a, Bvert *b)
    // tell patch strips are invalid:
    if (_patch)
       _patch->triangulation_changed();
-   _orient = 0;
+   _orient = nullptr;
 
    // invalidate cached state in this face
    // and neighboring simplices:
@@ -866,7 +866,7 @@ Bface::redefine(Bvert *v, Bvert *u)
    // tell patch strips are invalid:
    if (_patch)
       _patch->triangulation_changed();
-   _orient = 0;
+   _orient = nullptr;
 
    // invalidate cached state in this face
    // and neighboring simplices:
@@ -922,7 +922,7 @@ Bface::redefine(
    // tell patch strips are invalid:
    if (_patch)
       _patch->triangulation_changed();
-   _orient = 0;
+   _orient = nullptr;
 
    // invalidate cached state in this face
    // and neighboring simplices:
@@ -1014,7 +1014,7 @@ bool
 Bface::get_quad_verts(Bvert_list& verts) const 
 {
    verts.clear();
-   Bvert *v1=0, *v2=0, *v3=0, *v4=0;
+   Bvert *v1=nullptr, *v2=nullptr, *v3=nullptr, *v4=nullptr;
    if (!get_quad_verts(v1,v2,v3,v4))
       return 0;
    verts.push_back(v1);
@@ -1027,7 +1027,7 @@ Bface::get_quad_verts(Bvert_list& verts) const
 bool
 Bface::get_quad_pts(Wpt& a, Wpt& b, Wpt& c, Wpt& d) const 
 {
-   Bvert *v1=0, *v2=0, *v3=0, *v4=0;
+   Bvert *v1=nullptr, *v2=nullptr, *v3=nullptr, *v4=nullptr;
    if (!get_quad_verts(v1,v2,v3,v4))
       return 0;
    a = v1->loc();
@@ -1040,7 +1040,7 @@ Bface::get_quad_pts(Wpt& a, Wpt& b, Wpt& c, Wpt& d) const
 bool 
 Bface::get_quad_edges(Bedge*& a, Bedge*& b, Bedge*& c, Bedge*& d) const
 {
-	Bvert *v1=0, *v2=0, *v3=0, *v4=0;
+	Bvert *v1=nullptr, *v2=nullptr, *v3=nullptr, *v4=nullptr;
    if (!get_quad_verts(v1,v2,v3,v4))
       return 0;
 
@@ -1059,7 +1059,7 @@ bool
 Bface::get_quad_edges(Bedge_list& edges)                          const
 {
   edges.clear();
-   Bedge *e1=0, *e2=0, *e3=0, *e4=0;
+   Bedge *e1=nullptr, *e2=nullptr, *e3=nullptr, *e4=nullptr;
    if (!get_quad_edges(e1,e2,e3,e4))
       return 0;
    edges.push_back(e1);
@@ -1137,7 +1137,7 @@ Bface::quad_bc_to_uv(CWvec& bc) const
    //
    //   STANDARD QUAD ORDER
    
-   Bvert *a=0, *b=0, *c=0, *d=0;
+   Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
    if (!get_quad_verts(a, b, c, d)) {
       err_msg("Bface::quad_bc_to_uv: Error: can't get quad verts");
       return UVpt();
@@ -1184,7 +1184,7 @@ Bface::quad_uv2loc(CUVpt& uv) const
    //
    //   STANDARD QUAD ORDER
    
-   Bvert *a=0, *b=0, *c=0, *d=0;
+   Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
    if (!get_quad_verts(a, b, c, d)) {
       err_msg("Bface::quad_uv2loc: Error: can't get quad verts");
       return Wpt();
@@ -1310,7 +1310,7 @@ Bface_list::same_patch() const
 Patch*
 Bface_list::get_patch() const 
 {
-   return same_patch() && !empty() ? front()->patch() : 0;
+   return same_patch() && !empty() ? front()->patch() : nullptr;
 }
 
 double 
@@ -1359,9 +1359,9 @@ check_partner(Bface* f)
    // helper function used in quad_complete_faces() below
 
    if (!(f && f->is_quad()))
-      return 0;
+      return nullptr;
    Bface* p = f->quad_partner();
-   return p->flag() ? 0 : p;
+   return p->flag() ? nullptr : p;
 }
 
 Bface_list
@@ -1371,7 +1371,7 @@ Bface_list::quad_complete_faces() const
    // returns the "completed" list, containing the missing partners:
 
    mark_faces();
-   Bface* p=0;
+   Bface* p=nullptr;
    Bface_list ret = *this;
    for (Bface_list::size_type i=0; i<size(); i++)
       if ((p = check_partner(at(i))))
@@ -1437,7 +1437,7 @@ Bface_list::is_connected() const
    //       NOT connected.
 
    // reject if empty or not all from one mesh:
-   if (mesh() == NULL)
+   if (mesh() == nullptr)
       return false;
 
    // Find all faces connected to the first triangle.

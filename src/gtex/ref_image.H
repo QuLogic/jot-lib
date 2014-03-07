@@ -135,7 +135,7 @@ template <class T>
 class Array2d : public CoordSystem2d {
  public:
    //******** MANAGERS ********
-   Array2d() : CoordSystem2d(), _values(0) {}
+   Array2d() : CoordSystem2d(), _values(nullptr) {}
    Array2d(const Array2d<T>& arr) : _values(0) {
       resize(arr._width, arr._height);
       for (uint i=0; i<_max; i++)
@@ -168,7 +168,7 @@ class Array2d : public CoordSystem2d {
   
    void allocate() {
       delete [] _values;
-      _values = 0;
+      _values = nullptr;
       if (_max>0) {
          _values = new T[_max];
          assert(_values);
@@ -372,7 +372,7 @@ class ColorRefImage : public RefImage {
    // lookup the ColorRefImage and return a pointer to its internal texture:
    static TEXTUREglptr lookup_texture(int i, CVIEWptr& v = VIEW::peek()) {
       ColorRefImage* c = lookup(i, v);
-      return c ? c->get_texture() : 0;
+      return c ? c->get_texture() : nullptr;
    }
    
    // lookup the texture unit used by the current ColorRefImage;
@@ -467,7 +467,7 @@ class IDRefImage : public RefImage {
 
    static TEXTUREglptr lookup_texture(CVIEWptr& v = VIEW::peek()) {
       IDRefImage* c = lookup(v);
-      return c ? c->get_texture() : 0;
+      return c ? c->get_texture() : nullptr;
    }
 
    // lookup the texture unit used by the current IDRefImage;
@@ -537,15 +537,15 @@ class IDRefImage : public RefImage {
 
    Bvert* vert(uint id) const {
       Bsimplex* sim = simplex(id);
-      return is_vert(sim) ? (Bvert*)sim : 0;
+      return is_vert(sim) ? (Bvert*)sim : nullptr;
    }
    Bedge* edge(uint id) const {
       Bsimplex* sim = simplex(id);
-      return is_edge(sim) ? (Bedge*)sim : 0;
+      return is_edge(sim) ? (Bedge*)sim : nullptr;
    }
    Bface* face(uint id) const {
       Bsimplex* sim = simplex(id);
-      return is_face(sim) ? (Bface*)sim : 0;
+      return is_face(sim) ? (Bface*)sim : nullptr;
    }
    Bvert* vert(CNDCpt& ndc)         const { return vert(ndc_to_uint(ndc)); }
    Bedge* edge(CNDCpt& ndc)         const { return edge(ndc_to_uint(ndc)); }
@@ -569,14 +569,14 @@ class IDRefImage : public RefImage {
       Bsimplex* sim = simplex(ndc);
       if (sim && sim->get_face())
          return sim->get_face()->find_intersect_sim(ndc, obj_pt);
-      else return 0;
+      else return nullptr;
    }
 
    // Find the simplex that is intersected exactly (if any), but
    // return a face (either the sim itself or one that contains it):
    Bface* intersect(CNDCpt& ndc, Wpt& obj_pt) const {
       Bsimplex* sim = intersect_sim(ndc, obj_pt);
-      return sim ? sim->get_face() : 0;
+      return sim ? sim->get_face() : nullptr;
    }
 
    // Exact intersection -- return a face:
@@ -609,7 +609,7 @@ class IDRefImage : public RefImage {
    // edge, and the edge is in the given patch, and it's a silhouette
    // edge.
    bool is_patch_sil_edge(Cpoint2i& pix, const Patch* patch) const {
-      static Bedge* temp = 0;
+      static Bedge* temp = nullptr;
       if (pix_in_range(pix) && (temp = edge(pix)) 
           && (temp->patch() == patch) && (temp->is_sil())) 
          return true;
@@ -698,11 +698,11 @@ class IDRefImage : public RefImage {
    Patch* patch(Bsimplex* sim) const {
       return (is_face(sim) ? ((Bface*)sim)->patch() :
               is_edge(sim) ? ((Bedge*)sim)->patch() :
-              0);
+              nullptr);
    }
 
    Patch* face_patch(Bsimplex* sim) const {
-      return (is_face(sim) ? ((Bface*)sim)->patch() : 0); 
+      return is_face(sim) ? ((Bface*)sim)->patch() : nullptr;
    }
    //******** UTILITIES ********
 
@@ -741,7 +741,7 @@ class VisRefImage : public    IDRefImage,
    static void init();
    static VisRefImage* lookup(CVIEWptr& view = VIEW::peek()) {
       if (!view)
-         return 0;
+         return nullptr;
       if (!BaseVisRefImage::_factory)
          init();
       return (VisRefImage*)BaseVisRefImage::lookup(view);
@@ -764,7 +764,7 @@ class VisRefImage : public    IDRefImage,
          vis->update();
          return vis->find_near_simplex(cur, screen_rad, filt);
       }
-      return (Bsimplex*)0;
+      return nullptr;
    }
 
    // Return the nearest Bface within the given screen region,
@@ -781,7 +781,7 @@ class VisRefImage : public    IDRefImage,
          vis->update();
          return vis->intersect(ndc, obj_pt);
       }
-      return (Bface*)0;
+      return nullptr;
    }
    static Bface* Intersect(CNDCpt& ndc) {
       Wpt foo;
@@ -793,7 +793,7 @@ class VisRefImage : public    IDRefImage,
    // 2. Convert the screen location to a barycentric
    //    coordinate on the Bface.
    // 3. Return the Bface and barycentric coordinate.
-   //    (Returns NULL on failure.)
+   //    (Returns nullptr on failure.)
    static Bface* get_face_bc(
       Wvec& bc, CNDCpt& ndc = get_cursor(), double rad=1
       );

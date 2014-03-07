@@ -127,7 +127,7 @@ class CallBack_t {
     
    public:
    
-      CallBack_t():_next(0)                  { }
+      CallBack_t():_next(nullptr)            { }
       CallBack_t(State_t<EVENT> *n):_next(n) { }
       virtual ~CallBack_t() {}
       
@@ -290,7 +290,7 @@ class State_t {
       //! \brief Process the event, returning the next state. If
       //! requested, return the result of the callback in ret.
       State_t<EVENT> *event(const EVENT& e, State_t<EVENT>* start=0,
-                            int* ret=0) const;
+                            int* ret=nullptr) const;
 
       void clear() { _arcs.clear(); }
       
@@ -424,13 +424,13 @@ class Event : public Evd {
    public:
    
       Event()
-         : _view(0) { }
+         : _view(nullptr) { }
       Event(VIEWptr v, DEVice *d, DEVact a=MOV, DEVmod m=NONE)
          : Evd(d,a,m),_view(v) { }
       Event(DEVice *d, DEVact a=MOV, DEVmod m=NONE)
-         : Evd(d,a,m),_view(0) { }
+         : Evd(d,a,m),_view(nullptr) { }
       Event(CEvd &e)
-         : _view(0) { *(static_cast<Evd*>(this)) = e; }
+         : _view(nullptr) { *(static_cast<Evd*>(this)) = e; }
       Event(VIEWptr p, CEvd &e)
          : _view(p) { *(static_cast<Evd*>(this)) = e; }
       
@@ -471,7 +471,7 @@ class ButtonMapper
       DEVice_buttons  *_btn;
       DEVice_2d       *_ptr;
    public:
-      ButtonMapper():_btn(0), _ptr(0) {}
+      ButtonMapper():_btn(nullptr), _ptr(nullptr) {}
       ButtonMapper(Mouse *m):_btn(&m->buttons()), _ptr(&m->pointer()){}
       ButtonMapper(DEVice_2d *p, DEVice_buttons *b):_btn(b), _ptr(p){}
 
@@ -604,10 +604,10 @@ class ButtonMapper
       Event movM2()                              { return mov(Evd::MOD2); }
       Event movM3()                              { return mov(Evd::MOD3); }
 
-      Event shiftD()                             { return Event(0,SHIFT_D); }
-      Event ctrlD ()                             { return Event(0,CTL_D); }
-      Event shiftU()                             { return Event(0,SHIFT_U); }
-      Event ctrlU ()                             { return Event(0,CTL_U); }
+      Event shiftD()                             { return Event(nullptr,SHIFT_D); }
+      Event ctrlD ()                             { return Event(nullptr,CTL_D); }
+      Event shiftU()                             { return Event(nullptr,SHIFT_U); }
+      Event ctrlU ()                             { return Event(nullptr,CTL_U); }
 };
 
 // When using clip plane, this allows certain objects to be excluded from
@@ -680,7 +680,7 @@ class VIEWint_list {
                                                      if (it != dhash()->end())
                                                         return it->second;
                                                      else
-                                                        return 0;
+                                                        return nullptr;
                                                    }
      static void     add (CVIEWptr &v, VIEWint *d) { (*dhash())[v] = d;}
      static VIEWint *make(CVIEWptr &v)             { VIEWint *x = find(v);

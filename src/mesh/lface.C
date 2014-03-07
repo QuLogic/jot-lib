@@ -191,7 +191,7 @@ Lface::gen_child_face(
    // Lface Internal method.
 
    if (!(v1 && v2 && v3 && m))
-      return 0;
+      return nullptr;
 
    // Create child of this face
    Lface* child = (Lface*)m->add_face(v1, v2, v3, p);
@@ -222,7 +222,7 @@ Lface::claim_child(Lface* child, bool center_face)
       return;
 
    // Record this face as the child's parent
-   assert(child->parent() == NULL);
+   assert(child->parent() == nullptr);
    child->set_parent(this);
    if (center_face) {
 	  child->le(1)->set_parent(this);
@@ -255,10 +255,10 @@ Lface::allocate_subdiv_elements()
       return;
    set_bit(SUBDIV_ALLOCATED_BIT);
 
-   assert(lmesh() != NULL);
+   assert(lmesh() != nullptr);
    lmesh()->allocate_subdiv_mesh();
    LMESH* submesh = lmesh()->subdiv_mesh();
-   assert(submesh != NULL);
+   assert(submesh != nullptr);
 
 
    //                       lv3                                       #
@@ -291,7 +291,7 @@ Lface::allocate_subdiv_elements()
    le(2)->allocate_subdiv_elements();
    le(3)->allocate_subdiv_elements();
 
-   Patch* child_patch = _patch ? _patch->get_child() : 0;
+   Patch* child_patch = _patch ? _patch->get_child() : nullptr;
 
    // hook up 4 faces (verifying they're not already there):
    if (!subdiv_face1())
@@ -401,7 +401,7 @@ Lface::set_child_patch(Lface* f, Patch*& child)
    if (_patch && (child || (child = _patch->get_child())))
       child->add(f);
    else
-      f->set_patch(0);
+      f->set_patch(nullptr);
 }
 
 void
@@ -410,7 +410,7 @@ Lface::set_patch(Patch* p)
    Bface::set_patch(p);
 
    // In case subfaces already exist, set the patch on each
-   Patch* child_patch = 0;
+   Patch* child_patch = nullptr;
    set_child_patch(subdiv_face1(),       child_patch);
    set_child_patch(subdiv_face2(),       child_patch);
    set_child_patch(subdiv_face3(),       child_patch);
@@ -520,7 +520,7 @@ Lface::child_bc(
    if ((bc[0] < 0) || (bc[1] < 0) || (bc[2] < 0)) {
       err_msg("Lface::child_bc: barycentric coords outside face (%f,%f,%f)",
               bc[0], bc[1], bc[2]);
-      return 0;
+      return nullptr;
    }
 
    if (bc[0] >= 0.5) {
@@ -552,14 +552,14 @@ Lface::parent_bc(CWvec& bc, Wvec& ret) const
 
    if (!_parent) {
       err_msg("Lface::parent_bc: Error: no parent");
-      return 0;
+      return nullptr;
    }
 
    // Get parent simplex of v1:
    Bsimplex* v1p = lv(1)->parent();
    if (!v1p) {
       err_msg("Lface::parent_bc: Error: can't get v1 parent");
-      return 0;
+      return nullptr;
    }
 
    if (v1p == _parent->v1()) {
@@ -577,7 +577,7 @@ Lface::parent_bc(CWvec& bc, Wvec& ret) const
    } else {
       // We are screwed
       err_msg("Lface::parent_bc: Error: can't determine child");
-      return 0;
+      return nullptr;
    }
 
    return _parent;
@@ -601,7 +601,7 @@ Lface::bc_to_level(
    // mesh level of this Lface:
    int delta_level = level - lmesh()->subdiv_level();
 
-   CLface*     f = this, *p = 0;
+   CLface*     f = this, *p = nullptr;
    Wvec   tmp_bc = bc;
 
    ret_bc = bc;
@@ -650,7 +650,7 @@ Lface::parent(int rel_level)
    // return the parent at the highest available level.
 
    Lface* ret = (Lface*) this;
-   for ( ; rel_level > 0 && ret->parent() != NULL; rel_level--)
+   for ( ; rel_level > 0 && ret->parent() != nullptr; rel_level--)
       ret = ret->parent();
 
    return ret;

@@ -65,7 +65,7 @@ const string OTHER_DIRECTORY = "nprdata/other_textures/";
 NPRPenUI::NPRPenUI(NPRPen *p) :
    _id(0),
    _init(false),
-   _glui(0),
+   _glui(nullptr),
    _pen(p),
    _light(0,0,-1) {
 
@@ -216,18 +216,18 @@ NPRPenUI::build()
    _glui->set_main_gfx_window(_pen->view()->win()->id());
 
    //Init the control arrays
-   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
-   assert(_rotation.empty());     _rotation.resize(ROT_NUM, 0);
-   assert(_translation.empty());  _translation.resize(TRAN_NUM, 0);
-   assert(_scale.empty());        _scale.resize(SCALE_NUM, 0);
-   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
-   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
-   assert(_edittext.empty());     _edittext.resize(EDIT_NUM, 0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, nullptr);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
+   assert(_rotation.empty());     _rotation.resize(ROT_NUM, nullptr);
+   assert(_translation.empty());  _translation.resize(TRAN_NUM, nullptr);
+   assert(_scale.empty());        _scale.resize(SCALE_NUM, nullptr);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, nullptr);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, nullptr);
+   assert(_edittext.empty());     _edittext.resize(EDIT_NUM, nullptr);
 
    assert(_toon_filenames.size() == 0);
    assert(_other_filenames.size() == 0);
@@ -267,7 +267,7 @@ NPRPenUI::build()
    _checkbox[CHECK_TRANS] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_GLOBS],
       "Transparency to Background ",
-      NULL,
+      nullptr,
       id+CHECK_TRANS,
       checkbox_cb);
    assert(_checkbox[CHECK_TRANS]);
@@ -278,7 +278,7 @@ NPRPenUI::build()
    _checkbox[CHECK_ANNOTATE] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_GLOBS],
       "Annotatable ",
-      NULL,
+      nullptr,
       id+CHECK_ANNOTATE,
       checkbox_cb);
    assert(_checkbox[CHECK_ANNOTATE]);
@@ -291,7 +291,7 @@ NPRPenUI::build()
 
    _listbox[LIST_LAYER] = new GLUI_Listbox(
       _panel[PANEL_GTEX_LAYER_NAME], 
-      "", NULL,
+      "", nullptr,
       id+LIST_LAYER, listbox_cb);
    assert(_listbox[LIST_LAYER]);
    _listbox[LIST_LAYER]->set_w(172);
@@ -299,7 +299,7 @@ NPRPenUI::build()
    _edittext[EDIT_NAME] = new GLUI_EditText(
       _panel[PANEL_GTEX_LAYER_NAME],
       "", GLUI_EDITTEXT_TEXT,
-      NULL, 
+      nullptr,
       id+EDIT_NAME, edittext_cb);
    assert(_edittext[EDIT_NAME]);
    _edittext[EDIT_NAME]->set_w(172);
@@ -314,7 +314,7 @@ NPRPenUI::build()
 
    _radgroup[RADGROUP_GTEX] = new GLUI_RadioGroup(
       _panel[PANEL_GTEX_LAYER_NAME],
-      NULL,
+      nullptr,
       id+RADGROUP_GTEX, radiogroup_cb);
    assert(_radgroup[RADGROUP_GTEX]);
 
@@ -369,7 +369,7 @@ NPRPenUI::build()
    _checkbox[CHECK_PAPER] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Apply Paper Effect",
-      NULL,
+      nullptr,
       id+CHECK_PAPER,
       checkbox_cb);
    assert(_checkbox[CHECK_PAPER]);
@@ -377,7 +377,7 @@ NPRPenUI::build()
    _checkbox[CHECK_TRAVEL] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Mobile Paper Co-ords",
-      NULL,
+      nullptr,
       id+CHECK_TRAVEL,
       checkbox_cb);
    assert(_checkbox[CHECK_TRAVEL]);
@@ -387,7 +387,7 @@ NPRPenUI::build()
    _checkbox[CHECK_LIGHT] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Use Global Lighting",
-      NULL,
+      nullptr,
       id+CHECK_LIGHT,
       checkbox_cb);
    assert(_checkbox[CHECK_LIGHT]);
@@ -395,7 +395,7 @@ NPRPenUI::build()
    _checkbox[CHECK_SPEC] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LAYER_OPTS],
       "Specular Lighting",
-      NULL,
+      nullptr,
       id+CHECK_SPEC,
       checkbox_cb);
    assert(_checkbox[CHECK_SPEC]);
@@ -409,7 +409,7 @@ NPRPenUI::build()
 
    _radgroup[RADGROUP_LIGHT] = new GLUI_RadioGroup(
       _rollout[ROLLOUT_LIGHT],
-      NULL,
+      nullptr,
       id+RADGROUP_LIGHT, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHT]);
 
@@ -453,7 +453,7 @@ NPRPenUI::build()
    _checkbox[CHECK_DIR] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LIGHT_OPTS],
       "Direction",
-      NULL,
+      nullptr,
       id+CHECK_DIR,
       checkbox_cb);
    assert(_checkbox[CHECK_DIR]);
@@ -463,7 +463,7 @@ NPRPenUI::build()
    _checkbox[CHECK_CAM] = new GLUI_Checkbox(
       _panel[PANEL_GTEX_LIGHT_OPTS],
       "Cam Frame",
-      NULL,
+      nullptr,
       id+CHECK_CAM,
       checkbox_cb);
    assert(_checkbox[CHECK_CAM]);
@@ -474,7 +474,7 @@ NPRPenUI::build()
       id+SLIDE_R, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1000,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_R]);
    _slider[SLIDE_R]->set_num_graduations(1001);
    _slider[SLIDE_R]->set_w(200);
@@ -486,7 +486,7 @@ NPRPenUI::build()
    _rotation[ROT_L] = new GLUI_Rotation(
       _rollout[ROLLOUT_LIGHT],
       "Dir/Pos",
-      NULL,
+      nullptr,
       id+ROT_L, rotation_cb);
    assert(_rotation[ROT_L]);
 
@@ -498,7 +498,7 @@ NPRPenUI::build()
 
    _listbox[LIST_DETAIL] = new GLUI_Listbox(
       _rollout[ROLLOUT_TOON], 
-      "", NULL,
+      "", nullptr,
       id+LIST_DETAIL, listbox_cb);
    assert(_listbox[LIST_DETAIL]);
    _listbox[LIST_DETAIL]->set_w(172);
@@ -515,7 +515,7 @@ NPRPenUI::build()
       id+SLIDE_T, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_T]);
    _slider[SLIDE_T]->set_num_graduations(201);
 
@@ -526,7 +526,7 @@ NPRPenUI::build()
       id+SLIDE_F, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.1, 50.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_F]);
    _slider[SLIDE_F]->set_num_graduations(201);
    //////////////////////////////////
@@ -539,7 +539,7 @@ NPRPenUI::build()
    //rollout of normal map to use
    _listbox[LIST_DETAIL2] = new GLUI_Listbox(
       _rollout[ROLLOUT_TOON], 
-      "", NULL,
+      "", nullptr,
       id+LIST_DETAIL2, listbox_cb);
    assert(_listbox[LIST_DETAIL2]);
    _listbox[LIST_DETAIL2]->set_w(172);
@@ -590,7 +590,7 @@ NPRPenUI::build()
       id+SLIDE_L, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_L]);
    _slider[SLIDE_L]->set_num_graduations(201);
 
@@ -603,7 +603,7 @@ NPRPenUI::build()
       id+SLIDE_H, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_H]);
    _slider[SLIDE_H]->set_num_graduations(201);
 
@@ -613,7 +613,7 @@ NPRPenUI::build()
       id+SLIDE_S, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_S]);
    _slider[SLIDE_S]->set_num_graduations(201);
 
@@ -623,7 +623,7 @@ NPRPenUI::build()
       id+SLIDE_V, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_V]);
    _slider[SLIDE_V]->set_num_graduations(201);
 
@@ -632,7 +632,7 @@ NPRPenUI::build()
       id+SLIDE_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_A]);
    _slider[SLIDE_A]->set_num_graduations(201);
 
@@ -645,7 +645,7 @@ NPRPenUI::build()
    _checkbox[CHECK_INV] = new GLUI_Checkbox(
       _panel[PANEL_TEX],
       "Invert detail",
-      NULL,
+      nullptr,
       id+CHECK_INV,
       checkbox_cb);
    _checkbox[CHECK_INV]->set_int_val(0);
@@ -653,7 +653,7 @@ NPRPenUI::build()
 
    _listbox[LIST_TEX] = new GLUI_Listbox(
       _panel[PANEL_TEX], 
-      "", NULL,
+      "", nullptr,
       id+LIST_TEX, listbox_cb);
    assert(_listbox[LIST_TEX]);
 
@@ -677,7 +677,7 @@ NPRPenUI::build()
    _rotation[ROT_ROT] = new GLUI_Rotation(
       _panel[PANEL_XFORM],
       "Rotation",
-      NULL,
+      nullptr,
       id+ROT_ROT, rotation_cb);
    assert(_rotation[ROT_ROT]);
 
@@ -686,7 +686,7 @@ NPRPenUI::build()
    _translation[TRAN_X] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "X", GLUI_TRANSLATION_X,
-      NULL, 
+      nullptr,
       id+TRAN_X, translation_cb);
    assert(_translation[TRAN_X]);
    _translation[TRAN_X]->set_speed(0.1);
@@ -696,7 +696,7 @@ NPRPenUI::build()
    _translation[TRAN_Y] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Y", GLUI_TRANSLATION_Y,
-      NULL, 
+      nullptr,
       id+TRAN_Y, translation_cb);
    assert(_translation[TRAN_Y]);
    _translation[TRAN_Y]->set_speed(0.1);
@@ -706,7 +706,7 @@ NPRPenUI::build()
    _translation[TRAN_Z] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Z", GLUI_TRANSLATION_Z,
-      NULL, 
+      nullptr,
       id+TRAN_Z, translation_cb);
    assert(_translation[TRAN_Z]);
    _translation[TRAN_Z]->set_speed(0.1);   
@@ -716,7 +716,7 @@ NPRPenUI::build()
    _scale[SCALE_UNIFORM] = new GLUI_Translation(
       _panel[PANEL_XFORM],
       "Scale", GLUI_TRANSLATION_Y,
-      NULL, 
+      nullptr,
       id+SCALE_UNIFORM, scale_cb);
    assert(_scale[SCALE_UNIFORM]);
    _scale[SCALE_UNIFORM]->set_y(1.0);
@@ -733,9 +733,9 @@ NPRPenUI::build()
    _checkbox[CHECK_CENTER] = new GLUI_Checkbox(
       _rollout[ROLLOUT_HACK],
       "Center at world origin",
-      NULL /*,
+      nullptr /*,
       id+CHECK_CENTER,
-      NULL*/);
+      nullptr*/);
    assert(_checkbox[CHECK_CENTER]);
 
    // Editable xforms
@@ -752,14 +752,14 @@ NPRPenUI::build()
    _edittext[EDIT_TRAN_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Trans X", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_TRAN_X, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_X]);
 
    _edittext[EDIT_SCALE_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Scale X", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_SCALE_X, edit_xform_cb);
    assert(_edittext[EDIT_SCALE_X]);
    _edittext[EDIT_SCALE_X]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
@@ -767,7 +767,7 @@ NPRPenUI::build()
    _edittext[EDIT_ROT_X] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Rot X", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_ROT_X, edit_xform_cb);
    assert(_edittext[EDIT_ROT_X]);
    _edittext[EDIT_ROT_X]->set_alignment(GLUI_ALIGN_RIGHT);
@@ -777,14 +777,14 @@ NPRPenUI::build()
    _edittext[EDIT_TRAN_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_TRAN_Y, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_Y]);
 
    _edittext[EDIT_SCALE_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_SCALE_Y, edit_xform_cb);
    assert(_edittext[EDIT_SCALE_Y]);
    _edittext[EDIT_SCALE_Y]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
@@ -792,7 +792,7 @@ NPRPenUI::build()
    _edittext[EDIT_ROT_Y] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Y", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_ROT_Y, edit_xform_cb);
    assert(_edittext[EDIT_ROT_Y]);
 
@@ -801,14 +801,14 @@ NPRPenUI::build()
    _edittext[EDIT_TRAN_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_TRAN_Z, edit_xform_cb);
    assert(_edittext[EDIT_TRAN_Z]);
 
    _edittext[EDIT_SCALE_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_SCALE_Z, edit_xform_cb);
    assert(_edittext[EDIT_SCALE_Z]);
    _edittext[EDIT_SCALE_Y]->set_float_limits(min_scale, max_scale, GLUI_LIMIT_CLAMP);
@@ -816,7 +816,7 @@ NPRPenUI::build()
    _edittext[EDIT_ROT_Z] = new GLUI_EditText(
       _panel[PANEL_EDIT_XFORM],
       "Z", GLUI_EDITTEXT_FLOAT,
-      NULL, 
+      nullptr,
       id+EDIT_ROT_Z, edit_xform_cb);
    assert(_edittext[EDIT_ROT_Z]);
 
@@ -885,7 +885,7 @@ NPRPenUI::destroy()
 
    _glui->close();
 
-   _glui = NULL;
+   _glui = nullptr;
 }
 
 /////////////////////////////////////
@@ -2054,7 +2054,7 @@ void
 NPRPenUI::add_layer()
 {
    int i;
-   GTexture *t = NULL;
+   GTexture *t = nullptr;
    NPRTexture *npr = _pen->curr_npr_tex();
 
    if (npr)

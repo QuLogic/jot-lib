@@ -72,10 +72,10 @@ GLUT_WINSYS::GLUT_WINSYS(int &argc, char **argv) :
    _init_y(Config::get_var_int("JOT_WINDOW_Y", 28,true)),
    _map_pending(false),
    _show_special_cursor(false),
-   _mouse(0),
-   _curpush(0),
-   _file_select(0),
-   _alert_box(0)
+   _mouse(nullptr),
+   _curpush(nullptr),
+   _file_select(nullptr),
+   _alert_box(nullptr)
 {
   _double_buffered = 1;
 
@@ -91,7 +91,7 @@ GLUT_WINSYS::GLUT_WINSYS(int &argc, char **argv) :
 #ifdef macosx
    // apple's GLUT framework trashes current dir..
    // so get current directory
-   char * cwd = getcwd(NULL, 0);
+   char * cwd = getcwd(nullptr, 0);
 #endif
 
    glutInit(&argc, argv);
@@ -142,7 +142,7 @@ GLUT_WINSYS::setup(CVIEWptr &v)
            << endl;
    }
 
-   _windows.resize(_id + 1, 0);
+   _windows.resize(_id + 1, nullptr);
    _windows[_id] = this;
 
    // Set callbacks for 'current' window
@@ -287,7 +287,7 @@ GLUT_WINSYS::reshape_cb(int width, int height)
    //       This will be called by unblock() to handle any pending work...
 
    GLUT_WINSYS *win = _windows[glutGetWindow()];
-   assert(win && win->_view != NULL);
+   assert(win && win->_view != nullptr);
 
    win->_width = width;
    win->_height = height;
@@ -496,7 +496,7 @@ GLUT_WINSYS::set_focus()
 
 #ifdef WIN32
    HWND hwnd = FindWindow("GLUT", _name.c_str());
-   if(hwnd != NULL) {
+   if (hwnd != nullptr) {
       //SetFocus(hwnd);
       SetActiveWindow(hwnd);
    } else {

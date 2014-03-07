@@ -59,7 +59,7 @@ typedef vector<PCell*> PCell_list;
 class PCell {
  public:
    PCell(Panel* p, CBface_list& f) : _panel(p), _faces(f) {
-      assert(p != NULL);
+      assert(p != nullptr);
    }
 
    //******** ACCESSORS ********
@@ -160,11 +160,11 @@ class Panel:  public Bsurface {
 
    static PCell* find_cell(Bface* f) {
       Panel* p = Panel::find_owner(f);
-      if (!p) return 0;
+      if (!p) return nullptr;
       for (PCell_list::size_type i=0; i<p->_cells.size(); i++)
          if (p->_cells[i]->contains(f))
             return p->_cells[i];
-      return 0;
+      return nullptr;
    }
 
    static PCell_list find_cells(CBface_list& faces) {

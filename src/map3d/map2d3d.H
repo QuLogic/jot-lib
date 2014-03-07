@@ -172,7 +172,7 @@ class RuledSurfCurveVec : public Map2D3D {
    //******** MANAGERS ********
 
    RuledSurfCurveVec(Map1D3D* c) : _c(c) {
-      assert(_c != NULL);
+      assert(_c != nullptr);
       hookup();
    }
 
@@ -449,7 +449,7 @@ class XFormedMap2D3D : public Map2D3D {
    // You're on your honor to supply an affine (not perspective)
    // transform:
    XFormedMap2D3D(Map2D3D* m, CWtransf& xf = Identity) :
-      _map2d3d(0),
+      _map2d3d(nullptr),
       _xf(xf) {
       set_map(m);
    }
@@ -467,12 +467,12 @@ class XFormedMap2D3D : public Map2D3D {
    void clear_map() {
       if (_map2d3d) {
          _map2d3d->rem_output(this);
-         _map2d3d = 0;
+         _map2d3d = nullptr;
       }
    }
    void set_map(Map2D3D* m) {
       clear_map();
-      if ((_map2d3d = m) != NULL) {
+      if ((_map2d3d = m) != nullptr) {
          _map2d3d->add_output(this);
          invalidate();
       }

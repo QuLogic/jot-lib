@@ -85,7 +85,7 @@ class halftone_layer_t : public layer_base_t {
 class Halftone_TX : public GLSLShader_Layer_Base {
  public:
    //******** MANAGERS ********
-   Halftone_TX(Patch* patch = 0);
+   Halftone_TX(Patch* patch = nullptr);
    virtual ~Halftone_TX();
 
    //******** RUN-TIME TYPE ID ********

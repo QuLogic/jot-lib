@@ -53,7 +53,7 @@ using mlib::UVpt;
 
 static int foo = DECODER_ADD(HatchingStroke);
 
-TAGlist*			HatchingStroke::_hs_tags = 0;
+TAGlist*			HatchingStroke::_hs_tags = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // HatchingStroke Methods
@@ -63,7 +63,7 @@ TAGlist*			HatchingStroke::_hs_tags = 0;
 // Constructor
 /////////////////////////////////////
 
-HatchingStroke::HatchingStroke() : _group(NULL), _transf(NULL), _free(false)
+HatchingStroke::HatchingStroke() : _group(nullptr), _transf(nullptr), _free(false)
 {
 
    _vis_type =		VIS_TYPE_SCREEN | VIS_TYPE_NORMAL | VIS_TYPE_SUBCLASS;

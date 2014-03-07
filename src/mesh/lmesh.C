@@ -47,9 +47,9 @@ DECODER_ADD(LMESH);
 
 LMESH::LMESH(int num_v, int num_e, int num_f) :
    BMESH(num_v, num_e, num_f),
-   _parent_mesh(0),
-   _cur_mesh(0),     // XXX - see comment below
-   _subdiv_mesh(0),
+   _parent_mesh(nullptr),
+   _cur_mesh(nullptr),     // XXX - see comment below
+   _subdiv_mesh(nullptr),
    _subdiv_level(0),
    _loc_calc(new HybridLoc),    // use hybrid rules by default
    _color_calc(new LoopColor)   // for colors we're not so choosy
@@ -57,7 +57,7 @@ LMESH::LMESH(int num_v, int num_e, int num_f) :
    // Some compilers complain if 'this' is used in
    // member variable initialization section above
    _cur_mesh = this;
-   _lmesh_tags = NULL;            // non-static tags
+   _lmesh_tags = nullptr;            // non-static tags
 }
 
 LMESH::~LMESH()
@@ -81,7 +81,7 @@ LMESH::get_lmesh(const string& exact_name)
    if (exact_name == "") {
       if (debug)
          cerr << "LMESH::get_lmesh: error: name is empty" << endl;
-      return 0;
+      return nullptr;
    }
 
    // Does a mesh with the requested name exist?
@@ -883,7 +883,7 @@ LMESH::delete_subdiv_mesh()
    }
    if (is_control_mesh())
       set_cur_mesh(this);
-   _subdiv_mesh = 0;    // deletes _subdiv_mesh thru ref-counting
+   _subdiv_mesh = nullptr;    // deletes _subdiv_mesh thru ref-counting
 }
 
 void
@@ -900,7 +900,7 @@ LMESH::set_parent(LMESH* parent)
    _parent_mesh = parent; 
    _subdiv_level = parent->subdiv_level() + 1;
    LMESH* c = control_mesh();
-   assert(c != 0);
+   assert(c != nullptr);
    if (c->has_name()) {
       char tmp[32];
       sprintf(tmp, "%d", _subdiv_level);
@@ -1256,7 +1256,7 @@ bmesh_to_lmesh(BMESHptr mesh)
    // Otherwise allocate a new LMESH, copy the data
    // from the given mesh, and return the LMESH.
 
-   if (!mesh) return 0;
+   if (!mesh) return nullptr;
    LMESHptr ret = LMESH::upcast(&*mesh);
    if (!ret) {
       ret = new LMESH;

@@ -32,7 +32,7 @@
 class DotsShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   DotsShader(Patch* patch = 0);
+   DotsShader(Patch* patch = nullptr);
 
    virtual ~DotsShader();
 

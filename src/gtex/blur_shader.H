@@ -36,7 +36,7 @@
 class BlurShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   BlurShader(Patch* patch = 0);
+   BlurShader(Patch* patch = nullptr);
 
    virtual ~BlurShader();
 

@@ -118,7 +118,7 @@ class JOTvar : public DATA_ITEM {
                      // constructor: each JOTvar instance is a unique decoder!
                      JOTvar(TYPE v, OBJ *obj, const string &vname, set_meth m):
                           _vname(vname), _val(v), _obj(obj), _smeth(m), 
-                          _var_tags(0)
+                          _var_tags(nullptr)
                                           { _inst_name = inst_name(); 
                                        DATA_ITEM::add_decoder(_inst_name,this);}
 
@@ -130,7 +130,7 @@ class JOTvar : public DATA_ITEM {
  virtual const string &obj_name()   const { return _obj->name();}
  virtual const string &var_name()   const { return _vname;}
  virtual STAT_STR_RET class_name()  const { return _inst_name;}// instance name!
- virtual DATA_ITEM   *dup()         const { return  0; }
+ virtual DATA_ITEM   *dup()         const { return nullptr; }
  virtual CTAGlist    &tags()        const {
                            if (!_var_tags) {
                               ((JOTvar<OBJ,TYPE> *)this)->_var_tags = new TAGlist;

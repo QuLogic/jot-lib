@@ -57,7 +57,7 @@ class ImageLineStripCB : public GLStripCB {
 class ImageLineShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   ImageLineShader(Patch* patch = 0);
+   ImageLineShader(Patch* patch = nullptr);
 
    virtual ~ImageLineShader();
 

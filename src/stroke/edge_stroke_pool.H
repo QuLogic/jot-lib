@@ -87,7 +87,7 @@ class EdgeStrokePool : public BStrokePool {
 
 
  public:
-   EdgeStrokePool(EdgeStroke* proto = 0);
+   EdgeStrokePool(EdgeStroke* proto = nullptr);
 
    virtual ~EdgeStrokePool();
 

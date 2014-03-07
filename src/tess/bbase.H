@@ -52,7 +52,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    //******** MANAGERS ********
 
    // Create a top-level Bbase:
-   Bbase(CLMESHptr& m=0);
+   Bbase(CLMESHptr& m=nullptr);
 
    virtual ~Bbase();
 
@@ -71,10 +71,10 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    CLMESHptr& mesh()            const   { return _mesh; }
 
    // The control mesh in charge of the subdivision hierarchy::
-   LMESH* ctrl_mesh()   const   { return _mesh ? _mesh->control_mesh() : 0; }
+   LMESH* ctrl_mesh()   const   { return _mesh ? _mesh->control_mesh() : nullptr; }
 
    // The currently displayed mesh in the subdivision hierarchy:
-   LMESH* cur_mesh()    const   { return _mesh ? _mesh->cur_mesh() : 0; }
+   LMESH* cur_mesh()    const   { return _mesh ? _mesh->cur_mesh() : nullptr; }
 
    // The level of the currently displayed subdivision mesh:
    int cur_level()      const   { return _mesh ? _mesh->cur_level() : 0; }
@@ -86,7 +86,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    int subdiv_level()   const   { return _mesh ? _mesh->subdiv_level() : 0; }
 
    // The geom that owns the whole hierarchy of subdivision meshes:
-   GEOM*  geom()        const   { return _mesh ? _mesh->geom() : 0; }
+   GEOM*  geom()        const   { return _mesh ? _mesh->geom() : nullptr; }
 
    TEXBODY* texbody()   const;
 
@@ -132,7 +132,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Returns the boss meme (if any) on the given simplex:
    static Meme* find_boss_meme(CBsimplex* s) {
-      return s ? (Meme*)s->find_data(key()) : 0;
+      return s ? (Meme*)s->find_data(key()) : nullptr;
    }
 
    // Convenience -- does upcasts:
@@ -155,7 +155,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
       return find_boss_vmemes(mesh ? mesh->verts() : Bvert_list());
    }
 
-   static bool has_boss(CBsimplex* s) { return find_boss_meme(s) != 0; }
+   static bool has_boss(CBsimplex* s) { return find_boss_meme(s) != nullptr; }
 
    // Return true if every vertex is under meme control
    static bool is_covered(CBvert_list& verts) {
@@ -165,7 +165,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    // Returns the Bbase that owns the boss meme on the simplex:
    static Bbase* find_owner(CBsimplex* s) {
       Meme* m = find_boss_meme(s);
-      return m ? m->bbase() : 0;
+      return m ? m->bbase() : nullptr;
    }
 
    // Calls Bbase::find_owner() on each element of the list,
@@ -217,11 +217,11 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    // Bcurve and Bsurface over-ride the following to create
    // generic EdgeMemes or FaceMemes on the given edges or
    // faces, respectively.
-   virtual EdgeMeme* add_edge_meme(Ledge*) { assert(0); return 0; }
-   virtual FaceMeme* add_face_meme(Lface*) { assert(0); return 0; }
+   virtual EdgeMeme* add_edge_meme(Ledge*) { assert(0); return nullptr; }
+   virtual FaceMeme* add_face_meme(Lface*) { assert(0); return nullptr; }
 
-   virtual EdgeMeme* add_edge_meme(EdgeMeme*) { assert(0); return 0; }
-   virtual FaceMeme* add_face_meme(FaceMeme*) { assert(0); return 0; }
+   virtual EdgeMeme* add_edge_meme(EdgeMeme*) { assert(0); return nullptr; }
+   virtual FaceMeme* add_face_meme(FaceMeme*) { assert(0); return nullptr; }
 
    // Convenience for adding a lot of faces/edges at once:
    void add_face_memes(CBface_list& faces);
@@ -261,7 +261,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    // from a subdivision level not controlled directly by a Bbase.
    //
    static Bbase* hit_bbase(CNDCpt& p, double radius, mlib::Wpt& hit,
-                                Bsimplex** s=0);
+                                Bsimplex** s=nullptr);
    static Bbase* hit_bbase(CNDCpt& p, double radius) {
       Wpt hit;
       return hit_bbase(p, radius, hit);
@@ -269,9 +269,9 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    // Same as above, but returns the control-level Bbase:
    static Bbase* hit_ctrl_bbase(CNDCpt& p, double rad, mlib::Wpt& hit,
-                                     Bsimplex** s=0){
+                                     Bsimplex** s=nullptr){
       Bbase* ret = hit_bbase(p, rad, hit, s);
-      return ret ? ret->control() : 0;
+      return ret ? ret->control() : nullptr;
    }
    static Bbase* hit_ctrl_bbase(CNDCpt& p, double rad) {
       Wpt hit;
@@ -341,7 +341,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    Bbase* control() const {
       return (_parent ? _parent->control() : (Bbase*)this);
    }
-   bool   is_control()  const   { return (_parent == NULL); }
+   bool   is_control()  const   { return (_parent == nullptr); }
 
    Bbase* parent()      const   { return _parent; }
    Bbase* child()       const   { return _child; }
@@ -356,9 +356,9 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    Bbase* subdiv_bbase(int k) const {
       if (k ==0) return (Bbase*)this;
       if (k > 0)
-         return _child  ? _child-> subdiv_bbase(k-1) : 0;
+         return _child  ? _child-> subdiv_bbase(k-1) : nullptr;
       else
-         return _parent ? _parent->subdiv_bbase(k+1) : 0;
+         return _parent ? _parent->subdiv_bbase(k+1) : nullptr;
    }
 
    // The level of this Bbase in the Bbase hierarchy:
@@ -465,17 +465,17 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    virtual void set_mesh(CLMESHptr& mesh);
 
    void enter_drawables() {
-      if (is_control() && ctrl_mesh() != NULL)
+      if (is_control() && ctrl_mesh() != nullptr)
          ctrl_mesh()->drawables() += this;
    }
    void exit_drawables() {
-      if (is_control() && ctrl_mesh() != NULL)
+      if (is_control() && ctrl_mesh() != nullptr)
          ctrl_mesh()->drawables() -= this;
    }
 
    void delete_child() {
       delete _child;
-      _child = 0;
+      _child = nullptr;
    }
 };
 
@@ -518,7 +518,7 @@ class _Bbase_list : public RIC_array<T> {
 
    // Returns mesh that all belong to, or none
    LMESH* mesh() const {
-      return (same_mesh() && !empty()) ? first()->mesh() : 0;
+      return (same_mesh() && !empty()) ? first()->mesh() : nullptr;
    }
 
    // Set the "resolution level":
@@ -689,8 +689,8 @@ class BbaseBoundaryFilter : public SimplexFilter {
       if (!is_edge(s))
          return false;
       Bedge* e = (Bedge*)s;
-      return XOR(_bb->find_meme(e->f1())==0, 
-                 _bb->find_meme(e->f2())==0);
+      return XOR(_bb->find_meme(e->f1())==nullptr,
+                 _bb->find_meme(e->f2())==nullptr);
    }
 
  protected:

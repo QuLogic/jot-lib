@@ -271,7 +271,7 @@ class BpointAction : public Action {
 
    virtual bool can_invoke () const;
    virtual bool invoke     ();
-   virtual bool was_invoked() const { return _p != 0; }
+   virtual bool was_invoked() const { return _p != nullptr; }
 
    //******** DATA_ITEM METHODS ********
    
@@ -360,7 +360,7 @@ class BcurveAction : public Action {
    // if given action is a BcurveAction, return the Bcurve:
    static Bcurve* get_curve(Action* a) {
       BcurveAction* c = dynamic_cast<BcurveAction*>(a);
-      return c ? c->bcurve() : 0;
+      return c ? c->bcurve() : nullptr;
    }
    // convert action list to bcurve list:
    static Bcurve_list a2c(CAction_list& a);
@@ -377,7 +377,7 @@ class BcurveAction : public Action {
 
    virtual bool can_invoke() const;
    virtual bool invoke    ();
-   virtual bool was_invoked() const { return _c != 0; }
+   virtual bool was_invoked() const { return _c != nullptr; }
 
    //******** DATA_ITEM METHODS ********
    
@@ -435,7 +435,7 @@ class BcurveAction : public Action {
       );
 
    //******** UTILITIES ********
-   static Bpoint* bp(BpointAction* a) { return a ? a->bpoint() : 0; }
+   static Bpoint* bp(BpointAction* a) { return a ? a->bpoint() : nullptr; }
    Bpoint* bp1() const { return bp(_b1); }
    Bpoint* bp2() const { return bp(_b2); }
 };
@@ -483,7 +483,7 @@ class PanelAction : public Action {
 
    virtual bool can_invoke() const;
    virtual bool invoke    ();
-   virtual bool was_invoked() const { return _p != 0; }
+   virtual bool was_invoked() const { return _p != nullptr; }
 
    //******** DATA_ITEM METHODS ********
    

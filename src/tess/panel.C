@@ -57,7 +57,7 @@ PCellCornerVertFilter::accept(CBsimplex* s) const
       return false;
    Bvert* v = (Bvert*)s;
 
-   return (Bpoint::find_controller(v) != NULL ||
+   return (Bpoint::find_controller(v) != nullptr ||
            Panel::find_cells(v->get_faces()).size() > 1);
 }
 
@@ -271,7 +271,7 @@ Panel::create(CBcurve_list& contour, const vector<int> ns)
    // Create a Panel to fill a simple closed boundary:
 
    if (contour.empty()) {
-      return 0;
+      return nullptr;
    }
 
    Panel* ret = new Panel();
@@ -288,7 +288,7 @@ Panel::create(CBcurve_list& contour, const vector<int> ns)
 
    // have a hissy fit
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 Panel*
@@ -303,7 +303,7 @@ Panel::create(CBvert_list& verts)
    // give up
    err_adv(debug, "Panel::create: failed");
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 Panel*
@@ -311,7 +311,7 @@ Panel::create(const vector<Bcurve_list>& contours)
 {
    if (contours.empty()) {
       err_adv(debug, "Panel::create: empty contour list");
-      return 0;
+      return nullptr;
    }
    if (contours.size() == 1)
       return create(contours.front());
@@ -324,7 +324,7 @@ Panel::create(const vector<Bcurve_list>& contours)
 
    err_adv(debug, "Panel::create: failed");
    delete ret;
-   return 0;
+   return nullptr;
 }
 
 static bool debug_tess = Config::get_var_bool("DEBUG_TESSELLATE",false);
@@ -975,10 +975,10 @@ Panel*
 Panel::nbr_panel(Bcurve* c)
 {
    if (!_bcurves.contains(c))
-      return NULL;
+      return nullptr;
    Bnode_list out = c->outputs();
    if (out.num() < 2)
-      return NULL;
+      return nullptr;
    
    return (out[0]==this) ? Panel::upcast(out[1]) : Panel::upcast(out[0]);
 }
@@ -1526,7 +1526,7 @@ Panel::add_vert_meme(Lvert* v)
 
    // Screen out the wackos
    if (!v)
-      return 0;
+      return nullptr;
 
    // Don't create a duplicate meme:
    if (find_vert_meme(v))

@@ -83,9 +83,9 @@ class INFLATE : public DrawWidget {
    //! the given Bface f, using offset distance h, which is relative
    //! to the local edge lengths around each vertex:
    static bool do_inflate(Bface* face, double h, Bsurface*& output,
-                          Bface_list*& reversed_faces, MULTI_CMDptr cmd=0);   
+                          Bface_list*& reversed_faces, MULTI_CMDptr cmd=nullptr);
    static bool do_inflate(Bface_list faces, double h, Bsurface*& output,
-                          Bface_list*& reversed_faces, MULTI_CMDptr cmd=0); 
+                          Bface_list*& reversed_faces, MULTI_CMDptr cmd=nullptr);
 
    //******** DRAW FSA METHODS ********
 
@@ -183,8 +183,8 @@ class INFLATE_CMD : public COMMAND {
        _orig_face(orig_face),
        _mode(false),
        _dist(dist),
-       _output(0),
-       _reversed_faces(0) {
+       _output(nullptr),
+       _reversed_faces(nullptr) {
       _other_cmds = new MULTI_CMD;
    }
 
@@ -192,8 +192,8 @@ class INFLATE_CMD : public COMMAND {
        _orig_faces(orig_faces),
        _mode(true),
        _dist(dist),
-       _output(0),
-       _reversed_faces(0) {
+       _output(nullptr),
+       _reversed_faces(nullptr) {
       _other_cmds = new MULTI_CMD;
    }
 

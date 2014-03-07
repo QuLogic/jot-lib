@@ -89,7 +89,7 @@ ControlFrameTexture::draw_level(CVIEWptr& v, int k)
       return;
    }
 
-   assert(_strip != NULL);
+   assert(_strip != nullptr);
 
    // Set line thickness, color and alpha
 
@@ -119,7 +119,7 @@ ControlFrameTexture::draw_level(CVIEWptr& v, int k)
 inline Patch*
 get_sub_patch(Patch* p, int k)
 {
-   return (k == 0) ? p : Lpatch::isa(p) ? ((Lpatch*)p)->sub_patch(k) : 0;
+   return (k == 0) ? p : Lpatch::isa(p) ? ((Lpatch*)p)->sub_patch(k) : nullptr;
 }
 
 bool
@@ -308,9 +308,9 @@ get_patch(CBvert* v)
 {
    // Arbitrarily chose a face containing v and return its patch
 
-   if (!v) return 0;
+   if (!v) return nullptr;
    Bface* f = v->get_face();
-   if (!f) return 0;
+   if (!f) return nullptr;
    return f->patch();
 }
 

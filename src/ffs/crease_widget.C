@@ -45,7 +45,7 @@ CREASE_WIDGETptr CREASE_WIDGET::_instance;
 
 CREASE_WIDGET::CREASE_WIDGET() :
    DrawWidget(),
-   _strip(0)
+   _strip(nullptr)
 {
    _draw_start += DrawArc(new TapGuard,      drawCB(&CREASE_WIDGET::cancel_cb));
    _draw_start += DrawArc(new ZipZapGuard,   drawCB(&CREASE_WIDGET::sharpen_cb));
@@ -59,7 +59,7 @@ CREASE_WIDGET::CREASE_WIDGET() :
 void 
 CREASE_WIDGET::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 CREASE_WIDGETptr
@@ -114,15 +114,15 @@ inline Bedge*
 best_match_align(CBedge_list& edges, CGESTUREptr& g)
 {
    if (!(g && g->is_stroke()))
-      return 0;
+      return nullptr;
 
    BMESH* mesh = edges.mesh();
    if (!mesh) {
       err_adv(debug, "best_match_align: bad edge set");
-      return 0;
+      return nullptr;
    }
 
-   Bedge* ret = 0;
+   Bedge* ret = nullptr;
    double min_dist = 0;
    int k = mesh->rel_cur_level(); // compare edges mapped to this level
    for (Bedge_list::size_type i=0; i<edges.size(); i++) {
@@ -143,7 +143,7 @@ best_match_align(CBedge_list& edges, CGESTUREptr& g)
    const double MAX_AVG_DIST = 5;
    if (ret && min_dist > MAX_AVG_DIST) {
       err_adv(debug, "best_match_align: rejecting edge: bad match");
-      ret = 0;
+      ret = nullptr;
    } else {
       err_adv(debug, "best_match_align: %s edge", ret ? "found" : "could not find");
    }
@@ -165,20 +165,20 @@ find_match_align(CGESTUREptr& g)
    // 
    if (!(g && g->is_zip_zap())) {
       err_adv(debug, "find_match_align: non-zip-zap");
-      return 0;
+      return nullptr;
    }
 
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_adv(debug, "find_match_align: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
 
    const double RAD = 8;
    Bface_list faces = get_top_level(vis_ref->get_faces(g->pts(), RAD));
    if (!faces.same_mesh()) {
       err_adv(debug, "find_match_align: can't get top-level faces for gesture");
-      return 0;
+      return nullptr;
    }
 
    err_adv(debug, "find_match_align: %d top-level faces", faces.size());
@@ -190,17 +190,17 @@ inline Bedge*
 best_match_cross(CBedge_list& edges, CGESTUREptr& g)
 {
    if (!(g && g->straightness() > 0.8))
-      return 0;
+      return nullptr;
 
    PIXELline segment = g->endpt_line();
 
    BMESH* mesh = edges.mesh();
    if (!mesh) {
       err_adv(debug, "best_match_cross: bad edge set");
-      return 0;
+      return nullptr;
    }
 
-   Bedge* ret = 0;
+   Bedge* ret = nullptr;
    double min_dist = 0;
    int k = mesh->rel_cur_level(); // compare edges mapped to this level
    for (Bedge_list::size_type i=0; i<edges.size(); i++) {
@@ -235,20 +235,20 @@ find_match_cross(CGESTUREptr& g)
    // 
    if (!(g && g->straightness() > 0.8)) {
       err_adv(debug, "find_match_cross: bad straightness: %f", g->straightness());
-      return 0;
+      return nullptr;
    }
 
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_adv(debug, "find_match_cross: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
 
    const double RAD = 8;
    Bface_list faces = get_top_level(vis_ref->get_faces(g->pts(), RAD));
    if (!faces.same_mesh()) {
       err_adv(debug, "find_match_cross: can't get top-level faces for gesture");
-      return 0;
+      return nullptr;
    }
 
    err_adv(debug, "find_match_cross: %d top-level faces", faces.size());
@@ -337,7 +337,7 @@ bool
 CREASE_WIDGET::add(Bedge* e)
 {
    assert(is_active());
-   assert(_strip != NULL);
+   assert(_strip != nullptr);
    assert(e && e->mesh());
    if (e->mesh() != _mesh) {
       err_adv(debug, "CREASE_WIDGET::add: edge belongs to wrong mesh");
@@ -354,8 +354,8 @@ void
 CREASE_WIDGET::reset()
 {
    delete _strip;
-   _strip = 0;
-   _mesh = 0;
+   _strip = nullptr;
+   _mesh = nullptr;
 }
 
 int  

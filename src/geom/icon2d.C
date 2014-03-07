@@ -207,7 +207,7 @@ ICON2D::intersect(
    if (_can_intersect && !_suppress_draw) {
            
       //((ICON2D *)this)->recompute_xform(); // Update ICON location
-      BBOX2D bbox(bbox2d(0,0));            // Get bounding box 
+      BBOX2D bbox(bbox2d(0,nullptr));        // Get bounding box
 
       //CXYpt pick_pt(r.point() + r.vec());
       PIXEL pick_pt(r.point() + r.vec());

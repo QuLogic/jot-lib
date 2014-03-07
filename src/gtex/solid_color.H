@@ -34,9 +34,9 @@ class SolidColorTexture : public BasicTexture {
    static TAGlist*      _solid_color_texture_tags;
 
    //******** MANAGERS ********
-   SolidColorTexture(Patch* patch = 0,
+   SolidColorTexture(Patch* patch = nullptr,
                      CCOLOR& col = COLOR::white,
-                     StripCB* cb = 0) :
+                     StripCB* cb = nullptr) :
       BasicTexture(patch, cb ? cb : new GLStripCB),
       _color(col),
       _alpha(1),
@@ -94,7 +94,7 @@ class VertColorStripCB : public GLStripCB {
 class VertColorTexture : public SolidColorTexture {
  public:
    //******** MANAGERS ********
-   VertColorTexture(Patch* patch = 0, StripCB* cb=0) :
+   VertColorTexture(Patch* patch = nullptr, StripCB* cb=nullptr) :
       SolidColorTexture(patch, COLOR::white, cb ? cb : new VertColorStripCB) {}
 
    //******** RUN-TIME TYPE ID ********

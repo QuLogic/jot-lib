@@ -46,7 +46,7 @@ class FRAME_TIME_OBSERVER {
    void unobserve_frame_time() {
       if (_view)
          _view->remove_frame_time_observer(this);
-      _view = 0;
+      _view = nullptr;
    }
 
  protected:

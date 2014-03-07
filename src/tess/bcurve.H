@@ -59,8 +59,8 @@ class Bcurve : public Bbase{
           CWvec&        n,              //!< the curve's "plane normal"
           int           num_edges,      //!< num edges at control level
           int           res_lev = -1,   //!< num subdiv levels to override
-          Bpoint*       b1 = 0,         //!< optional 
-          Bpoint*       b2 = 0);        //!< endpoints
+          Bpoint*       b1 = nullptr,         //!< optional
+          Bpoint*       b2 = nullptr);        //!< endpoints
 
    //! Similar to above, but with prescribed non-uniform sampling:
    Bcurve(CLMESHptr&      mesh,         //!< mesh to use
@@ -68,8 +68,8 @@ class Bcurve : public Bbase{
           CWvec&          n,            //!< the curve's "plane normal"
           const vector<double>& t,      //!< t-values at which to sample curve
           int             res_lev = -1, //!< num subdiv levels to override
-          Bpoint*         b1 = 0,       //!< optional
-          Bpoint*         b2 = 0);      //!< endpoints
+          Bpoint*         b1 = nullptr,       //!< optional
+          Bpoint*         b2 = nullptr);      //!< endpoints
 
    //! Same as above, except this one takes an explicit map object
    //! instead of a Wpt_list
@@ -77,8 +77,8 @@ class Bcurve : public Bbase{
           Map1D3D*        map,
           const vector<double>& t,
           int             res_lev = -1,
-          Bpoint*         b1 = 0,
-          Bpoint*         b2 = 0);
+          Bpoint*         b1 = nullptr,
+          Bpoint*         b2 = nullptr);
 
 
    //! create bcurve that lives in specified surface:
@@ -87,8 +87,8 @@ class Bcurve : public Bbase{
           CLMESHptr&, 
           const vector<double>&t,
           int res_level = -1,
-          Bpoint*         b1 = 0,
-          Bpoint*         b2 = 0);
+          Bpoint*         b1 = nullptr,
+          Bpoint*         b2 = nullptr);
 
    //! create bcurve that lives on a specified set of vertices
    Bcurve(CBvert_list& verts,
@@ -321,7 +321,7 @@ class Bcurve : public Bbase{
    
    //! Non-uniform resampling
    //! (resample at given t values):
-   bool resample(const std::vector<double>& t) { return resample(t, NULL, NULL); }
+   bool resample(const std::vector<double>& t) { return resample(t, nullptr, nullptr); }
 
    //! Checks preconditions:
    bool can_resample() const;
@@ -349,14 +349,14 @@ class Bcurve : public Bbase{
 
    Bpoint* b1() const {
       EdgeStrip s = get_strip();
-      return s.empty() ? 0 : Bpoint::lookup(s.first());
+      return s.empty() ? nullptr : Bpoint::lookup(s.first());
    }
    Bpoint* b2() const {
       EdgeStrip s = get_strip();
-      return s.empty() ? 0 : Bpoint::lookup(s.last());
+      return s.empty() ? nullptr : Bpoint::lookup(s.last());
    }
    Bpoint* other_point(Bpoint* b) const {
-      return (b == b1()) ? b2() : (b == b2()) ? b1() : 0;
+      return (b == b1()) ? b2() : (b == b2()) ? b1() : nullptr;
    }
 
    bool contains(CBpoint* b) const { return b == b1() || b == b2(); }
@@ -377,7 +377,7 @@ class Bcurve : public Bbase{
       if (SurfaceCurveMap::isa(_map)) {
          return ((SurfaceCurveMap*)_map)->surface();
       }
-      return 0;
+      return nullptr;
    }
 
    //! returns the skin this curve is constrained in,
@@ -429,10 +429,10 @@ class Bcurve : public Bbase{
 
    //! Returns the Bcurve (if any) that owns all the edges (if any):
    static Bcurve* lookup(CBedge_list& edges) {
-      Bcurve* ret = edges.empty() ? 0 : find_controller(edges.front());
+      Bcurve* ret = edges.empty() ? nullptr : find_controller(edges.front());
       for (Bedge_list::size_type i=1; i<edges.size(); i++)
          if (find_controller(edges[i]) != ret)
-            return 0;
+            return nullptr;
       return ret;
    }
 
@@ -451,16 +451,16 @@ class Bcurve : public Bbase{
    // Note: the edge may not belong directly to the curve if it's
    // from a subdivision level not controlled directly by a Bcurve.
    //
-   static Bcurve* hit_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** e=0);
+   static Bcurve* hit_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** e=nullptr);
    static Bcurve* hit_curve(CNDCpt& p, double rad=6) {
       Wpt hit;
       return hit_curve(p, rad, hit);
    }
 
    //! Same as above, but returns the control-level Bcurve:
-   static Bcurve* hit_ctrl_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** e=0){
+   static Bcurve* hit_ctrl_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** e=nullptr){
       Bcurve* ret = hit_curve(p, rad, hit, e);
-      return ret ? ret->ctrl_curve() : 0;
+      return ret ? ret->ctrl_curve() : nullptr;
    }
    static Bcurve* hit_ctrl_curve(CNDCpt& p, double rad=6) {
       Wpt hit;
@@ -598,11 +598,11 @@ class Bcurve : public Bbase{
 
    Ledge* le(int k) const {
       CEdgeStrip* s = strip();
-      return s ? (Ledge*)s->edge(k) : 0;
+      return s ? (Ledge*)s->edge(k) : nullptr;
    }
    Lvert* lv(int k) const {
       CEdgeStrip* s = strip();
-      return s ? (Lvert*)s->vert(k) : 0;
+      return s ? (Lvert*)s->vert(k) : nullptr;
    }
 
    //******** BUILDING ********
@@ -792,7 +792,7 @@ inline Bcurve_list
 Bcurve::get_curves(CBedge_list& edges)
 {
    Bcurve_list ret;
-   Bcurve* bc = 0;
+   Bcurve* bc = nullptr;
    for (Bedge_list::size_type i=0; i<edges.size(); i++)
       if ((bc = find_controller(edges[i])))
          ret.add_uniquely(bc);
@@ -803,7 +803,7 @@ inline Bcurve*
 Bcurve::get_curve(CBedge_list& edges) 
 {
    Bcurve_list curves = get_curves(edges);
-   return (curves.num() == 1) ? curves.first() : 0;
+   return (curves.num() == 1) ? curves.first() : nullptr;
 }
 
 /*****************************************************************
@@ -872,7 +872,7 @@ class CurveMeme : public VertMeme {
    virtual VertMeme* _gen_child(Lvert* subvert, VertMeme* vm) const;
 
    virtual VertMeme* _gen_child(Lvert*, VertMeme*, VertMeme*, VertMeme*) const
-      { assert(0); return 0; }
+      { assert(0); return nullptr; }
 
 	protected:
    double       _t;     //!< parameter along curve
@@ -907,7 +907,7 @@ class BcurveFilter : public SimplexFilter {
  public:
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
-      return Bcurve::find_controller(s) != NULL;
+      return Bcurve::find_controller(s) != nullptr;
    }
 };
 

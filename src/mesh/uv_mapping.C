@@ -53,8 +53,8 @@ UVMapping::UVMapping(Bface *f) :
    _wrap_u(false),
    _wrap_v(false),
    _wrap_bad(false),
-   _virgin_debug_image(0),
-   _marked_debug_image(0)
+   _virgin_debug_image(nullptr),
+   _marked_debug_image(nullptr)
 {
    
    int k;
@@ -93,7 +93,7 @@ UVMapping::~UVMapping()
          assert(uvd);
          if (uvd->mapping()) {
             assert(uvd->mapping()==this);
-            uvd->set_mapping(0);
+            uvd->set_mapping(nullptr);
             cnt++;
          }
       }
@@ -283,7 +283,7 @@ UVMapping::compute_limits(Bface *f)
    assert(uvdata);
 
    //And it should not be mapped yet
-   assert(uvdata->mapping()==0);
+   assert(uvdata->mapping()==nullptr);
 
    //Init uv limits
    _min_u = uvdata->uv(1)[0];
@@ -327,7 +327,7 @@ UVMapping::compute_mapping(Bface *f)
    assert(uvdata);
 
    //And it better not be mapped yet
-   assert(uvdata->mapping()==0);
+   assert(uvdata->mapping()==nullptr);
 
    //Clear mesh bits
    CBface_list& faces = f->mesh()->faces();
@@ -571,7 +571,7 @@ UVMapping::recurse(Bface *seed_f, rec_fun_t fun )
                //and *should* be unmapped
                UVdata* uvdata = UVdata::lookup(f);
                assert(uvdata);
-               assert(uvdata->mapping()==0);
+               assert(uvdata->mapping()==nullptr);
 
                //Do the action (add to map, or update limits, etc.)
                (this->*fun)(f);
@@ -624,7 +624,7 @@ UVMapping::add_limit(Bface *f)
 
    UVdata* uvdata = UVdata::lookup(f);
    assert(uvdata);
-   assert(uvdata->mapping()==0);
+   assert(uvdata->mapping()==nullptr);
 
 
    for (k=1; k<=3; k++)
@@ -658,7 +658,7 @@ UVMapping::add_face(Bface *f)
 
    UVdata* uvdata = UVdata::lookup(f);
    assert(uvdata);
-   assert(uvdata->mapping()==0);
+   assert(uvdata->mapping()==nullptr);
 
    //Sanity check
    for (k=1; k<=3; k++)
@@ -849,7 +849,7 @@ UVMapping::find_face(CUVpt &uv, Wvec &bc)
 */      
 
       }
-   return 0;
+   return nullptr;
 }
 
 

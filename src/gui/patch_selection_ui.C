@@ -69,7 +69,7 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    
    _listbox[LIST_PATCH] = new GLUI_Listbox(
                               _panel[PANEL_MAIN], 
-                              "Patch", NULL,
+                              "Patch", nullptr,
                               id+LIST_PATCH, listbox_cb);
    
    if(_has_layers){
@@ -77,7 +77,7 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                               _panel[PANEL_MAIN],
                              "Layer",
                              GLUI_SPINNER_INT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LAYER, spinner_cb);
        _spinner[SPINNER_LAYER]->set_int_limits(0,MAX_LAYERS-1);
 
@@ -85,7 +85,7 @@ PatchSelectionUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                               _panel[PANEL_MAIN],
                              "Channel",
                              GLUI_SPINNER_INT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_CHANNEL, spinner_cb);
        _spinner[SPINNER_CHANNEL]->set_int_limits(0,MAX_CHANNELS-1);
 

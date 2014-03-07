@@ -34,7 +34,7 @@ FaderTexture::draw(CVIEWptr& v)
    double a = fade(v->frame_time());
 
    // put the base GTexture in charge of itself:
-   _base->set_ctrl(0);
+   _base->set_ctrl(nullptr);
 
    // are we done?
    if (a <= 0) {

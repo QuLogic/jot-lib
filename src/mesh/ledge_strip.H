@@ -40,13 +40,13 @@ class LedgeStrip : public EdgeStrip {
    //******** MANAGERS ********
 
    // Create an empty strip:
-   LedgeStrip() : _substrip(0) {}
+   LedgeStrip() : _substrip(nullptr) {}
 
    // Given a list of edges to search, build a strip of
    // edges that satisfy a given property.
    LedgeStrip(CBedge_list& list, CBedgeFilter& filter) :
       EdgeStrip(list, filter),
-      _substrip(0) {}
+      _substrip(nullptr) {}
 
    virtual ~LedgeStrip() { delete_substrip(); }
 
@@ -94,7 +94,7 @@ class LedgeStrip : public EdgeStrip {
          return _substrip->get_strip(level-1);
       }
    }
-   void delete_substrip() { delete _substrip; _substrip = 0;}
+   void delete_substrip() { delete _substrip; _substrip = nullptr;}
    void generate_substrip();
 
    bool need_rebuild() const;

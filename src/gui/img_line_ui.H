@@ -169,7 +169,7 @@ class ImageLineUI : public BaseUI {
    DEFINE_RTTI_METHODS3("ImageLineUI", ImageLineUI*, ImageLineUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   ImageLineUI(BaseUI* parent=0);
+   ImageLineUI(BaseUI* parent=nullptr);
    virtual ~ImageLineUI(){}
 
    /******** MEMBERS METHODS ********/

@@ -40,7 +40,7 @@ typedef const Bsurface CBsurface;
 class Bsurface : public Bbase {
  public:
    //******** MANAGERS ********
-   Bsurface(CLMESHptr& mesh=0);
+   Bsurface(CLMESHptr& mesh=nullptr);
 
    virtual ~Bsurface();
 
@@ -156,19 +156,19 @@ class Bsurface : public Bbase {
    // it's from a subdivision level not controlled directly by a
    // Bsurface.
    //
-   static Bsurface* hit_surface(CNDCpt& p, double rad, mlib::Wpt& hit, Bface** f=0);
-   static Bsurface* hit_surface(CNDCpt& p, double rad=2, Bface** f=0) {
+   static Bsurface* hit_surface(CNDCpt& p, double rad, mlib::Wpt& hit, Bface** f=nullptr);
+   static Bsurface* hit_surface(CNDCpt& p, double rad=2, Bface** f=nullptr) {
       Wpt hit;
       return hit_surface(p, rad, hit, f);
    }
 
    // Same as above, but returns the control-level Bsurface:
    static Bsurface* hit_ctrl_surface(CNDCpt& p, double rad, mlib::Wpt& hit,
-                                     Bface** e=0){
+                                     Bface** e=nullptr){
       Bsurface* ret = hit_surface(p, rad, hit, e);
-      return ret ? ret->ctrl_surface() : 0;
+      return ret ? ret->ctrl_surface() : nullptr;
    }
-   static Bsurface* hit_ctrl_surface(CNDCpt& p, double rad=2, Bface** f=0) {
+   static Bsurface* hit_ctrl_surface(CNDCpt& p, double rad=2, Bface** f=nullptr) {
       Wpt hit;
       return hit_ctrl_surface(p, rad, hit, f);
    }
@@ -215,7 +215,7 @@ class Bsurface : public Bbase {
 
  protected:
    // utility method used in draw methods below:
-   Patch* get_p() const { return _is_shown && _patch ? _patch : 0; }
+   Patch* get_p() const { return _is_shown && _patch ? _patch : nullptr; }
  public:
    virtual int draw_id_ref()        { return    IDRefDrawer( ).draw(get_p());}
    virtual int draw_id_ref_pre1()   { return   IDPre1Drawer( ).draw(get_p());}
@@ -331,7 +331,7 @@ inline Bsurface_list
 Bsurface::get_surfaces(CBface_list& faces)
 {
    Bsurface_list ret;
-   Bsurface* bs = 0;
+   Bsurface* bs = nullptr;
    for (Bface_list::size_type i=0; i<faces.size(); i++)
       if ((bs = find_owner(faces[i])))
          ret.add_uniquely(bs);
@@ -344,9 +344,9 @@ Bsurface::get_surface(CBface_list& faces)
 {
    Bsurface_list surfs = get_surfaces(faces);
    if (surfs.num() != 1)
-      return 0;
+      return nullptr;
    Bsurface* ret = surfs.first();
-   return faces.all_satisfy(BbaseOwnerFilter(ret)) ? ret : 0;
+   return faces.all_satisfy(BbaseOwnerFilter(ret)) ? ret : nullptr;
 }
 
 #endif // BSURFACE_H_IS_INCLUDED

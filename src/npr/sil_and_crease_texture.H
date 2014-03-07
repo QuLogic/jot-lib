@@ -206,7 +206,7 @@ protected:
 public :
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   SilAndCreaseTexture(Patch* patch = 0);
+   SilAndCreaseTexture(Patch* patch = nullptr);
 
    virtual ~SilAndCreaseTexture();
 
@@ -382,7 +382,7 @@ protected:
          break;
       default:
          assert(0);
-         return NULL;
+         return nullptr;
          break;
       }
    }
@@ -403,7 +403,7 @@ protected:
          break;
       default:
          assert(0);
-         return NULL;
+         return nullptr;
          break;
       }
    }

@@ -32,7 +32,7 @@
 class GLSLSolidShader : public GLSLPaperShader {
  public:
    //******** MANAGERS ********
-   GLSLSolidShader(Patch* patch = 0);
+   GLSLSolidShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Solid",

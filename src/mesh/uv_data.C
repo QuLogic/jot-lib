@@ -32,7 +32,7 @@ UVdata::UVdata(Bsimplex* s) :
    _uv_valid(false),
    _calc_type(SIMPLE_CALC),     // default: simple subdiv scheme
    _did_subdiv(false),
-   _mapping(0) 
+   _mapping(nullptr)
 {
    // The constructor is called (internally) only when the given
    // simplex does not already have a UVdata associated with it.
@@ -164,7 +164,7 @@ UVdata::split(Bvert* v)
       // neighboring faces.
       Bface_list faces = v->get_all_faces();
       for (Bface_list::size_type i=0; i<faces.size(); i++) {
-         if (lookup(faces[i]) == NULL) {
+         if (lookup(faces[i]) == nullptr) {
             if (debug) {
                err_msg("UVdata::split: continous vert next to non-uv face!");
                GtexUtil::show_tris(Bface_list(faces[i]));
@@ -173,7 +173,7 @@ UVdata::split(Bvert* v)
             continue;
          }
 //         get_data(faces[i]);
-         assert(lookup(faces[i]) != NULL); // must be, right?
+         assert(lookup(faces[i]) != nullptr); // must be, right?
          faces[i]->tex_coord(v) = uvd->_uv;
       }
       uvd->_uv_valid = false;
@@ -231,7 +231,7 @@ UVdata::set(Bvert* v, Bface* f, CUVpt& uv)
 //       Bface_list faces = v->get_all_faces();
 //       for (int i=0; i<faces.num(); i++) {
 //          get_data(faces[i]);
-// //         assert(lookup(faces[i]) != NULL); // must be, right?
+// //         assert(lookup(faces[i]) != nullptr); // must be, right?
 //          faces[i]->tex_coord(v) = uvd->_uv;
 //       }
 //       uvd->_uv_valid = false;
@@ -355,7 +355,7 @@ UVdata::get_quad_uvs(
    //
    //   STANDARD QUAD ORDER
 
-   Bvert *a=0, *b=0, *c=0, *d=0;
+   Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
    return (f && f->get_quad_verts(a, b, c, d) &&
            get_quad_uvs(a,b,c,d,uva,uvb,uvc,uvd));
 }
@@ -766,7 +766,7 @@ class LoopUV : public LoopCalc<UVpt> {
 
    //******** GETTING MORE LIKE IT ********
    // we don't do duping
-   virtual SubdivCalc<UVpt> *dup() const { return 0; }
+   virtual SubdivCalc<UVpt> *dup() const { return nullptr; }
 };
 
 UVpt
@@ -862,7 +862,7 @@ class SimpleUVCalc : public SimpleCalc<UVpt> {
 
    //******** GETTING MORE LIKE IT ********
    // we don't do duping
-   virtual SubdivCalc<UVpt> *dup() const { return 0; }
+   virtual SubdivCalc<UVpt> *dup() const { return nullptr; }
 };
 
 UVpt

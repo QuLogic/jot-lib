@@ -48,7 +48,7 @@ class NPRControlFrameTexture : public BasicTexture {
 
  public:
    //******** MANAGERS ********
-   NPRControlFrameTexture(Patch* patch = 0, CCOLOR& col = COLOR::blue);
+   NPRControlFrameTexture(Patch* patch = nullptr, CCOLOR& col = COLOR::blue);
    virtual ~NPRControlFrameTexture();
 
    //******** RUN-TIME TYPE ID ********

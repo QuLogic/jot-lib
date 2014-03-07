@@ -23,7 +23,7 @@
 #include "multi_lights_tone.H"
 
 static bool debug = Config::get_var_bool("DEBUG_MULTI_LIGHTS_TONE", false);
-TAGlist* MLToneShader::_tags = 0;
+TAGlist* MLToneShader::_tags = nullptr;
 
 /**********************************************************************
  * MLToneShader:

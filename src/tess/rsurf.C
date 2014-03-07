@@ -44,7 +44,7 @@ class RmemeVertPair : public VertPair {
 
    // using key, record data on v, associating to partner p
    RmemeVertPair(uintptr_t key, Bvert* v, Rmeme* r) :
-      VertPair(key, v, r->vert()), _r(r) { assert(r != NULL); }
+      VertPair(key, v, r->vert()), _r(r) { assert(r != nullptr); }
 
    //******** RUN TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("RmemeVertPair", RmemeVertPair*,
@@ -94,7 +94,7 @@ class RFacePair : public FacePair {
    // using key, record data on v, associating to partner p
    RFacePair(Bface* f, Bface* p, Rsurface* rsurf) :
       FacePair(rsurf->pair_lookup_key(), f, p), _rsurf(rsurf) {
-      assert(rsurf != NULL);
+      assert(rsurf != nullptr);
    }
 
    //******** RUN TIME TYPE ID ********

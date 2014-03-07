@@ -74,7 +74,7 @@ public:
          _id(id),
          _p(p),
          _n(n),
-         _s(NULL),        
+         _s(nullptr),
          _bc(mlib::Wvec (0,0,0)),
          _t(t),
          _type(STYPE_SIL),
@@ -349,7 +349,7 @@ private:
 public:
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
 
-   VoteGroup (LuboPath *p=NULL) :
+   VoteGroup (LuboPath *p=nullptr) :
          _lubo_path(p),
          _status(VOTE_GROUP_GOOD),
          _fstatus(FIT_NONE),
@@ -359,7 +359,7 @@ public:
          _vis(SIL_VISIBLE),
          _base_id(0) {}
 
-   VoteGroup (int id, LuboPath *p=NULL) :
+   VoteGroup (int id, LuboPath *p=nullptr) :
          _lubo_path(p),
          _status(VOTE_GROUP_GOOD),
          _fstatus(FIT_NONE),
@@ -686,7 +686,7 @@ public:
          }
       }
       x = size();
-      return 0;
+      return nullptr;
    }
 
    void gen_group_samples(double spacing, vector<LuboSample>& samples) const
@@ -787,8 +787,8 @@ public:
       _type= STYPE_SIL;
       _id  = 0;
       _id_invis = 0;
-      _bv  = NULL;
-      _s  = NULL;
+      _bv  = nullptr;
+      _s  = nullptr;
       _bc.set(0,0,0);
       _w.set(0,0,0);
       _l   = 0;     //arclength on its path
@@ -987,7 +987,7 @@ protected:
 public:
 
    //******** MANAGERS ********    
-   ZXedgeStrokeTexture(Patch* patch = 0);
+   ZXedgeStrokeTexture(Patch* patch = nullptr);
    ZXedgeStrokeTexture(CLMESHptr& mesh);
   // ZXedgeStrokeTexture(){} //dummy constructor
    

@@ -237,10 +237,10 @@ class Evd {
      DEVmod  _m;
      char    _c;
 
-        Evd():_d(0)                                                        { }
+        Evd():_d(nullptr)                                                  { }
         Evd(DEVice *d, DEVact a=MOV, DEVmod m=NONE):_d(d),_a(a),_m(m),_c(0){ }
-        Evd(char   c,  DEVact a=KEYD):_d(0),_a(a),_m(ANY),_c(c){}
-        Evd(DEVact a) :_d(0),_a(a),_m(ANY),_c(0){}
+        Evd(char   c,  DEVact a=KEYD):_d(nullptr),_a(a),_m(ANY),_c(c){}
+        Evd(DEVact a) :_d(nullptr),_a(a),_m(ANY),_c(0){}
 
    Evd &operator = (CEvd &e) { _d=e._d;_a=e._a;_m=e._m;_c=e._c;return *this; }
    int operator == (CEvd &e) const       
@@ -383,8 +383,8 @@ class DEVice_buttons : public DEVice {
   public:
    enum        DEVbutton_action { UP, DOWN };
 
-               DEVice_buttons()              : _state(0),_dev2(0) /*,_dev6(0)*/ {}
-               DEVice_buttons(DEVice_2d *d2) : _state(0),_dev2(d2)/*,_dev6(0)*/ {}
+               DEVice_buttons()              : _state(0),_dev2(nullptr) {}
+               DEVice_buttons(DEVice_2d *d2) : _state(0),_dev2(d2)      {}
    virtual    ~DEVice_buttons()             {}
 
    void        set_ptr(DEVice_2d *d)  { _dev2 = d; }
@@ -424,7 +424,7 @@ class DEVmod_desc {
      DEVice_buttons *_ice;
      int             _ind;
    public :
-     DEVmod_desc():_mod(Evd::NONE),_ice(0),_ind(-1)    { }
+     DEVmod_desc():_mod(Evd::NONE),_ice(nullptr),_ind(-1) { }
      DEVmod_desc(DEVice_buttons *ice, int btn_ind, Evd::DEVmod mod):
                   _mod(mod), _ice(ice), _ind(btn_ind)  { }
      DEVice_buttons *ice()                             { return _ice; }

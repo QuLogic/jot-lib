@@ -74,7 +74,7 @@ class layer_hatching_t : public layer_base_t {
 class HatchingTX : public GLSLShader_Layer_Base {
  public:
    //******** MANAGERS ********
-   HatchingTX(Patch* patch = 0);
+   HatchingTX(Patch* patch = nullptr);
    virtual ~HatchingTX();
 
    //******** RUN-TIME TYPE ID ********

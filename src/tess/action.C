@@ -45,11 +45,11 @@ lookup_mesh(int mesh_num)
    TEXBODY* tx = TEXBODY::cur_tex_body();
    if (!tx) {
       err_adv(debug, "lookup_mesh: error: can't get TEXBODY");
-      return 0;
+      return nullptr;
    }
    if (!tx->meshes().valid_index(mesh_num)) {
       err_adv(debug, "lookup_mesh: error: invalid mesh num");
-      return 0;
+      return nullptr;
    }
    return LMESH::upcast(tx->mesh(mesh_num));
 }
@@ -64,7 +64,7 @@ get_mesh_num(BMESHptr m)
 inline Action*
 get_action(Bbase* b)
 {
-   return b ? b->get_action() : 0;
+   return b ? b->get_action() : nullptr;
 }
 
 inline Action*
@@ -72,7 +72,7 @@ get_action(int i, const Action_list& list)
 {
    if (0 <= i && i < (int)list.size())
       return list[i];
-   return 0;
+   return nullptr;
 }
 
 /*****************************************************************
@@ -215,7 +215,7 @@ operator>>(STDdstream& ds, Action_list& al)
 /*****************************************************************
  * Script
  *****************************************************************/
-TAGlist* Script::_tags = NULL;
+TAGlist* Script::_tags = nullptr;
 
 bool
 Script::add(Action* a)
@@ -282,12 +282,12 @@ Script::get_actions(TAGformat &d)
 /*****************************************************************
  * BpointAction
  *****************************************************************/
-TAGlist* BpointAction::_tags = NULL;
+TAGlist* BpointAction::_tags = nullptr;
 
 BpointAction::BpointAction() :
    _res_level(0),
    _mesh_num(-1),
-   _p(0)
+   _p(nullptr)
 {
 }
 
@@ -303,7 +303,7 @@ BpointAction::BpointAction(
    _res_level(r),
    _mesh_num(-1),
    _mesh(m),
-   _p(0)
+   _p(nullptr)
 {
 }
 
@@ -322,7 +322,7 @@ BpointAction::create(
 {
    if (!m) {
       cerr << "BpointAction::create: error: null mesh" << endl;
-      return 0;
+      return nullptr;
    }
    BpointAction* ret = new BpointAction(m, o, n, t, r);
    assert(ret && ret->can_invoke());
@@ -367,7 +367,7 @@ BpointAction::can_invoke() const
 
    return (
       !was_invoked()     &&
-      _mesh != 0         &&
+      _mesh != nullptr   &&
       !_n.is_null()      &&
       !_t.is_null()      &&
       _res_level >= 0    &&
@@ -385,7 +385,7 @@ BpointAction::invoke()
       return false;
    }
 
-   assert(_mesh != 0);
+   assert(_mesh != nullptr);
    assert(!_p);
 
    err_adv(debug, "BpointAction::invoke: creating Bpoint...");
@@ -436,7 +436,7 @@ BpointAction::tags() const
 /*****************************************************************
  * BcurveAction
  *****************************************************************/
-TAGlist* BcurveAction::_tags = NULL;
+TAGlist* BcurveAction::_tags = nullptr;
 
 const int NUM_EDGES = 4;
 
@@ -446,9 +446,9 @@ BcurveAction::BcurveAction() :
    _mesh_num(-1),
    _i1(-1),
    _i2(-1),
-   _b1(0),
-   _b2(0),
-   _c(0)
+   _b1(nullptr),
+   _b2(nullptr),
+   _c(nullptr)
 {
 }
 
@@ -470,7 +470,7 @@ BcurveAction::BcurveAction(
    _b1(BpointAction::upcast(get_action(b1))),
    _b2(BpointAction::upcast(get_action(b2))),
    _mesh(m),
-   _c(0)
+   _c(nullptr)
 {
 }
 
@@ -491,7 +491,7 @@ BcurveAction::create(
 {
    if (!m) {
       cerr << "BcurveAction::create: error: null mesh" << endl;
-      return 0;
+      return nullptr;
    }
    BcurveAction* ret = new BcurveAction(m, pts, n, num_edges, r, b1, b2);
    assert(ret && ret->can_invoke());
@@ -519,8 +519,8 @@ BcurveAction::create_circle(
    MULTI_CMDptr cmd  // undoable command that this action is part of
    )
 {
-   if (!P.is_valid() || mesh == 0 || n < 3 || r <= 0)
-      return 0;
+   if (!P.is_valid() || mesh == nullptr || n < 3 || r <= 0)
+      return nullptr;
 
    // Get a coordinate system
    Wvec Z = P.normal().normalized();
@@ -539,7 +539,7 @@ BcurveAction::create_circle(
    pts.push_back(pts[0]);       // make it closed
 
    int rlev = 2;
-   return create(mesh, pts, Z, n, rlev, 0, 0, cmd);
+   return create(mesh, pts, Z, n, rlev, nullptr, nullptr, cmd);
 }                                          
 
 Action_list 
@@ -723,18 +723,18 @@ BcurveAction::tags() const
 /*****************************************************************
  * PanelAction
  *****************************************************************/
-TAGlist* PanelAction::_tags = NULL;
+TAGlist* PanelAction::_tags = nullptr;
 
 PanelAction::PanelAction() :
    _creating(true),
-   _p(0)
+   _p(nullptr)
 {
 }
 
 PanelAction::PanelAction(CBcurve_list& contour) :
    _creating(true),
    _actions(BcurveAction::c2a(contour)),
-   _p(0)
+   _p(nullptr)
 {
    if ((int)_actions.size() != contour.num()) {
       err_msg("PanelAction::PanelAction: error converting curves to actions");
@@ -752,7 +752,7 @@ PanelAction::create(CBcurve_list& contour, MULTI_CMDptr cmd)
    if (!m) {
       cerr << "PanelAction::create: error: null mesh from contour" << endl;
       cerr << contour << endl;
-      return 0;
+      return nullptr;
    }
 
    // XXX - should do other checks here...
@@ -762,7 +762,7 @@ PanelAction::create(CBcurve_list& contour, MULTI_CMDptr cmd)
    if (!ret->can_invoke()) {
       cerr << "PanelAction::create: error: can't invoke action" << endl;
       // delete ret;
-      return 0;
+      return nullptr;
    }
    ret->invoke();
 
@@ -793,7 +793,7 @@ PanelAction::create(
    Bcurve* border = BcurveAction::create_circle(P, c, r, samples, mesh, cmd);
    if (!border) {
       err_adv(debug, "PanelAction::create: can't create border");
-      return 0;
+      return nullptr;
    }
    return create(Bcurve_list(border), cmd);
 }

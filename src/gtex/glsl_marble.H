@@ -33,7 +33,7 @@
 class GLSLMarbleShader : public GLSLShader {
 public:
    //******** MANAGERS ********
-   GLSLMarbleShader(Patch* patch = 0);
+   GLSLMarbleShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Marble",

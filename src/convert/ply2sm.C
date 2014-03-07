@@ -85,10 +85,10 @@ PlyProperty face_props[] = { /* list of property information for a face */
 /*** the PLY object ***/
 
 static int nverts=0,nfaces=0;
-static Vertex **vlist=0;
-static Face **flist=0;
+static Vertex **vlist=nullptr;
+static Face **flist=nullptr;
 
-static PlyOtherProp *vert_other=0,*face_other=0;
+static PlyOtherProp *vert_other=nullptr,*face_other=nullptr;
 
 static int per_vertex_color = 0;
 static int has_normals = 0;

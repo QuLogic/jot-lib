@@ -369,7 +369,7 @@ NPRBkgTexCB::faceCB(CBvert* v, CBface*f)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       NPRBkgTexture::_nbt_tags = 0;
+TAGlist *       NPRBkgTexture::_nbt_tags = nullptr;
 
 
 /////////////////////////////////////
@@ -383,7 +383,7 @@ NPRBkgTexture::draw(CVIEWptr& v)
    if (_ctrl)
       return _ctrl->draw(v);
 
-   nbt_tex_flag   = (v->get_bkg_tex() != NULL);
+   nbt_tex_flag   = (v->get_bkg_tex() != nullptr);
    nbt_paper_flag = v->get_use_paper();
 
    if (!nbt_is_init_vertex_program) 

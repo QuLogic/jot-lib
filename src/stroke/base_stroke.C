@@ -48,7 +48,7 @@ const char *stroke_remap_fnames[][2] =
    {"mydot3.png",    "2D--gauss-nar-8-s.png"},
    {"one_d.png",     "1D--gauss-med-16.png"},
    {"one_d_fat.png", "2D--gauss-med-16.png"},
-   {NULL,            NULL}
+   {nullptr,         nullptr}
 };
 
 /*****************************************************************
@@ -57,7 +57,7 @@ const char *stroke_remap_fnames[][2] =
 
 static int foo3 = DECODER_ADD(BaseStrokeOffset);
 
-TAGlist*  BaseStrokeOffset::_bso_tags = 0;
+TAGlist*  BaseStrokeOffset::_bso_tags = nullptr;
 
 /////////////////////////////////////////////////////////////////
 // BaseStrokeOffset Methods
@@ -95,7 +95,7 @@ BaseStrokeOffset::tags() const
 
 static int foo2 = DECODER_ADD(BaseStrokeOffsetLIST);
 
-TAGlist*       BaseStrokeOffsetLIST::_bsol_tags = 0;
+TAGlist*       BaseStrokeOffsetLIST::_bsol_tags = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // BaseStrokeOffsetLIST Methods
@@ -399,9 +399,9 @@ BaseStrokeOffsetLIST::get_at_t(double t, BaseStrokeOffset& o) const
 #define  BASE_STROKE_DEFAULT_BRIGHTNESS      0.5f
 #define  BASE_STROKE_DEFAULT_OFFSET_STRETCH  1.0f
 #define  BASE_STROKE_DEFAULT_OFFSET_PHASE    0.0f
-#define  BASE_STROKE_DEFAULT_TEX             NULL
+#define  BASE_STROKE_DEFAULT_TEX             nullptr
 #define  BASE_STROKE_DEFAULT_TEX_FILE        ""
-#define  BASE_STROKE_DEFAULT_PAPER           NULL
+#define  BASE_STROKE_DEFAULT_PAPER           nullptr
 #define  BASE_STROKE_DEFAULT_PAPER_FILE      ""
 
 float PIX_RES = (float)Config::get_var_dbl("PIX_RES",BASE_STROKE_DEFAULT_PIX_RES,true);
@@ -412,7 +412,7 @@ float PIX_RES = (float)Config::get_var_dbl("PIX_RES",BASE_STROKE_DEFAULT_PIX_RES
 
 static int foo = DECODER_ADD(BaseStroke);
 
-TAGlist*        BaseStroke::_bs_tags = 0;
+TAGlist*        BaseStroke::_bs_tags = nullptr;
 unsigned int    BaseStroke::_stamp = 0;
 int             BaseStroke::_strokes_drawn = 0;
 float           BaseStroke::_scale = 0;
@@ -423,8 +423,8 @@ Wvec            BaseStroke::_cam_at_v;
 bool            BaseStroke::_debug = Config::get_var_bool("DEBUG_BASE_STROKES",false,true);
 bool            BaseStroke::_repair = Config::get_var_bool("BASE_STROKE_REPAIR_INTERSECTIONS",false,true);
 
-map<string,TEXTUREptr>* BaseStroke::_stroke_texture_map = 0;
-map<string,string>*     BaseStroke::_stroke_texture_remap = 0;
+map<string,TEXTUREptr>* BaseStroke::_stroke_texture_map = nullptr;
+map<string,string>*     BaseStroke::_stroke_texture_remap = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // BaseStroke Methods
@@ -465,7 +465,7 @@ BaseStroke::BaseStroke()
    _dirty =       true;
    _ndc_length =  -1.0;
 
-   _offsets = NULL;
+   _offsets = nullptr;
    _propagate_offsets = false;  
    // by default, do not copy offsets
    // automatically when this stroke is copied
@@ -483,7 +483,7 @@ BaseStroke::BaseStroke()
    _offset_upper_t = 1.0;
 
    _overdraw = false;
-   _overdraw_stroke = NULL;
+   _overdraw_stroke = nullptr;
 
    _use_paper = 1;
 }
@@ -498,7 +498,7 @@ BaseStroke::~BaseStroke()
    clear();
 
    if (_overdraw_stroke) delete _overdraw_stroke;
-   _overdraw_stroke = NULL;
+   _overdraw_stroke = nullptr;
 }
 
 /////////////////////////////////////
@@ -768,7 +768,7 @@ BaseStroke::set_texture(string tf)
       _stroke_texture_remap = new map<string,string>; assert(_stroke_texture_remap);
 
       int i = 0;
-      while (stroke_remap_fnames[i][0] != NULL) {
+      while (stroke_remap_fnames[i][0] != nullptr) {
          (*_stroke_texture_remap)[Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][0]] =
                                   Config::JOT_ROOT() + stroke_remap_base + stroke_remap_fnames[i][1];
          i++;
@@ -779,14 +779,14 @@ BaseStroke::set_texture(string tf)
       //No change
 
    } else if (tf == "") {
-      _tex = NULL;
+      _tex = nullptr;
       _tex_file = "";
 
    } else if ((ind = _stroke_texture_map->find(tf)) != _stroke_texture_map->end()) {
       //Finding original name in cache...
 
       //If its a failed texture...
-      if (ind->second == NULL) {
+      if (ind->second == nullptr) {
          //...see if it was remapped...
          map<string,string>::iterator ii = _stroke_texture_remap->find(tf);
          //...and change to looking up the remapped name            
@@ -803,14 +803,14 @@ BaseStroke::set_texture(string tf)
       }
 
       //Now see if the final name yields a good texture...
-      if (ind->second != NULL) {
+      if (ind->second != nullptr) {
          _tex = ind->second;
          _tex_file = tf;
          //err_mesg(ERR_LEV_SPAM, "BaseStroke::set_texture() - Using cached copy of texture.");
 
       } else {
          err_mesg(ERR_LEV_INFO, "BaseStroke::set_texture() - **ERROR** Previous caching failure: '%s'...", tf.c_str());
-         _tex = NULL;
+         _tex = nullptr;
          _tex_file = "";
       }
 
@@ -829,7 +829,7 @@ BaseStroke::set_texture(string tf)
          if (ii != _stroke_texture_remap->end()) {
             //...but also indicate that the original name is bad...
 
-            (*_stroke_texture_map)[tf] = NULL;
+            (*_stroke_texture_map)[tf] = nullptr;
 
             string old_tf = tf;
             tf = ii->second;
@@ -857,13 +857,13 @@ BaseStroke::set_texture(string tf)
          _tex = t;
          _tex_file = tf;
 
-      //Otherwise insert a failed NULL
+      //Otherwise insert a failed nullptr
       } else {
          err_mesg(ERR_LEV_ERROR, "BaseStroke::set_texture() - *****ERROR***** Failed loading to cache: '%s'...", tf.c_str());
 
-         (*_stroke_texture_map)[tf] = NULL;
+         (*_stroke_texture_map)[tf] = nullptr;
 
-         _tex = NULL;
+         _tex = nullptr;
          _tex_file = "";
       }
    }   
@@ -903,15 +903,15 @@ BaseStroke::set_paper(string tf)
 
    if (tf == "") {
       _paper_file = "";
-      _paper = NULL;
+      _paper = nullptr;
 
-   } else if ((t = PaperEffect::get_texture(tf, ret_tf)) != 0) {
+   } else if ((t = PaperEffect::get_texture(tf, ret_tf)) != nullptr) {
       _paper_file = ret_tf;
       _paper = t;
 
    } else {
       _paper_file = "";
-      _paper = NULL;
+      _paper = nullptr;
    }   
 }
 
@@ -984,9 +984,9 @@ BaseStroke::copy(CBaseStroke& s)
 
    if (s._propagate_offsets)
    {
-      if (s._offsets == NULL)
+      if (s._offsets == nullptr)
       {
-         _offsets = NULL;
+         _offsets = nullptr;
       }
       else
       {
@@ -1275,7 +1275,7 @@ BaseStroke::draw_dots()
 
    for (i=0; i < _draw_verts.num(); i++) {
       const BaseStrokeVertex& v = _draw_verts[i];
-      if (_offsets == NULL)
+      if (_offsets == nullptr)
          u = (v._l-l0) * du;
       else
          u=0.0;
@@ -1514,7 +1514,7 @@ BaseStroke::compute_overdraw()
  
    if (!_overdraw_stroke) init_overdraw();
 
-   assert(_overdraw_stroke->get_offsets() == NULL);
+   assert(_overdraw_stroke->get_offsets() == nullptr);
 
    _overdraw_stroke->clear();
 
@@ -1686,12 +1686,12 @@ BaseStroke::compute_length_l()
    last_vert = &(_verts[0]);
    last_vert->_vis_state = BaseStrokeVertex::VIS_STATE_VISIBLE;
    // Check if the vert has undefined _base_loc
-   // and init the last_vert to NULL if so, 
+   // and init the last_vert to nullptr if so,
    // indicating that no good last vert exists.
    if (!last_vert->_good)
    {
       good_verts = 0;
-      last_vert = 0;
+      last_vert = nullptr;
    }
    else
       good_verts = 1;
@@ -2078,7 +2078,7 @@ BaseStroke::refine_vert(int i, bool left)
    NDCZpt r_loc = verts[2]->_base_loc;
 
    //Bail out if were already within the resolution threshold
-   if ((l_loc - r_loc).planar_length() <= thresh) return NULL;
+   if ((l_loc - r_loc).planar_length() <= thresh) return nullptr;
 
    //Strore the verts for the spline interpolation
    verts[0] = &(_verts[(i>0)?(i-1):(0)]);
@@ -2182,7 +2182,7 @@ BaseStroke::refine_vert(int i, bool left)
    else
       {
          _refine_verts.del();
-         return NULL;
+         return nullptr;
       }
 }
 
@@ -2227,7 +2227,7 @@ BaseStroke::interpolate_vert(
    double u)
 {
    static BaseStrokeVertex *vl[4];
-   static BaseStrokeVertex *vlast = NULL;
+   static BaseStrokeVertex *vlast = nullptr;
    static unsigned int stamp = 666;
 
    if ((vlast != vleft) || (stamp != VIEW::stamp()))
@@ -2335,7 +2335,7 @@ BaseStroke::interpolate_vert(
       {
          // This function is sometimes called while generating
          // the offsets, before they have been set.
-         //assert(_offsets != NULL);
+         //assert(_offsets != nullptr);
          assert( vl[2]==vl[3]);
          assert( vl[2]->_t == _max_t);
          v->_base_loc =  vl[2]->_base_loc + m2 * (u - 1.0);
@@ -2346,7 +2346,7 @@ BaseStroke::interpolate_vert(
       {
          // This function is sometimes called while generating
          // the offsets, before they have been set.
-         //assert(_offsets != NULL);
+         //assert(_offsets != nullptr);
          assert( vl[0]==vl[1]);
          assert( vl[1]->_t == _min_t);
          v->_base_loc =  vl[1]->_base_loc + m1 * u;
@@ -2423,8 +2423,8 @@ BaseStroke::compute_connectivity()
 {
 
    int i;
-   BaseStrokeVertex *last_vert = 0;        // XXX - this was below with no value assigned
-   BaseStrokeVertex *this_vert = 0;
+   BaseStrokeVertex *last_vert = nullptr;        // XXX - this was below with no value assigned
+   BaseStrokeVertex *this_vert = nullptr;
 
    // At this point, the _verts are finalized, so
    // we can now fill out their connectivity (prev,next)
@@ -2449,7 +2449,7 @@ BaseStroke::compute_connectivity()
 
                      this_vert = this_vert->_refined_vertex;
                      //XXX//
-                     assert(this_vert != NULL);
+                     assert(this_vert != nullptr);
                      this_vert->_prev_vert = this_vert;
                   }
                else // (this_vert->_trans_type == BaseStrokeVertex::TRANS_CLIPPED)
@@ -2460,7 +2460,7 @@ BaseStroke::compute_connectivity()
 
                      this_vert = this_vert->_refined_vertex;
                      //XXX//
-                     assert(this_vert != NULL);
+                     assert(this_vert != nullptr);
                      this_vert->_prev_vert = last_vert; // XXX - no value assigned to last vert here
                      last_vert->_next_vert = this_vert;
                      this_vert->_next_vert = this_vert;
@@ -4550,12 +4550,12 @@ BaseStroke::generate_offsets(
 
    if (ol->empty()) {
       err_mesg(ERR_LEV_WARN, "BaseStroke::generate_offsets() - No offsets generated! Skipping.");
-      return 0;
+      return nullptr;
    }
 
    if (ol->size() < 2) {
       err_mesg(ERR_LEV_WARN, "BaseStroke::generate_offsets() - Less than 2 offsets generated! Skipping.");
-      return 0;
+      return nullptr;
    }
 
    (*ol)[0]._type = BaseStrokeOffset::OFFSET_TYPE_BEGIN;

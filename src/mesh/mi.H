@@ -57,7 +57,7 @@ avg_face_edge_len(CBedge* e)
    if (e->is_polyline())
       return e->length();
    RunningAvg<double> avg(0);
-   Bface* f=0;
+   Bface* f=nullptr;
    if ((f = e->f1()))
       avg.add(f->is_quad() ? f->quad_avg_dim() : avg_edge_len(f));
    if ((f = e->f2()))
@@ -77,7 +77,7 @@ avg_strong_len(CBvert* v)
       return 0;
 
    RunningAvg<double> avg(0);
-   Bedge* e=0;
+   Bedge* e=nullptr;
    for (int i=0; i<v->degree(); i++)
       if ((e = v->e(i))->is_strong())
          avg.add(e->length());
@@ -126,12 +126,12 @@ rewind_cw(CBvert* v, CBface* start, CSimplexFilter& filter)
 {
    Bface* ret = (Bface*)start;
    if (!(start && v && start->contains(v)))
-      return 0;
+      return nullptr;
    if (v->degree(filter) == 0)
       return ret;
 
    Bface* f = ret;
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    while ((e = f->edge_from_vert(v)) &&
           (f = e->other_face(ret)) &&
           !filter.accept(e))
@@ -152,7 +152,7 @@ inline Bface*
 lookup_quad(Bvert* v1, Bvert* v2, Bvert* v3)
 {
    Bface* f = lookup_face(v1, v2, v3);
-   return (f && f->is_quad()) ? f : 0;
+   return (f && f->is_quad()) ? f : nullptr;
 }
 
 // if the 4 vertices make up a quad, this returns the quad
@@ -161,15 +161,15 @@ inline Bface*
 lookup_quad(Bvert* v1, Bvert* v2, Bvert* v3, Bvert* v4)
 {
    if (!(v1 && v2 && v3 && v4))
-      return 0;
-   Bface* f = 0;
+      return nullptr;
+   Bface* f = nullptr;
    if ((f = lookup_quad(v1, v2, v3)) && f->quad_vert() == v4)
       return f;
    if ((f = lookup_quad(v1, v2, v4)) && f->quad_vert() == v3)
       return f;
    if ((f = lookup_quad(v1, v3, v4)) && f->quad_vert() == v2)
       return f;
-   return 0;
+   return nullptr;
 }
 
 // if the 4 vertices make up a quad, this returns the weak edge
@@ -178,7 +178,7 @@ inline Bedge*
 get_quad_weak_edge(Bvert* v1, Bvert* v2, Bvert* v3, Bvert* v4)
 {
    Bface* f = lookup_quad(v1, v2, v3, v4);
-   return f ? f->weak_edge() : 0;
+   return f ? f->weak_edge() : nullptr;
 }
 
 inline double

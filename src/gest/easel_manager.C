@@ -69,7 +69,7 @@ EaselManager::next_easel()
       cur_easel()->removeEasel();
    
    // Is this a no-op?
-   cur_easel() = NULL;
+   cur_easel() = nullptr;
 
    // Gently find and set aside the easel
    // that will be the new one:

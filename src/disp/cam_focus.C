@@ -21,13 +21,13 @@
 using namespace mlib;
 
 // The following don't have a more logical place to go:
-BaseCollide* BaseCollide::_instance = 0;
-BaseGravity* BaseGravity::_instance = 0;
+BaseCollide* BaseCollide::_instance = nullptr;
+BaseGravity* BaseGravity::_instance = nullptr;
 
 /*****************************************************************
  * CamFocus
  *****************************************************************/
-CamFocusptr  CamFocus::_cur = 0;
+CamFocusptr  CamFocus::_cur = nullptr;
 
 // speed:    world space units per second
 // duration: seconds
@@ -54,7 +54,7 @@ CamFocus::CamFocus(
    double  fh
    ) :
    _view(v),
-   _cam(v ? v->cam() : 0),
+   _cam(v ? v->cam() : nullptr),
    _width (fw == 0 ? cam()->data()->width()  : fw),
    _height(fh == 0 ? cam()->data()->height() : fh),
    _orig_time(VIEW::peek()->frame_time()),
@@ -85,7 +85,7 @@ CamFocus::CamFocus(
 
 CamFocus::CamFocus(VIEWptr v, CCAMptr &dest) :
    _view(v),
-   _cam(v ? v->cam() : 0),
+   _cam(v ? v->cam() : nullptr),
    _width(dest->data()->width()),
    _height(dest->data()->height()),
    _orig_time(VIEW::peek()->frame_time()),
@@ -179,7 +179,7 @@ CamFocus::cancel_cur()
 {
    if (_cur) {
       _cur->unschedule();
-      _cur = 0;
+      _cur = nullptr;
    }
 }
 
@@ -236,7 +236,7 @@ CamFocus::tick(void)
 /*****************************************************************
  * CamBreathe
  *****************************************************************/
-CamBreatheptr   CamBreathe::_breathe    = 0;
+CamBreatheptr   CamBreathe::_breathe    = nullptr;
 double          CamBreathe::_size       = 1;
 
 CamBreathe::CamBreathe(CAMptr  &p) :
@@ -293,8 +293,8 @@ CamBreathe::tick(void)
 /*****************************************************************
  * CamOrbit
  *****************************************************************/
-CamOrbitptr     CamOrbit::_orbit        = 0;
-CamCruiseptr    CamCruise::_cruise      = 0;
+CamOrbitptr     CamOrbit::_orbit        = nullptr;
+CamCruiseptr    CamCruise::_cruise      = nullptr;
 
 int
 CamOrbit::tick(void)

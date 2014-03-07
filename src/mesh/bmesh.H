@@ -315,32 +315,32 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    /// Add edge between the ith and jth vertices, checking for error conditions, and set the edge's mesh to this one.
    virtual Bedge* add_edge(int i, int j);
    /// Add the given face to the face-list in this mesh, and set the face's mesh to this one. Set the face to use the given patch (if any).
-   virtual Bface* add_face(Bface* f, Patch* p=0);
+   virtual Bface* add_face(Bface* f, Patch* p=nullptr);
    /*! Add the triangular face defined by the given vertices and patch (if any),
     * creating the necessary edges and checking for error conditions. */
-   virtual Bface* add_face(Bvert* u, Bvert* v, Bvert* w, Patch* p=0);
+   virtual Bface* add_face(Bvert* u, Bvert* v, Bvert* w, Patch* p=nullptr);
    /*! Add the triangular face defined by the ith, jth and kth vertices in this mesh's vertex-list,
     * creating the necessary edges and checking for error conditions. */
-   virtual Bface* add_face(int i, int j, int k, Patch* p=0);
+   virtual Bface* add_face(int i, int j, int k, Patch* p=nullptr);
 
    /// Add the given list of world-space points, as vertices, to this mesh, set their mesh to this one. Return this list as a vertex-list.
    Bvert_list add_verts(CWpt_list& pts);
 
    Bface* add_face(Bvert* u, Bvert* v, Bvert* w,
-                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, Patch* p=0);
+                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, Patch* p=nullptr);
    Bface* add_face(int    i, int    j, int    k,
-                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, Patch* p=0);
+                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, Patch* p=nullptr);
 
    /// Creates the quad from the given vertices and patch, if possible, and returns the quad rep, or nil.
-   Bface* add_quad(Bvert* u, Bvert* v, Bvert* w, Bvert* x, Patch* p=0);
+   Bface* add_quad(Bvert* u, Bvert* v, Bvert* w, Bvert* x, Patch* p=nullptr);
    /// Creates the quad if possible, and returns the quad rep, or nil:
    Bface* add_quad(Bvert* u, Bvert* v, Bvert* w, Bvert* x,
-                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, mlib::CUVpt& d, Patch* p=0);
+                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, mlib::CUVpt& d, Patch* p=nullptr);
    /// Creates the quad from the ith, jth, kth and lth vertices in this mesh's vertex list, if possible, and returns the quad rep, or nil.
-   Bface* add_quad(int    i, int    j, int    k, int    l, Patch* p=0);
+   Bface* add_quad(int    i, int    j, int    k, int    l, Patch* p=nullptr);
    /// Creates the quad if possible, and returns the quad rep, or nil:
    Bface* add_quad(int    i, int    j, int    k, int    l,
-                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, mlib::CUVpt& d, Patch* p=0);
+                   CUVpt& a, mlib::CUVpt& b, mlib::CUVpt& c, mlib::CUVpt& d, Patch* p=nullptr);
 
    //******** DELETING ELEMENTS ********
 
@@ -372,7 +372,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    //******** PRIMITIVES ********
    /// Create a cube with the two given points as the body diagonal, and apply the patch if given (default if not).
-   virtual void   Cube       (CWpt& =mlib::Wpt(0,0,0),mlib::CWpt& =mlib::Wpt(1,1,1), Patch* p=0);
+   virtual void   Cube       (CWpt& =mlib::Wpt(0,0,0),mlib::CWpt& =mlib::Wpt(1,1,1), Patch* p=nullptr);
 
    /// Create an octahedron with the given points, and apply the patch if given (default if not).
    virtual void   Octahedron (CWpt& =mlib::Wpt( 0, -M_SQRT2, 0),
@@ -380,12 +380,12 @@ class BMESH : public BODY, public NameLookup<BMESH> {
                               CWpt& =mlib::Wpt( 1,        0,-1),
                               CWpt& =mlib::Wpt(-1,        0,-1),
                               CWpt& =mlib::Wpt(-1,        0, 1),
-                              CWpt& =mlib::Wpt( 0,  M_SQRT2, 0), Patch* p=0);
+                              CWpt& =mlib::Wpt( 0,  M_SQRT2, 0), Patch* p=nullptr);
 
    /// Create a canonical icosahedron and apply the patch if given (default if not)
-   virtual void   Icosahedron(Patch* p=0);
+   virtual void   Icosahedron(Patch* p=nullptr);
    //sphere with correct spherical texture coordinates
-   virtual void   Sphere(Patch* p=0);
+   virtual void   Sphere(Patch* p=nullptr);
    virtual void   UV_BOX(Patch* &p);
 
    //******** MEASURES ********
@@ -472,7 +472,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    // face operations:
    Bvert*  split_face(Bface* face, CWpt &pt);
-   int     split_faces(CXYpt_list&, vector<Bvert*>&, Bface* =0);
+   int     split_faces(CXYpt_list&, vector<Bvert*>&, Bface* =nullptr);
    void    split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& nv);
 
    //******** SUBDIVISION/EDIT LEVEL ********
@@ -545,10 +545,10 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    // ret is a BMESH and the file specifies LMESH, an LMESH is
    // generated, read from the stream, and then the mesh data
    // is copied into ret.
-   static BMESHptr read_jot_stream(istream& is, BMESHptr ret=0);
+   static BMESHptr read_jot_stream(istream& is, BMESHptr ret=nullptr);
 
    // Opens the file and calls BMESH::read_jot_stream(), above.
-   static BMESHptr read_jot_file(const char* filename, BMESHptr ret=0);
+   static BMESHptr read_jot_file(const char* filename, BMESHptr ret=nullptr);
 
    // Read a mesh file into *this* mesh:
    bool read_file(const char* filename);
@@ -622,9 +622,9 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    virtual void transform(CWtransf &xform, CMOD& m = MOD());
 
    // CSG methods:
-   virtual BODY* subtract (BODYptr&) { return 0; } // CSG subtract
-   virtual BODY* combine  (BODYptr&) { return 0; } // CSG union
-   virtual BODY* intersect(BODYptr&) { return 0; } // CSG intersect
+   virtual BODY* subtract (BODYptr&) { return nullptr; } // CSG subtract
+   virtual BODY* combine  (BODYptr&) { return nullptr; } // CSG union
+   virtual BODY* intersect(BODYptr&) { return nullptr; } // CSG intersect
 
    virtual void         set_vertices(CWpt_list &) { }
    virtual CWpt_list&   vertices();
@@ -852,13 +852,13 @@ gel_to_bmesh(CGELptr &gel)
 inline GEL*
 bmesh_to_gel(BMESH* mesh)
 {
-   return mesh ? mesh->geom() : 0;
+   return mesh ? mesh->geom() : nullptr;
 }
 
 inline GEOM*
 bmesh_to_geom(BMESH* mesh)
 {
-   return mesh ? mesh->geom() : 0;
+   return mesh ? mesh->geom() : nullptr;
 }
 
 /*! Convenience method for returning the GEOM that owns a
@@ -1020,9 +1020,9 @@ typedef const BMESHobs CBMESHobs;
 class BMESHray : public RAYhit {
  public :
    //******** MANAGERS ********
-   BMESHray(CWpt  &p, mlib::CWvec &v):RAYhit(p,v), _simplex(0) { }
-   BMESHray(CWpt  &a, mlib::CWpt  &b):RAYhit(a,b), _simplex(0) { }
-   BMESHray(CXYpt &p)          :RAYhit(p),   _simplex(0) { }
+   BMESHray(CWpt  &p, mlib::CWvec &v):RAYhit(p,v), _simplex(nullptr) { }
+   BMESHray(CWpt  &a, mlib::CWpt  &b):RAYhit(a,b), _simplex(nullptr) { }
+   BMESHray(CXYpt &p)                :RAYhit(p),   _simplex(nullptr) { }
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS2("BMESHray", RAYhit, CRAYhit *);
@@ -1032,7 +1032,7 @@ class BMESHray : public RAYhit {
    Bsimplex* simplex()          const   { return _simplex; }
    void      set_simplex(Bsimplex *s)   { _simplex = s; }
 
-   BMESH* mesh() const { return _simplex ? _simplex->mesh() : (BMESH*)0; }
+   BMESH* mesh() const { return _simplex ? _simplex->mesh() : nullptr; }
 
    //******** CONVENIENT UPCASTS ********
    Bvert* vert() const { return bvert(_simplex); }
@@ -1041,7 +1041,7 @@ class BMESHray : public RAYhit {
 
    //******** STATIC METHODS ********
    static Bsimplex* simplex(CRAYhit &r) {
-      return BMESHray::isa(r) ? ((BMESHray &)r).simplex():0;
+      return BMESHray::isa(r) ? ((BMESHray &)r).simplex() : nullptr;
    }
    static  void  set_simplex (CRAYhit &r, Bsimplex *f) { 
       if (BMESHray::isa(r)) ((BMESHray &)r).set_simplex(f);

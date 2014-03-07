@@ -571,15 +571,15 @@ ZCrossExtractor<ScalarField,
 {
    
    // Make sure the starting face pointer is non-NULL:
-   assert(start_face != 0);
+   assert(start_face != nullptr);
    
-   // A NULL next face indicates that we're at a boundary.  Don't extract any
+   // A nullptr next face indicates that we're at a boundary.  Don't extract any
    // segments in this case and say that the loop wasn't completed:
-   if(next_face == 0)
+   if (next_face == nullptr)
       return false;
    
    // Make sure starting face and next face share an edge:
-   assert(start_face->shared_edge(next_face) != 0);
+   assert(start_face->shared_edge(next_face) != nullptr);
    
    Bface *prev_face = start_face;
    Bface *cur_face = next_face;
@@ -627,7 +627,7 @@ ZCrossExtractor<ScalarField,
                                get_confidence(cur_face, zcross_pts[next_pt])));
       
       // See if we are at a boundary edge:
-      if(next_face == 0)
+      if(next_face == nullptr)
          break;
       
       // See if we are back at the beginning (i.e. the loop is complete):
@@ -655,10 +655,10 @@ ZCrossExtractor<ScalarField,
 {
    
    // Make sure the face pointer is non-NULL:
-   assert(f != 0);
+   assert(f != nullptr);
    
    // Make sure the face has a non-NULL mesh pointer:
-   assert(f->mesh() != 0);
+   assert(f->mesh() != nullptr);
    
    BarycentricCoord f_zcross_pts[2];
    int f_zcross_edges[2];
@@ -782,7 +782,7 @@ ZCrossExtractor<ScalarField,
    if(seg.is_end() /* || (seg.get_end_conf() <= SC_THRESH) */ ){
    
       extracted_segs.push_back(
-         ZXseg(0,                            // Face
+         ZXseg(nullptr,                      // Face
                seg.get_end_pt(),             // World space point
                f->v(vert_index + 1),         // Vertex (what's this for?)
                seg.get_end_conf(),           // Confidence

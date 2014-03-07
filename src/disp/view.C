@@ -135,7 +135,7 @@ ThreadToView *ThreadToView::_instance = 0;
 
 /* ------------------ VIEW class definitions --------------------- */
 
-TAGlist *            VIEW::_v_tags = 0;
+TAGlist *            VIEW::_v_tags = nullptr;
 
 vector<vector<VEXEL>*> VIEW::_jitters;
 
@@ -1230,13 +1230,13 @@ VIEW::VIEW(
    _has_scissor_region(0),
    _sxmin(-1), 
    _sxmax(1),// left- & right-most edges of scissored view
-   _recorder(0), 
+   _recorder(nullptr),
    _alpha(1), 
    _use_paper(false), 
    _bkg_file(""),
-   _bkg_tex(NULL),
+   _bkg_tex(nullptr),
    _data_file(""),
-   _animator(0),
+   _animator(nullptr),
    _render_mode(NORMAL_MODE),
    _antialias_mode(2),
    _antialias_enable(0),
@@ -1709,9 +1709,9 @@ VIEW::bk_cam_hist()
 void
 VIEW::copy_cam(CCAMptr &c)
 {
-   assert(_cam != NULL);
+   assert(_cam != nullptr);
 
-   if (c != NULL)
+   if (c != nullptr)
       *_cam = *c;
    else
       err_msg("VIEW::copy_cam: given CAMptr is null");
@@ -1720,7 +1720,7 @@ VIEW::copy_cam(CCAMptr &c)
 void
 VIEW::use_cam(CCAMptr &c)
 {
-   if (c == NULL) {
+   if (c == nullptr) {
       err_msg("VIEW::use_cam: can't use null CAM");
       return;
    }
@@ -1863,7 +1863,7 @@ VIEW::display(
    CGELptr &o
    )
 { 
-   if (o != GELptr(0)) {
+   if (o != GELptr(nullptr)) {
       for (int i=0; i < _active.num(); i++)
          if (_active[i] == o)
             return 0;

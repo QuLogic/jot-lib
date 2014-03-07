@@ -46,9 +46,9 @@ err_(int flags, const char *fmt, va_list ap)
             FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | 
                            FORMAT_MESSAGE_FROM_SYSTEM | 
                            FORMAT_MESSAGE_IGNORE_INSERTS,
-                           NULL, GetLastError(), 
+                           nullptr, GetLastError(),
                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                           (LPTSTR) &lpMsgBuf, 0, NULL  );
+                           (LPTSTR) &lpMsgBuf, 0, nullptr );
             cerr << ": " << (LPCTSTR)lpMsgBuf;
             LocalFree( lpMsgBuf );
          }

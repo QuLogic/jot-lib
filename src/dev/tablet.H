@@ -59,7 +59,7 @@ class TabletEvent
  friend class TabletQueue;
  public:
    TabletEvent(char *buf, TabletDesc *d);
-   TabletEvent() : _desc(0) {}
+   TabletEvent() : _desc(nullptr) {}
    virtual ~TabletEvent() {}
 
    int          get_device()    const { return _device;  }
@@ -102,7 +102,7 @@ class TabletQueue
 
    void         do_enqueue( TabletEvent &event );
  public:
-   TabletQueue() : _length(256), _queue(0), _head(0), _tail(0)
+   TabletQueue() : _length(256), _queue(nullptr), _head(0), _tail(0)
                           { _queue = new TabletEvent[_length]; assert(_queue); }
    virtual ~TabletQueue() { delete _queue; }
 
@@ -124,7 +124,7 @@ class Tablet : public TTYfd
 
   public:
                      Tablet(FD_MANAGER *, TabletDesc::TabletType t,
-                            const char *tty = NULL,
+                            const char *tty = nullptr,
                             const char *name = "DEV_TABLET");
    virtual int       activate();
 
@@ -170,7 +170,7 @@ class TabletMultimode : public Tablet
 
            TabletMultimode(FD_MANAGER *, 
                            TabletDesc::TabletType type = TabletDesc::LARGE, 
-                           const char *tty  = NULL,
+                           const char *tty  = nullptr,
                            const char *name = "DEV_TABLET");
 
            void     enqueue_available_tablet_events();

@@ -408,7 +408,7 @@ TEXT2D::intersect(
    // the window size
    if (_can_intersect) {
       ((TEXT2D *)this)->recompute_xform(); // Update text location
-      BBOX2D bbox(bbox2d(0,0));            // Get bounding box 
+      BBOX2D bbox(bbox2d(0,nullptr));      // Get bounding box
 
       CXYpt pick_pt(r.point() + r.vec());
       if (bbox.contains(pick_pt)) {  // picked!
@@ -438,7 +438,7 @@ TEXT2D::bbox2d(
    int         force
    ) const
 {
-   if (s == 0) 
+   if (s == nullptr)
       s = get_string();
 
    int w, h;

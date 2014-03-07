@@ -61,7 +61,7 @@ PatternPenUI::lum_fun_id_t PatternPenUI::lum_function = LUM_SHADOW;
 vector<PatternPenUI*> PatternPenUI::_ui;
 
 PatternPenUI::PatternPenUI(PatternPen* pen) :
-   _glui(0),
+   _glui(nullptr),
    _pen(pen),
    _init(false),
    _current_mode(0),
@@ -144,7 +144,7 @@ void
 PatternPenUI::destroy() {
   _button.clear();
   _glui->close();
-  _glui = NULL;
+  _glui = nullptr;
 }
 
 
@@ -163,15 +163,15 @@ PatternPenUI::build()
    _glui->set_main_gfx_window(_pen->view()->win()->id());
    
    //Init the control arrays
-   _button.resize(BUT_NUM, 0);
-   _panel.resize(PANEL_NUM, 0);
-   _listbox.resize(LIST_NUM, 0);
-   _checkbox.resize(CHECK_NUM, 0);
-   _slider.resize(SLIDE_NUM, 0);
-   _rollout.resize(ROLLOUT_NUM, 0);
-   _rotation.resize(ROT_NUM, 0);
-   _radgroup.resize(RADGROUP_NUM, 0);
-   _radbutton.resize(RADBUT_NUM, 0);
+   _button.resize(BUT_NUM, nullptr);
+   _panel.resize(PANEL_NUM, nullptr);
+   _listbox.resize(LIST_NUM, nullptr);
+   _checkbox.resize(CHECK_NUM, nullptr);
+   _slider.resize(SLIDE_NUM, nullptr);
+   _rollout.resize(ROLLOUT_NUM, nullptr);
+   _rotation.resize(ROT_NUM, nullptr);
+   _radgroup.resize(RADGROUP_NUM, nullptr);
+   _radbutton.resize(RADBUT_NUM, nullptr);
 
    // Panel containing pen buttons
    _panel[PANEL_PEN] = new GLUI_Panel(_glui, "");
@@ -194,7 +194,7 @@ PatternPenUI::build()
    _panel[PANEL_MODE] = new GLUI_Panel(_glui, "");
 
     // stroke pattern modes
-   _listbox[LIST_MODE]= new GLUI_Listbox(_panel[PANEL_MODE], "Mode", NULL,
+   _listbox[LIST_MODE]= new GLUI_Listbox(_panel[PANEL_MODE], "Mode", nullptr,
 					  id+LIST_MODE, listbox_cb);
    _listbox[LIST_MODE]->add_item(0, "Analysis");
    _listbox[LIST_MODE]->add_item(1, "Synthesis");
@@ -204,7 +204,7 @@ PatternPenUI::build()
 
    new GLUI_Column(_panel[PANEL_MODE], false);
 
-   _listbox[LIST_STROKE_PRESET] = new GLUI_Listbox(_panel[PANEL_MODE], "Preset", NULL, id+LIST_STROKE_PRESET, listbox_cb);
+   _listbox[LIST_STROKE_PRESET] = new GLUI_Listbox(_panel[PANEL_MODE], "Preset", nullptr, id+LIST_STROKE_PRESET, listbox_cb);
    fill_preset_listbox(_listbox[LIST_STROKE_PRESET], _preset_filenames, Config::JOT_ROOT() + PRESET_DIRECTORY);
    preset_stroke();
 
@@ -217,7 +217,7 @@ PatternPenUI::build()
    
    _slider[SLIDE_EPS] = new GLUI_Slider(_panel[PANEL_STROKES], "Epsilon",
                                         id+SLIDE_EPS, slider_cb,
-                                        GLUI_SLIDER_FLOAT, 0, 20, NULL);
+                                        GLUI_SLIDER_FLOAT, 0, 20, nullptr);
    _slider[SLIDE_EPS]->set_num_graduations(101);
    _slider[SLIDE_EPS]->set_float_val(0.0f);
    _button[BUT_POP] = new GLUI_Button(_panel[PANEL_STROKES], "Pop Stroke",
@@ -230,7 +230,7 @@ PatternPenUI::build()
 
 
    _listbox[LIST_TYPE]= new GLUI_Listbox(_panel[PANEL_STROKES],
-                                         "Type", NULL,
+                                         "Type", nullptr,
                                          id+LIST_TYPE, listbox_cb);
    _listbox[LIST_TYPE]->add_item(0, "Hatching");
    _listbox[LIST_TYPE]->add_item(1, "Stippling");
@@ -238,20 +238,20 @@ PatternPenUI::build()
    _listbox[LIST_TYPE]->set_int_val(2);
 
    _listbox[LIST_PARAM]= new GLUI_Listbox(_panel[PANEL_STROKES],
-                                          "Param.", NULL,
+                                          "Param.", nullptr,
                                           id+LIST_PARAM, listbox_cb);
    _listbox[LIST_PARAM]->add_item(0, "Axis");
    _listbox[LIST_PARAM]->add_item(1, "Cartesian");
    _listbox[LIST_PARAM]->add_item(2, "Angular");
 
    _checkbox[CHECK_ANAL_STYLE] = new GLUI_Checkbox(_panel[PANEL_STROKES],
-                                                   "Analyze style", NULL,
+                                                   "Analyze style", nullptr,
                                                    id+CHECK_ANAL_STYLE, checkbox_cb);
    _checkbox[CHECK_ANAL_STYLE]->set_int_val(1);
 
    _slider[SLIDE_STYLE] = new GLUI_Slider(_panel[PANEL_STROKES], "Style adjust.",
                                           id+SLIDE_STYLE, slider_cb,
-                                          GLUI_SLIDER_FLOAT, 0, 1, NULL);
+                                          GLUI_SLIDER_FLOAT, 0, 1, nullptr);
    _slider[SLIDE_STYLE]->set_num_graduations(101);
    _slider[SLIDE_STYLE]->set_float_val(1.0f);
 
@@ -259,10 +259,10 @@ PatternPenUI::build()
                                             id+BUT_NEW_GROUP, button_cb);
    
    _checkbox[CHECK_STRUCT] = new GLUI_Checkbox(_panel[PANEL_STROKES],
-                                               "Display structure", NULL,
+                                               "Display structure", nullptr,
                                                id+CHECK_STRUCT, checkbox_cb);
    _checkbox[CHECK_FRAME] = new GLUI_Checkbox(_panel[PANEL_STROKES],
-                                              "Display ref frame", NULL,
+                                              "Display ref frame", nullptr,
                                               id+CHECK_FRAME, checkbox_cb);
    _checkbox[CHECK_FRAME]->set_int_val(1);
    
@@ -270,7 +270,7 @@ PatternPenUI::build()
    // synthesis mode
    _rollout[ROLLOUT_SYNTH] =  new GLUI_Rollout(_glui, "Synthesis", false);
    _listbox[LIST_CELL]= new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
-                                         "Cell", NULL, id+LIST_CELL, listbox_cb);
+                                         "Cell", nullptr, id+LIST_CELL, listbox_cb);
    _listbox[LIST_CELL]->add_item(0, "Box");
    _listbox[LIST_CELL]->add_item(1, "Rect");
    _listbox[LIST_CELL]->add_item(2, "Path");
@@ -279,31 +279,31 @@ PatternPenUI::build()
    _panel[PANEL_IMAGE] = new GLUI_Panel(_rollout[ROLLOUT_SYNTH], "Back Image");
    assert(_panel[PANEL_IMAGE]);
    _checkbox[CHECK_IMAGE_PRESSURE] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
-                                                       "Use Image Luminasity", NULL,
+                                                       "Use Image Luminasity", nullptr,
                                                        id+CHECK_IMAGE_PRESSURE, checkbox_cb);
 
    _checkbox[CHECK_IMAGE_ALPHA] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
-                                                    "Modify Alpha", NULL,
+                                                    "Modify Alpha", nullptr,
                                                     id+CHECK_IMAGE_ALPHA, checkbox_cb);
    _checkbox[CHECK_IMAGE_ALPHA]->set_int_val(_pen->get_gesture_drawer_a()); 
 
    _checkbox[CHECK_IMAGE_WIDTH] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
-                                                    "Modify Width", NULL,
+                                                    "Modify Width", nullptr,
                                                     id+CHECK_IMAGE_WIDTH, checkbox_cb);
    _checkbox[CHECK_IMAGE_WIDTH]->set_int_val(_pen->get_gesture_drawer_w()); 
      
    _checkbox[CHECK_IMAGE_COLOR] = new GLUI_Checkbox(_panel[PANEL_IMAGE],
-                                                    "Use Color", NULL,
+                                                    "Use Color", nullptr,
                                                     id+CHECK_IMAGE_COLOR, checkbox_cb);
 
 
    _checkbox[CHECK_SHOW_BBOX] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
-                                                  "Show cell", NULL,
+                                                  "Show cell", nullptr,
                                                   id+CHECK_SHOW_BBOX, checkbox_cb);
     _checkbox[CHECK_SHOW_BBOX]->set_int_val(1);
 
     _checkbox[CHECK_SHOW_ICON] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
-                                                   "Show example", NULL,
+                                                   "Show example", nullptr,
                                                    id+CHECK_SHOW_ICON, checkbox_cb);
     _checkbox[CHECK_SHOW_ICON]->set_int_val(1);
 
@@ -312,34 +312,34 @@ PatternPenUI::build()
 
     _slider[SLIDE_COLOR_H] = new GLUI_Slider(_panel[PANEL_COLOR], "H Adjust",
                                              id+SLIDE_COLOR_H, slider_cb,
-                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
+                                             GLUI_SLIDER_FLOAT, -1, 1, nullptr);
     _slider[SLIDE_COLOR_H]->set_num_graduations(21);
     _slider[SLIDE_COLOR_H]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_H]->set_w(120);
 
     _slider[SLIDE_COLOR_S] = new GLUI_Slider(_panel[PANEL_COLOR], "S Adjust",
                                              id+SLIDE_COLOR_S, slider_cb,
-                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
+                                             GLUI_SLIDER_FLOAT, -1, 1, nullptr);
     _slider[SLIDE_COLOR_S]->set_num_graduations(21);
     _slider[SLIDE_COLOR_S]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_S]->set_w(120);
 
     _slider[SLIDE_COLOR_V] = new GLUI_Slider(_panel[PANEL_COLOR], "V Adjust",
                                              id+SLIDE_COLOR_V, slider_cb,
-                                             GLUI_SLIDER_FLOAT, -1, 1, NULL);
+                                             GLUI_SLIDER_FLOAT, -1, 1, nullptr);
     _slider[SLIDE_COLOR_V]->set_num_graduations(21);
     _slider[SLIDE_COLOR_V]->set_float_val(0.0f);
     _slider[SLIDE_COLOR_V]->set_w(120);
 
     _listbox[LIST_LUMIN_FUNC] = new GLUI_Listbox(_panel[PANEL_COLOR],
-                                                 "Lum Func", NULL, id+LIST_LUMIN_FUNC, listbox_cb);
+                                                 "Lum Func", nullptr, id+LIST_LUMIN_FUNC, listbox_cb);
     _listbox[LIST_LUMIN_FUNC]->add_item(0, "Shadow");
     _listbox[LIST_LUMIN_FUNC]->add_item(1, "Highlight");
 
    new GLUI_Column(_rollout[ROLLOUT_SYNTH], false);
 
    _listbox[LIST_SYNTH] = new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
-                                           "Mode", NULL, id+LIST_SYNTH, listbox_cb);
+                                           "Mode", nullptr, id+LIST_SYNTH, listbox_cb);
    _listbox[LIST_SYNTH]->add_item(0, "synth_mimic");
    _listbox[LIST_SYNTH]->add_item(1, "synth_Efros");
    _listbox[LIST_SYNTH]->add_item(2, "synth_sample");
@@ -347,13 +347,13 @@ PatternPenUI::build()
    _listbox[LIST_SYNTH]->add_item(4, "synth_clone");
 
    _listbox[LIST_DIST] = new GLUI_Listbox(_rollout[ROLLOUT_SYNTH],
-                                          "Distribution", NULL, id+LIST_DIST, listbox_cb);
+                                          "Distribution", nullptr, id+LIST_DIST, listbox_cb);
    _listbox[LIST_DIST]->add_item(0, "Lloyd");
    _listbox[LIST_DIST]->add_item(1, "Stratified");
 
    _slider[SLIDE_RING] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "#Ring",
                                          id+SLIDE_RING, slider_cb,
-                                         GLUI_SLIDER_INT, 1, 5, NULL);
+                                         GLUI_SLIDER_INT, 1, 5, nullptr);
 
    _button[BUT_POP_SYNTH] = new GLUI_Button(_rollout[ROLLOUT_SYNTH], "Pop Cell",
                                             id+BUT_POP_SYNTH, button_cb);
@@ -362,20 +362,20 @@ PatternPenUI::build()
 
    
    _checkbox[CHECK_STRETCH] = new GLUI_Checkbox(_rollout[ROLLOUT_SYNTH],
-                                                "Element Stretching", NULL,
+                                                "Element Stretching", nullptr,
                                                 id+CHECK_STRETCH, checkbox_cb);
   
 
    _slider[SLIDE_CORRECT] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "Perceptual correction",
                                             id+SLIDE_CORRECT, slider_cb,
-                                            GLUI_SLIDER_FLOAT, 0, 1, NULL);
+                                            GLUI_SLIDER_FLOAT, 0, 1, nullptr);
    _slider[SLIDE_CORRECT]->set_num_graduations(200);
    _slider[SLIDE_CORRECT]->set_float_val(1.0f);
    _slider[SLIDE_CORRECT]->set_w(150);
 
    _slider[SLIDE_GLOBAL_SCALE] = new GLUI_Slider(_rollout[ROLLOUT_SYNTH], "Global Scale",
                                                  id+SLIDE_GLOBAL_SCALE, slider_cb,
-                                                 GLUI_SLIDER_FLOAT, 0, 2, NULL);
+                                                 GLUI_SLIDER_FLOAT, 0, 2, nullptr);
    _slider[SLIDE_GLOBAL_SCALE]->set_num_graduations(21);
    _slider[SLIDE_GLOBAL_SCALE]->set_float_val(1.0f);
    _slider[SLIDE_GLOBAL_SCALE]->set_w(150);
@@ -785,7 +785,7 @@ PatternPenUI::load_preset(const char *f)
    if (str == BaseStroke::static_name()) {
       //In case we're testing offsets, let
       //trash the old ones
-      _stroke->set_offsets(NULL);
+      _stroke->set_offsets(nullptr);
       _stroke->decode(d);
 	  cerr << "Stroke Preset Loaded" << endl;
    } else {

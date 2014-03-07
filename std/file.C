@@ -200,7 +200,7 @@ vector<string> dir_list(const string &path)
       FindClose(hFile);
    }
 #else
-   DIR *dir = 0;
+   DIR *dir = nullptr;
    struct dirent *direntry;
    if (!path.empty() && (dir = opendir(path.c_str()))) {
       const string dot(".");

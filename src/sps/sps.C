@@ -74,7 +74,7 @@ sps_real(CBface_list& input_faces,
    flist.clear();
    blist.clear();
 
-   OctreeNode* root = new OctreeNode(box.min(), box.max(), 1, NULL);
+   OctreeNode* root = new OctreeNode(box.min(), box.max(), 1, nullptr);
    if (height == 1) {
       root->set_leaf(true);
       root->set_disp(true);

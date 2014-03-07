@@ -194,7 +194,7 @@ GESTURE::startup_time(double dist_thresh) const
 
    // Find last index i within the distance threshold:
    int i = -1;
-   _pts.interpolate(dist_thresh/length(), 0, &i);
+   _pts.interpolate(dist_thresh/length(), nullptr, &i);
    if (i < 0 || i >= (int)_times.size()) {
       err_msg("GESTURE::startup_time: Error: PIXEL_list::interpolate failed");
       return 0;
@@ -886,7 +886,7 @@ class DEBUG_ELLIPSE : public GEL, public ELLIPSE {
 
    //******** DATA_ITEM VIRTUAL METHODS ********
 
-   virtual DATA_ITEM* dup() const { return 0; }
+   virtual DATA_ITEM* dup() const { return nullptr; }
 };
 
 int
@@ -1000,7 +1000,7 @@ trim_endpt_overlap(CPIXEL_list& pts)
 
    // Find the index of the point near the start of the last 15%:
    int last_k;
-   ret.interpolate(1 - END_ZONE, 0, &last_k, 0);
+   ret.interpolate(1 - END_ZONE, nullptr, &last_k, nullptr);
 
    // Pick off the last few points that are sufficiently close to the
    // start of the polyline.
@@ -1081,7 +1081,7 @@ GESTURE::is_ellipse(
    // 
    // In case this method gets called more than once on the same
    // GESTURE, just print messages the first time.
-   static const GESTURE* last_gesture = 0;
+   static const GESTURE* last_gesture = nullptr;
    static bool do_debug = Config::get_var_bool("DEBUG_ELLIPSE",false);
    bool debug = do_debug && last_gesture != this;
    last_gesture = this;

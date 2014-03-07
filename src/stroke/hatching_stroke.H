@@ -57,7 +57,7 @@ class HatchingVertexData : public BaseStrokeVertexData {
    /******** MEMBER METHODS ********/
 
    virtual BaseStrokeVertexData* alloc(int n) 
-      { return (n>0)?(new HatchingVertexData[n]):0; }
+      { return (n>0) ? (new HatchingVertexData[n]) : nullptr; }
 
    virtual void dealloc(BaseStrokeVertexData *d) {
       if (d) {

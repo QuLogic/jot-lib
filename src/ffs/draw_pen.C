@@ -141,7 +141,7 @@ class WidgetGuard : public DrawGuard {
 /*****************************************************************
  * DrawPen
  *****************************************************************/
-DrawPen* DrawPen::_instance = 0;
+DrawPen* DrawPen::_instance = nullptr;
 
 DrawPen::DrawPen(
    CGEST_INTptr &gest_int,
@@ -151,7 +151,7 @@ DrawPen::DrawPen(
    ) :
    Pen("draw", gest_int, d, m, u),
    _mode(DEFAULT),
-   _drag_pt(0),
+   _drag_pt(nullptr),
    _tap_timer(0),
    _tap_callback(false)
 {
@@ -314,12 +314,12 @@ DrawPen::tapat(PIXEL x)
    Bface* f;
    if (!(f = VisRefImage::get_edit_face()) || !f->is_selected()) {
       // Cancel all current selections
-      ModeReset(0); 
+      ModeReset(nullptr);
    }
 
-   Bpoint*   bpt      = 0;
-   Bcurve*   bcurve   = 0;
-   Bsurface* bsurface = 0;
+   Bpoint*   bpt      = nullptr;
+   Bcurve*   bcurve   = nullptr;
+   Bsurface* bsurface = nullptr;
 
    bool debug = Config::get_var_bool("DEBUG_TAP",false);
    err_adv(debug, "DrawPen::tapat (%f,%f)", x[0], x[1]);
@@ -350,7 +350,7 @@ DrawPen::tapat(PIXEL x)
       BMESH* m = VisRefImage::get_mesh();
       if (m == FLOOR::lookup_mesh()) {
          // don't focus on the floor
-         BMESH::set_focus(0,0);
+         BMESH::set_focus(nullptr,nullptr);
       } else {
          // focus on mesh and patch according to user's click:
          BMESH::set_focus(m,VisRefImage::get_patch());
@@ -521,7 +521,7 @@ get_skin(const vector<Skin*>& skins, Bface_list& region)
       if (skins[i]->skel_faces().contains_all(region))
          return skins[i];
    }
-   return NULL;
+   return nullptr;
 }
 
 // given a region on the skeleton of a skin, find the corresponding faces
@@ -1080,7 +1080,7 @@ DrawPen::dot_cb(CGESTUREptr& gest, DrawState*&)
    }
 
    // XXX - really just for testing: put a point on a uv surface:
-   Bface* f=0;
+   Bface* f=nullptr;
    Bsurface* bsurf = Bsurface::hit_ctrl_surface(c, 1, &f);
    bool debug = Config::get_var_bool("DEBUG_UV_INTERSECT",false);
    if (0) {
@@ -1151,9 +1151,9 @@ DrawPen::scribble_cb(CGESTUREptr& gest, DrawState*&)
 
 
    // Deactivate selections
-   ModeReset(0);
+   ModeReset(nullptr);
 
-   GEL* gel = 0;
+   GEL* gel = nullptr;
    Bpoint* bpt = Bpoint::hit_point(xy, 8);
    if (bpt) {
       gel = bpt->geom();
@@ -1226,7 +1226,7 @@ DrawPen::ellipse_cb(CGESTUREptr& gest, DrawState*& s)
       else
          err_msg("DrawPen::ellipse_cb: error: gesture is not an ellipse?!");
 
-      ModeReset(0); 
+      ModeReset(nullptr);
       return 0;
    }
 
@@ -1332,7 +1332,7 @@ DrawPen::line_cb(CGESTUREptr& gest, DrawState*& s)
    bool debug = Config::get_var_bool("DEBUG_LINE_CB",false);
    if (debug) cerr << "DrawPen::line_cb: " << endl;
 
-   Bpoint* bp = 0;
+   Bpoint* bp = nullptr;
    if (gest && gest->prev() && gest->prev()->is_tap() &&
        gest->prev()->age() < 3 &&
        gest->start().dist(gest->prev()->start()) < 8 &&
@@ -1493,7 +1493,7 @@ DrawPen::select_skel_curve(Bsurface* surf, CGESTUREptr& gest)
    }
 
    // cancel current selections:
-   ModeReset(0);
+   ModeReset(nullptr);
    err_adv(debug, "DrawPen::select_skel_curve: selecting skeleton curve");
    AddToSelection(skel);
    
@@ -1505,7 +1505,7 @@ DrawPen::handle_extrude(Bsurface* surf_sel, CGESTUREptr& gest)
 {
    static bool debug = Config::get_var_bool("DEBUG_EXTRUDE",false);
 
-   Bface* face = 0;
+   Bface* face = nullptr;
 
    if (!(gest->straightness() > 0.8)) {
       err_adv(debug, "DrawPen::handle_extrude: gesture not straight");
@@ -1547,7 +1547,7 @@ DrawPen::handle_extrude(Bsurface* surf_sel, CGESTUREptr& gest)
          }
       }
    }
-   ModeReset(0);
+   ModeReset(nullptr);
 
    return true;
 }
@@ -1787,7 +1787,7 @@ DrawPen::create_curve(GESTUREptr gest)
    // film plane.
    Wplane P = get_plane(b1, b2);
    if (!P.is_valid()) {
-      b1 = b2 = 0;
+      b1 = b2 = nullptr;
       // Ignoring the endpoints, try for a plane from the FLOOR
       // or AxisWidget:
       P = get_draw_plane(gest->pts(), t, b);
@@ -1810,7 +1810,7 @@ DrawPen::create_curve(GESTUREptr gest)
 
    // If closed curve, don't use endpoints:
    if (wpts.is_closed()) {
-      b1 = b2 = 0;
+      b1 = b2 = nullptr;
    }
 
    MULTI_CMDptr cmd = new MULTI_CMD;
@@ -1820,7 +1820,7 @@ DrawPen::create_curve(GESTUREptr gest)
            << "can't find mesh to use" << endl;
       return 0;
    }
-   assert(mesh != 0);
+   assert(mesh != nullptr);
 
    int r = get_res_level(mesh);
    int num_edges = 4; // XXX - default is 4 edges; should be smarter:

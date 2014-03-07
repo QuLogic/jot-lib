@@ -139,10 +139,10 @@ class Bvert : public Bsimplex {
 
    // Neighboring vertex number k:
    Bvert* nbr(int k) const {
-      return (0 <= k && k < (int)_adj.size()) ? _adj[k]->other_vertex(this) : 0;
+      return (0 <= k && k < (int)_adj.size()) ? _adj[k]->other_vertex(this) : nullptr;
    }
    // Neighboring vertex along given edge (which must be adjacent to this):
-   Bvert* nbr(CBedge* e) const { return e ? e->other_vertex(this) : 0; }
+   Bvert* nbr(CBedge* e) const { return e ? e->other_vertex(this) : nullptr; }
 
    // Return a set of neighboring vertices from the
    // given set of edges, all of which must contain
@@ -185,11 +185,11 @@ class Bvert : public Bsimplex {
    // Return the edge connecting this to a given vertex:
    Bedge* lookup_edge(CBvert* v) const {
       if (v == this)
-         return 0;  
+         return nullptr;
       for (Bedge_list::size_type k=0; k<_adj.size(); k++)
          if (_adj[k]->contains(v))
             return _adj[k];
-      return 0;
+      return nullptr;
    }
 
    // tell if this is adjacent to the given vertex:
@@ -265,7 +265,7 @@ class Bvert : public Bsimplex {
    // Like above, but returns the next border vertex:
    Bvert* next_border_vert_cw() {
       Bedge* border = next_border_edge_cw();
-      return border ? border->other_vertex(this) : 0;
+      return border ? border->other_vertex(this) : nullptr;
    }               
 
    //******** BUILDING/REDEFINING ********
@@ -448,7 +448,7 @@ class Bvert : public Bsimplex {
    //******** XXX - OBSOLETE -- OLD TESSELLATOR STUFF
    virtual bool local_search(Bsimplex *&end, Wvec &final_bc,
                              CWpt &target, mlib::Wpt &reached, 
-                             Bsimplex *repeater = 0, int iters = 30);
+                             Bsimplex *repeater = nullptr, int iters = 30);
    virtual NDCpt nearest_pt_ndc(mlib::CNDCpt& p, mlib::Wvec &bc, int &is_on_simplex) const;
    virtual Wpt   nearest_pt(mlib::CWpt& p, mlib::Wvec &bc, bool &is_on_simplex) const;
 
@@ -473,13 +473,13 @@ class Bvert : public Bsimplex {
 inline Bedge*
 lookup_edge(CBvert* a, CBvert* b)
 {
-   return (a && b) ? a->lookup_edge(b) : 0;
+   return (a && b) ? a->lookup_edge(b) : nullptr;
 }
 
 inline Bvert*
 bvert(Bsimplex* sim)
 {
-   return is_vert(sim) ? (Bvert*)sim : 0;
+   return is_vert(sim) ? (Bvert*)sim : nullptr;
 }
 
 inline Wpt 

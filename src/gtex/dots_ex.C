@@ -261,7 +261,7 @@ GLint   DotsShader_EX::_height_loc(-1);
 
 DotsShader_EX::DotsShader_EX(Patch* p) :
    GLSLShader(p,new StripTexCoordsCB3()),
-   _tone_shader(0),
+   _tone_shader(nullptr),
    _style(0)
 {
    set_tone_shader(get_toon_shader(p));

@@ -45,7 +45,7 @@ class ColorIDTexture : public BasicTexture {
 
  public:
    //******** MANAGERS ********
-   ColorIDTexture(Patch* patch = 0, GLenum pmode = GL_FILL);
+   ColorIDTexture(Patch* patch = nullptr, GLenum pmode = GL_FILL);
    virtual ~ColorIDTexture() { gtextures().delete_all(); }
 
    //******** RUN-TIME TYPE ID ********

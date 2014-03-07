@@ -33,7 +33,7 @@
 class MLToneShader : public ToneShader {
  public:
    //******** MANAGERS ********
-   MLToneShader(Patch* patch = 0);
+   MLToneShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("MLToneShader", MLToneShader*, ToneShader, CDATA_ITEM*);

@@ -38,7 +38,7 @@ bool draw_skin_only = false;
  **********************************************************************/
 bool Bsurface::_show_crease = false;
 Bsurface::Bsurface(CLMESHptr& mesh) :  
-   _patch(0),
+   _patch(nullptr),
    _retri_count(0),
    _target_len(0),
    _update_stamp(0)
@@ -63,7 +63,7 @@ Bsurface::~Bsurface()
    // Putting the patch back into the mesh's drawables list might be
    // something to consider. Currently it seems control surfaces don't
    // get deleted, so it hasn't been an issue.
-   _patch = 0;
+   _patch = nullptr;
    _bpoints.clear();
    _bcurves.clear();
 
@@ -76,15 +76,15 @@ Bsurface::~Bsurface()
    _ememes.delete_all();
 
    // Get out of the mesh if needed:
-   set_parent(0);
-   set_mesh(0);
+   set_parent(nullptr);
+   set_mesh(nullptr);
 }
 
 
 CBface_list& 
 Bsurface::bfaces() const
 {
-   if (_patch != NULL)
+   if (_patch != nullptr)
       return _patch->faces();
    static Bface_list ret;
    return ret;
@@ -102,7 +102,7 @@ Bsurface::set_parent(Bbase* p)
    if (s) {
       _bcurves = s->_bcurves.children();
       _bpoints = s->_bpoints.child_points();
-   } else assert(p == 0);
+   } else assert(p == nullptr);
 
    Bbase::set_parent(p);
 
@@ -192,12 +192,12 @@ Bsurface::set_mesh(CLMESHptr& mesh)
    } else {
       // use the child patch of the parent surface
       Bsurface* s = parent_surface();
-      Patch* p = s ? s->patch() : 0;
+      Patch* p = s ? s->patch() : nullptr;
       // policy here may need work; for now try being a hard-ass
-      assert(p != NULL);
+      assert(p != nullptr);
       _patch = (Lpatch*)p->get_child();
    }
-   assert(_patch != NULL);
+   assert(_patch != nullptr);
    Patch::set_focus(_patch);
 }
   
@@ -208,7 +208,7 @@ Bsurface::gen_subdiv_memes() const
    // levels of the mesh already, now is the time to shower
    // down memes upon them (as needed):
 
-   if (_res_level > 0 && _mesh->subdiv_mesh() != NULL) {
+   if (_res_level > 0 && _mesh->subdiv_mesh() != nullptr) {
 
       // Ensure the child is created
       ((Bsurface*)this)->produce_child();
@@ -235,7 +235,7 @@ Bsurface::add_edge_meme(EdgeMeme* e)
       _ememes.push_back(e);
       return e;
    }
-   return 0;
+   return nullptr;
 }
 
 EdgeMeme* 
@@ -243,7 +243,7 @@ Bsurface::add_edge_meme(Ledge* e)
 {
    // Sometimes they're not serious
    if (!e)
-      return 0;
+      return nullptr;
 
    // Don't create a duplicate meme:
    if (find_edge_meme(e))
@@ -260,7 +260,7 @@ Bsurface::add_face_meme(FaceMeme* f)
       _fmemes.push_back(f);
       return f;
    }
-   return 0;
+   return nullptr;
 }
 
 FaceMeme* 
@@ -270,7 +270,7 @@ Bsurface::add_face_meme(Lface* f)
 
    // Screen out the wackos
    if (!f)
-      return 0;
+      return nullptr;
 
    // Don't create a duplicate meme:
    if (find_face_meme(f))
@@ -304,7 +304,7 @@ Bsurface::add_face(Bvert* u, Bvert* v, Bvert* w)
 
    if (!f) {
       err_msg("Bsurface::add_face: Error creating face");
-      return 0;
+      return nullptr;
    }
 
    // Put a face meme on it
@@ -346,7 +346,7 @@ Bsurface::add_quad(Bvert* u, Bvert* v, Bvert* w, Bvert* x)
 
    if (!(f && f->is_quad())) {
       err_msg("Bsurface::add_quad: Error creating quad");
-      return 0;
+      return nullptr;
    }
 
    // Put edge memes on all the edges:
@@ -385,7 +385,7 @@ Bsurface::add_quad(
    FaceMeme* ret = add_quad(u,v,w,x);
 
    if (!ret)
-      return 0;
+      return nullptr;
       
    // Assign uv-coords as requested:
    if (!UVdata::set(u,v,w,x,a,b,c,d))
@@ -592,7 +592,7 @@ Bsurface*
 Bsurface::selected_surface()
 {
    Bsurface_list surfaces = selected_surfaces();
-   return (surfaces.num() == 1) ? surfaces[0] : 0;
+   return (surfaces.num() == 1) ? surfaces[0] : nullptr;
 }
 
 CCOLOR& 
@@ -718,7 +718,7 @@ vertexCB(void* vdata)
 
 TessellatorData::TessellatorData() :
    _tess(gluNewTess()),
-   _surf(0)
+   _surf(nullptr)
 {
    // We don't handle "combine" callbacks since we
    // don't want the operation to happen. If GLU wants
@@ -744,7 +744,7 @@ TessellatorData::TessellatorData() :
                    (glu_tess_func) &endCB);
    gluTessCallback(_tess, GLU_TESS_ERROR, 
                    (glu_tess_func) &errorCB);
-   gluTessCallback(_tess, GLU_TESS_COMBINE, 0); // we reject this
+   gluTessCallback(_tess, GLU_TESS_COMBINE, nullptr); // we reject this
 }
 
 void
@@ -961,7 +961,7 @@ Bsurface::hit_surface(CNDCpt& p, double rad, Wpt& hit, Bface** face)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_msg("Bsurface::hit_surface: Error: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
    vis_ref->update();
 

@@ -62,7 +62,7 @@ class FileListbox {
    // this extension are ignored.
    static void fill_listbox(GLUI_Listbox *listbox, vector<string> &files,
                             const string &full_path, const string &save_path,
-                            const char *extension=0);
+                            const char *extension=nullptr);
 
  protected:
 

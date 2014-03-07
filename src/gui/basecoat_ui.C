@@ -66,7 +66,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_BASECOAT] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_MAIN],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_BASECOAT, radiogroup_cb);
 
    _radbutton[RADBUT_BASECOAT_NONE] = new GLUI_RadioButton(
@@ -88,7 +88,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_LIGHT_SEPARATE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_MAIN],
                                 "Light Seperation",
-                                NULL,
+                                nullptr,
                                 CHECK_LIGHT_SEPARATE,
                                 checkbox_cb);
 
@@ -101,7 +101,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_REMAP_A, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_REMAP_A]->set_num_graduations(100);
    _slider[SLIDE_REMAP_A]->set_w(200);
 
@@ -111,7 +111,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_REMAP_B, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_REMAP_B]->set_num_graduations(100);
    _slider[SLIDE_REMAP_B]->set_w(200);
 
@@ -121,7 +121,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_COLOR_OFFSET, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_COLOR_OFFSET]->set_num_graduations(100);
    _slider[SLIDE_COLOR_OFFSET]->set_w(200);
 
@@ -131,7 +131,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_COLOR_STEEPNESS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_COLOR_STEEPNESS]->set_num_graduations(100);
    _slider[SLIDE_COLOR_STEEPNESS]->set_w(200);
 
@@ -140,7 +140,7 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _listbox[LIST_TEXTURE] = new GLUI_Listbox(
                                _rollout[ROLLOUT_MAIN],
                                "Toon Map",
-                               0,
+                               nullptr,
                                id+LIST_TEXTURE,
                                listbox_cb);
    

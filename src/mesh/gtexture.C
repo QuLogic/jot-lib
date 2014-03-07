@@ -30,7 +30,7 @@ const string GTexture::_end_tag  (string("\n#END ") + _type_name + string("\n"))
 CTAGlist &
 GTexture::tags() const
 {
-   static TAGlist* basic_tags = 0;
+   static TAGlist* basic_tags = nullptr;
 
    if (!basic_tags) {
       basic_tags = new TAGlist(0);
@@ -42,7 +42,7 @@ GTexture::tags() const
 GTexture::GTexture(Patch* p, StripCB* cb) :
    _patch(p),
    _cb(cb),
-   _ctrl(0)
+   _ctrl(nullptr)
 {
    changed(); 
 }

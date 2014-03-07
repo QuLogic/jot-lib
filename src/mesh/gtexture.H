@@ -156,7 +156,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
 
    //******** MANAGERS ********
 
-   GTexture(Patch* p = 0, StripCB* cb=0);
+   GTexture(Patch* p = nullptr, StripCB* cb=nullptr);
    virtual ~GTexture() { delete _cb; }  
 
    //******** RUN-TIME TYPE ID ********
@@ -263,7 +263,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
 
    //******** DATA_ITEM VIRTUAL FUNCTIONS ********
 
-   virtual DATA_ITEM   *dup()        const { return 0; }
+   virtual DATA_ITEM   *dup()        const { return nullptr; }
    virtual CTAGlist    &tags()       const;
 
  //*******************************************************

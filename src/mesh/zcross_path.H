@@ -142,8 +142,8 @@ class ZXseg {
 
       ZXseg ()
       {
-         _s = NULL;
-         _v = NULL;
+         _s = nullptr;
+         _v = nullptr;
          _g = false;
    
       }
@@ -158,7 +158,7 @@ class ZXseg {
       Wpt&       p()            { return _p; }
       Bsimplex*  s()      const { return _s; }
       //! if we really really want the face we can get it
-      //! if no face is there you will get a NULL
+      //! if no face is there you will get a nullptr
       Bface*     f()      const { return get_bface(_s); }
       Bvert*     v()      const { return _v; }
       bool       g()      const { return _g > 0.0; }
@@ -200,12 +200,12 @@ public:
    //******** MANAGERS ********
 
    // Create an empty strip:
-   ZcrossPath() : _patch(0), _index(-1) {}
+   ZcrossPath() : _patch(nullptr), _index(-1) {}
 
    // Given a list of edges to search, build a strip of
    // edges that satisfy a given property.
    ZcrossPath(CBface_list& list) :
-         _patch(0),
+         _patch(nullptr),
          _index(-1)
    {
 
@@ -282,7 +282,7 @@ public:
 
    BMESH* mesh() const
    {
-      return empty() ? (BMESH*)0 : _segs[0].f()->mesh();
+      return empty() ? nullptr : _segs[0].f()->mesh();
    }
 
    //******** THE MAIN JOB ********

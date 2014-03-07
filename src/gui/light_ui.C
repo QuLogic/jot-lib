@@ -72,7 +72,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    //Number
    _radgroup[RADGROUP_LIGHTNUM] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
-                                     NULL,
+                                     nullptr,
                                      RADGROUP_LIGHTNUM, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTNUM]);
 
@@ -115,7 +115,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_ENABLE] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "On",
-                                NULL,
+                                nullptr,
                                 CHECK_ENABLE,
                                 checkbox_cb);
    assert(_checkbox[CHECK_ENABLE]);
@@ -123,14 +123,14 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _checkbox[CHECK_SHOW_WIDGET] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "Show Widget",
-                                NULL,
+                                nullptr,
                                 CHECK_SHOW_WIDGET,
                                 checkbox_cb);
 
    _checkbox[CHECK_POS] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Dir",
-                             NULL,
+                             nullptr,
                              CHECK_POS,
                              checkbox_cb);
    assert(_checkbox[CHECK_POS]);
@@ -138,14 +138,14 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_CAM] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Cam",
-                             NULL,
+                             nullptr,
                              CHECK_CAM,
                              checkbox_cb);
    assert(_checkbox[CHECK_CAM]);
 
    _radgroup[RADGROUP_LIGHTCOL] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
-                                     NULL,
+                                     nullptr,
                                      RADGROUP_LIGHTCOL, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTCOL]);
 
@@ -164,7 +164,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _rotation[ROT_LIGHT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHTTOP],
                              "Pos/Dir",
-                             NULL,
+                             nullptr,
                              ROT_LIGHT, rotation_cb);
    assert(_rotation[ROT_LIGHT]);
   
@@ -173,21 +173,21 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              _panel[PANEL_LIGHTTOP],
                              "x",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_DIR_X, spinner_cb);
    _spinner[SPINNER_LIGHT_DIR_X]->set_w(20);
    _spinner[SPINNER_LIGHT_DIR_Y] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "y",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_DIR_Y, spinner_cb);
    _spinner[SPINNER_LIGHT_DIR_Y]->set_w(20);
     _spinner[SPINNER_LIGHT_DIR_Z] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "z",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_DIR_Z, spinner_cb);
     _spinner[SPINNER_LIGHT_DIR_Z]->set_w(20);
     new GLUI_Column(_panel[PANEL_LIGHTTOP], false);
@@ -203,26 +203,26 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _rotation[ROT_SPOT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHT_SPOTDIR],
                              "Spot Dir",
-                             NULL,
+                             nullptr,
                              ROT_SPOT, rotation_cb);
      new GLUI_Column(_panel[PANEL_LIGHT_SPOTDIR], false);
     _spinner[SPINNER_LIGHT_SPOT_X] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "x",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_SPOT_X, spinner_cb);
     _spinner[SPINNER_LIGHT_SPOT_Y] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "y",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_SPOT_Y, spinner_cb);
     _spinner[SPINNER_LIGHT_SPOT_Z] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "z",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_LIGHT_SPOT_Z, spinner_cb);
     //_new GLUI_Column(_rollout[ROLLOUT_SPOT], true);
     _slider[SLIDE_SPOT_EXPONENT] = new GLUI_Slider(
@@ -231,7 +231,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                           SLIDE_SPOT_EXPONENT, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL);
+                          nullptr);
     
     _slider[SLIDE_SPOT_CUTOFF] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -239,7 +239,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                           SLIDE_SPOT_CUTOFF, slider_cb,
                           GLUI_SLIDER_INT,
                           0, 90,
-                          NULL);
+                          nullptr);
     _slider[SLIDE_SPOT_CUTOFF]->set_int_val(90);
     _slider[SLIDE_SPOT_K0] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -247,7 +247,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                           SLIDE_SPOT_K0, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL);
+                          nullptr);
     _slider[SLIDE_SPOT_K0]->set_float_val(1.0);
     _slider[SLIDE_SPOT_K1] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -255,7 +255,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                           SLIDE_SPOT_K1, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    
     _slider[SLIDE_SPOT_K2] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -263,7 +263,7 @@ LightUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                           SLIDE_SPOT_K2, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 0.5,
-                          NULL);
+                          nullptr);
    
 
  

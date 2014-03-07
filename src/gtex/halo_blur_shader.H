@@ -39,7 +39,7 @@
 class HaloBlurShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   HaloBlurShader(Patch* patch = 0);
+   HaloBlurShader(Patch* patch = nullptr);
 
    virtual ~HaloBlurShader();
 

@@ -65,9 +65,9 @@ extern "C" int Select(int maxfds, fd_set *reads, fd_set *writes, fd_set *errors,
      need to worry about timeouts.  Otherwise, we can
      ignore it */
 
-    if (timeout == NULL) {
+    if (timeout == nullptr) {
        while (TRUE) {
-          rc = select(maxfds,reads,writes,errors,NULL);
+          rc = select(maxfds,reads,writes,errors,nullptr);
           if ((rc == -1) && (errno == EINTR)) { /* interrupted */
              if (reads) bcopy(&readcopy,reads,sizeof(fd_set));
              if (writes) bcopy(&writecopy,writes,sizeof(fd_set));
@@ -111,7 +111,7 @@ extern "C" int Select(int maxfds, fd_set *reads, fd_set *writes, fd_set *errors,
    }
 #endif
 
-FD_MANAGER *FD_MANAGER::_mgr = 0;
+FD_MANAGER *FD_MANAGER::_mgr = nullptr;
 
 /* -------------------------------------------------------------------------
  *
@@ -132,7 +132,7 @@ FD_MANAGER *FD_MANAGER::_mgr = 0;
            (TIME).tv_usec = ((MSEC)%1000)*1000; \
            PTR =  &TIME;                        \
         } else                                  \
-           PTR = NULL
+           PTR = nullptr
 
 /* ------------------------ Static Routines  ------------------------------- */
 
@@ -516,7 +516,7 @@ int TTYfd::read_all(
      stat.cbInQue = maxbytes;
    if (stat.cbInQue > 0) {
      unsigned long bytes;
-     int error = ReadFile((HANDLE)_fd, buf, stat.cbInQue, &bytes, NULL);
+     int error = ReadFile((HANDLE)_fd, buf, stat.cbInQue, &bytes, nullptr);
      num = bytes;
      if (error==FALSE)
        return -1;
@@ -563,7 +563,7 @@ int TTYfd::nread(
    FD_ZERO(&readfds);
    FD_SET(_fd, &readfds);
    for (buf += num; num < readnum; buf += howmany, num += howmany)
-      if ((i = SELECT(FD_SETSIZE, &readfds, 0, 0, toptr)) == 0) {
+      if ((i = SELECT(FD_SETSIZE, &readfds, nullptr, nullptr, toptr)) == 0) {
          if (TTYdebug)
             cerr << "Timeout expired" << endl; 
          return num;
@@ -578,7 +578,7 @@ int TTYfd::nread(
 #else
    unsigned long bytes;
    for (buf +=num; num<readnum; buf+=howmany, num+=howmany) {
-      int error = ReadFile((HANDLE)_fd, buf, readnum-num, &bytes, NULL);
+      int error = ReadFile((HANDLE)_fd, buf, readnum-num, &bytes, nullptr);
       if (bytes==0) {
 	if (TTYdebug)
           cerr << "Timeout expired" << endl;
@@ -716,7 +716,7 @@ int TTYfd::write(
    FD_ZERO(&writefds);
    FD_SET(_fd, &writefds);
    for (; num < writenum; num += howmany, buf += howmany) {
-      if (SELECT(FD_SETSIZE, 0, &writefds, 0, toptr) <= 0) {
+      if (SELECT(FD_SETSIZE, nullptr, &writefds, nullptr, toptr) <= 0) {
          perror("TTYfd::write [select failed]");
          break;
       }
@@ -727,7 +727,7 @@ int TTYfd::write(
    }
 #else
    unsigned long bytes;
-   if (WriteFile((HANDLE)_fd, buf, writenum, &bytes, NULL) == FALSE)
+   if (WriteFile((HANDLE)_fd, buf, writenum, &bytes, nullptr) == FALSE)
      perror("TTYfd::write [WriteFile failed]");
    num = bytes;
 #endif
@@ -852,8 +852,8 @@ int TTYfd::open()
 #ifdef sun
     if ((_fd = ::open(_dev, O_RDWR|O_NDELAY  |O_NOCTTY, 0)) < 0) {     /* Open for non-blocking read */
 #elif WIN32
-    if ((HANDLE)(_fd = (int)CreateFile(_dev, GENERIC_READ|GENERIC_WRITE, 0, NULL,
-				       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL)) ==
+    if ((HANDLE)(_fd = (int)CreateFile(_dev, GENERIC_READ|GENERIC_WRITE, 0, nullptr,
+				       OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)) ==
 	INVALID_HANDLE_VALUE) {
 #else
     if ((_fd = ::open(_dev, O_RDWR|O_NONBLOCK|O_NOCTTY, 0)) < 0) {     /* Open for non-blocking read */
@@ -914,7 +914,7 @@ TTYfd::TTYfd(
    const char  *name
    ):_synch_pos(0), _manager(manager)
 { 
-   if (dev != NULL)
+   if (dev != nullptr)
    {
       strcpy(_dev, dev);
    }

@@ -47,7 +47,7 @@ class CIRCLE_WIDGET : public DrawWidget {
    static CIRCLE_WIDGETptr get_instance();
 
    static CIRCLE_WIDGETptr get_active_instance() {
-      return isa(_active) ? (CIRCLE_WIDGET*)&*_active : (CIRCLE_WIDGET*)0;
+      return isa(_active) ? (CIRCLE_WIDGET*)&*_active : nullptr;
    }
 
    //******** RUN-TIME TYPE ID ********

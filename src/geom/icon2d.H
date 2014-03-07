@@ -55,7 +55,7 @@ class ICON2D : public GEOM {
 
    const string &name() const {return _name; }
 
-   virtual  BBOX2D  bbox2d   (int b=5, char*s=0, int r=0) const;
+   virtual  BBOX2D  bbox2d   (int b=5, char*s=nullptr, int r=0) const;
    virtual  void    update   ()                { }
 
    virtual  int     draw     (CVIEWptr  &v);

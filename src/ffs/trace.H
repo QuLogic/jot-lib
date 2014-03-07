@@ -56,7 +56,7 @@ class TRACE : public DrawWidget {
    static void clear_instance();
 
    static TRACEptr get_active_instance() {
-      return isa(_active) ? (TRACE*)&*_active : (TRACE*)0;
+      return isa(_active) ? (TRACE*)&*_active : nullptr;
    }
 
    //******** RUN-TIME TYPE ID ********

@@ -112,7 +112,7 @@ class RenderingModeSingleton {
       //! \brief Indicates whether any of the available rendering modes are
       //! supported on the current system.
       bool supported()
-         { return mode != 0; }
+         { return mode != nullptr; }
       
       //! \copydoc RenderingMode::setup_for_drawing_outside_dl(const Patch*)
       void setup_for_drawing_outside_dl(const Patch *patch)
@@ -132,7 +132,7 @@ class RenderingModeSingleton {
       
       //! \copydoc RenderingMode::get_new_strip_cb()
       GLStripCB *get_new_strip_cb()
-         { return mode ? mode->get_new_strip_cb() : 0; }
+         { return mode ? mode->get_new_strip_cb() : nullptr; }
    
    private:
    

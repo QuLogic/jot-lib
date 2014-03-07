@@ -252,7 +252,7 @@ class BaseStrokeVertexData {
    /******** MEMBER METHODS ********/
 
    virtual BaseStrokeVertexData* alloc(int n) 
-      { return (n>0)?(new BaseStrokeVertexData[n]):0; }
+      { return (n>0) ? (new BaseStrokeVertexData[n]) : nullptr; }
 
    virtual void dealloc(BaseStrokeVertexData *d) 
       { if (d) delete [] d; }
@@ -344,10 +344,10 @@ class BaseStrokeVertex {
       _vis_state(VIS_STATE_VISIBLE), 
       _vis_reason(VIS_REASON_NONE), 
       _trans_type(TRANS_NONE),
-      _data(0),
-      _refined_vertex(0),
-      _next_vert(0),
-      _prev_vert(0)
+      _data(nullptr),
+      _refined_vertex(nullptr),
+      _next_vert(nullptr),
+      _prev_vert(nullptr)
    {};
    virtual ~BaseStrokeVertex() {}; 
    
@@ -421,7 +421,7 @@ template <class T> class SARRAY {
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   SARRAY(int m=0) : _array(0), _num(0), _max(0)  {
+   SARRAY(int m=0) : _array(nullptr), _num(0), _max(0)  {
       if (m>0) realloc(m);
    }
 
@@ -472,7 +472,7 @@ template <class T> class SARRAY {
       if (_array)
          delete [] _array;
       _array = _new_array;
-      _new_array = 0;
+      _new_array = nullptr;
    }
 };
 
@@ -494,7 +494,7 @@ class StrokeVertexArray : public SARRAY<BaseStrokeVertex> {
 
 
    StrokeVertexArray() :
-      SARRAY<BaseStrokeVertex>(0), _data(0), _new_data(0), _proto(0) {}
+      SARRAY<BaseStrokeVertex>(0), _data(nullptr), _new_data(nullptr), _proto(nullptr) {}
 
    ~StrokeVertexArray() {
       if (_proto&&_data)
@@ -526,7 +526,7 @@ class StrokeVertexArray : public SARRAY<BaseStrokeVertex> {
       if (_data) _proto->dealloc(_data);
 
       _data = _new_data;
-      _new_data = 0;
+      _new_data = nullptr;
    }
 };
 

@@ -32,7 +32,7 @@ class GLSLToonShader;
 class HalftoneShaderEx : public GLSLShader {
  public:
    // ******** MANAGERS ********
-   HalftoneShaderEx(Patch* patch = 0);
+   HalftoneShaderEx(Patch* patch = nullptr);
    
    void   set_style(int s) { _style = s; }
    // ******** RUN-TIME TYPE ID ********

@@ -43,12 +43,12 @@ class EdgeStrip {
    //******** MANAGERS ********
 
    // Create an empty strip:
-   EdgeStrip() : _patch(0), _index(-1) {}
+   EdgeStrip() : _patch(nullptr), _index(-1) {}
 
    // Given a list of edges to search, build a strip of
    // edges that satisfy a given property.
    EdgeStrip(CBedge_list& list, CSimplexFilter& filter) :
-      _patch(0),
+      _patch(nullptr),
       _index(-1) {
       build(list, filter);
    }
@@ -171,7 +171,7 @@ class EdgeStrip {
    // Returns the child strip at the given subdivision level.
    // The specified level is relative to this strip, so level 0
    // refers to this strip, level 1 is its child strip, etc.:
-   virtual CEdgeStrip* sub_strip(int k) const  { return k==0 ? this : 0; }
+   virtual CEdgeStrip* sub_strip(int k) const  { return k==0 ? this : nullptr; }
 
    // Returns edge and vert lists of the "current" strip:
    // (see comment above about the virtual cur_strip() method):

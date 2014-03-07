@@ -25,7 +25,7 @@ class TestSPSapp : public BaseJOTapp {
    //******** MANAGERS *******/
    TestSPSapp(int argc, char **argv) :
       BaseJOTapp(argc, argv) {
-      assert(_instance == 0);
+      assert(_instance == nullptr);
       _instance = this;
       _show_sample = false;
       _show_grid = false;

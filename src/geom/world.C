@@ -33,7 +33,7 @@
 
 using namespace mlib;
 
-WORLD*  WORLD::_w       = 0;
+WORLD*  WORLD::_w       = nullptr;
 bool    WORLD::_is_over = false;
 
 bool debug_threads = Config::get_var_bool("JOT_DEBUG_THREADS") != 0;
@@ -52,7 +52,7 @@ LOADER::load(
    )
 {
    bool loaded = 0;
-   for (LOADER *l = _all; l != 0 && !loaded; l = l->_next) {
+   for (LOADER *l = _all; l != nullptr && !loaded; l = l->_next) {
       loaded = l->try_load(path);
    }
    return loaded;
@@ -100,7 +100,7 @@ WORLD::_default_decoder(
    if (hash)
       cerr << hash->class_name() << " vs. " << name << endl;
 
-   return 0;
+   return nullptr;
 }
 
 //
@@ -344,7 +344,7 @@ WORLD::show_pts(
    for (Wpt_list::size_type i=0; i<pts.size(); i++)
       show(pts[i], width, col, alpha, depth_test);
 
-   return 0;
+   return nullptr;
 }
 
 GELptr
@@ -376,7 +376,7 @@ WORLD::show_polyline(
    line->set_no_depth(!depth_test);
    create(line,false);
 
-   return 0;
+   return nullptr;
 }
 
 /*******************************************************
@@ -455,7 +455,7 @@ class REF_CLASS(WMSG) : public FRAMEobs {
    int tick() {
       if (_end_time && the_time() > _end_time) {
          _text->set_string("");
-         _msg = 0;
+         _msg = nullptr;
          return -1;
       } else return 1;
    }
@@ -463,7 +463,7 @@ class REF_CLASS(WMSG) : public FRAMEobs {
    static WMSG *msg() {return _msg;}
 };
 
-WMSG *WMSG::_msg=0;
+WMSG *WMSG::_msg=nullptr;
 TEXT2Dptr msgtext;
 
 void
@@ -527,7 +527,7 @@ class REF_CLASS(WMMSG) : public FRAMEobs {
          for (int i = 0; i < _num_msgs; i++) 
             _text[i]->set_string("");
 
-         _msg = 0;
+         _msg = nullptr;
          return -1;
       } else return 1;
    }
@@ -535,7 +535,7 @@ class REF_CLASS(WMMSG) : public FRAMEobs {
    static WMMSG *msg() {return _msg;}
 };
 
-WMMSG *WMMSG::_msg=0;
+WMMSG *WMMSG::_msg=nullptr;
 TEXT2Dptr mmsgtext[MAXLINES];
 
 //returns the location of the next instance of chr in the string

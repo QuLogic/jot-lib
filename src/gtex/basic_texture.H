@@ -52,7 +52,7 @@ class OGLTexture : public GTexture {
 
  public:
    //******** MANAGERS ********
-   OGLTexture(Patch *patch = 0, StripCB* cb=0) :
+   OGLTexture(Patch *patch = nullptr, StripCB* cb=nullptr) :
       GTexture(patch, cb ? cb : new GLStripCB) {}
    virtual ~OGLTexture() {}
 
@@ -105,7 +105,7 @@ class OGLTexture : public GTexture {
 class BasicTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   BasicTexture(Patch* patch = 0, StripCB* cb=0) : OGLTexture(patch,cb){}
+   BasicTexture(Patch* patch = nullptr, StripCB* cb=nullptr) : OGLTexture(patch,cb){}
    virtual ~BasicTexture() { delete_dl(); }
 
    //******** RUN-TIME TYPE ID ********

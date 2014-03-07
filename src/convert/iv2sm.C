@@ -49,7 +49,7 @@
 #include "mesh/gtexture.H"
 
 // Reference dev symbols
-DEVice_2d *DEVice_2d::last = 0;
+DEVice_2d *DEVice_2d::last = nullptr;
 
 void outputMesh(ostream &os);
 
@@ -91,7 +91,7 @@ SbVec3f objColor;
 int badtris = 0;
 int reppts  = 0;
 int duptris = 0;
-ostream *output_stream = 0;
+ostream *output_stream = nullptr;
 
 void
 initialize_mesh()
@@ -130,19 +130,19 @@ scenegraph_to_tris(SoNode *root)
   SoCallbackAction myAction;
   //add a callback for a color block -sginsber
   myAction.addPreCallback(SoMaterial::getClassTypeId(),
-			  materialCallback, NULL);
+			  materialCallback, nullptr);
   
   //specify that a shapeCallback should be executed 
   //every time a shapenode is encountered -sginsber
   myAction.addPreCallback(SoShape::getClassTypeId(), 
-			  shapeCallback, NULL);
+			  shapeCallback, nullptr);
 
   
      
   //now, call a printTriangleCallback whenever a triangle
   //node is encountered -sginsber
   myAction.addTriangleCallback(SoShape::getClassTypeId(), 
-			       printTriangleCallback, NULL);
+			       printTriangleCallback, nullptr);
   
   myAction.apply(root);
 }
@@ -534,7 +534,7 @@ main(int argc, char **argv)
 	exit(1);
    }
    root = SoDB::readAll(&in);
-   if (root == NULL) {
+   if (root == nullptr) {
 	fprintf(stderr, "%s: Problem reading data\n", argv[0]);
 	exit(1);
     }

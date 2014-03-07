@@ -271,7 +271,7 @@ UVmeme::set_uv_from_loc()
    // but here we take 1/10th of that value.
    static const double THRESH_SCALE =
       Config::get_var_dbl("VERT_MEME_THRESH_SCALE", 1e-1)/10.0; 
-   assert(vert() != 0);
+   assert(vert() != nullptr);
    double t = vert()->avg_edge_len()*THRESH_SCALE;
 
    // Find where the vert moved to.
@@ -388,7 +388,7 @@ UVsurface::UVsurface(
 }
 
 UVsurface::UVsurface(UVsurface* parent) :
-   _map(0)
+   _map(nullptr)
 {
    // Create a child UVsurface of the given parent:
 
@@ -409,7 +409,7 @@ UVsurface::UVsurface(UVsurface* parent) :
 UVsurface::~UVsurface()
 {
    destructor();
-   _map = 0;
+   _map = nullptr;
 }
 
 Bnode_list 
@@ -478,7 +478,7 @@ internal_face(Bvert* v1, Bvert* v2, CBface_list& enclosed_faces)
       return e->f1();
    if (e->f2() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f2()) != enclosed_faces.end())
       return e->f2();
-   return 0;
+   return nullptr;
 }
 
 inline bool
@@ -511,7 +511,7 @@ external_face(Bvert* v1, Bvert* v2, CBface_list& enclosed_faces)
       return e->f1();
    if (e->f2() && std::find(enclosed_faces.begin(), enclosed_faces.end(), e->f2()) == enclosed_faces.end())
       return e->f2();
-   return 0;
+   return nullptr;
 }
 
 inline bool
@@ -538,7 +538,7 @@ is_inconsistent_wrt_external_surface(
 inline bool
 is_enclosed(Bcurve* bcurve, CBface_list& enclosed_faces)
 {
-   assert(bcurve != 0);
+   assert(bcurve != nullptr);
 
    if (bcurve->is_polyline())
       return false;
@@ -597,20 +597,20 @@ UVsurface::build_revolve(
    static bool debug = Config::get_var_bool("DEBUG_BUILD_TUBE",false);
    if (!bcurve->is_closed()) {
       err_adv(debug, "UVsurface::build_revolve: rejecting non-closed base curve");
-      return 0;
+      return nullptr;
    }
    if (!(bcurve->is_embedded() || bcurve->is_border() || bcurve->is_polyline())) {
       if (debug)
          cerr << "UVsurface::build_revolve: error: curve is not embedded, "
               << "border, or polyline" << endl;
-      return 0;
+      return nullptr;
    }
    // Check how curve winds around axis:
    double w = bcurve->winding_number(axis->map(0), axis->tan(0));
    err_adv(debug, "winding: %1.1f", w);
    if (!(isEqual(w,1) || isEqual(w,-1))) {
       err_adv(debug, "rejecting curve w/ bad winding number: %f", w);
-      return 0;
+      return nullptr;
    }
 
    // Get curve verts and curve map;
@@ -669,8 +669,8 @@ UVsurface::build_revolve(
    double aspect = Config::get_var_dbl("TUBE_ASPECT", 1.0,true);
    tube_map->get_min_distortion_v_vals(uvals, vvals, aspect);
 
-   Bcurve*    tcurve = 0;
-   Bpoint*    tpoint = 0;
+   Bcurve*    tcurve = nullptr;
+   Bpoint*    tpoint = nullptr;
    Bvert_list top_verts;
    Wpt        top_pt;
    bool is_cone_top = joined_at_top(tube_map, top_pt);
@@ -756,7 +756,7 @@ UVsurface::build_revolve(
    // XXX - avg len is okay for panel, testing on uv surface
 //   ret->ememes().set_rest_length(ret->bedges().avg_len());
 
-   Panel* top = 0;
+   Panel* top = nullptr;
    if (!is_cone_top) {
       // Slap on a cap at level 0 relative to the two curves
       Bvert_list final = top_verts; // Get the last row, 
@@ -832,7 +832,7 @@ UVsurface::build_coons_patch(
   if ( !(a && b && c && d) ) {
     cerr << "UVsurface::build_coons_patch: ERROR, one or more points are null"
          << endl;
-    return 0;
+    return nullptr;
   }
 
   Bcurve* ab = a->lookup_curve(b);
@@ -843,7 +843,7 @@ UVsurface::build_coons_patch(
   if ( !( ab && bc && cd && da) ){
     cerr << "UVsurface::build_coons_patch: ERROR, one or more curves are null"
          << endl;
-    return 0;
+    return nullptr;
   }
 
   if ( ab->is_embedded() || 
@@ -852,14 +852,14 @@ UVsurface::build_coons_patch(
        da->is_embedded() ) {
     cerr << "UVsurface::build_coons_patch: ERROR, one or more curves are embedded"
          << endl;
-    return 0;
+    return nullptr;
   }
     
   if ( !(ab->num_edges() == cd->num_edges() &&
          bc->num_edges() == da->num_edges()) ) {
     cerr << "UVsurface::build_coons_patch: ERROR, unequal num edges "
          << "on opposite curves" << endl;
-    return 0;
+    return nullptr;
   }
 
   Map1D3D* c1 = ab->map();
@@ -869,7 +869,7 @@ UVsurface::build_coons_patch(
 
   if ( !(c1 && c2 && d1 && d2) ) {
     cerr << "UVsurface::build_coons_patch: ERROR, can't get curve maps" << endl;
-    return 0;
+    return nullptr;
   }
 
   // Done validating ... from here on, we shall surely succeed!!! 
@@ -1211,20 +1211,20 @@ UVsurface::inset_quad(
       e = v2->lookup_edge(v4);
    if (!(e && e->is_weak())) {
       if (debug) err_msg("UVsurface::inset_quad: can't find the quad");
-      return 0;
+      return nullptr;
    }
 
    Bface* f = e->f1();
    if (find_owner(f) != this) {
       if (debug) err_msg("UVsurface::inset_quad: not owner of quad");
-      return 0;
+      return nullptr;
    }
 
    // Get existing uv coords of the quad
    // XXX - things changed - need to get uv-coords from the memes
    UVpt u1, u2, u3, u4;
    if (!UVdata::get_quad_uvs(v1,v2,v3,v4,u1,u2,u3,u4))
-      return 0;
+      return nullptr;
 
    // Create the new vertices:
    assert(_map);

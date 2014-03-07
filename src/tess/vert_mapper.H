@@ -92,10 +92,10 @@ class VertMapper {
    // Given side A element, return corresponding side B element:
    Bvert* a_to_b(Bvert* a) const {
       int i = _a_verts.get_index(a);
-      return (0 <= i && i < (int)_b_verts.size()) ? _b_verts[i] : 0;
+      return (0 <= i && i < (int)_b_verts.size()) ? _b_verts[i] : nullptr;
    }
    Bedge* a_to_b(Bedge* a) const {
-      if (!a) return 0;
+      if (!a) return nullptr;
       Bvert* v1 = a_to_b(a->v1());
       if (v1->get_all_faces().empty())
          v1 = a->v1();
@@ -105,7 +105,7 @@ class VertMapper {
       return lookup_edge(v1, v2);
    }
    Bface* a_to_b(Bface* a) const {
-      if (!a) return 0;
+      if (!a) return nullptr;
       Bvert* v1 = a_to_b(a->v1());
       if (v1->get_all_faces().empty())
          v1 = a->v1();
@@ -137,16 +137,16 @@ class VertMapper {
 
    // Given side B element, return corresponding side A element:
    Bvert* b_to_a(Bvert* b) const {
-      if (!_dual) return 0;
+      if (!_dual) return nullptr;
       int i = _b_verts.get_index(b);
-      return (0 <= i && i < (int)_a_verts.size()) ? _a_verts[i] : 0;
+      return (0 <= i && i < (int)_a_verts.size()) ? _a_verts[i] : nullptr;
    }
    Bedge* b_to_a(Bedge* b) const {
-      if (!b) return 0;
+      if (!b) return nullptr;
       return lookup_edge(b_to_a(b->v1()), b_to_a(b->v2()));
    }
    Bface* b_to_a(Bface* b) const {
-      if (!b) return 0;
+      if (!b) return nullptr;
       return lookup_face(b_to_a(b->v1()), b_to_a(b->v2()), b_to_a(b->v3()));
    }
 

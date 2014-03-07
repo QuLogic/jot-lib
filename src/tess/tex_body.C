@@ -34,11 +34,11 @@
 using namespace mlib;
 
 //******** STATIC MEMBER DATA ********
-TEXBODY*   TEXBODY::null          = 0;
-TAGlist*   TEXBODY::_texbody_tags = 0;
+TEXBODY*   TEXBODY::null          = nullptr;
+TAGlist*   TEXBODY::_texbody_tags = nullptr;
 TEXBODYptr TEXBODY::_focus;
 
-HaloBase* HaloBase::_instance    = 0;
+HaloBase* HaloBase::_instance    = nullptr;
 
 static int foo = DECODER_ADD(TEXBODY);
 
@@ -48,7 +48,7 @@ TEXBODY::TEXBODY() :
    _skel_curves_visible(false),
    _mesh_file(""),
    _mesh_update_file(""),
-   _script(0)
+   _script(nullptr)
 {
    // disallow a mesh from being added to the list twice
    _meshes.set_unique();
@@ -60,7 +60,7 @@ TEXBODY::TEXBODY(CGEOMptr& geom, const string& name) :
    _skel_curves_visible(false),
    _mesh_file(""),
    _mesh_update_file(""),
-   _script(0)
+   _script(nullptr)
 {
    // disallow a mesh from being added to the list twice
    _meshes.set_unique();
@@ -88,7 +88,7 @@ TEXBODY::TEXBODY(CBMESHptr& m, const string& name) :
    _skel_curves_visible(false),
    _mesh_file(""),
    _mesh_update_file(""),
-   _script(0)
+   _script(nullptr)
 {
    // disallow a mesh from being added to the list twice
    _meshes.set_unique();
@@ -103,7 +103,7 @@ TEXBODY::~TEXBODY()
    // stop observing self
    end_xform_obs();
    if (_focus == this)
-      set_focus(0);
+      set_focus(nullptr);
 }
 
 Script* 
@@ -198,7 +198,7 @@ TEXBODY::cur_rep() const
          return _meshes[i];
 
    static BMESHptr null_ptr; // needed to return a reference
-   null_ptr = 0;
+   null_ptr = nullptr;
    return null_ptr;
 }
 
@@ -431,13 +431,13 @@ TEXBODY::get_inflate_mesh(BMESHptr mesh)
    // ordered by their inflation dimension, so to speak.
 
    if (!mesh) {
-      return 0;
+      return nullptr;
    }
 
    // Find position of mesh in the list:
    int i = _meshes.get_index(mesh);
    if (!_meshes.valid_index(i)) {
-      return 0;
+      return nullptr;
    }
 
    // Try for the next mesh, if any:
@@ -449,7 +449,7 @@ TEXBODY::get_inflate_mesh(BMESHptr mesh)
    if (add(BMESH::upcast(mesh->dup()))) {
       return _meshes.last();
    }
-   return 0;
+   return nullptr;
 }
 
 int
@@ -847,7 +847,7 @@ TEXBODY::get_mesh_data(TAGformat &d)
 
    //Implictly, _mesh_file should be NULL_STR since we loaded
    //the mesh data imbedded in the stream, not from external file
-   //_mesh_file = NULL_STR;
+   //_mesh_file = nullptr;
 }
 
 void
@@ -1013,7 +1013,7 @@ TEXBODY::get_mesh(TAGformat &d)
 
    //Implictly, _mesh_file should be NULL_STR since we loaded
    //the mesh data imbedded in the stream, not from external file
-   //_mesh_file = NULL_STR;
+   //_mesh_file = nullptr;
 }
 
 void
@@ -1112,11 +1112,11 @@ draw_sphere()
    // Draw a sphere via GLU
    // calling gluNewQuadric during static initialization
    // on Mac OS X causes a seg fault; so initialize to 0:
-   static GLUquadric* quad = 0;
+   static GLUquadric* quad = nullptr;
    if (!quad) {
       quad = gluNewQuadric();
    }
-   assert(quad != 0);
+   assert(quad != nullptr);
    double rad = 1.0;    // radius of sphere
    GLint slices = 24;   // these numbers control the
    GLint stacks = 16;   //   tessellation of the sphere
@@ -1205,7 +1205,7 @@ TEXBODY::get_ffs_tex_body(MULTI_CMDptr cmd)
 {
    TEXBODYptr ret = TEXBODY::cur_tex_body();
    if (!ret) {
-      ret = new TEXBODY(BMESHptr(0), "ffs");
+      ret = new TEXBODY(BMESHptr(nullptr), "ffs");
       ret->add(create_mesh("skeleton"));
       ret->add(create_mesh("surface"));
       WORLD::create(ret, !cmd);
@@ -1244,7 +1244,7 @@ TEXBODY::create_mesh(const string& base_name)
    ret->set_subdiv_loc_calc(vp ? new HybridVolPreserve : new HybridLoc);
 
    // Make this mesh the "focus"
-   BMESH::set_focus(ret, 0);
+   BMESH::set_focus(ret, nullptr);
 
    return ret;
 }

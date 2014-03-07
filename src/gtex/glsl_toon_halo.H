@@ -38,7 +38,7 @@
 class GLSLToonShaderHalo : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLToonShaderHalo(Patch* patch = 0);
+   GLSLToonShaderHalo(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Toon Halo",

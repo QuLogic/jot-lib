@@ -27,7 +27,7 @@ class DecalStrokePool : public BStrokePool {
  public:
    virtual void         draw_flat(CVIEWptr &);
     
-    DecalStrokePool(OutlineStroke* proto = 0) : BStrokePool(proto) {}
+    DecalStrokePool(OutlineStroke* proto = nullptr) : BStrokePool(proto) {}
 
    /******** DATA_ITEM METHODS ********/
    DEFINE_RTTI_METHODS2("DecalStrokePool", BStrokePool, CBStrokePool*);

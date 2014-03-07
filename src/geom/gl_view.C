@@ -790,7 +790,7 @@ GL_VIEW::poly_ext_available()
 {
    CriticalSection cs(&polyextmutex);
    static bool ret = (strstr((const char *)glGetString(GL_EXTENSIONS),
-                            "GL_EXT_polygon_offset") != 0);
+                            "GL_EXT_polygon_offset") != nullptr);
    return ret;
 }
 

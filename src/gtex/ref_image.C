@@ -428,18 +428,18 @@ ColorRefImage::get_list(CVIEWptr& v)
 {
    if (!v) {
       err_msg( "ColorRefImage::get_list: error -- view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg( "ColorRefImage::get_list: error -- view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    VIEWimpl *key = v->impl();
    map<VIEWimpl*,ColorRefImage_list*>::iterator it;
    it = _hash.find(key);
-   ColorRefImage_list *ret = 0;
+   ColorRefImage_list *ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if ((ret = new ColorRefImage_list()))
@@ -457,14 +457,14 @@ ColorRefImage::lookup(int i, CVIEWptr& v)
    const int MAX_IMAGES=8;
    if (i<0 || i>=MAX_IMAGES) {
       err_msg("ColorRefImage::lookup: error: image %d not available", i);
-      return 0;
+      return nullptr;
    }
 
    // get the list of color ref images for this view:
    ColorRefImage_list* list = get_list(v);
    if (!list) {
       err_msg("ColorRefImage::lookup: error: can't get list of images");
-      return 0;
+      return nullptr;
    }
 
    // create images if needed up to number i:
@@ -648,25 +648,25 @@ uint IDRefImage::_alpha_bits = 0;
 
 bool IDRefImage::_nonstandard_bits = false;
 
-IDRefImage* IDRefImage::_instance = 0;
+IDRefImage* IDRefImage::_instance = nullptr;
 
 IDRefImage* 
 IDRefImage::lookup(CVIEWptr& v)
 {
    if (!v) {
       err_msg( "IDRefImage::lookup: error:  view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg( "IDRefImage::lookup: error:  view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    VIEWimpl *key = v->impl();
    map<VIEWimpl*,IDRefImage*>::iterator it;
    it = _hash.find(key);
-   IDRefImage* ret = 0;
+   IDRefImage* ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if ((ret = new IDRefImage(v)))
@@ -931,7 +931,7 @@ IDRefImage::find_near_simplex(
    Point2i hit;
    if (search(c, screen_pix_rad, filt, hit))
       return simplex(hit);
-   return 0;
+   return nullptr;
 }
 
 bool 
@@ -964,7 +964,7 @@ IDRefImage::find_neighbor(CNDCpt& p, Bedge* current, int radius) const
 {
    // check neighbors, spiralling out from middle
    Point2i center = ndc_to_pix(p);
-   Bedge* temp = 0;
+   Bedge* temp = nullptr;
    Point2i check;
    for (int rad = 0; rad <= radius; rad++) {
       for (int i = -rad; i <= rad; i++) {
@@ -981,7 +981,7 @@ IDRefImage::find_neighbor(CNDCpt& p, Bedge* current, int radius) const
       }
    }
    
-   return 0; // no neighbor found
+   return nullptr; // no neighbour found
 }
 
 Bedge_list
@@ -1001,7 +1001,7 @@ IDRefImage::find_all_neighbors(
 {
    Bedge_list neighbors(radius*radius);
    std::set<Bedge*> unique;
-   Bedge* temp = 0;
+   Bedge* temp = nullptr;
    Point2i check;
    for (int i = -radius; i <= radius; i++) {
       for (int j = -radius; j <= radius; j++) {
@@ -1028,7 +1028,7 @@ IDRefImage::is_simplex_near(CNDCpt& p, const Bsimplex* simp, int radius) const
 {
    // check neighbors, spiralling (?) out from middle
    Point2i center = ndc_to_pix(p);
-   Bsimplex* temp = 0;
+   Bsimplex* temp = nullptr;
    Point2i check;
    for (int rad = 0; rad <= radius; rad++) {
       for (int i = -rad; i <= rad; i++) {
@@ -1408,7 +1408,7 @@ VisRefImage::get_sub_face(
    else if (f && LMESH::isa(f->mesh()))
       return ((Lface*)f)->bc_to_level(level, bc);
    else
-      return 0;
+      return nullptr;
 }
 
 Bface*          // Bface* at current mesh edit level for a given screen point
@@ -1423,7 +1423,7 @@ VisRefImage::get_edit_face(
    if (f && LMESH::isa(f->mesh()))
       return ((Lface*)f)->bc_to_edit_level(bc);
    else
-      return 0;
+      return nullptr;
 }
 
 // end of file ref_image.C

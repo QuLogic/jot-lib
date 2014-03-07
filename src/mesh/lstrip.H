@@ -37,7 +37,7 @@
 class Lstrip : public TriStrip {
  public:
    //******** MANAGERS ********
-   Lstrip(int s=0) : TriStrip(s), _right_substrip(0), _left_substrip(0) {}
+   Lstrip(int s=0) : TriStrip(s), _right_substrip(nullptr), _left_substrip(nullptr) {}
    virtual ~Lstrip() { delete_substrips(); }
 
    void delete_substrips();

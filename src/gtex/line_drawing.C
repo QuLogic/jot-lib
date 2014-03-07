@@ -977,7 +977,7 @@ inline RenderingMode*
 LineDrawingRenderingModeSelectionPolicy::SelectRenderingMode()
 {
    
-   RenderingMode *mode = 0;
+   RenderingMode *mode = nullptr;
    
    if(GLExtensions::gl_arb_shader_objects_supported() &&
       GLExtensions::gl_arb_vertex_shader_supported() &&
@@ -1015,7 +1015,7 @@ bool LineDrawingTexture::draw_sugcontours = true;
 float LineDrawingTexture::sugcontour_thresh = 0.0;
 
 LineDrawingTexture::LineDrawingTexture(Patch* patch, StripCB* cb)
-   : BasicTexture(patch, cb), solid_color_texture(0)
+   : BasicTexture(patch, cb), solid_color_texture(nullptr)
 {
    
 //    if(!LineDrawingModeSingleton::Instance().line_drawing_supported()){
@@ -1049,7 +1049,7 @@ LineDrawingTexture::draw(CVIEWptr& v)
          
    }
    
-   assert(cb() != 0);
+   assert(cb() != nullptr);
    
    // XXX - This is a temporary hack to remove use of the LineDrawingModeSingleton
    // from the LineDrawingTexture constructor due to static initialization
@@ -1251,7 +1251,7 @@ load_ARB_shader(const char *header, GLenum shader_type, const char *shader_strin
    
    GLhandleARB shader_handle = glCreateShaderObjectARB(shader_type);
    
-   glShaderSourceARB(shader_handle, 1, &shader_string, 0);
+   glShaderSourceARB(shader_handle, 1, &shader_string, nullptr);
    
    glCompileShaderARB(shader_handle);
    

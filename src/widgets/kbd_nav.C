@@ -51,8 +51,8 @@ kbd_nav::kbd_nav(
       _kmap[i] = 0;
  
    for (const char *c = "1234567890"; *c; c++) {
-      Event  down_ev(NULL, Evd(*c, KEYD));
-      Event  up_ev  (NULL, Evd(*c, KEYU));
+      Event  down_ev(nullptr, Evd(*c, KEYD));
+      Event  up_ev  (nullptr, Evd(*c, KEYU));
       _entry += Arc(up_ev,   Cb(&Key_int::up));
       _entry += Arc(down_ev, Cb(&Key_int::down));
    }

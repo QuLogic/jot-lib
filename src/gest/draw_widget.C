@@ -30,7 +30,7 @@
  *****************************************************************/
 
 DrawWidgetptr DrawWidget::_active;
-DrawWidget*   DrawWidget::null = 0;
+DrawWidget*   DrawWidget::null = nullptr;
 
 DrawWidget::DrawWidget(double dur) :
    GEOM(static_name()),
@@ -83,7 +83,7 @@ DrawWidget::deactivate()
 {
    if (_active != this)
       return;
-   _active=0;
+   _active=nullptr;
 
    if (has_mode_name())
       ModeName::pop_name();

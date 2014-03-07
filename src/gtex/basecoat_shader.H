@@ -33,7 +33,7 @@
 class BasecoatShader : public ToneShader {
  public:
    //******** MANAGERS ********
-   BasecoatShader(Patch* patch = 0);
+   BasecoatShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("BasecoatShader", BasecoatShader*, ToneShader, CDATA_ITEM*);

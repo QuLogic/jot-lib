@@ -36,7 +36,7 @@ APPEAR::get_texture(TAGformat &d)
 
    string texture_name;
    *d >> _tex_xform >> texture_name;
-   _texture = 0;
+   _texture = nullptr;
    if (!texture_name.empty() && texture_name != "NO_TEXTURE") {
       // XXX - taken from CLI::get_file_relative
       if (texture_name[0] != '/' && texture_name[0] != '.')

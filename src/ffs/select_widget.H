@@ -61,7 +61,7 @@ class SELECT_WIDGET : public DrawWidget {
    static SELECT_WIDGETptr get_instance();
 
    static SELECT_WIDGETptr get_active_instance() {
-      return isa(_active) ? (SELECT_WIDGET*)&*_active : (SELECT_WIDGET*)0;
+      return isa(_active) ? (SELECT_WIDGET*)&*_active : nullptr;
    }
 
    //******** RUN-TIME TYPE ID ********

@@ -38,7 +38,7 @@ using mlib::XYpt;
  *************************************************************************/
 VIEW_EASEL::VIEW_EASEL(
    CVIEWptr &v) :
-   _view(v) /* , _trace(NULL) */
+   _view(v) /* , _trace(nullptr) */
 {
    _camera = CAMptr( new CAM( "easel cam" ) );
    saveCam( _view->cam() );
@@ -133,7 +133,7 @@ VIEW_EASEL::extract_closest(
    ) 
 {
    cerr << "VIEW_EASEL::extract_closest: not implemented" << endl;
-   return 0;
+   return nullptr;
 }
 
 GELptr 
@@ -145,7 +145,7 @@ VIEW_EASEL::extract_closest_pix(
    ) 
 {
    cerr << "VIEW_EASEL::extract_closest_pix: not implemented" << endl;
-   return 0;
+   return nullptr;
 }
 
 /* end of file vieweasel.C */

@@ -125,7 +125,7 @@ class GEST_INT : public Simple_int, public FRAMEobs, public CAMobs {
    // gesture accessors
    // (get gesture number k out of the entire gesture history):
    GESTUREptr gesture(int k) const {
-      return _stack.valid_index(k) ? _stack[k] : GESTUREptr(0);
+      return _stack.valid_index(k) ? _stack[k] : GESTUREptr(nullptr);
    }
    GESTUREptr last() const { return gesture(_stack.num()-1); }
 

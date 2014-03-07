@@ -104,7 +104,7 @@ class REF_CLASS(CAMdata) : public REFcounter {
                         mlib::Wvec&, mlib::Wvec&, mlib::Wvec&) const;
 
   public : 
-   CAMdata(CAM* = 0);
+   CAMdata(CAM* = nullptr);
    void      add_cb(CAMobs *cb)         { _cblist.insert(cb);}
    void      rem_cb(CAMobs *cb)         { _cblist.erase(cb);}
  

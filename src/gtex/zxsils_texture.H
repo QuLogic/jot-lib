@@ -32,7 +32,7 @@
 class ZcrossTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   ZcrossTexture(Patch* patch = 0) :
+   ZcrossTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _color(0,0,0), // XXX g++ 2.97 work around
       _width(2) {}

@@ -29,7 +29,7 @@ namespace GUI
 template <class T>
 inline T* get_current_texture(Patch* p=Patch::focus())
 {
-   return p ? T::upcast(p->cur_tex()) : 0;
+   return p ? T::upcast(p->cur_tex()) : nullptr;
 }
 
 template <class T>
@@ -41,7 +41,7 @@ inline void get_all_my_textures(
    )
 {
    index = -1;
-   my_p = 0;
+   my_p = nullptr;
    my_patches.clear();
    BMESH_list meshes = BMESH_list(DRAWN);
    for (int i=0; i < meshes.num(); ++i) {

@@ -52,7 +52,7 @@ class HatchingCollection :
  public:
 	 /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-	HatchingCollection(Patch *p=0);
+	HatchingCollection(Patch *p=nullptr);
 	~HatchingCollection();
 
 	/******** MEMBERS METHODS ********/

@@ -89,7 +89,7 @@ class InflateBaseFilter : public SimplexFilter {
    public:
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
-      return Bbase::find_controller(s) != 0;
+      return Bbase::find_controller(s) != nullptr;
    }
 };
 
@@ -194,7 +194,7 @@ SkinMeme::compute_update()
    // but it may still track the closest point on the skeleton
    // surface to avoid penetrating inside the skeleton surface.
 
-   if (vert()->parent() == 0)
+   if (vert()->parent() == nullptr)
       _update = loc();
    else
       _update = vert()->detail_loc_from_parent();
@@ -342,7 +342,7 @@ SkinMeme::update_tracker(
    // XXX - assume all meshes have Identity transform. We
    // don't deal w/ translating between local coord systems.
 
-   Bsimplex* best_simplex = 0;
+   Bsimplex* best_simplex = nullptr;
    double min_dist = 0; // (initial value is irrelevant)
 
    assert(_track_filter && trackers.all_satisfy(*_track_filter));
@@ -394,7 +394,7 @@ SkinMeme::track_to_target(CWpt& target, Wpt& near_pt)
    // Record the result, even if unsuccessful:
    set(track_sim, near_bc);
 
-   return (track_simplex() != 0);
+   return (track_simplex() != nullptr);
 }
 
 // end of file skin_meme.C

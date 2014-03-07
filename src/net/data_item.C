@@ -23,8 +23,8 @@
 using mlib::Wpt;
 using mlib::Wvec;
 
-map<string,DATA_ITEM*> *DATA_ITEM::_hash = 0;
-DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, const string&, DATA_ITEM*) = 0;
+map<string,DATA_ITEM*> *DATA_ITEM::_hash = nullptr;
+DATA_ITEM* (*DATA_ITEM::_decode_unknown)(STDdstream&, const string&, DATA_ITEM*) = nullptr;
 
 const string NAME_INT    ("int");
 const string NAME_DOUBLE ("double");
@@ -102,7 +102,7 @@ DATA_ITEM::Decode(
       }
    } else if (!str.empty()) {
       if (_decode_unknown)
-         di = _decode_unknown(d, str, 0);
+         di = _decode_unknown(d, str, nullptr);
 
       if (!di) {
          const char *x = str.c_str(); char _buf[128], *buf = _buf;

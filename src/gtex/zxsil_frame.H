@@ -30,7 +30,7 @@
 class ZcrossFrameTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   ZcrossFrameTexture(Patch* patch = 0) :
+   ZcrossFrameTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _creases(new CreasesTexture(patch)),
       _zxsils(new ZcrossTexture(patch)) {}

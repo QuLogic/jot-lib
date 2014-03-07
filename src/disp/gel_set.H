@@ -63,7 +63,7 @@ class GELset : public GEL {
   virtual int  draw_vis_ref()           {return _gel_list.draw_vis_ref();}
   virtual BBOX bbox(int i=0) const;
 
-  virtual DATA_ITEM *dup() const { return 0; }
+  virtual DATA_ITEM *dup() const { return nullptr; }
 private:
   GELlist _gel_list;
 };

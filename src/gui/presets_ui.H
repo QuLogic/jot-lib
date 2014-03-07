@@ -66,7 +66,7 @@ class PresetsUI : public BaseUI {
    DEFINE_RTTI_METHODS3("PresetsUI", PresetsUI*, PresetsUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   PresetsUI(BaseUI* parent, string dir=0, string ext=0);
+   PresetsUI(BaseUI* parent, string dir=nullptr, string ext=nullptr);
    virtual ~PresetsUI(){}
 
    /******** MEMBERS METHODS ********/  

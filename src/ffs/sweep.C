@@ -160,7 +160,7 @@ pts_in_range(const T& pts, int i1, int i2)
 bool
 SWEEP_BASE::from_center(CGESTUREptr& g) const
 {
-   assert(g != 0);
+   assert(g != nullptr);
    return g->start().dist(sweep_origin()) < DIST_THRESH_PIXELS;
 }
 
@@ -289,7 +289,7 @@ SWEEP_BASE::reset()
 
    // Clear cached data.
    _line->clear();
-   _mesh = 0;
+   _mesh = nullptr;
 }
 
 void
@@ -375,7 +375,7 @@ SWEEP_DISK::SWEEP_DISK() : SWEEP_BASE()
 void 
 SWEEP_DISK::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 SWEEP_DISKptr
@@ -811,11 +811,11 @@ SWEEP_DISK::build_revolve(
    Bcurve* bcurve = Bcurve::get_curve(_boundary.edges());
    if (!bcurve) {
       err_adv(debug, "SWEEP_DISK::build_revolve: can't find curve");
-      return 0;
+      return nullptr;
    }
    if (!bcurve->is_control()) {
       err_adv(debug, "SWEEP_DISK::build_revolve: error: non-control curve");
-      return 0;
+      return nullptr;
    }
 
    Map1D3D* axis = new Wpt_listMap(apts, new WptMap(apts[0]), new WptMap(apts[1]), n);
@@ -823,7 +823,7 @@ SWEEP_DISK::build_revolve(
    // XXX - Zachary: add SWEEP_CMD here:
 
    // Create/Edit the surface of revolution
-   UVsurface* ret = NULL;
+   UVsurface* ret = nullptr;
    Panel* p = Panel::upcast(Bsurface::get_surface(_enclosed_faces));
    assert(p);
    if (is_editing) {
@@ -1074,7 +1074,7 @@ SWEEP_LINE::SWEEP_LINE() : SWEEP_BASE()
 void 
 SWEEP_LINE::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 SWEEP_LINEptr
@@ -1175,7 +1175,7 @@ void
 SWEEP_LINE::reset()
 {
    // Clear cached data.
-   _curve = 0;
+   _curve = nullptr;
    _plane = Wplane();
 }
 
@@ -1270,7 +1270,7 @@ SWEEP_LINE::create_rect(CWvec& v)
    static bool debug =
       Config::get_var_bool("DEBUG_CREATE_RECT",false) || debug_all;
 
-   assert(_curve != 0);
+   assert(_curve != nullptr);
    Bpoint *b1 = _curve->b1(), *b2 = _curve->b2();
    assert(b1 && b2);
    Wvec u = b2->loc() - b1->loc();      // vector along existing straight line
@@ -1357,7 +1357,7 @@ SWEEP_POINT::SWEEP_POINT() : SWEEP_BASE()
 void 
 SWEEP_POINT::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 SWEEP_POINTptr
@@ -1397,7 +1397,7 @@ void
 SWEEP_POINT::reset()
 {
    // Clear cached data.
-   _point = 0;
+   _point = nullptr;
    _plane = Wplane();
 }
 

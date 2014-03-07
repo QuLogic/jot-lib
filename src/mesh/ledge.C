@@ -61,7 +61,7 @@ Ledge::parallel_sub_edge(int k) const
 {
    Lface* f = lf(k);
    if (!(f && (f = f->subdiv_face_center())))
-      return 0;
+      return nullptr;
    return (Ledge*)f->opposite_edge(_subdiv_vertex);
 }
 
@@ -75,7 +75,7 @@ Ledge::parent_edge(int rel_level) const
    for (int i=0; e && i<rel_level; i++) {
       Bsimplex* p = e->parent();
       if (!is_edge(p))
-         return 0;
+         return nullptr;
       e = (Ledge*)p;
    }
 
@@ -91,7 +91,7 @@ Ledge::ctrl_element() const
       return ((Ledge*)_parent)->ctrl_element();
    if (is_face(_parent))
       return ((Lface*)_parent)->control_face();
-   return 0;
+   return nullptr;
 }
 
 uint 
@@ -131,7 +131,7 @@ Ledge::delete_subdiv_elements()
 void    
 Ledge::subdiv_vert_deleted() 
 { 
-   _subdiv_vertex = 0; 
+   _subdiv_vertex = nullptr;
 
    clear_bit(SUBDIV_LOC_VALID_BIT);
    clear_bit(SUBDIV_COLOR_VALID_BIT);
@@ -224,8 +224,8 @@ Ledge::get_sub_faces(Bface* f, Bedge* &e1, Bface* &sf1, Bedge* &e2, Bface* &sf2)
 //     sv1 -------------------------------- sv2                    #
 //              e1        sve      e2                              #
 
-   e1  = e2  = 0;
-   sf1 = sf2 = 0;
+   e1  = e2  = nullptr;
+   sf1 = sf2 = nullptr;
 
    Lvert* sve = _subdiv_vertex;
 
@@ -269,8 +269,8 @@ Ledge::push_multi(Bface* f)
 
    // See the diagram of child elements in
    // Ledge::get_sub_faces(), above.
-   Bedge  *e1=0,  *e2=0;
-   Bface *sf1=0, *sf2=0;
+   Bedge  *e1=nullptr,  *e2=nullptr;
+   Bface *sf1=nullptr, *sf2=nullptr;
    get_sub_faces(f, e1, sf1, e2, sf2);
 
    if (e1 && sf1)
@@ -291,8 +291,8 @@ Ledge::push_primary(Bface* f)
 
    // See the diagram of child elements in
    // Ledge::get_sub_faces(), above.
-   Bedge  *e1=0,  *e2=0;
-   Bface *sf1=0, *sf2=0;
+   Bedge  *e1=nullptr,  *e2=nullptr;
+   Bface *sf1=nullptr, *sf2=nullptr;
    get_sub_faces(f, e1, sf1, e2, sf2);
 
    if (e1 && sf1)
@@ -308,7 +308,7 @@ Ledge::claim_child(Ledge* child)
       return;
 
    // Record this face as the child's parent
-   assert(child->parent() == NULL);
+   assert(child->parent() == nullptr);
    child->set_parent(this);
 
    // Propagate attributes to child:
@@ -323,7 +323,7 @@ Ledge::claim_child(Lvert* child)
 {
    if (!child)
       return;
-   assert(child->parent() == NULL);
+   assert(child->parent() == nullptr);
 
    // Record child, and set this face as the child's parent
    _subdiv_vertex = child;
@@ -341,7 +341,7 @@ Ledge::set_subdiv_elements(Lvert* subv)
    }
    set_bit(SUBDIV_ALLOCATED_BIT);
 
-   assert(_subdiv_vertex == NULL);
+   assert(_subdiv_vertex == nullptr);
    if (!subv)
       return;
    assert(lmesh()->subdiv_mesh() == subv->lmesh());
@@ -361,7 +361,7 @@ Ledge::allocate_subdiv_elements()
    // The policy is: if the edge's subdiv vertex is allocated,
    // then the subdiv edges must already be allocated.
    //
-   // So when _subdiv_vertex != NULL this is a no-op.
+   // So when _subdiv_vertex != nullptr this is a no-op.
 
    // Make this lightweight, so you can call
    // it when you're not sure if you need to:

@@ -164,7 +164,7 @@ class REFptr {
 
  public:
    //******** MANAGERS ********
-   REFptr(             ): p_(0)             { }
+   REFptr(             ): p_(nullptr)       { }
    REFptr(CREFptr<T> &p): p_(p.p_)          { if (p_) REF_ME(p_)->Own (); }
    REFptr(T *      pObj): p_(pObj)          { if (p_) REF_ME(p_)->Own (); }
 
@@ -176,8 +176,8 @@ class REFptr {
 #endif
    ~REFptr()    { if (p_) REF_ME(p_)->Free(); }
 
-   void Init()  { p_ = 0; }
-   void Clear() { if (p_) REF_ME(p_)->Free(); p_=0; }
+   void Init()  { p_ = nullptr; }
+   void Clear() { if (p_) REF_ME(p_)->Free(); p_=nullptr; }
 
    //******** ASSIGNMENT ********
    REFptr<T> &operator=(T* o) {
@@ -216,7 +216,7 @@ class REFptr {
 
    REFptr<T> &Cast_from_void(void *V) { *this = (T*) V; return *this;}
 
-   //******** I/0 ********
+   //******** I/O ********
    friend inline ostream& operator<<(ostream& os,CREFptr<T>& p) {
       return os<<p.p_;
    }

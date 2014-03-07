@@ -54,7 +54,7 @@ class  STROKE_UI_JOB : public AUX_JOB {
 
  public:
 
-   STROKE_UI_JOB() : _ui(0)               {}
+   STROKE_UI_JOB() : _ui(nullptr)         {}
    virtual ~STROKE_UI_JOB()               {}
 
    void              set_ui(StrokeUI* ui) { _ui = ui; }
@@ -136,7 +136,7 @@ class STROKE_GEL : public GEL {
 		_stroke.draw_end(); 
 		return i;
 	}
-	virtual DATA_ITEM*	dup()	const			{ return 0; }
+	virtual DATA_ITEM*	dup()	const			{ return nullptr; }
 
 };
 

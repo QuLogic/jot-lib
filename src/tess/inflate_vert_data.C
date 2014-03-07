@@ -39,7 +39,7 @@ InflateVertData::InflateVertData(Bvert* v) :
    //
    // InflateVertData gets looked-up by its classname.
 
-   assert(v != NULL);
+   assert(v != nullptr);
 }
 
 bool 

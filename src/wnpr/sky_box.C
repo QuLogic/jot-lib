@@ -46,7 +46,7 @@ SKY_BOX::SKY_BOX()
 
    // build the skybox mesh:
    LMESHptr sky_mesh = new LMESH;
-   Patch* p = 0;
+   Patch* p = nullptr;
    //sky_mesh->Sphere();
 
    sky_mesh->UV_BOX(p);
@@ -105,7 +105,7 @@ Patch*
 SKY_BOX::get_patch()
 {
    BMESHptr mesh = BMESH::upcast(_body);
-   return (mesh && mesh->npatches() > 0) ? mesh->patch(0) : 0;
+   return (mesh && mesh->npatches() > 0) ? mesh->patch(0) : nullptr;
 }
 
 /************************************

@@ -100,7 +100,7 @@ GLUT_KBD::update_mods(CXYpt &/*cur*/) {
 GLUT_KBD::GLUT_KBD(GLUT_WINSYS *winsys)
    : _winsys(winsys), _shift(false), _ctrl(false)
 {
-   _kbds.resize(winsys->id() + 1, 0);
+   _kbds.resize(winsys->id() + 1, nullptr);
    _kbds[winsys->id()] = this;
    glutKeyboardFunc(normal_keydown_callback);
    glutKeyboardUpFunc(normal_keyup_callback);

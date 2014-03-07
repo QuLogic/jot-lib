@@ -246,7 +246,7 @@ read_obj(vector<LMESHptr>& meshes, istream& in)
   
    meshes.push_back(new LMESH);
    int curr_mesh = 0;
-   Patch* curr_patch = 0;
+   Patch* curr_patch = nullptr;
 
    string token;
    while (!(in.eof() || in.fail())) {

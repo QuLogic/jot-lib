@@ -29,7 +29,7 @@
 class GLSLPerlinTest : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLPerlinTest(Patch* patch = 0);
+   GLSLPerlinTest(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Perlin Test",

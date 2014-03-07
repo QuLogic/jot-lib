@@ -154,8 +154,8 @@ class TEXBODY : public GEOM, public XFORMobs {
    //******** STATICS ********
 
    // Wrap given mesh in a TEXBODY and throw it in the world:
-   static void display  (CBMESHptr& mesh, MULTI_CMDptr cmd=0);
-   static void undisplay(CBMESHptr& mesh, MULTI_CMDptr cmd=0);
+   static void display  (CBMESHptr& mesh, MULTI_CMDptr cmd=nullptr);
+   static void undisplay(CBMESHptr& mesh, MULTI_CMDptr cmd=nullptr);
 
    // TEXBODY::null is used in ray_geom() to get a TEXBODY
    // from a RAYhit after doing intersection, e.g.:
@@ -208,12 +208,12 @@ class TEXBODY : public GEOM, public XFORMobs {
    // access FFS meshes from *this* TEXBODY:
    LMESHptr get_skel_mesh() const {
       return LMESH::upcast(
-         _meshes.valid_index(SKELETON_MESH) ? _meshes[SKELETON_MESH] : 0
+         _meshes.valid_index(SKELETON_MESH) ? _meshes[SKELETON_MESH] : nullptr
          );
    }
    LMESHptr get_surf_mesh() const {
       return LMESH::upcast(
-         _meshes.valid_index(SURFACE_MESH) ? _meshes[SURFACE_MESH] : 0
+         _meshes.valid_index(SURFACE_MESH) ? _meshes[SURFACE_MESH] : nullptr
          );
    }
 

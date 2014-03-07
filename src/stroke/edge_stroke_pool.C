@@ -31,10 +31,10 @@ using mlib::Point2i;
 
 static int foobag1 = DECODER_ADD(EdgeStrokePool);
 
-TAGlist*    EdgeStrokePool::_esp_tags   = NULL;
+TAGlist*    EdgeStrokePool::_esp_tags   = nullptr;
 
 // XXX hack for serialization
-BMESH *     EdgeStrokePool::_mesh = 0;
+BMESH *     EdgeStrokePool::_mesh = nullptr;
 int         EdgeStrokePool::foo = 0;
 
 /////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ EdgeStrokePool::draw_flat(CVIEWptr& v) {
       TEXTUREptr proto_tex =     prot->get_texture();
       const string proto_tex_file =  prot->get_texture_file();
 
-      if (prot->get_texture()) prot->set_texture(NULL, "");
+      if (prot->get_texture()) prot->set_texture(nullptr, "");
 
       prot->draw_start();
 
@@ -182,7 +182,7 @@ EdgeStrokePool::EdgeStrokePool(EdgeStroke* proto) :
 {
    assert(_edit_proto == 0);
    assert(_draw_proto == 0);
-   if (proto != NULL)
+   if (proto != nullptr)
       set_prototype(proto);
 }
 
@@ -288,7 +288,7 @@ EdgeStrokePool::verify_offsets()
 
    for (i=0; i < _num_strokes_used; i++) {
       // see if any stroke has all 0 pressures in offsets
-      BaseStrokeOffsetLISTptr o = 0;
+      BaseStrokeOffsetLISTptr o = nullptr;
 
       o = at(i)->get_offsets();
       if (!o)

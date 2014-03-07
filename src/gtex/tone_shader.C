@@ -25,8 +25,8 @@
 const int MAX_OCCLUDERS = 4;
 
 static bool debug = Config::get_var_bool("DEBUG_TONE_SHADER", false);
-TAGlist* ToneShader::_tags = 0;
-TAGlist* tone_layer_t::_tl_tags = 0;
+TAGlist* ToneShader::_tags = nullptr;
+TAGlist* tone_layer_t::_tl_tags = nullptr;
 
 CTAGlist &
 tone_layer_t::tags() const
@@ -166,7 +166,7 @@ GLint  ToneShader::_is_reciever_loc = -1;
 
 ToneShader::ToneShader(Patch* p) :
    GLSLShader(p, new ToneStripCB),
-   _tex_2d(0),
+   _tex_2d(nullptr),
    _smoothNormal(1),
    _normals_smoothed(false),
    _normals_elliptic(false),

@@ -20,7 +20,7 @@
 static bool debug = Config::get_var_bool("DEBUG_SUBDIV_UPDATER",false);
 
 SubdivUpdater::SubdivUpdater(LMESHptr m, CBvert_list& verts) :
-   _parent(0)
+   _parent(nullptr)
 {
    // Screened in SubdivUpdater::create():
    assert(m && m == verts.mesh());
@@ -77,7 +77,7 @@ SubdivUpdater::create(CBvert_list& verts)
    } else
       err_adv(debug, "SubdivUpdater::create: can't get LMESH from vert list");
 
-   return 0;
+   return nullptr;
 }
 
 SubdivUpdater* 

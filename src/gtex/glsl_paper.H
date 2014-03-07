@@ -30,7 +30,7 @@
 class GLSLPaperShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLPaperShader(Patch* patch = 0);
+   GLSLPaperShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL paper",

@@ -43,7 +43,7 @@ template <class T>
 class SubdivCalc {
  public:
    //******** MANAGERS ********
-   SubdivCalc(): _boss(0) {}
+   SubdivCalc(): _boss(nullptr) {}
    virtual ~SubdivCalc() {}
 
    void set_boss(SubdivCalc<T> * boss) { _boss=boss; }
@@ -82,7 +82,7 @@ class SubdivCalc {
 
    //******** DUPLICATING ********
 
-   virtual SubdivCalc<T> *dup() const { return 0; }
+   virtual SubdivCalc<T> *dup() const { return nullptr; }
 
  protected:
    SubdivCalc<T> * _boss;

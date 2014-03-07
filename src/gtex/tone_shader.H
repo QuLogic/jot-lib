@@ -163,7 +163,7 @@ class tone_layer_t : public DATA_ITEM {
 class ToneShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   ToneShader(Patch* patch = 0);
+   ToneShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("ToneShader", ToneShader*, GLSLShader, CDATA_ITEM*);

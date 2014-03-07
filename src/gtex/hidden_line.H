@@ -34,7 +34,7 @@ class HiddenLineTexture : public OGLTexture {
 
    //******** MANAGERS ********
 
-   HiddenLineTexture(Patch* patch = 0) :
+   HiddenLineTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _solidcolor(new SolidColorTexture(patch, COLOR::white)),
       _wireframe( new WireframeTexture (patch, COLOR::black)) {}

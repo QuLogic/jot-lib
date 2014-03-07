@@ -54,7 +54,7 @@ class GL_VIEW: public VIEWimpl {
    virtual void     prepare_buf_read();
    virtual void     end_buf_read();
    virtual void     read_pixels(uchar *,bool alpha=false);
-   virtual int      stencil_draw(STENCILCB *, GELlist *objs= 0);
+   virtual int      stencil_draw(STENCILCB *, GELlist *objs= nullptr);
 
    static  double   gl_version();
    static  bool     poly_ext_available();
@@ -81,14 +81,14 @@ class GL_VIEW: public VIEWimpl {
    // to glPushAttrib().
    //
    // In case the point size or line width is below the minimum value
-   // supported by OpenGL, and a != NULL, they set *a to the fraction
+   // supported by OpenGL, and a != nullptr, they set *a to the fraction
    // size/min_size (or width/min_width). This can be used by the
    // caller to reduce the opacity of the point or line in lieu of
    // reducing the point size or line width (by setting alpha = *a).
    //
    // calls glPushAttrib with: mask |
    //   GL_ENABLE_BIT | GL_POINT_BIT | GL_HINT_BIT | GL_COLOR_BUFFER_BIT
-   static  void init_point_smooth(GLfloat size, GLbitfield mask=0, GLfloat* a=0);
+   static  void init_point_smooth(GLfloat size, GLbitfield mask=0, GLfloat* a=nullptr);
 
    // XXX - g++ 4.0 on Mac OS X insists that the following function
    // not be defined in the .C file (because then g++ "can't find" it).
@@ -96,7 +96,7 @@ class GL_VIEW: public VIEWimpl {
    //
    // calls glPushAttrib with: mask |
    //   GL_ENABLE_BIT | GL_LINE_BIT  | GL_HINT_BIT | GL_COLOR_BUFFER_BIT
-   static  void init_line_smooth(GLfloat width, GLbitfield mask=0, GLfloat* a=0) {
+   static  void init_line_smooth(GLfloat width, GLbitfield mask=0, GLfloat* a=nullptr) {
       // Turns on antialiasing for lines and sets the line width to the
       // given amount. Calls glPushAttrib() with GL_ENABLE_BIT,
       // GL_LINE_BIT and GL_COLOR_BUFFER_BIT along with whatever bits

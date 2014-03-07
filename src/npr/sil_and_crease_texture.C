@@ -142,7 +142,7 @@ const float line_alphas[] =
       SUGLINE_VIS_ALPHA,   SUGLINE_HIDDEN_ALPHA,   SUGLINE_OCCLUDED_ALPHA
    };
 
-TAGlist*    SilAndCreaseTexture::_sct_tags   = NULL;
+TAGlist*    SilAndCreaseTexture::_sct_tags   = nullptr;
 
 //////////////////////////////////////////////////////
 // SilAndCreaseTexture Methods
@@ -265,7 +265,7 @@ SilAndCreaseTexture::get_crease_pool(TAGformat &d)
       //      cerr << "SilAndCreaseTexture::get_crease_pool() - Loaded class name " << str << "\n";
    }
    //
-   assert(EdgeStrokePool::mesh() == 0);
+   assert(EdgeStrokePool::mesh() == nullptr);
    EdgeStrokePool::set_mesh(_patch->mesh());
 
    EdgeStroke* es = new EdgeStroke();
@@ -280,7 +280,7 @@ SilAndCreaseTexture::get_crease_pool(TAGformat &d)
 
    pool->decode(*d);
 
-   EdgeStrokePool::set_mesh(0);
+   EdgeStrokePool::set_mesh(nullptr);
 
    _crease_stroke_pools.push_back(pool);
 }
@@ -486,12 +486,12 @@ SilAndCreaseTexture::create_crease_strokes()
    if (strip->empty())
       return;
 
-   Bedge *cur_edge       = 0;
-   Bvert *cur_vert_start = 0;
-   Bvert *cur_vert_end   = 0;
+   Bedge *cur_edge       = nullptr;
+   Bvert *cur_vert_start = nullptr;
+   Bvert *cur_vert_end   = nullptr;
 
 
-   EdgeStrokePool* pool = 0;
+   EdgeStrokePool* pool = nullptr;
    _crease_stroke_pools.clear();
 
    int stroke_started = 0;
@@ -529,7 +529,7 @@ SilAndCreaseTexture::create_crease_strokes()
             // add the vertex of next edge that is not also in cur
             next_key_val_found = strip->edge(i+1)->find_data(&EdgeStrokePool::foo);
             if (!next_key_val_found) {
-               Bvert* next_vert_end = 0;
+               Bvert* next_vert_end = nullptr;
                next_vert_end = strip->next_vert(i+1);
                assert(next_vert_end);
 
@@ -557,8 +557,8 @@ SilAndCreaseTexture::create_crease_strokes()
          // angle between cur and next is too small, so break stroke
          if (end_stroke) {
             // indicate break in edge strip
-            cur_vert_start = 0;
-            cur_vert_end = 0;
+            cur_vert_start = nullptr;
+            cur_vert_end = nullptr;
             stroke_started = 0;
             // To draw the strip, the pool must contain at least one
             // stroke.  The next call adds a stroke to the pool.
@@ -651,7 +651,7 @@ SilAndCreaseTexture::read_stream(istream& is, vector<string> &leftover)
    }
 
    // read all the crease stroke pools
-   assert(EdgeStrokePool::mesh() == 0);
+   assert(EdgeStrokePool::mesh() == nullptr);
    EdgeStrokePool::set_mesh(_patch->mesh());
    for(int i=0; i<num_crease_stroke_pools; i++ ) {
       EdgeStrokePool *pool = new EdgeStrokePool();
@@ -659,7 +659,7 @@ SilAndCreaseTexture::read_stream(istream& is, vector<string> &leftover)
       pool->read_stream(is);
       _crease_stroke_pools.push_back(pool);
    }
-   EdgeStrokePool::set_mesh(0);
+   EdgeStrokePool::set_mesh(nullptr);
 
    leftover.clear();
 
@@ -2933,7 +2933,7 @@ SilAndCreaseTexture::generate_strokes_from_groups()
       selection_changed |= _sil_stroke_pools[k]->update_selection(paths);
    }
    if (selection_changed) {
-      LinePen *line_pen = 0;
+      LinePen *line_pen = nullptr;
       if (BaseJOTapp::instance() &&
           (line_pen = dynamic_cast<LinePen*>(BaseJOTapp::instance()->cur_pen()))){
          line_pen->selection_changed(LinePen::LINE_PEN_SELECTION_CHANGED__SIL_TRACKING);

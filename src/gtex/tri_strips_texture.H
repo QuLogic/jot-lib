@@ -102,7 +102,7 @@ class StripColorCB : public FlatShadeStripCB {
  **********************************************************************/
 class TriStripsTexture : public FlatShadeTexture {
  public:
-   TriStripsTexture(Patch* patch = 0) :
+   TriStripsTexture(Patch* patch = nullptr) :
       FlatShadeTexture(patch, new StripColorCB) {}
 
    //******** RUN-TIME TYPE ID ********

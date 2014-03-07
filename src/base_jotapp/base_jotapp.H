@@ -90,11 +90,11 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
 
 
       WINDOW() :
-         _menu(0),_cam1(0), _cam2(0), _win(0),  _mouse_map(0,0) {
+         _menu(nullptr),_cam1(nullptr), _cam2(nullptr), _win(nullptr),  _mouse_map(nullptr,nullptr) {
          _start.set_name("WINDOW::start");
       }
       WINDOW(WINSYS *win) :
-         _menu(0),_cam1(0),_cam2(0), _win(win),_mouse_map(0,0) {
+         _menu(nullptr),_cam1(nullptr),_cam2(nullptr), _win(win),_mouse_map(nullptr,nullptr) {
          _start.set_name("WINDOW::start");
       }
 
@@ -129,7 +129,7 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
    //! \name PenManager Related Functions
    //@{
 
-   Pen *cur_pen() { return _pen_manager ? _pen_manager->cur_pen() : 0; }
+   Pen *cur_pen() { return _pen_manager ? _pen_manager->cur_pen() : nullptr; }
    void next_pen() { if(_pen_manager)
          _pen_manager->next_pen(); }
    void prev_pen() { if(_pen_manager)

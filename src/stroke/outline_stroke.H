@@ -53,7 +53,7 @@ class OutlineStroke : public BaseStroke {
 
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
  public:
-   OutlineStroke(Patch* p = 0) :
+   OutlineStroke(Patch* p = nullptr) :
       _patch(p),
       _original_mesh_size(0.0),
       _propagate_patch(false),

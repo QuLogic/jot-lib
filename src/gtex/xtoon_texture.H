@@ -72,7 +72,7 @@ class XToonTexture : public BasicTexture {
 
  public:
     // ******** CONSTRUCTOR ********
-   XToonTexture(Patch* patch = 0) :
+   XToonTexture(Patch* patch = nullptr) :
       BasicTexture(patch, new ToonTexCB),
       _tex_name(""),
       _layer_name("Shader"),
@@ -108,7 +108,7 @@ class XToonTexture : public BasicTexture {
  public:
    //******** Accessors ********
    virtual string     get_tex_name() const            { return _tex_name;     }
-   virtual void       set_tex_name(const string tn)   { _tex_name = tn; _tex=NULL;  }
+   virtual void       set_tex_name(const string tn)   { _tex_name = tn; _tex=nullptr;  }
    virtual string     get_layer_name() const          { return _layer_name;   }
    virtual void       set_layer_name(const string ln) { _layer_name = ln;     }
    virtual int        get_use_paper() const           { return _use_paper;    }

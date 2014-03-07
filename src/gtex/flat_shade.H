@@ -86,7 +86,7 @@ class FlatShadeTexture : public BasicTexture {
    
  public:
    
-   FlatShadeTexture(Patch* patch = 0, StripCB* cb=0) :
+   FlatShadeTexture(Patch* patch = nullptr, StripCB* cb=nullptr) :
       BasicTexture(patch, cb ? cb : new FlatShadeStripCB),
       _debug_uv_in_dl(false),
       _has_uv_coords(false),

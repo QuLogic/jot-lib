@@ -82,17 +82,17 @@ class SimplexArray : public vector<T> {
 
    // If whole list is from same mesh, returns the mesh:
    BMESH* mesh() const {
-      if (empty()) return 0;
+      if (empty()) return nullptr;
       BMESH* ret = (*this)[0]->mesh();
       for (size_t i=1; i<size(); i++)
          if (ret != (*this)[i]->mesh())
-            return 0;            
+            return nullptr;
       return ret;         
    }
 
    // Returns true if the list is empty or they all belong to
    // the same mesh
-   bool same_mesh() const { return empty() || mesh() != NULL; }
+   bool same_mesh() const { return empty() || mesh() != nullptr; }
    
    vector<BMESH*> get_meshes() const {
      vector<BMESH*> ret;
@@ -243,7 +243,7 @@ class SimplexArray : public vector<T> {
       for (size_t i=0; i<size(); i++)
          if (f.accept((*this)[i]))
             return (*this)[i];
-      return 0;
+      return nullptr;
    }
 
    //******** SELECTED ELEMENTS ********
@@ -296,7 +296,7 @@ class SimplexArray : public vector<T> {
    //******** ARRAY VIRTUAL METHODS ********
 
    virtual void  append_ele(const T& s) {
-      // Don't permit NULL pointers to be inserted
+      // Don't permit nullptr pointers to be inserted
       if (s) {
          vector<T>::push_back(s);
       } else {

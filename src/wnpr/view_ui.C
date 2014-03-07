@@ -61,7 +61,7 @@ ViewUI::ViewUI(VIEWptr v) :
       _id(0),
       _init(false),
       _view(v),
-      _glui(0)
+      _glui(nullptr)
 {
    _ui.push_back(this);
    _id = (_ui.size()-1);
@@ -101,11 +101,11 @@ ViewUI::fetch(CVIEWptr& v)
 {
    if (!v) {
       err_msg("ViewUI::fetch() - Error! view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg("ViewUI::fetch() - Error! view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
@@ -348,16 +348,16 @@ ViewUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_spinner.empty());      _spinner.resize(SPINNER_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
-   assert(_rotation.empty());     _rotation.resize(ROT_NUM, 0);
-   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
-   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, nullptr);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_spinner.empty());      _spinner.resize(SPINNER_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
+   assert(_rotation.empty());     _rotation.resize(ROT_NUM, nullptr);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, nullptr);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, nullptr);
 
    assert(_bkgtex_filenames.empty());
    assert(_paper_filenames.empty());
@@ -376,7 +376,7 @@ ViewUI::build()
    //Number
    _radgroup[RADGROUP_LIGHTNUM] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_LIGHTNUM, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTNUM]);
 
@@ -419,7 +419,7 @@ ViewUI::build()
    _checkbox[CHECK_ENABLE] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "On",
-                                NULL,
+                                nullptr,
                                 id+CHECK_ENABLE,
                                 checkbox_cb);
    assert(_checkbox[CHECK_ENABLE]);
@@ -427,14 +427,14 @@ ViewUI::build()
     _checkbox[CHECK_SHOW_WIDGET] = new GLUI_Checkbox(
                                 _panel[PANEL_LIGHTTOP],
                                 "Show Widget",
-                                NULL,
+                                nullptr,
                                 id+CHECK_SHOW_WIDGET,
                                 checkbox_cb);
 
    _checkbox[CHECK_POS] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Dir",
-                             NULL,
+                             nullptr,
                              id+CHECK_POS,
                              checkbox_cb);
    assert(_checkbox[CHECK_POS]);
@@ -442,14 +442,14 @@ ViewUI::build()
    _checkbox[CHECK_CAM] = new GLUI_Checkbox(
                              _panel[PANEL_LIGHTTOP],
                              "Cam",
-                             NULL,
+                             nullptr,
                              id+CHECK_CAM,
                              checkbox_cb);
    assert(_checkbox[CHECK_CAM]);
 
    _radgroup[RADGROUP_LIGHTCOL] = new GLUI_RadioGroup(
                                      _panel[PANEL_LIGHTTOP],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_LIGHTCOL, radiogroup_cb);
    assert(_radgroup[RADGROUP_LIGHTCOL]);
 
@@ -468,7 +468,7 @@ ViewUI::build()
    _rotation[ROT_LIGHT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHTTOP],
                              "Pos/Dir",
-                             NULL,
+                             nullptr,
                              id+ROT_LIGHT, rotation_cb);
    assert(_rotation[ROT_LIGHT]);
    new GLUI_Column(_panel[PANEL_LIGHTTOP], false);
@@ -477,19 +477,19 @@ ViewUI::build()
                              _panel[PANEL_LIGHTTOP],
                              "x",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_DIR_X, spinner_cb);
    _spinner[SPINNER_LIGHT_DIR_Y] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "y",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_DIR_Y, spinner_cb);
     _spinner[SPINNER_LIGHT_DIR_Z] = new GLUI_Spinner(
                              _panel[PANEL_LIGHTTOP],
                              "z",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_DIR_Z, spinner_cb);
 
     _rollout[ROLLOUT_SPOT] = new GLUI_Rollout(_rollout[ROLLOUT_LIGHT], "Point Light", false);
@@ -499,26 +499,26 @@ ViewUI::build()
     _rotation[ROT_SPOT] = new GLUI_Rotation(
                              _panel[PANEL_LIGHT_SPOTDIR],
                              "Spot Dir",
-                             NULL,
+                             nullptr,
                              id+ROT_SPOT, rotation_cb);
      new GLUI_Column(_panel[PANEL_LIGHT_SPOTDIR], false);
     _spinner[SPINNER_LIGHT_SPOT_X] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "x",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_SPOT_X, spinner_cb);
     _spinner[SPINNER_LIGHT_SPOT_Y] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "y",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_SPOT_Y, spinner_cb);
     _spinner[SPINNER_LIGHT_SPOT_Z] = new GLUI_Spinner(
                               _panel[PANEL_LIGHT_SPOTDIR],
                              "z",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_LIGHT_SPOT_Z, spinner_cb);
     //new GLUI_Column(_rollout[ROLLOUT_SPOT], true);
     _slider[SLIDE_SPOT_EXPONENT] = new GLUI_Slider(
@@ -527,7 +527,7 @@ ViewUI::build()
                           id+SLIDE_SPOT_EXPONENT, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL);
+                          nullptr);
     
     _slider[SLIDE_SPOT_CUTOFF] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -535,7 +535,7 @@ ViewUI::build()
                           id+SLIDE_SPOT_CUTOFF, slider_cb,
                           GLUI_SLIDER_INT,
                           0, 90,
-                          NULL);
+                          nullptr);
     _slider[SLIDE_SPOT_CUTOFF]->set_int_val(90);
     _slider[SLIDE_SPOT_K0] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -543,7 +543,7 @@ ViewUI::build()
                           id+SLIDE_SPOT_K0, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 5.0,
-                          NULL);
+                          nullptr);
     _slider[SLIDE_SPOT_K0]->set_float_val(1.0);
     _slider[SLIDE_SPOT_K1] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -551,7 +551,7 @@ ViewUI::build()
                           id+SLIDE_SPOT_K1, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    
     _slider[SLIDE_SPOT_K2] = new GLUI_Slider(
                           _rollout[ROLLOUT_SPOT],
@@ -559,7 +559,7 @@ ViewUI::build()
                           id+SLIDE_SPOT_K2, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 0.5,
-                          NULL);
+                          nullptr);
    
 
    //Color
@@ -569,7 +569,7 @@ ViewUI::build()
                           id+SLIDE_LH, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_LH]);
    _slider[SLIDE_LH]->set_num_graduations(201);
 
@@ -579,7 +579,7 @@ ViewUI::build()
                           id+SLIDE_LS, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_LS]);
    _slider[SLIDE_LS]->set_num_graduations(201);
 
@@ -589,7 +589,7 @@ ViewUI::build()
                           id+SLIDE_LV, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_LV]);
    _slider[SLIDE_LV]->set_num_graduations(201);
 
@@ -602,7 +602,7 @@ ViewUI::build()
    _checkbox[CHECK_PAPER] = new GLUI_Checkbox(
                                _rollout[ROLLOUT_BKG],
                                "Apply Paper to Bkg",
-                               NULL,
+                               nullptr,
                                id+CHECK_PAPER,
                                checkbox_cb);
    assert(_checkbox[CHECK_PAPER]);
@@ -615,7 +615,7 @@ ViewUI::build()
 
    _listbox[LIST_BKGTEX] = new GLUI_Listbox(
                               _panel[PANEL_BKGTEX],
-                              "", NULL,
+                              "", nullptr,
                               id+LIST_BKGTEX, listbox_cb);
    assert(_listbox[LIST_BKGTEX]);
    _listbox[LIST_BKGTEX]->add_item(0, "----");
@@ -628,7 +628,7 @@ ViewUI::build()
                           id+SLIDE_BH, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_BH]);
    _slider[SLIDE_BH]->set_num_graduations(201);
 
@@ -638,7 +638,7 @@ ViewUI::build()
                           id+SLIDE_BS, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_BS]);
    _slider[SLIDE_BS]->set_num_graduations(201);
 
@@ -648,7 +648,7 @@ ViewUI::build()
                           id+SLIDE_BV, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_BV]);
    _slider[SLIDE_BV]->set_num_graduations(201);
 
@@ -657,7 +657,7 @@ ViewUI::build()
                           id+SLIDE_BA, slider_cb,
                           GLUI_SLIDER_FLOAT,
                           0.0, 1.0,
-                          NULL);
+                          nullptr);
    assert(_slider[SLIDE_BA]);
    _slider[SLIDE_BA]->set_num_graduations(201);
 
@@ -669,7 +669,7 @@ ViewUI::build()
    _checkbox[CHECK_ACTIVE] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_PAPER],
                                 "Active",
-                                NULL,
+                                nullptr,
                                 id+CHECK_ACTIVE,
                                 checkbox_cb);
    assert(_checkbox[CHECK_ACTIVE]);
@@ -682,7 +682,7 @@ ViewUI::build()
    _listbox[LIST_PAPER] = new GLUI_Listbox(
                              _panel[PANEL_PAPER],
                              "",
-                             NULL,
+                             nullptr,
                              id+LIST_PAPER, listbox_cb);
    assert(_listbox[LIST_PAPER]);
    _listbox[LIST_PAPER]->add_item(0, "----");
@@ -694,7 +694,7 @@ ViewUI::build()
                             id+SLIDE_BRIG, slider_cb,
                             GLUI_SLIDER_FLOAT,
                             0.0, 1.0,
-                            NULL);
+                            nullptr);
    assert(_slider[SLIDE_BRIG]);
    _slider[SLIDE_BRIG]->set_num_graduations(101);
 
@@ -704,7 +704,7 @@ ViewUI::build()
                             id+SLIDE_CONT, slider_cb,
                             GLUI_SLIDER_FLOAT,
                             0.0, 1.0,
-                            NULL);
+                            nullptr);
    assert(_slider[SLIDE_CONT]);
    _slider[SLIDE_CONT]->set_num_graduations(101);
 
@@ -715,7 +715,7 @@ ViewUI::build()
    _checkbox[CHECK_ANTI] = new GLUI_Checkbox(
                               _rollout[ROLLOUT_ANTI],
                               "Active",
-                              NULL,
+                              nullptr,
                               id+CHECK_ANTI,
                               checkbox_cb);
    assert(_checkbox[CHECK_ANTI]);
@@ -728,7 +728,7 @@ ViewUI::build()
    _listbox[LIST_ANTI] = new GLUI_Listbox(
                             _panel[PANEL_ANTI],
                             "",
-                            NULL,
+                            nullptr,
                             id+LIST_ANTI, listbox_cb);
    assert(_listbox[LIST_ANTI]);
    fill_anti_listbox(_listbox[LIST_ANTI]);
@@ -752,7 +752,7 @@ ViewUI::build()
                             id+SLIDE_SUGR, slider_cb,
                             GLUI_SLIDER_FLOAT,
                             1, 20,
-                            NULL);
+                            nullptr);
    assert(_slider[SLIDE_SUGR]);
    _slider[SLIDE_SUGR]->set_num_graduations(120);
 
@@ -762,7 +762,7 @@ ViewUI::build()
                             id+SLIDE_SUGT, slider_cb,
                             GLUI_SLIDER_FLOAT,
                             0.0, 2.0,
-                            NULL);
+                            nullptr);
    assert(_slider[SLIDE_SUGT]);
    _slider[SLIDE_SUGT]->set_num_graduations(201);
 
@@ -772,7 +772,7 @@ ViewUI::build()
                               id+SLIDE_SUGMIN, slider_cb,
                               GLUI_SLIDER_INT,
                               0, 255,
-                              NULL);
+                              nullptr);
    assert(_slider[SLIDE_SUGMIN]);
    _slider[SLIDE_SUGMIN]->set_num_graduations(255);
 
@@ -782,14 +782,14 @@ ViewUI::build()
                               id+SLIDE_SUGMAX, slider_cb,
                               GLUI_SLIDER_INT,
                               0, 255,
-                              NULL);
+                              nullptr);
    assert(_slider[SLIDE_SUGMAX]);
    _slider[SLIDE_SUGMAX]->set_num_graduations(255);
 
    _checkbox[CHECK_SUGLCK] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE],
                                 "Check only on lines",
-                                NULL,
+                                nullptr,
                                 id+CHECK_SUGLCK,
                                 checkbox_cb);
    assert(_checkbox[CHECK_SUGLCK]);
@@ -800,14 +800,14 @@ ViewUI::build()
                                id+SLIDE_SUGLWID, slider_cb,
                                GLUI_SLIDER_INT,
                                1, 10,
-                               NULL);
+                               nullptr);
    assert(_slider[SLIDE_SUGLWID]);
    _slider[SLIDE_SUGLWID]->set_num_graduations(255);
 
    _checkbox[CHECK_SUGMED] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE],
                                 VALLEY ? "---" : "Median filter",
-                                NULL,
+                                nullptr,
                                 id+CHECK_SUGMED,
                                 checkbox_cb);
    assert(_checkbox[CHECK_SUGMED]);
@@ -815,7 +815,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGKEY] = new GLUI_Checkbox(
                                 _rollout[ROLLOUT_LINE],
                                 "Keyline",
-                                NULL,
+                                nullptr,
                                 id+CHECK_SUGKEY,
                                 checkbox_cb);
    assert(_checkbox[CHECK_SUGKEY]);
@@ -829,7 +829,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGOBJ_ENABLE] = new GLUI_Checkbox(
                                        _rollout[ROLLOUT_LINE_OBJ],
                                        "Enabled",
-                                       NULL,
+                                       nullptr,
                                        id+CHECK_SUGOBJ_ENABLE,
                                        checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_ENABLE]);
@@ -839,7 +839,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGOBJ_C1] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "Apply Tests",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C1,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C1]);
@@ -850,7 +850,7 @@ ViewUI::build()
                                 id+SLIDE_SUGOBJT2, slider_cb,
                                 GLUI_SLIDER_FLOAT,
                                 -0.1, 0.3,
-                                NULL);
+                                nullptr);
    assert(_slider[SLIDE_SUGOBJT2]);
    _slider[SLIDE_SUGOBJT2]->set_num_graduations(201);
 
@@ -860,7 +860,7 @@ ViewUI::build()
                                  id+SLIDE_SUGOBJT2a, slider_cb,
                                  GLUI_SLIDER_FLOAT,
                                  -0.1, 0.3,
-                                 NULL);
+                                 nullptr);
    assert(_slider[SLIDE_SUGOBJT2a]);
    _slider[SLIDE_SUGOBJT2a]->set_num_graduations(201);
 
@@ -870,7 +870,7 @@ ViewUI::build()
                                 id+SLIDE_SUGOBJT3, slider_cb,
                                 GLUI_SLIDER_FLOAT,
                                 0, 1,
-                                NULL);
+                                nullptr);
    assert(_slider[SLIDE_SUGOBJT3]);
    _slider[SLIDE_SUGOBJT3]->set_num_graduations(201);
 
@@ -880,7 +880,7 @@ ViewUI::build()
                                  id+SLIDE_SUGOBJT3a, slider_cb,
                                  GLUI_SLIDER_FLOAT,
                                  0, 1,
-                                 NULL);
+                                 nullptr);
    assert(_slider[SLIDE_SUGOBJT3a]);
    _slider[SLIDE_SUGOBJT3a]->set_num_graduations(201);
 
@@ -890,14 +890,14 @@ ViewUI::build()
                                   id+SLIDE_SUGOBJDREG, slider_cb,
                                   GLUI_SLIDER_INT,
                                   1, 100,
-                                  NULL);
+                                  nullptr);
    assert(_slider[SLIDE_SUGOBJDREG]);
    _slider[SLIDE_SUGOBJDREG]->set_num_graduations(101);
 
    _checkbox[CHECK_SUGOBJ_C2] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "Flip gradient test",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C2,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C2]);
@@ -905,7 +905,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGOBJ_C5] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "Hysteresis thresholding",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C5,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C5]);
@@ -913,7 +913,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGOBJ_C3] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "Use curvature normals",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C3,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C3]);
@@ -921,7 +921,7 @@ ViewUI::build()
    _checkbox[CHECK_SUGOBJ_C6] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "Numerical derivatives",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C6,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C6]);
@@ -933,14 +933,14 @@ ViewUI::build()
                                    id+SLIDE_SUGOBJWHICH, slider_cb,
                                    GLUI_SLIDER_INT,
                                    1, 5,
-                                   NULL);
+                                   nullptr);
    assert(_slider[SLIDE_SUGOBJWHICH]);
    _slider[SLIDE_SUGOBJWHICH]->set_num_graduations(500);
 
    _checkbox[CHECK_SUGOBJ_C4] = new GLUI_Checkbox(
                                    _rollout[ROLLOUT_LINE_OBJ],
                                    "grad(f) * V",
-                                   NULL,
+                                   nullptr,
                                    id+CHECK_SUGOBJ_C4,
                                    checkbox_cb);
    assert(_checkbox[CHECK_SUGOBJ_C4]);
@@ -951,7 +951,7 @@ ViewUI::build()
                                id+SLIDE_SUGOBJT, slider_cb,
                                GLUI_SLIDER_FLOAT,
                                -1,  1,
-                               NULL);
+                               nullptr);
    assert(_slider[SLIDE_SUGOBJT]);
    _slider[SLIDE_SUGOBJT]->set_num_graduations(201);
 
@@ -961,7 +961,7 @@ ViewUI::build()
                                 id+SLIDE_SUGOBJT5, slider_cb,
                                 GLUI_SLIDER_FLOAT,
                                 -1, 1,
-                                NULL);
+                                nullptr);
    assert(_slider[SLIDE_SUGOBJT5]);
    _slider[SLIDE_SUGOBJT5]->set_num_graduations(201);
 
@@ -1040,7 +1040,7 @@ ViewUI::destroy()
    //Recursively kills off all controls, and itself
    _glui->close();
 
-   _glui = NULL;
+   _glui = nullptr;
 
 
 }

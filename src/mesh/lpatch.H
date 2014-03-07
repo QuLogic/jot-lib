@@ -60,7 +60,7 @@ class Lpatch : public Patch {
    //******** SUBDIVISION HIERARCHY ********
 
    // Control mesh for the subdivision hierarchy:
-   LMESH* control_mesh() const { return _mesh ? lmesh()->control_mesh() : 0; }
+   LMESH* control_mesh() const { return _mesh ? lmesh()->control_mesh() : nullptr; }
 
    // Level of the currently drawn mesh in the hierarchy:
    int cur_level()       const { return _mesh ? lmesh()->cur_level() : 0; }
@@ -78,7 +78,7 @@ class Lpatch : public Patch {
    //
    Lpatch* sub_patch(int k);
 
-   void delete_child() { delete _child; _child = 0;}
+   void delete_child() { delete _child; _child = nullptr;}
    
 
    //******** Patch VIRTUAL METHODS ********
@@ -104,7 +104,7 @@ class Lpatch : public Patch {
       return _parent ? _parent->ctrl_patch() : (Patch*)this;
    }
 
-   bool is_ctrl_patch() const { return _parent == NULL; }
+   bool is_ctrl_patch() const { return _parent == nullptr; }
 
    // The level of this Patch relative to its control Patch:
    virtual int rel_subdiv_level() {
@@ -159,7 +159,7 @@ class Lpatch : public Patch {
 
    // Normal people can't make these --
    // get yours from an LMESH:
-   Lpatch(LMESH *mesh) : Patch(mesh), _parent(0), _child(0) {}
+   Lpatch(LMESH *mesh) : Patch(mesh), _parent(nullptr), _child(nullptr) {}
 
    // Clear subdivision strips down to given level:
    void clear_subdiv_strips(int level);

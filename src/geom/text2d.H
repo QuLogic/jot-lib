@@ -61,7 +61,7 @@ class TEXT2D : public GEOM {
       return (_suppress_draw = !_suppress_draw);
    }
 
-   virtual  BBOX2D  bbox2d       (int b=5, const char*s=0, int r=0) const;
+   virtual  BBOX2D  bbox2d       (int b=5, const char*s=nullptr, int r=0) const;
    virtual  void    update       ()                { }
 
    virtual  int     draw         (CVIEWptr  &v);

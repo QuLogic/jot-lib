@@ -62,7 +62,7 @@ class Primitive :  public Bsurface {
       CWvec&,
       Bface_list,
       Bface_list,
-      MULTI_CMDptr cmd=0
+      MULTI_CMDptr cmd=nullptr
       );
 
    //! to create a roof based on the input parameters
@@ -72,13 +72,13 @@ class Primitive :  public Bsurface {
       CWvec&,
       CBface_list&,
       CEdgeStrip&,
-      MULTI_CMDptr cmd=0
+      MULTI_CMDptr cmd=nullptr
       );
 
    //! If conditions are favorable, create a ball primitive with given
    //! screen-space radius (in PIXELs) around an isolated skeleton point:
    static Primitive* create_ball(
-      Bpoint* skel, double pix_rad, MULTI_CMDptr cmd=0
+      Bpoint* skel, double pix_rad, MULTI_CMDptr cmd=nullptr
       );
 
    static Primitive* build_simple_tube(

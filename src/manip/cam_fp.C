@@ -92,17 +92,17 @@ Cam_int_fp::Cam_int_fp(
 {
         
    //create key events
-   Event  for_up(NULL, Evd('8', KEYU));
-   Event  for_down(NULL, Evd('8', KEYD));
-   Event  back_up(NULL, Evd('2', KEYU));
-   Event  back_down(NULL, Evd('2', KEYD));
-   Event  left_up(NULL, Evd('4', KEYU));
-   Event  left_down(NULL, Evd('4', KEYD));
-   Event  right_up(NULL, Evd('6', KEYU));
-   Event  right_down(NULL, Evd('6', KEYD));
-   Event  breathe(NULL, Evd('5', KEYD));
-   Event  orbit(NULL, Evd('9', KEYD));
-   Event  toggle(NULL, Evd('Y', KEYD));
+   Event  for_up(nullptr, Evd('8', KEYU));
+   Event  for_down(nullptr, Evd('8', KEYD));
+   Event  back_up(nullptr, Evd('2', KEYU));
+   Event  back_down(nullptr, Evd('2', KEYD));
+   Event  left_up(nullptr, Evd('4', KEYU));
+   Event  left_down(nullptr, Evd('4', KEYD));
+   Event  right_up(nullptr, Evd('6', KEYU));
+   Event  right_down(nullptr, Evd('6', KEYD));
+   Event  breathe(nullptr, Evd('5', KEYD));
+   Event  orbit(nullptr, Evd('9', KEYD));
+   Event  toggle(nullptr, Evd('Y', KEYD));
 
    //events possible while moving foward
   // _cam_forward += Arc(for_up,   Cb(&Cam_int_fp::moveup,    (State *)-1));
@@ -554,7 +554,7 @@ Cam_int_fp::breathe(CEvent &e, State *&)
    if(CamBreathe::cur())
       {
          CamBreathe::cur()->stop();
-         CamBreathe::cur() = NULL;
+         CamBreathe::cur() = nullptr;
       }
    else
       {
@@ -694,7 +694,7 @@ int
 Cam_int_fp::stop_cruise(CEvent &e, State *&s) 
 {
    CamCruise::cur()->stop(); 
-   CamCruise::cur() = NULL;
+   CamCruise::cur() = nullptr;
 
    return 0;
 }
@@ -704,7 +704,7 @@ int
 Cam_int_fp::stop_breathe(CEvent &e, State *&) 
 {
    CamBreathe::cur()->stop(); 
-   CamBreathe::cur() = NULL;
+   CamBreathe::cur() = nullptr;
 
    return 0;
 }
@@ -1068,8 +1068,8 @@ Cam_int_fp::moveup(
    set<UPobs*>::iterator i;
    for (i = _up_obs.begin(); i != _up_obs.end(); ++i)
       (*i)->reset(_do_reset);  // reset everyone watching us
-   _geom = 0;
-   _icon = 0;
+   _geom = nullptr;
+   _icon = nullptr;
    return 0;
 }
 
@@ -1092,7 +1092,7 @@ Cam_int_fp::iconup(
    if (_resizing) {
       _resizing = false;
       const int retval = _icon->resize_up(e, s);
-      _icon = 0;
+      _icon = nullptr;
       return retval;
    }
    DEVice_buttons *btns=(DEVice_buttons *)e._d;
@@ -1104,7 +1104,7 @@ Cam_int_fp::iconup(
        (curpt - _start_pix).length() > 20 &&
        (curpt - _start_pix).normalized() * VEXEL(1,1).normalized() > 0.5) {
       _icon->remove_icon();
-      _icon = 0;
+      _icon = nullptr;
       return 0;
    }
 
@@ -1260,7 +1260,7 @@ Cam_int_fp::make_view(
 {
    // Create new cam icon
    _icon = CamIcon::create(curpt, _view->cam());
-   _geom = 0;
+   _geom = nullptr;
    
    reset(1);
 }

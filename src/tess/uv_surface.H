@@ -95,7 +95,7 @@ class UVsurface: public Bsurface {
       Bpoint_list& points,         // points created
       Bcurve_list& curves,         // curves created
       Bsurface_list& surfs,        // surfaces created
-      MULTI_CMDptr cmd=0);
+      MULTI_CMDptr cmd=nullptr);
 
    //    d ---------- c                               
    //    |            |                                
@@ -114,7 +114,7 @@ class UVsurface: public Bsurface {
       Bpoint* b,                                       
       Bpoint* c,                                       
       Bpoint* d,
-      MULTI_CMDptr cmd=0);
+      MULTI_CMDptr cmd=nullptr);
 
    // Tessellate the surface regularly with the given
    // dimensions.  If 'do_cap' is true and the mapping has
@@ -156,7 +156,7 @@ class UVsurface: public Bsurface {
 
    // Generate a row of vertices and their uv-coords:
    void build_row(double v, int num_cols, Bvert_list&, UVpt_list&,
-                  Bvert* first_v=0, Bvert* last_v=0);
+                  Bvert* first_v=nullptr, Bvert* last_v=nullptr);
 
    // Just adds memes to the given vertices
    void add_memes(CBvert_list& verts, CUVpt_list& uvs);
@@ -240,7 +240,7 @@ class UVmeme : public VertMeme {
    // returns the map:
    Map2D3D* get_set() {
       if (!(_uv_valid || lookup_uv()))
-         return 0;
+         return nullptr;
       return map();
    }
 

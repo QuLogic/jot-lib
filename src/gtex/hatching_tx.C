@@ -26,7 +26,7 @@
 
 #include "hatching_tx.H"
 
-TAGlist* HatchingTX::_hatching_tags = 0;
+TAGlist* HatchingTX::_hatching_tags = nullptr;
 
 GLuint   HatchingTX::_program(0);
 bool     HatchingTX::_init(false);
@@ -337,7 +337,7 @@ HatchingTX::draw_triangles()
       _patch->draw_tri_strips(_cb);
    } else {
       // patch = null means skip blending, send weight = 1 always
-      s->set_patch(0);
+      s->set_patch(nullptr);
       _patch->draw_tri_strips(_cb);
    }
 }
@@ -406,7 +406,7 @@ HatchingTX::get_layer(TAGformat &d)
 /**********************************************************************
  * layer_hatching_t
  **********************************************************************/
-TAGlist* layer_hatching_t::_lh_tags = 0;
+TAGlist* layer_hatching_t::_lh_tags = nullptr;
 
 CTAGlist &
 layer_hatching_t::tags() const

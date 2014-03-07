@@ -176,7 +176,7 @@ class Cursor3D : public DrawWidget {
 
    //******** GEOM methods ********
 
-   virtual int  interactive(CEvent&, State*&, RAYhit* =0) const;
+   virtual int  interactive(CEvent&, State*&, RAYhit* =nullptr) const;
 
    // first argument is new transform,
    // 2nd and 3rd arguments are ignored:

@@ -93,7 +93,7 @@ EdgeStrip::next_edge(
          return v->e(i);            // return the good edge
       }
    }
-   return 0;
+   return nullptr;
 }
 
 void
@@ -105,7 +105,7 @@ EdgeStrip::build(CBedge_list& edges, CSimplexFilter& filter)
    reset();
 
    for (Bedge_list::size_type k=0; k<edges.size(); k++)
-      build(0, edges[k], filter);
+      build(nullptr, edges[k], filter);
 }
 
 void
@@ -192,7 +192,7 @@ EdgeStrip::build_with_tips(CBedge_list& edges, CSimplexFilter& filter)
 
    // Now check the rest:
    for (k=0; k<edges.size(); k++)
-      build(0, edges[k], wanted);
+      build(nullptr, edges[k], wanted);
 }
 
 void
@@ -356,7 +356,7 @@ get_leading_vert(CEdgeStrip& source)
    for (Bvert_list::size_type j=0; j<verts.size(); j++)
       if (edges[j]->flag())
          return verts[j];
-   return 0;
+   return nullptr;
 }
 
 inline void
@@ -384,7 +384,7 @@ EdgeStrip::get_unified() const
    _edges.get_verts().clear_flag02();
    _edges.set_flags(1);
    EdgeStrip ret;
-   Bvert* v = 0;
+   Bvert* v = nullptr;
    while ((v = get_leading_vert(*this))) {
       add_to_strip(v, *this, ret);
    }

@@ -41,7 +41,7 @@ class LineDrawingTexture : public BasicTexture {
    //! \name Constructors
    //@{
       
-   LineDrawingTexture(Patch* patch = 0, StripCB* cb=0);
+   LineDrawingTexture(Patch* patch = nullptr, StripCB* cb=nullptr);
       
    ~LineDrawingTexture();
       

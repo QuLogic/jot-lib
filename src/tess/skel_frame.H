@@ -48,8 +48,8 @@ class SkelFrame : public VertFrame {
    SkelFrame(uintptr_t key,
              Bvert* v,
              CWvec& n,
-             Bedge* prev=0,
-             Bedge* next=0) :
+             Bedge* prev=nullptr,
+             Bedge* next=nullptr) :
       VertFrame(key,v,Wvec::X(),n),
       _orig_n(n),
       _prev(prev),
@@ -63,8 +63,8 @@ class SkelFrame : public VertFrame {
              Bvert* v,
              CWvec& t,
              CWvec& n,
-             Bedge* prev=0,
-             Bedge* next=0) :
+             Bedge* prev=nullptr,
+             Bedge* next=nullptr) :
       VertFrame(key,v,t,n),
       _orig_n(n),
       _prev(prev),

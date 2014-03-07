@@ -27,7 +27,7 @@ using namespace mlib;
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       FeatureStrokeTexture::_fst_tags = 0;
+TAGlist *       FeatureStrokeTexture::_fst_tags = nullptr;
 
 
 /////////////////////////////////////
@@ -119,7 +119,7 @@ FeatureStrokeTexture::get_decal_pool(TAGformat &d)
    }
 
    // XXX - Hackery!
-   assert(DecalLineStroke::mesh() == 0);
+   assert(DecalLineStroke::mesh() == nullptr);
    assert(_patch);
    DecalLineStroke::set_mesh(_patch->mesh());
 
@@ -138,7 +138,7 @@ FeatureStrokeTexture::get_decal_pool(TAGformat &d)
       ((DecalLineStroke*)s)->set_patch(_patch);
    }
 
-   DecalLineStroke::set_mesh(0);
+   DecalLineStroke::set_mesh(nullptr);
 
 }
 
@@ -403,7 +403,7 @@ FeatureStrokeTexture::write_stream(ostream& os)  const
 int
 FeatureStrokeTexture::read_stream(istream &is, vector<string>& leftover)
 {
-   assert(DecalLineStroke::mesh() == 0);
+   assert(DecalLineStroke::mesh() == nullptr);
 
    assert(_patch);
    DecalLineStroke::set_mesh(_patch->mesh());
@@ -425,7 +425,7 @@ FeatureStrokeTexture::read_stream(istream &is, vector<string>& leftover)
       ((DecalLineStroke*)s)->set_patch(_patch);
    }
 
-   DecalLineStroke::set_mesh(0);
+   DecalLineStroke::set_mesh(nullptr);
 
    static IOBlockList blocklist;
    IOBlockList::size_type i;
@@ -468,7 +468,7 @@ FeatureStrokeTexture::read_gtexture(
    ARRAY<GTexture *> all_tex;
    all_tex += _sil_and_crease_tex;
 
-   GTexture *tex = 0;
+   GTexture *tex = nullptr;
    const string &name_str = name;
    for (int i = 0; !tex && i< all_tex.num(); i++) {
       if (all_tex[i]->class_name() == name_str) {

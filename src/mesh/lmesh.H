@@ -66,7 +66,7 @@ class LMESH : public BMESH {
       return (LMESH*) (_parent_mesh ? _parent_mesh->control_mesh() : this);
    }
 
-   bool   is_control_mesh()     const   { return (_parent_mesh == 0); }
+   bool   is_control_mesh()     const   { return (_parent_mesh == nullptr); }
 
    // Subdivision child of this mesh:
    LMESH* subdiv_mesh()         const   { return (LMESH*)_subdiv_mesh; }
@@ -82,7 +82,7 @@ class LMESH : public BMESH {
       else if (k < 0)
          return parent_mesh(-k);
       else
-         return _subdiv_mesh ? _subdiv_mesh->subdiv_mesh(k-1) : 0;
+         return _subdiv_mesh ? _subdiv_mesh->subdiv_mesh(k-1) : nullptr;
    }
 
    // Parent at level k relative to this mesh:
@@ -93,7 +93,7 @@ class LMESH : public BMESH {
       else if (k < 0)
          return subdiv_mesh(-k);
       else
-         return _parent_mesh ? _parent_mesh->parent_mesh(k-1) : 0;
+         return _parent_mesh ? _parent_mesh->parent_mesh(k-1) : nullptr;
    }
 
    // Generate the subdivision mesh,
@@ -178,7 +178,7 @@ class LMESH : public BMESH {
    //    returns an LMESHptr.
    static LMESHptr merge(LMESHptr m1, LMESHptr m2) {
       BMESHptr ret = BMESH::merge(m1, m2);
-      return ret ? (LMESH*)&*ret : 0;
+      return ret ? (LMESH*)&*ret : nullptr;
    }
 
    // Given a set of vertices from the same LMESH, return
@@ -304,9 +304,9 @@ class LMESH : public BMESH {
    virtual int    intersect(RAYhit&, CWtransf&, mlib::Wpt&,
                             Wvec&, double&, double&,mlib::XYpt&) const;
    virtual void   transform(CWtransf &xform, CMOD& m);
-   virtual BODY  *subtract (BODYptr &subtractor)   { return 0; }
-   virtual BODY  *combine (BODYptr &combiner)      { return 0; }
-   virtual BODY  *intersect (BODYptr &intersector) { return 0; }
+   virtual BODY  *subtract (BODYptr &subtractor)   { return nullptr; }
+   virtual BODY  *combine (BODYptr &combiner)      { return nullptr; }
+   virtual BODY  *intersect (BODYptr &intersector) { return nullptr; }
    virtual CBBOX &get_bb();
 
    //**************** DATA_ITEM methods ****************
@@ -363,7 +363,7 @@ inline LMESHptr
 gel_to_lmesh(CGELptr &gel) 
 {
    BMESHptr mesh = gel_to_bmesh(gel);
-   return mesh ? LMESH::upcast(&*mesh) : 0;
+   return mesh ? LMESH::upcast(&*mesh) : nullptr;
 }
 
 inline BMESH*
@@ -383,7 +383,7 @@ get_cur_mesh(CBMESH* m)
 inline LMESH*
 get_lmesh(CBsimplex* s)
 {
-   return s ? LMESH::upcast(s->mesh()) : 0;
+   return s ? LMESH::upcast(s->mesh()) : nullptr;
 }
 
 inline int
@@ -398,36 +398,36 @@ inline Bface*
 get_ctrl_face(CBface* f)
 {
    if (!f)
-      return 0;
+      return nullptr;
    return LMESH::isa(f->mesh()) ? ((Lface*)f)->control_face() : (Bface*)f;
 }
 
 inline Bface*
 get_parent_face(CBface* f)
 {
-   return (f && LMESH::isa(f->mesh())) ? ((Lface*)f)->parent() : 0;
+   return (f && LMESH::isa(f->mesh())) ? ((Lface*)f)->parent() : nullptr;
 }
 
 inline Bsimplex*
 get_parent_simplex(CBedge* e)
 {
-   return (e && LMESH::isa(e->mesh())) ? ((Ledge*)e)->parent() : 0;
+   return (e && LMESH::isa(e->mesh())) ? ((Ledge*)e)->parent() : nullptr;
 }
 
 inline Bsimplex*
 get_parent_simplex(CBvert* v)
 {
-   return (v && LMESH::isa(v->mesh())) ? ((Lvert*)v)->parent() : 0;
+   return (v && LMESH::isa(v->mesh())) ? ((Lvert*)v)->parent() : nullptr;
 }
 
 inline Bsimplex*
 get_parent_simplex(CBsimplex* s)
 {
-   return (!(s && LMESH::isa(s->mesh())) ? 0 :
+   return (!(s && LMESH::isa(s->mesh())) ? nullptr :
            is_vert(s) ? get_parent_simplex((Bvert*)s) :
            is_edge(s) ? get_parent_simplex((Bedge*)s) :
            is_face(s) ? (Bsimplex*)get_parent_face((Bface*)s) :
-           0);
+           nullptr);
 }
 
 inline void
@@ -463,7 +463,7 @@ get_subdiv_mesh(BMESH* m, int level)
 {
    // XXX -- could handle negative levels but not doing it now
    if ( level < 0 || !LMESH::isa(m) )
-      return 0;
+      return nullptr;
 
    LMESH* lm = (LMESH*)m;
 
@@ -499,7 +499,7 @@ get_parent_faces(CBface_list& faces, int level=1)
       return ret;
 
    // first clear the flag of each parental face
-   Lface* p = 0;
+   Lface* p = nullptr;
    Bface_list::size_type i;
    for (i = 0; i<faces.size(); i++) {
       if ((p = ((Lface*)faces[i])->parent()))

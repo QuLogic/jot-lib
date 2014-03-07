@@ -45,7 +45,7 @@ MLIB_INLINE
 mlib::Plane<PLANE,P,V,L>::Plane(const P plg[], int n)
     : _d(0)
 {
-    if (plg == NULL || n < 3)
+    if (plg == nullptr || n < 3)
         return;
 
     if (n == 4)
@@ -109,7 +109,7 @@ MLIB_INLINE
 mlib::Plane<PLANE,P,V,L>::Plane(const P plg[], int n, const V& nor)
      :_normal(nor.normalized()), _d(0)
 {
-    if (plg == NULL || n < 1 || _normal.is_null())
+    if (plg == nullptr || n < 1 || _normal.is_null())
         return;
 
     P s(0,0,0);

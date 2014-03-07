@@ -62,12 +62,12 @@ using namespace mlib;
 HatchingGroupBase::HatchingGroupBase(HatchingGroup *hg) :
    _group(hg), _cam(Wpt(0,0,0)), _num_base_levels(0)
 {
-   _select = NULL;
+   _select = nullptr;
    _selected = false;
 
    // Fill out by child class
    // Assumed to exist when group is 'complete'
-   _backbone = NULL;
+   _backbone = nullptr;
 
    _old_desired_level = 1.0;
 
@@ -133,7 +133,7 @@ HatchingGroupBase::clear()
 
    assert(_select);
    delete(_select);
-   _select = NULL;
+   _select = nullptr;
 }
 
 /////////////////////////////////////
@@ -676,7 +676,7 @@ HatchingGroupBase::smooth_gesture(
    dlen = 1.0/(double)num;
 
    for (k=0; k<=num; k++) {
-      spts.push_back(pts.interpolate((double)k*dlen,0,&seg,&frac));
+      spts.push_back(pts.interpolate((double)k*dlen,nullptr,&seg,&frac));
       sprl.push_back(prl[seg]*(1.0-frac) + prl[seg+1]*frac);
    }
    spts.update_length();
@@ -703,7 +703,7 @@ HatchingGroupBase::smooth_gesture(
    dlen = 1.0/(double)(cnt-1);
    
    for (k=0; k<cnt; k++) {
-      spline.add(Wpt(XYpt(spts.interpolate((double)k*dlen,0,&seg,&frac))),k);
+      spline.add(Wpt(XYpt(spts.interpolate((double)k*dlen,nullptr,&seg,&frac))),k);
       double p = sprl[seg]*(1.0-frac) + sprl[seg+1]*frac;
       pspline.add(Wpt(p,p,p),k);
    }
@@ -914,14 +914,14 @@ HatchingGroupBase::compute_cutting_plane(
    if (!f) 
    {
       err_mesg(ERR_LEV_WARN, "HatchingGroupBase::compute_cutting_plane() - Nearest pt. on interp. line misses all meshes!"); 
-      return 0;
+      return nullptr;
    }
    else
    {
       if (f->patch() != pat)
       {
          err_mesg(ERR_LEV_WARN, "HatchingGroupBase::compute_cutting_plane() - Nearest pt. on interp. line misses right patch!"); 
-         return 0;
+         return nullptr;
       }
    }
 
@@ -1016,10 +1016,10 @@ HatchingGroupBase::find_face_vis(
 {
    static VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
 
-   if (vis_ref == NULL) 
+   if (vis_ref == nullptr)
    {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupBase::find_face_vis() - Error: Can't get visibility reference image!"); 
-      return 0;
+      return nullptr;
    }
 
    // Does a thing using the faces attached to
@@ -1032,7 +1032,7 @@ HatchingGroupBase::find_face_vis(
    if (is_face(s))
       return (Bface*)s;
    else
-      return 0;
+      return nullptr;
 }
 /////////////////////////////////////
 // find_face_id()
@@ -1044,10 +1044,10 @@ HatchingGroupBase::find_face_id(CNDCpt& pt)
 
    static IDRefImage* id_ref = IDRefImage::lookup(VIEW::peek());
 
-   if (id_ref == NULL) 
+   if (id_ref == nullptr)
    {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupBase::find_face_id() - Error: Can't get ID reference image!"); 
-      return 0;
+      return nullptr;
    } 
 
    Bsimplex *s = id_ref->simplex(pt);
@@ -1075,13 +1075,13 @@ HatchingGroupBase::query_filter_id(CNDCpt& pt, CSimplexFilter& filt)
 
    static IDRefImage* id_ref = IDRefImage::lookup(VIEW::peek());
 
-   if (id_ref == NULL) 
+   if (id_ref == nullptr)
    {
       err_mesg(ERR_LEV_ERROR, "HatchingGroupBase::query_filter_id() - Error: Can't get ID reference image!"); 
       return 0;
    } 
 
-   return (id_ref->find_near_simplex(pt,ID_REF_RADIUS,filt) != 0);
+   return (id_ref->find_near_simplex(pt,ID_REF_RADIUS,filt) != nullptr);
 }
 
 
@@ -1172,7 +1172,7 @@ HatchingGroupBase::generate_interpolated_level(int lev)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingLevelBase::_hlb_tags = 0;
+TAGlist *       HatchingLevelBase::_hlb_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -1389,7 +1389,7 @@ HatchingLevelBase::update_transition()
    _current_width = _group->group()->prototype()->get_width() * _current_frac;
 
    if ((_group->group()->prototype()->get_alpha() < 1.0) ||
-      (_group->group()->prototype()->get_texture() != NULL))
+      (_group->group()->prototype()->get_texture() != nullptr))
          _current_alpha_frac = (_extinction == EXT_NONE)?(1.0):(min(_current_frac,1.0));
    else
       _current_alpha_frac = 1.0;
@@ -1403,7 +1403,7 @@ HatchingLevelBase::update_transition()
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingHatchBase::_hhb_tags = 0;
+TAGlist *       HatchingHatchBase::_hhb_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -1646,7 +1646,7 @@ HatchingHatchBase::~HatchingHatchBase()
         
    assert(_stroke);
    delete _stroke;
-   _stroke = 0;
+   _stroke = nullptr;
 
 }
 
@@ -1752,8 +1752,8 @@ HatchingHatchBase::stroke_pts_setup()
 
    //Use _real_* vars to get 2D pts for stroke
 
-   HatchingSelectBase * select = (_level->group()->selected())?
-      (_level->group()->selection()):(NULL);
+   HatchingSelectBase * select = _level->group()->selected() ?
+       _level->group()->selection() : nullptr;
 
    NDCZpt pt;
         
@@ -1942,7 +1942,7 @@ HatchingSelectBase::draw(CVIEWptr &v)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingBackboneBase::_hbb_tags = 0;
+TAGlist *       HatchingBackboneBase::_hbb_tags = nullptr;
 
 /////////////////////////////////////
 // tags()

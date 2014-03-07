@@ -33,7 +33,7 @@ static bool debug = Config::get_var_bool("DEBUG_HALFTONE", false);
 static bool enable_alpha_transitions =
    Config::get_var_bool("ENABLE_HALFTONE_ALPHA_TRANSITIONS",false);
 
-TAGlist* halftone_layer_t::_lh_tags = 0;
+TAGlist* halftone_layer_t::_lh_tags = nullptr;
 
 const float PROCEDURAL_DOTS_SIZE = 4.0f;
 
@@ -121,7 +121,7 @@ GLint   Halftone_TX::_opacity_remap_loc(-1);
 GLint   Halftone_TX::_timed_lod_hi(-1);
 GLint   Halftone_TX::_timed_lod_lo(-1);
 
-TAGlist* Halftone_TX::_halftone_tags=0;
+TAGlist* Halftone_TX::_halftone_tags=nullptr;
 
 Halftone_TX::Halftone_TX(Patch* p) :
    GLSLShader_Layer_Base(p,new StripOpCB()),
@@ -285,7 +285,7 @@ Halftone_TX::draw_triangles()
 
    } else {
       // patch = null means skip blending, send weight = 1 always
-      s->set_patch(0);
+      s->set_patch(nullptr);
    }
 
    // now draw the interior (with triangle strips):
@@ -1034,7 +1034,7 @@ Halftone_TX::enable_tone_correction(int layer_num)
             );
 
       if (layer->_mode == 2)
-         build_correction_tex(tone_correction_maps[tex_stage],0);
+         build_correction_tex(tone_correction_maps[tex_stage],nullptr);
 
       layer->_use_tone_correction = true;
       layer->_tone_correction_tex_stage = tex_stage;
@@ -1102,7 +1102,7 @@ Halftone_TX::enable_lod_only_correction(int layer_num)
          build_r_function_tex(r_function_maps[tex_stage],
                               _patterns[layer->_pattern_tex_stage]);
       if (layer->_mode == 2)
-         build_r_function_tex(r_function_maps[tex_stage],0);
+         build_r_function_tex(r_function_maps[tex_stage],nullptr);
       
       layer->_r_function_tex_stage = tex_stage;
       layer->_use_lod_only = true;

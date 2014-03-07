@@ -207,7 +207,7 @@ CurveMeme::compute_delt()
          tout << _t << endl;
          assert(map());
          int k= -1;
-         map()->get_wpts().interpolate(_t, 0, &k, 0);
+         map()->get_wpts().interpolate(_t, nullptr, &k, nullptr);
          kout << k << endl;
       } else {
          cerr << "CurveMeme::compute_delt: could not open output files"
@@ -276,7 +276,7 @@ CurveMeme::_gen_child(Lvert* subvert) const
       cerr << "CurveMeme::_gen_child" << endl;
 
    if (!subvert)
-      return 0;
+      return nullptr;
    Bcurve* c = curve()->child();
    assert(c && !c->find_vert_meme(subvert));
 
@@ -293,7 +293,7 @@ CurveMeme::_gen_child(Lvert* subvert, VertMeme* vm) const
 {
 
    if (!subvert)
-      return 0;
+      return nullptr;
 
    Bcurve* c = curve()->child();
    assert(c && !c->find_vert_meme(subvert));
@@ -315,9 +315,9 @@ Bcurve::Bcurve(
    int          res_lev,
    Bpoint*      b1,
    Bpoint*      b2
-   ) : _map(0),
-       _skin(0),
-       _stroke_3d(0),
+   ) : _map(nullptr),
+       _skin(nullptr),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -326,8 +326,8 @@ Bcurve::Bcurve(
 {
    set_mesh(mesh);
 
-   Map0D3D* p0 = NULL;
-   Map0D3D* p1 = NULL;
+   Map0D3D* p0 = nullptr;
+   Map0D3D* p1 = nullptr;
    if (b1 || b2) {
       assert(b1 && b2);
       assert(!pts.is_closed());
@@ -376,9 +376,9 @@ Bcurve::Bcurve(
    int             res_lev,
    Bpoint*         b1,      
    Bpoint*         b2 
-   ) : _map(0),
-       _skin(0),
-       _stroke_3d(0),
+   ) : _map(nullptr),
+       _skin(nullptr),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -387,8 +387,8 @@ Bcurve::Bcurve(
 {
    set_mesh(mesh);
 
-   Map0D3D* p0 = NULL;
-   Map0D3D* p1 = NULL;
+   Map0D3D* p0 = nullptr;
+   Map0D3D* p1 = nullptr;
    if (b1 || b2) {
       assert(b1 && b2);
       assert(!pts.is_closed());
@@ -437,9 +437,9 @@ Bcurve::Bcurve(
    int                  res_lev,
    Bpoint*              b1,      
    Bpoint*              b2 
-   ) : _map(0),
-       _skin(0),
-       _stroke_3d(0),
+   ) : _map(nullptr),
+       _skin(nullptr),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -462,8 +462,8 @@ Bcurve::Bcurve(
       cerr << "res_lev argument = " << res_lev << endl;
    }
 
-   Map0D3D* p0 = NULL;
-   Map0D3D* p1 = NULL;
+   Map0D3D* p0 = nullptr;
+   Map0D3D* p1 = nullptr;
    if (b1 || b2) {
       assert(b1 && b2);
       assert(!map->is_closed());
@@ -478,7 +478,7 @@ Bcurve::Bcurve(
 
       assert(p0 && p1);
    } else {
-      assert( (p0 == NULL) && (p1 == NULL) );
+      assert( (p0 == nullptr) && (p1 == nullptr) );
       assert(map->is_closed());
    }
 
@@ -519,9 +519,9 @@ Bcurve::Bcurve(
    int res_lev,
    Bpoint* b1,
    Bpoint* b2
-   ) : _map(0),
-       _skin(0),
-       _stroke_3d(0),
+   ) : _map(nullptr),
+       _skin(nullptr),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -578,13 +578,13 @@ Bcurve::Bcurve(
 
    } else {
       // If we have a closed curve, endpoints must be null
-      assert(b1 == NULL);
-      assert(b2 == NULL);
+      assert(b1 == nullptr);
+      assert(b2 == nullptr);
    }
 
    _map = new SurfaceCurveMap(surf, uvpts,
-                              b1 ? b1->map() : NULL,
-                              b2 ? b2->map() : NULL);
+                              b1 ? b1->map() : nullptr,
+                              b2 ? b2->map() : nullptr);
 
    if (res_lev < 0) {
       err_adv(debug_res_level,
@@ -636,9 +636,9 @@ Bcurve::Bcurve(
    CBvert_list& verts,
    Bsurface* surf,
    int res_lev
-   ) : _map(0),
+   ) : _map(nullptr),
        _skin(surf),
-       _stroke_3d(0),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -671,8 +671,8 @@ Bcurve::Bcurve(
    // live in this CURVE (CurvePtMap) .. except for when this
    // is a closed curve
 
-   Bpoint* b1 = 0;
-   Bpoint* b2 = 0;
+   Bpoint* b1 = nullptr;
+   Bpoint* b2 = nullptr;
    Bvert* first = s_verts.front();
    Bvert* last = s_verts.back();
    if (first->get_all_faces().empty()) first = verts.front();
@@ -744,8 +744,8 @@ Bcurve::Bcurve(
       bcs.push_back(meme->get_bc());
    }
    _map = new SkinCurveMap(simps, bcs, skin,
-      b1 ? b1->map() : NULL,
-      b2 ? b2->map() : NULL);
+      b1 ? b1->map() : nullptr,
+      b2 ? b2->map() : nullptr);
    Wpt_list pts = _map->get_wpts();
 
    if (res_lev < 0) {
@@ -797,9 +797,9 @@ Bcurve::Bcurve(
    UVpt_list uvpts,
    Map2D3D* surf,
    int res_lev
-   ) : _map(0),
-       _skin(0),
-       _stroke_3d(0),
+   ) : _map(nullptr),
+       _skin(nullptr),
+       _stroke_3d(nullptr),
        _got_style(0),
        _max_height(0),
        _shadow_visible(true),
@@ -829,8 +829,8 @@ Bcurve::Bcurve(
    // live in this surface (SurfacePtMap) .. except for when this
    // is a closed curve
 
-   Bpoint* b1 = 0;
-   Bpoint* b2 = 0;
+   Bpoint* b1 = nullptr;
+   Bpoint* b2 = nullptr;
 
    if ( !is_closed ) {
      
@@ -873,8 +873,8 @@ Bcurve::Bcurve(
 
    _map = new SurfaceCurveMap( surf, 
                                uvpts, 
-                               b1 ? b1->map() : NULL,
-                               b2 ? b2->map() : NULL);
+                               b1 ? b1->map() : nullptr,
+                               b2 ? b2->map() : nullptr);
 
    if (res_lev < 0) {
       err_adv(debug_res_level,
@@ -918,9 +918,9 @@ Bcurve::Bcurve(
 
 //! Create a child Bcurve of the given parent:
 Bcurve::Bcurve(Bcurve* parent) :
-   _map(0),
-   _skin(0),
-   _stroke_3d(0),
+   _map(nullptr),
+   _skin(nullptr),
+   _stroke_3d(nullptr),
    _got_style(0),
    _max_height(0),
    _shadow_visible(true),
@@ -959,7 +959,7 @@ Bcurve::~Bcurve()
    destructor();
 
    // delete it?
-   _map = 0;
+   _map = nullptr;
 
    // Bbase destructor removes vert memes.
    // We have to remove our edge memes.
@@ -985,12 +985,12 @@ Bcurve::strip(int k) const
 
    if (k < 0) {
       err_msg("Bcurve::strip: bad level (%d)", k);
-      return 0;
+      return nullptr;
    }
    Bcurve* c = ctrl_curve();
    if (!c) {
       err_msg("Bcurve::strip: null control curve");
-      return 0;
+      return nullptr;
    }
    CEdgeStrip* ret = c->_strip.sub_strip(k);
    if (!ret) {
@@ -1005,7 +1005,7 @@ Bcurve::cur_strip() const
    Bcurve* c = ctrl_curve();
    if (!c) {
       err_msg("Bcurve::strip: null control curve");
-      return 0;
+      return nullptr;
    }
    return strip(c->rel_cur_level());
 }
@@ -1071,7 +1071,7 @@ Bcurve::surfaces() const
 
    // XXX - probably should not favor top level.
 
-   Bsurface* surf=0;
+   Bsurface* surf=nullptr;
    Bsurface_list ret;
    CBedge_list &edges = _strip.edges();
    for (Bedge_list::size_type k=0; k<edges.size(); k++) {
@@ -1125,7 +1125,7 @@ next_curve(Bpoint* b, Bcurve* c, bool ccw)
 
    // edges to check for next curve:
    Bedge_list adj = b->vert()->get_manifold_edges();
-   Bcurve* ret = 0;
+   Bcurve* ret = nullptr;
    double min_angle = 0;
    for (Bedge_list::size_type i=0; i<adj.size(); i++) {
       Bedge*    e = adj[i];
@@ -1407,7 +1407,7 @@ Bcurve::can_resample() const
       return false;
    }
 
-   if (_map == NULL) {
+   if (_map == nullptr) {
       if (debug)
          err_msg("Bcurve::can_resample: no map!");
       return false;
@@ -1432,7 +1432,7 @@ Bcurve::resample(int n)
    if (n < min_edges)
       return false;
 
-   return resample(make_params(n), NULL, NULL);
+   return resample(make_params(n), nullptr, nullptr);
 }
 
 bool
@@ -1460,14 +1460,14 @@ Bcurve::_resample(const std::vector<double>& t, CBpoint* bpt1, CBpoint* bpt2)
          assert(0);
       }
    } else {
-      if (bpt1 == NULL && bpt2 == NULL) {
+      if (bpt1 == nullptr && bpt2 == nullptr) {
          bpt1 = b1();
          bpt2 = b2();
       }
 
-      // we don't want one to be NULL and not the other
-      assert(bpt1 != NULL);
-      assert(bpt2 != NULL);
+      // we don't want one to be nullptr and not the other
+      assert(bpt1 != nullptr);
+      assert(bpt2 != nullptr);
       assert(bpt1 != bpt2); // sanity check.. this was a problem once
    }
 
@@ -1478,7 +1478,7 @@ Bcurve::_resample(const std::vector<double>& t, CBpoint* bpt1, CBpoint* bpt2)
    // 1st vertex:
    Lvert* v = (bpt1 ? bpt1->vert() :
                (Lvert*)_mesh->add_vertex(_map->map(t[0])));
-   new CurveMeme(this, v, t[0], bpt1 == NULL);
+   new CurveMeme(this, v, t[0], bpt1 == nullptr);
 
    // Interior vertices: 2nd param to second to last
    for (std::vector<double>::size_type k=1; k<t.size() - 1; k++) {
@@ -1537,7 +1537,7 @@ Bcurve::add_vert_meme(VertMeme* v)
 
       return v;
    }
-   return 0;
+   return nullptr;
 }
 
 void 
@@ -1579,7 +1579,7 @@ Bcurve::add_edge_meme(EdgeMeme* e)
       _ememes.push_back(e);
       return e;
    }
-   return 0;
+   return nullptr;
 }
 
 
@@ -1588,7 +1588,7 @@ Bcurve::add_edge_meme(Ledge* e)
 {
    // Screen out the wackos
    if (!e)
-      return 0;
+      return nullptr;
 
    // Don't create a duplicate meme:
    EdgeMeme* em = find_edge_meme(e);
@@ -1628,7 +1628,7 @@ Bcurve*
 Bcurve::selected_curve()
 {
    Bcurve_list curves = selected_curves();
-   return (curves.num() == 1) ? curves[0] : 0;
+   return (curves.num() == 1) ? curves[0] : nullptr;
 }
 
 CCOLOR& 
@@ -1984,7 +1984,7 @@ Bcurve::get_reshape_constraint_lines(std::vector<Wline>& ret_lines,
           // get the vertex on one of e's adjoining faces that's
           // on the desired side with respect to the tangent
 
-          Bface* adj_face = 0;
+          Bface* adj_face = nullptr;
 
           if ( mode == RESHAPE_MESH_RIGHT_FACE_TAN ) {
              adj_face = e->other_face(e->ccw_face());
@@ -2206,7 +2206,7 @@ Bcurve::hit_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** edge)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_msg("Bcurve::hit_curve: error: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
    vis_ref->update();
 
@@ -2577,7 +2577,7 @@ can_fill_ccw(CBvert_list& verts)
    assert(verts.size() == chain.size()   ||
           verts.size() == chain.size()+1);
    for (Bedge_list::size_type i=0; i<chain.size(); i++) {
-      if (chain[i]->ccw_face(verts[i]) != NULL) {
+      if (chain[i]->ccw_face(verts[i]) != nullptr) {
          err_adv(debug, "can_fill_ccw: a face lies in the interior");
          return false;
       }
@@ -3256,7 +3256,7 @@ Bcurve::reshape_on_skin(const PIXEL_list &new_curve)
       return false;
    }
 
-   if (_skin == NULL) {
+   if (_skin == nullptr) {
       // this function should only be called if curve is constrained to a surface
       cerr << "Bcurve::reshape_on_skin(): ERROR, no constraining skin for curve" 
            << endl;
@@ -3314,7 +3314,7 @@ Bcurve::reshape_on_surface(const PIXEL_list &new_curve)
 
    Map2D3D* surf_map = constraining_surface();
 
-   if (surf_map == NULL) {
+   if (surf_map == nullptr) {
       // this function should only be called if curve is constrained to a surface
       cerr << "Bcurve::reshape_on_surface(): ERROR, no constraining surface for curve" 
            << endl;

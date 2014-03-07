@@ -51,7 +51,7 @@
 class GLSLShader : public BasicTexture { //no longer derived from Perlin
  public:
    //******** MANAGERS ********
-   GLSLShader(Patch* patch = 0, StripCB* cb = 0);
+   GLSLShader(Patch* patch = nullptr, StripCB* cb = nullptr);
    virtual ~GLSLShader();
 
    //******** RUN-TIME TYPE ID ********
@@ -247,7 +247,7 @@ class GLSLShader : public BasicTexture { //no longer derived from Perlin
 class GLSLLightingShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLLightingShader(Patch* patch = 0);
+   GLSLLightingShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Lighting",

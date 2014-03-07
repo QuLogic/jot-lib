@@ -83,7 +83,7 @@ class REF_CLASS(WORLD) : public SCHEDULER {
 
 static void       set_world     (WORLD    *d) { _w = d; }
 static WORLD*     get_world     ()            { return _w; }
-static int        world_set     ()            { return _w != 0;}
+static int        world_set     ()            { return _w != nullptr;}
 static void       timer_callback(CFRAMEobsptr &o){_w->schedule(o); }
 
  static bool       is_over() { return _is_over; }

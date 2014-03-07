@@ -127,7 +127,7 @@ class SetupGL {
 
 int OGLTexture::draw_stencil() {
         
-   if (_patch == NULL) return -1;
+   if (_patch == nullptr) return -1;
    // push/pop attribs instead
    glColorMask(0, 0, 0, 0);
    glDisable(GL_DEPTH_TEST);

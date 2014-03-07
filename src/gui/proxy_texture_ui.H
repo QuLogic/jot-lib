@@ -92,7 +92,7 @@ class ProxyTextureUI : public BaseUI {
    DEFINE_RTTI_METHODS3("ProxyTextureUI", ProxyTextureUI*, ProxyTextureUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   ProxyTextureUI(BaseUI* parent=0);
+   ProxyTextureUI(BaseUI* parent=nullptr);
    virtual ~ProxyTextureUI(){}
 
    /******** MEMBERS METHODS ********/

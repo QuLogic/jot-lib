@@ -30,7 +30,7 @@
  **********************************************************************/
 class PatchColorTexture : public HiddenLineTexture {
  public:
-   PatchColorTexture(Patch* patch = 0) : HiddenLineTexture(patch) {
+   PatchColorTexture(Patch* patch = nullptr) : HiddenLineTexture(patch) {
       set_color(COLOR::any());
    }
 

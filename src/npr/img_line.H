@@ -77,7 +77,7 @@ public:
 class ImgLineTexture : public OGLTexture {
 public:
    //******** MANAGERS ********
-   ImgLineTexture(Patch* patch = 0);
+   ImgLineTexture(Patch* patch = nullptr);
    virtual ~ImgLineTexture(); 
 
    //******** RUN-TIME TYPE ID ********

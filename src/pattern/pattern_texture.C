@@ -35,7 +35,7 @@
 //#include "pattern_stroke.H"
 #include "pattern_texture.H"
 
-TAGlist *       PatternTexture::_pt_tags = 0;
+TAGlist *       PatternTexture::_pt_tags = nullptr;
 static bool debug = Config::get_var_bool("DEBUG_TEXTURE",false);
 
 /**********************************************************************

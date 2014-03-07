@@ -225,7 +225,7 @@ public:
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
 
-   HatchingLevelBase(HatchingGroupBase *hgb = NULL);
+   HatchingLevelBase(HatchingGroupBase *hgb = nullptr);
    ~HatchingLevelBase();
 
    /******** MEMBER METHODS ********/
@@ -325,7 +325,7 @@ class HatchingHatchBase : public DATA_ITEM {
    HatchingHatchBase(HatchingLevelBase *hlb, double len, 
                      mlib::CWpt_list &pl,  const vector<mlib::Wvec> &nl,
                      CBaseStrokeOffsetLISTptr &ol); 
-   HatchingHatchBase(HatchingLevelBase *hlb=0) { _level = hlb; } 
+   HatchingHatchBase(HatchingLevelBase *hlb=nullptr) { _level = hlb; }
    ~HatchingHatchBase();
 
    /******** MEMBER METHODS ********/
@@ -481,7 +481,7 @@ class HatchingBackboneBase : public DATA_ITEM {
 
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   HatchingBackboneBase(Patch *p=0) : _len(0), _patch(p), _use_exist(true) {}
+   HatchingBackboneBase(Patch *p=nullptr) : _len(0), _patch(p), _use_exist(true) {}
    virtual ~HatchingBackboneBase();
 
    /******** MEMBER METHODS ********/

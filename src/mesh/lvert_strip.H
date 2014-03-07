@@ -38,7 +38,7 @@
 class LvertStrip : public VertStrip {
  public:
    //******** MANAGERS ********
-   LvertStrip() : _substrip(0) {}
+   LvertStrip() : _substrip(nullptr) {}
    virtual ~LvertStrip() { delete_substrip(); }
 
    void clear_subdivision(int level);
@@ -56,7 +56,7 @@ class LvertStrip : public VertStrip {
    LvertStrip*  _substrip;  // corresponding finer-level vert strip
 
    //******** MANAGING SUBSTRIP ********
-   void delete_substrip() { delete _substrip; _substrip = 0;}
+   void delete_substrip() { delete _substrip; _substrip = nullptr;}
    void generate_substrip();
    int  cur_level() const;
 

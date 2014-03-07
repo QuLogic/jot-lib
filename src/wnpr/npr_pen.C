@@ -61,10 +61,10 @@ NPRPen::NPRPen(
 
    _gesture_drawer = new FooGestureDrawer();
         
-   _prev_gesture_drawer = 0;
+   _prev_gesture_drawer = nullptr;
 
    // ui vars:
-   _curr_npr_tex = 0;
+   _curr_npr_tex = nullptr;
 
    _ui = new NPRPenUI(this);
    assert(_ui);
@@ -128,7 +128,7 @@ NPRPen::deactivate(State* s)
    if(_gest_int && _prev_gesture_drawer)
    {
       _gest_int->set_drawer(_prev_gesture_drawer);   
-      _prev_gesture_drawer = 0;
+      _prev_gesture_drawer = nullptr;
    }
    return true;
 }
@@ -249,7 +249,7 @@ NPRPen::deselect_current_texture()
 
    if (_curr_npr_tex)
      _curr_npr_tex->set_selected(false);
-   _curr_npr_tex= 0;
+   _curr_npr_tex= nullptr;
 
    _ui->update();
 

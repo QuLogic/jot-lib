@@ -72,7 +72,7 @@ class NameLookup {
 //       citer_t pos = _map.find(obj_name); // doesn't work either
 //       return (pos == _map.end()) ? 0 : pos->second;
       // &^%$#$%$@!!! this makes the slow part twice as %$#@!!@# slow:
-      return (_map.find(obj_name) == _map.end()) ? 0 :
+      return (_map.find(obj_name) == _map.end()) ? nullptr :
          _map.find(obj_name)->second; // &^%#$@@! compiler
    }
 
@@ -88,7 +88,7 @@ class NameLookup {
          char tmp[64];
          sprintf(tmp, "%d", i++);
          ret = base + tmp;
-      } while (lookup(ret) != 0);
+      } while (lookup(ret) != nullptr);
       return ret;
    }
 
@@ -135,11 +135,11 @@ class NameLookup {
                  << endl;
          }
          // Old name was in use, remove our entry:
-         _map[_name] = 0;
+         _map[_name] = nullptr;
       }
 
       // Error if myname is already in use:
-      assert(lookup(myname) == 0);
+      assert(lookup(myname) == nullptr);
 
       _name = myname;      // record our name
 

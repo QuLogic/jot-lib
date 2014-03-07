@@ -42,7 +42,7 @@ using mlib::CNDCpt;
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingCollection::_hc_tags = 0;
+TAGlist *       HatchingCollection::_hc_tags = nullptr;
 
 
 /////////////////////////////////////
@@ -197,7 +197,7 @@ HatchingCollection::add_group(int t)
          hg = new HatchingGroupFree(_patch); 
          break;
        default: 
-         hg = 0;
+         hg = nullptr;
       }
 
    if (hg)
@@ -233,7 +233,7 @@ HatchingCollection::next_group(CNDCpt &pt, HatchingGroup *hg)
       }
    }
 
-   if (hit.size()==0) return 0;
+   if (hit.size()==0) return nullptr;
    else if (hit.size()==1) return hit.front();
    else if (it != (size_t)-1) return hit[(it+1)%hit.size()];
    else return hit.front();

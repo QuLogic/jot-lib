@@ -30,7 +30,7 @@
 class SilFrameTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   SilFrameTexture(Patch* patch = 0) :
+   SilFrameTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _creases(new CreasesTexture(patch)),
       _sils(new SilsTexture(patch)) {}

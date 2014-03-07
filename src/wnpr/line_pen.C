@@ -83,7 +83,7 @@ LinePen::LinePen(
    assert(_gest_int);
 
    // Place to remember old settings
-   _prev_gesture_drawer = 0;
+   _prev_gesture_drawer = nullptr;
 
    // Drawer for when we dont wanna draw strokes
    _blank_gesture_drawer = new BlankGestureDrawer(); assert(_blank_gesture_drawer);
@@ -94,9 +94,9 @@ LinePen::LinePen(
    // UI vars:
    _ui = new LinePenUI(this);   assert(_ui);
 
-   _curr_tex = NULL;
-   _curr_pool = NULL;
-   _curr_stroke = NULL;
+   _curr_tex = nullptr;
+   _curr_pool = nullptr;
+   _curr_stroke = nullptr;
    _curr_mode = EDIT_MODE_NONE;
 
    _undo_prototype = new OutlineStroke(); assert(_undo_prototype);
@@ -104,7 +104,7 @@ LinePen::LinePen(
 
    _virtual_baseline = true;
 
-   _baseline_gel = new BASELINE_GEL;  assert(_baseline_gel != NULL);
+   _baseline_gel = new BASELINE_GEL;  assert(_baseline_gel != nullptr);
 
    BaseStroke *s = _baseline_gel->stroke();
 
@@ -139,8 +139,8 @@ LinePen::~LinePen()
    assert(_blank_gesture_drawer);
    delete _blank_gesture_drawer;
 
-   assert(_baseline_gel != NULL);
-   _baseline_gel = NULL;
+   assert(_baseline_gel != nullptr);
+   _baseline_gel = nullptr;
 
    delete _undo_prototype;
 }
@@ -207,14 +207,14 @@ LinePen::deactivate(State* s)
 {
    easel_clear();
 
-   perform_selection(NULL, NULL, NULL, EDIT_MODE_NONE);
+   perform_selection(nullptr, nullptr, nullptr, EDIT_MODE_NONE);
    
    if(_ui) _ui->hide();
 
    bool ret = Pen::deactivate(s);   assert(ret);
 
    _gest_int->set_drawer(_prev_gesture_drawer);   
-   _prev_gesture_drawer = NULL;
+   _prev_gesture_drawer = nullptr;
 
    return true;
 }
@@ -279,7 +279,9 @@ LinePen::pick_stroke(
 
    if (min_dist == DBL_MAX)
    {
-      ret_stroke = NULL;      ret_pool   = NULL;      ret_mode   = EDIT_MODE_NONE;
+      ret_stroke = nullptr;
+      ret_pool   = nullptr;
+      ret_mode   = EDIT_MODE_NONE;
       return false;
    }
    else
@@ -335,7 +337,7 @@ LinePen::update_gesture_drawer()
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
       s = _curr_stroke;
-      drawable = (s != NULL);
+      drawable = (s != nullptr);
    }
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
@@ -343,7 +345,7 @@ LinePen::update_gesture_drawer()
       assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
-      s = NULL;
+      s = nullptr;
       drawable = true;
    }
    else
@@ -354,7 +356,7 @@ LinePen::update_gesture_drawer()
       assert(!_curr_pool);
       assert(!_curr_stroke);
 
-      s = NULL;
+      s = nullptr;
       drawable = false;
    }   
 
@@ -399,9 +401,9 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
 
    cerr << "LinePen::tap_cb" << endl;
 
-   NPRTexture*    new_tex     = NULL;		
-   BStrokePool*   new_pool    = NULL;
-   OutlineStroke* new_stroke  = NULL;
+   NPRTexture*    new_tex     = nullptr;
+   BStrokePool*   new_pool    = nullptr;
+   OutlineStroke* new_stroke  = nullptr;
    edit_mode_t    new_mode    = EDIT_MODE_NONE;
 
    Patch* p;
@@ -425,8 +427,8 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
       if (pick_stroke(new_tex, gest->center(), 
                         PICK_STROKE_RADIUS, new_pool, new_stroke, new_mode))
       {
-         assert(new_pool   != NULL);
-         assert(new_stroke != NULL);
+         assert(new_pool   != nullptr);
+         assert(new_stroke != nullptr);
          assert(new_mode   != EDIT_MODE_NONE);
       }
       // We failed to pick a stroke directy, so try picking from the mesh
@@ -446,7 +448,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
 
                   if (new_pool->num_strokes()==0) 
                   {
-                     new_stroke = NULL;
+                     new_stroke = nullptr;
                   }
                   else 
                   {
@@ -460,17 +462,17 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
                }
                else
                {
-                  new_tex = NULL;
+                  new_tex = nullptr;
                }
             }
             else
             {
-               new_tex = NULL;
+               new_tex = nullptr;
             }
          }
          else
          {
-            new_tex = NULL;
+            new_tex = nullptr;
          }
       } 
       else if ((f = VisRefImage::get_face(gest->center(),PICK_FACE_RADIUS)))
@@ -481,7 +483,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
    
          if (new_pool->num_strokes()==0) 
          {
-            new_stroke = NULL;
+            new_stroke = nullptr;
          }
          else 
          {
@@ -497,7 +499,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
       //in the initial serach, so bail out.
       else
       {
-         new_tex = NULL;
+         new_tex = nullptr;
       }
    }
 
@@ -553,7 +555,7 @@ LinePen::perform_selection(
    {
       if (_curr_pool)
       {
-         _curr_pool->set_selected_stroke(NULL);
+         _curr_pool->set_selected_stroke(nullptr);
       }
       _curr_pool = new_pool;
       _curr_mode = new_mode;
@@ -690,7 +692,7 @@ LinePen::retrieve_active_prototype()
       assert(!_curr_pool);
       assert(!_curr_stroke);
 
-      s = NULL;
+      s = nullptr;
    }
 
    return s;
@@ -891,7 +893,7 @@ LinePen::button_edit_cycle_line_types()
                               get_sil_stroke_pool(SilAndCreaseTexture::SIL_VIS);
    }
 
-   new_stroke = (new_pool->num_strokes())?(new_pool->stroke_at(0)):(NULL);
+   new_stroke = new_pool->num_strokes() ? new_pool->stroke_at(0) : nullptr;
 
    easel_clear();
 
@@ -939,7 +941,7 @@ LinePen::button_edit_cycle_decal_groups()
          }
          else
          {
-            new_stroke = NULL;
+            new_stroke = nullptr;
          }
       }
    }
@@ -953,7 +955,7 @@ LinePen::button_edit_cycle_decal_groups()
       }
       else
       {
-         new_stroke = NULL;
+         new_stroke = nullptr;
       }
    }
 
@@ -999,7 +1001,7 @@ LinePen::button_edit_cycle_crease_paths()
       new_pool = (*pools)[0];
    }
 
-   new_stroke = (new_pool->num_strokes())?(new_pool->stroke_at(0)):(NULL);
+   new_stroke = new_pool->num_strokes() ? new_pool->stroke_at(0) : nullptr;
 
    easel_clear();
 
@@ -1063,7 +1065,7 @@ LinePen::button_edit_offset_edit()
 {
    assert((_curr_mode == EDIT_MODE_SIL) || (_curr_mode == EDIT_MODE_CREASE));
    COutlineStroke *s = retrieve_active_prototype();
-   assert(s && (s->get_offsets() != NULL));
+   assert(s && (s->get_offsets() != nullptr));
 
    easel_clear();   
 
@@ -1097,11 +1099,11 @@ LinePen::button_edit_offset_clear()
 
       op = retrieve_active_prototype();   assert(op);
       assert(op->class_name() == OutlineStroke::static_name());
-      //assert(op->get_offsets() != NULL);
+      //assert(op->get_offsets() != nullptr);
       assert(op->get_patch() == _curr_tex->patch());
 
       o.copy(*op);
-      o.set_offsets(NULL);
+      o.set_offsets(nullptr);
       //XXX - Do this here?
       o.set_original_mesh_size(_view->pix_to_ndc_scale() * _curr_tex->patch()->pix_size());
 
@@ -1125,10 +1127,10 @@ LinePen::button_edit_offset_clear()
 
       op = retrieve_active_prototype();   assert(op);
       assert(op->class_name() == EdgeStroke::static_name());
-      //assert(op->get_offsets() != NULL);
+      //assert(op->get_offsets() != nullptr);
 
       o.copy(*op);
-      o.set_offsets(NULL);
+      o.set_offsets(nullptr);
 
       modify_active_prototype(&o);
 
@@ -1147,7 +1149,7 @@ LinePen::button_edit_offset_clear()
 
       apply_undo_prototype();
 
-      perform_selection(_curr_tex, _curr_pool, NULL, _curr_mode);
+      perform_selection(_curr_tex, _curr_pool, nullptr, _curr_mode);
 
       store_undo_prototype();
 
@@ -1259,7 +1261,7 @@ get_offsets(
 
          BaseStrokeOffsetLISTptr os = s->generate_offsets(pts, presses); 
 
-         if (os == NULL)
+         if (os == nullptr)
          {
             cerr << "LinePen::get_offsets - WARNING! Stroke returned no offsets...\n";
             continue;
@@ -1349,7 +1351,7 @@ get_offsets(
 
    if (ret->empty()) {
       cerr << "LinePen::get_offsets - WARNING!! No offets generated.\n";
-      ret = NULL;
+      ret = nullptr;
    }
 
    return ret;
@@ -1370,8 +1372,8 @@ LinePen::button_edit_offset_apply()
       assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
       assert(_curr_pool->get_prototype());
 
-      BaseStrokeOffsetLISTptr os = get_offsets(_gestures, ((_virtual_baseline)?(NULL):(_curr_stroke)));
-      if (os == NULL)
+      BaseStrokeOffsetLISTptr os = get_offsets(_gestures, _virtual_baseline ? nullptr : _curr_stroke);
+      if (os == nullptr)
       {
          WORLD::message("Failed to produce offsets from sketch");
          return;
@@ -1413,8 +1415,8 @@ LinePen::button_edit_offset_apply()
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
 
-      BaseStrokeOffsetLISTptr os = get_offsets(_gestures, ((_virtual_baseline)?(NULL):(_curr_stroke)));
-      if (os == NULL)
+      BaseStrokeOffsetLISTptr os = get_offsets(_gestures, _virtual_baseline ? nullptr : _curr_stroke);
+      if (os == nullptr)
       {
          WORLD::message("Failed to produce offsets from sketch");
          return;
@@ -1475,7 +1477,7 @@ LinePen::button_edit_offset_apply()
       OutlineStroke *s = _curr_pool->get_stroke(); 
       assert(s && s->is_of_type(DecalLineStroke::static_name()));
       DecalLineStroke *ds = (DecalLineStroke*)s;
-      assert(ds->get_offsets() == NULL);
+      assert(ds->get_offsets() == nullptr);
 
       ds->clear();
 
@@ -1627,7 +1629,7 @@ LinePen::button_edit_stroke_add()
 
    s->clear();
    assert(s->is_of_type(EdgeStroke::static_name()));
-   s->set_offsets(NULL);
+   s->set_offsets(nullptr);
 
    easel_clear();
 
@@ -1662,7 +1664,7 @@ LinePen::button_edit_stroke_del()
 
    apply_undo_prototype();
 
-   perform_selection(_curr_tex, _curr_pool, NULL, _curr_mode);
+   perform_selection(_curr_tex, _curr_pool, nullptr, _curr_mode);
 
    store_undo_prototype();
 
@@ -1803,7 +1805,7 @@ LinePen::create_stroke(CGESTUREptr &g)
       {
          assert(easel_is_empty());
          apply_undo_prototype();
-         perform_selection(_curr_tex, _curr_pool, NULL, _curr_mode);
+         perform_selection(_curr_tex, _curr_pool, nullptr, _curr_mode);
          //store_undo_prototype();
       }
       accept_gesture = true;
@@ -1853,11 +1855,11 @@ LinePen::notify(CCAMdataptr &)
    
    if (_gestures.num() == 0)
    {
-      assert((e == NULL) || (e->lines().num() == 0));
+      assert((e == nullptr) || (e->lines().num() == 0));
    }
    else
    {
-      if (e != NULL)
+      if (e != nullptr)
       {
          assert(e->lines().num() == (_gestures.num()+1));
 
@@ -1887,10 +1889,10 @@ LinePen::easel_add(CGESTUREptr &g)
 
    if (_gestures.num() == 0)
    {
-      if (e == NULL)
+      if (e == nullptr)
       {
          BaseJOTapp::instance()->easels().make_new_easel(_view);
-         e = BaseJOTapp::instance()->easels().cur_easel();  assert(e != NULL);
+         e = BaseJOTapp::instance()->easels().cur_easel();  assert(e != nullptr);
       }
       else
       {
@@ -1907,7 +1909,7 @@ LinePen::easel_add(CGESTUREptr &g)
    }
    else
    {
-      assert(e != NULL);
+      assert(e != nullptr);
       assert(e->lines().num() == (_gestures.num() + 1));
    }
 
@@ -1926,12 +1928,12 @@ LinePen::easel_is_empty()
    
    if (_gestures.num() == 0)
    {
-      assert((e == NULL) || (e->lines().num() == 0));
+      assert((e == nullptr) || (e->lines().num() == 0));
       return true;
    }
    else
    {
-      assert(e != NULL);
+      assert(e != nullptr);
       assert(e->lines().num() == (_gestures.num() + 1));
       return false;
    }
@@ -1948,11 +1950,11 @@ LinePen::easel_clear()
    
    if (_gestures.num() == 0)
    {
-      assert((e == NULL) || (e->lines().num() == 0));
+      assert((e == nullptr) || (e->lines().num() == 0));
    }
    else
    {
-      assert(e != NULL);
+      assert(e != nullptr);
       assert(e->lines().num() == (_gestures.num()+1));
 
       while(!_gestures.empty()) 
@@ -1973,7 +1975,7 @@ LinePen::easel_pop()
 {
    VIEW_EASELptr e = BaseJOTapp::instance()->easels().cur_easel();
    
-   assert(e != NULL);
+   assert(e != nullptr);
    assert(e->lines().num() == (_gestures.num()+1));
 
    e->rem_line(_gestures.pop());
@@ -2002,7 +2004,7 @@ LinePen::easel_update_baseline()
    
    assert(_gestures.num() != 0);
 
-   assert(e != NULL);
+   assert(e != nullptr);
    assert(e->lines().num() == (_gestures.num()+1));
 
 
@@ -2030,7 +2032,7 @@ LinePen::easel_update_baseline()
       assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(!_curr_stroke);
-      s = NULL;
+      s = nullptr;
    }
 
    if (_curr_mode == EDIT_MODE_DECAL)
@@ -2107,7 +2109,7 @@ LinePen::easel_populate()
       assert(0);
    }
 
-   assert(s && s->get_offsets() != NULL);
+   assert(s && s->get_offsets() != nullptr);
 
    CBaseStrokeOffsetLISTptr ol = s->get_offsets();
 
@@ -2118,32 +2120,32 @@ LinePen::easel_populate()
    double x_vec = center[0] - pix_len/2.0;
    double y_vec = center[1];
 
-   GESTUREptr g = NULL;
+   GESTUREptr g = nullptr;
 
    for (vector<BaseStrokeOffset>::size_type i=0; i<ol->size(); i++) {
       CBaseStrokeOffset &o = (*ol)[i];
 
       if (o._type == BaseStrokeOffset::OFFSET_TYPE_BEGIN)
       {
-         assert(g == NULL);
+         assert(g == nullptr);
          g = new GESTURE(_gest_int,_gestures.num(),PIXEL(x_vec+pix_len*o._pos,y_vec+o._len),o._press,_gesture_drawer);
       }
       else if (o._type == BaseStrokeOffset::OFFSET_TYPE_MIDDLE)
       {
-         assert(g != NULL);
+         assert(g != nullptr);
          g->add(PIXEL(x_vec+pix_len*o._pos,y_vec+o._len), 0, o._press);
       }
       else
       {
-         assert(g != NULL);
+         assert(g != nullptr);
          assert(o._type == BaseStrokeOffset::OFFSET_TYPE_END);
          g->add(PIXEL(x_vec+pix_len*o._pos,y_vec+o._len), 0, o._press);
          //g->complete(PIXEL(x_vec+pix_len*o._pos,y_vec+o._len));
          easel_add(g);
-         g = NULL;
+         g = nullptr;
       }
    }
-   assert(g == NULL);
+   assert(g == nullptr);
 
    assert(!easel_is_empty());
 
@@ -2190,7 +2192,7 @@ LinePen::key(CEvent &e)
          if((_curr_mode == EDIT_MODE_SIL) || (_curr_mode == EDIT_MODE_CREASE))
          {
             COutlineStroke *s = retrieve_active_prototype();
-            if (s && (s->get_offsets() != NULL))
+            if (s && (s->get_offsets() != nullptr))
             {
                button_edit_offset_edit();
             }
@@ -2332,8 +2334,8 @@ LinePen::set_decal_stroke_verts(
       
       Wpt sp1, sp2; // projections of p1 and p2, respectively, onto mesh surface
 
-      Bface *f1 = NULL;
-      Bface *f2 = NULL;
+      Bface *f1 = nullptr;
+      Bface *f2 = nullptr;
 
       f1 = vis_ref->vis_intersect(p1, sp1);
       
@@ -2369,8 +2371,8 @@ LinePen::set_decal_stroke_verts(
       }
       else 
       {  // faces are not adjacent, so try to connect by walking
-         Bedge* cur_edge = 0;
-         Bface* cur_face = 0;
+         Bedge* cur_edge = nullptr;
+         Bface* cur_face = nullptr;
 
          // find first edge crossed
          for(j = 1; j < 4; j++) 
@@ -2398,7 +2400,7 @@ LinePen::set_decal_stroke_verts(
         
          while(cur_edge && cur_face != f2) 
          {
-            Bedge* next_edge = 0;
+            Bedge* next_edge = nullptr;
           
             for(j = 1; j < 4; j++) 
             {
@@ -2412,7 +2414,7 @@ LinePen::set_decal_stroke_verts(
                   break;   
                }
             } 
-            if(next_edge == 0) break;
+            if(next_edge == nullptr) break;
 
             cur_edge = next_edge;
             cur_face = cur_edge->other_face(cur_face);

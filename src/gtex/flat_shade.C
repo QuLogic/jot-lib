@@ -162,7 +162,7 @@ FlatShadeTexture::draw(CVIEWptr& v)
                  << pre_path
                  << " and try again."
                  << endl;
-            _debug_uv_tex = 0;
+            _debug_uv_tex = nullptr;
          }
       }
 

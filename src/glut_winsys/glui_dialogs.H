@@ -54,8 +54,8 @@ class GLUIPopUp {
          int      _width, _height;
          uchar*   _data;
 
-         IconBitmap(int w, int h) : _width(0), _height(0), _data(NULL) { set_size(w,h); }
-         IconBitmap() : _width(0), _height(0), _data(NULL) {}
+         IconBitmap(int w, int h) : _width(0), _height(0), _data(nullptr) { set_size(w,h); }
+         IconBitmap() : _width(0), _height(0), _data(nullptr) {}
          ~IconBitmap() { if (_data) delete[] _data; }
 
          void set(int *icon) 
@@ -150,7 +150,7 @@ class GLUIPopUp {
 
  protected:
    /******** MEMBER METHODS ********/
-   virtual bool      is_showing() { return _glui != NULL; }
+   virtual bool      is_showing() { return _glui != nullptr; }
 
    virtual bool      show_glui(bool blocking);
    virtual bool      hide_glui();
@@ -272,7 +272,7 @@ class DIR_ENTRY : public REFcounter {
 
    void              clear()
    {
-      _parent = NULL;
+      _parent = nullptr;
       _contents.clear();
       _name = "";
       _full_path = "";

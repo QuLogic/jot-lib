@@ -27,7 +27,7 @@ Lstrip::delete_substrips()
 {
    delete _right_substrip;
    delete _left_substrip;
-   _right_substrip = _left_substrip = 0;
+   _right_substrip = _left_substrip = nullptr;
 }
 
 void
@@ -66,7 +66,7 @@ Lstrip::add(Bvert* v)
    // the sequence of verts -- corresponding
    // faces need to be looked up.
 
-   if (v == 0) {
+   if (v == nullptr) {
       err_msg("Lstrip::add: error: vertex is null");
       return;
    }

@@ -884,7 +884,7 @@ BMESH*
 OBJReaderImpl::get_mesh() const
 {
    
-   if(!read_succeeded) return 0;
+   if(!read_succeeded) return nullptr;
    
    BMESH *mesh = new BMESH;
    
@@ -1303,7 +1303,7 @@ OBJReaderImpl::add_creases(BMESH *mesh) const
       Bedge *cur_edge = mesh->be(ei);
       
       // Skip boundary edges:
-      if((cur_edge->f1() == 0) || (cur_edge->f2() == 0))
+      if((cur_edge->f1() == nullptr) || (cur_edge->f2() == nullptr))
          continue;
       
       // Skip edges that inside a single obj face:
@@ -1365,7 +1365,7 @@ OBJReaderImpl::add_creases(BMESH *mesh) const
 //----------------------------------------------------------------------------//
 
 OBJReader::OBJReader()
-   : impl(0)
+   : impl(nullptr)
 {
    
    impl = new OBJReaderImpl();

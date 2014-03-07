@@ -247,8 +247,8 @@ class JOTapp : public BaseJOTapp {
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
    JOTapp(int argc, char **argv) :
-      BaseJOTapp(argc, argv), _tablet(0), _tab_map(0), _gest_int(0),
-      _draw_manip(0), _draw_pen(0), _line_pen(0)
+      BaseJOTapp(argc, argv), _tablet(nullptr), _tab_map(nullptr), _gest_int(nullptr),
+      _draw_manip(nullptr), _draw_pen(nullptr), _line_pen(nullptr)
       {}
 
    //******** LOADING ********
@@ -312,7 +312,7 @@ class JOTapp : public BaseJOTapp {
          box->add_text("(c)2004 All Rights Reserved");
          box->add_button("OK");
          box->set_default(0);
-         if (box->display(false, splash_cb, this, NULL, 0)) {
+         if (box->display(false, splash_cb, this, nullptr, 0)) {
             err_mesg(ERR_LEV_SPAM, "JOTapp::init() - AlertBox displayed.");
          } else {
             err_msg("JOTapp::init() - AlertBox **FAILED** to display!!");
@@ -322,7 +322,7 @@ class JOTapp : public BaseJOTapp {
          //GLUI window tries to take initial focus.
          //If the splash alert box shows, this is called
          //after the popup is dismissed instead.
-         splash_cb(this,NULL,0,0);
+         splash_cb(this,nullptr,0,0);
       }
    }
 };
@@ -1199,7 +1199,7 @@ debug_memes()
    }
    Bvert* v = closest_vert(f, p);
    assert(v);
-   static VertMeme* vm = 0;
+   static VertMeme* vm = nullptr;
    if (vm)
       vm->set_do_debug(false);
    vm = Bbase::find_boss_vmeme(v);
@@ -1289,7 +1289,7 @@ JOTapp::clear_cb(const Event&, State *&)
    box->add_button("No");
    box->set_default(0);
 
-   if (box->display(true, alert_cbs, NULL, NULL, ALERT_CLEAR_CB))
+   if (box->display(true, alert_cbs, nullptr, nullptr, ALERT_CLEAR_CB))
       cerr << "clear_cb() - AlertBox displayed.\n";
    else
       cerr << "clear_cb() - AlertBox **FAILED** to display!!\n";
@@ -1320,7 +1320,7 @@ JOTapp::alert_cbs(void *ptr, void *dptr, int idx, int but_idx)
          //no
          //try again...
          Event e;
-         State *s=NULL;
+         State *s=nullptr;
          save_cb(e, s);
       } else {
          //cancel
@@ -1368,7 +1368,7 @@ do_clear()
    if (BaseJOTapp::instance() &&
        (draw_pen = dynamic_cast<DrawPen*>(BaseJOTapp::instance()->cur_pen()))) {
 
-      draw_pen->ModeReset(0);
+      draw_pen->ModeReset(nullptr);
 
    }
 }
@@ -1389,7 +1389,7 @@ JOTapp::save_cb(const Event&, State *&)
    sel->set_file(fname);
 
 
-   if (sel->display(true, file_cbs, NULL, FILE_SAVE_JOT_CB))
+   if (sel->display(true, file_cbs, nullptr, FILE_SAVE_JOT_CB))
       cerr << "save_cb() - FileSelect displayed.\n";
    else
       cerr << "save_cb() - FileSelect **FAILED** to display!!\n";
@@ -1410,7 +1410,7 @@ JOTapp::load_image_cb(const Event&, State*&)
    sel->set_filter("*.png");
    
 
-   if (sel->display(true, file_cbs, NULL, FILE_LOAD_IMAGE_CB))
+   if (sel->display(true, file_cbs, nullptr, FILE_LOAD_IMAGE_CB))
       cerr << "load_image() - FileSelect displayed.\n";
    else
       cerr << "load_image() - FileSelect **FAILED** to display!!\n";
@@ -1431,7 +1431,7 @@ JOTapp::load_cb(const Event&, State *&)
    sel->add_filter("*.sm");
    sel->add_filter("*.obj");
 
-   if (!sel->display(true, file_cbs, NULL, FILE_LOAD_JOT_CB)) {
+   if (!sel->display(true, file_cbs, nullptr, FILE_LOAD_JOT_CB)) {
       cerr << "JOTapp::load_cb: error: FileSelect failed to display"
            << endl;
    }
@@ -1447,7 +1447,7 @@ JOTapp::file_cbs(void *ptr, int idx, int action, string path, string file)
    switch (idx) {
     case FILE_SAVE_JOT_CB:
       if (action == FileSelect::OK_ACTION) {
-         FILE* foo = 0;
+         FILE* foo = nullptr;
          bool exists = !!(foo=fopen(fullpath.c_str(),"r"));
          if (exists) {
             fclose(foo);
@@ -1543,7 +1543,7 @@ JOTapp::do_save(string fullpath)
          assert(0);
       }
 
-      if (box->display(true, alert_cbs, NULL, NULL, ALERT_SAVE_JOT_FAILED_CB))
+      if (box->display(true, alert_cbs, nullptr, nullptr, ALERT_SAVE_JOT_FAILED_CB))
          cerr << "do_save() - AlertBox displayed.\n";
       else
          cerr << "do_save() - AlertBox **FAILED** to display!!\n";
@@ -1588,14 +1588,14 @@ JOTapp::do_load(string fullpath)
       // load .sm file
       if (!instance()->load_sm_file(fullpath)) {
          box->add_text("Failed to load .sm file.");
-         box->display(true, alert_cbs, NULL, NULL, ALERT_LOAD_JOT_FAILED_CB);
+         box->display(true, alert_cbs, nullptr, nullptr, ALERT_LOAD_JOT_FAILED_CB);
       }
       return;
    } else if (ext == "obj") {
       // load .obj file
       if (!instance()->load_obj_file(fullpath)) {
          box->add_text("Failed to load .obj file.");
-         box->display(true, alert_cbs, NULL, NULL, ALERT_LOAD_JOT_FAILED_CB);
+         box->display(true, alert_cbs, nullptr, nullptr, ALERT_LOAD_JOT_FAILED_CB);
       }
       return;
    } else if (ext == "jot") {
@@ -1650,13 +1650,13 @@ JOTapp::do_load(string fullpath)
             assert(0);
          }
 
-         if (!box->display(true, alert_cbs, NULL, NULL,
+         if (!box->display(true, alert_cbs, nullptr, nullptr,
                            ALERT_LOAD_JOT_FAILED_CB))
             cerr << "do_save() - AlertBox **FAILED** to display!!\n";
       }
    } else {
       box->add_text("Unknown file type.");
-      box->display(true, alert_cbs, NULL, NULL, ALERT_LOAD_JOT_FAILED_CB);
+      box->display(true, alert_cbs, nullptr, nullptr, ALERT_LOAD_JOT_FAILED_CB);
    }
 }
 
@@ -1792,12 +1792,12 @@ int
 toggle_recorder (const Event &, State *&)
 {
    Recorder* _rec =VIEW::peek()->recorder();
-   if ( _rec == NULL)
+   if ( _rec == nullptr)
       return 0;
    if (_rec->on())
       _rec->deactivate();
    else {
-      if (_rec->get_ui() == NULL) {
+      if (_rec->get_ui() == nullptr) {
          _rec->set_ui(new RecorderUI(_rec));
          _rec->_name_buf = "default";
          _rec->new_path();
@@ -1811,8 +1811,8 @@ int
 rec_play (const Event &, State *&)
 {
 
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_play();
    return 1;
 }
@@ -1821,8 +1821,8 @@ int
 rec_rec (const Event &, State *&)
 {
 
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_record();
    return 1;
 }
@@ -1831,8 +1831,8 @@ int
 rec_stop (const Event &, State *&)
 {
 
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_stop();
    return 1;
 }
@@ -1841,8 +1841,8 @@ int
 rec_pause (const Event &, State *&)
 {
 
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_pause();
    return 1;
 }
@@ -1962,7 +1962,7 @@ cycle_subdiv_loc_calc(const Event&, State *&)
 
    static int k=0;
    LMESH* ctrl_mesh = (LMESH*)m;
-   SubdivLocCalc* calc = 0;
+   SubdivLocCalc* calc = nullptr;
    switch (++k % 3) {
     case 0:
       calc = new LoopLoc;
@@ -1974,7 +1974,7 @@ cycle_subdiv_loc_calc(const Event&, State *&)
       calc = new HybridVolPreserve;
       break;
    }
-   assert(calc != 0);
+   assert(calc != nullptr);
    ctrl_mesh->set_subdiv_loc_calc(calc);
    ctrl_mesh->update();
    WORLD::message(calc->name() + " scheme in use");

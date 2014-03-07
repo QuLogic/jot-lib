@@ -28,7 +28,7 @@
 class GestureStroke : public Stroke {
 public:
   // constructor / destructor
-  GestureStroke(CBBOXpix& bbox=BBOXpix()) : _gesture(), _drawer(0), _bbox(bbox){}
+  GestureStroke(CBBOXpix& bbox=BBOXpix()) : _gesture(), _drawer(nullptr), _bbox(bbox){}
   GestureStroke(CGESTUREptr& gest, GestureStrokeDrawer* drawer) : _gesture(gest), _drawer(drawer) {}
   virtual ~GestureStroke(){}
 

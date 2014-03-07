@@ -33,7 +33,7 @@ class ProxySurface {
    static UVpt baseUVpt(Bface* f);
    bool baseUVpt(Bface* f, UVpt& uv);
    //******** MANAGERS ********
-   ProxySurface(Patch* p=0);
+   ProxySurface(Patch* p=nullptr);
    virtual ~ProxySurface();
    void     update_proxy_surface();
    CBMESHptr& proxy_mesh() const { return _proxy_mesh; }
@@ -109,7 +109,7 @@ class ProxyData : public SimplexData {
 
    // return the data stored on a simplex:
    static ProxyData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : 0;
+      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : nullptr;
    }
 
    // return the data stored on a simplex, and create it if needed:
@@ -160,7 +160,7 @@ class PixelsData : public SimplexData {
 
    // return the data stored on a simplex:
    static PixelsData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : 0;
+      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : nullptr;
    }
 
    // return the data stored on a simplex, and create it if needed:

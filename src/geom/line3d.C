@@ -113,7 +113,7 @@ LINE3D::intersect(
    // Then call ray.check() passing it all this stuff
    if (distance >= 0)
       ray.check(distance, 1, 0, (GEL*)this, surf_norm, nearpt, nearpt,
-                0, XYpt());
+                nullptr, XYpt());
    return ray;
 }
 

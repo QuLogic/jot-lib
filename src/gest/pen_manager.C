@@ -37,7 +37,7 @@ PenManager::~PenManager()
    for(unsigned long i = 0; i < pens.size(); ++i){
       
       delete pens[i];
-      pens[i] = 0;
+      pens[i] = nullptr;
       
    }
    

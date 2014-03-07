@@ -59,7 +59,7 @@ PROFILE::PROFILE() :
 void 
 PROFILE::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 PROFILEptr
@@ -175,8 +175,8 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    vector<PIXEL_list> pt_lists;
    PIXEL_list temp_list;
    bool recording = false;
-   Primitive* p = 0;
-   BMESH* mesh = 0;
+   Primitive* p = nullptr;
+   BMESH* mesh = nullptr;
 
    // find all the sections
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
@@ -407,7 +407,7 @@ PROFILE::find_matching_sil(CGESTUREptr& g)
 
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
-   BMESH* mesh = 0;
+   BMESH* mesh = nullptr;
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
@@ -484,7 +484,7 @@ get_sil_edge(Bface* f)
 {
    UVpt uv1, uv2, uv3;
    UVdata::get_uvs(f, uv1, uv2, uv3);
-   Bedge* edge = NULL;
+   Bedge* edge = nullptr;
    if (uv1[0] == uv2[0] && uv1[1] != uv2[1])
       edge = f->e1();
    else if (uv1[0] == uv3[0] && uv1[1] != uv3[1])
@@ -539,7 +539,7 @@ PROFILE::n_next_quads(Bedge* edge, int n, bool dir, bool add_bound)
 
    // four verts form a quad
    for (Bvert_list::size_type i = 0; i < vlist1.size()-1; i++) {
-      Bface* f = NULL;
+      Bface* f = nullptr;
       f = lookup_face(vlist1[i], vlist1[i+1], vlist2[i]); 
       if (f) ret.push_back(f);
       f = lookup_face(vlist1[i], vlist1[i+1], vlist2[i+1]);
@@ -600,7 +600,7 @@ PROFILE::reset()
    _selected_region.clear();
    _region_boundary.reset();
    _boundary_side.clear();
-   _mesh = 0;
+   _mesh = nullptr;
 }
 
 int  
@@ -634,7 +634,7 @@ PROFILE::tap_cb(CGESTUREptr& gest, DrawState*& s)
          // it is also required that we're editing the top
          // cross section of the tube
          int i = 0;
-         Bvert* v = NULL;
+         Bvert* v = nullptr;
          for (; i < _selected_edges.num(); i++) {
             UVpt uv;
             v = _selected_edges.vert(i);
@@ -832,7 +832,7 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
    }
 
    // find a control vert of the cap ring
-   Bvert* ctrl = NULL;
+   Bvert* ctrl = nullptr;
    for (Bvert_list::size_type i = 0; i < ring0.size(); i++)
       if ((ctrl = ((Lvert*)ring0[i])->ctrl_vert()))
          break;

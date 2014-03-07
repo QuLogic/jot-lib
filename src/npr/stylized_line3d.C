@@ -36,7 +36,7 @@ is_stylized()
 StylizedLine3D::StylizedLine3D(CWpt_list& pts) :
    LINE3D(pts),
    _got_style(false),
-   _stroke_3d(new WpathStroke(NULL))
+   _stroke_3d(new WpathStroke(nullptr))
 {
 }
 

@@ -58,7 +58,7 @@ class SKY_BOX : public GEOM {
    static void clean_on_exit() {
       if (Config::get_var_bool("DEBUG_CLEAN_ON_EXIT",false))
          cerr << "SKY_BOX::clean_on_exit()\n";
-      _sky_instance = 0;
+      _sky_instance = nullptr;
    }
    static SKY_BOX* null;
 
@@ -91,7 +91,7 @@ class SKY_BOX : public GEOM {
    
    //******** GEL METHODS ********
 
-   virtual DATA_ITEM* dup() const { return 0; } // there's only one
+   virtual DATA_ITEM* dup() const { return nullptr; } // there's only one
 
    virtual bool do_viewall() const { return false; }
 

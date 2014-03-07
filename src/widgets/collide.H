@@ -37,7 +37,7 @@ class Collide : public BaseCollide {
    virtual ~Collide() {}
                          
    Collide(double s,int h,double r,double m) : BaseCollide() {
-      assert(_instance == 0);
+      assert(_instance == nullptr);
       _instance = this;
       _size = s;
       _height = h;
@@ -101,11 +101,11 @@ class Gravity : public BaseGravity {
  public :
                          
    Gravity() : BaseGravity() {
-      assert(_instance == 0);
+      assert(_instance == nullptr);
       _instance = this;
 
       _currentGrav = 0;
-      _ground = NULL;
+      _ground = nullptr;
       _strength = .05;
       _globe = false;
       _landscape = false;

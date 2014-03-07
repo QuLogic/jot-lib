@@ -59,7 +59,7 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                                                 if (it != _dhash.end())
                                                    return it->second;
                                                 else
-                                                   return 0;
+                                                   return nullptr;
                                               }
               void  add (CGELptr &g, void *v) { _dhash[g] = v; }
       virtual void  del_item(void *) = 0;
@@ -88,10 +88,10 @@ class hashdist : public DATA_ITEM, public GELdistobs,
                                                          _dhash.erase(it);
                                                       }
                                                     }
-              int       is_default(CGELptr &g)const { return find(g)==0; }
+              int       is_default(CGELptr &g)const { return find(g)==nullptr; }
       const map<CGELptr,void*> &hash()        const { return _dhash; }
       virtual CTAGlist &tags()                const { return _tags; }
-      virtual DATA_ITEM *dup()                const { return  0; }
+      virtual DATA_ITEM *dup()                const { return  nullptr; }
       virtual STAT_STR_RET class_name ()      const { return _str; }
       virtual void     put_dummy(TAGformat &) const { }  // unused
       virtual void     get_var  (TAGformat &)     = 0;

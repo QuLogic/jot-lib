@@ -30,7 +30,7 @@ using namespace mlib;
 hashvar<int>   net_read_in_progress("NET_READ_IN_PROGRESS", 0, 0, 0);
 
 // Gloval used to let NETcontext objects know who broadcasted object...
-NetStream*     broadcaster = 0;
+NetStream*     broadcaster = nullptr;
 
 static bool debug = Config::get_var_bool("DEBUG_DISTRIB",false);
 
@@ -236,7 +236,7 @@ class JOTcam : public FUNC_ITEM {
    CAMdataptr _cam;
    DISTRIB   *_d;
  public:
-   JOTcam(CCAMdataptr &cam, DISTRIB *d = 0):FUNC_ITEM("CHNG_CAM"), _cam(cam), _d(d) { }
+   JOTcam(CCAMdataptr &cam, DISTRIB *d = nullptr):FUNC_ITEM("CHNG_CAM"), _cam(cam), _d(d) { }
    virtual void  put(TAGformat &d)      const { *d << _cam; }
    virtual void  get(TAGformat &d)
    {
@@ -395,13 +395,13 @@ class JOTgrab: public FUNC_ITEM
             GRABBED.grab(_g);
          else 
             GRABBED.release(_g);
-         _save = 0;
+         _save = nullptr;
          // disable networking
          DISTRIB::get_distrib()->set_processing_gate(true);
       }
    }
 };
-GELptr JOTgrab::_save = 0;
+GELptr JOTgrab::_save = nullptr;
 
 
 /*************************************
@@ -507,7 +507,7 @@ class JOTtransp : public FUNC_ITEM
 // Statics 
 /////////////////////////////////////////////////////////////////
 
-DISTRIB*       DISTRIB::_d = 0;
+DISTRIB*       DISTRIB::_d = nullptr;
 
 /////////////////////////////////////////////////////////////////
 // Methods
@@ -529,12 +529,12 @@ DISTRIB::DISTRIB(FD_MANAGER *manager):
    new JOTsend_geom(GELptr());
    new JOTclip_info();
    new JOTrender_mode();
-   new JOThash     (GELptr(), 0);
+   new JOThash     (GELptr(), nullptr);
    new JOTxform    (GEOMptr());
    new JOTcreate   (GELptr());
    new JOTcam      (CAMdataptr(), this);
-   new JOTwin      (0);
-   new JOTio       (0);
+   new JOTwin      (nullptr);
+   new JOTio       (nullptr);
    new JOTview     (VIEWptr());
    new JOTgrab     (GELptr(), 0);
    new JOTcolor    (GEOMptr());
@@ -603,7 +603,7 @@ DISTRIB::interpret(
                sender->check_end_delim(); // forces an eof() if done
             }
          } while (!sender->eof());
-         broadcaster = 0;
+         broadcaster = nullptr;
      }
      brcase NETswap_ack: // only master wall receives NETswap_ack's
      {

@@ -79,14 +79,14 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_SHOW_BLEND]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Show Blend Patches",
-                              NULL,
+                              nullptr,
                               id+CHECK_SHOW_BLEND,
                               checkbox_cb);
    _spinner[SPINNER_N_RING] = new GLUI_Spinner(
                              _rollout[ROLLOUT_PATCH],
                              "N-Rings",
                              GLUI_SPINNER_INT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_N_RING, spinner_cb);
    _spinner[SPINNER_N_RING]->set_w(20);
    _spinner[SPINNER_N_RING]->set_int_limits(0,2);
@@ -97,7 +97,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_REMAP_POWER, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1.0, 6.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_REMAP_POWER]->set_num_graduations(100);
    _slider[SLIDE_REMAP_POWER]->set_w(200);
 
@@ -108,57 +108,57 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
     _listbox[LIST_TEX_SEL] = new GLUI_Listbox(
                               _rollout[ROLLOUT_PATCH], 
-                              "Texture", NULL,
+                              "Texture", nullptr,
                               id+LIST_TEX_SEL, listbox_cb);
     
     
     _checkbox[CHECK_HALO] = new GLUI_Checkbox(_rollout[ROLLOUT_PATCH],
                                                          "Draw Halo",
-                                                         0,
+                                                         nullptr,
                                                          id+CHECK_HALO,
                                                          checkbox_cb);
 
    _checkbox[CHECK_TRACKING]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Tracking",
-                              NULL,
+                              nullptr,
                               id+CHECK_TRACKING,
                               checkbox_cb);   
    _checkbox[CHECK_LOD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "LOD",
-                              NULL,
+                              nullptr,
                               CHECK_LOD,
                               checkbox_cb);
    _checkbox[CHECK_ROTATION]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Rotate",
-                              NULL,
+                              nullptr,
                               id+CHECK_ROTATION,
                               checkbox_cb);
 
    _checkbox[CHECK_TIMED_LOD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Timed LOD Transitions",
-                              NULL,
+                              nullptr,
                               id+CHECK_TIMED_LOD,
                               checkbox_cb);
    _checkbox[CHECK_USE_DIRECTION]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Direction Vector",
-                              NULL,
+                              nullptr,
                               id+CHECK_USE_DIRECTION,
                               checkbox_cb);
    _checkbox[CHECK_USE_WEIGHTED_LS]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Weighted LS",
-                              NULL,
+                              nullptr,
                               id+CHECK_USE_WEIGHTED_LS,
                               checkbox_cb);
    _checkbox[CHECK_USE_VIS_TEST]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Use Visibility Test",
-                              NULL,
+                              nullptr,
                               id+CHECK_USE_VIS_TEST,
                               checkbox_cb);
    
@@ -170,7 +170,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              _panel[PANEL_SPS],
                              "Hight",
                              GLUI_SPINNER_INT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_SPS_HIGHT, spinner_cb);
    _spinner[SPINNER_SPS_HIGHT]->set_w(20);
    _spinner[SPINNER_SPS_HIGHT]->set_int_limits(0,10);
@@ -179,7 +179,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              _panel[PANEL_SPS],
                              "Min Dist",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_SPS_MIN_DIST, spinner_cb);
    _spinner[SPINNER_SPS_MIN_DIST]->set_w(20);
    _spinner[SPINNER_SPS_MIN_DIST]->set_float_limits(0.0,1.0);
@@ -188,7 +188,7 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                              _panel[PANEL_SPS],
                              "Regularity",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              id+SPINNER_SPS_REG, spinner_cb);
    _spinner[SPINNER_SPS_REG]->set_w(20);
    _spinner[SPINNER_SPS_REG]->set_float_limits(0.0,50.0);
@@ -200,29 +200,29 @@ PatchUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_OCCLUDER]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Occluder",
-                              NULL,
+                              nullptr,
                               id+CHECK_OCCLUDER,
                               checkbox_cb);
 
    _checkbox[CHECK_RECIEVER]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_PATCH],
                               "Reciever",
-                              NULL,
+                              nullptr,
                               id+CHECK_RECIEVER,
                               checkbox_cb);
 
    _slider[SLIDE_SHADOW_SCALE]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Scale",
                                                id+SLIDE_SHADOW_SCALE,slider_cb,
-                                               GLUI_SLIDER_FLOAT,0.0,1.5,0);
+                                               GLUI_SLIDER_FLOAT,0.0,1.5,nullptr);
 
 
    _slider[SLIDE_SHADOW_SOFT]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Softness",
                                               id+SLIDE_SHADOW_SOFT,slider_cb,
-                                              GLUI_SLIDER_FLOAT,0.01,1.0,0);
+                                              GLUI_SLIDER_FLOAT,0.01,1.0,nullptr);
 
    _slider[SLIDE_SHADOW_OFFSET]=new GLUI_Slider(_rollout[ROLLOUT_PATCH], "Shadow Y Offset",
                                                 id+SLIDE_SHADOW_OFFSET,slider_cb,
-                                                GLUI_SLIDER_FLOAT,-1.0,1.0,0);
+                                                GLUI_SLIDER_FLOAT,-1.0,1.0,nullptr);
 
 
 
@@ -570,7 +570,7 @@ const char *
 PatchUI::get_current_tex_name()
 {
    if(!_patch)
-      return 0;
+      return nullptr;
    GTexture* tex = _patch->cur_tex();
    if(!tex)
       return "Other...";

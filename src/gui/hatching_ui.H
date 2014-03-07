@@ -113,7 +113,7 @@ class HatchingUI : public BaseUI {
    DEFINE_RTTI_METHODS3("HatchingUI", HatchingUI*, HatchingUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   HatchingUI(BaseUI* parent=0);
+   HatchingUI(BaseUI* parent=nullptr);
    virtual ~HatchingUI(){}
 
    /******** MEMBERS METHODS ********/
@@ -123,7 +123,7 @@ class HatchingUI : public BaseUI {
 
    int          get_current_layer() { return _texture_selection_ui->get_layer_num(); }
    int          get_current_channel() { return _texture_selection_ui->get_channel_num(); }
-   ToneShader*  get_tone_shader() { return (_current_hatching) ? _current_hatching->get_tone_shader() : 0; }
+   ToneShader*  get_tone_shader() { return (_current_hatching) ? _current_hatching->get_tone_shader() : nullptr; }
    bool         load_preset();
    bool         save_preset();
  protected:   

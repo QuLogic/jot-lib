@@ -40,7 +40,7 @@ class GLUT_MANAGER : public FD_MANAGER {
    class tty_to_id {
     public:
       FD_EVENT    *_fd;
-      tty_to_id(FD_EVENT *fd=0) : _fd(fd) { }
+      tty_to_id(FD_EVENT *fd=nullptr) : _fd(fd) { }
       int operator == (const tty_to_id &i) const { return _fd == i._fd; }
 #ifdef WIN32
       int ready() {
@@ -53,7 +53,7 @@ class GLUT_MANAGER : public FD_MANAGER {
             static int msec_wait = Config::get_var_int("GLUT_WAIT",0,true);
             struct timeval tm; tm.tv_usec = msec_wait; tm.tv_sec = 0;
             fd_set fd;  FD_ZERO(&fd);  FD_SET(_fd->fd(), &fd);
-            if (select(_fd->fd()+1, &fd, NULL, NULL, &tm) != SOCKET_ERROR) 
+            if (select(_fd->fd()+1, &fd, nullptr, nullptr, &tm) != SOCKET_ERROR)
                return FD_ISSET(_fd->fd(), &fd);
             else 
                return 0;
@@ -86,14 +86,14 @@ class GLUT_MANAGER : public FD_MANAGER {
 
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
-   GLUT_MANAGER() : _blocker(NULL) {}
+   GLUT_MANAGER() : _blocker(nullptr) {}
    virtual ~GLUT_MANAGER() {}
 
    /******** MEMBER METHODS ********/
  public:
     GLUT_WINSYS*  get_blocker()                 { return _blocker; }
     void          set_blocker(GLUT_WINSYS *w)   { assert(!_blocker); w->block(); _blocker = w; };
-    void          clear_blocker(GLUT_WINSYS *w) { assert(_blocker == w); _blocker = NULL; w->unblock(); };
+    void          clear_blocker(GLUT_WINSYS *w) { assert(_blocker == w); _blocker = nullptr; w->unblock(); };
 
  protected:
 
@@ -148,7 +148,7 @@ class GLUT_MANAGER : public FD_MANAGER {
          // so we always make a local copy of the timeval struct
          // and pass that in.
          struct timeval t = tval;
-         readyFDs = select(max + 1, &selectFDs, 0, &exceptFDs, &t);
+         readyFDs = select(max + 1, &selectFDs, nullptr, &exceptFDs, &t);
 
          for (vector<tty_to_id>::size_type i = 0; i < _ids.size() && (num < readyFDs); i++) {
             if (FD_ISSET(_ids[i]._fd->fd(), &selectFDs)) {
@@ -208,7 +208,7 @@ class GLUT_MANAGER : public FD_MANAGER {
                struct timespec ts;
                ts.tv_sec = 0;
                ts.tv_nsec = sleep_ms * 1000;
-               nanosleep(&ts, NULL);
+               nanosleep(&ts, nullptr);
 #endif
                }
             }

@@ -33,7 +33,7 @@ static bool debug = Config::get_var_bool("DEBUG_BLUR_SHADER", false);
 GLuint          BlurShader::_program = 0;
 bool            BlurShader::_did_init = false;
 
-BlurShader* BlurShader::_instance(0);
+BlurShader* BlurShader::_instance(nullptr);
 
 BlurShader::BlurShader(Patch* p) : 
    GLSLShader(p, new ImageLineStripCB), 

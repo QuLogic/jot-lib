@@ -84,7 +84,7 @@ CRV_SKETCH::get_instance()
 
 CRV_SKETCH::CRV_SKETCH() :
    DrawWidget(),
-   _curve(0),
+   _curve(nullptr),
    _mode(INACTIVE),
    _component(NONE),
    _init_stamp(0)
@@ -104,7 +104,7 @@ CRV_SKETCH::CRV_SKETCH() :
 void 
 CRV_SKETCH::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 
@@ -118,7 +118,7 @@ CRV_SKETCH::reset()
    // Clear cached data.
 
    _guidelines.clear(); // clear LIST of lines
-   _curve = NULL;
+   _curve = nullptr;
    _points.clear();
    _mode = INACTIVE;
    _component = NONE;
@@ -628,7 +628,7 @@ CRV_SKETCH::init(CGESTUREptr& g)
                Map0D3D* b2 = me->_curve->b2()->map();
                new_map = new SurfaceCurveMap(surface, uvp, b1, b2);
             } else {
-               new_map = new SurfaceCurveMap(surface, uvp, 0, 0);
+               new_map = new SurfaceCurveMap(surface, uvp, nullptr, nullptr);
             }
             cerr << "can reach here" << endl;
             assert(new_map);
@@ -695,7 +695,7 @@ CRV_SKETCH::set_shadow_map()
       _shadow_map = new Wpt_listMap(_shadow_pts, new WptMap(_shadow_pts[0]),
          new WptMap(_shadow_pts.back()), _curve->shadow_plane().normal());
    else
-      _shadow_map = new Wpt_listMap(_shadow_pts, 0, 0, _curve->shadow_plane().normal());
+      _shadow_map = new Wpt_listMap(_shadow_pts, nullptr, nullptr, _curve->shadow_plane().normal());
 }
 
 bool
@@ -704,7 +704,7 @@ CRV_SKETCH::init_curve(CNDCpt& p, mode_t mode, int rad)
    // The gesture had to start near a Bcurve:
    const double SCREEN_RAD = 10;        // search radius
    Wpt hit;                             // intersect point
-   Bedge* e = NULL;                     // intersect edge
+   Bedge* e = nullptr;                  // intersect edge
    Bcurve* curve = Bcurve::hit_curve(p, SCREEN_RAD, hit, &e);
 
    if (!curve) {

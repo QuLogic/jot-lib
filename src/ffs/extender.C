@@ -60,7 +60,7 @@ inline BMESHptr
 other_mesh(const TEXBODY* t, CBMESHptr& m)
 {
    if (!t || !t->contains(m) || t->num_meshes() != 2)
-      return 0;
+      return nullptr;
    return (t->mesh(0) == m) ? t->mesh(1) : t->mesh(0);
 }
 
@@ -198,7 +198,7 @@ EXTENDER::EXTENDER() :
 void 
 EXTENDER::clean_on_exit() 
 { 
-   _instance = 0; 
+   _instance = nullptr;
 }
 
 bool 
@@ -346,7 +346,7 @@ EXTENDER::sweep_ball(CGESTUREptr& g)
       cmd
       );
    err_adv(debug, "  %s", tube ? "succeeded" : "failed");
-   return tube != 0;
+   return tube != nullptr;
 }
 
 bool
@@ -780,7 +780,7 @@ EXTENDER::circle_cb(CGESTUREptr& gest, DrawState*& s)
    
    UVsurface* surf = UVsurface::find_owner(f);
 
-   Lface* inset = 0;
+   Lface* inset = nullptr;
    if (do_uv && surf && (inset = surf->inset_quad( v1,  v2,  v3,  v4,
                                                    uva, uvb, uvc, uvd))) {
       quad = inset;

@@ -53,7 +53,7 @@ class HatchingGroupFixed : public HatchingGroup,
 
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
-   HatchingGroupFixed(Patch *p=0);
+   HatchingGroupFixed(Patch *p=nullptr);
    ~HatchingGroupFixed();
 
  protected:
@@ -198,7 +198,7 @@ class HatchingHatchFixed :
                CBaseStrokeOffsetLISTptr &ol) : 
                   HatchingHatchBase(hlb,len,pl,nl,ol) {}
 
-      HatchingHatchFixed(HatchingLevelBase *hlb=0) :
+      HatchingHatchFixed(HatchingLevelBase *hlb=nullptr) :
          HatchingHatchBase(hlb) {}
 
    /******** HatchingHatchBase METHODS ********/
@@ -280,7 +280,7 @@ class HatchingBackboneFixed :
  public:
       /******** CONSTRUCTOR/DESTRUCTOR ********/
 
-      HatchingBackboneFixed(Patch *p=0);
+      HatchingBackboneFixed(Patch *p=nullptr);
       ~HatchingBackboneFixed();
 
       /******** HatchingBackboneBase METHODS ********/

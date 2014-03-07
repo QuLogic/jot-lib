@@ -31,11 +31,11 @@
 #include "sps/sps.H"
 
 // example defined in src/jot.C:
-init_fade_func_t Patch::_init_fade = 0;
+init_fade_func_t Patch::_init_fade = nullptr;
 
-TAGlist*        Patch::_patch_tags      = 0;
+TAGlist*        Patch::_patch_tags      = nullptr;
 int             Patch::_next_stencil_id = 0;
-Patch*          Patch::_focus           = 0;
+Patch*          Patch::_focus           = nullptr;
 
 // permits d2d stuff to be written out to file when saving:
 static const bool patch_d2d =
@@ -48,18 +48,18 @@ static const bool debug_samples =
 Patch::Patch(BMESH* mesh) :
    _mesh(mesh),
    _faces(0),
-   _creases(0),
-   _borders(0),   
+   _creases(nullptr),
+   _borders(nullptr),
    _textures(0),
    _cur_tex_i(0),
    _non_tex_i(0),
-   _prev_tex(0),
+   _prev_tex(nullptr),
    _pixels(0),
    _stamp(0),
    _mesh_version(0),
    _tri_strips_dirty(1),
-   _tex_coord_gen(0),
-   _data(0),
+   _tex_coord_gen(nullptr),
+   _data(nullptr),
    _stencil_id(0),
    _sps_height(5),
    _sps_min_dist(0.35),
@@ -110,7 +110,7 @@ Patch::~Patch()
 
    // Get out of the patch list if needed:
    if (_mesh) _mesh->unlist(this);
-   _mesh = 0;
+   _mesh = nullptr;
 
    // The patch owns its tri_strips, crease strips, and Gtexures, 
    // but not its faces, edge strips, or vert strips. So it deletes
@@ -128,12 +128,12 @@ Patch::~Patch()
    //_textures.delete_all();
    
    for (Bface_list::size_type i=0; i<_faces.size(); i++) {
-      _faces[i]->set_patch(0);
+      _faces[i]->set_patch(nullptr);
       _faces[i]->set_patch_index(-1);
    }
 
    if (is_focus(this))
-      set_focus(0);
+      set_focus(nullptr);
 }
 
 int 
@@ -215,14 +215,14 @@ void
 Patch::creases_changed() 
 {
    delete _creases;
-   _creases = 0; 
+   _creases = nullptr;
 }
 
 void 
 Patch::borders_changed() 
 {
    delete _borders;
-   _borders = 0; 
+   _borders = nullptr;
 }
 
 //********************** ACCESSING PATCH GEOMETRY **********************
@@ -355,7 +355,7 @@ Patch::remove(Bface* f)
       _faces[k]->set_patch_index(k);
    }
    f->set_patch_index(-1);
-   f->set_patch(0);
+   f->set_patch(nullptr);
    triangulation_changed();
 }
 
@@ -381,7 +381,7 @@ Patch::remove(VertStrip* vs)
       changed();
    }
    vs->set_patch_index(-1);
-   vs->set_patch(0);
+   vs->set_patch(nullptr);
 }
 
 void            
@@ -406,7 +406,7 @@ Patch::remove(EdgeStrip* es)
       changed();
    }
    es->set_patch_index(-1);
-   es->set_patch(0);
+   es->set_patch(nullptr);
 }
 
 void
@@ -424,7 +424,7 @@ Patch::build_tri_strips()
       // clear face flags before finding triangle strips
       for (k=0; k<_faces.size(); k++) {
          _faces[k]->clear_flag();
-         _faces[k]->orient_strip(0);
+         _faces[k]->orient_strip(nullptr);
       }
 
       // If secondary faces shouldn't be drawn, set their flags
@@ -586,7 +586,7 @@ Patch::find_tex(const string& tex_name) const
       if (_textures[i]->type() == temp_tex_name)
          return _textures[i];
 
-   return 0;
+   return nullptr;
 }
 
 /*!
@@ -606,7 +606,7 @@ Patch::get_tex(const string& tex_name)
    // if not found, instantiate it.
    tex = (GTexture*)DATA_ITEM::lookup(tex_name);
    if (!tex)
-      return 0;        // can't look it up
+      return nullptr;        // can't look it up
 
    // got one of the right type, now duplicate it
    if ((tex = (GTexture*)tex->dup())) {
@@ -615,7 +615,7 @@ Patch::get_tex(const string& tex_name)
       return tex;
    } else {
       err_msg("Patch::get_tex: tex->dup() returned nil");
-      return 0;        // can't duplicate it
+      return nullptr;        // can't duplicate it
    }
 }
 
@@ -716,7 +716,7 @@ Patch::write_stream(ostream &os)
    if (_faces.empty())
       return 0;
 
-   assert(_mesh != NULL);
+   assert(_mesh != nullptr);
 
    os << "#BEGIN PATCH" << endl;
 
@@ -894,7 +894,7 @@ Patch::read_texture(istream &is, vector<string> &leftover)
       }
       texnum = get_tex_index(name);
    }
-   GTexture* tex = texnum >= 0 ? _textures[texnum] : 0;
+   GTexture* tex = texnum >= 0 ? _textures[texnum] : nullptr;
    if (!tex) {
       cerr << "Patch::read_texture - could not find GTexture '"
            << name << "' (skipping)" << endl;
@@ -1010,7 +1010,7 @@ Patch::dup() const
 {
    // to be filled in...
 
-   return 0;
+   return nullptr;
 }
 
 

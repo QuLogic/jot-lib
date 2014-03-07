@@ -68,7 +68,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_DETAIL_TYPE] = new GLUI_RadioGroup(
 				       _panel[PANEL_DETAIL_TYPE],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_DETAIL_TYPE, radiogroup_cb);
 
    _radbutton[RADBUT_DETAIL_ALL] = new GLUI_RadioButton(
@@ -94,7 +94,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_DETAIL_FUNC] = new GLUI_RadioGroup(
 				       _panel[PANEL_DETAIL_FUNC],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_DETAIL_FUNC, radiogroup_cb);
 
    _radbutton[RADBUT_DETAIL_FUNC_NONE] = new GLUI_RadioButton(
@@ -127,7 +127,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
                               _rollout[ROLLOUT_MAIN],
                              "Box size",
                              GLUI_SPINNER_FLOAT,
-                             NULL,
+                             nullptr,
                              SPINNER_BOX_SIZE, spinner_cb);
 
    _slider[SLIDE_USER_DEPTH] = new GLUI_Slider(
@@ -136,7 +136,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_USER_DEPTH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_USER_DEPTH]->set_num_graduations(100);
    _slider[SLIDE_USER_DEPTH]->set_w(200);
 
@@ -147,7 +147,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_UNIT_LEN, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_UNIT_LEN]->set_num_graduations(100);
    _slider[SLIDE_UNIT_LEN]->set_w(200);
 
@@ -157,7 +157,7 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_EDGE_LEN_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 1.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_EDGE_LEN_SCALE]->set_num_graduations(100);
    _slider[SLIDE_EDGE_LEN_SCALE]->set_w(200);
 
@@ -167,13 +167,13 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       id+SLIDE_RATIO_SCALE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0.0, 10.0,
-      NULL);
+      nullptr);
    _slider[SLIDE_RATIO_SCALE]->set_num_graduations(100);
    _slider[SLIDE_RATIO_SCALE]->set_w(200);
 
    _radgroup[RADGROUP_NORMAL] = new GLUI_RadioGroup(
 				       _rollout[ROLLOUT_MAIN],
-				       NULL,
+				       nullptr,
 				       id+RADGROUP_NORMAL, radiogroup_cb);
 
    _radbutton[RADBUT_NORMAL_SMOOTH] = new GLUI_RadioButton(

@@ -123,7 +123,7 @@ class PatchUI : public BaseUI {
    DEFINE_RTTI_METHODS3("PatchUI", PatchUI*, PatchUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   PatchUI(BaseUI* parent=0);
+   PatchUI(BaseUI* parent=nullptr);
    virtual ~PatchUI(){}
 
    /******** MEMBERS METHODS ********/

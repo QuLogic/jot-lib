@@ -54,7 +54,7 @@ CameraPath::read_stream ( iostream& is ) {
 Recorder::Recorder(VIEWptr view) : 
    _view(view),
    _swatch(new stop_watch()),
-   _cur_path(NULL),
+   _cur_path(nullptr),
    _cur_path_num(-1),
    _fps(24),
    _on(false),
@@ -67,7 +67,7 @@ Recorder::Recorder(VIEWptr view) :
    _path_time(0),
    _next_time(0),
    _sync(false),
-   _ui(NULL)
+   _ui(nullptr)
 {  
 }
 
@@ -78,7 +78,7 @@ Recorder::~Recorder()
    vector<CameraPath*>::size_type i;
    for ( i=0; i < _campaths.size() ; i++ )
       delete _campaths[i];
-   _view = 0;
+   _view = nullptr;
 }
 
 
@@ -285,9 +285,9 @@ int
 Recorder::del_path(int k) 
 { 
    delete _campaths[k];
-   _campaths[k] = NULL;
+   _campaths[k] = nullptr;
    _cur_path_num = 1;
-   _cur_path = NULL;
+   _cur_path = nullptr;
    _ui->sync_live();
    set_path(-1);
    return _ui->del_path_entry(k);
@@ -353,7 +353,7 @@ Recorder::set_path( int pathnum )
 { 
    if ( pathnum < 0 || pathnum >= (int)_campaths.size() ) {
       cerr << "illegal path value:" << pathnum  ;
-      _cur_path = NULL;
+      _cur_path = nullptr;
       _cur_path_num = -1;
       _ui->sync_live();
       return -1;

@@ -187,7 +187,7 @@ class MappableEdgeFilter : public SimplexFilter {
  public:
    MappableEdgeFilter(CVertMapper& m) : _mapper(m) {}
    virtual bool accept(CBsimplex* s) const {
-      return is_edge(s) && _mapper.a_to_b((Bedge*)s) != 0;
+      return is_edge(s) && _mapper.a_to_b((Bedge*)s) != nullptr;
    }
 };
 

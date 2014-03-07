@@ -31,7 +31,7 @@ static bool debug = Config::get_var_bool("DEBUG_GLSL_TOON", false);
 GLuint          GLSLToonShader::_program = 0;
 bool            GLSLToonShader::_did_init = false;
 GLint           GLSLToonShader::_tex_loc = -1;
-GLSLToonShader* GLSLToonShader::_instance(0);
+GLSLToonShader* GLSLToonShader::_instance(nullptr);
 
 GLSLToonShader::GLSLToonShader(Patch* p) : GLSLShader(p)
 {

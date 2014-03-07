@@ -65,7 +65,7 @@ class REPARENT_CMD : public COMMAND {
    Lvert*       _c;
 };
 
-REPARENT_CMD::REPARENT_CMD(Bvert* o, Bvert* c) : _o(0), _c(0) 
+REPARENT_CMD::REPARENT_CMD(Bvert* o, Bvert* c) : _o(nullptr), _c(nullptr)
 {
    assert(o && c && o->mesh() == c->mesh());
    if (!LMESH::isa(o->mesh()))
@@ -682,7 +682,7 @@ class MOVE_VERT_CMD : public COMMAND {
    Wpt          _new_loc;
 };
 
-MOVE_VERT_CMD::MOVE_VERT_CMD(Bvert* v, CWpt& new_loc) : _vert(0)
+MOVE_VERT_CMD::MOVE_VERT_CMD(Bvert* v, CWpt& new_loc) : _vert(nullptr)
 {
    assert(v);
    _vert = v;

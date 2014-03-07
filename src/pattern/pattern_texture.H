@@ -29,7 +29,7 @@
 class PatternTexture : public BasicTexture, public CAMobs  {
 public: 
    //******** MANAGERS ********
-   PatternTexture(Patch* patch = 0);      
+   PatternTexture(Patch* patch = nullptr);
    virtual ~PatternTexture();
 
    //******** RUN-TIME TYPE ID ********

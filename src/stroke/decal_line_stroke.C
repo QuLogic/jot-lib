@@ -26,10 +26,10 @@ using namespace mlib;
 
 static int dcl = DECODER_ADD(DecalLineStroke);
 
-TAGlist*            DecalLineStroke::_dls_tags = 0;
+TAGlist*            DecalLineStroke::_dls_tags = nullptr;
 
 // XXX hack for serialization
-BMESH *DecalLineStroke::_mesh = 0;
+BMESH *DecalLineStroke::_mesh = nullptr;
 
 DecalLineStroke::DecalLineStroke(Patch* p) :
    OutlineStroke(p)
@@ -154,7 +154,7 @@ DecalLineStroke::interpolate_refinement_vert(
 
    DecalVertexData* d 
       = (DecalVertexData*) v->_data;
-   d->sim = 0;
+   d->sim = nullptr;
 
    DecalVertexData* v1_d 
       = (DecalVertexData*)(vl[1]->_data);
@@ -231,7 +231,7 @@ DecalLineStroke::check_vert_visibility(CBaseStrokeVertex &v)
       return false;
    }
 
-   static IDRefImage* id_ref       = 0;
+   static IDRefImage* id_ref       = nullptr;
    static uint        id_ref_stamp = UINT_MAX;
 
    // cache id ref image for the current frame
@@ -314,7 +314,7 @@ DecalLineStroke::get_vert_locs(TAGformat &d)
       int e_index = 0;      
       int f_index = 0;      
 
-      Bsimplex* s = 0;
+      Bsimplex* s = nullptr;
 
       *d >> loc;
 
@@ -388,7 +388,7 @@ DecalLineStroke::get_vertex_loc(TAGformat &d)
    int e_index = 0;      
    int f_index = 0;      
 
-   Bsimplex *s = 0;
+   Bsimplex *s = nullptr;
 
    *d >> loc;
    *d >> pr;
@@ -459,7 +459,7 @@ DecalLineStroke::add_vert_loc(CWpt loc,
       return 0;
    }
 
-   if (s == 0 && _vert_locs.back().sim == 0 ) {
+   if (s == nullptr && _vert_locs.back().sim == nullptr ) {
       cerr << "DecalLineStroke::add_vert_loc: " 
            << " attempting to add 2 bad verts in a row, "
            << " returning" << endl;
@@ -467,7 +467,7 @@ DecalLineStroke::add_vert_loc(CWpt loc,
    }
 
    if (_vert_locs.size() <= 2 &&
-       _vert_locs.back().sim == 0 &&
+       _vert_locs.back().sim == nullptr &&
        _vert_locs[_vert_locs.size() - 2].loc == loc ) {
       cerr << "DecalLineStroke::add_vert_loc: " 
            << " attempting to add duplicate vert after bad vert "
@@ -517,7 +517,7 @@ BaseStrokeVertex*
 DecalLineStroke::refine_vert(int i, bool left)
 {
    if ( !_verts[i]._good || !_verts[i+1]._good )
-      return 0;
+      return nullptr;
 
    return BaseStroke::refine_vert(i, left);
 }

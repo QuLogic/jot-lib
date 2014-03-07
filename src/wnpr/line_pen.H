@@ -79,7 +79,7 @@ class BASELINE_GEL : public GEL {
 		_stroke.draw_end(); 
 		return i;
 	}
-	virtual DATA_ITEM*	dup()	const			{ return 0; }
+	virtual DATA_ITEM*	dup()	const			{ return nullptr; }
 
 };
 

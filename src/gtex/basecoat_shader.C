@@ -24,7 +24,7 @@
 #include "multi_lights_tone.H"
 
 static bool debug = Config::get_var_bool("DEBUG_BASECOAT_SHADER", false);
-TAGlist* BasecoatShader::_tags = 0;
+TAGlist* BasecoatShader::_tags = nullptr;
 
 /**********************************************************************
  * BasecoatShader:

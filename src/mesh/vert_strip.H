@@ -39,7 +39,7 @@ class StripCB;
 class VertStrip {
  public:
    //******** MANAGERS ********
-   VertStrip() : _patch(0), _index(-1) {}
+   VertStrip() : _patch(nullptr), _index(-1) {}
    virtual ~VertStrip();
 
    //******** ACCESSORS ********

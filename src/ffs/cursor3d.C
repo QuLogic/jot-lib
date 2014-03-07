@@ -140,18 +140,18 @@ Cursor3D::detach()
 
    iter_t pos = _map.find(_attached);
    assert(pos != _map.end() && pos->second == this);
-   pos->second = 0;
-   _attached = 0;
+   pos->second = nullptr;
+   _attached = nullptr;
 }
 
 Cursor3D*
 Cursor3D::find_cursor(GEOMptr g)
 {
    if (!g)
-      return 0;
+      return nullptr;
    
    citer_t pos = _map.find(g);
-   return (pos == _map.end()) ? 0 : pos->second;
+   return (pos == _map.end()) ? nullptr : pos->second;
 }
 
 void
@@ -185,7 +185,7 @@ Cursor3D*
 Cursor3D::attach(GEOMptr g)
 {
    if (!g)
-      return 0;
+      return nullptr;
 
    Cursor3D* ret = find_cursor(g);
    if (!ret) {
@@ -760,7 +760,7 @@ Cursor3D::down_cb(CEvent &, State *& s)
 int
 Cursor3D::up_cb(CEvent &, State *&)
 {
-   _cmd = 0;
+   _cmd = nullptr;
    return 0;
 }
 

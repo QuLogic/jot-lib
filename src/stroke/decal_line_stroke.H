@@ -36,13 +36,13 @@ class DecalVertexData : public BaseStrokeVertexData {
 
    const Bsimplex* sim;
 
-   DecalVertexData() : sim(0) {  }
+   DecalVertexData() : sim(nullptr) {  }
    virtual ~DecalVertexData() {}
 
    /******** MEMBER METHODS ********/
 
    virtual BaseStrokeVertexData* alloc(int n) 
-      { return (n>0)?(new DecalVertexData[n]):0; }
+      { return (n>0) ? (new DecalVertexData[n]) : nullptr; }
 
    virtual void dealloc(BaseStrokeVertexData *d) {
       if (d) {
@@ -87,7 +87,7 @@ class DecalLineStroke : public OutlineStroke {
    class vert_loc {
     public:
       vert_loc() {}  // need this to instantiate vector<vert_loc>
-      vert_loc(mlib::CWpt pt, const Bsimplex* s=0, double pr = 1.0): 
+      vert_loc(mlib::CWpt pt, const Bsimplex* s=nullptr, double pr = 1.0):
          loc(pt), sim(s), press(pr) {}
     public:
       mlib::Wpt loc;  
@@ -120,7 +120,7 @@ class DecalLineStroke : public OutlineStroke {
 
 
  public:
-   DecalLineStroke(Patch* p=0);
+   DecalLineStroke(Patch* p=nullptr);
 
    virtual ~DecalLineStroke() {}  
 
@@ -135,7 +135,7 @@ class DecalLineStroke : public OutlineStroke {
    virtual void  clear();
 
    int   add_vert_loc(mlib::CWpt loc, 
-                      const Bsimplex* s=0, 
+                      const Bsimplex* s=nullptr,
                       double press = 1.0);
 
    int   num_vert_locs() { return _vert_locs.size(); }

@@ -110,11 +110,11 @@ class ARRAY {
    //******** MANAGERS ********
 
    ARRAY(int m=0) :
-      _array(0), _num(0), _max(max(m,0)), _unique(0), _do_index(0) {
+      _array(nullptr), _num(0), _max(max(m,0)), _unique(0), _do_index(0) {
       if (_max) _array = new T[_max];
    }
    ARRAY(CARRAY<T>& l) :
-      _array(0), _num(0), _max(0), _unique(0), _do_index(0) { *this = l; }
+      _array(nullptr), _num(0), _max(0), _unique(0), _do_index(0) { *this = l; }
 
    virtual ~ARRAY() { clear(); delete [] _array;}
 
@@ -316,7 +316,7 @@ class ARRAY {
       }
       if (k != BAD_IND)
          err_msg("ARRAY::pull: invalid index %d", k);
-      return 0;
+      return false;
    }
    // Pull the given element:
    bool pull_element(const T& p) { return pull_index(get_index(p)); }
@@ -428,13 +428,13 @@ inline bool
 operator ==(CARRAY<T>& a, CARRAY<S> &b)
 {
    if (a.num() != b.num())
-      return 0;
+      return false;
    for (int i = 0; i < b.num(); i++) {
       // Use !(x == y) because == should be available and != may not be
       if (!(a[i] == (T)b[i]))
-         return 0;
+         return false;
    }
-   return 1;
+   return true;
 }
 
 // concatenation
@@ -548,7 +548,7 @@ fsleep(double dur)
    timeout.tv_usec = (suseconds_t) sleep_time;
 #  endif
 #endif
-   SELECT(FD_SETSIZE, 0, 0, 0, &timeout);
+   SELECT(FD_SETSIZE, nullptr, nullptr, nullptr, &timeout);
 #endif
 }
 

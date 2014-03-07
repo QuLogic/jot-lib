@@ -59,7 +59,7 @@ HaloRefImage::HaloRefImage(CVIEWptr& v) : RefImage(v)
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 256, 256, 0, GL_BGRA, GL_UNSIGNED_BYTE, nullptr);
       glGenFramebuffers(1, &_fbo);
       glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_tex, 0);
@@ -72,18 +72,18 @@ HaloRefImage::lookup(CVIEWptr& v)
 {
    if (!v) {
       err_msg( "HaloRefImage::lookup: error:  view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg( "HaloRefImage::lookup: error:  view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
    VIEWimpl *key = v->impl();
    map<VIEWimpl*,HaloRefImage*>::iterator it;
    it = _hash.find(key);
-   HaloRefImage *ret = 0;
+   HaloRefImage *ret = nullptr;
    if (it != _hash.end())
       ret = it->second;
    else if ((ret = new HaloRefImage(v)))

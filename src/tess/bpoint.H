@@ -111,7 +111,7 @@ class Bpoint : public Bbase{
    //******** ACCESSORS ********
 
    Lvert* vert() const {
-      return _strip.empty() ? 0 : (Lvert*) _strip.vert(0);
+      return _strip.empty() ? nullptr : (Lvert*) _strip.vert(0);
    }
    CWpt&  loc()  const { return vert()->loc(); }
    NDCZpt ndc()  const { return vert()->ndc(); }
@@ -172,10 +172,10 @@ class Bpoint : public Bbase{
    void remove_shadow()              { set_shadow_plane(Wplane()); }
 
    // If this point is constrained by a surface,
-   // return the map2D3D for the surface, (otherwise NULL):
+   // return the map2D3D for the surface, (otherwise nullptr):
    Map2D3D* constraining_surface() const {
       CSurfacePtMap* sm = SurfacePtMap::upcast(_map);
-      return sm ? sm->surface() : 0;
+      return sm ? sm->surface() : nullptr;
    }
    // Like above, but upcast to PlaneMap if it is one:
    PlaneMap* constraining_plane() const {
@@ -357,7 +357,7 @@ inline Bpoint_list
 Bpoint::get_points(CBvert_list& verts)
 {
    Bpoint_list ret;
-   Bpoint* bp = 0;
+   Bpoint* bp = nullptr;
    for (Bvert_list::size_type i=0; i<verts.size(); i++)
       if ((bp = lookup(verts[i])))
          ret += bp;
@@ -371,7 +371,7 @@ class BpointFilter : public SimplexFilter {
  public:
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
-      return is_vert(s) && Bpoint::lookup((Bvert*)s) != 0;
+      return is_vert(s) && Bpoint::lookup((Bvert*)s) != nullptr;
    }
 };
 
@@ -388,7 +388,7 @@ class BpointFrame : public VertFrame {
 
    //******** MANAGERS ********
 
-   // The Bpoint or its map cannot be NULL:
+   // The Bpoint or its map cannot be nullptr:
    BpointFrame(uintptr_t key, Bpoint* p) :
       VertFrame(key, p->vert()), _bp(p) {}
 

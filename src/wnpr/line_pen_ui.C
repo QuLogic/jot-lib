@@ -176,14 +176,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    int id = _id << ID_SHIFT;
 
    //Init the control arrays
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
-   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
-   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
-   assert(_statictext.empty());   _statictext.resize(TEXT_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, nullptr);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, nullptr);
+   assert(_statictext.empty());   _statictext.resize(TEXT_NUM, nullptr);
 
    //Sub-panel containing silhouette flag controls
    _rollout[ROLLOUT_FLAGS] = new GLUI_Rollout(p, "Line Types", true);
@@ -193,7 +193,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SEE_THRU] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "See Thru",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SEE_THRU,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SEE_THRU]);
@@ -204,7 +204,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SIL_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Vis",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SIL_VIS,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_VIS]);
@@ -212,7 +212,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SIL_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Hid",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SIL_HID,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_HID]);
@@ -220,7 +220,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SIL_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Sil - Occ",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SIL_OCC,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SIL_OCC]);
@@ -230,7 +230,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SILBF_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Vis",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SILBF_VIS,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_VIS]);
@@ -238,7 +238,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SILBF_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Hid",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SILBF_HID,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_HID]);
@@ -246,7 +246,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_SILBF_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bak - Occ",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_SILBF_OCC,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_SILBF_OCC]);
@@ -256,7 +256,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_BORDER_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Vis",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_BORDER_VIS,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_VIS]);
@@ -264,7 +264,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_BORDER_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Hid",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_BORDER_HID,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_HID]);
@@ -272,7 +272,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_BORDER_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Bor - Occ",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_BORDER_OCC,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_BORDER_OCC]);
@@ -282,7 +282,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_CREASE_VIS] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Vis",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_CREASE_VIS,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_VIS]);
@@ -290,7 +290,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_CREASE_HID] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Hid",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_CREASE_HID,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_HID]);
@@ -298,7 +298,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_FLAG_CREASE_OCC] = new GLUI_Checkbox(
       _rollout[ROLLOUT_FLAGS],
       "Cre - Occ",
-      NULL,
+      nullptr,
       id+CHECK_FLAG_CREASE_OCC,
       checkbox_cb);
    assert(_checkbox[CHECK_FLAG_CREASE_OCC]);
@@ -319,7 +319,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_COHER_GLOBAL] = new GLUI_Checkbox(
       _panel[PANEL_COHER_OPTS],
       "Global",
-      NULL,
+      nullptr,
       id+CHECK_COHER_GLOBAL,
       checkbox_cb);
    assert(_checkbox[CHECK_COHER_GLOBAL]);
@@ -327,14 +327,14 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_COHER_SIG_1] = new GLUI_Checkbox(
       _panel[PANEL_COHER_OPTS],
       "NoSig",
-      NULL,
+      nullptr,
       id+CHECK_COHER_SIG_1,
       checkbox_cb);
    assert(_checkbox[CHECK_COHER_SIG_1]);
 
    _radgroup[RADGROUP_COHER_COVER] = new GLUI_RadioGroup(
       _panel[PANEL_COHER_OPTS],
-      NULL,
+      nullptr,
       id+RADGROUP_COHER_COVER, radiogroup_cb);
    assert(_radgroup[RADGROUP_COHER_COVER]);
 
@@ -366,7 +366,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
 
    _radgroup[RADGROUP_COHER_FIT] = new GLUI_RadioGroup(
       _panel[PANEL_COHER_FIT],
-      NULL,
+      nullptr,
       id+RADGROUP_COHER_FIT, radiogroup_cb);
    assert(_radgroup[RADGROUP_COHER_FIT]);
 
@@ -409,7 +409,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_PIX, slider_cb,
       GLUI_SLIDER_FLOAT, 
       6, 200,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_PIX]);
    _slider[SLIDE_COHER_PIX]->set_num_graduations(195);
 
@@ -419,7 +419,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_MV, slider_cb,
       GLUI_SLIDER_INT, 
       1, 20,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_MV]);
    _slider[SLIDE_COHER_MV]->set_num_graduations(20);
 
@@ -431,7 +431,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_WF, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_WF]);
    _slider[SLIDE_COHER_WF]->set_num_graduations(201);
 
@@ -441,7 +441,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_MP, slider_cb,
       GLUI_SLIDER_INT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_MP]);
    _slider[SLIDE_COHER_MP]->set_num_graduations(101);
 
@@ -454,7 +454,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_WS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_WS]);
    _slider[SLIDE_COHER_WS]->set_num_graduations(201);
 
@@ -464,7 +464,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_M5, slider_cb,
       GLUI_SLIDER_INT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_M5]);
    _slider[SLIDE_COHER_M5]->set_num_graduations(101);
 
@@ -476,7 +476,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_WB, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_WB]);
    _slider[SLIDE_COHER_WB]->set_num_graduations(201);
 
@@ -486,7 +486,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_HJ, slider_cb,
       GLUI_SLIDER_INT, 
       1, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_HJ]);
    _slider[SLIDE_COHER_HJ]->set_num_graduations(100);
 
@@ -499,7 +499,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_WH, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_WH]);
    _slider[SLIDE_COHER_WH]->set_num_graduations(201);
 
@@ -509,7 +509,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_COHER_HT, slider_cb,
       GLUI_SLIDER_INT, 
       1, 1000,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_COHER_HT]);
    _slider[SLIDE_COHER_HT]->set_num_graduations(1000);
 
@@ -534,7 +534,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_MESH_CREASE_VIS_STEP, slider_cb,
       GLUI_SLIDER_FLOAT, 
       1, 200,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_MESH_CREASE_VIS_STEP]);
    _slider[SLIDE_MESH_CREASE_VIS_STEP]->set_w(150);
    _slider[SLIDE_MESH_CREASE_VIS_STEP]->set_num_graduations(200);
@@ -547,7 +547,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_MESH_CREASE_DETECT_ANGLE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 180,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_MESH_CREASE_DETECT_ANGLE]);
    _slider[SLIDE_MESH_CREASE_DETECT_ANGLE]->set_w(150);
    _slider[SLIDE_MESH_CREASE_DETECT_ANGLE]->set_num_graduations(361);
@@ -558,7 +558,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_MESH_CREASE_JOINT_ANGLE, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 180,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_MESH_CREASE_JOINT_ANGLE]);
    _slider[SLIDE_MESH_CREASE_JOINT_ANGLE]->set_w(150);
    _slider[SLIDE_MESH_CREASE_JOINT_ANGLE]->set_num_graduations(361);
@@ -571,7 +571,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_MESH_POLY_FACTOR, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_MESH_POLY_FACTOR]);
    _slider[SLIDE_MESH_POLY_FACTOR]->set_w(150);
    _slider[SLIDE_MESH_POLY_FACTOR]->set_num_graduations(301);
@@ -582,7 +582,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_MESH_POLY_UNITS, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_MESH_POLY_UNITS]);
    _slider[SLIDE_MESH_POLY_UNITS]->set_w(150);
    _slider[SLIDE_MESH_POLY_UNITS]->set_num_graduations(301);
@@ -646,7 +646,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_NOISE_PROTOTYPE_LOCK] = new GLUI_Checkbox(
       _panel[PANEL_NOISE_PROTOTYPE_CONTROLS],
       "Lock",
-      NULL,
+      nullptr,
       id+CHECK_NOISE_PROTOTYPE_LOCK,
       checkbox_cb);
    assert(_checkbox[CHECK_NOISE_PROTOTYPE_LOCK]);
@@ -660,7 +660,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_NOISE_OBJECT_MOTION] = new GLUI_Checkbox(
       _panel[PANEL_NOISE_OBJECT],
       "Motion Only",
-      NULL,
+      nullptr,
       id+CHECK_NOISE_OBJECT_MOTION,
       checkbox_cb);
    assert(_checkbox[CHECK_NOISE_OBJECT_MOTION]);
@@ -673,7 +673,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_NOISE_OBJECT_FREQUENCY, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 30,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_NOISE_OBJECT_FREQUENCY]);
    _slider[SLIDE_NOISE_OBJECT_FREQUENCY]->set_num_graduations(61);
 
@@ -684,7 +684,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_NOISE_OBJECT_RANDOM_ORDER, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER]);
    _slider[SLIDE_NOISE_OBJECT_RANDOM_ORDER]->set_num_graduations(101);
 
@@ -695,7 +695,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
       id+SLIDE_NOISE_OBJECT_RANDOM_DURATION, slider_cb,
       GLUI_SLIDER_FLOAT, 
       0, 1,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION]);
    _slider[SLIDE_NOISE_OBJECT_RANDOM_DURATION]->set_num_graduations(101);
 
@@ -837,7 +837,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_EDIT_PRESSURE_WIDTH] = new GLUI_Checkbox(
       _panel[PANEL_EDIT_PRESSURE],
       "Vary Width",
-      NULL,
+      nullptr,
       id+CHECK_EDIT_PRESSURE_WIDTH,
       checkbox_cb);
    assert(_checkbox[CHECK_EDIT_PRESSURE_WIDTH]);
@@ -845,7 +845,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
    _checkbox[CHECK_EDIT_PRESSURE_ALPHA] = new GLUI_Checkbox(
       _panel[PANEL_EDIT_PRESSURE],
       "Vary Alpha",
-      NULL,
+      nullptr,
       id+CHECK_EDIT_PRESSURE_ALPHA,
       checkbox_cb);
    assert(_checkbox[CHECK_EDIT_PRESSURE_ALPHA]);
@@ -859,7 +859,7 @@ LinePenUI::build(GLUI* glui, GLUI_Panel *p, int w)
 
    _radgroup[RADGROUP_EDIT_OVERSKETCH] = new GLUI_RadioGroup(
       _panel[PANEL_EDIT_OVERSKETCH],
-      NULL,
+      nullptr,
       id+RADGROUP_EDIT_OVERSKETCH, radiogroup_cb);
    assert(_radgroup[RADGROUP_EDIT_OVERSKETCH]);
 

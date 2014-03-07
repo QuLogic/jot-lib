@@ -197,7 +197,7 @@ class SMVIEWapp : public BaseJOTapp {
       //GLUI window tries to take initial focus.
       //If the splash alert box shows, this is called
       //after the popup is dismissed instead.
-      splash_cb(this,NULL,0,0);
+      splash_cb(this,nullptr,0,0);
    }
 };
 
@@ -676,7 +676,7 @@ clear_cb(const Event&, State *&)
    box->add_button("No");
    box->set_default(0);
 
-   if (box->display(true, alert_cbs, NULL, NULL, ALERT_CLEAR_CB))
+   if (box->display(true, alert_cbs, nullptr, nullptr, ALERT_CLEAR_CB))
       cerr << "clear_cb() - AlertBox displayed.\n";
    else
       cerr << "clear_cb() - AlertBox **FAILED** to display!!\n";
@@ -709,7 +709,7 @@ alert_cbs(void *ptr, void *dptr, int idx, int but_idx)
          else if (but_idx == 1) //no
          {
             //try again...
-            Event e; State *s=NULL;
+            Event e; State *s=nullptr;
             save_cb(e, s);
          }
          else //cancel
@@ -770,7 +770,7 @@ save_cb(const Event&, State *&)
    sel->set_file(fname);
    
 
-   if (sel->display(true, file_cbs, NULL, FILE_SAVE_JOT_CB))
+   if (sel->display(true, file_cbs, nullptr, FILE_SAVE_JOT_CB))
       cerr << "save_cb() - FileSelect displayed.\n";
    else
       cerr << "save_cb() - FileSelect **FAILED** to display!!\n";
@@ -793,7 +793,7 @@ load_cb(const Event&, State *&)
    sel->set_filter("*.jot");
    
 
-   if (sel->display(true, file_cbs, NULL, FILE_LOAD_JOT_CB))
+   if (sel->display(true, file_cbs, nullptr, FILE_LOAD_JOT_CB))
       cerr << "load_cb() - FileSelect displayed.\n";
    else
       cerr << "load_cb() - FileSelect **FAILED** to display!!\n";
@@ -907,7 +907,7 @@ do_save(string fullpath)
             assert(0);
       }
 
-      if (box->display(true, alert_cbs, NULL, NULL, ALERT_SAVE_JOT_FAILED_CB))
+      if (box->display(true, alert_cbs, nullptr, nullptr, ALERT_SAVE_JOT_FAILED_CB))
          cerr << "do_save() - AlertBox displayed.\n";
       else
          cerr << "do_save() - AlertBox **FAILED** to display!!\n";
@@ -979,7 +979,7 @@ do_load(string fullpath)
          assert(0);
       }
 
-      if (box->display(true, alert_cbs, NULL, NULL, ALERT_LOAD_JOT_FAILED_CB))
+      if (box->display(true, alert_cbs, nullptr, nullptr, ALERT_LOAD_JOT_FAILED_CB))
          cerr << "do_save() - AlertBox displayed.\n";
       else
          cerr << "do_save() - AlertBox **FAILED** to display!!\n";
@@ -1112,12 +1112,12 @@ int
 toggle_recorder (const Event &, State *&)
 {
    Recorder* _rec =VIEW::peek()->recorder();
-   if ( _rec == NULL)
+   if ( _rec == nullptr)
       return 0;
    if (_rec->on())
       _rec->deactivate();
    else {
-      if (_rec->get_ui() == NULL) {
+      if (_rec->get_ui() == nullptr) {
          _rec->set_ui(new RecorderUI(_rec));
          _rec->_name_buf = "default";
          _rec->new_path();
@@ -1131,8 +1131,8 @@ int
 rec_play (const Event &, State *&)
 {
   
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_play();
    return 1;
 }
@@ -1141,8 +1141,8 @@ int
 rec_rec (const Event &, State *&)
 {
   
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_record();
    return 1;
 }
@@ -1151,8 +1151,8 @@ int
 rec_stop (const Event &, State *&)
 {
   
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_stop();
    return 1;
 }
@@ -1161,8 +1161,8 @@ int
 rec_pause (const Event &, State *&)
 {
   
-   Recorder* _rec = NULL;
-   if ( ( _rec =VIEW::peek()->recorder()) == NULL ) return 0;
+   Recorder* _rec = nullptr;
+   if ( ( _rec =VIEW::peek()->recorder()) == nullptr ) return 0;
    _rec->rec_pause();
    return 1;
 }
@@ -1245,13 +1245,13 @@ cycle_subdiv_loc_calc(const Event&, State *&)
 
    static int k=0;
    LMESH* ctrl_mesh = (LMESH*)m;
-   SubdivLocCalc* calc = 0;
+   SubdivLocCalc* calc = nullptr;
    switch (++k % 3) {
     case 0: calc = new LoopLoc;           break;
     case 1: calc = new Hybrid2Loc;        break; 
     case 2: calc = new HybridVolPreserve; break;
    }
-   assert(calc != 0);
+   assert(calc != nullptr);
    ctrl_mesh->set_subdiv_loc_calc(calc);
    ctrl_mesh->update();
    WORLD::message(calc->name() + " scheme in use");

@@ -94,7 +94,7 @@ INFLATE::INFLATE() :
 void
 INFLATE::clean_on_exit()
 {
-   _instance = 0;
+   _instance = nullptr;
 }
 
 int
@@ -128,7 +128,7 @@ INFLATE::tap_cb(CGESTUREptr& gest, DrawState*& state)
       near_guidelines = true;
 
    // Check if gesture hits a BFace
-   Bface* face = 0;
+   Bface* face = nullptr;
    Bsurface::hit_ctrl_surface(gest->start(), 1, &face);
 
    // Fail if Gesture missed guidelines and geometry
@@ -166,7 +166,7 @@ INFLATE::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 
    // Verify that we have a starting face
    if ( _orig_face ) {
-      Bface* face = 0;
+      Bface* face = nullptr;
 
       // Check that the stroke is straight enough to represent a line
       if (!(gest->straightness() > 0.8)) {
@@ -224,7 +224,7 @@ INFLATE::line_cb(CGESTUREptr& gest, DrawState*& s)
    // Verify that we have a starting face
    if ( _orig_face ) {
       // Check that the stroke is straight enough to represent a line
-      Bface* face = 0;
+      Bface* face = nullptr;
       if (!(gest->straightness() > 0.8)) {
          err_adv(debug, "INFLATE::line_cb: gesture not straight");
          return false;
@@ -347,7 +347,7 @@ INFLATE::setup(Bface *bf, double dist, double dur)
    // Get set of reachable faces:
    Bface_list set
       = Bface_list::reachable_faces(f);
-   assert(set.mesh() != NULL);
+   assert(set.mesh() != nullptr);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
            set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
@@ -416,11 +416,11 @@ INFLATE::reset()
 
    // Clear cached data.
    _lines.clear();
-   _orig_face = 0;
+   _orig_face = nullptr;
    _faces.clear();
    _boundary.reset();
    _d = 0;
-   _mesh = 0;
+   _mesh = nullptr;
    _preview_dist = 0;
 }
 
@@ -627,7 +627,7 @@ INFLATE::do_inflate(
 
    // Get set of reachable faces:
    Bface_list set = Bface_list::reachable_faces(face);
-   assert(set.mesh() != NULL);
+   assert(set.mesh() != nullptr);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
            set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
@@ -682,7 +682,7 @@ INFLATE::do_inflate(
    }
 
    Bface_list set = orig_faces;
-   assert(set.mesh() != NULL);
+   assert(set.mesh() != nullptr);
    err_adv(debug, "reachable faces: %d, subdiv level: %d, total faces: %d",
            set.size(), set.mesh()->subdiv_level(), set.mesh()->nfaces());
 
@@ -780,7 +780,7 @@ INFLATE_CMD::clear()
    if ( _output ) {
       _output->delete_elements();
       delete _output;
-      _output = 0;
+      _output = nullptr;
    }
    if ( _reversed_faces )
       delete _reversed_faces;

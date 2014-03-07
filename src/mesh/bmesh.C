@@ -51,8 +51,8 @@ static int dummy = BODY::set_factory(new BMESH);
 
 bool     BMESH::_random_sils = !Config::get_var_bool("NO_RANDOM_SILS",false);
 bool     BMESH::_freeze_sils  = false;
-TAGlist* BMESH::_bmesh_tags   = NULL;
-TAGlist* BMESH::_bmesh_update_tags   = NULL;
+TAGlist* BMESH::_bmesh_tags   = nullptr;
+TAGlist* BMESH::_bmesh_update_tags   = nullptr;
 BMESHptr BMESH::_focus;
 bool     BMESH::_show_secondary_faces = false;
 
@@ -98,10 +98,10 @@ BMESH::BMESH(int num_v, int num_e, int num_f) :
    _edges(num_e),
    _faces(num_f),
    _version(1),
-   _creases(0),
-   _borders(0),
-   _polylines(0),
-   _lone_verts(0),
+   _creases(nullptr),
+   _borders(nullptr),
+   _polylines(nullptr),
+   _lone_verts(nullptr),
    _sil_stamp(0),
    _zx_stamp(0),
    _draw_enabled(1),
@@ -109,10 +109,10 @@ BMESH::BMESH(int num_v, int num_e, int num_f) :
    _pix_size_stamp(0),
    _type(EMPTY_MESH),
    _type_valid(1),
-   _geom(0),
+   _geom(nullptr),
    _pm_stamp(0),
    _eye_local_stamp(0),
-   _curv_data(0),
+   _curv_data(nullptr),
    _avg_edge_len(0),
    _avg_edge_len_valid(0),
    _edit_level(0),
@@ -132,8 +132,8 @@ BMESH::BMESH(int num_v, int num_e, int num_f) :
 BMESH::BMESH(CBMESH& m) :
    NameLookup<BMESH>(),
    _version(1),
-   _polylines(0),
-   _lone_verts(0),
+   _polylines(nullptr),
+   _lone_verts(nullptr),
    _sil_stamp(0),
    _zx_stamp(0),
    _draw_enabled(1),
@@ -141,10 +141,10 @@ BMESH::BMESH(CBMESH& m) :
    _pix_size_stamp(0),
    _type(EMPTY_MESH),
    _type_valid(1),
-   _geom(0),
+   _geom(nullptr),
    _pm_stamp(0),
    _eye_local_stamp(0),
-   _curv_data(0),
+   _curv_data(nullptr),
    _avg_edge_len(0),
    _avg_edge_len_valid(0),
    _edit_level(0),
@@ -174,13 +174,13 @@ BMESH::~BMESH()
    delete_elements();
 
    if (is_focus(this))
-      set_focus(0);
+      set_focus(nullptr);
 }
 
 void
 BMESH::set_focus(BMESHptr m) 
 {
-   set_focus(m, (m && m->patches().num() == 1) ? m->patches().first() : 0);
+   set_focus(m, (m && m->patches().num() == 1) ? m->patches().first() : nullptr);
 }
 
 void
@@ -240,13 +240,13 @@ BMESH::add_edge(Bvert* u, Bvert* v)
       Bedge* ret = u->lookup_edge(v);
       return ret ? ret : add_edge(new_edge(u,v));
    }
-   return 0;
+   return nullptr;
 }
 
 Bedge*
 BMESH::add_edge(int i, int j)
 {
-   Bedge* ret = 0;
+   Bedge* ret = nullptr;
    if (valid_vert_indices(i,j))
       ret = add_edge(_verts[i],_verts[j]);
    else
@@ -258,7 +258,7 @@ Bedge*
 BMESH::lookup_edge (const Point2i &p)
 {
    if (p[0] < 0 || p[0] >= (int)_verts.size() || p[1] < 0 || p[1] >= (int)_verts.size())
-      return 0;
+      return nullptr;
    return (::lookup_edge (bv(p[0]), bv(p[1])));
 
 }
@@ -269,7 +269,7 @@ BMESH::add_face(Bface* f, Patch* p)
 {
    if (!f) {
       err_msg("BMESH::add_face: error: face is nil");
-      return 0;
+      return nullptr;
    }
 
    f->set_mesh(this);
@@ -280,7 +280,7 @@ BMESH::add_face(Bface* f, Patch* p)
    if (p && p->mesh() != this) {
       cerr << "BMESH::add_face: error: patch specified "
            << "belongs to a different mesh"  << endl;
-      p = 0; // reject it
+      p = nullptr; // reject it
    }
 
    // use the patch if it is given
@@ -296,14 +296,14 @@ BMESH::add_face(Bvert* u, Bvert* v, Bvert* w, Patch* p)
    // Screen for wackos:
    if (!(u && v && w)) {
       err_msg("BMESH::add_face: Error: vertices are nil");
-      return 0;
+      return nullptr;
    } else if (u==v || u==w || v==w) {
       err_msg("BMESH::add_face: Error: repeated vertex");
-      return 0;
+      return nullptr;
    }
    if (!((u->mesh() == this) && (v->mesh() == this) && (w->mesh() == this))) {
       err_msg("BMESH::add_face: Error: foreign vertices not allowed");
-      return 0;
+      return nullptr;
    }
 
    // Is the face already defined?
@@ -319,7 +319,7 @@ BMESH::add_face(Bvert* u, Bvert* v, Bvert* w, Patch* p)
    Bedge *e1=add_edge(u,v), *e2=add_edge(v,w), *e3=add_edge(w,u);
    if (!(e1 && e2 && e3)) {
       err_msg("BMESH::add_face: Error: can't create edges");
-      return 0;
+      return nullptr;
    }
    return add_face(new_face(u,v,w,e1,e2,e3), p);
 }
@@ -330,7 +330,7 @@ BMESH::add_face(int i, int j, int k, Patch* p)
    if (!valid_vert_indices(i,j,k)) {
       err_msg("BMESH::add_face: Error: invalid vertex indices (%d,%d,%d)",
               i, j, k);
-      return 0;
+      return nullptr;
    }
    return add_face(_verts[i],_verts[j],_verts[k], p);
 }
@@ -385,7 +385,7 @@ BMESH::add_quad(Bvert* u, Bvert* v, Bvert* w, Bvert* x, Patch* p)
       err_msg("BMESH::add_quad: Error: created one face, not the other");
    else
       err_msg("BMESH::add_quad: Error: couldn't create either face");
-   return 0;
+   return nullptr;
 }
 
 Bface*
@@ -408,7 +408,7 @@ BMESH::add_quad(int i, int j, int k, int l, Patch* p)
    return (
       valid_vert_indices(i,j,k,l) ?
       add_quad(_verts[i],_verts[j],_verts[k],_verts[l],p) :
-      0);
+      nullptr);
 }
 
 Bface*
@@ -418,7 +418,7 @@ BMESH::add_quad(int i, int j, int k, int l,
    return (
       valid_vert_indices(i,j,k,l) ?
       add_quad(_verts[i],_verts[j],_verts[k],_verts[l],a,b,c,d,p) :
-      0);
+      nullptr);
 }
 
 Bface*
@@ -428,7 +428,7 @@ BMESH::lookup_face (const Point3i &p)
     || p[1] < 0 || p[1] >= (int)_verts.size()
     || p[2] < 0 || p[2] >= (int)_verts.size()) {
       cerr << "BMESH::lookup_face - invalid vert index\n";
-      return 0;
+      return nullptr;
    }
    return (::lookup_face (bv(p[0]), bv(p[1]), bv(p[2])));
 
@@ -463,7 +463,7 @@ BMESH::Cube(CWpt& a, CWpt& b, Patch* p)
    // Set up the Patch:
    if (p && p->mesh() != this) {
       err_msg("BMESH::Cube: foreign patch, rejecting...");
-      p = 0;
+      p = nullptr;
    }
    if (!p)
       p = new_patch();
@@ -496,7 +496,7 @@ BMESH::Octahedron(CWpt& bot, CWpt& m0, CWpt& m1,
    // Set up the Patch:
    if (p && p->mesh() != this) {
       err_msg("BMESH::Octahedron: foreign patch, rejecting...");
-      p = 0;
+      p = nullptr;
    }
    if (!p)
       p = new_patch();
@@ -531,7 +531,7 @@ BMESH::UV_BOX(Patch* &p)
    // Set up the Patch:
    if (p && p->mesh() != this) {
       err_msg("BMESH::Sphere: foreign patch, rejecting...");
-      p = 0;
+      p = nullptr;
    }
    if (!p)
       p = new_patch();
@@ -676,7 +676,7 @@ BMESH::Sphere(Patch* p)
    // Set up the Patch:
    if (p && p->mesh() != this) {
       err_msg("BMESH::Sphere: foreign patch, rejecting...");
-      p = 0;
+      p = nullptr;
    }
    if (!p)
       p = new_patch();
@@ -763,7 +763,7 @@ BMESH::Icosahedron(Patch* p)
    // Set up the Patch:
    if (p && p->mesh() != this) {
       err_msg("BMESH::Icosahedron: foreign patch, rejecting...");
-      p = 0;
+      p = nullptr;
    }
    if (!p)
       p = new_patch();
@@ -866,7 +866,7 @@ BMESH::print() const
 int
 BMESH::set_crease(int i, int j) const
 {
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    if (valid_vert_indices(i,j) && (e = bv(i)->lookup_edge(bv(j))))
       e->set_crease();
    else
@@ -877,7 +877,7 @@ BMESH::set_crease(int i, int j) const
 int
 BMESH::set_weak_edge(int i, int j) const
 {
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    if (valid_vert_indices(i,j) && (e = bv(i)->lookup_edge(bv(j))))
       e->set_bit(Bedge::WEAK_BIT);
    else
@@ -888,7 +888,7 @@ BMESH::set_weak_edge(int i, int j) const
 int
 BMESH::set_patch_boundary(int i, int j) const
 {
-   Bedge* e = 0;
+   Bedge* e = nullptr;
    if (valid_vert_indices(i,j) && (e = bv(i)->lookup_edge(bv(j))))
       e->set_patch_boundary();
    else
@@ -913,7 +913,7 @@ BMESH::pick_face(
    Wpt  p = inv_xform() * world_ray.point();
    Wvec n = inv_xform() * world_ray.direction();
 
-   Bface* ret = 0;              // face to return
+   Bface* ret = nullptr;        // face to return
    double d, min_d = -1;        // distance, min distance
    Wpt    h;                    // (temp) hit point
    for (int i=0; i<nfaces(); i++) {
@@ -1133,16 +1133,16 @@ BMESH::build_zcross_strips()
       return 0;
    // distribute sils to patches
 
-   Patch*  p = 0;
+   Patch*  p = nullptr;
    Patch* lp = _zx_sils.seg(0).f()->patch(); // last p
-   assert (lp != NULL);
+   assert (lp != nullptr);
 
 
    for (k = 0; k < _zx_sils.num(); k++) {
 
       Bface* f = _zx_sils.seg(k).f();
       if ( !f && k > 0 )
-         assert ( _zx_sils.seg(k-1).f() ); //assert for double NULLS
+         assert ( _zx_sils.seg(k-1).f() ); //assert for double nullptrs
 
       // null f means that point belongs to last f;
       // this accessor is probably less than safe...
@@ -1159,7 +1159,7 @@ BMESH::build_zcross_strips()
             if (!lp->zx_sils().segs().empty() && lp->zx_sils().segs().back().f()) {
 
                lp->zx_sils().add_seg (
-                  NULL, _zx_sils.seg(k-1).p(), _zx_sils.seg(k-1).v(),
+                  nullptr, _zx_sils.seg(k-1).p(), _zx_sils.seg(k-1).v(),
                   _zx_sils.seg(k-1).g() , _zx_sils.seg(k-1).bc()
                   );
             }
@@ -1262,7 +1262,7 @@ BMESH::get_zcross_strips()
 
       // Now check old silhoutte triangles:
       for (k=0 ; k<old_segs.size(); k++) {
-         // some old faces are NULL
+         // some old faces are nullptr
          if (old_segs[k].f())
             _zx_sils.start_sil(old_segs[k].f());
       }
@@ -1349,7 +1349,7 @@ BMESH::get_sil_strips()
       // Check all edges to find new sils:
       for (Bedge_list::size_type k=0; k<_edges.size(); k++)
          if (_edges[k]->is_sil())
-            _sils.build(0, _edges[k], filter);  // get all connected sils
+            _sils.build(nullptr, _edges[k], filter);  // get all connected sils
 
       // Record the time taken and number of silhouettes found:
       brute_secs.add(clock.elapsed_time());
@@ -1373,7 +1373,7 @@ BMESH::get_sil_strips()
       size_t k;
       for (k = 0; k < old_sils.size(); k++)
          if (old_sils[k]->is_sil())
-            _sils.build(0, old_sils[k], filter);
+            _sils.build(nullptr, old_sils[k], filter);
 
       // 2. Now check a small fraction of the edges.
       //    (If n is the total number of edges,
@@ -1386,7 +1386,7 @@ BMESH::get_sil_strips()
          //       so we're careful below to ensure j < n:
          int j = min((int)(drand48()*n), maxj);
          if (_edges[j]->is_sil())
-            _sils.build(0, _edges[j], filter);  // get all connected sils
+            _sils.build(nullptr, _edges[j], filter);  // get all connected sils
       }
 
       // Record the time taken and number of silhouettes found:
@@ -1466,7 +1466,7 @@ BMESH::eye_local() const
 void
 BMESH::make_patch_if_needed()
 {
-   Patch* p = 0;
+   Patch* p = nullptr;
 
    for (Bface_list::size_type k=0; k<_faces.size(); k++) {
       if (!bf(k)->patch()) {
@@ -1587,7 +1587,7 @@ BMESH::read_jot_file(const char* filename, BMESHptr ret)
    
    if (!filename) {
       err_msg("BMESH::read_jot_file() - Filename is NULL");
-      return 0;
+      return nullptr;
    }
    fstream fin;
 #if (defined (WIN32) && (defined(_MSC_VER) && (_MSC_VER <=1300))) /*VS 6.0*/
@@ -1600,7 +1600,7 @@ BMESH::read_jot_file(const char* filename, BMESHptr ret)
 
    if (!fin) {
       err_mesg(ERR_LEV_WARN, "BMESH::read_jot_file() - Could not open file '%s'", filename);
-      return 0;
+      return nullptr;
    }
 
    return read_jot_stream(fin, ret);
@@ -1626,7 +1626,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
 
    if (!isprint(firstchar)) {
       err_msg("BMESH::read_jot_stream() - Unreadable: Non-printable first character.");
-      return 0;
+      return nullptr;
    } else if (isdigit(firstchar)) {
       // If it's numerical digit then try to load as old .sm
       // This will go away...
@@ -1637,7 +1637,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
          return ret;
       } else {
          err_msg("BMESH::read_jot_stream() - Error: Failed parsing old-style file.");
-         return 0;
+         return nullptr;
       }
    } else if (firstchar == '#') {
       // If it's a # then fail out...
@@ -1648,7 +1648,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
       err_mesg(ERR_LEV_INFO,
                "BMESH::read_jot_stream() - Warning: Rejecting file with '#%s' header.",
                file_header);
-      return 0;
+      return nullptr;
    } else {
       // Otherwise, it better be the new .sm format...
       STDdstream stream(&in);
@@ -1665,7 +1665,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
             err_msg(
                "BMESH::read_jot_stream() - Error: Supposed mesh class '#%s' not found.",
                class_name.c_str());
-            return 0;
+            return nullptr;
          }
 
          // Get the correct type (BMESH or LMESH) as specified in the file:
@@ -1674,7 +1674,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
             err_msg(
                "BMESH::read_jot_stream() - Error: Class '#%s' is not a BMESH subclass.",
                class_name.c_str());
-            return 0;
+            return nullptr;
          }
       }
 
@@ -1938,7 +1938,7 @@ BMESH::read_faces(istream& is)
       is >> i >> j >> k;
 
       // Create the face:
-      if (!add_face(i,j,k,0))
+      if (!add_face(i,j,k,nullptr))
          ret = 0;       // not success
    }
 
@@ -2465,7 +2465,7 @@ BMESH::check_type()
 
    // XXX - may not be needed
    for (k=0; (int)k<nfaces(); k++)
-      _faces[k]->orient_strip(0);
+      _faces[k]->orient_strip(nullptr);
 
    // deal with inconsistently oriented edges if needed.
    if (num_inconsistent_edges > 0) {
@@ -2548,7 +2548,7 @@ Bedge*
 BMESH::nearest_edge(CWpt &p)
 {
    if (_edges.empty())
-      return 0;
+      return nullptr;
 
    Wpt q;
    Bedge *ret = _edges[0];
@@ -2568,7 +2568,7 @@ Bvert*
 BMESH::nearest_vert(CWpt &p)
 {
    if (_verts.empty())
-      return 0;
+      return nullptr;
 
    Bvert *ret = _verts[0];
    double dist = (p - _verts[0]->loc()).length_sqrd(), d;
@@ -3011,7 +3011,7 @@ BMESH::split_faces(
       return 0;
    }
 
-   Bface* cur=0;
+   Bface* cur=nullptr;
    Wpt cur_pt;
    if (!start_face) {
       BaseVisRefImage *vis_ref = BaseVisRefImage::lookup(VIEW::peek());
@@ -3142,8 +3142,8 @@ BMESH::try_swap_edge(Bedge* edge, bool favor)
    //           bigger minimum angle).
    */
 
-   Bface *f1=0, *f2=0;
-   Bvert *a=0, *b=0, *c=0, *d=0;
+   Bface *f1=nullptr, *f2=nullptr;
+   Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
    if (!edge->swapable(f1,f2,a,b,c,d, favor))
       return 0;
 
@@ -3165,7 +3165,7 @@ BMESH::try_collapse_edge(Bedge* e, Bvert* v)
 {
    // vertex v will be removed
    // vertex u will absorb its adjacent edges and faces
-   Bvert *u = 0;
+   Bvert *u = nullptr;
 
    if (v) {
       // caller wants v to be destroyed
@@ -3278,10 +3278,10 @@ BMESH::changed(change_t change)
       _zx_stamp = 0;
 
       delete _borders;
-      _borders = 0;
+      _borders = nullptr;
 
       delete _creases;
-      _creases = 0;
+      _creases = nullptr;
 
       _patches.triangulation_changed();
 
@@ -3298,13 +3298,13 @@ BMESH::changed(change_t change)
       // invalidate BODY stuff:
       _vert_locs.clear();
       BODY::_edges.reset();
-      _body = BODYptr(0);
+      _body = BODYptr(nullptr);
       _bb.reset();
       _avg_edge_len_valid = 0;
       
       // invalidate curvature data:
       delete _curv_data;
-      _curv_data = 0;
+      _curv_data = nullptr;
       
       break;
 
@@ -3312,7 +3312,7 @@ BMESH::changed(change_t change)
       // Invalidate crease strips in patches:
       _patches.creases_changed();
       delete _creases;
-      _creases = 0;
+      _creases = nullptr;
 
     default:
       ;
@@ -3467,7 +3467,7 @@ BMESH::put_faces(TAGformat &d) const
             faces[i] = face;
          } else if (f->quad_rep() == f) {
             // Write a quad:
-            Bvert *a=0, *b=0, *c=0, *d=0;
+            Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
             f->get_quad_verts(a,b,c,d);
             assert(a && b && c && d);
             face.push_back(a->index());
@@ -3521,7 +3521,7 @@ class UVforIO2
             // (i.e. write out the quad just once, not twice)
             if (!f->is_quad_rep())
                return;
-            Bvert *a=0, *b=0, *c=0, *d=0;
+            Bvert *a=nullptr, *b=nullptr, *c=nullptr, *d=nullptr;
             UVpt ua, ub, uc, ud;
             if (f->get_quad_verts(a,b,c,d) && UVdata::get_quad_uvs(a,b,c,d,ua,ub,uc,ud)) {
                assert(a && b && c && d);
@@ -3624,7 +3624,7 @@ BMESH::get_uvfaces(TAGformat &d)
    if (uvs.empty())
       return;
 
-   Patch* p = 0;
+   Patch* p = nullptr;
    for (vector<UVforIO2>::size_type i=0; i<uvs.size(); i++) {
       const UVforIO2& uv = uvs[i];
       if (!uv.is_good()) {
@@ -3909,7 +3909,7 @@ BMESH::get_faces(TAGformat &d)
    // Later if Patches are specified in the file, faces will
    // be re-sorted into their correct patches and this default
    // patch will be removed:
-   Patch* p = 0;  //new_patch();
+   Patch* p = nullptr;  //new_patch();
    for (size_t i=0; i<faces.size(); i++) {
       const vector<int>& face = faces[i];
 
@@ -4195,7 +4195,7 @@ BMESH::merge(BMESHptr m1, BMESHptr m2)
    // error checking:
    if (!m1 && !m2) {
       err_msg("BMESH::merge: warning: both meshes are null.");
-      return BMESHptr(0);
+      return BMESHptr(nullptr);
    } else if (!m1) {
       return m2;        // don't fret it
    } else if (!m2) {
@@ -4206,7 +4206,7 @@ BMESH::merge(BMESHptr m1, BMESHptr m2)
            << " and "
            << m2->class_name()
            << endl;
-      return BMESHptr(0);
+      return BMESHptr(nullptr);
    }
 
    // try to think of everything. they might be the same mesh.
@@ -4276,7 +4276,7 @@ BMESH::_merge(BMESH* m)
       // Invalidation
       _vert_locs.clear();
       BODY::_edges.reset();
-      _body = 0;
+      _body = nullptr;
       _bb.reset();
 
       // So display lists get rebuilt:
@@ -4449,7 +4449,7 @@ BMESH::split_patches()
       Bface_list component = Bface_list::reachable_faces(_faces[i]);
 
       // assert none of them are in a patch:
-      assert(component.all_satisfy(PatchFaceFilter(0)));
+      assert(component.all_satisfy(PatchFaceFilter(nullptr)));
 
       // create a new patch and add all the faces we found:
       Patch* p = new_patch();
@@ -4487,7 +4487,7 @@ BMESH::get_components() const
 void
 BMESH::split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& new_vs)
 {
-   Bedge* curr_edge = 0;
+   Bedge* curr_edge = nullptr;
    for (int ed=1; ed<4; ed++)
       if (start_face->e(ed)->which_side(plane) == 0) {
          curr_edge = start_face->e(ed);
@@ -4500,8 +4500,8 @@ BMESH::split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& new_vs)
    }
 
    Bvert *new_pt;
-   Bvert *last_pt  = 0;
-   Bvert *start_pt = 0;
+   Bvert *last_pt  = nullptr;
+   Bvert *start_pt = nullptr;
 
    do {
       if (last_pt) {
@@ -4534,7 +4534,7 @@ BMESH::split_tris(Bface* start_face, Wplane plane, vector<Bvert*>& new_vs)
          start_pt = new_pt;
 
       last_pt = new_pt;
-   } while (new_vs.size() < 3 || last_pt->lookup_edge(start_pt) == 0);
+   } while (new_vs.size() < 3 || last_pt->lookup_edge(start_pt) == nullptr);
 }
 
 
@@ -4713,7 +4713,7 @@ BMESHray::check(
 {
    if (test(d, is_surface, d_2d)) {
       // the RAYhit is being redefined ... clear the old simplex.
-      set_simplex(0);
+      set_simplex(nullptr);
       RAYhit::check(d, is_surface, d_2d, g, n, nearpt, surfl, app, tex_coord);
    }
 }

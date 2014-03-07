@@ -154,7 +154,7 @@ class layer_base_t: public DATA_ITEM {
 class GLSLShader_Layer_Base : public GLSLShader {
  public :
    //******** MANAGERS ********
-   GLSLShader_Layer_Base(Patch* p, StripCB* cb=0);
+   GLSLShader_Layer_Base(Patch* p, StripCB* cb=nullptr);
    virtual ~GLSLShader_Layer_Base();
 
    enum max_layer_t { MAX_LAYERS=4 };
@@ -244,7 +244,7 @@ class GLSLShader_Layer_Base : public GLSLShader {
  *****************************************************************/
 class StripOpCB : public GLStripCB {
  public:
-   StripOpCB() : _opacity_attr_loc(-1), _patch(0) {}
+   StripOpCB() : _opacity_attr_loc(-1), _patch(nullptr) {}
    void set_opacity_attr_loc(GLint loc) { _opacity_attr_loc = loc; }
    void set_patch(Patch* p) { _patch = p; }
 

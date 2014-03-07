@@ -275,7 +275,7 @@ Wpt_listMap::set_pts(CWpt_list& pts)
 {
    _pts = pts; 
    _pts.update_length();
-   if (pts.size() > 0 && _p0 != NULL && _p1 != NULL) {
+   if (pts.size() > 0 && _p0 != nullptr && _p1 != nullptr) {
       if (!_p0->set_pt(pts[0]))
          err_msg("Wpt_listMap::set_pts: error setting endpoint");
       if (!_p1->set_pt(pts.back()))
@@ -314,7 +314,7 @@ SurfaceCurveMap::SurfaceCurveMap(
    } else
       assert(_uvs.is_closed());
 
-   assert(_surf != NULL);
+   assert(_surf != nullptr);
    hookup();
    
    if (Config::get_var_bool("DEBUG_SURF_CURVE_MAP_CONSTRUCTOR",false,true)) {

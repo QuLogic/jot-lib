@@ -71,7 +71,7 @@ class layer_paint_t : public layer_base_t {
 class Painterly : public GLSLShader_Layer_Base {
  public:
    //******** MANAGERS ********
-   Painterly(Patch* patch = 0);
+   Painterly(Patch* patch = nullptr);
    virtual ~Painterly();
 
    //******** RUN-TIME TYPE ID ********

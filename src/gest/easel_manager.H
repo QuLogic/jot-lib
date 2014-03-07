@@ -47,7 +47,7 @@ class EaselManager {
       
       VIEW_EASELptr easel(unsigned idx) const
          { return easel_list.valid_index(idx) ?
-                     easel_list[idx] : VIEW_EASELptr(0); }
+                     easel_list[idx] : VIEW_EASELptr(nullptr); }
       
       long num_easels() const
          { return easel_list.num(); }

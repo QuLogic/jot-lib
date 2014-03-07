@@ -35,7 +35,7 @@ class Lface : public Bface {
 
    //******** MANAGERS ********
    Lface(Lvert* u, Lvert* v, Lvert* w, Ledge* e, Ledge* f, Ledge* g) :
-      Bface(u,v,w,e,f,g), _parent(0) {}
+      Bface(u,v,w,e,f,g), _parent(nullptr) {}
 
    virtual ~Lface() { delete_subdiv_elements(); }
 
@@ -199,7 +199,7 @@ get_parent(Lface* f, int level)
    // Return f's parent face at the given level
    // (relative to the level of f).
 
-   return f ? f->parent(level) : 0;
+   return f ? f->parent(level) : nullptr;
 }
 
 inline Lface* 
@@ -217,7 +217,7 @@ remap(Lface* f, int level)
    // returns f.
 
    if (!f)
-      return 0;                         // bad input
+      return nullptr;                   // bad input
    if (level == 0)
       return f;                         // nothing to do
    if (level > 0)
@@ -230,7 +230,7 @@ inline Lface*
 Ledge::ctrl_face() const 
 {
    Bsimplex* sim = ctrl_element();
-   return is_face(sim) ? (Lface*)sim : (Lface*)0;
+   return is_face(sim) ? (Lface*)sim : nullptr;
 }
 
 #endif  // LFACE_H_HAS_BEEN_INCLUDED

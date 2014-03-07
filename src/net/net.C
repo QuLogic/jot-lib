@@ -94,7 +94,7 @@ write_win32(int fildes, const void *buf, size_t nbyte)
    DWORD val=0;
    if (GetFileType((HANDLE)fildes) == FILE_TYPE_DISK) 
    {
-      if (!WriteFile((HANDLE)fildes, buf, nbyte, &val, NULL))
+      if (!WriteFile((HANDLE)fildes, buf, nbyte, &val, nullptr))
       {
          //cerr << "write_win32: error " << GetLastError() << endl;
 
@@ -103,12 +103,12 @@ write_win32(int fildes, const void *buf, size_t nbyte)
              FORMAT_MESSAGE_ALLOCATE_BUFFER | 
              FORMAT_MESSAGE_FROM_SYSTEM | 
              FORMAT_MESSAGE_IGNORE_INSERTS,
-             NULL,
+             nullptr,
              GetLastError(),
              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
              (LPTSTR) &lpMsgBuf,
              0,
-             NULL 
+             nullptr
          );
 
          cerr << "write_win32() - Error! Message: " << (LPCTSTR)lpMsgBuf << "\n";
@@ -119,7 +119,7 @@ write_win32(int fildes, const void *buf, size_t nbyte)
    else 
    {
       OVERLAPPED overlap;
-      overlap.hEvent = (HANDLE)NULL;
+      overlap.hEvent = nullptr;
       if (!WriteFile((HANDLE)fildes, buf, nbyte, &val, &overlap))
       {
          if (!GetOverlappedResult((HANDLE)fildes, &overlap, &val, TRUE))
@@ -129,12 +129,12 @@ write_win32(int fildes, const void *buf, size_t nbyte)
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | 
                 FORMAT_MESSAGE_FROM_SYSTEM | 
                 FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL,
+                nullptr,
                 GetLastError(),
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                 (LPTSTR) &lpMsgBuf,
                 0,
-                NULL 
+                nullptr
             );
 
             cerr << "write_win32() - Error! Message: " << (LPCTSTR)lpMsgBuf << "\n";
@@ -156,20 +156,20 @@ read_win32(int fildes, void *buf, size_t nbyte)
 
    if (fildes == fileno(stdin))
    {
-      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, NULL);
+      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, nullptr);
    }
    else if (filetype == FILE_TYPE_DISK) 
    {
-      ReadFile((HANDLE)fildes, buf, nbyte, &val, NULL);
+      ReadFile((HANDLE)fildes, buf, nbyte, &val, nullptr);
    } 
    else if (filetype == FILE_TYPE_CHAR) 
    {
-      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, NULL);
+      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, nullptr);
    } 
    else 
    {
       OVERLAPPED overlap;
-      overlap.hEvent = (HANDLE)NULL;
+      overlap.hEvent = nullptr;
       if (ReadFile((HANDLE) fildes, buf, nbyte, &val, &overlap)==FALSE) 
       {
          if (!GetOverlappedResult((HANDLE) fildes, &overlap, &val, TRUE)) 
@@ -307,7 +307,7 @@ num_bytes_to_read(int fildes)
 static char *
 get_host_print_name(
    int         port,
-   const char *hname = 0
+   const char *hname = nullptr
    )
 {
    static char nbuff[255];
@@ -382,7 +382,7 @@ NetHost::NetHost(
 {
    struct hostent *entry;
 
-   assert(hostname != NULL);
+   assert(hostname != nullptr);
 
    if (isdigit(hostname[0])) {
       unsigned long netAddr = inet_addr(hostname);
@@ -395,7 +395,7 @@ NetHost::NetHost(
    } else {
       entry = gethostbyname(hostname);
 
-      if (entry == NULL) {
+      if (entry == nullptr) {
          cerr << "NetHost: Could not resolve hostname!" << endl;
          exit(1);
       }
@@ -411,7 +411,7 @@ NetHost::NetHost(
    struct sockaddr_in *addr
    )
 {
-   assert(addr != NULL);
+   assert(addr != nullptr);
 
    struct hostent *entry;
 
@@ -419,7 +419,7 @@ NetHost::NetHost(
                           sizeof(addr->sin_addr),
                           addr->sin_family);
 
-   if (entry == NULL) {
+   if (entry == nullptr) {
       perror("NetHost(sockaddr): gethostbyaddr");
       exit(1);
    }
@@ -481,7 +481,7 @@ NetStream::NetStream(
    _fd = fd;
    if (!should_block) set_blocking(false);
 
-   if (client == 0) 
+   if (client == nullptr)
    {
       char tmp[32];
       sprintf(tmp, "%d", fd);
@@ -520,7 +520,7 @@ NetStream::NetStream(
    int readable  = flags & read;
    int writeable = flags & write;
 
-   fstream* fs = 0;
+   fstream* fs = nullptr;
    if (readable && writeable) {
       // We don't expect this to happen...
       // Because it's writeable, we'll truncate the file.
@@ -553,7 +553,7 @@ NetStream::NetStream(
       cerr << "NetStream::NetStream: error: failed to create fstream"
            << endl;
       delete fs;
-      fs = 0;
+      fs = nullptr;
    }
 
    _iostream = fs;
@@ -645,7 +645,7 @@ NetStream::_die(
 {
    if (!Config::get_var_bool("NO_CONNECT_ERRS",false,true)) {
       cerr << "NetStream(" << name_ << ":" << port_ << "): " << msg << ": ";
-      perror(NULL);
+      perror(nullptr);
    }
    _fd = -1;
 }
@@ -1041,7 +1041,7 @@ Network::_die(
    )
 {
    cerr << "Network(" << name_ << "): " << msg << ": ";
-   perror(NULL);
+   perror(nullptr);
    exit(1);
 }
 
@@ -1094,7 +1094,7 @@ Network::configure(
 
    signal(SIGPIPE, net_exception_handler);
 
-   return 0;
+   return nullptr;
 }
 
 

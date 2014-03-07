@@ -104,7 +104,7 @@ class GRIDwidget_anchor : public GEOM {
 /*****************************************************************
  * TestSPSapp Methods
  *****************************************************************/
-TestSPSapp* TestSPSapp::_instance = 0;
+TestSPSapp* TestSPSapp::_instance = nullptr;
 
 void
 TestSPSapp::create_grid(Wtransf ff)

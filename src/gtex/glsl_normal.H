@@ -35,7 +35,7 @@
 class GLSLNormalShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLNormalShader(Patch* patch = 0);
+   GLSLNormalShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL_NORMAL",

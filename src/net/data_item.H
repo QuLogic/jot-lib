@@ -66,8 +66,8 @@ class TAGformat {
      STDdstream *_ds;
   public:
          TAGformat(STDdstream *d, const string &n,int m):_name(n),_multi(m),_ds(d){}
-         TAGformat(               const string &n,int m):_name(n),_multi(m),_ds(0){}
-         TAGformat() : _multi(0), _ds(0) {}
+         TAGformat(               const string &n,int m):_name(n),_multi(m),_ds(nullptr){}
+         TAGformat() : _multi(0), _ds(nullptr) {}
      void        set_stream(STDdstream *d) { _ds = d; }
      STDdstream &operator*()               { return *_ds; }
      STDdstream &read_id()                 { if (_name != "" && _multi)
@@ -157,7 +157,7 @@ class TAG_val : public TAG {
    STDdstream &format(CDATA_ITEM *me, STDdstream &d) {
       bool output;
       // Need to use != 0 in order to work around VC++ problem
-      if (_test == 0) output = true;
+      if (_test == nullptr) output = true;
       else {
          output = (((T *)me)->*_test)();
       }
@@ -236,13 +236,13 @@ class DATA_ITEM {
                                                          DATA_ITEM *))
                                                  { _decode_unknown = d; }
  static  DATA_ITEM  *Decode     (STDdstream &d, int DelayDecoding = 0);
- static  DATA_ITEM  *lookup     (const string &d) { if (!_hash) return 0;
+ static  DATA_ITEM  *lookup     (const string &d) { if (!_hash) return nullptr;
                                                     map<string,DATA_ITEM*>::iterator i;
                                                     i = _hash->find(d);
                                                     if (i != _hash->end())
                                                       return i->second;
                                                     else
-                                                      return 0;
+                                                      return nullptr;
                                                   }
      /* -------- Static debugging functions -------- */
  static  map<string,DATA_ITEM*> *di_hash()        { return _hash; }

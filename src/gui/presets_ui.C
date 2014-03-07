@@ -64,7 +64,7 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    //Preset list
    _listbox[LIST_PRESET] = new GLUI_Listbox(
       _panel[PANEL_PRESET], 
-      "", NULL, 
+      "", nullptr,
       id+LIST_PRESET, listbox_cb);
    assert(_listbox[LIST_PRESET]);
    _listbox[LIST_PRESET]->set_w(MY_WIDTH);   
@@ -75,7 +75,7 @@ PresetsUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    //New preset name box
    _edittext[EDITTEXT_SAVE] = new GLUI_EditText(
       _panel[PANEL_PRESET], "", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+LIST_PRESET, edittext_cb);
 
    assert(_edittext[EDITTEXT_SAVE]);

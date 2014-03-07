@@ -33,7 +33,7 @@ class ProxyTexture;
 class HatchingTexture : public BasicTexture  {
  public: 
    //******** MANAGERS ********
-   HatchingTexture(Patch* patch = 0);      
+   HatchingTexture(Patch* patch = nullptr);
    virtual ~HatchingTexture();
 
    //******** RUN-TIME TYPE ID ********   

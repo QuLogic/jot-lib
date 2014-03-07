@@ -283,7 +283,7 @@ class CREATE_RIBBONS_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   CREATE_RIBBONS_CMD(CEdgeStrip&a, CEdgeStrip& b, Patch* p=0) :
+   CREATE_RIBBONS_CMD(CEdgeStrip&a, CEdgeStrip& b, Patch* p=nullptr) :
       COMMAND(false), _a(a), _b(b), _patch(p) {}
 
    //******** RUN-TIME TYPE ID ********
@@ -340,7 +340,7 @@ class WPT_LIST_RESHAPE_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   WPT_LIST_RESHAPE_CMD(Wpt_listMap* map, CWpt_list& new_pts) : _map(0) {
+   WPT_LIST_RESHAPE_CMD(Wpt_listMap* map, CWpt_list& new_pts) : _map(nullptr) {
       assert(map);
       _map       = map;
       _old_shape = map->get_wpts();
@@ -375,7 +375,7 @@ class TUBE_MAP_RESHAPE_CMD : public COMMAND {
 
    //******** MANAGERS ********
 
-   TUBE_MAP_RESHAPE_CMD(TubeMap* map, CWpt_list& new_pts) : _map(0) {
+   TUBE_MAP_RESHAPE_CMD(TubeMap* map, CWpt_list& new_pts) : _map(nullptr) {
       assert(map);
       _map       = map;
       _old_shape = map->get_wpts();

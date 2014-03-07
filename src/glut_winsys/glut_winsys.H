@@ -41,7 +41,7 @@ class GLUT_WINSYS : public WINSYS {
 
    /******** STATIC MEMBER METHODS ********/
  public:
-   static GLUT_WINSYS*  instance() { return _windows.empty() ? 0 : _windows[0];}
+   static GLUT_WINSYS*  instance() { return _windows.empty() ? nullptr : _windows[0];}
    static GLUT_WINSYS*  window()   { return _windows[glutGetWindow()]; }
 
  protected:

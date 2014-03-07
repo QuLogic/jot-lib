@@ -105,7 +105,7 @@ GestureStroke::add_stroke_pt(CPIXEL& pt, double pressure) {
   if (!_bbox.valid()) return;
   
   if (!_gesture){
-    _gesture = new GESTURE(NULL, -1, pt, pressure);
+    _gesture = new GESTURE(nullptr, -1, pt, pressure);
     EXIST.rem(_gesture);
   } else {
     _gesture->add(pt, -1.0, pressure);

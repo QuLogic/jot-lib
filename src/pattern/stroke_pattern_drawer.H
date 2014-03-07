@@ -41,7 +41,7 @@ public:
   virtual ~StrokePatternDrawer() {}
   virtual int draw(CVIEWptr& view);
   virtual int  draw_final(CVIEWptr & v);
-  virtual DATA_ITEM *dup() const { return 0; }
+  virtual DATA_ITEM *dup() const { return nullptr; }
   
   
 private:

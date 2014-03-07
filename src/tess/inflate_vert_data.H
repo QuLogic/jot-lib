@@ -78,7 +78,7 @@ class InflateVertData : public SimplexData {
    }
 
    // Determine if the vertex has inflate data
-   static bool has_data(CBvert* v) { return lookup(v) != NULL; }
+   static bool has_data(CBvert* v) { return lookup(v) != nullptr; }
 
  protected:
 

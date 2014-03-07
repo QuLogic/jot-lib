@@ -58,7 +58,7 @@ HalftoneUI::HalftoneUI(BaseUI* parent) :
    _presets_ui = new PresetsUI(this, "nprdata/halftone_presets/", ".hatch");
    _texture_selection_ui = new PatchSelectionUI(this, true);
    _tone_shader_ui = new ToneShaderUI(this);
-   _current_halftone = 0;  
+   _current_halftone = nullptr;
 }
 
 
@@ -86,7 +86,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _listbox[LIST_PATTERN] = new GLUI_Listbox(
       _panel[PANEL_PROPERTIES], 
-      "Pattern", NULL, 
+      "Pattern", nullptr,
       id+LIST_PATTERN, listbox_cb);
    
    fill_directory_listbox(_listbox[LIST_PATTERN], _pattern_filenames, Config::JOT_ROOT() + "/nprdata/haftone_textures/", ".png", false, true);
@@ -96,13 +96,13 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     _checkbox[CHECK_ENABLE]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Enable",
-                              NULL,
+                              nullptr,
                               id+CHECK_ENABLE,
                               checkbox_cb);
    _checkbox[CHECK_HIGHLIGHT]=new GLUI_Checkbox(
                               _panel[PANEL_PROPERTIES],
                               "Highlight",
-                              NULL,
+                              nullptr,
                               id+CHECK_HIGHLIGHT,
                               checkbox_cb);
 
@@ -113,7 +113,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       GLUI_SLIDER_FLOAT, 
       1.0f/8,
       8.0,
-      NULL);
+      nullptr);
    _slider[SLIDER_SCALE]->set_w(150);
    _slider[SLIDER_SCALE]->set_num_graduations(200);
 
@@ -124,7 +124,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    
    _radgroup[RADGROUP_TC_ON_OFF] = new GLUI_RadioGroup(
                                      _panel[PANEL_PROPERTIES],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_TC_ON_OFF, radiogroup_cb); 
    _radbutton[RADBUT_TC_OFF] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_ON_OFF],
@@ -135,7 +135,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
 
    _radgroup[RADGROUP_TC_MODE] = new GLUI_RadioGroup(
                                      _panel[PANEL_PROPERTIES],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_TC_MODE, radiogroup_cb); 
    _radbutton[RADBUT_TC_FULL] = new GLUI_RadioButton(
                                    _radgroup[RADGROUP_TC_MODE],
@@ -149,7 +149,7 @@ HalftoneUI::build(GLUI* glui, GLUI_Panel* base, bool open)
     
    _radgroup[RADGROUP_COLOR_SEL] = new GLUI_RadioGroup(
                                      _panel[PANEL_COLOR_SWITCH],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_COLOR_SEL, radiogroup_cb);
    
    _radbutton[RADBUT_STROKE_COL] = new GLUI_RadioButton(

@@ -51,7 +51,7 @@ class CamIcon {
    static CamIcon *intersect_all(CXYpt &pt);
    static CamIcon *create   (CXYpt &where, CCAMptr &cam) {
       if (_orig_icon) return _orig_icon->copy_icon(where, cam);
-      return 0;
+      return nullptr;
    }
 };
 

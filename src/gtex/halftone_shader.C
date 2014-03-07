@@ -42,7 +42,7 @@ HalftoneShader::HalftoneShader(Patch* patch) :
    string tex_name = "nprdata/toon_textures/clear-black.png";
    m_toon_tone_shader->set_tex(Config::JOT_ROOT() + tex_name);
 
-   _perlin=0;
+   _perlin=nullptr;
    _perlin_generator= Perlin::get_instance();
    if (!_perlin_generator)
       _perlin_generator= new Perlin();

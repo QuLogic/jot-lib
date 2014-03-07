@@ -43,7 +43,7 @@ using namespace mlib;
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingGroupFree::_hgfr_tags = 0;
+TAGlist *       HatchingGroupFree::_hgfr_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -361,9 +361,9 @@ HatchingGroupFree::get_position(TAGformat &d)
 
 HatchingGroupFree::HatchingGroupFree(Patch *p)  : 
    HatchingGroup(p),
-   _mapping(0),
+   _mapping(nullptr),
    _selected(false),
-   _position(0)
+   _position(nullptr)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFree::HatchingGroupFree()");
    //Add the base instance
@@ -385,13 +385,13 @@ HatchingGroupFree::~HatchingGroupFree()
    {
       assert(_position);
       delete _position;
-      _position = NULL;
+      _position = nullptr;
    }
 
    if (_mapping)
    {
       _mapping->unregister_usage();
-      _mapping = NULL;
+      _mapping = nullptr;
    }
 
    for (k=0;k<_instances.size();k++)  delete _instances[k];
@@ -1071,7 +1071,7 @@ HatchingGroupFree::slice_mesh_with_plane(
 
    assert(f->front_facing());
 
-   nxtFace1 = f->plane_walk(0,wpPlane,nxtEdge1);
+   nxtFace1 = f->plane_walk(nullptr,wpPlane,nxtEdge1);
    assert(nxtEdge1);
    nxtFace2 = f->plane_walk(nxtEdge1,wpPlane,nxtEdge2);
    assert(nxtEdge2);
@@ -1162,7 +1162,7 @@ HatchingGroupFree::find_uv_mapping(CNDCpt_list &pl)
       err_mesg(ERR_LEV_WARN, "HatchingGroupFree::find_uv_mapping() - Stroke mid. pt. missed mesh!!");
    }
 
-   return 0;
+   return nullptr;
 }
 
 
@@ -1190,7 +1190,7 @@ HatchingGroupFree::find_uv_mapping(CNDCpt_list &pl)
 
 HatchingGroupFreeInst::HatchingGroupFreeInst(HatchingGroup *hg) :
    HatchingGroupBase(hg),
-   _position(0)
+   _position(nullptr)
 {
 
 
@@ -1208,12 +1208,12 @@ HatchingGroupFreeInst::~HatchingGroupFreeInst()
    {
       assert(_position);
       delete(_position);
-      _position = NULL;
+      _position = nullptr;
 
       if (_backbone)
       {
          delete(_backbone);
-         _backbone = NULL;
+         _backbone = nullptr;
       }
    }
 }
@@ -1434,8 +1434,8 @@ HatchingGroupFreeInst::interpolate(
 
    for (k=0; k<num; k++) {
       pts.push_back(
-         ptl1.interpolate((double) k*dlen, 0, &seg1, &frac1)*ifrac +
-         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac));
+         ptl1.interpolate((double) k*dlen, nullptr, &seg1, &frac1)*ifrac +
+         ptl2.interpolate((double) k*dlen, nullptr, &seg2, &frac2)*(1.0-ifrac));
 
       m->interpolate( uvl1[seg1], (1.0-frac1), uvl1[seg1+1], frac1, uv1 );
       m->interpolate( uvl2[seg2], (1.0-frac2), uvl2[seg2+1], frac2, uv2 );
@@ -1563,7 +1563,7 @@ HatchingGroupFreeInst::draw_select(CVIEWptr &v)
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingHatchFree::_hhfr_tags = 0;
+TAGlist *       HatchingHatchFree::_hhfr_tags = nullptr;
 
 static int foobar = DECODER_ADD(HatchingHatchFree);
 
@@ -1744,8 +1744,8 @@ HatchingHatchFree::stroke_pts_setup()
    //Use _real_* vars to get 2D pts for stroke
    //and do visiblity
 
-   HatchingSelectBase * select = (_level->group()->selected())?
-      (_level->group()->selection()):(NULL);
+   HatchingSelectBase * select = _level->group()->selected() ?
+       _level->group()->selection() : nullptr;
 
    NDCZpt pt;
 
@@ -1804,7 +1804,7 @@ HatchingHatchFree::stroke_pts_setup()
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingBackboneFree::_hbfr_tags = 0;
+TAGlist *       HatchingBackboneFree::_hbfr_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -2072,7 +2072,7 @@ HatchingBackboneFree::compute(
 
       if ((*hlb)[i]->get_pts().length() < (*hlb)[i+1]->get_pts().length())
       {
-         p =     (*hlb)[i  ]->get_pts().interpolate(0.5,0,&ind,&frac);
+         p =     (*hlb)[i  ]->get_pts().interpolate(0.5,nullptr,&ind,&frac);
          m->interpolate(((HatchingHatchFree*)(*hlb)[i  ])->get_uvs()[ind  ], (1.0-frac),
                         ((HatchingHatchFree*)(*hlb)[i  ])->get_uvs()[ind+1], (    frac),
                         puv);
@@ -2086,7 +2086,7 @@ HatchingBackboneFree::compute(
       }
       else
       {
-         p =   (*hlb)[i+1]->get_pts().interpolate(0.5,0,&ind,&frac);
+         p =   (*hlb)[i+1]->get_pts().interpolate(0.5,nullptr,&ind,&frac);
          m->interpolate(((HatchingHatchFree*)(*hlb)[i+1])->get_uvs()[ind  ], (1.0-frac),
                         ((HatchingHatchFree*)(*hlb)[i+1])->get_uvs()[ind+1], (    frac),
                         puv);
@@ -2142,7 +2142,7 @@ HatchingBackboneFree::compute(
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingPositionFree::_hpfr_tags = 0;
+TAGlist *       HatchingPositionFree::_hpfr_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -2189,8 +2189,8 @@ HatchingPositionFree::HatchingPositionFree(
    _direction(Wvec(0,0,0)),
    _left_dot(0.0),
    _right_dot(0.0),
-   _curr_placements(NULL),
-   _old_placements(NULL)
+   _curr_placements(nullptr),
+   _old_placements(nullptr)
 {
 }
 
@@ -2290,7 +2290,7 @@ HatchingPositionFree::compute_location()
       return false;
    }
    f->bc2norm_blend(bc,surface_norm);
-   _direction = (VIEW::peek_cam()->data()->xform(0) * _group->patch()->xform() * surface_norm).normalized();
+   _direction = (VIEW::peek_cam()->data()->xform(nullptr) * _group->patch()->xform() * surface_norm).normalized();
 
    //For now, hatch groups only slide in the u direction.
    //To figure out their u scaling, we record the following.
@@ -3345,7 +3345,7 @@ HatchingPositionFree::update()
    //must be updates each frame
 
    _curr_direction = (_group->patch()->inv_xform() * 
-                      VIEW::peek_cam()->data()->xform(0).inverse() * _direction).normalized();
+                      VIEW::peek_cam()->data()->xform(nullptr).inverse() * _direction).normalized();
 
    cache_search_dots();
 

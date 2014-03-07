@@ -35,7 +35,7 @@
 class GLSLToonShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLToonShader(Patch* patch = 0);
+   GLSLToonShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL Toon",

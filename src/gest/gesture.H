@@ -59,7 +59,7 @@ class GESTURE : public GEL {
 
    // constructor that begins to build the gesture
    GESTURE(GEST_INT* gi, int index, mlib::CPIXEL& p, double pressure,
-           GestureDrawer* drawer=0, CEvent& down = Event()) :
+           GestureDrawer* drawer=nullptr, CEvent& down = Event()) :
       GEL(),
       _gest_int(gi), _index(index),
       _start_frame(0), _end_frame(0),
@@ -68,7 +68,7 @@ class GESTURE : public GEL {
 
    GESTURE(CGESTURE& gest) :
      GEL(),
-     _gest_int(0), _index(0), 
+     _gest_int(nullptr), _index(0),
      _pts(gest.pts()), _times(gest.timing()), _pressures(gest.pressures()),
      _start_frame(0), _end_frame(0),
      _bbox(gest.bbox(0)), _pix_bbox(gest.pix_bbox()),
@@ -306,7 +306,7 @@ class GESTURE : public GEL {
 
    virtual DATA_ITEM *dup() const {
       // XXX - no need for duping
-      return 0;
+      return nullptr;
       // return new GESTURE(_drawer);
    }
 

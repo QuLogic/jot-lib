@@ -28,7 +28,7 @@ class UNIX_MANAGER : public FD_MANAGER {
       class tty_to_id {
          public:
             FD_EVENT    *_fd;
-            tty_to_id() : _fd(0) { }
+            tty_to_id() : _fd(nullptr) { }
             tty_to_id(FD_EVENT *fd) : _fd(fd) { }
             int operator == (const tty_to_id &i)   { return _fd == i._fd; }
       };
@@ -43,7 +43,7 @@ class UNIX_MANAGER : public FD_MANAGER {
       fd_set selectFDs;
       fd_set exceptFDs;
       do {
-         struct timeval  tval,  *to = (_timeouts.size()||!infinite) ? &tval : 0;
+         struct timeval  tval,  *to = (_timeouts.size()||!infinite) ? &tval : nullptr;
                 tval.tv_sec  = 0; tval.tv_usec =  10;
          // Clear out list of file descriptors (fd's) we're interested in
          FD_ZERO(&selectFDs);

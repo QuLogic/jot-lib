@@ -56,7 +56,7 @@ class SilStrokePool : public BStrokePool {
 
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
-   SilStrokePool(OutlineStroke* proto = 0);
+   SilStrokePool(OutlineStroke* proto = nullptr);
 
    /******** MEMBER METHODS *******/
    virtual void         draw_flat(CVIEWptr &);

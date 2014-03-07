@@ -328,28 +328,28 @@ StrokeGroup::compute_element_neighbors_2D(){
     in.pointlist[2*i] = _stroke_paths[idx]->center()[0];
     in.pointlist[2*i+1] = _stroke_paths[idx]->center()[1];
   }
-  in.pointmarkerlist = 0;
+  in.pointmarkerlist = nullptr;
   in.numberofpointattributes = 0;
-  in.pointattributelist = 0;
+  in.pointattributelist = nullptr;
   in.numberofsegments = 0;
   in.numberofholes = 0;
   in.numberofregions = 0;
-  in.regionlist = 0;
+  in.regionlist = nullptr;
 
   // initialize output data
-  out.pointlist = (REAL*) NULL;
-  out.pointattributelist = (REAL*) NULL;
-  out.pointmarkerlist = (int*) NULL;
-  out.trianglelist = (int*) NULL;
-  out.triangleattributelist = (REAL*) NULL;
-  out.neighborlist = (int*) NULL;
-  out.segmentlist = (int*) NULL;
-  out.segmentmarkerlist = (int*) NULL;
-  out.edgelist = (int*) NULL;
-  out.edgemarkerlist = (int*) NULL;
+  out.pointlist = nullptr;
+  out.pointattributelist = nullptr;
+  out.pointmarkerlist = nullptr;
+  out.trianglelist = nullptr;
+  out.triangleattributelist = nullptr;
+  out.neighborlist = nullptr;
+  out.segmentlist = nullptr;
+  out.segmentmarkerlist = nullptr;
+  out.edgelist = nullptr;
+  out.edgemarkerlist = nullptr;
   
   // compute triangulation and write result
-  triangulate("zeQ", &in, &out, 0);
+  triangulate("zeQ", &in, &out, nullptr);
   vector<double> distances;
   for (int i=0 ; i<nb_elements ; i++){
     distances.push_back(1e19);
@@ -2605,29 +2605,29 @@ StrokeGroup::delaunay_edges(const vector<UVpt>& nodes, vector< pair<int,int> >& 
     in.pointlist[2*i] = nodes[i][0];
     in.pointlist[2*i+1] = nodes[i][1];
   }
-  in.pointmarkerlist = 0;
+  in.pointmarkerlist = nullptr;
   in.numberofpointattributes = 0;
-  in.pointattributelist = 0;
+  in.pointattributelist = nullptr;
   in.numberofsegments = 0;
   in.numberofholes = 0;
   in.numberofregions = 0;
-  in.regionlist = 0;
+  in.regionlist = nullptr;
 
   // initialize output data
-  out.pointlist = (REAL*) NULL;
-  out.pointattributelist = (REAL*) NULL;
-  out.pointmarkerlist = (int*) NULL;
-  out.trianglelist = (int*) NULL;
-  out.triangleattributelist = (REAL*) NULL;
-  out.neighborlist = (int*) NULL;
-  out.segmentlist = (int*) NULL;
-  out.segmentmarkerlist = (int*) NULL;
-  out.edgelist = (int*) NULL;
-  out.edgemarkerlist = (int*) NULL;
+  out.pointlist = nullptr;
+  out.pointattributelist = nullptr;
+  out.pointmarkerlist = nullptr;
+  out.trianglelist = nullptr;
+  out.triangleattributelist = nullptr;
+  out.neighborlist = nullptr;
+  out.segmentlist = nullptr;
+  out.segmentmarkerlist = nullptr;
+  out.edgelist = nullptr;
+  out.edgemarkerlist = nullptr;
 
 
   // compute triangulation and write result (edges and nodes)
-  triangulate("zeQ", &in, &out, 0);
+  triangulate("zeQ", &in, &out, nullptr);
   int nb_edges = out.numberofedges;
   vector< vector< pair<double,int> > > tmp_node_edges(nb_nodes);
   for (int i=0 ; i<nb_edges ; i++){

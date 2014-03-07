@@ -66,13 +66,13 @@ class Bface  : public Bsimplex {
    Bvert *v1()     const  { return _v1; }
    Bvert *v2()     const  { return _v2; }
    Bvert *v3()     const  { return _v3; }
-   Bvert *v(int i) const  { return (i>0&&i<4)?(&_v1)[i-1]:0; } // i in [1..3]
+   Bvert *v(int i) const  { return (0<i && i<4) ? (&_v1)[i-1] : nullptr; } // i in [1..3]
 
    // edges:
    Bedge *e1()     const  { return _e1; }
    Bedge *e2()     const  { return _e2; }
    Bedge *e3()     const  { return _e3; }
-   Bedge *e(int i) const  { return (i>0&&i<4)?(&_e1)[i-1]:0; } // i in [1..3]
+   Bedge *e(int i) const  { return (0<i && i<4) ? (&_e1)[i-1] : nullptr; } // i in [1..3]
 
    // Face normal (cached value -- recomputed as needed):
    CWvec& norm() const {
@@ -120,35 +120,35 @@ class Bface  : public Bsimplex {
    bool contains(CWpt& pt, double threshold=0) const ;
 
    Bvert* other_vertex(CBvert* u, CBvert* v) const {
-      return (!(contains(u) && contains(v)) ? 0 :
-              (u==_v1) ? ((v==_v2) ? _v3 : (v==_v3) ? _v2 : 0) :
-              (u==_v2) ? ((v==_v1) ? _v3 : (v==_v3) ? _v1 : 0) :
-              (u==_v3) ? ((v==_v1) ? _v2 : (v==_v2) ? _v1 : 0) :
-              0);
+      return (!(contains(u) && contains(v)) ? nullptr :
+              (u==_v1) ? ((v==_v2) ? _v3 : (v==_v3) ? _v2 : nullptr) :
+              (u==_v2) ? ((v==_v1) ? _v3 : (v==_v3) ? _v1 : nullptr) :
+              (u==_v3) ? ((v==_v1) ? _v2 : (v==_v2) ? _v1 : nullptr) :
+              nullptr);
    }
    Bvert* other_vertex(CBedge* e) const {
-      return e ? other_vertex(e->v1(), e->v2()) : (Bvert*)0;
+      return e ? other_vertex(e->v1(), e->v2()) : nullptr;
    }
    Bvert* next_vert_ccw(CBvert* u) const {
-      return (u==_v1) ? _v2 : (u==_v2) ? _v3 : (u==_v3) ? _v1 : 0;
+      return (u==_v1) ? _v2 : (u==_v2) ? _v3 : (u==_v3) ? _v1 : nullptr;
    }
 
    // Return the vertex of the given edge (of this face)
    // that comes first WRT this face, in CCW order:
    Bvert* leading_vert_ccw(CBedge* e) const {
       return (
-         e ? ((next_vert_ccw(e->v1()) == e->v2()) ? e->v1() : e->v2()) : 0
+         e ? ((next_vert_ccw(e->v1()) == e->v2()) ? e->v1() : e->v2()) : nullptr
          );
    }
 
    Bedge* next_edge_ccw(CBedge* u) const {
-      return (u==_e1) ? _e2 : (u==_e2) ? _e3 : (u==_e3) ? _e1 : 0;
+      return (u==_e1) ? _e2 : (u==_e2) ? _e3 : (u==_e3) ? _e1 : nullptr;
    }
    Bedge* edge_from_vert(CBvert* u) const {
-      return (u==_v1) ? _e1 : (u==_v2) ? _e2 : (u==_v3) ? _e3 : 0; 
+      return (u==_v1) ? _e1 : (u==_v2) ? _e2 : (u==_v3) ? _e3 : nullptr;
    }
    Bedge* edge_before_vert(CBvert* u) const {
-      return (u==_v1) ? _e3 : (u==_v2) ? _e1 : (u==_v3) ? _e2 : 0; 
+      return (u==_v1) ? _e3 : (u==_v2) ? _e1 : (u==_v3) ? _e2 : nullptr;
    }
    Bface* next_face_ccw(CBvert* u) const {
       return edge_before_vert(u)->other_face(this);
@@ -157,7 +157,7 @@ class Bface  : public Bsimplex {
    // neighboring face (i in [1..3]):
    Bface* nbr(int i) const {
       Bedge* ei = e(i);
-      return ei ? ei->other_face(this) : 0;
+      return ei ? ei->other_face(this) : nullptr;
    }
 
    // return edge shared with given face:
@@ -165,28 +165,28 @@ class Bface  : public Bsimplex {
       return ((_e1->other_face(this) == f) ? _e1 :
               (_e2->other_face(this) == f) ? _e2 :
               (_e3->other_face(this) == f) ? _e3 :
-              0);
+              nullptr);
    }
 
    Bedge* opposite_edge(CBvert* a) const {
       return ((a == _v1) ? _e2 :
               (a == _v2) ? _e3 :
-              (a == _v3) ? _e1 : 0
+              (a == _v3) ? _e1 : nullptr
          );
    }
    Bface* opposite_face(CBvert* a) const {
       Bedge* e = opposite_edge(a);
-      return e ? e->other_face(this) : 0;
+      return e ? e->other_face(this) : nullptr;
    }
    Bface* next_strip_face() const {
       CBedge* e = opposite_edge(orient_strip());
-      return (e && e->is_crossable()) ? e->other_face(this) : 0;
+      return (e && e->is_crossable()) ? e->other_face(this) : nullptr;
    }
    Bedge* other_edge(CBvert* v, CBedge* e) const {
       return ((_e1 != e && _e1->contains(v)) ? _e1 :
               (_e2 != e && _e2->contains(v)) ? _e2 :
               (_e3 != e && _e3->contains(v)) ? _e3 :
-              0);
+              nullptr);
    }
 
    int orientation(CBedge* e) const {
@@ -272,13 +272,13 @@ class Bface  : public Bsimplex {
    Bedge* weak_edge() const {
       return  (_e1->is_weak() ? _e1 :
                _e2->is_weak() ? _e2 :
-               _e3->is_weak() ? _e3 : 0
+               _e3->is_weak() ? _e3 : nullptr
          );
    }
 
    // The other Bface making up the quad:
    Bface* quad_partner() const {
-      return is_quad() ? weak_edge()->other_face(this) : (Bface*)0;
+      return is_quad() ? weak_edge()->other_face(this) : nullptr;
    }
 
    // Arbitrarily (but consistently) pick one face to
@@ -291,17 +291,17 @@ class Bface  : public Bsimplex {
    bool is_quad_rep() const { return is_quad() && quad_rep() == this; }
 
    Bvert* quad_vert() const {
-      return is_quad() ? weak_edge()->opposite_vert(this) : (Bvert*)0;
+      return is_quad() ? weak_edge()->opposite_vert(this) : nullptr;
    }
    Bvert* quad_opposite_vert(CBvert* v) const {
       Bedge* e = weak_edge();
-      if (!e) return 0;
+      if (!e) return nullptr;
       if (e->contains(v))
          return e->other_vertex(v);
       if (contains(v))
          return e->opposite_vert(this);
       Bface* f = quad_partner();
-      return f && f->contains(v) ? e->opposite_vert(f) : 0;
+      return f && f->contains(v) ? e->opposite_vert(f) : nullptr;
    }
 
    // Given one edge of quad, return opposite edge
@@ -312,14 +312,14 @@ class Bface  : public Bsimplex {
          return u1->lookup_edge(u2);
       }
       else
-         return 0;
+         return nullptr;
    }
 
    //added by Karol for the quad mesh traversal
    Bface* other_quad_face(CBedge *e) const {
 	   
 	   
-	 if (!e) return 0; //safety first
+	 if (!e) return nullptr; //safety first
 	
 	   //we may be on the other quad face not directly adjacent to this edge
 	   //in that case get the other quad face
@@ -630,7 +630,7 @@ class Bface  : public Bsimplex {
    //******** XXX - OBSOLETE -- OLD TESSELLATOR STUFF
    bool local_search(Bsimplex *&end, Wvec &final_bc,
                      CWpt &target, Wpt &reached, 
-                     Bsimplex *repeater = 0, int iters = 30);
+                     Bsimplex *repeater = nullptr, int iters = 30);
 
    //*******************************************************
    // PROTECTED
@@ -682,27 +682,27 @@ class Bface  : public Bsimplex {
 inline Bface*
 bface(Bsimplex* sim)
 {
-   return is_face(sim) ? (Bface*)sim : 0;
+   return is_face(sim) ? (Bface*)sim : nullptr;
 }
 
 inline Bface*
 lookup_face(CBedge* e, CBvert* v)
 {
-   return (e && v) ? e->lookup_face(v) : 0;
+   return (e && v) ? e->lookup_face(v) : nullptr;
 }
 
 inline Bface*
 lookup_face(CBedge* a, CBedge* b)
 {
-   return (a && b) ? a->lookup_face(b) : 0;
+   return (a && b) ? a->lookup_face(b) : nullptr;
 }
 
 inline Bface*
 lookup_face(CBvert* a, CBvert* b, CBvert* c)
 {
-   Bedge* e = a ? a->lookup_edge(b) : 0;
+   Bedge* e = a ? a->lookup_edge(b) : nullptr;
 
-   return e ? e->lookup_face(c) : 0;
+   return e ? e->lookup_face(c) : nullptr;
 }
 
 inline Bvert* 
@@ -712,7 +712,7 @@ next_vert_ccw(CBface* f, CBvert* v)
 
    // v must be a vertex of f.
 
-   return f ? f->next_vert_ccw(v) : 0; 
+   return f ? f->next_vert_ccw(v) : nullptr;
 }
 
 inline Bface* 
@@ -723,18 +723,18 @@ ccw_face(CBedge* e, CBvert* v)
 
    // v must be a vertex of e.
 
-   Bvert* u = e ? e->other_vertex(v) : 0;
+   Bvert* u = e ? e->other_vertex(v) : nullptr;
 
-   return ((u == 0)                        ? 0       :
+   return ((u == nullptr)                  ? nullptr :
            (next_vert_ccw(e->f1(),v) == u) ? e->f1() :
            (next_vert_ccw(e->f2(),v) == u) ? e->f2() :
-           0);
+           nullptr);
 }
 
 inline Bface* 
 ccw_face(CBedge* e) 
 {
-   return e ? ccw_face(e, e->v1()) : 0;
+   return e ? ccw_face(e, e->v1()) : nullptr;
 }
 
 inline void
@@ -749,7 +749,7 @@ reverse_faces(const vector<Bface*>& faces)
 inline Bvert*
 closest_vert(Bface* f, CWpt& p)
 {
-   if (!f) return 0;
+   if (!f) return nullptr;
    double d1 = f->v1()->wloc().dist(p);
    double d2 = f->v2()->wloc().dist(p);
    double d3 = f->v3()->wloc().dist(p);
@@ -763,7 +763,7 @@ closest_vert(Bface* f, CWpt& p)
 inline Bvert*
 closest_vert(Bface* f, CNDCpt& p)
 {
-   if (!f) return 0;
+   if (!f) return nullptr;
    double d1 = NDCpt(f->v1()->wloc()).dist(p);
    double d2 = NDCpt(f->v2()->wloc()).dist(p);
    double d3 = NDCpt(f->v3()->wloc()).dist(p);
@@ -1064,7 +1064,7 @@ Bedge::screen_face(CSimplexFilter& filter) const
    return (
       filter.accept(_f1) ? _f1 :
       filter.accept(_f2) ? _f2 :
-      _adj ? _adj->first_satisfies(filter) : 0
+      _adj ? _adj->first_satisfies(filter) : nullptr
       );
 }
 
@@ -1084,7 +1084,7 @@ Bedge::opposite_vert(CBface* f) const
    // and vice versa:
 
    Bface* g = other_face(f);
-   return g ? g->other_vertex(_v1,_v2) : 0;
+   return g ? g->other_vertex(_v1,_v2) : nullptr;
 }
 
 inline bool 

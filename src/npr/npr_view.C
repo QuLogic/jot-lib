@@ -244,8 +244,8 @@ NPRview::distribute_pixels_to_patches()
       return;
    _distribute_pixels_stamp = VIEW::stamp();
 
-   Bsimplex*     sim = 0;
-   Patch*          p = 0;
+   Bsimplex*     sim = nullptr;
+   Patch*          p = nullptr;
    IDRefImage* idref = id_ref();
 
    for (unsigned int id=0; id<idref->max(); id++) {
@@ -268,7 +268,7 @@ NPRview::draw_background()
       string      tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
    
-      if ((tex_name != "") && (tex_ptr == NULL)) {
+      if ((tex_name != "") && (tex_ptr == nullptr)) {
          Image image(tex_name);
 
          if (!image.empty()) {
@@ -293,12 +293,12 @@ NPRview::draw_background()
                ViewUI::update(_view);
          }
       } else if (tex_name == "") {
-         assert(tex_ptr == NULL);
+         assert(tex_ptr == nullptr);
       }
 
       // Now draw bkg if it's textured and/or needs papering
 
-      if ((tex_ptr == NULL) || (!_view->get_use_paper()) || (_view->get_alpha() == 1.0))
+      if ((tex_ptr == nullptr) || (!_view->get_use_paper()) || (_view->get_alpha() == 1.0))
          return 0;
 
       GL_VIEW_PRINT_GL_ERRORS("[Middle] - ");
@@ -311,7 +311,7 @@ NPRview::draw_background()
     
       Wtransf tf;
 
-      if (tex_ptr != NULL) {
+      if (tex_ptr != nullptr) {
          // Aspect ratio of texture
          double ta = ((double)tex_ptr->image().width())/((double)tex_ptr->image().height());
          // Aspect ratio of window
@@ -349,7 +349,7 @@ NPRview::draw_background()
    
       GL_COL(_view->color(), _view->get_alpha());  // GL_CURRENT_BIT
 
-      if (tex_ptr!=NULL) {
+      if (tex_ptr!=nullptr) {
          glEnable(GL_TEXTURE_2D);                  // GL_TEXTURE_BIT      or GL_ENABLE_BIT
          tex_ptr->apply_texture(&tf);              // GL_TEXTURE_BIT
       }      
@@ -391,7 +391,7 @@ NPRview::draw_background()
       string      tex_name = _view->get_bkg_file();
       TEXTUREptr  tex_ptr  = _view->get_bkg_tex();
 
-      if ((tex_name != "") && (tex_ptr == NULL)) {
+      if ((tex_name != "") && (tex_ptr == nullptr)) {
          Image image(tex_name);
 
          if (!image.empty()) {
@@ -417,7 +417,7 @@ NPRview::draw_background()
                ViewUI::update(_view);
          }
       } else if (tex_name == "") {
-         assert(tex_ptr == NULL);
+         assert(tex_ptr == nullptr);
       }
    
       glPushAttrib(
@@ -445,7 +445,7 @@ NPRview::draw_background()
       Wtransf tf;
       tf = Wtransf(Wpt(1.0,1.0,0)); 
          
-      if (tex_ptr!=NULL) {
+      if (tex_ptr!=nullptr) {
          glEnable(GL_TEXTURE_2D);                  // GL_TEXTURE_BIT      or GL_ENABLE_BIT
          _view->set_bkg_tf(tf);
          tex_ptr->apply_texture(&tf);              // GL_TEXTURE_BIT

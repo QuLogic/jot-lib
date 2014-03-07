@@ -22,7 +22,7 @@ vector<MenuItem *> GLUIMoveMenu::_menu_items(10);
 
 GLUIMoveMenu::GLUIMoveMenu(const string &name, int main_window_id) :
    MoveMenu(name),
-   _glui(0),
+   _glui(nullptr),
    _menu_created(false),
    _main_window_id(main_window_id),
    _id(-1),
@@ -88,7 +88,7 @@ GLUIMoveMenu::create_menu()
 
    if(_glui) {
       _glui->close();
-      _glui = 0;
+      _glui = nullptr;
    }
 
    // If we're recreating the menu, must unmap previously mapped item ids
@@ -119,7 +119,7 @@ GLUIMoveMenu::create_menu()
       for (MenuList::size_type i = 0; i < _item_list.size(); i++) {
          // Tell the menu item which menu it belongs to
          _item_list[i]->menu(this);
-         const char *label = 0;
+         const char *label = nullptr;
          // Make default label if one doesn't exist
          if (_item_list[i]->label().empty()) {
             label = "----";
@@ -163,7 +163,7 @@ GLUIMoveMenu::map_menu_item(MenuItem *item)
 
    // See if there's an empty slot in the menu item array.
    for (vector<MenuItem *>::size_type i=0; i<_menu_items.size(); i++) {
-      if (_menu_items[i] == 0) {    // found an empty slot
+      if (_menu_items[i] == nullptr) {    // found an empty slot
          cerr << "map_menu_item(), empty slot " << i << endl;
          _menu_items[i] = item; // store item 
          return i;              // return the index as the item's id
@@ -186,6 +186,6 @@ void
 GLUIMoveMenu::unmap_menu_item(int item_index)
 {
    assert(0 <= item_index && item_index < (int)_menu_items.size());
-   _menu_items[item_index] = 0;
+   _menu_items[item_index] = nullptr;
 }
 

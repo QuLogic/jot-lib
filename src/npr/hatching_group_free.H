@@ -60,7 +60,7 @@ class HatchingGroupFree :
  public:
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
 
-   HatchingGroupFree(Patch *p=0);
+   HatchingGroupFree(Patch *p=nullptr);
    ~HatchingGroupFree();
 
    /******** MEMBER METHODS ********/
@@ -216,7 +216,7 @@ class HatchingHatchFree :
                                         
    HatchingHatchFree(HatchingLevelBase *hlb, HatchingHatchFree *hhf);
 
-   HatchingHatchFree(HatchingLevelBase *hlb=0) :
+   HatchingHatchFree(HatchingLevelBase *hlb=nullptr) :
       HatchingHatchBase(hlb) {}
 
    mlib::CUVpt_list&                get_uvs()               { return _uvs; }
@@ -264,7 +264,7 @@ class HatchingBackboneFree : public HatchingBackboneBase {
    /******** CONSTRUCTOR/DESTRUCTOR ********/
 
    HatchingBackboneFree(Patch *p,HatchingGroupFreeInst* i, HatchingBackboneFree *b);
-   HatchingBackboneFree(Patch *p=0,HatchingGroupFreeInst* i=0);
+   HatchingBackboneFree(Patch *p=nullptr,HatchingGroupFreeInst* i=nullptr);
    ~HatchingBackboneFree();
 
    /******** HatchingBackboneBase METHODS ********/
@@ -350,7 +350,7 @@ class HatchingPositionFree :
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
 
-   HatchingPositionFree(HatchingGroupFree *hg=0, UVMapping *m=0);
+   HatchingPositionFree(HatchingGroupFree *hg=nullptr, UVMapping *m=nullptr);
    ~HatchingPositionFree();
 
    /******** MEMBER METHODS ********/

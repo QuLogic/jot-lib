@@ -277,7 +277,7 @@ class SkinCurveMap : public Map1D3D {
    // Constructor only takes an array of simplices and bcs
    // if the curve is not closed, p0 and p1 have to be not null
    SkinCurveMap(Bsimplex_list& simps, vector<Wvec>& bcs, Skin* skin,
-      Map0D3D* p0 = 0, Map0D3D* p1 = 0);
+      Map0D3D* p0 = nullptr, Map0D3D* p1 = nullptr);
 
    virtual ~SkinCurveMap() { unhook(); } // undo dependencies
 

@@ -87,7 +87,7 @@ MMENU::move(
 
             t2d->set_is2d(1); // Make sure it is screen space text
 
-            BBOX2D bbox = t2d->bbox2d(0, 0, 1);
+            BBOX2D bbox = t2d->bbox2d(0, nullptr, 1);
             if ( bbox.contains(p) ){
                _sel = i;
                gp->set_color(_highlight_col);
@@ -167,12 +167,12 @@ MMENU::tick() {
 
             t2d->set_is2d(1); // Make sure it is screen space text
        
-            BBOX2D bbox = t2d->bbox2d(0, 0, 1);
+            BBOX2D bbox = t2d->bbox2d(0, nullptr, 1);
 //            t2d->set_loc( bbox.min() );
             curloc[1] +=  bbox.min()[1] - bbox.max()[1];
 
             t2d->set_loc(curloc);
-            dbbox += t2d->bbox2d(0,0,1);
+            dbbox += t2d->bbox2d(0,nullptr,1);
          } else {
             Wpt curpt(curloc);
             Wtransf newloc(curpt);

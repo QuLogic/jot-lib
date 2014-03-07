@@ -51,7 +51,7 @@ NPRControlFrameTexture::NPRControlFrameTexture(
       BasicTexture(patch, new GLStripCB),
          _color(col),
          _alpha(1.0),
-         _strip(0) 
+         _strip(nullptr)
 {
    _strokes.push_back(new BaseStroke);
    _strokes[0]->set_texture(Config::JOT_ROOT() + SELECTION_STROKE_TEXTURE);

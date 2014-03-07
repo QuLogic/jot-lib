@@ -65,9 +65,9 @@ class TEXTURE : public REFcounter {
    virtual int  load_image();
    virtual int  set_image(unsigned char *data, int w, int h, uint bpp=3);
 
-   virtual bool load_texture (unsigned char **copy=0) = 0;
+   virtual bool load_texture (unsigned char **copy=nullptr) = 0;
    virtual bool load_cube_map()                       = 0;
-   virtual void apply_texture(mlib::CWtransf   *xf=0) = 0;
+   virtual void apply_texture(mlib::CWtransf   *xf=nullptr) = 0;
 
    void set_expand_image(bool expand) { _expand_image = expand;}
 

@@ -40,7 +40,7 @@ class CamState {
       *_cam = *ncam;
    }
    ~CamState() { 
-      _cam = 0;
+      _cam = nullptr;
    }
    double t() { return _t;}
    CAMptr cam() { return _cam; };

@@ -27,8 +27,8 @@
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *      IOManager::_io_tags = NULL;
-IOManager *    IOManager::_instance = NULL;
+TAGlist *      IOManager::_io_tags = nullptr;
+IOManager *    IOManager::_instance = nullptr;
 
 /////////////////////////////////////
 // tags()

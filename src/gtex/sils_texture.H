@@ -31,7 +31,7 @@
 class SilsTexture : public OGLTexture {
  public:
    //******** MANAGERS ********
-   SilsTexture(Patch* patch = 0) :
+   SilsTexture(Patch* patch = nullptr) :
       OGLTexture(patch),
       _color(0,0,0), // XXX g++ 2.97 work around
       _width(2),

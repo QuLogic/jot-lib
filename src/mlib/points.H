@@ -889,7 +889,7 @@ class NDCZpt_list : public vector<NDCZpt> {
       //! paramter there:
       //!
       //! \note Progress along the polyline is measured just in X and Y, not Z.
-      NDCZpt interpolate(double s, NDCZvec *tan=0, int*segp=0, double*tp=0) const;
+      NDCZpt interpolate(double s, NDCZvec *tan=nullptr, int*segp=nullptr, double*tp=nullptr) const;
       
       //@}
       

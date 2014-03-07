@@ -31,13 +31,13 @@ class EdgeStrokeVertexData : public BaseStrokeVertexData {
 
    const Bsimplex* sim;
 
-   EdgeStrokeVertexData() : sim(0) {  }
+   EdgeStrokeVertexData() : sim(nullptr) {  }
    virtual ~EdgeStrokeVertexData() {}
 
    /******** MEMBER METHODS ********/
 
    virtual BaseStrokeVertexData* alloc(int n) 
-      { return (n>0)?(new EdgeStrokeVertexData[n]):0; }
+      { return (n>0) ? (new EdgeStrokeVertexData[n]) : nullptr; }
 
    virtual void dealloc(BaseStrokeVertexData *d) {
       if (d) {

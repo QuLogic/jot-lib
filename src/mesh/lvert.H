@@ -75,10 +75,10 @@ class Lvert : public Bvert {
 
    Lvert(CWpt& p=mlib::Wpt::Origin()) :
       Bvert(p),
-      _subdiv_vertex(0),
+      _subdiv_vertex(nullptr),
       _corner(0),
       _mask(SMOOTH_VERTEX),
-      _parent(0),
+      _parent(nullptr),
       _offset(0) {}
 
    virtual ~Lvert();
@@ -94,7 +94,7 @@ class Lvert : public Bvert {
 
    //******** CONTROL ELEMENTS ********
 
-   bool is_control() const { return _parent == 0; }
+   bool is_control() const { return _parent == nullptr; }
 
    // proper parent
    // (it's null for vertices of the control mesh):
@@ -107,7 +107,7 @@ class Lvert : public Bvert {
    // convenience method - casts control element to Lvert if valid:
    Lvert* ctrl_vert() const {
       Bsimplex* sim = ctrl_element();
-      return is_vert(sim) ? (Lvert*)sim : (Lvert*)0;
+      return is_vert(sim) ? (Lvert*)sim : nullptr;
    }
    
    //******** SUBDIV VERTS ********

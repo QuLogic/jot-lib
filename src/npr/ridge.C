@@ -32,7 +32,7 @@ static bool debug = Config::get_var_bool("DEBUG_RIDGE", false);
 GLuint          RidgeShader::_program = 0;
 bool            RidgeShader::_did_init = false;
 
-RidgeShader* RidgeShader::_instance(0);
+RidgeShader* RidgeShader::_instance(nullptr);
 
 RidgeShader::RidgeShader(Patch* p) : GLSLShader(p), 
 	_start_offset(5), _end_offset(35), 

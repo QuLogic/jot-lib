@@ -38,7 +38,7 @@ class CurvatureTexture : public BasicTexture {
       //! \name Constructors
       //@{
       
-      CurvatureTexture(Patch* patch = 0, StripCB* cb=0);
+      CurvatureTexture(Patch* patch = nullptr, StripCB* cb=nullptr);
       
       //@}
       

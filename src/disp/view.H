@@ -164,7 +164,7 @@ class REF_CLASS(VIEWimpl) {
    virtual void   prepare_buf_read()             {}
    virtual void   end_buf_read()                 {}
    virtual void   read_pixels(uchar *,bool a=false)  {}
-   virtual int    stencil_draw(STENCILCB *, GELlist * = 0) { return 0; }
+   virtual int    stencil_draw(STENCILCB *, GELlist * = nullptr) { return 0; }
    virtual bool   antialias_check() { return false; }
 
    virtual void    draw_setup() {}
@@ -414,7 +414,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    bool              get_use_paper() const                  { return _use_paper; }
 
    // Setting filename kills texture:
-   void              set_bkg_file(string f)                 { _bkg_file = f; _bkg_tex = NULL; CHANGED(TEXTURE_CHANGED);}
+   void              set_bkg_file(string f)                 { _bkg_file = f; _bkg_tex = nullptr; CHANGED(TEXTURE_CHANGED);}
    
    // npr_view sets this from the filename:
    const string&     get_bkg_file() const                   { return _bkg_file; }
@@ -696,7 +696,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    CAMptr               cam()                      { return _cam; }
 
    // Camera history
-   void save_cam(CCAMptr c=0);
+   void save_cam(CCAMptr c=nullptr);
    void fwd_cam_hist();
    void bk_cam_hist();
 
@@ -793,7 +793,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
                                                  1.0 : 1.0/peek()->ndc2pix_scale();}
 
    //!METHS: interface delegated to an implementation object
-   int         stencil_draw(STENCILCB *cb, GELlist *objs= 0) { return _impl ? 
+   int         stencil_draw(STENCILCB *cb, GELlist *objs= nullptr) { return _impl ?
                                                                   _impl->stencil_draw(cb,objs) : 0; }
    void        set_size      (int w, int h, int x, int y);
    void        set_cursor    (int i)       { if (_impl) _impl->set_cursor(i); }

@@ -44,7 +44,7 @@ class Map1D3D : public Map {
  public:
 
    //******** MANAGERS ********
-   Map1D3D(Map0D3D* p0 = 0, Map0D3D* p1 = 0, mlib::CWvec& n = mlib::Wvec::null());
+   Map1D3D(Map0D3D* p0 = nullptr, Map0D3D* p1 = nullptr, mlib::CWvec& n = mlib::Wvec::null());
 
    virtual ~Map1D3D() { unhook(); } // clears dependencies
 
@@ -209,7 +209,7 @@ class ReverseMap1D3D : public Map1D3D {
 
    static Map1D3D* get_reverse_map(Map1D3D* m) {
       if (!m)
-         return 0;
+         return nullptr;
       if (isa(m))
          return ((ReverseMap1D3D*)m)->_map1d3d;
       else
@@ -305,8 +305,8 @@ class Wpt_listMap : public Map1D3D {
    // Constructor takes optional endpoints.
    // If they are given the Wpt_list cannot be closed.
    Wpt_listMap(mlib::CWpt_list& pts,
-               Map0D3D* p0 = 0,
-               Map0D3D* p1 = 0,
+               Map0D3D* p0 = nullptr,
+               Map0D3D* p1 = nullptr,
                mlib::CWvec&    n = mlib::Wvec::null()
       );
 
@@ -379,8 +379,8 @@ class SurfaceCurveMap : public Map1D3D {
    // null the UVpt_list has to be closed.
    SurfaceCurveMap(Map2D3D* surface,
                    mlib::CUVpt_list& uvs,
-                   Map0D3D* p0 = 0,
-                   Map0D3D* p1 = 0);
+                   Map0D3D* p0 = nullptr,
+                   Map0D3D* p1 = nullptr);
 
    virtual ~SurfaceCurveMap() { unhook(); } // undo dependencies
 
@@ -481,7 +481,7 @@ class RayMap : public Map1D3D {
    RayMap(Map0D3D* base_pt, mlib::CWvec& dir) :
       _base(base_pt),
       _dir(dir.normalized()) {
-      assert(_base != NULL);
+      assert(_base != nullptr);
       assert(!_dir.is_null());
       hookup(); // create Bnode dependency on base point
    }

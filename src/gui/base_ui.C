@@ -30,12 +30,12 @@
 
 BaseUI::BaseUI(string n)
    : _name(n),
-     _glui(0)
+     _glui(nullptr)
 {}
 
 BaseUI::BaseUI(BaseUI* parent, string n)
    : _name(n),
-     _glui(0),
+     _glui(nullptr),
      _parent(parent)
 {}
 
@@ -90,7 +90,7 @@ BaseUI::build()
    _glui = GLUI_Master.create_glui(_name.c_str(), 0, root_x + root_w + 10, root_y);
    _glui->set_main_gfx_window(VIEW::peek()->win()->id());
       
-   build(_glui, NULL, true);
+   build(_glui, nullptr, true);
 
    //Show will actually show it...
    _glui->hide();
@@ -115,7 +115,7 @@ BaseUI::destroy()
    
    //Recursively kills off all controls, and itself
    _glui->close();
-   _glui = NULL;
+   _glui = nullptr;
 }
 
 void 

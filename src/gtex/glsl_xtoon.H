@@ -32,7 +32,7 @@
 class GLSLXToonShader : public GLSLShader {
  public:
    //******** MANAGERS ********
-   GLSLXToonShader(Patch* patch = 0);
+   GLSLXToonShader(Patch* patch = nullptr);
 
    //******** RUN-TIME TYPE ID ********
    DEFINE_RTTI_METHODS3("GLSL XToon",
@@ -76,7 +76,7 @@ class GLSLXToonShader : public GLSLShader {
    virtual const string& get_tex_name() const   { return _tex_name;     }
    virtual void set_tex_name(const string& tn)  {
      // cerr << "GLSLXToonShader::set_tex_name: deconstructing... ";
-     // _tex = NULL;
+     // _tex = nullptr;
      // cerr << "done" << endl;
       _tex_name = tn; 
       set_tex(_tex_name);

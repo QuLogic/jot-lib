@@ -619,7 +619,7 @@ ProxySurface::neighbor_face(int dir, Bface* face)
 	Bvert* v4 = get_vert_grid(uv4);
 	
 	if(!v1 || !v2 || !v3 || !v4)
-		return 0;
+		return nullptr;
 
 	Bface* n = lookup_quad(v1, v2, v3, v4);
 	assert(n);

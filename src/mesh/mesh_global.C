@@ -138,7 +138,7 @@ MeshGlobal::selected_faces_all_levels(BMESH* m)
 
    // If this is an lmesh, also find the selected
    // faces for any sub mesh in the hierarchy
-   for (LMESH* lm = LMESH::upcast(cm); lm != 0; lm = lm->subdiv_mesh()) {
+   for (LMESH* lm = LMESH::upcast(cm); lm != nullptr; lm = lm->subdiv_mesh()) {
       ret = ret + selected_faces(lm);
    }
 
@@ -450,7 +450,7 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
    // get the subdiv mesh corresponding to old edit level
    LMESH* old_edit_mesh = get_subdiv_mesh(get_ctrl_mesh(mesh), from);
 
-   if (old_edit_mesh == 0) {
+   if (old_edit_mesh == nullptr) {
       err_adv(debug, "null mesh for old level");
       return;
    }

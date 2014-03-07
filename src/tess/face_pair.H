@@ -112,7 +112,7 @@ class FacePairFilter : public SimplexFilter {
 
    //******** SOLE JOB ********
    virtual bool accept(CBsimplex* s) const {
-      return is_face(s) ? FacePair::find_pair(_key, (Bface*)s) != NULL : false;
+      return is_face(s) ? FacePair::find_pair(_key, (Bface*)s) != nullptr : false;
    }
 
  protected:

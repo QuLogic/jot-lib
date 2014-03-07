@@ -46,7 +46,7 @@ class FeatureStrokeTexture : public OGLTexture,
 
  public:
    /******** CONSTRUCTOR/DESTRUCTOR ********/
-   FeatureStrokeTexture(Patch* patch = 0);
+   FeatureStrokeTexture(Patch* patch = nullptr);
    virtual ~FeatureStrokeTexture() {  unobserve(); }
 
    /******** MEMBER METHODS ********/

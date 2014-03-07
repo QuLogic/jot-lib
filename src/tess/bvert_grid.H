@@ -72,7 +72,7 @@ class BvertGrid {
    void clear() {
       _grid.clear();
       _du = _dv = _RowsCache = _ColsCache = 0;
-      _mesh = 0;
+      _mesh = nullptr;
    }
 
    // Vertices of bottom and top run left to right.

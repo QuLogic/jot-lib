@@ -91,7 +91,7 @@ void
 Lvert::subdiv_vert_deleted() 
 { 
   // not for public use, to be called by the child
-  _subdiv_vertex = 0; 
+  _subdiv_vertex = nullptr;
 
   clear_bit(SUBDIV_LOC_VALID_BIT);
   clear_bit(SUBDIV_COLOR_VALID_BIT);
@@ -109,7 +109,7 @@ Lvert::ctrl_element() const
       return ((Ledge*)_parent)->ctrl_element();
    if (is_face(_parent))
       return ((Lface*)_parent)->control_face();
-   return 0; // should never happen
+   return nullptr; // should never happen
 }
 
 Lvert* 
@@ -119,10 +119,10 @@ Lvert::subdiv_vert(int level)
    // relative to this:
 
    if (level < 0)
-      return 0;
+      return nullptr;
    if (level == 0)
       return this;
-   return _subdiv_vertex ? _subdiv_vertex->subdiv_vert(level-1) : 0;
+   return _subdiv_vertex ? _subdiv_vertex->subdiv_vert(level-1) : nullptr;
 }
 
 Lvert* 
@@ -135,7 +135,7 @@ Lvert::parent_vert(int rel_level) const
    for (int i=0; v && i<rel_level; i++) {
       Bsimplex* p = v->parent();
       if (!is_vert(p))
-         return 0;
+         return nullptr;
       v = (Lvert*)p;
    }
 
@@ -147,7 +147,7 @@ Lvert::cur_subdiv_vert()
 {
    // Return subdiv vertex at current subdiv level of the mesh:
 
-   return _mesh ? subdiv_vert(_mesh->rel_cur_level()) : 0;
+   return _mesh ? subdiv_vert(_mesh->rel_cur_level()) : nullptr;
 }
 
 /*****************************************************************
@@ -222,7 +222,7 @@ Lvert::update_subdivision()
    if (!_subdiv_vertex) {
      // this vertex generated a child at one time, but someone else
      // removed it at the next level down
-      return 0;
+      return nullptr;
    }
 
    // keep track of color, position, and corner separately

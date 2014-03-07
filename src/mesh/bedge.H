@@ -132,7 +132,7 @@ class Bedge : public Bsimplex {
 
    // If v is a vertex of this edge, return the other vertex:
    Bvert* other_vertex(CBvert* v) const {
-      return (v==_v1)?_v2:(v==_v2)?_v1:0;
+      return (v==_v1) ? _v2 : (v==_v2) ? _v1 : nullptr;
    }
 
    // Return the vertex's "index." i.e., 1 or 2
@@ -141,9 +141,9 @@ class Bedge : public Bsimplex {
 
    Bvert* shared_vert(CBedge* e) const {
       return (
-         (e == 0 || e == this) ? 0   :
+         (e == nullptr || e == this) ? nullptr   :
          e->contains(_v1)      ? _v1 :
-         e->contains(_v2)      ? _v2 : 0
+         e->contains(_v2)      ? _v2 : nullptr
          );
    }
 
@@ -157,7 +157,7 @@ class Bedge : public Bsimplex {
    }
 
    // If f is a primary adjacent face, return the other primary adjacent face:
-   Bface* other_face(CBface *f)  const   { return (f==_f1)?_f2:(f==_f2)?_f1:0;} 
+   Bface* other_face(CBface *f)  const   { return (f==_f1) ? _f2 : (f==_f2) ? _f1 : nullptr;}
 
 
    // Return a front-facing face, if any:
@@ -279,7 +279,7 @@ class Bedge : public Bsimplex {
 
    // Returns true if the 2 adjacent faces have a consistent orientation:
    bool consistent_orientation() const;
-   bool oriented_ccw(Bface* =0)  const;
+   bool oriented_ccw(Bface* =nullptr)  const;
 
    // Returns true if either vertex has an odd number of adjacent
    // polyline edges (or crease edges, respectively). Used in
@@ -382,7 +382,7 @@ class Bedge : public Bsimplex {
       ) const;
 
    // faces
-   virtual Bface* get_face()         const { return _f1?_f1:_f2?_f2:0;  }
+   virtual Bface* get_face()         const { return _f1 ? _f1 : _f2 ? _f2 : nullptr;  }
    virtual bool   on_face(CBface* f) const { return contains(f); }
 
    // Return the first face accepted by the filter:
@@ -408,7 +408,7 @@ class Bedge : public Bsimplex {
    //******** XXX - OBSOLETE -- OLD TESSELLATOR STUFF
    virtual bool local_search(Bsimplex *&end, Wvec &final_bc,
          CWpt &target, mlib::Wpt &reached, 
-         Bsimplex *repeater = 0, int iters = 30);
+         Bsimplex *repeater = nullptr, int iters = 30);
    virtual NDCpt nearest_pt_ndc(mlib::CNDCpt& p, mlib::Wvec &bc, int &is_on_simplex) const;
    virtual Wpt   nearest_pt(mlib::CWpt& p, mlib::Wvec &bc, bool &is_on_simplex) const;
 
@@ -439,7 +439,7 @@ class Bedge : public Bsimplex {
 inline Bedge*
 bedge(Bsimplex* sim)
 {
-   return is_edge(sim) ? (Bedge*)sim : 0;
+   return is_edge(sim) ? (Bedge*)sim : nullptr;
 }
 
 /*****************************************************************
@@ -567,7 +567,7 @@ class StrongEdgeFilter : public SimplexFilter {
 class FrontFacingEdgeFilter : public SimplexFilter {
  public:
    virtual bool accept(CBsimplex* s) const {
-      return is_edge(s) && (((Bedge*)s)->frontfacing_face() != 0);
+      return is_edge(s) && (((Bedge*)s)->frontfacing_face() != nullptr);
    }
 };
 

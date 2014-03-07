@@ -25,7 +25,7 @@
  * layer_base_t
  *****************************************************************/
 static bool debug = Config::get_var_bool("DEBUG_LAYER_BASE",false);
-TAGlist* layer_base_t::_lb_tags = 0;
+TAGlist* layer_base_t::_lb_tags = nullptr;
 
 void         
 layer_base_t::get_pattern_name (TAGformat &d)
@@ -175,7 +175,7 @@ layer_base_t::tags() const
 /*****************************************************************
  * GLSLShader_Layer_Base:
  *****************************************************************/
-TAGlist* GLSLShader_Layer_Base::_tags = 0;
+TAGlist* GLSLShader_Layer_Base::_tags = nullptr;
 
 GLSLShader_Layer_Base::GLSLShader_Layer_Base(Patch* p, StripCB* cb) :
    GLSLShader(p, cb),

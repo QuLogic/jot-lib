@@ -68,7 +68,7 @@ class Config {
 
    static const string& JOT_ROOT()        { assert(_instance); return _instance->_jot_root;  }
  
-   static void       no_warn(const string &s) { if (_no_warn == 0) _no_warn = new set<string>; _no_warn->insert(s); }
+   static void       no_warn(const string &s) { if (_no_warn == nullptr) _no_warn = new set<string>; _no_warn->insert(s); }
 
  protected:
    static bool       get_var_is_set(const string& var);

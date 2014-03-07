@@ -97,7 +97,7 @@ class GEOM : public GEL, public APPEAR {
  public: 
    //******** MANAGERS ********
    GEOM(CGEOMptr &o, const string &);  // copy constructor
-   GEOM(const string &, CBODYptr& b = 0);
+   GEOM(const string &, CBODYptr& b = nullptr);
    GEOM();
    virtual ~GEOM();
 
@@ -151,7 +151,7 @@ class GEOM : public GEL, public APPEAR {
 
    //******** ADDITIONAL GEOM INTERFACE ********
    virtual int      lookup_constraint(CEvent &, State *&, cons &) { return 0; }
-   virtual int      interactive      (CEvent &, State *&, RAYhit * =0) const
+   virtual int      interactive      (CEvent &, State *&, RAYhit * =nullptr) const
       { return 0; }
    virtual BBOX     bbox             (int i=0)      const;
 
@@ -262,7 +262,7 @@ inline BODYptr
 gel_to_body(CGELptr &gel)
 {
    GEOM* geom = GEOM::upcast(gel);
-   return geom ? geom->body() : 0;
+   return geom ? geom->body() : nullptr;
 }
 
 STDdstream  &operator>>(STDdstream &d, GEOMptr &p);

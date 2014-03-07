@@ -62,7 +62,7 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
 
   _radgroup[RADGROUP_REF_IMAGES] = new GLUI_RadioGroup(
                                      _rollout[ROLLOUT_MAIN],
-                                     NULL,
+                                     nullptr,
                                      id+RADGROUP_REF_IMAGES, radiogroup_cb);
 
 
@@ -89,7 +89,7 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
 
    _slider[SLIDER_HALO] = new GLUI_Slider(_rollout[ROLLOUT_MAIN],
                                           "Halo kernel size",
-                                          id+SLIDER_HALO,slider_cb,1,0,50,0);
+                                          id+SLIDER_HALO,slider_cb,1,0,50,nullptr);
 
    _slider[SLIDER_HALO]->set_int_val(HaloRefImage::lookup()->get_kernel_size());
 
@@ -97,7 +97,7 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
 
    _listbox[LISTBOX_SKY] = new GLUI_Listbox(_rollout[ROLLOUT_MAIN],
                                             "Sky",
-                                            0,id+LISTBOX_SKY,
+                                            nullptr,id+LISTBOX_SKY,
                                             listbox_cb);
 
     fill_directory_listbox(_listbox[LISTBOX_SKY], _sky_filenames, Config::JOT_ROOT() + "/nprdata/sky_textures/", ".png", false);
@@ -105,7 +105,7 @@ RefImageUI::build(GLUI* glui, GLUI_Panel*  base, bool open)
 
    _checkbox[CHECKBOX_SKY] = new GLUI_Checkbox(_rollout[ROLLOUT_MAIN],
                                                "draw skybox",
-                                               0,id+CHECKBOX_SKY,
+                                               nullptr,id+CHECKBOX_SKY,
                                                checkbox_cb);
    _checkbox[CHECKBOX_SKY]->set_int_val(0);
                                                          

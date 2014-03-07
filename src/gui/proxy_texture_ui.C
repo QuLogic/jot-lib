@@ -57,7 +57,7 @@ ProxyTextureUI::ProxyTextureUI(BaseUI* parent) :
    _color_ui = new ColorUI(this);
 
    _texture_selection_ui = new PatchSelectionUI(this, false);
-   _current_tex = 0;  
+   _current_tex = nullptr;
 }
 
 
@@ -79,7 +79,7 @@ ProxyTextureUI::build(GLUI* glui, GLUI_Panel* base, bool open)
   
    _listbox[LIST_BASECOAT]= new GLUI_Listbox(
                               _rollout[ROLLOUT_MAIN], 
-                              "Basecoat", NULL,
+                              "Basecoat", nullptr,
                               LIST_BASECOAT, listbox_cb);                             
    fill_basecoat_listbox(_listbox[LIST_BASECOAT]);   
 
@@ -89,21 +89,21 @@ ProxyTextureUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    _checkbox[CHECK_SHOW_SAMPLES]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Samples",
-                              NULL,
+                              nullptr,
                               CHECK_SHOW_SAMPLES,
                               checkbox_cb);    
 
     _checkbox[CHECK_SHOW_SAMPLES_OLD]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Samples Old",
-                              NULL,
+                              nullptr,
                               CHECK_SHOW_SAMPLES_OLD,
                               checkbox_cb);    
 
    _checkbox[CHECK_SHOW_PROXY_MESH]=new GLUI_Checkbox(
                               _rollout[ROLLOUT_SAMPLES],
                               "Show Proxy Mesh",
-                              NULL,
+                              nullptr,
                               CHECK_SHOW_PROXY_MESH,
                               checkbox_cb);
    _checkbox[CHECK_SHOW_PROXY_MESH]->disable();

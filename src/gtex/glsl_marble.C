@@ -50,7 +50,7 @@ GLSLShader(p, new VertNormStripCB)
       Config::get_var_str("GLSL_TOON_FILENAME","clear-black.png")
       ));
    
-   _perlin=0;
+   _perlin=nullptr;
    _perlin_generator= Perlin::get_instance();
    if (!_perlin_generator)
       _perlin_generator= new Perlin();

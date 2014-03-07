@@ -46,7 +46,7 @@ Cam_int_edit::Cam_int_edit(
    CEvent    &zoom_up_ev
    )
 {
-   Event  toggle(NULL, Evd('Y', KEYD));
+   Event  toggle(nullptr, Evd('Y', KEYD));
 
    _cam_rot    += Arc(move_ev, Cb(&Cam_int_edit::rot));
    _cam_rot    += Arc(up_ev,   Cb(&Cam_int_edit::up,    (State *)-1));
@@ -539,7 +539,7 @@ Cam_int_edit::up(
    VIEWptr         view(e.view());
    CAMptr          cam (view->cam());
 
-   _model = NULL;
+   _model = nullptr;
    cam->data()->end_manip();
    return 0;
 }
@@ -558,7 +558,7 @@ Cam_int_edit::scale
    CAMdataptr  data(cam->data());
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp   = ptr->old(); 
@@ -596,7 +596,7 @@ Cam_int_edit::scale_x
    CAMdataptr  data(cam->data());
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp   = ptr->old(); 
@@ -633,7 +633,7 @@ Cam_int_edit::scale_y
    CAMdataptr  data(cam->data());
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp   = ptr->old(); 
@@ -670,7 +670,7 @@ Cam_int_edit::scale_z
    CAMdataptr  data(cam->data());
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp   = ptr->old(); 
@@ -706,7 +706,7 @@ Cam_int_edit::rot_z
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
    //return if you didn't select a model to edit
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp  = ptr->old(); 
@@ -735,7 +735,7 @@ Cam_int_edit::rot_y
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
    //return if you didn't select a model to edit
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp  = ptr->old(); 
@@ -763,7 +763,7 @@ Cam_int_edit::rot_x
    DEVice_2d  *ptr=(DEVice_2d *)e._d;
    
    //return if you didn't select a model to edit
-   if(_model == NULL)
+   if(_model == nullptr)
       return 0;
 
    XYpt tp  = ptr->old(); 

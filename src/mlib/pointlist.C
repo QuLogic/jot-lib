@@ -325,11 +325,11 @@ mlib::Pointlist<L,P,V,S>::update_length()
 //!
 //! \param[in] s Interpolation parameter.  Varies from 0 to 1 (0 is the begining
 //! of the line and 1 is the end).
-//! \param[out] tan Tanget of segment \p segp (pass NULL if you don't want it).
+//! \param[out] tan Tanget of segment \p segp (pass nullptr if you don't want it).
 //! \param[out] segp Index of the segment that contains the interpolated position
-//! at \p s (pass NULL if you don't want it).
+//! at \p s (pass nullptr if you don't want it).
 //! \param[out] tp Parameter varying from 0 to 1 representing the corresponding
-//! position of \p s on the segment \p segp (pass NULL if you don't want it).
+//! position of \p s on the segment \p segp (pass nullptr if you don't want it).
 //! \return The interpolated point along on the polyline at \p s.
 template<class L, class P, class V, class S>
 MLIB_INLINE

@@ -46,7 +46,7 @@ BvertGrid::build(
        !top.same_mesh()                 ||
        !left.same_mesh()                ||
        !right.same_mesh()               ||
-       bottom.mesh() == 0) {
+       bottom.mesh() == nullptr) {
       err_msg("BvertGrid::build: can't deal with CRAP input");
 
       std::ostream_iterator<Bvert*> err_it (std::cerr, ", ");
@@ -107,7 +107,7 @@ BvertGrid::cache()
    _ColsCache = ncols() - 1;
    _mesh = bottom().mesh();
 
-   assert(_RowsCache > 0 && _ColsCache > 0 && _mesh != 0);
+   assert(_RowsCache > 0 && _ColsCache > 0 && _mesh != nullptr);
 
    _du = 1.0/_ColsCache;
    _dv = 1.0/_RowsCache;
@@ -157,7 +157,7 @@ BvertGrid::add_quad(int i, int j, Patch* p)
          uv  (i  , j  ),
          uv  (i-1, j  ),
          p);
-   return q != 0;
+   return q != nullptr;
 }
 
 bool

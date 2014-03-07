@@ -32,7 +32,7 @@ GLuint          BinaryImageShader::_program = 0;
 bool            BinaryImageShader::_did_init = false;
 GLint           BinaryImageShader::_tex_loc = -1;
 GLint           BinaryImageShader::_thresh_loc = -1;
-BinaryImageShader* BinaryImageShader::_instance(0);
+BinaryImageShader* BinaryImageShader::_instance(nullptr);
 
 BinaryImageShader::BinaryImageShader(Patch* p) : GLSLShader(p), 
 	_binary_threshold(0.8)

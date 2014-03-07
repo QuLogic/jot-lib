@@ -86,8 +86,8 @@ Key_int::add_event(
    )
 {
    for (const char *c = k; *c; c++) {
-      Event  down_ev(NULL, Evd(*c, KEYD));
-      Event  up_ev  (NULL, Evd(*c, KEYU));
+      Event  down_ev(nullptr, Evd(*c, KEYD));
+      Event  up_ev  (nullptr, Evd(*c, KEYU));
       _key_down += Arc(up_ev,   Cb(&Key_int::up,    start));
       _entry    += Arc(down_ev, Cb(&Key_int::down, &_key_down));
    }
@@ -99,8 +99,8 @@ Key_int::add_event(
    State *start    // where to go when this FSA finishes
    )
 {
-   Event  down_ev(NULL, Evd(k, KEYD));
-   Event  up_ev  (NULL, Evd(k, KEYU));
+   Event  down_ev(nullptr, Evd(k, KEYD));
+   Event  up_ev  (nullptr, Evd(k, KEYU));
    _key_down += Arc(up_ev,   Cb(&Key_int::up,    start));
    _entry    += Arc(down_ev, Cb(&Key_int::down, &_key_down));
 }
@@ -133,7 +133,7 @@ FilmTrans::down(
    if (_view->intersect(r,VIEW::H_TEXT).success() && GEOM::isa(r.geom())) {
       geom = ray_geom(r, GEOM::null);
       if (geom->interactive(e, s, &r)) {
-         _obj      = 0;
+         _obj      = nullptr;
          _no_xform = 1;
          return 1; // Interactive - return....
       }
@@ -190,7 +190,7 @@ FilmTrans::up(
       XFORMobs::notify_xform_obs(_obj, XFORMobs::END);
 
    // forget this obj
-   _obj = (GEOMptr) 0;
+   _obj = (GEOMptr) nullptr;
 
    return 0;
 }

@@ -52,7 +52,7 @@ class DiskMap : public Map0D3D {
    // if the given set of faces topologically forms a disk
    // (see Bface_list::is_disk()), and if the maximum normal
    // deviation (in radians) is below the given threshold:
-   static DiskMap* create(CBface_list& disk, bool flip_tan=false, Bvert* v=NULL);
+   static DiskMap* create(CBface_list& disk, bool flip_tan=false, Bvert* v=nullptr);
 
    virtual ~DiskMap();
 
@@ -110,7 +110,7 @@ class DiskMap : public Map0D3D {
    //******** MANAGERS ********
 
    // Created in create(), set up in recompute():
-   DiskMap() : _updater(0), _flip_tan(false) {}
+   DiskMap() : _updater(nullptr), _flip_tan(false) {}
 
    //******** UTILITIES ********
 

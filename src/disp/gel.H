@@ -265,7 +265,7 @@ class ExistList : public GELlist {
     GELptr  lookup        (const string &n) const;
     string  unique_dupname(const string &) const;
     string  unique_name   (const string &) const;
-    bool    allocated() const { return _array != 0; }
+    bool    allocated() const { return _array != nullptr; }
 };
 
 extern ExistList    EXIST;

@@ -89,7 +89,7 @@ ZcrossTexture::draw(CVIEWptr& v)
       glBegin ( GL_POINTS ) ;
       for ( int k =0 ; k < n; k++ ) {
          glColor3d ( 0.0 , 0.0 , 1.0 );
-         if ( zx_sils.face(k) == NULL )
+         if ( zx_sils.face(k) == nullptr )
             glColor3d ( 1.0, 0, 0 );
          glVertex3dv ( zx_sils.point(k).data() );
       }

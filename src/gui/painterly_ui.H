@@ -113,7 +113,7 @@ class PainterlyUI : public BaseUI {
    DEFINE_RTTI_METHODS3("PainterlyUI", PainterlyUI*, PainterlyUI, BaseUI*);
 
     /******** CONSTRUCTOR/DECONSTRUCTOR ********/
-   PainterlyUI(BaseUI* parent=0);
+   PainterlyUI(BaseUI* parent=nullptr);
    virtual ~PainterlyUI(){}
 
    /******** MEMBERS METHODS ********/
@@ -123,7 +123,7 @@ class PainterlyUI : public BaseUI {
 
    int          get_current_layer() { return _texture_selection_ui->get_layer_num(); }
    int          get_current_channel() { return _texture_selection_ui->get_channel_num(); }
-   ToneShader*  get_tone_shader() { return (_current_painterly) ? _current_painterly->get_tone_shader() : 0; }
+   ToneShader*  get_tone_shader() { return (_current_painterly) ? _current_painterly->get_tone_shader() : nullptr; }
    bool         load_preset();
    bool         save_preset();
  protected:   

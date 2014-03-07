@@ -51,7 +51,7 @@ class SimplexFilter {
    virtual ~SimplexFilter() {}
 
    //******** SOLE JOB ********
-   virtual bool accept(CBsimplex* s) const { return s != 0; }
+   virtual bool accept(CBsimplex* s) const { return s != nullptr; }
 };
 typedef const SimplexFilter CSimplexFilter;
 
@@ -78,7 +78,7 @@ class Bsimplex {
 
    //******** MANAGERS ********
 
-   Bsimplex() : _key(0), _flag(0), _mesh(0), _data_list(0) {}
+   Bsimplex() : _key(0), _flag(0), _mesh(nullptr), _data_list(nullptr) {}
    virtual ~Bsimplex();
 
    //******** ACCESSORS ********
@@ -90,7 +90,7 @@ class Bsimplex {
 
    uintptr_t key() const { return _key ? _key : ((Bsimplex*)this)->generate_key();}
    static Bsimplex* lookup(uintptr_t k) {
-      return (k<_table.size()) ? _table[k] : 0;
+      return (k<_table.size()) ? _table[k] : nullptr;
    }
 
    //******** DIMENSION ********
@@ -135,7 +135,7 @@ class Bsimplex {
    //******** SIMPLEX DATA ********
 
    SimplexData* find_data(uintptr_t key) const {
-      return _data_list ? _data_list->get_item(key) : 0;
+      return _data_list ? _data_list->get_item(key) : nullptr;
    }
 
    SimplexData* find_data(const string& s) const { return find_data((uintptr_t)s.c_str());}
@@ -242,7 +242,7 @@ class Bsimplex {
    virtual bool local_search(
       Bsimplex *&end, Wvec &final_bc,
       CWpt &target, mlib::Wpt &reached,
-      Bsimplex *repeater = 0, int iters = 30
+      Bsimplex *repeater = nullptr, int iters = 30
       ) = 0;
 
    virtual NDCpt nearest_pt_ndc(mlib::CNDCpt&, mlib::Wvec&, int&)               const = 0;
@@ -279,7 +279,7 @@ class Bsimplex {
  public:
    class IDtable : public vector<Bsimplex*> {
     public:
-      IDtable(int max) : vector<Bsimplex*>() { reserve(max); this->push_back((Bsimplex*)0); }
+      IDtable(int max) : vector<Bsimplex*>() { reserve(max); this->push_back(nullptr); }
    };
  protected:
    static IDtable       _table;
@@ -311,13 +311,13 @@ is_face(CBsimplex* s)
 inline BMESH*
 get_mesh(CBsimplex* s) 
 {
-   return s ? s->mesh() : (BMESH*)0;
+   return s ? s->mesh() : nullptr;
 }
 
 inline Bface*
 get_bface(CBsimplex* s) 
 {
-   return s ? s->get_face() : (Bface*)0;
+   return s ? s->get_face() : nullptr;
 }
 
 #endif // BSIMPLEX_H_IS_INCLUDED

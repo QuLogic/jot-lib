@@ -93,7 +93,7 @@ class MMENU : public FRAMEobs, public Simple_int
          MenuCb_t *_f;
          GEOMptr _g;
          MMENUMenuItem(){
-             _g = NULL; _f = NULL;
+             _g = nullptr; _f = nullptr;
          }
          MMENUMenuItem(CGEOMptr g, MenuCb_t *f){
              _g = g; _f = f;
@@ -106,10 +106,10 @@ class MMENU : public FRAMEobs, public Simple_int
 
   vector<MMENUMenuItem> _items;
  public:
-  void add(CGEOMptr &g, MenuCb_t *o=0) {
+  void add(CGEOMptr &g, MenuCb_t *o=nullptr) {
       _items.push_back(MMENUMenuItem(g, o));
   }
-  void add(const string &n, MenuCb_t *o=0){
+  void add(const string &n, MenuCb_t *o=nullptr){
       add(new TEXT2D("",n), o);
   }
   void clear(){

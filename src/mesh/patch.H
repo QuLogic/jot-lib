@@ -80,7 +80,7 @@ class DynamicSample;
 typedef const DynamicSample CDynamicSample;
 class DynamicSample {
  public:
-   DynamicSample() : _face(0), _weight(0) {}
+   DynamicSample() : _face(nullptr), _weight(0) {}
    DynamicSample(CBface* f, CWvec& bc, CPIXEL& pix, double weight) :
       _face(f),
       _bc(bc),
@@ -263,7 +263,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
       
    //! \brief Used by Lpatch to produce a child patch
    //! at the next subdivision level.
-   virtual Patch* get_child() { return 0; }
+   virtual Patch* get_child() { return nullptr; }
       
    //! \brief Returns the highest-level parent Patch of this one.
    //!
@@ -384,7 +384,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    
    //! \brief Texture to use according to the "current texture index".
    GTexture* cur_tex() const {
-      return _textures.valid_index(_cur_tex_i) ? _textures[_cur_tex_i] : 0;
+      return _textures.valid_index(_cur_tex_i) ? _textures[_cur_tex_i] : nullptr;
    }
       
    //@}
@@ -630,7 +630,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //@}
 
    //******** MANAGERS ********
-   Patch(BMESH* = 0);
+   Patch(BMESH* = nullptr);
    friend class BMESH;
 
    //! \name Serialization Methods
@@ -683,7 +683,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
 inline Patch* 
 get_patch(CBface* f) 
 {
-   return f ? f->patch() : 0; 
+   return f ? f->patch() : nullptr;
 }
 
 //! \brief Returns the Patch of a Bsimplex.
@@ -705,7 +705,7 @@ get_patch(CBsimplex* s)
 inline Patch*
 get_ctrl_patch(Patch* p)
 {
-   return p ? p->ctrl_patch() : 0;
+   return p ? p->ctrl_patch() : nullptr;
 }
 
 //! \brief Returns the control patch of an APPEAR
@@ -873,7 +873,7 @@ Patch_list::min_alpha() const
 inline BMESH*
 GTexture::mesh() const 
 {
-   return _patch ? _patch->mesh() : 0; 
+   return _patch ? _patch->mesh() : nullptr;
 }
 
 // Given a Patch, return a particular type of texture (class G)
@@ -882,7 +882,7 @@ template <class G>
 inline G*
 get_tex(Patch* p)
 {
-   return p ? G::upcast(p->get_tex(G::static_name())) : 0;
+   return p ? G::upcast(p->get_tex(G::static_name())) : nullptr;
 }
 
 
@@ -907,7 +907,7 @@ class PatchBlend : public SimplexData {
    //******** LOOKUPS ********
    // get the PatchBlend on v
    static PatchBlend* lookup(uintptr_t key, Bvert* v) {
-      return v ? upcast(v->find_data(key)) : 0;
+      return v ? upcast(v->find_data(key)) : nullptr;
    }   
    static void lookup_create(uintptr_t key, Bvert* v, double b) {
       PatchBlend* ret = lookup(key,v);

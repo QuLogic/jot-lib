@@ -35,7 +35,7 @@ static bool debug = Config::get_var_bool("DEBUG_IMAGE_LINE_SHADER", false);
 GLuint          SimpleImageLineShader::_program = 0;
 bool            SimpleImageLineShader::_did_init = false;
 
-SimpleImageLineShader* SimpleImageLineShader::_instance(0);
+SimpleImageLineShader* SimpleImageLineShader::_instance(nullptr);
 
 SimpleImageLineShader::SimpleImageLineShader(Patch* p) : 
    GLSLShader(p),
@@ -44,7 +44,7 @@ SimpleImageLineShader::SimpleImageLineShader(Patch* p) :
    _dist_opacity_ctrl(1),
    _moving_factor(0.3),
    _tone_opacity_ctrl(1),
-   _tone(0)
+   _tone(nullptr)
 {
    if(debug){
       cerr<<"SimpleImageLineShader Debug's working"<<endl;

@@ -53,7 +53,7 @@ class WINSYS: public DEVmod_gen {
       int         _stencil_buffer;  // Do we have a stencil buffer?
 
    public:
-      WINSYS() : _map_cb(0), _double_buffered(0), _stencil_buffer(0) {}
+      WINSYS() : _map_cb(nullptr), _double_buffered(0), _stencil_buffer(0) {}
       virtual ~WINSYS() {}
 
       static  WINSYS *create(int &argc, char **argv);

@@ -53,7 +53,7 @@
 // Static variables
 /////////////////////////////////////
 
-TAGlist*                SilUI::_sui_tags = 0;
+TAGlist*                SilUI::_sui_tags = nullptr;
 vector<SilUI*>          SilUI::_ui;
 map<VIEWimpl*,SilUI*>   SilUI::_hash;
 
@@ -232,7 +232,7 @@ SilUI::put_selected_patch(TAGformat &d) const
 
    if (_selectedGEL)
    {
-      CBMESHptr b = ((TEXBODY*)&*_selectedGEL)->cur_rep();   assert(b != NULL);
+      CBMESHptr b = ((TEXBODY*)&*_selectedGEL)->cur_rep();   assert(b != nullptr);
       CPatch_list &pl = b->patches();
       index = (_selectedPatch)?(pl.get_index(_selectedPatch)):(-1);
    }
@@ -259,7 +259,7 @@ SilUI::get_selected_patch(TAGformat &d)
 
    if (_selectedGEL)
    {
-      CBMESHptr b = ((TEXBODY*)&*_selectedGEL)->cur_rep(); assert(b != NULL);
+      CBMESHptr b = ((TEXBODY*)&*_selectedGEL)->cur_rep(); assert(b != nullptr);
       CPatch_list &pl = b->patches();
       assert(index < pl.num());
 
@@ -406,9 +406,9 @@ SilUI::get_vote_index(TAGformat &d)
 /////////////////////////////////////
 
 SilUI::SilUI(VIEWptr v) :
-   _selectedGEL(NULL),
-   _selectedPatch(NULL),
-   _observedTexture(NULL),
+   _selectedGEL(nullptr),
+   _selectedPatch(nullptr),
+   _observedTexture(nullptr),
    _votePathIndex(-1),
    _votePathIndexStamp(0),
    _strokePathId(-1),
@@ -419,7 +419,7 @@ SilUI::SilUI(VIEWptr v) :
    _id(0),
    _init(false),
    _view(v),
-   _glui(0)
+   _glui(nullptr)
 {
    _ui.push_back(this);
    _id = (_ui.size()-1);
@@ -492,11 +492,11 @@ SilUI::fetch(CVIEWptr& v)
 {
    if (!v) {
       err_msg("SilUI::fetch() - Error! view is nil");
-      return 0;
+      return nullptr;
    }
    if (!v->impl()) {
       err_msg("SilUI::fetch() - Error! view->impl() is nil");
-      return 0;
+      return nullptr;
    }
 
    // hash on the view implementation rather than the view itself
@@ -769,17 +769,17 @@ SilUI::build()
    _glui->set_main_gfx_window(_view->win()->id());
 
    //Init the control arrays
-   assert(_button.empty());       _button.resize(BUT_NUM, 0);
-   assert(_slider.empty());       _slider.resize(SLIDE_NUM, 0);
-   assert(_listbox.empty());      _listbox.resize(LIST_NUM, 0);
-   assert(_panel.empty());        _panel.resize(PANEL_NUM, 0);
-   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, 0);
-   assert(_graph.empty());        _graph.resize(GRAPH_NUM, 0);
-   assert(_text.empty());         _text.resize(TEXT_NUM, 0);
-   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, 0);
-   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, 0);
-   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, 0);
-   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, 0);
+   assert(_button.empty());       _button.resize(BUT_NUM, nullptr);
+   assert(_slider.empty());       _slider.resize(SLIDE_NUM, nullptr);
+   assert(_listbox.empty());      _listbox.resize(LIST_NUM, nullptr);
+   assert(_panel.empty());        _panel.resize(PANEL_NUM, nullptr);
+   assert(_rollout.empty());      _rollout.resize(ROLLOUT_NUM, nullptr);
+   assert(_graph.empty());        _graph.resize(GRAPH_NUM, nullptr);
+   assert(_text.empty());         _text.resize(TEXT_NUM, nullptr);
+   assert(_edittext.empty());     _edittext.resize(EDITTEXT_NUM, nullptr);
+   assert(_checkbox.empty());     _checkbox.resize(CHECK_NUM, nullptr);
+   assert(_radgroup.empty());     _radgroup.resize(RADGROUP_NUM, nullptr);
+   assert(_radbutton.empty());    _radbutton.resize(RADBUT_NUM, nullptr);
 
    assert(_mesh_names.empty());
    assert(_buffer_filenames.empty());
@@ -797,7 +797,7 @@ SilUI::build()
    //Mesh selector
    _listbox[LIST_MESH] = new GLUI_Listbox(
       _panel[PANEL_MESH], 
-      "", NULL,
+      "", nullptr,
       id+LIST_MESH, listbox_cb);
    assert(_listbox[LIST_MESH]);
 
@@ -839,7 +839,7 @@ SilUI::build()
       id+SLIDE_RATE, slider_cb,
       GLUI_SLIDER_INT, 
       1, 100,
-      NULL);
+      nullptr);
    assert(_slider[SLIDE_RATE]);
    _slider[SLIDE_RATE]->set_num_graduations(100);
 
@@ -889,7 +889,7 @@ SilUI::build()
    //Buffer save list
    _listbox[LIST_BUFFER] = new GLUI_Listbox(
       _rollout[ROLLOUT_BUFFER],
-      "", NULL,
+      "", nullptr,
       id+LIST_BUFFER, listbox_cb);
    assert(_listbox[LIST_BUFFER]);
    _listbox[LIST_BUFFER]->disable();
@@ -901,7 +901,7 @@ SilUI::build()
    //Buffer name editor
    _edittext[EDITTEXT_BUFFER_NAME] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+EDITTEXT_BUFFER_NAME, edittext_cb);
    assert(_edittext[EDITTEXT_BUFFER_NAME]);
    _edittext[EDITTEXT_BUFFER_NAME]->disable();
@@ -912,7 +912,7 @@ SilUI::build()
    //Buffer misc text 1
    _edittext[EDITTEXT_BUFFER_MISC1] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+EDITTEXT_BUFFER_MISC1, edittext_cb);
    assert(_edittext[EDITTEXT_BUFFER_MISC1]);
    _edittext[EDITTEXT_BUFFER_MISC1]->disable();
@@ -921,7 +921,7 @@ SilUI::build()
    //Buffer misc text 2
    _edittext[EDITTEXT_BUFFER_MISC2] = new GLUI_EditText(
       _rollout[ROLLOUT_BUFFER], "", 
-      GLUI_EDITTEXT_TEXT, NULL, 
+      GLUI_EDITTEXT_TEXT, nullptr,
       id+EDITTEXT_BUFFER_MISC2, edittext_cb);
    assert(_edittext[EDITTEXT_BUFFER_MISC2]);
    _edittext[EDITTEXT_BUFFER_MISC2]->disable();
@@ -935,7 +935,7 @@ SilUI::build()
    _checkbox[CHECK_TRACK_STROKES] = new GLUI_Checkbox(
       _rollout[ROLLOUT_OPTIONS],
       "Track Strokes",
-      NULL,
+      nullptr,
       id+CHECK_TRACK_STROKES,
       checkbox_cb);
    assert(_checkbox[CHECK_TRACK_STROKES]);
@@ -1403,7 +1403,7 @@ SilUI::destroy()
    //Recursively kills off all controls, and itself
    _glui->close();
 
-   _glui = NULL;
+   _glui = nullptr;
 
 
 }
@@ -2372,7 +2372,7 @@ SilUI::valid_gel(CGELptr g)
    if (TEXBODY::isa(g))
    {
       CBMESHptr b = ((TEXBODY*)&*g)->cur_rep();
-      if (b != NULL)
+      if (b != nullptr)
       {
          CPatch_list &pl = b->patches();
 
@@ -2406,7 +2406,7 @@ SilUI::select_gel(GEL *g)
    
    CBMESHptr b = ((TEXBODY*)&*g)->cur_rep();
    
-   assert(b != NULL);
+   assert(b != nullptr);
    
    CPatch_list &pl = b->patches();
 
@@ -2438,7 +2438,7 @@ SilUI::deselect_gel()
    if (_selectedGEL)
    {
       deselect_patch();
-      _selectedGEL = NULL;
+      _selectedGEL = nullptr;
    }
 
    assert(!_selectedGEL);
@@ -2488,7 +2488,7 @@ SilUI::deselect_patch()
    if (_selectedPatch)
    {
       stop_observing();
-      _selectedPatch = NULL;
+      _selectedPatch = nullptr;
    }
 
    assert(!_selectedPatch);
@@ -2524,7 +2524,7 @@ SilUI::stop_observing()
    if (_observedTexture)
    {
       _observedTexture->rem_obs(this);
-      _observedTexture = NULL;
+      _observedTexture = nullptr;
    }
    assert(!_observedTexture);
    clear_votepath_index();
@@ -2579,7 +2579,7 @@ SilUI::select_name()
 
    CGELlist& list = _view->active();
 
-   GELptr g = NULL;
+   GELptr g = nullptr;
 
    if (name == _bufferGEL->name())
    {
@@ -2587,13 +2587,13 @@ SilUI::select_name()
    }
    else
    {
-      for (int i=0; i < list.num() && (g == NULL); i++) 
+      for (int i=0; i < list.num() && (g == nullptr); i++)
       {
          if (name == list[i]->name()) g = list[i];
       }
    }
 
-   assert(g != NULL);
+   assert(g != nullptr);
 
    select_gel(&*g);
 }
@@ -2613,7 +2613,7 @@ SilUI::select_next_patch()
    
       CBMESHptr b = ((TEXBODY*)_selectedGEL)->cur_rep();
    
-      assert(b != NULL);
+      assert(b != nullptr);
    
       CPatch_list &pl = b->patches();
 

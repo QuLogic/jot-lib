@@ -52,7 +52,7 @@ struct HatchingStyle
 class GLSLHatching : public GLSLPaperShader {
  public:
    //******** MANAGERS ********
-   GLSLHatching(Patch* patch = 0);
+   GLSLHatching(Patch* patch = nullptr);
    
    virtual ~GLSLHatching();
 

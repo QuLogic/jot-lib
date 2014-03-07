@@ -45,7 +45,7 @@ ImageLineStripCB::faceCB(CBvert* v, CBface* f)
 GLuint          ImageLineShader::_program = 0;
 bool            ImageLineShader::_did_init = false;
 
-ImageLineShader* ImageLineShader::_instance(0);
+ImageLineShader* ImageLineShader::_instance(nullptr);
 
 ImageLineShader::ImageLineShader(Patch* p) : 
    GLSLShader(p, new ImageLineStripCB), 

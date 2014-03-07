@@ -29,7 +29,7 @@
 
 using namespace mlib;
 
-TAGlist* Bpoint::_bpoint_tags = NULL;
+TAGlist* Bpoint::_bpoint_tags = nullptr;
 
 inline void
 print_locs(Lvert* v)
@@ -138,7 +138,7 @@ Bpoint::Bpoint(
    CWpt&  o,
    CWvec& n,
    int res_lev) :
-   _map(0)
+   _map(nullptr)
 {
    // The mesh has to be the control mesh:
    assert(mesh->is_control_mesh());
@@ -167,7 +167,7 @@ Bpoint::Bpoint(CLMESHptr& mesh, Map0D3D* map, int res_lev) :
 /// Create a bpoint that is goverened by a SurfacePtMap, with given
 /// Map2D3D and UV coordinate and given mesh
 Bpoint::Bpoint(CLMESHptr& mesh, Map2D3D* surf, CUVpt& uvp, int res_lev) :
-   _map(0)
+   _map(nullptr)
 {
    assert(mesh);
    set_mesh(mesh);
@@ -185,7 +185,7 @@ Bpoint::Bpoint(CLMESHptr& mesh, Map2D3D* surf, CUVpt& uvp, int res_lev) :
 /// Create a bpoint that is goverened by a SurfacePtMap, with given
 /// vertex, UV coordinate, Map2D3D and resolution level
 Bpoint::Bpoint(Lvert* vert, CUVpt& uv, Map2D3D* map, int res_lev) :
-   _map(0)
+   _map(nullptr)
 {
    assert(vert);
    LMESH* m = vert->lmesh();
@@ -215,7 +215,7 @@ Bpoint::Bpoint(Lvert* vert, CUVpt& uv, Map2D3D* map, int res_lev) :
 /// Create a bpoint that is goverened by a CurvePtMap, with given
 /// vertex, t, Map1D3D and resolution level
 Bpoint::Bpoint(Lvert* vert, double& t, Map1D3D* map, int res_lev) :
-   _map(0)
+   _map(nullptr)
 {
    assert(vert);
    LMESH* m = vert->lmesh();
@@ -279,7 +279,7 @@ Bpoint::~Bpoint()
  
    // XXX - don't delete map
    //       if you do, make sure curves delete their maps too
-   _map = 0;
+   _map = nullptr;
 }
 
 void
@@ -353,7 +353,7 @@ Bpoint::adjacent_curves() const
    // XXX - policy re: subdivision levels may change.
 
    Bcurve_list ret;
-   Bcurve* bc = 0;
+   Bcurve* bc = nullptr;
    Bvert* v = vert();
    for (int i=0; i<v->degree(); i++)
       if ((bc = Bcurve::find_controller(v->e(i))))
@@ -368,12 +368,12 @@ Bpoint::other_curve(Bcurve* c) const
    // return the other
    Bcurve_list nbrs = adjacent_curves();
    if (nbrs.num() != 2)
-      return 0;
+      return nullptr;
    if (nbrs[0] == c)
       return nbrs[1];
    if (nbrs[1] == c)
       return nbrs[0];
-   return 0;
+   return nullptr;
 }
 
 Bcurve*
@@ -383,7 +383,7 @@ Bpoint::lookup_curve(CBpoint* p) const
    for (int k=0; k<nbrs.num(); k++)
       if (nbrs[k]->other_point((Bpoint*) p) == this)
          return nbrs[k];
-   return 0;
+   return nullptr;
 }
 
 void 
@@ -435,7 +435,7 @@ Bpoint*
 Bpoint::selected_point()
 {
    Bpoint_list points = selected_points();
-   return (points.num() == 1) ? points[0] : 0;
+   return (points.num() == 1) ? points[0] : nullptr;
 }
 
 CCOLOR&
@@ -776,7 +776,7 @@ Bpoint::hit_point(CNDCpt& p, double pix_radius)
    VisRefImage *vis_ref = VisRefImage::lookup(VIEW::peek());
    if (!vis_ref) {
       err_msg("hit_point: error: can't get vis ref image");
-      return 0;
+      return nullptr;
    }
    vis_ref->update();
    return lookup(

@@ -43,7 +43,7 @@ class PatchIDTexture : public BasicTexture {
 
  public:
    //******** MANAGERS ********
-   PatchIDTexture(Patch* patch = 0, GLenum pmode = GL_FILL);
+   PatchIDTexture(Patch* patch = nullptr, GLenum pmode = GL_FILL);
    virtual ~PatchIDTexture() { gtextures().delete_all(); }
 
    //******** RUN-TIME TYPE ID ********

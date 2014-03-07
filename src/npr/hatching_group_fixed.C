@@ -46,7 +46,7 @@ static bool debug = Config::get_var_bool("DEBUG_HATCH_FIXED",false,true);
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingGroupFixed::_hgf_tags = 0;
+TAGlist *       HatchingGroupFixed::_hgf_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
@@ -305,7 +305,7 @@ HatchingGroupFixed::get_backbone(TAGformat &d)
 /////////////////////////////////////
 
 HatchingGroupFixed::HatchingGroupFixed(Patch *p) : 
-   HatchingGroup(p), HatchingGroupBase(NULL) //NULL should be 'this'
+   HatchingGroup(p), HatchingGroupBase(nullptr) //nullptr should be 'this'
 {
    _group = this;
 
@@ -325,7 +325,7 @@ HatchingGroupFixed::~HatchingGroupFixed()
 
       if (_backbone)
          delete(_backbone);
-      _backbone = NULL;
+      _backbone = nullptr;
    }
 
 }
@@ -663,7 +663,7 @@ HatchingGroupFixed::store_visibility(HatchingLevelBase *hlb)
          hull.size(), pts.size());
    }
 
-   Bface *f = 0;
+   Bface *f = nullptr;
    XYpt center = NDCpt(hull.average());
    BMESHray r(center);
    VIEW::peek()->intersect(r);
@@ -1264,7 +1264,7 @@ HatchingGroupFixed::slice_mesh_with_plane(
 
    assert(f->front_facing());
 
-   nxtFace1 = f->plane_walk(0,wpPlane,nxtEdge1);
+   nxtFace1 = f->plane_walk(nullptr,wpPlane,nxtEdge1);
    assert(nxtEdge1);
 
    nxtFace2 = f->plane_walk(nxtEdge1,wpPlane,nxtEdge2);
@@ -1358,8 +1358,8 @@ HatchingGroupFixed::interpolate(
 
    for (k=0; k<num; k++) {
       pts.push_back(
-         ptl1.interpolate((double) k*dlen, 0, &seg1, &frac1)*ifrac +
-         ptl2.interpolate((double) k*dlen, 0, &seg2, &frac2)*(1.0-ifrac));
+         ptl1.interpolate((double) k*dlen, nullptr, &seg1, &frac1)*ifrac +
+         ptl2.interpolate((double) k*dlen, nullptr, &seg2, &frac2)*(1.0-ifrac));
 
       norms.push_back(
          (nl1[seg1]*(1.0-frac1) + nl1[seg1+1]*frac1)*ifrac  +
@@ -1406,7 +1406,7 @@ HatchingGroupFixed::interpolate(
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingHatchFixed::_hhf_tags = 0;
+TAGlist *       HatchingHatchFixed::_hhf_tags = nullptr;
 
 static int foo = DECODER_ADD(HatchingHatchFixed);
 
@@ -1556,7 +1556,7 @@ HatchingHatchFixed::draw_setup()
 /////////////////////////////////////
 // Static Variable Initialization
 /////////////////////////////////////
-TAGlist *       HatchingBackboneFixed::_hbf_tags = 0;
+TAGlist *       HatchingBackboneFixed::_hbf_tags = nullptr;
 
 /////////////////////////////////////
 // tags()
