@@ -2491,7 +2491,7 @@ GLUIFileSelect::do_sort_toggle(int button)
 DIR_ENTRYptr
 GLUIFileSelect::generate_dir_entry(const string &full_path, const string &name)
 {
-   DIR_ENTRYptr ret = new DIR_ENTRY;
+   DIR_ENTRYptr ret = make_shared<DIR_ENTRY>();
 
    if (full_path == "")
    {

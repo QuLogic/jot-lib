@@ -21,6 +21,7 @@
 #include <cassert>
 
 #include <iostream>
+#include <memory>
 
 #include "platform.H"
 #include "thread_mutex.H"
@@ -223,6 +224,11 @@ class REFptr {
 };
 
 #undef REF_ME
+
+#define MAKE_SHARED_PTR(A)    \
+class A;                      \
+typedef shared_ptr<A> A##ptr; \
+typedef const A##ptr C##A##ptr;
 
 // This macro makes a REFptr baseclass that other
 // REFptr templates can subclass from.  The key to 

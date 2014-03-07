@@ -230,7 +230,7 @@ class GLUIAlertBox : public AlertBox, public GLUIPopUp  {
  * GLUIFileSelect
  *****************************************************************/
 
-MAKE_PTR_BASEC(DIR_ENTRY);
+MAKE_SHARED_PTR(DIR_ENTRY);
 
 #define CDIR_ENTRYlist const DIR_ENTRYlist
 
@@ -240,9 +240,7 @@ class DIR_ENTRYlist : public vector<DIR_ENTRYptr>
    DIR_ENTRYlist(int num=8) : vector<DIR_ENTRYptr>()  { reserve(num); }
 };
 
-#define CDIR_ENTRYptr const DIR_ENTRYptr
-
-class DIR_ENTRY : public REFcounter {
+class DIR_ENTRY {
  public:
    enum dir_entry_t {
       DIR_ENTRY_ROOT,
@@ -281,7 +279,6 @@ class DIR_ENTRY : public REFcounter {
       _type = DIR_ENTRY_UNKNOWN;
 
    }
-
 };
 
 
