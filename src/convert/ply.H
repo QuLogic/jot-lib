@@ -239,8 +239,6 @@ void set_prop_rules_ply (PlyFile *, PlyRuleList *);
 PlyRuleList *append_prop_rule (PlyRuleList *, char *, char *);
 int matches_rule_name (char *);
 
-char *recreate_command_line (int, char *argv[]);
-
 
 #ifdef __cplusplus
 }

@@ -1308,39 +1308,6 @@ void get_info_ply(PlyFile *ply, float *version, int *file_type)
 
 
 /******************************************************************************
-Re-create the command line that was used to invoke this program.
-
-Entry:
-  argc - number of words in argv
-  argv - array of words in command line
-******************************************************************************/
-
-char *recreate_command_line (int argc, char *argv[])
-{
-  int i;
-  char *line;
-  int len = 0;
-
-  /* count total number of characters needed, including separating spaces */
-  for (i = 0; i < argc; i++)
-    len += strlen(argv[i]) + 1;
-
-  /* create empty line */
-  line = (char *) malloc (sizeof(char) * len);
-  line[0] = '\0';
-
-  /* repeatedly append argv */
-  for (i = 0; i < argc; i++) {
-    strcat (line, argv[i]);
-    if (i != argc - 1)
-      strcat (line, " ");
-  }
-
-  return (line);
-}
-
-
-/******************************************************************************
 Find an element from the element list of a given PLY object.
 
 Entry:
