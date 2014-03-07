@@ -124,9 +124,8 @@ class STENCILCB {
    virtual void stencil_bounds(mlib::XYpt_list &pts) = 0;
 };
 
-#define CCLEARobsptr const CLEARobsptr
-MAKE_PTR_BASEC(CLEARobs);
-class CLEARobs : public REFcounter {
+MAKE_SHARED_PTR(CLEARobs);
+class CLEARobs {
  public :
    virtual void notify_clear(CVIEWptr &) const = 0;
 };
