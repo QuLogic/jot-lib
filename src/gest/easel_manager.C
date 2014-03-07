@@ -31,20 +31,16 @@
 void
 EaselManager::make_new_easel(const VIEWptr &v)
 {
-   
-   if(!cur_easel()){
-      
-      VIEW_EASELptr easel = new VIEW_EASEL(v);
-      
+   if (!cur_easel()) {
+      VIEW_EASELptr easel = make_shared<VIEW_EASEL>(v);
+
       assert(easel);
 
       cur_easel_idx = easel_list.num();
       easel_list += easel;
 
       WORLD::message("Created new easel");
-      
    }
-   
 }
 
 void

@@ -29,17 +29,15 @@
 #include "disp/view.H"
 // #include "draw/trace.H"
 
-MAKE_PTR_BASEC(VIEW_EASEL);
-typedef const VIEW_EASELptr CVIEW_EASELptr;
+MAKE_SHARED_PTR(VIEW_EASEL);
 
 /*!
  *  \brief Container for GELS associated with a given fixed camera.
  *
  */
-class VIEW_EASEL : public REFcounter {
-   
+class VIEW_EASEL {
+
    public:
-   
       //******** MANAGERS ********
       VIEW_EASEL(const VIEWptr &v);
       virtual ~VIEW_EASEL();
