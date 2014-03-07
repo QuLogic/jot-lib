@@ -43,8 +43,7 @@
  * STROKE_UI_JOB:
  **********************************************************************/
 class StrokeUI;
-MAKE_PTR_SUBC(STROKE_UI_JOB,AUX_JOB);
-#define CSTROKE_UI_JOBptr const STROKE_UI_JOBptr
+MAKE_SHARED_PTR(STROKE_UI_JOB);
 
 class  STROKE_UI_JOB : public AUX_JOB {
 

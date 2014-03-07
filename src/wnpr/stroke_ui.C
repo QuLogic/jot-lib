@@ -174,7 +174,7 @@ StrokeUI::init()
 
    int i;
 
-   _job = new STROKE_UI_JOB;
+   _job = make_shared<STROKE_UI_JOB>();
    _job->set_ui(this);
 
    _init = true;

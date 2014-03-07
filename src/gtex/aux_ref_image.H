@@ -34,10 +34,9 @@
  *
  **********************************************************************/
 
-MAKE_PTR_BASEC(AUX_JOB);
-#define CAUX_JOBptr const AUX_JOBptr
+MAKE_SHARED_PTR(AUX_JOB);
 
-class  AUX_JOB : public REFcounter {
+class AUX_JOB {
 
  protected:
 
