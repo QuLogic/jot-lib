@@ -1068,7 +1068,7 @@ CRV_SKETCH::reshape_shadow(const PIXEL_list &new_curve)
 {
 
    bool debug = Config::get_var_bool("CRV_SKETCH_RESHAPE_SHADOW",false);
-   Wpt_listMap* m = Wpt_listMap::upcast(_shadow_map);
+   Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_shadow_map);
    if (!m) {
       err_adv(debug, "CRV_SKETCH::reshape_shadow: rejecting non Wpt_list map");
       return false;

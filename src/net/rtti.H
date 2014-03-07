@@ -28,9 +28,6 @@
 #define ISA(O)         ((O) && (O)->is_of_type(static_name()))
 #define ISOF(N,PAR)    (IS(N) || PAR::is_of_type(N))
 
-#define ISOF2(N,PAR1,PAR2) \
-   (IS(N) || PAR1::is_of_type(N) || PAR2::is_of_type(N))
-
 #ifdef JOT_AVOID_STATIC_LOCAL_INLINE_VAR
 #define STAT_STR_RET string
 #else

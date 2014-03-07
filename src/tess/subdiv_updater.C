@@ -71,7 +71,7 @@ SubdivUpdater::create(CBvert_list& verts)
    // Given an input region to keep updated,
    // create a SubdivUpdater to manage it: 
 
-   LMESHptr m = LMESH::upcast(verts.mesh());
+   LMESHptr m = dynamic_cast<LMESH*>(verts.mesh());
    if (m) {
       return new SubdivUpdater(m, verts);
    } else

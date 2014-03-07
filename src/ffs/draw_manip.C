@@ -76,7 +76,7 @@ find_plane(CBcurve* c)
    // If it lies inside a constraining surface, use the plane
    // of the surface, if any:
    if (c->constraining_surface()) {
-      PlaneMap* pm = PlaneMap::upcast(c->constraining_surface());
+      PlaneMap* pm = dynamic_cast<PlaneMap*>(c->constraining_surface());
       return pm ? pm->plane() : Wplane();
    }
 

@@ -109,7 +109,7 @@ class ProxyData : public SimplexData {
 
    // return the data stored on a simplex:
    static ProxyData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : nullptr;
+      return (s && p) ? dynamic_cast<ProxyData*>(s->find_data(uintptr_t(p))) : nullptr;
    }
 
    // return the data stored on a simplex, and create it if needed:
@@ -160,7 +160,7 @@ class PixelsData : public SimplexData {
 
    // return the data stored on a simplex:
    static PixelsData* lookup(CBsimplex* s, ProxySurface* p) {
-      return (s && p) ? upcast(s->find_data(uintptr_t(p))) : nullptr;
+      return (s && p) ? dynamic_cast<PixelsData*>(s->find_data(uintptr_t(p))) : nullptr;
    }
 
    // return the data stored on a simplex, and create it if needed:

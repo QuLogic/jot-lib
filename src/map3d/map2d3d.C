@@ -610,7 +610,7 @@ TubeMap::set_pts(CWpt_list &pts)
    _s.update_length();
    if (false && !pts.empty() && _c1 != nullptr) {
 
-      //Wpt_listMap* axis = Wpt_listMap::upcast(_a);
+      //Wpt_listMap* axis = dynamic_cast<Wpt_listMap*>(_a);
       //Wpt_list apts = axis->pts();
       //assert(apts.num() == 2);
       //axis->p1()->set_pt(Wline(apts[0], apts[1]).project(pts.back()));

@@ -157,7 +157,7 @@ OVERSKETCH::find_matching_sil(CPIXEL_list& pts, CEdgeStrip& sils)
       if (do_match(pts, sils.edge(i)))
          _selected_sils.add(sils.vert(i), sils.edge(i));
 
-   _mesh = LMESH::upcast(_selected_sils.mesh());
+   _mesh = dynamic_cast<LMESH*>(_selected_sils.mesh());
    if (_mesh) {
       int n = _selected_sils.num_line_strips();
       _selected_sils = _selected_sils.get_unified();
@@ -193,7 +193,7 @@ OVERSKETCH::select_faces()
       err_adv(debug, "OVERSKETCH::select_faces: no selected sils");
       return;
    }
-   LMESH* m = LMESH::upcast(_selected_sils.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(_selected_sils.mesh());
    assert(m && _selected_sils.same_mesh());
    MeshGlobal::deselect_all();
 //   MeshGlobal::select(ctrl_faces(_selected_sils.edges()));

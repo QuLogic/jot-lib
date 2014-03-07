@@ -153,7 +153,7 @@ class Panel:  public Bsurface {
 
    // Returns the Panel that owns the boss meme on the simplex:
    static Panel* find_owner(CBsimplex* s) {
-      return upcast(Bsurface::find_owner(s));
+      return dynamic_cast<Panel*>(Bsurface::find_owner(s));
    }
 
    //******** CELLS ********
@@ -218,7 +218,7 @@ class Panel:  public Bsurface {
    static bool _show_skel; // for testing cells/skeletons
 
    // Panel at control level:
-   Panel* control() const { return upcast(Bbase::control()); }
+   Panel* control() const { return dynamic_cast<Panel*>(Bbase::control()); }
 
    //******** CELLS ********
 

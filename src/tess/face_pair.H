@@ -64,7 +64,7 @@ class FacePair : public SimplexData {
 
    // get the FacePair on f
    static FacePair* find_pair(uintptr_t key, CBface* f) {
-      return f ? upcast(f->find_data(key)) : 0;
+      return f ? dynamic_cast<FacePair*>(f->find_data(key)) : 0;
    }
 
    // find the partner of f

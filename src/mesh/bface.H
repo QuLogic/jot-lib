@@ -678,11 +678,11 @@ class Bface  : public Bsimplex {
  * Inline methods
  *******************************************************/
 
-// Convenient "upcast":
+// Convenient "cast":
 inline Bface*
 bface(Bsimplex* sim)
 {
-   return is_face(sim) ? (Bface*)sim : nullptr;
+   return is_face(sim) ? static_cast<Bface*>(sim) : nullptr;
 }
 
 inline Bface*

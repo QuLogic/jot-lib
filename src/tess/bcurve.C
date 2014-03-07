@@ -63,7 +63,7 @@ CurveMeme::set_t(double t)
 void 
 CurveMeme::copy_attribs_v(VertMeme* v)
 {
-   CurveMeme* p = upcast(v); // parent curve meme
+   CurveMeme* p = dynamic_cast<CurveMeme*>(v); // parent curve meme
 
    if (p) {
       static bool debug = Config::get_var_bool("DEBUG_MEMES",false);
@@ -82,8 +82,8 @@ CurveMeme::copy_attribs_e(VertMeme* v1, VertMeme* v2)
    if (!map())
       return;
 
-   CurveMeme* p1 = upcast(v1);
-   CurveMeme* p2 = upcast(v2);
+   CurveMeme* p1 = dynamic_cast<CurveMeme*>(v1);
+   CurveMeme* p2 = dynamic_cast<CurveMeme*>(v2);
    if (p1 && p2) {
       static bool debug = Config::get_var_bool("DEBUG_MEMES",false);
       err_adv(debug, "CurveMeme::copy_attribs_e");
@@ -298,7 +298,7 @@ CurveMeme::_gen_child(Lvert* subvert, VertMeme* vm) const
    Bcurve* c = curve()->child();
    assert(c && !c->find_vert_meme(subvert));
 
-   CurveMeme* cm = (CurveMeme*)vm; // upcast our comrade
+   CurveMeme* cm = dynamic_cast<CurveMeme*>(vm);
 
    // Be careful about averaging t-vals for closed curves:
    return new CurveMeme(c, subvert, map()->avg(_t, cm->_t), true);
@@ -650,7 +650,7 @@ Bcurve::Bcurve(
    // create bcurve that lives on a specified set of vertices on a skin
    bool debug = Config::get_var_bool("DEBUG_BCURVE_ON_SKIN",false);
 
-   LMESH* m = LMESH::upcast(verts.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(verts.mesh());
    assert(m);
    set_mesh(m);
 
@@ -809,7 +809,7 @@ Bcurve::Bcurve(
 
    bool debug = Config::get_var_bool("DEBUG_BCURVE_ON_VERTS",false);
 
-   LMESH* m = LMESH::upcast(verts.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(verts.mesh());
    assert(m);
    set_mesh(m);
 
@@ -3216,7 +3216,7 @@ Bcurve::reshape_on_plane(const PIXEL_list &new_curve)
    // plane gives bad results.
 
    bool debug = Config::get_var_bool("RESHAPE_ON_PLANE_DEBUG",false);
-   Wpt_listMap* m = Wpt_listMap::upcast(_map);
+   Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_map);
    if (!m) {
       err_adv(debug, "Bcurve::reshape_on_plane: rejecting non Wpt_list map");
       return false;

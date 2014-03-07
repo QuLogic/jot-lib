@@ -758,7 +758,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       templists = get_c_verts(templists[0]);
       for (auto & list : templists) {
          Bcurve* b_curve = new Bcurve(list, c_p_skin,
-                                    (LMESH::upcast(region.mesh()))->subdiv_level());
+                                      dynamic_cast<LMESH*>(region.mesh())->subdiv_level());
          cmd->add(new SHOW_BBASE_CMD(b_curve));
       }
       push(p_region, cmd);
@@ -865,7 +865,7 @@ try_punch(CBface_list& region, bool debug)
             uvpts.update_length();
             Bcurve* new_curve =
                new Bcurve(cvlist, uvpts, surf->map(),
-                          (LMESH::upcast(mesh))->subdiv_level());
+                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(new_curve));
          }
 
@@ -882,7 +882,7 @@ try_punch(CBface_list& region, bool debug)
          for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
-                          (LMESH::upcast(mesh))->subdiv_level());
+                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(b_curve));
          }
 
@@ -896,7 +896,7 @@ try_punch(CBface_list& region, bool debug)
          for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
-                          (LMESH::upcast(mesh))->subdiv_level());
+                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
             cmd->add(new SHOW_BBASE_CMD(b_curve));
          }
          
@@ -915,7 +915,7 @@ try_punch(CBface_list& region, bool debug)
 
             for (auto & list : curve_verts_lists) {
                Bcurve* b_curve = new Bcurve(list, c_skin,
-                  (LMESH::upcast(mesh))->subdiv_level());
+                  dynamic_cast<LMESH*>(mesh)->subdiv_level());
                cmd->add(new SHOW_BBASE_CMD(b_curve));
             }
 
@@ -1087,7 +1087,7 @@ DrawPen::dot_cb(CGESTUREptr& gest, DrawState*&)
       if (bsurf)
          err_adv(debug, "surface: %s", bsurf->class_name().c_str());
       if (bsurf && f) {
-         UVsurface* uvsurf = UVsurface::upcast(bsurf);
+         UVsurface* uvsurf = dynamic_cast<UVsurface*>(bsurf);
          err_adv(debug, "uvsurf: %p, map: %s",
                  uvsurf, uvsurf ? uvsurf->map()->class_name().c_str() : "null");
          if (!(uvsurf && uvsurf->map())) {
@@ -1444,7 +1444,7 @@ DrawPen::panel_op(Bsurface* surf, CGESTUREptr& gest)
    // XXX - Should generalize to find the panel underlying
    //       other surface types (e.g. inflate or skin patch).
    //       For now reject if the surface itself is not a panel:
-   Panel* pnl = Panel::upcast(surf);
+   Panel* pnl = dynamic_cast<Panel*>(surf);
    if (!pnl) {
       err_adv(debug, "DrawPen::panel_op: no panel");
       return false;
@@ -1478,7 +1478,7 @@ DrawPen::select_skel_curve(Bsurface* surf, CGESTUREptr& gest)
    // XXX - Should generalize to find the primitive underlying
    //       other surface types (e.g. inflate or skin patch).
    //       For now reject if the surface itself is not a primitive:
-   Primitive* prim = Primitive::upcast(surf);
+   Primitive* prim = dynamic_cast<Primitive*>(surf);
    if (!prim) {
       err_adv(debug, "DrawPen::select_skel_curve: no primitive");
       return false;
@@ -1541,7 +1541,7 @@ DrawPen::handle_extrude(Bsurface* surf_sel, CGESTUREptr& gest)
       INFLATE::init(faces, dist);
    } else {
       if (!INFLATE::init( face, dist ) && Skin::isa(surf_sel)) {
-         Skin* skin = Skin::upcast(surf_sel);
+         Skin* skin = dynamic_cast<Skin*>(surf_sel);
          if (skin->is_inflate()) {
             skin->add_offsets(dist);
          }

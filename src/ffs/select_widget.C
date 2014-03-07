@@ -223,7 +223,7 @@ get_cur_level_verts(Bvert* v, Bedge* e)
 
    Bvert_list ret;
 
-   LMESH* mesh = LMESH::upcast(e->mesh());
+   LMESH* mesh = dynamic_cast<LMESH*>(e->mesh());
    if (mesh) {
       ((Ledge*)e)->get_subdiv_verts(mesh->rel_cur_level(), ret);
    } else {

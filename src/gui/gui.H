@@ -29,7 +29,7 @@ namespace GUI
 template <class T>
 inline T* get_current_texture(Patch* p=Patch::focus())
 {
-   return p ? T::upcast(p->cur_tex()) : nullptr;
+   return p ? dynamic_cast<T*>(p->cur_tex()) : nullptr;
 }
 
 template <class T>
@@ -47,7 +47,7 @@ inline void get_all_my_textures(
    for (int i=0; i < meshes.num(); ++i) {
       Patch_list patch = meshes[i]->patches();
       for (int j=0; j < patch.num(); ++j) {
-         if (T::upcast(patch[j]->cur_tex())) {
+         if (dynamic_cast<T*>(patch[j]->cur_tex())) {
             my_patches.add(patch[j]);
             char tmp[64];
             sprintf(tmp, " m_%d_p_%d", i, j);

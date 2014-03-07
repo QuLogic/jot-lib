@@ -174,12 +174,12 @@ class Bpoint : public Bbase{
    // If this point is constrained by a surface,
    // return the map2D3D for the surface, (otherwise nullptr):
    Map2D3D* constraining_surface() const {
-      CSurfacePtMap* sm = SurfacePtMap::upcast(_map);
+      CSurfacePtMap* sm = dynamic_cast<SurfacePtMap*>(_map);
       return sm ? sm->surface() : nullptr;
    }
-   // Like above, but upcast to PlaneMap if it is one:
+   // Like above, but cast to PlaneMap if it is one:
    PlaneMap* constraining_plane() const {
-      return PlaneMap::upcast(constraining_surface());
+      return dynamic_cast<PlaneMap*>(constraining_surface());
    }
 
    void set_map(Map0D3D* map, bool update_curves=true);
@@ -194,7 +194,7 @@ class Bpoint : public Bbase{
 
    // Returns the Bpoint that owns the boss meme on the simplex:
    static Bpoint* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Bpoint*>(Bbase::find_owner(s));
    }
 
    // Find the Bpoint owner of this simplex, or if there is none,
@@ -202,7 +202,7 @@ class Bpoint : public Bbase{
    // continuing up the subdivision hierarchy until we find a
    // Bpoint owner or hit the top trying.
    static Bpoint* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<Bpoint*>(Bbase::find_controller(s));
    }
 
    // XXX -- obsolete?
@@ -314,7 +314,7 @@ class Bpoint_list : public _Bbase_list<Bpoint_list,Bpoint> {
    Bpoint_list(CBbase_list& bbases) :
       _Bbase_list<Bpoint_list,Bpoint>(bbases.num()) {
       for (int i=0; i<bbases.num(); i++) {
-         Bpoint* p = Bpoint::upcast(bbases[i]);
+         Bpoint* p = dynamic_cast<Bpoint*>(bbases[i]);
          if (p)
             *this += p;
       }

@@ -215,7 +215,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    err_adv(debug, "   gesture aligns with cross section");
    err_adv(debug, "   mesh level %d", mesh->subdiv_level());
 
-   _mesh = LMESH::upcast(_selected_edges.mesh());
+   _mesh = dynamic_cast<LMESH*>(_selected_edges.mesh());
    _n = _a = _b = 0;
    _mode = 1; // _mode is set to editing the cross section
    activate();
@@ -460,7 +460,7 @@ PROFILE::find_matching_sil(CPIXEL_list& pts, CEdgeStrip& sils)
       if (do_match(pts, sils.edge(i)) && check_tube_side(sils.edge(i)))
          _selected_edges.add(sils.vert(i), sils.edge(i));
 
-   _mesh = LMESH::upcast(_selected_edges.mesh());
+   _mesh = dynamic_cast<LMESH*>(_selected_edges.mesh());
    _n = _a = _b = 0;
    _mode = 0; // _mode set to editting silhouette
    if (_mesh) {
@@ -570,7 +570,7 @@ PROFILE::select_faces()
       err_adv(debug, "PROFILE::select_faces: no selected edges");
       return;
    }
-   LMESH* m = LMESH::upcast(_selected_edges.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(_selected_edges.mesh());
    assert(m && _selected_edges.same_mesh());
    MeshGlobal::deselect_all();
 

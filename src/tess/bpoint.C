@@ -641,7 +641,7 @@ Bpoint::move_to(CXYpt& xy)
    // Otherwise move in our plane
 
    Wpt new_loc;
-   PlaneMap* p = PlaneMap::upcast(constraining_surface());
+   PlaneMap* p = dynamic_cast<PlaneMap*>(constraining_surface());
    if (p) {
       new_loc = p->plane().intersect(Wline(xy));
    } else if (has_shadow()) {

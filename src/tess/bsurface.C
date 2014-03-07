@@ -98,7 +98,7 @@ Bsurface::set_parent(Bbase* p)
    // Set our curves/points from the parent first,
    // because in Bbase::set_parent() our child will
    // try to set curves/points from us:
-   Bsurface* s = upcast(p);
+   Bsurface* s = dynamic_cast<Bsurface*>(p);
    if (s) {
       _bcurves = s->_bcurves.children();
       _bpoints = s->_bpoints.child_points();
@@ -289,7 +289,7 @@ Bsurface::add_face_meme(Lface* f)
 void 
 Bsurface::add_face_memes(CBface_list& faces) 
 {
-   if (!(_mesh && LMESH::upcast(faces.mesh()) == _mesh)) {
+   if (!(_mesh && dynamic_cast<LMESH*>(faces.mesh()) == _mesh)) {
       err_msg("Bsurface::add_face_memes: error: bad mesh");
       return;
    }

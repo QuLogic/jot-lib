@@ -65,7 +65,7 @@ class VertPair : public SimplexData {
 
    // get the VertPair on v
    static VertPair* find_pair(uintptr_t key, CBvert* v) {
-      return v ? upcast(v->find_data(key)) : 0;
+      return v ? dynamic_cast<VertPair*>(v->find_data(key)) : 0;
    }
 
    // find the partner of v

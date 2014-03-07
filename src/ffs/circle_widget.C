@@ -417,7 +417,7 @@ CIRCLE_WIDGET::make_preview( void )
    } else {
       Bcurve *border = Bcurve::lookup(_circle->bfaces().get_boundary().edges());
       if( border != nullptr ) {
-         Wpt_listMap *map = Wpt_listMap::upcast(border->map());
+         Wpt_listMap *map = dynamic_cast<Wpt_listMap*>(border->map());
          if( map )
             map->set_pts(_preview);
       }

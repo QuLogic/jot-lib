@@ -416,7 +416,7 @@ class Bcurve : public Bbase{
 
    //! Returns the Bcurve that owns the boss meme on the simplex:
    static Bcurve* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Bcurve*>(Bbase::find_owner(s));
    }
 
    //! Find the Bcurve owner of this simplex, or if there is none,
@@ -424,7 +424,7 @@ class Bcurve : public Bbase{
    //! continuing up the subdivision hierarchy until we find a
    //! Bcurve owner or hit the top trying.
    static Bcurve* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<Bcurve*>(Bbase::find_controller(s));
    }
 
    //! Returns the Bcurve (if any) that owns all the edges (if any):
@@ -670,7 +670,7 @@ class Bcurve_list : public _Bbase_list<Bcurve_list,Bcurve> {
    Bcurve_list(CBbase_list& bbases) :
       _Bbase_list<Bcurve_list,Bcurve>(bbases.num()) {
       for (int i=0; i<bbases.num(); i++) {
-         Bcurve* c = Bcurve::upcast(bbases[i]);
+         Bcurve* c = dynamic_cast<Bcurve*>(bbases[i]);
          if (c)
             *this += c;
       }

@@ -446,7 +446,7 @@ TEXBODY::get_inflate_mesh(BMESHptr mesh)
    }
 
    // Didn't work, so make a new one:
-   if (add(BMESH::upcast(mesh->dup()))) {
+   if (add(dynamic_cast<BMESH*>(mesh->dup()))) {
       return _meshes.last();
    }
    return nullptr;

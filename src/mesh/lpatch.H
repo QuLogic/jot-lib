@@ -46,16 +46,16 @@ class Lpatch : public Patch {
 
    //******** ACCESSORS ********
 
-   // Owning mesh, conveniently upcast to LMESH:
-   LMESH*  lmesh()       const { return (LMESH*)_mesh; }
+   // Owning mesh, conveniently cast to LMESH:
+   LMESH*  lmesh()       const { return static_cast<LMESH*>(_mesh); }
    
    // Parent and child patches in the subdivision hierarchy:
-   Patch* parent()       const { return (Patch*)_parent; }
-   Patch* child()        const { return (Patch*)_child; }
+   Patch* parent()       const { return static_cast<Patch*>(_parent); }
+   Patch* child()        const { return static_cast<Patch*>(_child); }
 
-   // More upcasts (convenience):
-   Lface*  lface(int i)  const { return (Lface*)_faces[i]; }
-   Lstrip* lstrip(int i) const { return (Lstrip*)_tri_strips[i]; }
+   // More casts (convenience):
+   Lface*  lface(int i)  const { return static_cast<Lface*>(_faces[i]); }
+   Lstrip* lstrip(int i) const { return static_cast<Lstrip*>(_tri_strips[i]); }
 
    //******** SUBDIVISION HIERARCHY ********
 

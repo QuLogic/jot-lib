@@ -56,7 +56,7 @@ class Bsurface : public Bbase {
 
    // Returns the Bsurface that owns the boss meme on the simplex:
    static Bsurface* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Bsurface*>(Bbase::find_owner(s));
    }
 
    // Find the Bsurface owner of this simplex, or if there is none,
@@ -64,7 +64,7 @@ class Bsurface : public Bbase {
    // continuing up the subdivision hierarchy until we find a
    // Bsurface owner or hit the top trying.
    static Bsurface* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<Bsurface*>(Bbase::find_controller(s));
    }
 
    // Returns the set of Bsurfaces owning any of the given faces:
@@ -316,7 +316,7 @@ class Bsurface_list : public _Bbase_list<Bsurface_list,Bsurface> {
    Bsurface_list(CBbase_list& bbases) :
       _Bbase_list<Bsurface_list,Bsurface>(bbases.num()) {
       for (int i=0; i<bbases.num(); i++) {
-         Bsurface* s = Bsurface::upcast(bbases[i]);
+         Bsurface* s = dynamic_cast<Bsurface*>(bbases[i]);
          if (s)
             *this += s;
       }

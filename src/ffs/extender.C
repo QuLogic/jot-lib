@@ -100,8 +100,8 @@ merge_surfaces(BMESHptr m1, BMESHptr m2)
 //    }
 
    // Verify two TEXBODYs
-   TEXBODY* t1 = TEXBODY::upcast(m1->geom());
-   TEXBODY* t2 = TEXBODY::upcast(m2->geom());
+   TEXBODY* t1 = dynamic_cast<TEXBODY*>(m1->geom());
+   TEXBODY* t2 = dynamic_cast<TEXBODY*>(m2->geom());
    if (!(t1 && t2)) {
       err_adv(debug, "merge_surfaces: Error: can't get TEXBODYs");
       return false;

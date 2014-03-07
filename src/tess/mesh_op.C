@@ -350,7 +350,7 @@ REDEF_EDGE_CMD::undoit()
 JOIN_SEAM_CMD::JOIN_SEAM_CMD(CBvert_list& o, CBvert_list& c) :
    _cmds(new MULTI_CMD())
 {
-   LMESH* m = LMESH::upcast(c.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(c.mesh());
    if (!(m && m == o.mesh() && c.size() == o.size())) {
       err_adv(debug, "JOIN_SEAM_CMD::JOIN_SEAM_CMD: bad chains");
       return;
@@ -938,7 +938,7 @@ add_offset(Skin* skin, double offset)
 
    VertMemeList memes = skin->vmemes();
    for (VertMemeList::size_type i = 0; i < memes.size(); i++) {
-      SkinMeme::upcast(memes[i])->add_offset(offset);
+      dynamic_cast<SkinMeme*>(memes[i])->add_offset(offset);
    }
 
    add_offset(skin->child(), offset);

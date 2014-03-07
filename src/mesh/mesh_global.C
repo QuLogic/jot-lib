@@ -138,7 +138,7 @@ MeshGlobal::selected_faces_all_levels(BMESH* m)
 
    // If this is an lmesh, also find the selected
    // faces for any sub mesh in the hierarchy
-   for (LMESH* lm = LMESH::upcast(cm); lm != nullptr; lm = lm->subdiv_mesh()) {
+   for (LMESH* lm = dynamic_cast<LMESH*>(cm); lm != nullptr; lm = lm->subdiv_mesh()) {
       ret = ret + selected_faces(lm);
    }
 

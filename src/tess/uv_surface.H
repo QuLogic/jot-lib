@@ -72,7 +72,7 @@ class UVsurface: public Bsurface {
 
    // Returns the UVsurface that owns the boss meme on the simplex:
    static UVsurface* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<UVsurface*>(Bbase::find_owner(s));
    }
 
    // Find the UVsurface owner of this simplex, or if there is none,
@@ -80,7 +80,7 @@ class UVsurface: public Bsurface {
    // continuing up the subdivision hierarchy until we find a
    // UVsurface owner or hit the top trying.
    static UVsurface* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<UVsurface*>(Bbase::find_controller(s));
    }
 
    //******** BUILDING ********
@@ -262,7 +262,7 @@ UVsurface::uvm(int i) const
 inline bool 
 UVsurface::get_uv(CBvert* v, UVpt& uv) const
 {
-   UVmeme* m = UVmeme::upcast(find_meme(v));
+   UVmeme* m = dynamic_cast<UVmeme*>(find_meme(v));
    if (m && m->uv_valid()) {
       uv = m->uv();
       return 1;

@@ -410,7 +410,7 @@ Panel::finish_tessellation()
    _mesh->update_subdivision(res_lev);
 
    if (0 && debug) {
-      for (Panel* p = this; p; p = upcast(p->child())) {
+      for (Panel* p = this; p; p = dynamic_cast<Panel*>(p->child())) {
          cerr << p->identifier() << ": "
               << p->vmemes().size() << " memes / "
               << p->bverts().size() << " verts" << endl;
@@ -474,7 +474,7 @@ Panel::tessellate_disk(CBvert_list& verts, bool create_mode)
    }
 
    // Do common setup for tessellation
-   if (create_mode && !prepare_tessellation(LMESH::upcast(verts.mesh())))
+   if (create_mode && !prepare_tessellation(dynamic_cast<LMESH*>(verts.mesh())))
       return false;
 
    // get "center of mass"
@@ -880,7 +880,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
 
       // use WPT_LIST_RESHAPE_CMD to reshape
       pts.update_length();
-      Wpt_listMap* m = Wpt_listMap::upcast(_bcurves[i]->map());
+      Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_bcurves[i]->map());
       WPT_LIST_RESHAPE_CMDptr  w_cmd= new WPT_LIST_RESHAPE_CMD(m,pts);
       cmd->add(w_cmd);
    }
@@ -980,7 +980,7 @@ Panel::nbr_panel(Bcurve* c)
    if (out.num() < 2)
       return nullptr;
    
-   return (out[0]==this) ? Panel::upcast(out[1]) : Panel::upcast(out[0]);
+   return (out[0]==this) ? dynamic_cast<Panel*>(out[1]) : dynamic_cast<Panel*>(out[0]);
 }
 
 bool
@@ -992,7 +992,7 @@ Panel::try_re_tess_adj(Bcurve* bc, int n)
    assert(out.num() < 2);
    if (out.num() != 1)
       return false;
-   Panel* adj = Panel::upcast(out[0]);
+   Panel* adj = dynamic_cast<Panel*>(out[0]);
    if (!adj)
       return false;
 

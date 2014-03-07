@@ -882,7 +882,7 @@ template <class G>
 inline G*
 get_tex(Patch* p)
 {
-   return p ? G::upcast(p->get_tex(G::static_name())) : nullptr;
+   return p ? dynamic_cast<G*>(p->get_tex(G::static_name())) : nullptr;
 }
 
 
@@ -907,7 +907,7 @@ class PatchBlend : public SimplexData {
    //******** LOOKUPS ********
    // get the PatchBlend on v
    static PatchBlend* lookup(uintptr_t key, Bvert* v) {
-      return v ? upcast(v->find_data(key)) : nullptr;
+      return v ? dynamic_cast<PatchBlend*>(v->find_data(key)) : nullptr;
    }   
    static void lookup_create(uintptr_t key, Bvert* v, double b) {
       PatchBlend* ret = lookup(key,v);

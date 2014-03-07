@@ -136,10 +136,10 @@ class Primitive :  public Bsurface {
    //******** STATICS ********
 
    static Primitive* find_owner(Bsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Primitive*>(Bbase::find_owner(s));
    }
    static Primitive* find_controller(CBsimplex* s) {
-      return upcast(Bbase::find_controller(s));
+      return dynamic_cast<Primitive*>(Bbase::find_controller(s));
    }
    //! Returns the set of Primitives owning any of the given faces:
    static Bsurface_list get_primitives(CBface_list& faces) {

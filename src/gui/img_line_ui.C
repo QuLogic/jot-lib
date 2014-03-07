@@ -70,7 +70,7 @@ BaseUI(parent,"Image Line UI"), _color_sel(0)
 ImageLineShader* 
 ImageLineUI::get_current_image_line_shader(CVIEWptr& v) 
 {
-   return ImageLineShader::upcast(Patch::focus()->cur_tex(v));
+   return dynamic_cast<ImageLineShader*>(Patch::focus()->cur_tex(v));
 }
 
 ImageLineShader*  
@@ -547,7 +547,7 @@ ImageLineUI::apply_changes()
    {
       if(all_meshes && whole_mesh){
 	 for(int j=0; j < patches.num(); ++j){
-	    tex = ImageLineShader::upcast(patches[j]->cur_tex(VIEW::peek()));
+	    tex = dynamic_cast<ImageLineShader*>(patches[j]->cur_tex(VIEW::peek()));
 
 	    if(!tex)
 	       continue;
@@ -559,7 +559,7 @@ ImageLineUI::apply_changes()
 	 // Apply to patches only within the selected model
 	 for(int j=0; j < patches.num(); ++j){
 	    if(BMESH::is_focus(patches[j]->mesh()))
-	       tex = ImageLineShader::upcast(patches[j]->cur_tex(VIEW::peek()));
+	       tex = dynamic_cast<ImageLineShader*>(patches[j]->cur_tex(VIEW::peek()));
 
 	       if(!tex)
 		  continue;
@@ -672,7 +672,7 @@ ImageLineUI::apply_changes_to_texture(operation_id_t op, ImageLineShader* tex, i
       else{
 	 Patch_list patches = _texture_selection_ui->get_all_patches();
 	 for(int j=0; j < patches.num(); ++j){
-	    tex2 = ImageLineShader::upcast(patches[j]->cur_tex(VIEW::peek()));
+	    tex2 = dynamic_cast<ImageLineShader*>(patches[j]->cur_tex(VIEW::peek()));
 
 	    if(!tex2)
 	       continue;

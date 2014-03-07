@@ -135,15 +135,15 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
       return s ? (Meme*)s->find_data(key()) : nullptr;
    }
 
-   // Convenience -- does upcasts:
+   // Convenience -- does casts:
    static VertMeme* find_boss_vmeme(CBvert* v) {
-      return (VertMeme*)find_boss_meme(v);
+      return static_cast<VertMeme*>(find_boss_meme(v));
    }
    static EdgeMeme* find_boss_ememe(CBedge* e) {
-      return (EdgeMeme*)find_boss_meme(e);
+      return static_cast<EdgeMeme*>(find_boss_meme(e));
    }
    static FaceMeme* find_boss_fmeme(CBface* f) {
-      return (FaceMeme*)find_boss_meme(f);
+      return static_cast<FaceMeme*>(find_boss_meme(f));
    }
 
    // Convenience: lookup boss memes for a whole list of simplices
@@ -194,10 +194,10 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    // Finds the Meme (if any) put on the simplex by *this* Bbase:
    virtual Meme* find_meme(CBsimplex* s) const;
 
-   // Convenience -- does upcasts:
-   VertMeme* find_vert_meme(CBvert* v) const { return (VertMeme*)find_meme(v);}
-   EdgeMeme* find_edge_meme(CBedge* e) const { return (EdgeMeme*)find_meme(e);}
-   FaceMeme* find_face_meme(CBface* f) const { return (FaceMeme*)find_meme(f);}
+   // Convenience -- does casts:
+   VertMeme* find_vert_meme(CBvert* v) const { return static_cast<VertMeme*>(find_meme(v));}
+   EdgeMeme* find_edge_meme(CBedge* e) const { return static_cast<EdgeMeme*>(find_meme(e));}
+   FaceMeme* find_face_meme(CBface* f) const { return static_cast<FaceMeme*>(find_meme(f));}
 
    const VertMemeList& vmemes() const { return _vmemes; }
 

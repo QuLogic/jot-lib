@@ -54,7 +54,7 @@ class RmemeVertPair : public VertPair {
 
    // get the RmemeVertPair on v
    static RmemeVertPair* find_pair(uintptr_t key, CBvert* v) {
-      return upcast(VertPair::find_pair(key, v));
+      return dynamic_cast<RmemeVertPair*>(VertPair::find_pair(key, v));
    }
 
    //******** SimplexData VIRTUAL METHODS ********
@@ -143,7 +143,7 @@ HybridDisp::get_val(CBvert* v) const
       err_adv(debug, "HybridDisp::get_val: no bbase");
       return 0;
    }
-   Rmeme* r = Rmeme::upcast(_bb->find_vert_meme(v));
+   Rmeme* r = dynamic_cast<Rmeme*>(_bb->find_vert_meme(v));
    if (!r) {
       err_adv(debug, "HybridDisp::get_val: lookup Rmeme failed");
       return 0;
@@ -280,7 +280,7 @@ class RmemeSFilter: public SimplexFilter {
       if (!is_vert(s))
          return false;
 
-      Rmeme* rm = Rmeme::upcast(_bb->find_meme(s));
+      Rmeme* rm = dynamic_cast<Rmeme*>(_bb->find_meme(s));
       
       return (rm && rm->s() != 0);
    }
@@ -296,7 +296,7 @@ Rmeme::copy_attribs_v(VertMeme* v)
    // we now update our reference vertex (if necessary)
    // and displacement magnitude from our parent.
 
-   Rmeme* p = upcast(v); // parent
+   Rmeme* p = dynamic_cast<Rmeme*>(v); // parent
 
    err_adv(debug, "Rmeme::copy_attribs_v: should not be called");
 
@@ -358,8 +358,8 @@ Rmeme::copy_attribs_e(VertMeme* v1, VertMeme* v2)
 
    err_adv(debug, "Rmeme::copy_attribs_e: should not be called");
 
-   Rmeme* p1 = upcast(v1);
-   Rmeme* p2 = upcast(v2);
+   Rmeme* p1 = dynamic_cast<Rmeme*>(v1);
+   Rmeme* p2 = dynamic_cast<Rmeme*>(v2);
 
    if (!(p1 && p1->ref() && p2 && p2->ref())) {
       err_adv(debug, "Rmeme::copy_attribs_e: can't get parent ref verts");
@@ -408,10 +408,10 @@ Rmeme::copy_attribs_q(VertMeme* v1, VertMeme* v2, VertMeme* v3, VertMeme* v4)
 
    err_adv(debug, "Rmeme::copy_attribs_q: should not be called");
 
-   Rmeme* p1 = upcast(v1);
-   Rmeme* p2 = upcast(v2);
-   Rmeme* p3 = upcast(v3);
-   Rmeme* p4 = upcast(v4);
+   Rmeme* p1 = dynamic_cast<Rmeme*>(v1);
+   Rmeme* p2 = dynamic_cast<Rmeme*>(v2);
+   Rmeme* p3 = dynamic_cast<Rmeme*>(v3);
+   Rmeme* p4 = dynamic_cast<Rmeme*>(v4);
 
    if (!(p1 && p1->ref() &&
          p2 && p2->ref() &&
@@ -838,7 +838,7 @@ Rsurface::draw_debug()
       glBegin(GL_LINES);
       
       for (int i=0; i<vmemes.num(); i++) {
-         Rmeme* rm = Rmeme::upcast(vmemes[i]);
+         Rmeme* rm = dynamic_cast<Rmeme*>(vmemes[i]);
          if (rm && rm->vert() && rm->ref()) {
             glVertex3dv(rm->vert()->loc().data());
             glVertex3dv(rm->ref() ->loc().data());
@@ -1105,7 +1105,7 @@ bool
 Rsurface::sew_ribbons(CBface_list& side_b, MULTI_CMDptr cmd)
 {
    err_adv(debug, "Rsurface::sew_ribbons");
-   LMESH* mesh = LMESH::upcast(side_b.mesh());
+   LMESH* mesh = dynamic_cast<LMESH*>(side_b.mesh());
    if (!mesh) {
       err_adv(debug, "  can't get side B mesh");
       return 0;
@@ -1306,7 +1306,7 @@ Rsurface::find_b(CBface_list& A, Bface_list& B)
 
    B.clear();
 
-   LMESH* m = LMESH::upcast(A.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(A.mesh());
    if (!m)
       return 0;
 
@@ -1391,7 +1391,7 @@ Rsurface::handle_punch(CBface_list& region, MULTI_CMDptr cmd)
    // it is (if any).
    Bface_list B;
    Bface_list A;
-   Rsurface* rsurf = upcast(Bbase::find_owner(region));
+   Rsurface* rsurf = dynamic_cast<Rsurface*>(Bbase::find_owner(region));
    if (rsurf) {
       B = region;
       if (!map_to_a(B,A)) {

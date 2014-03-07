@@ -198,7 +198,7 @@ class Rsurface: public Bsurface {
 
    // Mapping from side B elements to corresponding side A elements:
    static Bvert* side_a_vert(CBvert* v) {
-      Rmeme* rm = Rmeme::upcast(find_boss_meme(v));
+      Rmeme* rm = dynamic_cast<Rmeme*>(find_boss_meme(v));
       return rm ? rm->ref() : 0;
    }
    static Bedge* side_a_edge(CBedge* e) {
@@ -234,7 +234,7 @@ class Rsurface: public Bsurface {
 
    // Returns the Rsurface that owns the boss meme on the simplex:
    static Rsurface* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Rsurface*>(Bbase::find_owner(s));
    }
 
    // Find the Rsurface owner of this simplex, or if there is none,
@@ -242,7 +242,7 @@ class Rsurface: public Bsurface {
    // continuing up the subdivision hierarchy until we find a
    // Rsurface owner or hit the top trying.
    static Rsurface* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<Rsurface*>(Bbase::find_controller(s));
    }
 
    //******** BUILDING ********

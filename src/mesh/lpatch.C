@@ -98,10 +98,10 @@ Lpatch::set_parent(Patch* p)
    // if it's legal. returns true on success
    // (asserts zero on failure!)
 
-   // upcast to Lpatch
-   if (!isa(p))
+   // cast to Lpatch
+   Lpatch* pa = dynamic_cast<Lpatch*>(p);
+   if (!pa)
       return false;
-   Lpatch* pa = (Lpatch*)p;
    assert(
       pa->lmesh()->subdiv_mesh() == lmesh() &&
       (!_parent || _parent == pa) &&

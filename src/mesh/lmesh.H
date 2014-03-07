@@ -52,12 +52,12 @@ class LMESH : public BMESH {
    // verts whose subdiv verts need recalculating:
    CBvert_list& dirty_verts() const { return _dirty_verts; }
 
-   //******** CONVENIENT UPCASTS ********
-   Lvert* lv(int k) const { return (Lvert*) _verts[k]; }
-   Ledge* le(int k) const { return (Ledge*) _edges[k]; }
-   Lface* lf(int k) const { return (Lface*) _faces[k]; }
+   //******** CONVENIENT CASTS ********
+   Lvert* lv(int k) const { return static_cast<Lvert*>(_verts[k]); }
+   Ledge* le(int k) const { return static_cast<Ledge*>(_edges[k]); }
+   Lface* lf(int k) const { return static_cast<Lface*>(_faces[k]); }
 
-   Lvert* dv(int k) const { return (Lvert*) _dirty_verts[k]; }
+   Lvert* dv(int k) const { return static_cast<Lvert*>(_dirty_verts[k]); }
 
    //******** ACCESSORS ********
 
@@ -358,12 +358,12 @@ class LMESH : public BMESH {
  * inlines
  *****************************************************************/
 
-// Convenient "upcast" (though GEL actually may contain an LMESH)
+// Convenient cast (though GEL actually may contain an LMESH)
 inline LMESHptr 
 gel_to_lmesh(CGELptr &gel) 
 {
    BMESHptr mesh = gel_to_bmesh(gel);
-   return mesh ? LMESH::upcast(&*mesh) : nullptr;
+   return mesh ? dynamic_cast<LMESH*>(&*mesh) : nullptr;
 }
 
 inline BMESH*
@@ -383,14 +383,14 @@ get_cur_mesh(CBMESH* m)
 inline LMESH*
 get_lmesh(CBsimplex* s)
 {
-   return s ? LMESH::upcast(s->mesh()) : nullptr;
+   return s ? dynamic_cast<LMESH*>(s->mesh()) : nullptr;
 }
 
 inline int
 subdiv_level(CBsimplex* s)
 {
    if (!s) return -1;
-   LMESH* m = LMESH::upcast(s->mesh());
+   LMESH* m = dynamic_cast<LMESH*>(s->mesh());
    return m ? m->subdiv_level() : -1;
 }
 
@@ -455,7 +455,7 @@ update_subdivision(CBMESHptr& mesh, int level)
 inline LMESH*
 get_lmesh(CBface_list& faces)
 {
-   return LMESH::upcast(faces.mesh());
+   return dynamic_cast<LMESH*>(faces.mesh());
 }
 
 inline LMESH*
@@ -480,7 +480,7 @@ inline Bface_list
 get_subdiv_faces(CBface_list& faces, int level)
 {
    Bface_list ret;
-   LMESH* m = LMESH::upcast(faces.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(faces.mesh());
    if (!(level >= 0 && m && m->subdiv_mesh(level)))
       return ret;
    for (Bface_list::size_type i=0; i<faces.size(); i++)
@@ -494,7 +494,7 @@ inline Bface_list
 get_parent_faces(CBface_list& faces, int level=1)
 {
    Bface_list ret;
-   LMESH* m = LMESH::upcast(faces.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(faces.mesh());
    if (!(level >= 0 && m && m->parent_mesh(level)))
       return ret;
 

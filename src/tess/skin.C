@@ -205,7 +205,7 @@ Skin::create_cover_skin(
    }
 
    // need an LMESH that contains all faces
-   LMESH* mesh = LMESH::upcast(b_mesh);
+   LMESH* mesh = dynamic_cast<LMESH*>(b_mesh);
 
    Skin* cur = new Skin(mesh, region, b_map, 0, false, "cover", cmd);
    cur->set_all_sticky();
@@ -220,7 +220,7 @@ Skin::create_cover_skin(
 
    debug = false;
    _debug_instance = cur;
-   Skin* ret = upcast(cur->control());
+   Skin* ret = dynamic_cast<Skin*>(cur->control());
 
    for (int i = 0; i < Bsurface::get_surfaces(region).num(); i++) {
       if (Skin::isa(Bsurface::get_surfaces(region)[i]))
@@ -254,7 +254,7 @@ Skin::create_multi_sleeve(
    Bface_list all_skel_faces = interior + exterior;
 
    // need an LMESH that contains all faces
-   LMESH* mesh = LMESH::upcast(all_skel_faces.mesh());
+   LMESH* mesh = dynamic_cast<LMESH*>(all_skel_faces.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
       return nullptr;
@@ -351,7 +351,7 @@ Skin::create_multi_sleeve(
    }
 
    _debug_instance = cur;
-   return upcast(cur->control());
+   return dynamic_cast<Skin*>(cur->control());
 }
 
 inline void
@@ -540,7 +540,7 @@ Skin::debug_draw_memes(
    glBegin(GL_POINTS);
    for (int i=0; i<vam.num(); i++) {
       COLOR c = loose_color;
-      SkinMeme* sm = SkinMeme::upcast(vam[i]);
+      SkinMeme* sm = dynamic_cast<SkinMeme*>(vam[i]);
       assert(sm);
       if (sm->is_sticky())
          c = sticky_color;
@@ -649,7 +649,7 @@ Skin::gen_vert(Bvert* skel_vert)
       skin_vert = (Lvert*)_mesh->add_vertex(skel_vert->loc());
       _mapper.add(skel_vert, skin_vert);
    }
-   SkinMeme* m = SkinMeme::upcast(find_meme(skin_vert));
+   SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(skin_vert));
    if (m) {
       m->add_track_simplex(skel_vert);
    } else {
@@ -956,7 +956,7 @@ Skin::set_sticky(CBvert_list& verts, bool sticky) const
 {
    int ret = 0;
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      ret += ::set_sticky(SkinMeme::upcast(find_meme(verts[i])), sticky);
+      ret += ::set_sticky(dynamic_cast<SkinMeme*>(find_meme(verts[i])), sticky);
    }
    return ret;
 }
@@ -983,7 +983,7 @@ Skin::set_offsets(CBvert_list& verts, double h) const
 {
    int ret = 0;
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      ret += ::set_offset(SkinMeme::upcast(find_meme(verts[i])), h);
+      ret += ::set_offset(dynamic_cast<SkinMeme*>(find_meme(verts[i])), h);
    }
    return ret;
 }
@@ -1007,7 +1007,7 @@ void
 Skin::freeze(CBvert_list& verts) const
 {
    for (Bvert_list::size_type i=0; i<verts.size(); i++)
-      ::freeze(SkinMeme::upcast(find_meme(verts[i])));
+      ::freeze(dynamic_cast<SkinMeme*>(find_meme(verts[i])));
 }
 
 void
@@ -1015,7 +1015,7 @@ Skin::restrict(CBvert_list& verts, SimplexFilter* f) const
 {
    assert(f);
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m) {
          //assert(m->track_simplex() == 0 || f->accept(m->track_simplex()));
          m->set_track_filter(f);
@@ -1027,7 +1027,7 @@ void
 Skin::set_non_penetrate(CBvert_list& verts, bool b) const
 {
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m) {
          m->set_non_penetrate(b);
       }
@@ -1038,7 +1038,7 @@ void
 Skin::set_stay_outside(CBvert_list& verts, bool b) const
 {
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m) {
          m->set_stay_outside(b);
       }
@@ -1071,7 +1071,7 @@ Skin::adjust_crease_offsets() const
       );
    Bvert_list crease_skin_verts = _mapper.a_to_b(crease_skel_verts);
    for (Bvert_list::size_type i=0; i<crease_skin_verts.size(); i++)
-      scale_offset(SkinMeme::upcast(find_meme(crease_skin_verts[i])), scales[i]);
+      scale_offset(dynamic_cast<SkinMeme*>(find_meme(crease_skin_verts[i])), scales[i]);
 }
 
 void
@@ -1116,7 +1116,7 @@ void
 Skin::track_deeper(CBvert_list& verts, int R) const
 {
    for (Bvert_list::size_type i=0; i<verts.size(); i++)
-      ::track_deeper(SkinMeme::upcast(find_meme(verts[i])), R);
+      ::track_deeper(dynamic_cast<SkinMeme*>(find_meme(verts[i])), R);
 }
 
 inline void
@@ -1170,12 +1170,12 @@ Skin::debug_smoothing(int iters)
    return;
 
    while (_debug_instance->rel_cur_level() > 0 &&
-          upcast(_debug_instance->child())) {
-      _debug_instance = upcast(_debug_instance->child());
+          typeid(_debug_instance->child()) == typeid(Skin*)) {
+      _debug_instance = dynamic_cast<Skin*>(_debug_instance->child());
    }
    while (_debug_instance->rel_cur_level() < 0 &&
-          upcast(_debug_instance->parent())) {
-      _debug_instance = upcast(_debug_instance->parent());
+          typeid(_debug_instance->parent()) == typeid(Skin*)) {
+      _debug_instance = dynamic_cast<Skin*>(_debug_instance->parent());
    }
    if (_debug_instance->rel_cur_level() != 0) {
       err_msg("Skin::debug_smoothing: no skin at cur level %d",
@@ -1228,7 +1228,7 @@ Skin::create_inflate(
    assert(cmd != nullptr);
 
    // need an LMESH that contains all faces
-   LMESH* mesh = LMESH::upcast(skel.mesh());
+   LMESH* mesh = dynamic_cast<LMESH*>(skel.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
       return nullptr;
@@ -1407,7 +1407,7 @@ Skin::frozen_verts(CBvert_list& verts) const
 {
    Bvert_list ret(verts.size());
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m && m->is_frozen()) {
          ret.push_back(m->vert());
       }
@@ -1426,7 +1426,7 @@ Skin::sticky_verts(CBvert_list& verts) const
 {
    Bvert_list ret(verts.size());
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m && m->is_sticky()) {
          ret.push_back(m->vert());
       }
@@ -1439,7 +1439,7 @@ Skin::track_points(CBvert_list& verts) const
 {
    Wpt_list ret(verts.size());
    for (Bvert_list::size_type i=0; i<verts.size(); i++) {
-      SkinMeme* m = SkinMeme::upcast(find_meme(verts[i]));
+      SkinMeme* m = dynamic_cast<SkinMeme*>(find_meme(verts[i]));
       if (m && m->is_tracking()) {
          ret.push_back(m->track_pt());
       } else {
@@ -1482,7 +1482,7 @@ Skin::draw_debug()
    // sticky: orange
    // unglued: grey
 
-   Skin* cur = upcast(cur_subdiv_bbase());
+   Skin* cur = dynamic_cast<Skin*>(cur_subdiv_bbase());
    if (!cur) return;
    Bvert_list    verts = cur->skin_verts();
    Bvert_list   frozen = cur->frozen_verts(verts);

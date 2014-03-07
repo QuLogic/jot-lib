@@ -199,7 +199,7 @@ operator>>(STDdstream& ds, Action_list& al)
    char brace; ds >> brace;
    al.clear();
    while (ds.check_end_delim()) {
-      Action* a = Action::upcast(DATA_ITEM::Decode(ds, false));
+      Action* a = dynamic_cast<Action*>(DATA_ITEM::Decode(ds, false));
       if (a) {
          err_adv(debug, "Action_list::decode:  read %s", a->class_name().c_str());
          al.push_back(a);
@@ -467,8 +467,8 @@ BcurveAction::BcurveAction(
    _mesh_num(-1),
    _i1(-1),
    _i2(-1),
-   _b1(BpointAction::upcast(get_action(b1))),
-   _b2(BpointAction::upcast(get_action(b2))),
+   _b1(dynamic_cast<BpointAction*>(get_action(b1))),
+   _b2(dynamic_cast<BpointAction*>(get_action(b2))),
    _mesh(m),
    _c(nullptr)
 {
@@ -597,8 +597,8 @@ BcurveAction::apply_indices(const Action_list& list)
    // after read from file or copy operation
 
    _mesh = lookup_mesh(_mesh_num);
-   _b1 = BpointAction::upcast(get_action(_i1, list));
-   _b2 = BpointAction::upcast(get_action(_i2, list));
+   _b1 = dynamic_cast<BpointAction*>(get_action(_i1, list));
+   _b2 = dynamic_cast<BpointAction*>(get_action(_i2, list));
 
    if (debug) {
       cerr << "BcurveAction::apply_indices: "

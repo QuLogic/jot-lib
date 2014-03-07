@@ -1639,7 +1639,7 @@ NPRPenUI::deselect()
 
    if (_pen->curr_npr_tex()) {
       bool apply = false;
-      TEXBODY* t = TEXBODY::upcast(_pen->curr_npr_tex()->mesh()->geom());
+      TEXBODY* t = dynamic_cast<TEXBODY*>(_pen->curr_npr_tex()->mesh()->geom());
       if (t) {
          apply = t->apply_xf();
          static bool APPLY_NPR_TRANSFORMS = Config::get_var_bool("APPLY_NPR_TRANSFORMS",false);
@@ -2111,13 +2111,13 @@ NPRPenUI::smooth_normals()
 
    if (npr) {
       GTexture *t = npr->get_basecoat(_listbox[LIST_LAYER]->get_int_val()-1);
-      if (XToonTexture::upcast(t)) {
-	 XToonTexture::upcast(t)->update_smoothing(true);
+      if (typeid(XToonTexture) == typeid(*t)) {
+         dynamic_cast<XToonTexture*>(t)->update_smoothing(true);
          update_gtex();
-      } else if (GLSLXToonShader::upcast(t)) {
-        GLSLXToonShader::upcast(t)->set_normals(0);
+      } else if (typeid(GLSLXToonShader) == typeid(*t)) {
+        dynamic_cast<GLSLXToonShader*>(t)->set_normals(0);
         update_gtex();
-	  }
+      }
    }
 }
 
@@ -2131,13 +2131,13 @@ NPRPenUI::elliptic_normals()
 
    if (npr) {
       GTexture *t = npr->get_basecoat(_listbox[LIST_LAYER]->get_int_val()-1);
-      if (XToonTexture::upcast(t)) {
-         XToonTexture::upcast(t)->update_elliptic(true);
+      if (typeid(XToonTexture) == typeid(*t)) {
+         dynamic_cast<XToonTexture*>(t)->update_elliptic(true);
          update_gtex();
-      } else if (GLSLXToonShader::upcast(t)) { 
-         GLSLXToonShader::upcast(t)->set_normals(2);
+      } else if (typeid(GLSLXToonShader) == typeid(*t)) {
+         dynamic_cast<GLSLXToonShader*>(t)->set_normals(2);
          update_gtex();
-	  }
+      }
    }
 }
 
@@ -2151,13 +2151,13 @@ NPRPenUI::spheric_normals()
 
    if (npr) {
       GTexture *t = npr->get_basecoat(_listbox[LIST_LAYER]->get_int_val()-1);
-      if (XToonTexture::upcast(t)) {
-         XToonTexture::upcast(t)->update_spheric(true);
+      if (typeid(XToonTexture) == typeid(*t)) {
+         dynamic_cast<XToonTexture*>(t)->update_spheric(true);
          update_gtex();
-      } else if (GLSLXToonShader::upcast(t)) {
-         GLSLXToonShader::upcast(t)->set_normals(1);
+      } else if (typeid(GLSLXToonShader) == typeid(*t)) {
+         dynamic_cast<GLSLXToonShader*>(t)->set_normals(1);
          update_gtex();
-	  }
+      }
    }
 }
 
@@ -2171,11 +2171,11 @@ NPRPenUI::cylindric_normals()
 
    if (npr) {
       GTexture *t = npr->get_basecoat(_listbox[LIST_LAYER]->get_int_val()-1);
-      if (XToonTexture::upcast(t)) {
-         XToonTexture::upcast(t)->update_cylindric(true);
+      if (typeid(XToonTexture) == typeid(*t)) {
+         dynamic_cast<XToonTexture*>(t)->update_cylindric(true);
          update_gtex();
-      } else if (GLSLXToonShader::upcast(t)) {
-         GLSLXToonShader::upcast(t)->set_normals(3);
+      } else if (typeid(GLSLXToonShader) == typeid(*t)) {
+         dynamic_cast<GLSLXToonShader*>(t)->set_normals(3);
          update_gtex();
       }
    }
@@ -2191,11 +2191,11 @@ NPRPenUI::compute_curvatures()
 
    if (npr) {
       GTexture *t = npr->get_basecoat(_listbox[LIST_LAYER]->get_int_val()-1);
-      if (XToonTexture::upcast(t)) {
-         XToonTexture::upcast(t)->update_curvatures(true);
+      if (typeid(XToonTexture) == typeid(*t)) {
+         dynamic_cast<XToonTexture*>(t)->update_curvatures(true);
          update_gtex();
-      }// else if (GLSLXToonShader::isa(t)) {
-        // GLSLXToonShader *xtoon = (GLSLXToonShader*)t;
+      }// else if (typeid(GLSLXToonShader) == typeid(*t)) {
+        // GLSLXToonShader *xtoon = dynamic_cast<GLSLXToonShader*>(t);
         // xtoon->update_curvatures(true);
         // update_gtex();
       //}

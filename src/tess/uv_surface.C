@@ -58,7 +58,7 @@ UVmeme::copy_attribs_v(VertMeme* v)
    // we now update our uv coords from our parent meme's
    // uv coords.
 
-   UVmeme* p = upcast(v); // parent
+   UVmeme* p = dynamic_cast<UVmeme*>(v); // parent
 
    if (!p) {
       return;
@@ -83,8 +83,8 @@ UVmeme::copy_attribs_e(VertMeme* v1, VertMeme* v2)
    if (!map())
       return;
 
-   UVmeme* p1 = upcast(v1);
-   UVmeme* p2 = upcast(v2);
+   UVmeme* p1 = dynamic_cast<UVmeme*>(v1);
+   UVmeme* p2 = dynamic_cast<UVmeme*>(v2);
 
    if (!(p1 && p2 && p1->_uv_valid && p2->_uv_valid))
       return;
@@ -115,10 +115,10 @@ UVmeme::copy_attribs_q(VertMeme* v1, VertMeme* v2, VertMeme* v3, VertMeme* v4)
    if (!m)
       return;
 
-   UVmeme* p1 = upcast(v1);
-   UVmeme* p2 = upcast(v2);
-   UVmeme* p3 = upcast(v3);
-   UVmeme* p4 = upcast(v4);
+   UVmeme* p1 = dynamic_cast<UVmeme*>(v1);
+   UVmeme* p2 = dynamic_cast<UVmeme*>(v2);
+   UVmeme* p3 = dynamic_cast<UVmeme*>(v3);
+   UVmeme* p4 = dynamic_cast<UVmeme*>(v4);
 
    if (p1 && p2 && p3 && p4 &&
        p1->_uv_valid && p2->_uv_valid &&
@@ -324,7 +324,7 @@ UVmeme::_gen_child(Lvert* lv, VertMeme* p) const
    // create a child meme with our "partner", giving the child
    // an average of its parents' uv coords
 
-   UVmeme* partner = UVmeme::upcast(p);
+   UVmeme* partner = dynamic_cast<UVmeme*>(p);
 
    // XXX - may need to be more graceful here
    assert(map() && _uv_valid && partner && partner->_uv_valid);
@@ -343,9 +343,9 @@ UVmeme::_gen_child(Lvert* lv, VertMeme* v1, VertMeme* v2, VertMeme* v3) const
    // create a child meme with our 3 "partners", giving the
    // child an average of its parents' uv coords
 
-   UVmeme* p1 = UVmeme::upcast(v1);
-   UVmeme* p2 = UVmeme::upcast(v2);
-   UVmeme* p3 = UVmeme::upcast(v3);
+   UVmeme* p1 = dynamic_cast<UVmeme*>(v1);
+   UVmeme* p2 = dynamic_cast<UVmeme*>(v2);
+   UVmeme* p3 = dynamic_cast<UVmeme*>(v3);
 
    // XXX - may need to be more graceful here
    assert(map() && _uv_valid &&

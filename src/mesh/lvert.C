@@ -387,9 +387,9 @@ Lvert::mask_changed()
 
    // Edge masks depend on vertex masks.
    //
-   // In the loop below, if we try to upcast an
+   // In the loop below, if we try to cast an
    // adjacent Bedge* to Ledge* when the Bedge
-   // constructor is not finished, the upcast is
+   // constructor is not finished, the cast is
    // invalid, causing a seg fault.  The following
    // 'if' statement is a work-around:
    for (int k = 0; k < degree(); k++) {

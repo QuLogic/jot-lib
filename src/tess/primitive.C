@@ -580,7 +580,7 @@ Primitive::get_primitive(BMESH* mesh)
    }
 
    // To find the skeleton we first need the TEXBODY owning the mesh.
-   TEXBODY* tex = TEXBODY::upcast(mesh->geom());
+   TEXBODY* tex = dynamic_cast<TEXBODY*>(mesh->geom());
    if (!tex) {
       err_adv(debug, "Primitive::get_primitive: error: non TEXBODY");
       return nullptr;
@@ -2277,7 +2277,7 @@ Primitive::create_xf_meme(Lvert* vert, CoordFrame* frame)
 {
    Meme* m = find_meme(vert);
    if (m) {
-      XFMeme* ret = XFMeme::upcast(m);
+      XFMeme* ret = dynamic_cast<XFMeme*>(m);
       assert(ret);
       return ret;
    }

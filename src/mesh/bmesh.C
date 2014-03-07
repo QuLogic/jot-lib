@@ -1669,7 +1669,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
          }
 
          // Get the correct type (BMESH or LMESH) as specified in the file:
-         ret = upcast(di->dup());
+         ret = dynamic_cast<BMESH*>(di->dup());
          if (!ret) {
             err_msg(
                "BMESH::read_jot_stream() - Error: Class '#%s' is not a BMESH subclass.",

@@ -108,7 +108,7 @@ class Skin:  public Bsurface {
 
    // Returns the Skin that owns the boss meme on the simplex:
    static Skin* find_owner(CBsimplex* s) {
-      return upcast(Bbase::find_owner(s));
+      return dynamic_cast<Skin*>(Bbase::find_owner(s));
    }
 
    // Find the Skin owner of this simplex, or if there is none,
@@ -116,14 +116,14 @@ class Skin:  public Bsurface {
    // continuing up the subdivision hierarchy until we find a
    // Skin owner or hit the top trying.
    static Skin* find_controller(CBsimplex* s) {
-     return upcast(Bbase::find_controller(s));
+     return dynamic_cast<Skin*>(Bbase::find_controller(s));
    }
 
-   Skin* parent()  const { return upcast(Bbase::parent()); }
-   Skin* child()   const { return upcast(Bbase::child()); }
-   Skin* control() const { return upcast(Bbase::control()); }
+   Skin* parent()  const { return dynamic_cast<Skin*>(Bbase::parent()); }
+   Skin* child()   const { return dynamic_cast<Skin*>(Bbase::child()); }
+   Skin* control() const { return dynamic_cast<Skin*>(Bbase::control()); }
 
-   Skin* subdiv_skin(int k) const { return upcast(subdiv_bbase(k)); }
+   Skin* subdiv_skin(int k) const { return dynamic_cast<Skin*>(subdiv_bbase(k)); }
 
    //******** UTILITIES ********
 

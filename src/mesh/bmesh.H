@@ -1034,7 +1034,7 @@ class BMESHray : public RAYhit {
 
    BMESH* mesh() const { return _simplex ? _simplex->mesh() : nullptr; }
 
-   //******** CONVENIENT UPCASTS ********
+   //******** CONVENIENT CASTS ********
    Bvert* vert() const { return bvert(_simplex); }
    Bedge* edge() const { return bedge(_simplex); }
    Bface* face() const { return bface(_simplex); }

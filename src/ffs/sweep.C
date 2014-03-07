@@ -425,7 +425,7 @@ SWEEP_DISK::setup(Panel* p, Bpoint_list points, Bcurve_list curves, Bsurface_lis
    Wpt b = o + n.normalized()*len;
 
    // try basic setup
-   if (!SWEEP_BASE::setup(LMESH::upcast(faces.mesh()), o, b, default_timeout()))
+   if (!SWEEP_BASE::setup(dynamic_cast<LMESH*>(faces.mesh()), o, b, default_timeout()))
       return false;
 
    // ******** From here on we accept it ********
@@ -455,7 +455,7 @@ SWEEP_DISK::setup(CGESTUREptr& gest, double dur)
    }
 
    // XXX - shouldn't require it is a Panel:
-   Panel* p = Panel::upcast(Bsurface::hit_ctrl_surface(gest->start()));
+   Panel* p = dynamic_cast<Panel*>(Bsurface::hit_ctrl_surface(gest->start()));
    if (!p) {
       err_adv(debug, "SWEEP_DISK::setup: non-panel");
       return false;
@@ -491,7 +491,7 @@ SWEEP_DISK::setup(CGESTUREptr& gest, double dur)
    Wpt b = o + n.normalized()*len;
 
    // try basic setup
-   if (!SWEEP_BASE::setup(LMESH::upcast(faces.mesh()), o, b, dur))
+   if (!SWEEP_BASE::setup(dynamic_cast<LMESH*>(faces.mesh()), o, b, dur))
       return false;
 
    // ******** From here on we accept it ********
@@ -824,18 +824,18 @@ SWEEP_DISK::build_revolve(
 
    // Create/Edit the surface of revolution
    UVsurface* ret = nullptr;
-   Panel* p = Panel::upcast(Bsurface::get_surface(_enclosed_faces));
+   Panel* p = dynamic_cast<Panel*>(Bsurface::get_surface(_enclosed_faces));
    assert(p);
    if (is_editing) {
       assert(!_surfs.empty());
-      ret = UVsurface::upcast(_surfs[0]);
+      ret = dynamic_cast<UVsurface*>(_surfs[0]);
       assert(ret);
 
-      TubeMap* tmap = TubeMap::upcast(ret->map());
+      TubeMap* tmap = dynamic_cast<TubeMap*>(ret->map());
       assert(tmap);
 
       // reshape the axis
-      Wpt_listMap* m = Wpt_listMap::upcast(tmap->axis());
+      Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(tmap->axis());
       assert(m);
       WPT_LIST_RESHAPE_CMDptr a_cmd = new WPT_LIST_RESHAPE_CMD(m,apts);
       if (a_cmd->doit())
@@ -961,7 +961,7 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
 
       // XXX - should be undoable
       if (is_editing) {
-         Wpt_listMap* m = Wpt_listMap::upcast(_curves[i]->map());
+         Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_curves[i]->map());
          cmd->add(new WPT_LIST_RESHAPE_CMD(m,cpts));
       } else {
          top_pts += BpointAction::create(_mesh, cpts.back(), b, n, res_level, cmd);
@@ -1017,7 +1017,7 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
    _mesh->update_subdivision(res_level);
 
    // Record data necessary to return to this mode
-   Panel* p = Panel::upcast(Bsurface::get_surface(_enclosed_faces));
+   Panel* p = dynamic_cast<Panel*>(Bsurface::get_surface(_enclosed_faces));
    assert(p);
    if (is_editing) {
       vector<Panel*>::iterator it = std::find(panels.begin(), panels.end(), p);

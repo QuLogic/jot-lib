@@ -103,7 +103,7 @@ LMESH::get_lmesh(const string& exact_name)
            << ", but it is not an LMESH"
            << endl;
    }
-   return upcast(mesh);
+   return dynamic_cast<LMESH*>(mesh);
 }
 
 void
@@ -483,8 +483,8 @@ LMESH::_merge(BMESH* bm)
    // merge the given mesh into this one.
 
    // error checking was done before this protected method was called.
-   // so this convenient upcast is safe:
-   LMESH* m = (LMESH*)bm;
+   // so this convenient cast is safe:
+   LMESH* m = static_cast<LMESH*>(bm);
 
    // merge subdivision meshes (recursively) first. but if this one
    // has fewer levels of subdivision, truncate the other one to the
@@ -815,7 +815,7 @@ LMESH::update_subdivision(CBface_list& faces, int k)
    if (faces.empty())
       return true;
 
-   LMESH* m = LMESH::upcast(faces.mesh());
+   LMESH* m = dynamic_cast<LMESH*>(faces.mesh());
    if (!m) {
       err_adv(debug, "  error: non-LMESH");
       return false;
@@ -1257,7 +1257,7 @@ bmesh_to_lmesh(BMESHptr mesh)
    // from the given mesh, and return the LMESH.
 
    if (!mesh) return nullptr;
-   LMESHptr ret = LMESH::upcast(&*mesh);
+   LMESHptr ret = dynamic_cast<LMESH*>(&*mesh);
    if (!ret) {
       ret = new LMESH;
       *ret = *mesh;

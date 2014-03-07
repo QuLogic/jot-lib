@@ -73,7 +73,7 @@ copy_face(Bface* f, CVertMapper& vmap, Primitive* p, bool reverse)
    FaceMeme* fm = nullptr;
    UVpt a, b, c;
    if (UVdata::get_uvs(f, a, b, c)) {
-      Panel* r = Panel::upcast(Bsurface::find_controller(f));
+      Panel* r = dynamic_cast<Panel*>(Bsurface::find_controller(f));
       assert(r && r->curves().num()==4);
       int n = min(r->curves()[0]->num_edges(), r->curves()[1]->num_edges());
       if (reverse) {
@@ -139,7 +139,7 @@ get_inflate_mesh(LMESHptr skel_mesh)
 {
    if (!skel_mesh)
       return nullptr;
-   TEXBODY* tex = TEXBODY::upcast(skel_mesh->geom());
+   TEXBODY* tex = dynamic_cast<TEXBODY*>(skel_mesh->geom());
    if (!tex)
       return nullptr;
    return LMESH::upcast(tex->get_inflate_mesh(skel_mesh));
@@ -422,7 +422,7 @@ PAPER_DOLL::init(CGESTUREptr& g)
       err_adv(debug, "PAPER_DOLL::init: non-ellipse");
       return false;
    }
-   Panel* p = Panel::upcast(
+   Panel* p = dynamic_cast<Panel*>(
       Bsurface::get_surface(get_top_level(VisRefImage::get_faces(g->pts())))
       );
    err_adv(debug, "PAPER_DOLL::init: %s panel", p?"found":"could not find");
@@ -546,7 +546,7 @@ PAPER_DOLL::init(Primitive* p)
 Primitive*
 PAPER_DOLL::build_primitive(CBface_list& o_faces)
 {
-   LMESHptr skel_mesh = LMESH::upcast(o_faces.mesh());
+   LMESHptr skel_mesh = dynamic_cast<LMESH*>(o_faces.mesh());
    assert(skel_mesh);
    LMESHptr mesh = get_inflate_mesh(skel_mesh);
    assert(mesh);

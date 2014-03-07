@@ -484,7 +484,7 @@ CREATE_RIBBONS_CMD::is_ready() const
    assert(is_clear());
 
    // Both edge chains must belong to the same LMESH:
-   if (!LMESH::upcast(_a.mesh()) || _a.mesh() != _b.mesh()) {
+   if (!dynamic_cast<LMESH*>(_a.mesh()) || _a.mesh() != _b.mesh()) {
       err_adv(_debug, "CREATE_RIBBONS_CMD::is_ready: invalid mesh");
       return false;
    }
@@ -549,7 +549,7 @@ CREATE_RIBBONS_CMD::doit()
    // If no patch was provided, create one and ensure that it gets
    // drawn by putting in in the drawables list of the control mesh
    if (!_patch) {
-      LMESHptr mesh = LMESH::upcast(_a.mesh());
+      LMESHptr mesh = dynamic_cast<LMESH*>(_a.mesh());
       assert(mesh != nullptr);
       _patch = mesh->new_patch();
       assert(_patch && _patch->mesh() == mesh);
