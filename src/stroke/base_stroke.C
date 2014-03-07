@@ -741,7 +741,7 @@ BaseStroke::get_offsets(TAGformat &d)
       return;
    }
 
-   BaseStrokeOffsetLISTptr o = new BaseStrokeOffsetLIST;
+   BaseStrokeOffsetLISTptr o = make_shared<BaseStrokeOffsetLIST>();
    assert(o);
    o->decode(*d);
 
@@ -990,7 +990,7 @@ BaseStroke::copy(CBaseStroke& s)
       }
       else
       {
-         _offsets = new BaseStrokeOffsetLIST;
+         _offsets = make_shared<BaseStrokeOffsetLIST>();
 
          _offsets->copy(*s._offsets);
       }
@@ -4485,7 +4485,7 @@ BaseStroke::generate_offsets(
    NDCZpt_list::size_type j;
    double t_guess, t_closest;
    BaseStrokeVertex v;
-   BaseStrokeOffsetLISTptr ol = new BaseStrokeOffsetLIST;
+   BaseStrokeOffsetLISTptr ol = make_shared<BaseStrokeOffsetLIST>();
 
    //Compute the _l values which are the
    //NDC partial lengths that form the

@@ -1327,7 +1327,7 @@ QuadCell::add_group_var(Stroke_List* old_group)
       vector<Wvec>     new_bar;
       vector<double>   new_alpha;
       vector<double>   new_width;
-      //BaseStrokeOffsetLISTptr new_offsets = new BaseStrokeOffsetLIST;
+      //BaseStrokeOffsetLISTptr new_offsets = make_shared<BaseStrokeOffsetLIST>();
       //Wpt border_pix;
       try {
            int n = strokes[i]->get_verts_num();

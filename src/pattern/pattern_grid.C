@@ -678,7 +678,7 @@ PatternGrid::add(CNDCpt_list &pl,
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
-      BaseStrokeOffsetLISTptr ol = new BaseStrokeOffsetLIST;
+      BaseStrokeOffsetLISTptr ol = make_shared<BaseStrokeOffsetLIST>();
 
       ol->set_replicate(0);
       ol->set_hangover(1);

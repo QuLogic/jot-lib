@@ -952,7 +952,7 @@ HatchingGroupFree::add(CNDCpt_list &pl, const vector<double>&prl, int curve_type
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
-      BaseStrokeOffsetLISTptr ol = new BaseStrokeOffsetLIST;
+      BaseStrokeOffsetLISTptr ol = make_shared<BaseStrokeOffsetLIST>();
 
       ol->set_replicate(0);
       ol->set_hangover(1);
@@ -1421,7 +1421,7 @@ HatchingGroupFreeInst::interpolate(
    UVpt_list   uvpts;
    Wpt_list    pts;
    vector<Wvec> norms;
-   BaseStrokeOffsetLISTptr offsets = new BaseStrokeOffsetLIST;
+   BaseStrokeOffsetLISTptr offsets = make_shared<BaseStrokeOffsetLIST>();
 
    UVpt uv;
    UVpt uv1;
@@ -1620,7 +1620,7 @@ HatchingHatchFree::HatchingHatchFree(
    _norms.clear();   
    _norms.insert(_norms.end(), hhf->get_norms().begin(), hhf->get_norms().end());
 
-   _offsets = new BaseStrokeOffsetLIST;
+   _offsets = make_shared<BaseStrokeOffsetLIST>();
    
    //XXX - Copy this or just use the ptr?!?
    _offsets->copy(*(hhf->get_offsets()));

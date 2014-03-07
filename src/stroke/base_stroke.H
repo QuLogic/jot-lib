@@ -109,12 +109,10 @@ STDdstream  &operator>>(STDdstream &ds, BaseStrokeOffset &o);
 // but this IS a ref counted item
 
 #define CBaseStrokeOffsetLIST    const BaseStrokeOffsetLIST
-#define CBaseStrokeOffsetLISTptr const BaseStrokeOffsetLISTptr
 
-MAKE_PTR_BASEC(BaseStrokeOffsetLIST);
+MAKE_SHARED_PTR(BaseStrokeOffsetLIST);
 
-class BaseStrokeOffsetLIST : public REFcounter,
-                             protected vector<BaseStrokeOffset>,
+class BaseStrokeOffsetLIST : protected vector<BaseStrokeOffset>,
                              public DATA_ITEM {
 
    /******** STATIC MEMBER VARIABLES ********/   

@@ -1244,7 +1244,7 @@ get_offsets(
    static float MIN_OFFSET_DELTA_T = 0.001f;
    assert(gest_list.num());
 
-   BaseStrokeOffsetLISTptr ret = new BaseStrokeOffsetLIST;   assert (ret);
+   BaseStrokeOffsetLISTptr ret = make_shared<BaseStrokeOffsetLIST>();   assert (ret);
 
    //Use selected baseline
    if (s)

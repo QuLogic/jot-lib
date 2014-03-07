@@ -1532,7 +1532,7 @@ HatchingHatchBase::get_offsetlist(TAGformat &d)
       return;
    }
 
-   BaseStrokeOffsetLISTptr o = new BaseStrokeOffsetLIST;
+   BaseStrokeOffsetLISTptr o = make_shared<BaseStrokeOffsetLIST>();
    assert(o);
    o->decode(*d);
 

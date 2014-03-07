@@ -1188,7 +1188,7 @@ HatchingGroupFixed::add(
       //XXX  - Okay, using the gesture pressure, but no offsets.
       //Need to go back and add offset generation...
 
-      BaseStrokeOffsetLISTptr ol = new BaseStrokeOffsetLIST;
+      BaseStrokeOffsetLISTptr ol = make_shared<BaseStrokeOffsetLIST>();
 
       ol->set_replicate(0);
       ol->set_hangover(1);
@@ -1352,7 +1352,7 @@ HatchingGroupFixed::interpolate(
 
    Wpt_list pts;
    vector<Wvec> norms;
-   BaseStrokeOffsetLISTptr offsets = new BaseStrokeOffsetLIST;
+   BaseStrokeOffsetLISTptr offsets = make_shared<BaseStrokeOffsetLIST>();
 
    ifrac = 0.5 + (drand48() - 0.5) * INTERPOLATION_RANDOM_FACTOR;
 
