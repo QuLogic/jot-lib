@@ -90,7 +90,7 @@ class UNIX_MANAGER : public FD_MANAGER {
    virtual void rem(FD_EVENT *fd) {
       vector<tty_to_id>::iterator it = std::find(_ids.begin(), _ids.end(), tty_to_id(fd));
       if (it != _ids.end()) {
-         _ids.erase(it)
+         _ids.erase(it);
       }
    }
 };
