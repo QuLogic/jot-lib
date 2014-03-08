@@ -3,6 +3,8 @@ jot-lib
 
 C++ libraries for 3D graphics, especially NPR
 
+[![Build Status](https://travis-ci.org/QuLogic/jot-lib.png)](https://travis-ci.org/QuLogic/jot-lib)
+
 What is this?
 -------------
 
@@ -26,7 +28,7 @@ libraries:
  * GLUT
  * GLEW
  * libpng
- * Coin3D (optional; used by iv2sm for conversions. Another implementation ofi
+ * Coin3D (optional; used by iv2sm for conversions. Another implementation of
            Open Inventor may also work.)
 
 How to build
