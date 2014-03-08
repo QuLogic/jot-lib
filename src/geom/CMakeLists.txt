@@ -23,7 +23,6 @@ TARGET_LINK_LIBRARIES(geom
 	dev
 	disp
 	dlhandler
-	geom
 	gtex
 	mlib
 	net

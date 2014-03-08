@@ -39,7 +39,6 @@ TARGET_LINK_LIBRARIES(mesh
 	geom
 	gtex
 	map3d
-	mesh
 	mlib
 	net
 	sps

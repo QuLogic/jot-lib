@@ -14,7 +14,6 @@ ADD_LIBRARY(disp
 	paper_effect_base.C)
 
 TARGET_LINK_LIBRARIES(disp
-	disp
 	geom
 	mlib
 	net
