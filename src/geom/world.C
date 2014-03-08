@@ -763,7 +763,7 @@ WORLD::display(CGELptr &o, bool undoable)
       return;
 
    if (undoable) {
-      add_command( new DISPLAY_CMD(o) );
+      add_command( make_shared<DISPLAY_CMD>(o) );
    } else {
       DRAWN.add(o); 
    }
@@ -776,7 +776,7 @@ WORLD::display_gels(CGELlist& gels, bool undoable)
       return;
 
    if (undoable) {
-      add_command( new DISPLAY_CMD(gels) );
+      add_command( make_shared<DISPLAY_CMD>(gels) );
    } else {
       for (int i=0; i<gels.num(); i++)
          DRAWN.add(gels[i]); 
@@ -790,7 +790,7 @@ WORLD::undisplay(CGELptr &o, bool undoable)
       return;
 
    if (undoable) {
-      add_command( new UNDISPLAY_CMD(o) );
+      add_command( make_shared<UNDISPLAY_CMD>(o) );
    } else {
       DRAWN.rem(o); 
    }
@@ -803,7 +803,7 @@ WORLD::undisplay_gels(CGELlist& gels, bool undoable)
       return;
 
    if (undoable) {
-      add_command( new UNDISPLAY_CMD(gels) );
+      add_command( make_shared<UNDISPLAY_CMD>(gels) );
    } else {
       for (int i=0; i<gels.num(); i++)
          DRAWN.rem(gels[i]); 

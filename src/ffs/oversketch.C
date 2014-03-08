@@ -398,8 +398,8 @@ OVERSKETCH::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offs
    }
 
    // now apply new locs
-//   FIT_VERTS_CMDptr cmd = new FIT_VERTS_CMD(region_verts, new_locs);
-   SUBDIV_OFFSET_CMDptr cmd = new SUBDIV_OFFSET_CMD(region_verts, offsets);
+//   FIT_VERTS_CMDptr cmd = make_shared<FIT_VERTS_CMD>(region_verts, new_locs);
+   SUBDIV_OFFSET_CMDptr cmd = make_shared<SUBDIV_OFFSET_CMD>(region_verts, offsets);
    cmd->doit();
    WORLD::add_command(cmd);
 

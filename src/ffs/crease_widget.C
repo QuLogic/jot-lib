@@ -408,7 +408,7 @@ CREASE_WIDGET::sharpen_cb(CGESTUREptr& gest, DrawState*& s)
       if (lm)
          err_adv(debug, "before sharpen: %d dirty verts", lm->dirty_verts().size());
       if (e->crease_val()<USHRT_MAX)
-         WORLD::add_command(new CREASE_INC_CMD(_strip->edges(), 
+         WORLD::add_command(make_shared<CREASE_INC_CMD>(_strip->edges(),
             (ushort)_mesh->rel_cur_level(), true));
       //_strip->edges().inc_crease_vals((ushort)_mesh->rel_cur_level());
       if (lm)
@@ -441,7 +441,7 @@ CREASE_WIDGET::smooth_cb(CGESTUREptr& gest, DrawState*& s)
    }
    if (std::find(_strip->edges().begin(), _strip->edges().end(), e) != _strip->edges().end()) {
       if (e->crease_val()> 0)
-         WORLD::add_command(new CREASE_INC_CMD(_strip->edges(), 
+         WORLD::add_command(make_shared<CREASE_INC_CMD>(_strip->edges(),
             (ushort)_mesh->rel_cur_level(), false));
       //_strip->edges().dec_crease_vals((ushort)_mesh->rel_cur_level());
       if (lmesh())

@@ -268,7 +268,7 @@ class CRV_SKETCH : public DrawWidget {
 /*****************************************************************
  * CRV_SKETCH_CMD
  *****************************************************************/
-MAKE_PTR_SUBC(CRV_SKETCH_CMD,COMMAND);
+MAKE_SHARED_PTR(CRV_SKETCH_CMD);
 class CRV_SKETCH_CMD : public COMMAND {
  public:
 

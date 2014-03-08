@@ -43,7 +43,7 @@ show(CBedge* e)
  *   Used when joining seams together. (The "open" part gets
  *   merged into the "closed" part, hence 'o' and 'c'.)
  *****************************************************************/
-MAKE_PTR_SUBC(REPARENT_CMD,COMMAND);
+MAKE_SHARED_PTR(REPARENT_CMD);
 class REPARENT_CMD : public COMMAND {
  public:
 
@@ -132,7 +132,7 @@ REPARENT_CMD::undoit()
  *   Perform a lightweight face redefinition, replacing one vertex
  *   with another in a given Bface, but not changing the edges.
  *****************************************************************/
-MAKE_PTR_SUBC(REDEF_FACE_V_CMD,COMMAND);
+MAKE_SHARED_PTR(REDEF_FACE_V_CMD);
 class REDEF_FACE_V_CMD : public COMMAND {
  public:
 
@@ -204,7 +204,7 @@ REDEF_FACE_V_CMD::undoit()
  *
  *   Update a Bface to replace one edge with another.
  *****************************************************************/
-MAKE_PTR_SUBC(REDEF_FACE_E_CMD,COMMAND);
+MAKE_SHARED_PTR(REDEF_FACE_E_CMD);
 class REDEF_FACE_E_CMD : public COMMAND {
  public:
 
@@ -276,7 +276,7 @@ REDEF_FACE_E_CMD::undoit()
  *
  *   Redefine an edge by replacing one vertex with another.
  *****************************************************************/
-MAKE_PTR_SUBC(REDEF_EDGE_CMD,COMMAND);
+MAKE_SHARED_PTR(REDEF_EDGE_CMD);
 class REDEF_EDGE_CMD : public COMMAND {
  public:
 
@@ -348,7 +348,7 @@ REDEF_EDGE_CMD::undoit()
  * JOIN_SEAM_CMD
  *****************************************************************/
 JOIN_SEAM_CMD::JOIN_SEAM_CMD(CBvert_list& o, CBvert_list& c) :
-   _cmds(new MULTI_CMD())
+   _cmds(make_shared<MULTI_CMD>())
 {
    LMESH* m = dynamic_cast<LMESH*>(c.mesh());
    if (!(m && m == o.mesh() && c.size() == o.size())) {
@@ -438,7 +438,7 @@ void
 JOIN_SEAM_CMD::reparent_verts()
 {
    for (Bvert_list::size_type i=0; i<_o.size(); i++) {
-      REPARENT_CMDptr cmd = new REPARENT_CMD(_o[i], _c[i]);
+      REPARENT_CMDptr cmd = make_shared<REPARENT_CMD>(_o[i], _c[i]);
       cmd->doit();
       _cmds->add(cmd);
    }
@@ -457,7 +457,7 @@ JOIN_SEAM_CMD::redefine_faces(Bvert* o, Bvert* c)
    Bface_list faces;
    o->get_all_faces(faces);
    for (Bface_list::size_type i=0; i<faces.size(); i++) {
-      REDEF_FACE_V_CMDptr cmd = new REDEF_FACE_V_CMD(faces[i], o, c);
+      REDEF_FACE_V_CMDptr cmd = make_shared<REDEF_FACE_V_CMD>(faces[i], o, c);
       cmd->doit();
       _cmds->add(cmd);
    }
@@ -478,7 +478,7 @@ JOIN_SEAM_CMD::redefine_edges(Bvert* o, Bvert* c)
    for (Bedge_list::size_type i=0; i<edges.size(); i++) {
       // only do edges w/ flag == 0
       if (!edges[i]->flag()) {
-         REDEF_EDGE_CMDptr cmd = new REDEF_EDGE_CMD(edges[i], o, c);
+         REDEF_EDGE_CMDptr cmd = make_shared<REDEF_EDGE_CMD>(edges[i], o, c);
          cmd->doit();
          _cmds->add(cmd);
       }
@@ -497,7 +497,7 @@ JOIN_SEAM_CMD::redefine_faces(Bedge* o, Bedge* c)
 
    Bface_list faces = o->get_all_faces();
    for (Bface_list::size_type i=0; i<faces.size(); i++) {
-      REDEF_FACE_E_CMDptr cmd = new REDEF_FACE_E_CMD(faces[i], o, c);
+      REDEF_FACE_E_CMDptr cmd = make_shared<REDEF_FACE_E_CMD>(faces[i], o, c);
       cmd->doit();
       _cmds->add(cmd);
    }
@@ -659,7 +659,7 @@ FIT_VERTS_CMD::undoit()
 /*****************************************************************
  * MOVE_VERT_CMD
  *****************************************************************/
-MAKE_PTR_SUBC(MOVE_VERT_CMD,COMMAND);
+MAKE_SHARED_PTR(MOVE_VERT_CMD);
 class MOVE_VERT_CMD : public COMMAND {
  public:
 
@@ -787,8 +787,8 @@ SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD(
    vector<double> parent_offsets;
    get_parents(verts, offsets, parents, parent_offsets);
    if (!parents.empty())
-      _parent_cmd  = new SUBDIV_OFFSET_CMD(parents, parent_offsets);
-   _ctrl_vert_cmds = new MULTI_CMD;
+      _parent_cmd  = make_shared<SUBDIV_OFFSET_CMD>(parents, parent_offsets);
+   _ctrl_vert_cmds = make_shared<MULTI_CMD>();
 }
 
 bool
@@ -860,7 +860,7 @@ SUBDIV_OFFSET_CMD::doit()
             // control verts cannot be moved via their subdiv offset;
             // instead move them directly w/ a MOVE_VERT_CMD:
             _ctrl_vert_cmds->add(
-               new MOVE_VERT_CMD(
+               make_shared<MOVE_VERT_CMD>(
                   _verts[i],
                   _verts[i]->loc() + (_verts[i]->norm() * _offsets[i])
                   )

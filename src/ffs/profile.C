@@ -892,7 +892,7 @@ PROFILE::sharp_end_xform(Bvert* v, PIXEL tap)
    }
 
    _mode = 1;
-   FIT_VERTS_CMDptr cmd = new FIT_VERTS_CMD(verts, new_locs);
+   FIT_VERTS_CMDptr cmd = make_shared<FIT_VERTS_CMD>(verts, new_locs);
    WORLD::add_command(cmd);
    return true;
 }
@@ -960,7 +960,7 @@ PROFILE::apply_offsets(CBvert_list& sil_verts, const vector<double>& sil_offsets
    vector<double> parent_offsets;
    get_parents(region_verts, offsets, parent_verts, parent_offsets);
 
-   SUBDIV_OFFSET_CMDptr cmd = new SUBDIV_OFFSET_CMD(parent_verts, parent_offsets);
+   SUBDIV_OFFSET_CMDptr cmd = make_shared<SUBDIV_OFFSET_CMD>(parent_verts, parent_offsets);
    WORLD::add_command(cmd);
    return true;
 }

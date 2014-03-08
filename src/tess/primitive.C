@@ -1068,7 +1068,7 @@ class Pcalc {
    double d(double i) const { return (c(i) - c(0))/(c(_N-1) - c(0)); }
 };
 
-MAKE_PTR_SUBC(STERILIZE_MEMES_CMD,COMMAND);
+MAKE_SHARED_PTR(STERILIZE_MEMES_CMD);
 class STERILIZE_MEMES_CMD : public COMMAND {
  public:
 
@@ -1111,7 +1111,7 @@ sterilize_verts(CBvert_list& verts, MULTI_CMDptr cmd)
    if (!memes.empty()) {
       memes.sterilize();
       if (cmd)
-         cmd->add(new STERILIZE_MEMES_CMD(memes, true));
+         cmd->add(make_shared<STERILIZE_MEMES_CMD>(memes, true));
    }
 }
 
@@ -1255,9 +1255,9 @@ create_skel_curve(
    skel_curve->set_name(name);
    init_name(skel_curve->b1(), name + "_b1");
    init_name(skel_curve->b2(), name + "_b2");
-   cmd->add(new SHOW_BBASE_CMD(skel_curve));
-   cmd->add(new SHOW_BBASE_CMD(skel_curve->b1()));
-   cmd->add(new SHOW_BBASE_CMD(skel_curve->b2()));
+   cmd->add(make_shared<SHOW_BBASE_CMD>(skel_curve));
+   cmd->add(make_shared<SHOW_BBASE_CMD>(skel_curve->b1()));
+   cmd->add(make_shared<SHOW_BBASE_CMD>(skel_curve->b2()));
    skel_curve->mesh()->update_subdivision(1);
    return skel_curve;
 }
@@ -1694,7 +1694,7 @@ Primitive::extend(
    if (surf) {
       surf->set_res_level(0);
       if(debug) cerr << "panel created" << endl;
-      cmd->add(new SHOW_BBASE_CMD(surf));
+      cmd->add(make_shared<SHOW_BBASE_CMD>(surf));
       creases = creases + surf->bfaces().boundary_edges();
       surf->set_name("roof_panel");
    }
@@ -1759,7 +1759,7 @@ Primitive::extend(
    if (other_surf) {
       other_surf->set_res_level(0);
       if(debug) cerr << "panel created" << endl;
-      cmd->add(new SHOW_BBASE_CMD(other_surf));
+      cmd->add(make_shared<SHOW_BBASE_CMD>(other_surf));
       creases = creases + other_surf->bfaces().boundary_edges();
       other_surf->set_name("roof_panel");
    }
@@ -1868,7 +1868,7 @@ Primitive::extend(
       skel_point = create_skel_point(_skel_mesh, _base1, n, pts.front());
       init_name(skel_point, name() + "-skel-point");
       absorb_skel(skel_point);
-      cmd->add(new SHOW_BBASE_CMD(skel_point));
+      cmd->add(make_shared<SHOW_BBASE_CMD>(skel_point));
    } else {
       Bpoint* bp1 = create_skel_point(_skel_mesh, _base1, n, pts.front());
       Bpoint* bp2 = nullptr;

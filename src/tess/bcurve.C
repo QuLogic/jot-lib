@@ -3234,7 +3234,7 @@ Bcurve::reshape_on_plane(const PIXEL_list &new_curve)
    // new shape:              pts
    // create WPT_LIST_RESHAPE_CMDptr from old, new, and m
    // WORLD::add_command(cmd)
-   WPT_LIST_RESHAPE_CMDptr  cmd= new WPT_LIST_RESHAPE_CMD(m,pts);
+   WPT_LIST_RESHAPE_CMDptr cmd = make_shared<WPT_LIST_RESHAPE_CMD>(m, pts);
    WORLD::add_command(cmd);
 
    //or can be represented in one line as  //   WORLD::add_command(new (WPT_LIST_RESHAPE_CMD(m,pts)));

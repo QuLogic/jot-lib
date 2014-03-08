@@ -256,7 +256,7 @@ protected:
  *      Perform an DRAW_STROKE operation.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(DRAW_STROKE_CMD,COMMAND);
+MAKE_SHARED_PTR(DRAW_STROKE_CMD);
 class DRAW_STROKE_CMD : public COMMAND {
  public:
    //******** MANAGERS ********
@@ -290,7 +290,7 @@ class DRAW_STROKE_CMD : public COMMAND {
  *      Perform an  MAKE_CELL_CMD operation.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(MAKE_CELL_CMD,COMMAND);
+MAKE_SHARED_PTR(MAKE_CELL_CMD);
 class MAKE_CELL_CMD : public COMMAND {
  public:
    //******** MANAGERS ********
@@ -322,7 +322,7 @@ class MAKE_CELL_CMD : public COMMAND {
  *      Perform an EXPEND_CELL_CMD operation.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(EXPEND_CELL_CMD,COMMAND);
+MAKE_SHARED_PTR(EXPEND_CELL_CMD);
 class EXPEND_CELL_CMD : public COMMAND {
  public:
    //******** MANAGERS ********

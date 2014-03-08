@@ -116,7 +116,7 @@ PatchPen::notify_down()
    _cmd = nullptr; // start a new command
    Bface* f = cur_face();
    if (f) {
-      _cmd = new CHANGE_PATCH_CMD(f->patch());
+      _cmd = make_shared<CHANGE_PATCH_CMD>(f->patch());
       WORLD::add_command(_cmd); // calls _cmd->doit()
    } else {
       err_adv(debug, "PatchPen::notify_down: did not hit mesh");
@@ -144,7 +144,7 @@ PatchPen::tap_cb(CGESTUREptr& tap, DrawState*&)
    if (f) {
       assert(f->mesh());
       WORLD::add_command(
-         new CHANGE_PATCH_CMD(f->mesh()->new_patch(), Bface_list(f))
+         make_shared<CHANGE_PATCH_CMD>(f->mesh()->new_patch(), Bface_list(f))
          );
    } else {
       err_adv(debug, "PatchPen::tap_cb: did not hit mesh");

@@ -690,7 +690,7 @@ PatternGrid::add(CNDCpt_list &pl,
 
       ol->add(BaseStrokeOffset( 1.0, 0.0, finalprl[finalprl.size()-1],   BaseStrokeOffset::OFFSET_TYPE_END));
 
-      DRAW_STROKE_CMDptr cmd = new DRAW_STROKE_CMD( control_cell, new Pattern3dStroke( control_cell,
+      DRAW_STROKE_CMDptr cmd = make_shared<DRAW_STROKE_CMD>( control_cell, new Pattern3dStroke( control_cell,
                                                      faces,
                                                      pts,
                                                      norms,

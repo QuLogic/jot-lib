@@ -29,7 +29,7 @@
  *
  *   COMMAND that can move a GEOM or a set of Bbases. 
  *****************************************************************/
-MAKE_PTR_SUBC(MOVE_CMD,COMMAND);
+MAKE_SHARED_PTR(MOVE_CMD);
 class MOVE_CMD : public COMMAND {
  public:
 
@@ -73,7 +73,7 @@ class MOVE_CMD : public COMMAND {
  *
  *   COMMAND that can transform a set of GEOMs. 
  *****************************************************************/
-MAKE_PTR_SUBC(XFORM_CMD,COMMAND);
+MAKE_SHARED_PTR(XFORM_CMD);
 class XFORM_CMD : public COMMAND {
  public:
 
@@ -120,7 +120,7 @@ class XFORM_CMD : public COMMAND {
  *      it; "undoit" makes the region secondary so you can't.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(PUSH_FACES_CMD,COMMAND);
+MAKE_SHARED_PTR(PUSH_FACES_CMD);
 class PUSH_FACES_CMD : public COMMAND {
  public:
 
@@ -153,14 +153,14 @@ class PUSH_FACES_CMD : public COMMAND {
  *      Make a region of mesh visible (primary). I.e., it's
  *      the reverse of PUSH_FACES_CMD.
  *****************************************************************/
-MAKE_PTR_SUBC(UNPUSH_FACES_CMD, UNDO_CMD);
+MAKE_SHARED_PTR(UNPUSH_FACES_CMD);
 class UNPUSH_FACES_CMD : public UNDO_CMD {
  public:
 
    //******** MANAGERS ********
 
    UNPUSH_FACES_CMD(CBface_list& r, bool do_boundary=true) :
-      UNDO_CMD(new PUSH_FACES_CMD(r, do_boundary))  {}
+      UNDO_CMD(make_shared<PUSH_FACES_CMD>(r, do_boundary))  {}
 
    //******** RUN-TIME TYPE ID ********
 
@@ -173,7 +173,7 @@ class UNPUSH_FACES_CMD : public UNDO_CMD {
  *
  *      Reverse the normals within a region of mesh.
  *****************************************************************/
-MAKE_PTR_SUBC(REVERSE_FACES_CMD,COMMAND);
+MAKE_SHARED_PTR(REVERSE_FACES_CMD);
 class REVERSE_FACES_CMD : public COMMAND {
  public:
 
@@ -209,7 +209,7 @@ class REVERSE_FACES_CMD : public COMMAND {
  *            detach it at its endpoints so it has no
  *            influence on the rest of the mesh anymore.
  *****************************************************************/
-MAKE_PTR_SUBC(SHOW_BBASE_CMD,COMMAND);
+MAKE_SHARED_PTR(SHOW_BBASE_CMD);
 class SHOW_BBASE_CMD : public COMMAND {
  public:
 
@@ -245,14 +245,14 @@ class SHOW_BBASE_CMD : public COMMAND {
  *
  *   Hide a Bbase. I.e., it's the reverse of SHOW_BBASE_CMD.
  *****************************************************************/
-MAKE_PTR_SUBC(HIDE_BBASE_CMD, UNDO_CMD);
+MAKE_SHARED_PTR(HIDE_BBASE_CMD);
 class HIDE_BBASE_CMD : public UNDO_CMD {
  public:
 
    //******** MANAGERS ********
 
    HIDE_BBASE_CMD(Bbase* b, bool done=true) :
-      UNDO_CMD(new SHOW_BBASE_CMD(b, !done))  {}
+      UNDO_CMD(make_shared<SHOW_BBASE_CMD>(b, !done))  {}
 
    //******** RUN-TIME TYPE ID ********
 
@@ -277,7 +277,7 @@ class HIDE_BBASE_CMD : public UNDO_CMD {
  *  if needed to preserve good aspect ratios.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(CREATE_RIBBONS_CMD,COMMAND);
+MAKE_SHARED_PTR(CREATE_RIBBONS_CMD);
 class CREATE_RIBBONS_CMD : public COMMAND {
  public:
 
@@ -334,7 +334,7 @@ class CREATE_RIBBONS_CMD : public COMMAND {
  *
  *      -- Kiran Kulkarni
  *****************************************************************/
-MAKE_PTR_SUBC(WPT_LIST_RESHAPE_CMD,COMMAND);
+MAKE_SHARED_PTR(WPT_LIST_RESHAPE_CMD);
 class WPT_LIST_RESHAPE_CMD : public COMMAND {
  public:
 
@@ -369,7 +369,7 @@ class WPT_LIST_RESHAPE_CMD : public COMMAND {
  *    Reshape a UV parameterized tube. (Used in editing surfs of revolution.)
  *
  *****************************************************************/
-MAKE_PTR_SUBC(TUBE_MAP_RESHAPE_CMD,COMMAND);
+MAKE_SHARED_PTR(TUBE_MAP_RESHAPE_CMD);
 class TUBE_MAP_RESHAPE_CMD : public COMMAND {
  public:
 

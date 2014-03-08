@@ -70,7 +70,7 @@ create_curve(LMESHptr m, CWpt_list& wpts, mlib::CWvec& n,
 
    Bcurve* ret = new Bcurve(m, wpts, n, num_edges, res_level, b1, b2);
    if (cmd)
-      cmd->add(new SHOW_BBASE_CMD(ret));
+      cmd->add(make_shared<SHOW_BBASE_CMD>(ret));
 	
    return ret;
 }
@@ -108,13 +108,13 @@ push(CBface_list& faces, MULTI_CMDptr& cmd, bool push_boundary=true)
    //Bsurface* surf = Bsurface::get_surface(faces);
    //if (surf && surf->bfaces().same_elements(faces)) {
    //   if (cmd)
-   //      cmd->add(new HIDE_BBASE_CMD(surf,false));
+   //      cmd->add(make_shared<HIDE_BBASE_CMD>(surf,false));
    //   else
    //      surf->hide();
    //} else {
       faces.push_layer(push_boundary);
       if (cmd)
-         cmd->add(new PUSH_FACES_CMD(faces, push_boundary));
+         cmd->add(make_shared<PUSH_FACES_CMD>(faces, push_boundary));
    //}
 }
 
@@ -229,12 +229,12 @@ show_surface(Bsurface* s, MULTI_CMDptr cmd)
 {
    assert(s && cmd);
    // old way: show/hide the surface:
-//    cmd->add(new SHOW_BBASE_CMD(s));
+//    cmd->add(make_shared<SHOW_BBASE_CMD>(s));
 
    // new way: unpush/push the faces:
    // need this to restore the surface when multiple undo ops
    // are happening in sequence:
-   cmd->add(new UNPUSH_FACES_CMD(s->bfaces()));;
+   cmd->add(make_shared<UNPUSH_FACES_CMD>(s->bfaces()));;
 }
 
 inline bool

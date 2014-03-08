@@ -174,7 +174,7 @@ FLOOR::draw(CVIEWptr &v)
 /*****************************************************************
  * FLOOR_XFORM_CMD
  *****************************************************************/
-MAKE_PTR_SUBC(FLOOR_XFORM_CMD,COMMAND);
+MAKE_SHARED_PTR(FLOOR_XFORM_CMD);
 
 //! \brief Transform the floor.
 class FLOOR_XFORM_CMD : public COMMAND {
@@ -223,7 +223,7 @@ FLOOR::_transform(CWtransf &xf, MULTI_CMDptr cmd)
    mesh()->transform(xf, id);
    _map->transform(xf, id);
    if (cmd)
-      cmd->add(new FLOOR_XFORM_CMD(this, xf, true));
+      cmd->add(make_shared<FLOOR_XFORM_CMD>(this, xf, true));
 }
 
 inline double
@@ -256,8 +256,8 @@ FLOOR::realign(BMESH* m, MULTI_CMDptr cmd)
    if (min_d >= 0)
       return;
 
-   if( cmd == nullptr) {
-      cmd  = new MULTI_CMD;
+   if (cmd == nullptr) {
+      cmd = make_shared<MULTI_CMD>();
       _instance->_transform(Wtransf::translation(n*min_d), cmd);
       WORLD::add_command(cmd);
    }

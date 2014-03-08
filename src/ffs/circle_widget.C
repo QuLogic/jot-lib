@@ -83,7 +83,7 @@ CIRCLE_WIDGET::CIRCLE_WIDGET() :
    // Set up the clean up routine
    atexit(clean_on_exit);
 
-   _cmd = new MULTI_CMD;
+   _cmd = make_shared<MULTI_CMD>();
 }
 
 CIRCLE_WIDGET::~CIRCLE_WIDGET()
@@ -334,7 +334,7 @@ CIRCLE_WIDGET::create_literal(GESTUREptr gest)
 bool
 CIRCLE_WIDGET::finish_literal(void)
 {
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
 
    // Get a mesh to put the new curve into.
    LMESHptr mesh = TEXBODY::get_skel_mesh(cmd);

@@ -148,8 +148,8 @@ INFLATE::tap_cb(CGESTUREptr& gest, DrawState*& state)
       }
 
       // Attempt to inflate the surface
-      INFLATE_CMDptr cmd = _mode ? (new INFLATE_CMD( _faces, _preview_dist )) :
-         (new INFLATE_CMD( _orig_face, _preview_dist ));
+      INFLATE_CMDptr cmd = _mode ? make_shared<INFLATE_CMD>(_faces, _preview_dist)
+                                 : make_shared<INFLATE_CMD>(_orig_face, _preview_dist);
       WORLD::add_command(cmd);
    }
 

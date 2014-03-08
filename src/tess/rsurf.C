@@ -1245,7 +1245,7 @@ Rsurface::sew_ribbons(CBface_list& side_b, MULTI_CMDptr cmd)
    }
 
    if (cmd)
-      cmd->add(new UNPUSH_FACES_CMD(p->faces()));
+      cmd->add(make_shared<UNPUSH_FACES_CMD>(p->faces()));
 
    mesh->changed();
 

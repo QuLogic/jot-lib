@@ -484,7 +484,7 @@ Skin::finish_ctor(MULTI_CMDptr cmd)
    // XXX - move?
    create_subdiv_updater();
 
-//   cmd->add(new SHOW_BBASE_CMD(this));
+//   cmd->add(make_shared<SHOW_BBASE_CMD>(this));
    show_surface(this,cmd); 
 
    if (debug)
@@ -751,7 +751,7 @@ join(CBvert_list& o, CBvert_list& c, MULTI_CMDptr& cmd, const string& msg)
 {
    // Used in Skin::join_to_skel() to join seams of a mesh together.
 
-   JOIN_SEAM_CMDptr join = new JOIN_SEAM_CMD(o, c);
+   JOIN_SEAM_CMDptr join = make_shared<JOIN_SEAM_CMD>(o, c);
    if (join->doit()) {
       err_adv(debug, "  joined %s (%d verts to %d verts)",
               msg.c_str(), o.size(), c.size());
@@ -1268,7 +1268,7 @@ Skin::create_inflate(
    ret->set_all_offsets(h);
    ret->adjust_crease_offsets();
 
-   MULTI_CMDptr push_cmd = new MULTI_CMD();
+   MULTI_CMDptr push_cmd = make_shared<MULTI_CMD>();
    if (mode) push(skel, push_cmd);
    // lock down crease vertices before smoothing
    ret->freeze_problem_verts(mode);
@@ -1366,7 +1366,7 @@ Skin::create_inflate(
       err_adv(debug, "Skin::create_inflate: error finding skin boundaries");
       return false;
    }
-   CREATE_RIBBONS_CMDptr rib = new CREATE_RIBBONS_CMD(outer_strip, inner_strip);
+   CREATE_RIBBONS_CMDptr rib = make_shared<CREATE_RIBBONS_CMD>(outer_strip, inner_strip);
    if (rib->doit()) {
       cmd->add(rib);
       if (!mode) {
@@ -1388,7 +1388,7 @@ Skin::add_offsets(double dist)
    if (!_inflate)
       return;
    err_adv(debug, "Skin::add_offsets:: changing offsets");
-   WORLD::add_command(new INFLATE_SKIN_ADD_OFFSET_CMD(this, dist));
+   WORLD::add_command(make_shared<INFLATE_SKIN_ADD_OFFSET_CMD>(this, dist));
 }
 
 void 

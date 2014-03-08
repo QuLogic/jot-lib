@@ -37,7 +37,7 @@
  *   mesh topology op: joing together two matching edge chains
  *   in a mesh.
  *****************************************************************/
-MAKE_PTR_SUBC(JOIN_SEAM_CMD,COMMAND);
+MAKE_SHARED_PTR(JOIN_SEAM_CMD);
 class JOIN_SEAM_CMD : public COMMAND {
  public:
 
@@ -80,7 +80,7 @@ class JOIN_SEAM_CMD : public COMMAND {
  *   changing meme data, moving verts directly, or defining new
  *   subdiv offsets for them.
  *****************************************************************/
-MAKE_PTR_SUBC(FIT_VERTS_CMD,COMMAND);
+MAKE_SHARED_PTR(FIT_VERTS_CMD);
 class FIT_VERTS_CMD : public COMMAND {
  public:
 
@@ -122,7 +122,7 @@ class FIT_VERTS_CMD : public COMMAND {
  *   changing meme data, moving verts directly, or defining new
  *   subdiv offsets for them.
  *****************************************************************/
-MAKE_PTR_SUBC(SUBDIV_OFFSET_CMD,COMMAND);
+MAKE_SHARED_PTR(SUBDIV_OFFSET_CMD);
 class SUBDIV_OFFSET_CMD : public COMMAND {
  public:
 
@@ -165,7 +165,7 @@ class SUBDIV_OFFSET_CMD : public COMMAND {
  *
  *   increase/decrease the height of inflation
  *****************************************************************/
-MAKE_PTR_SUBC(INFLATE_SKIN_ADD_OFFSET_CMD,COMMAND);
+MAKE_SHARED_PTR(INFLATE_SKIN_ADD_OFFSET_CMD);
 class INFLATE_SKIN_ADD_OFFSET_CMD : public COMMAND {
  public:
 
@@ -193,7 +193,7 @@ class INFLATE_SKIN_ADD_OFFSET_CMD : public COMMAND {
  *
  *   increase/decrease the sharpness of creases
  *****************************************************************/
-MAKE_PTR_SUBC(CREASE_INC_CMD,COMMAND);
+MAKE_SHARED_PTR(CREASE_INC_CMD);
 class CREASE_INC_CMD : public COMMAND {
  public:
 

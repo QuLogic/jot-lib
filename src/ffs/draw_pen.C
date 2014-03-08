@@ -233,12 +233,12 @@ void
 DrawPen::ModeReset(MULTI_CMDptr cmd)
 {
    if (cmd)
-      cmd->add(new MESH_DESELECT_ALL_CMD());
+      cmd->add(make_shared<MESH_DESELECT_ALL_CMD>());
    else {
       if (!MeshGlobal::selected_edges().empty() ||
          !MeshGlobal::selected_faces().empty() ||
          !MeshGlobal::selected_verts().empty())
-         WORLD::add_command(new MESH_DESELECT_ALL_CMD());
+         WORLD::add_command(make_shared<MESH_DESELECT_ALL_CMD>());
    }
    Bbase     ::deselect_all();
    _mode = DEFAULT;
@@ -759,7 +759,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       for (auto & list : templists) {
          Bcurve* b_curve = new Bcurve(list, c_p_skin,
                                       dynamic_cast<LMESH*>(region.mesh())->subdiv_level());
-         cmd->add(new SHOW_BBASE_CMD(b_curve));
+         cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
       }
       push(p_region, cmd);
 
@@ -783,7 +783,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       // find the strip for the new merged region on both sides
       EdgeStrip outer_strip_ext = get_ext_strip(outer_strip, true); 
       EdgeStrip inner_strip_ext = get_ext_strip(inner_strip, false); 
-      CREATE_RIBBONS_CMDptr rib = new CREATE_RIBBONS_CMD(outer_strip_ext, inner_strip_ext);
+      CREATE_RIBBONS_CMDptr rib = make_shared<CREATE_RIBBONS_CMD>(outer_strip_ext, inner_strip_ext);
       if (rib->doit())
          cmd->add(rib);
       //rib->patch()->faces().reverse_faces(); // to ensure correct orientation
@@ -829,7 +829,7 @@ try_punch(CBface_list& region, bool debug)
       return false;
    } 
 
-   MULTI_CMDptr cmd = new MULTI_CMD; 
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    vector<Bface_list> regions = get_regions(check_inf_region(region));
    if (debug) cerr << "   num of regions: " << regions.size() << endl;
    vector<Bvert_list> b_verts_lists;
@@ -866,7 +866,7 @@ try_punch(CBface_list& region, bool debug)
             Bcurve* new_curve =
                new Bcurve(cvlist, uvpts, surf->map(),
                           dynamic_cast<LMESH*>(mesh)->subdiv_level());
-            cmd->add(new SHOW_BBASE_CMD(new_curve));
+            cmd->add(make_shared<SHOW_BBASE_CMD>(new_curve));
          }
 
          push(regions[i], cmd);
@@ -883,7 +883,7 @@ try_punch(CBface_list& region, bool debug)
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
                           dynamic_cast<LMESH*>(mesh)->subdiv_level());
-            cmd->add(new SHOW_BBASE_CMD(b_curve));
+            cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
          }
 
       } else if (get_skin(skins, regions[i])) {
@@ -897,7 +897,7 @@ try_punch(CBface_list& region, bool debug)
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
                           dynamic_cast<LMESH*>(mesh)->subdiv_level());
-            cmd->add(new SHOW_BBASE_CMD(b_curve));
+            cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
          }
          
       } else {
@@ -916,7 +916,7 @@ try_punch(CBface_list& region, bool debug)
             for (auto & list : curve_verts_lists) {
                Bcurve* b_curve = new Bcurve(list, c_skin,
                   dynamic_cast<LMESH*>(mesh)->subdiv_level());
-               cmd->add(new SHOW_BBASE_CMD(b_curve));
+               cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
             }
 
          } else {
@@ -1052,7 +1052,7 @@ DrawPen::dot_cb(CGESTUREptr& gest, DrawState*&)
       return 0;
    }
 
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    LMESHptr mesh    = TEXBODY::get_skel_mesh(cmd);
    int      res_lev = get_res_level(mesh);
 
@@ -1299,7 +1299,7 @@ DrawPen::ellipse_cb(CGESTUREptr& gest, DrawState*& s)
       return stroke_cb(gest, s);
 
    // Make the Panel
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    PanelAction::create(P, c, dx/2, TEXBODY::get_skel_mesh(cmd), 4, cmd);
    WORLD::add_command(cmd);
 
@@ -1353,7 +1353,7 @@ DrawPen::line_cb(CGESTUREptr& gest, DrawState*& s)
       // Create the circular panel
       if (debug) cerr << "  creating disk..." << endl;
       double rad = world_length(c, gest->length());
-      MULTI_CMDptr cmd = new MULTI_CMD;
+      MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
       PanelAction::create(P, c, rad, TEXBODY::get_skel_mesh(cmd), 4, cmd);
       WORLD::add_command(cmd);
 
@@ -1720,7 +1720,7 @@ DrawPen::create_rect(GESTUREptr line)
    LMESHptr m = bcurve->mesh();
    Wpt p1 = b1->loc(), p2 = b2->loc(), p3 = p2 + v, p4 = p1 + v;
 
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
 
    // Create points b3 and b4
    Bpoint* b3 = BpointAction::create(m, p3, n, u, b2->res_level(), cmd);
@@ -1813,7 +1813,7 @@ DrawPen::create_curve(GESTUREptr gest)
       b1 = b2 = nullptr;
    }
 
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    LMESHptr mesh = tess::get_common_mesh(b1,b2,cmd);
    if (!mesh) {
       cerr << "DrawPen::create_curve: error: "
@@ -1917,7 +1917,7 @@ DrawPen::project_to_plane(
 void
 DrawPen::create_sphere(Bpoint* skel, double pix_rad) const
 {
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    Primitive* ball = Primitive::create_ball(skel, pix_rad, cmd);
    if (!ball) {
       err_msg("DrawPen::create_sphere: failed");

@@ -35,7 +35,7 @@
  *   is moved back to its original patch.
  *
  *****************************************************************/
-MAKE_PTR_SUBC(CHANGE_PATCH_CMD,COMMAND);
+MAKE_SHARED_PTR(CHANGE_PATCH_CMD);
 class CHANGE_PATCH_CMD : public COMMAND {
  public:
 

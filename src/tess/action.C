@@ -399,7 +399,7 @@ BpointAction::invoke()
    _p->set_action(this);
 
    assert(_cmd && _cmd->is_empty());
-   _cmd->add(new SHOW_BBASE_CMD(_p));
+   _cmd->add(make_shared<SHOW_BBASE_CMD>(_p));
    return true;
 }
 
@@ -678,7 +678,7 @@ BcurveAction::invoke()
    _c->set_action(this);
 
    assert(_cmd && _cmd->is_empty());
-   _cmd->add(new SHOW_BBASE_CMD(_c));
+   _cmd->add(make_shared<SHOW_BBASE_CMD>(_c));
    return true;
 }
 
@@ -916,7 +916,7 @@ PanelAction::invoke()
    _p->set_action(this);
 
    assert(_cmd && _cmd->is_empty());
-   _cmd->add(new SHOW_BBASE_CMD(_p));
+   _cmd->add(make_shared<SHOW_BBASE_CMD>(_p));
    return true;
 }
 

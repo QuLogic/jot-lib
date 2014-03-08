@@ -32,7 +32,7 @@
 #include "mesh/bedge.H"
 #include "mesh/bface.H"
 
-MAKE_PTR_SUBC(MESH_SELECT_CMD,COMMAND);
+MAKE_SHARED_PTR(MESH_SELECT_CMD);
 
 /*!
  *  \brief A COMMAND class for selecting faces, edges and vertices on a mesh.
@@ -86,7 +86,7 @@ class MESH_SELECT_CMD : public COMMAND {
 
 };
 
-MAKE_PTR_SUBC(MESH_DESELECT_CMD, UNDO_CMD);
+MAKE_SHARED_PTR(MESH_DESELECT_CMD);
 
 /*!
  *  \brief A COMMAND class for deselecting faces, edges and vertices on a mesh.
@@ -100,30 +100,30 @@ class MESH_DESELECT_CMD : public UNDO_CMD {
       //@{
    
       MESH_DESELECT_CMD(Bvert *v)
-         : UNDO_CMD(new MESH_SELECT_CMD(v)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(v)) { }
       MESH_DESELECT_CMD(Bedge *e)
-         : UNDO_CMD(new MESH_SELECT_CMD(e)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(e)) { }
       MESH_DESELECT_CMD(Bface *f)
-         : UNDO_CMD(new MESH_SELECT_CMD(f)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(f)) { }
       
       MESH_DESELECT_CMD(const Bvert_list &vl)
-         : UNDO_CMD(new MESH_SELECT_CMD(vl)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(vl)) { }
       MESH_DESELECT_CMD(const Bedge_list &el)
-         : UNDO_CMD(new MESH_SELECT_CMD(el)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(el)) { }
       MESH_DESELECT_CMD(const Bface_list &fl)
-         : UNDO_CMD(new MESH_SELECT_CMD(fl)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(fl)) { }
       
       MESH_DESELECT_CMD(const Bvert_list &vl, const Bedge_list &el)
-         : UNDO_CMD(new MESH_SELECT_CMD(vl, el)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(vl, el)) { }
       MESH_DESELECT_CMD(const Bvert_list &vl, const Bface_list &fl)
-         : UNDO_CMD(new MESH_SELECT_CMD(vl, fl)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(vl, fl)) { }
       MESH_DESELECT_CMD(const Bedge_list &el, const Bface_list &fl)
-         : UNDO_CMD(new MESH_SELECT_CMD(el, fl)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(el, fl)) { }
       
       MESH_DESELECT_CMD(const Bvert_list &vl,
                         const Bedge_list &el,
                         const Bface_list &fl)
-         : UNDO_CMD(new MESH_SELECT_CMD(vl, el, fl)) { }
+         : UNDO_CMD(make_shared<MESH_SELECT_CMD>(vl, el, fl)) { }
       
       //@}
    
@@ -136,7 +136,7 @@ class MESH_DESELECT_CMD : public UNDO_CMD {
 
 };
 
-MAKE_PTR_SUBC(MESH_DESELECT_ALL_CMD, MESH_DESELECT_CMD);
+MAKE_SHARED_PTR(MESH_DESELECT_ALL_CMD);
 
 /*!
  *  \brief A COMMAND class for deselecting faces, edges and vertices on a mesh.

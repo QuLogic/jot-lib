@@ -34,8 +34,7 @@
 
 class COMMAND;
 typedef const COMMAND CCOMMAND;
-MAKE_PTR_BASEC(COMMAND);
-typedef const COMMANDptr CCOMMANDptr;
+MAKE_SHARED_PTR(COMMAND);
 
 /*!
  *  \brief Base class for "commands" that can be executed 
@@ -83,7 +82,7 @@ typedef const COMMANDptr CCOMMANDptr;
  *      clear()  changes state to 'clear'
  *  
  */
-class COMMAND : public REFcounter {
+class COMMAND {
    
  public:
 
@@ -148,7 +147,7 @@ class COMMAND : public REFcounter {
       
 };
 
-MAKE_PTR_SUBC(UNDO_CMD,COMMAND);
+MAKE_SHARED_PTR(UNDO_CMD);
 
 /*!
  *  \brief Given some command, UNDO_CMD performs the reverse operation.
@@ -198,7 +197,7 @@ class UNDO_CMD : public COMMAND {
    
 };
 
-MAKE_PTR_SUBC(DISPLAY_CMD,COMMAND);
+MAKE_SHARED_PTR(DISPLAY_CMD);
 
 /*!
  *  \brief Put a GEL or GELs in the WORLD's display list.
@@ -252,7 +251,7 @@ class DISPLAY_CMD : public COMMAND {
 
 };
 
-MAKE_PTR_SUBC(UNDISPLAY_CMD, UNDO_CMD);
+MAKE_SHARED_PTR(UNDISPLAY_CMD);
 
 /*!
  *  \brief Remove a GEL or GELs from the WORLD's display list.
@@ -267,8 +266,8 @@ class UNDISPLAY_CMD : public UNDO_CMD {
    //! \name Constructors
    //@{
 
-   UNDISPLAY_CMD(CGELptr&  gel ) : UNDO_CMD(new DISPLAY_CMD(gel))  {}
-   UNDISPLAY_CMD(CGELlist& gels) : UNDO_CMD(new DISPLAY_CMD(gels)) {}
+   UNDISPLAY_CMD(CGELptr&  gel ) : UNDO_CMD(make_shared<DISPLAY_CMD>(gel))  {}
+   UNDISPLAY_CMD(CGELlist& gels) : UNDO_CMD(make_shared<DISPLAY_CMD>(gels)) {}
    
    //@}
 
@@ -281,7 +280,7 @@ class UNDISPLAY_CMD : public UNDO_CMD {
 
 };
 
-MAKE_PTR_SUBC(MULTI_CMD,COMMAND);
+MAKE_SHARED_PTR(MULTI_CMD);
 
 /*!
  *  \brief Perform multiple commands at once.

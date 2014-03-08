@@ -428,7 +428,7 @@ SELECT_WIDGET::try_select_face(CPIXEL &pix, double margin)
    if (!f)
       return false;
    err_adv(0, "  selected face: pix area %f", pix_area(f));
-   WORLD::add_command(new MESH_SELECT_CMD(f));
+   WORLD::add_command(make_shared<MESH_SELECT_CMD>(f));
    return true;
 }
 
@@ -441,7 +441,7 @@ SELECT_WIDGET::try_deselect_face(CPIXEL &pix, double margin)
    Bface* f = find_face(pix, margin, MIN_PIX_AREA);
    if (!(f && f->is_selected()))
       return false;
-   WORLD::add_command(new MESH_DESELECT_CMD(f));
+   WORLD::add_command(make_shared<MESH_DESELECT_CMD>(f));
    return true;
 }
 
@@ -454,7 +454,7 @@ SELECT_WIDGET::try_select_edge(CPIXEL& p)
    Bedge* e = find_edge(p);
    if (!e)
       return false;
-   WORLD::add_command(new MESH_SELECT_CMD(e));
+   WORLD::add_command(make_shared<MESH_SELECT_CMD>(e));
    return true;
 }
 
@@ -467,7 +467,7 @@ SELECT_WIDGET::try_deselect_edge(CPIXEL &pix)
    Bedge* e = find_edge(pix);
    if (!(e && e->is_selected()))
       return false;
-   WORLD::add_command(new MESH_DESELECT_CMD(e));
+   WORLD::add_command(make_shared<MESH_DESELECT_CMD>(e));
    return true;
 }
 
@@ -697,7 +697,7 @@ SELECT_WIDGET:: slash_cb(CGESTUREptr& gest, DrawState*& s)
 			}
 
 		
-		   WORLD::add_command(new MESH_SELECT_CMD(final_list));
+		   WORLD::add_command(make_shared<MESH_SELECT_CMD>(final_list));
 		
 		   return cancel_cb(gest,s);
 
@@ -920,7 +920,7 @@ SELECT_WIDGET::select_faces(CPIXEL_list& pts)
    }
    
    if (flist.size() > 0) {
-      WORLD::add_command(new MESH_SELECT_CMD(flist));
+      WORLD::add_command(make_shared<MESH_SELECT_CMD>(flist));
       err_adv(debug, "  succeeded");
       return true;
    }
@@ -965,7 +965,7 @@ SELECT_WIDGET::select_edges(CPIXEL_list& pts)
 
    // 3. Select the edges
 
-   WORLD::add_command(new MESH_SELECT_CMD(chain));
+   WORLD::add_command(make_shared<MESH_SELECT_CMD>(chain));
 
    return true;
 }

@@ -173,7 +173,7 @@ class INFLATE : public DrawWidget {
 /*****************************************************************
  * INFLATE_CMD
  *****************************************************************/
-MAKE_PTR_SUBC(INFLATE_CMD,COMMAND);
+MAKE_SHARED_PTR(INFLATE_CMD);
 
 //! \brief Perform an INFLATE operation.
 class INFLATE_CMD : public COMMAND {
@@ -185,7 +185,7 @@ class INFLATE_CMD : public COMMAND {
        _dist(dist),
        _output(nullptr),
        _reversed_faces(nullptr) {
-      _other_cmds = new MULTI_CMD;
+      _other_cmds = make_shared<MULTI_CMD>();
    }
 
    INFLATE_CMD(Bface_list orig_faces, double dist) :
@@ -194,7 +194,7 @@ class INFLATE_CMD : public COMMAND {
        _dist(dist),
        _output(nullptr),
        _reversed_faces(nullptr) {
-      _other_cmds = new MULTI_CMD;
+      _other_cmds = make_shared<MULTI_CMD>();
    }
 
    //******** RUN-TIME TYPE ID ********

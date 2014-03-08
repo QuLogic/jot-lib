@@ -776,7 +776,7 @@ SWEEP_DISK::do_sweep(CWpt& o, Wvec t, Wvec n, Wvec b, Wpt_list spts)
 
    Bpoint_list bpts = Bpoint::get_points(_boundary.verts());
 
-   MULTI_CMDptr cmd = new MULTI_CMD();
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    if ( bpts.empty() ) {
       // Create the axis map:
       Wpt_list apts(2);
@@ -837,19 +837,19 @@ SWEEP_DISK::build_revolve(
       // reshape the axis
       Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(tmap->axis());
       assert(m);
-      WPT_LIST_RESHAPE_CMDptr a_cmd = new WPT_LIST_RESHAPE_CMD(m,apts);
+      WPT_LIST_RESHAPE_CMDptr a_cmd = make_shared<WPT_LIST_RESHAPE_CMD>(m,apts);
       if (a_cmd->doit())
          cmd->add(a_cmd);
 
       // reshape the top curve
       double s = spts.back()[2]/spts.front()[2];
       Wtransf M = tmap->axis()->F(1) * Wtransf::scaling(0,s,s) * tmap->axis()->Finv(0);
-      WPT_LIST_RESHAPE_CMDptr c1_cmd = new WPT_LIST_RESHAPE_CMD(((Wpt_listMap*)tmap->c1()), M*((Wpt_listMap*)tmap->c0())->get_wpts());
+      WPT_LIST_RESHAPE_CMDptr c1_cmd = make_shared<WPT_LIST_RESHAPE_CMD>(((Wpt_listMap*)tmap->c1()), M*((Wpt_listMap*)tmap->c0())->get_wpts());
       if (c1_cmd->doit())
          cmd->add(c1_cmd);
 
       // reshape the profile
-      cmd->add(new TUBE_MAP_RESHAPE_CMD(tmap,spts));   
+      cmd->add(make_shared<TUBE_MAP_RESHAPE_CMD>(tmap,spts));
 
       // change the record
       vector<Panel*>::iterator it = std::find(panels.begin(), panels.end(), p);
@@ -923,7 +923,7 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
    } else {
       reverse_faces( _enclosed_faces );
       if(cmd)
-         cmd->add(new REVERSE_FACES_CMD(_enclosed_faces, true));
+         cmd->add(make_shared<REVERSE_FACES_CMD>(_enclosed_faces, true));
    }
 
    double avg_len = _boundary.edges().avg_len();
@@ -962,7 +962,7 @@ SWEEP_DISK::build_box(CWpt& o, CWvec& t, CWpt_list& spts, MULTI_CMDptr cmd)
       // XXX - should be undoable
       if (is_editing) {
          Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_curves[i]->map());
-         cmd->add(new WPT_LIST_RESHAPE_CMD(m,cpts));
+         cmd->add(make_shared<WPT_LIST_RESHAPE_CMD>(m,cpts));
       } else {
          top_pts += BpointAction::create(_mesh, cpts.back(), b, n, res_level, cmd);
          curves  += BcurveAction::create(_mesh, cpts, b, num_edges , res_level,
@@ -1300,7 +1300,7 @@ SWEEP_LINE::create_rect(CWvec& v)
    LMESHptr m = _curve->mesh();
    Wpt p1 = b1->loc(), p2 = b2->loc(), p3 = p2 + v, p4 = p1 + v;
 
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
 
    // Create points b3 and b4
    Bpoint* b3 = BpointAction::create(m, p3, n, v, b2->res_level(), cmd);

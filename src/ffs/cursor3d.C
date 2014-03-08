@@ -748,7 +748,7 @@ Cursor3D::down_cb(CEvent &, State *& s)
    }
    if (_down_intersect != INTERSECT_NONE) {
       // use an xform command so it is undoable:
-      _cmd = new XFORM_CMD(this);
+      _cmd = make_shared<XFORM_CMD>(this);
       assert(_cmd);
       if (_attached)
          _cmd->add(_attached);

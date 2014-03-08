@@ -583,7 +583,7 @@ Panel::split_tri(Bpoint* bp, Bcurve* bc, CPIXEL_list& pts, bool scribble)
          ns[i] = 2;
    }
 
-   PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, c, ns);
+   PNL_RETESS_CMDptr cmd = make_shared<PNL_RETESS_CMD>(this, c, ns);
    WORLD::add_command(cmd);
    return true;
 }
@@ -610,7 +610,7 @@ Panel::inc_sec_disk(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
       else
          ns[i] = bc->num_edges() + (scribble ? -1 : 1);
    }
-   PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, _bcurves, ns);
+   PNL_RETESS_CMDptr cmd = make_shared<PNL_RETESS_CMD>(this, _bcurves, ns);
    WORLD::add_command(cmd);
    return true;
 }
@@ -644,7 +644,7 @@ Panel::inc_sec_tri(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
    ns[0] = 1;
    ns[1] = bc1->num_edges()+(scribble ? -1 : 1);
    ns[2] = bc2->num_edges()+(scribble ? -1 : 1);
-   PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, c, ns);
+   PNL_RETESS_CMDptr cmd = make_shared<PNL_RETESS_CMD>(this, c, ns);
    WORLD::add_command(cmd);
    return true;
 }
@@ -676,7 +676,7 @@ Panel::inc_sec_quad(Bcurve* bc1, Bcurve* bc2, CPIXEL_list& pts, bool scribble)
          ns[i] = _bcurves[i]->num_edges();
       else
          ns[i] = _bcurves[i]->num_edges()+(scribble ? -1 : 1);
-   PNL_RETESS_CMDptr cmd = new PNL_RETESS_CMD(this, _bcurves, ns);
+   PNL_RETESS_CMDptr cmd = make_shared<PNL_RETESS_CMD>(this, _bcurves, ns);
    WORLD::add_command(cmd);
    return true;
 }
@@ -725,12 +725,11 @@ Panel::oversketch(CPIXEL_list& sketch_pixels)
    // Now reshape the skel to the new desired pixel path.
    set<Panel*> visited;
    map<Bvert*, Wpt> map_locs;
-   MULTI_CMDptr cmd = new MULTI_CMD();
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    if (apply_skel(pts, visited, map_locs, cmd, Wvec::X(), Wvec::X())) {
       WORLD::add_command(cmd);
       return true;
    }
-   delete cmd;
    return false;
 }
 
@@ -881,7 +880,7 @@ Panel::apply_skel(CWpt_list& new_skel, set<Panel*>& visited,
       // use WPT_LIST_RESHAPE_CMD to reshape
       pts.update_length();
       Wpt_listMap* m = dynamic_cast<Wpt_listMap*>(_bcurves[i]->map());
-      WPT_LIST_RESHAPE_CMDptr  w_cmd= new WPT_LIST_RESHAPE_CMD(m,pts);
+      WPT_LIST_RESHAPE_CMDptr w_cmd = make_shared<WPT_LIST_RESHAPE_CMD>(m, pts);
       cmd->add(w_cmd);
    }
 

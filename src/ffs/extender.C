@@ -334,7 +334,7 @@ EXTENDER::sweep_ball(CGESTUREptr& g)
 
    err_adv(debug, " can sweep ball");
 
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    push(p->bfaces(), cmd);
 
    Primitive * tube = Primitive::build_simple_tube(
@@ -908,7 +908,7 @@ EXTENDER::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 
    // Haven't ruled it out yet. Call Primitive::extend_branch() to
    // check further conditions and do the operation if it's okay.
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    Primitive* branch =
       Primitive::extend_branch(gest->pts(), _plane_xf.Z(), _base1, _base2, cmd);
    if (!branch)

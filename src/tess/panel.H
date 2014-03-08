@@ -288,7 +288,7 @@ class Panel:  public Bsurface {
  * PNL_RETESS_CMD
  *
  *****************************************************************/
-MAKE_PTR_SUBC(PNL_RETESS_CMD,COMMAND);
+MAKE_SHARED_PTR(PNL_RETESS_CMD);
 class PNL_RETESS_CMD : public COMMAND {
  public:
 

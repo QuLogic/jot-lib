@@ -100,7 +100,7 @@ find_xlate_plane(Bcurve* c, CWpt& p)
 inline void
 init_cmd(MOVE_CMDptr& c, CBbase_list& bbases)
 {
-   c = new MOVE_CMD(bbases);
+   c = make_shared<MOVE_CMD>(bbases);
    assert(c);
    WORLD::add_command(c);
 }
@@ -231,7 +231,7 @@ DrawManip::down(CEvent& e, State*& s)
    if (bbases.empty() && !geom)
       return 0;
 
-   _cmd = bbases.empty() ? new MOVE_CMD(geom) : new MOVE_CMD(bbases);
+   _cmd = bbases.empty() ? make_shared<MOVE_CMD>(geom) : make_shared<MOVE_CMD>(bbases);
    assert(_cmd);
    WORLD::add_command(_cmd);
    _cmd->notify_xf_obs(XFORMobs::START);

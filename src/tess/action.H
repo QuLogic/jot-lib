@@ -156,7 +156,7 @@ class Action : public DATA_ITEM {
 
    //******** PROTECTED METHODS ********
 
-   Action() : _cmd(new MULTI_CMD()) {}
+   Action() : _cmd(make_shared<MULTI_CMD>()) {}
 };
 typedef const Action CAction;
 

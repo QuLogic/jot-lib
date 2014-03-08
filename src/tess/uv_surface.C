@@ -633,7 +633,7 @@ UVsurface::build_revolve(
       // non-primary piece of the surface. The surrounding curve will
       // lie along a non-manifold part of the surface.
       if (cmd)
-         cmd->add(new PUSH_FACES_CMD(enclosed_faces));
+         cmd->add(make_shared<PUSH_FACES_CMD>(enclosed_faces));
       enclosed_faces.push_layer();
    } else if (bcurve->is_border() && !enclosed_faces.empty()) {
       Bvert *v1 = bot_verts[0], *v2 = bot_verts[1];
@@ -679,7 +679,7 @@ UVsurface::build_revolve(
       tpoint = new Bpoint(v, UVpt(0,1), tube_map);
       points += tpoint;
       top_verts.push_back(v);
-      if (cmd) cmd->add(new SHOW_BBASE_CMD(tpoint));
+      if (cmd) cmd->add(make_shared<SHOW_BBASE_CMD>(tpoint));
    } else {
       // Make the top curve to resemble the bottom one
       tcurve = new Bcurve(
@@ -690,7 +690,7 @@ UVsurface::build_revolve(
          );
       curves += tcurve;
       top_verts = tcurve->full_verts();
-      if (cmd) cmd->add(new SHOW_BBASE_CMD(tcurve));
+      if (cmd) cmd->add(make_shared<SHOW_BBASE_CMD>(tcurve));
    }
 
    // Get subdiv mesh and vertex lists at chosen level k
@@ -750,7 +750,7 @@ UVsurface::build_revolve(
                          uvpts[j-1], uvpts[j]);
       }
    }
-   if (cmd) cmd->add(new SHOW_BBASE_CMD(ret));
+   if (cmd) cmd->add(make_shared<SHOW_BBASE_CMD>(ret));
 
    // Set rest length of edges to the average initial length
    // XXX - avg len is okay for panel, testing on uv surface
@@ -766,7 +766,7 @@ UVsurface::build_revolve(
       if (top) {
          surfs += top;
          //       top->ememes().set_rest_length(top->bedges().avg_len());
-         if (cmd) cmd->add(new SHOW_BBASE_CMD(top));
+         if (cmd) cmd->add(make_shared<SHOW_BBASE_CMD>(top));
       }
    }
    
@@ -950,7 +950,7 @@ UVsurface::build_coons_patch(
 
    // Make it undoable:
    if (cmd)
-      cmd->add(new SHOW_BBASE_CMD(ret));
+      cmd->add(make_shared<SHOW_BBASE_CMD>(ret));
 
    return ret;
 }

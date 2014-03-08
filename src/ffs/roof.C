@@ -455,7 +455,7 @@ ROOF::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 
    // Haven't ruled it out yet. Call Primitive::build_roof() to
    // check further conditions and do the operation if it's okay.
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    int orig_corner_angle = Config::get_var_int("JOT_CORNER_ANGLE", 45);
    Config::set_var_int("JOT_CORNER_ANGLE",30);
    Primitive* roof =

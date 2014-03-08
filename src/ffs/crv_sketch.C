@@ -494,7 +494,7 @@ CRV_SKETCH::specify_upper(CWpt_list& list)
 
    // then set the new uv point list
    assert(SurfaceCurveMap::isa(upp->map()));
-   CRV_SKETCH_CMDptr  cmd= new CRV_SKETCH_CMD(upp,uvp, list.front(), list.back());
+   CRV_SKETCH_CMDptr  cmd = make_shared<CRV_SKETCH_CMD>(upp, uvp, list.front(), list.back());
    WORLD::add_command(cmd);
    //((SurfaceCurveMap*)(upp->map()))->set_uvs(uvp);
    
@@ -1082,7 +1082,7 @@ CRV_SKETCH::reshape_shadow(const PIXEL_list &new_curve)
    // new shape:              pts
    // create WPT_LIST_RESHAPE_CMDptr from old, new, and m
    // WORLD::add_command(cmd)
-   CRV_SKETCH_CMDptr  cmd= new CRV_SKETCH_CMD(_curve,_shadow_pts);
+   CRV_SKETCH_CMDptr  cmd = make_shared<CRV_SKETCH_CMD>(_curve, _shadow_pts);
    WORLD::add_command(cmd);
    //m->set_pts(_shadow_pts);
    _shadow_normals.clear();

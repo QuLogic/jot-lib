@@ -367,9 +367,9 @@ define_offsets(
 inline MULTI_CMDptr
 hide_surfs_cmd(CBsurface_list& surfs)
 {
-   MULTI_CMDptr hide_all = new MULTI_CMD;
+   MULTI_CMDptr hide_all = make_shared<MULTI_CMD>();
    for (int i=0; i<surfs.num(); i++)
-      hide_all->add(new HIDE_BBASE_CMD(surfs[i],false));
+      hide_all->add(make_shared<HIDE_BBASE_CMD>(surfs[i],false));
    return hide_all;
 }
 
@@ -515,7 +515,7 @@ PAPER_DOLL::init(CBcurve_list& contour)
    }
 
    // create the primitive
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
    Primitive* p = Primitive::init(skel_mesh, pts, P.normal(), cmd);
    if (!p) {
       err_adv(debug, "PAPER_DOLL::init: Primitive::init() failed");
@@ -590,13 +590,13 @@ PAPER_DOLL::build_primitive(CBface_list& o_faces)
 
 
    // make it all undoable:
-   MULTI_CMDptr cmd = new MULTI_CMD;
+   MULTI_CMDptr cmd = make_shared<MULTI_CMD>();
 
    // finish build
    ret->finish_build(cmd);
 
    //cmd->add(hide_surfs_cmd(Bsurface::get_surfaces(o_faces)));
-   cmd->add(new SHOW_BBASE_CMD(ret));
+   cmd->add(make_shared<SHOW_BBASE_CMD>(ret));
    WORLD::add_command(cmd);
 
    return _prim = ret;

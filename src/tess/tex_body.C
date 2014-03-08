@@ -143,7 +143,7 @@ TEXBODY::display(CBMESHptr& mesh, MULTI_CMDptr cmd)
    // Put it in the WORLD's DRAWN and EXIST lists:
    WORLD::create(tex, !cmd);
    if (cmd)
-      cmd->add(new DISPLAY_CMD(tex));
+      cmd->add(make_shared<DISPLAY_CMD>(tex));
 }
 
 void
@@ -158,8 +158,7 @@ TEXBODY::undisplay(CBMESHptr& mesh, MULTI_CMDptr cmd)
    if (gel) {
       WORLD::undisplay(gel, !cmd);
       if (cmd)
-         cmd->add
-            (new UNDISPLAY_CMD(gel));
+         cmd->add(make_shared<UNDISPLAY_CMD>(gel));
    } else {
       err_msg("TEXBODY::undisplay: warning: mesh has no GEL");
    }
@@ -1210,7 +1209,7 @@ TEXBODY::get_ffs_tex_body(MULTI_CMDptr cmd)
       ret->add(create_mesh("surface"));
       WORLD::create(ret, !cmd);
       if (cmd) {
-         cmd->add(new DISPLAY_CMD(ret));
+         cmd->add(make_shared<DISPLAY_CMD>(ret));
       }
       ret->set_apply_xf(1); // FFS TEXBODYs keep the identity xform
    }
