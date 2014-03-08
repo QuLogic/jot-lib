@@ -38,7 +38,7 @@ class LOADER {
 
 
 
-#define CWORLDptr const WORLDptr
+MAKE_SHARED_PTR(WORLD);
 //-----------------------------------------------
 // WORLD
 //    Top level SCHEDULER, handles UNDO list, messages
@@ -47,7 +47,7 @@ class LOADER {
 class NetStream;
 class RenderThread;
 class ThreadSync;
-class REF_CLASS(WORLD) : public SCHEDULER {
+class WORLD : public SCHEDULER {
  protected :
    static WORLD    *_w;
    vector<TTYfd *>  _fds;

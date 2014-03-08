@@ -1217,7 +1217,7 @@ VIEW::VIEW(
    _in_data_file(false),
    _impl(i),
    _view_id(_num_views), 
-   _cam(new CAM("camera")),
+   _cam(make_shared<CAM>("camera")),
    _cam_hist(100),
    _cam_hist_cur(0), // current camera starts at first index to set
    _width(0), 
@@ -1260,10 +1260,10 @@ VIEW::VIEW(
 
    disp_obs();  // observe all changes to DRAWN
 
-   _animator = new Animator(this);
+   _animator = new Animator(shared_from_this());
    assert(_animator);
 
-   _recorder = new Recorder(this);
+   _recorder = new Recorder(shared_from_this());
    assert(_recorder);
 
    _num_views++;
@@ -1283,9 +1283,9 @@ VIEW::VIEW(
       }
    }
    
-   VIEWS.add(this);
+   VIEWS.add(shared_from_this());
 
-   _impl->set_view(this);
+   _impl->set_view(shared_from_this());
 }
 
 void
@@ -1446,7 +1446,7 @@ VIEW::paint()
 
 
 
-   if (!multithread) push(this);
+   if (!multithread) push(shared_from_this());
 
    if (_impl) _tris = _impl->paint();
 
@@ -1487,7 +1487,8 @@ VIEW::intersect(
 #ifdef USE_PTHREAD
    assert(ThreadToView::get() == 0);
 #endif
-   CVIEWptr this_view((VIEW *)this);
+   // FIXME: const modification shouldn't be necessary...
+   VIEWptr this_view = const_pointer_cast<VIEW>(shared_from_this());
 
    push(this_view);
 
@@ -1659,7 +1660,6 @@ VIEW::inside(
    ) const
 {
    GELlist objs;
-   VIEWptr  v((VIEW *)this);
    for (int i = 0; i < _drawn.num(); i++)
       if (!NO_COPY.get(_drawn[i]) && _drawn[i]->inside(lasso))
          objs += _drawn[i];
@@ -1674,7 +1674,7 @@ VIEW::save_cam(CCAMptr c)
    if (_cam_hist.valid_index(_cam_hist_cur ))
       _cam_hist.truncate(_cam_hist_cur );
 
-   CAMptr cptr = new CAM("history");
+   CAMptr cptr = make_shared<CAM>("history");
    *cptr = (c ? *c : *_cam);
    _cam_hist += cptr;
    _cam_hist_cur++;
@@ -1689,7 +1689,7 @@ VIEW::fwd_cam_hist()
   if (_cam_hist_cur >= (_cam_hist.num()-1) ){
     /* already at max */
   } else {
-    new CamFocus(this, _cam_hist[++_cam_hist_cur]);
+    new CamFocus(shared_from_this(), _cam_hist[++_cam_hist_cur]);
   }
 }
 
@@ -1703,7 +1703,7 @@ VIEW::bk_cam_hist()
     save_cam();
     _cam_hist_cur--;
   }
-  new CamFocus(this, _cam_hist[--_cam_hist_cur]);
+  new CamFocus(shared_from_this(), _cam_hist[--_cam_hist_cur]);
 }
 
 void
@@ -2027,7 +2027,7 @@ VIEW::viewall()
 
    Wpt from = bb.center() + dist * dirvec;
    new CamFocus(
-      this,
+      shared_from_this(),
       from,
       bb.center(),
       from + Wvec::Y(),
@@ -2042,7 +2042,7 @@ VIEW::set_color(CCOLOR &c)
 {
    if (c != _bkgnd_col) {
       _bkgnd_col = c;
-      VIEWobs::notify_viewobs(this, COLOR_ALPHA_CHANGED);
+      VIEWobs::notify_viewobs(shared_from_this(), COLOR_ALPHA_CHANGED);
    }
 }
 
@@ -2051,7 +2051,7 @@ VIEW::set_alpha(double a)
 {
    if (_alpha != a) {
       _alpha = a;
-      VIEWobs::notify_viewobs(this, COLOR_ALPHA_CHANGED);
+      VIEWobs::notify_viewobs(shared_from_this(), COLOR_ALPHA_CHANGED);
    }
 }
 
@@ -2060,7 +2060,7 @@ VIEW::set_render_mode(render_mode_t r)
 {
    if (_render_mode != r) {
       _render_mode = r;
-      VIEWobs::notify_viewobs(this, UNKNOWN_CHANGED);
+      VIEWobs::notify_viewobs(shared_from_this(), UNKNOWN_CHANGED);
    }
 }
 

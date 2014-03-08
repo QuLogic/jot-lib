@@ -426,7 +426,7 @@ SilUI::SilUI(VIEWptr v) :
     
    // Defer init() until the first build()
 
-   WORLD::get_world()->schedule(this);
+   WORLD::get_world()->schedule(shared_from_this());
 
    _always_update = Config::get_var_bool("ALWAYS_UPDATE",false)?(1):(0);
    _sigma_one     = Config::get_var_bool("SIGMA_ONE",false)?(1):(0);
@@ -466,7 +466,7 @@ SilUI::~SilUI()
 {
    // XXX - Need to clean up? Nah, we never destroy these
 
-   WORLD::get_world()->unschedule(this);
+   WORLD::get_world()->unschedule(shared_from_this());
 
    cerr << "SilUI::~SilUI - Error!!! Destructor not implemented.\n";
 }

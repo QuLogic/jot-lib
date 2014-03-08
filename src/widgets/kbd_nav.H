@@ -23,8 +23,9 @@
 #include "disp/view.H"
 #include "manip/manip.H"
 
-MAKE_PTR_SUBC(kbd_nav, FRAMEobs);
-class kbd_nav : public FRAMEobs, public Key_int {
+MAKE_SHARED_PTR(kbd_nav);
+class kbd_nav : public FRAMEobs, public Key_int,
+                public enable_shared_from_this<kbd_nav> {
   protected:
    int        _kmap[256];
    CAMdataptr _data;

@@ -27,7 +27,7 @@
  *
  *      Displays frames per second in lower left of window.
  *****************************************************************/
-MAKE_PTR_SUBC(FPS, FRAMEobs);
+MAKE_SHARED_PTR(FPS);
 class FPS : public FRAMEobs {
   public:
 

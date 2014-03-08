@@ -36,7 +36,7 @@ extern const double MIN_GESTURE_LENGTH;
 extern const double MIN_GESTURE_SPREAD;
 
 class GestureDrawer;
-class GEST_INT;
+MAKE_SHARED_PTR(GEST_INT);
 
 MAKE_PTR_SUBC(GESTURE,GEL);
 typedef const GESTURE CGESTURE;
@@ -58,7 +58,7 @@ class GESTURE : public GEL {
    //******** MANAGERS ********
 
    // constructor that begins to build the gesture
-   GESTURE(GEST_INT* gi, int index, mlib::CPIXEL& p, double pressure,
+   GESTURE(GEST_INTptr gi, int index, mlib::CPIXEL& p, double pressure,
            GestureDrawer* drawer=nullptr, CEvent& down = Event()) :
       GEL(),
       _gest_int(gi), _index(index),
@@ -314,7 +314,7 @@ class GESTURE : public GEL {
 
    //******** MEMBER DATA ********
 
-   GEST_INT*            _gest_int;      ///< owner of this
+   GEST_INTptr          _gest_int;      ///< owner of this
    int                  _index;         ///< index of this in owner's list
    mlib::PIXEL_list           _pts;     ///< pixel trail
    vector<double>       _times;         ///< times for each pixel added

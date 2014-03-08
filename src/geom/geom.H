@@ -44,12 +44,8 @@ class RAYhit;
 #define CRAYhit const RAYhit
 class RAYnear;
 #define CRAYnear const RAYnear
-class CAM;
-typedef REFptr<CAM> CAMptr;
-#define CCAMptr const CAMptr
 #define CEvent const Event
-class VIEWptr;
-#define CVIEWptr const VIEWptr
+MAKE_SHARED_PTR(VIEW);
 class GEOMptr;
 #define CGEOMptr const GEOMptr
 

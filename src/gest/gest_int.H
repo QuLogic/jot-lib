@@ -89,9 +89,9 @@ class GESTURE_list : public LIST<GESTUREptr> {
  *      the gestures to "observers," i.e. Pens that trigger
  *      appropriate callbacks.
  *****************************************************************/
-MAKE_PTR_SUBC(GEST_INT,FRAMEobs);
-typedef const GEST_INTptr CGEST_INTptr;
-class GEST_INT : public Simple_int, public FRAMEobs, public CAMobs {
+MAKE_SHARED_PTR(GEST_INT);
+class GEST_INT : public Simple_int, public FRAMEobs, public CAMobs,
+                 public enable_shared_from_this<GEST_INT> {
  protected:
    VIEWptr              _view;          // view
    GestObs_list         _obs;           // observers of gestures

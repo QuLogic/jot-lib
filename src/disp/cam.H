@@ -36,14 +36,9 @@ using namespace mlib;
 
 
 #define CSCREENptr  const SCREENptr
-#define CCAMptr     const CAMptr
+MAKE_SHARED_PTR(CAM);
 #define CCAMdata    const CAMdata
 #define CCAMdataptr const CAMdataptr
-
-// would like to use typedef, but this same #define
-// occurs in many .H files and so is a pain to fix:
-class VIEWptr;
-#define CVIEWptr const VIEWptr
 
 //----------------------------------------------
 //
@@ -63,7 +58,7 @@ class REF_CLASS(CAMdata) : public REFcounter {
 
   protected : 
 
-   CAM*         _cam;
+   CAMptr       _cam;
    mlib::Wpt    _from;            // camera location
    mlib::Wpt    _at;              // point we're looking at
    mlib::Wpt    _up;              // point in the "up" direction
@@ -194,7 +189,7 @@ class CAMobs {
 //  to OGl.
 //
 //----------------------------------------------
-class REF_CLASS(CAM): public SCHEDULER {
+class CAM : public SCHEDULER {
   protected: 
    string       _name;
 
@@ -286,7 +281,7 @@ class REF_CLASS(SCREEN) : public REFcounter
 
   public:
    virtual ~SCREEN() {}
-   SCREEN() { _saved_cam = new CAM("saved cam"); }
+   SCREEN() { _saved_cam = make_shared<CAM>("saved cam"); }
 
    virtual void push_eye_offset (CCAMptr &,CAMdata::eye);
    virtual void pop_eye_offset  (const CAM *c);

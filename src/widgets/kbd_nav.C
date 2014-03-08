@@ -57,7 +57,7 @@ kbd_nav::kbd_nav(
       _entry += Arc(down_ev, Cb(&Key_int::down));
    }
    VIEWint_list::add(view, &_entry);// get notified for each relevant key event
-   WORLD::timer_callback(this);     // get called back each frame to navigate
+   WORLD::timer_callback(shared_from_this()); // get called back each frame to navigate
 }
 
 int

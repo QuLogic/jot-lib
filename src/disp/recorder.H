@@ -35,7 +35,7 @@ class CamState {
  
  public:
    CamState (double time, CCAMptr& ncam) { 
-      _cam =  new CAM ( "state_cam" ) ;
+      _cam = make_shared<CAM>("state_cam");
       _t = time;  //time from start of path
       *_cam = *ncam;
    }

@@ -30,13 +30,10 @@ class   RAYhit;
 #define CRAYhit const RAYhit
 class   RAYnear;
 #define CRAYnear const RAYnear
-class VIEWptr;
-#define CVIEWptr  const VIEWptr
-class VIEW;
+MAKE_SHARED_PTR(VIEW);
 
 
 #define CFRAMEobslist const FRAMEobslist
-#define CFRAMEobsptr  const FRAMEobsptr
 //--------------------------------------------
 // FRAMEobs, FRAMEobslist  -
 //   An object that can be notified when each
@@ -46,8 +43,8 @@ class VIEW;
 // or not.  A value of -1 indicates that the
 // observer should be removed from the queue.
 //--------------------------------------------
-MAKE_PTR_BASEC(FRAMEobs);
-class FRAMEobs: public REFcounter {
+MAKE_SHARED_PTR(FRAMEobs);
+class FRAMEobs {
    protected:
       // index of this FRAMEobs in
       // SCHEDULER::_scheduled list (below):
@@ -65,7 +62,6 @@ class FRAMEobs: public REFcounter {
 typedef LIST<FRAMEobsptr> FRAMEobslist;
 
 
-#define CSCHEDULERptr const SCHEDULERptr
 #define CSCHEDULER    const SCHEDULER
 //---------------------------------------------
 // SCHEDULER, SCHEDULEptr
@@ -76,7 +72,7 @@ typedef LIST<FRAMEobsptr> FRAMEobslist;
 // callback, and all the other schedulers and GEL objects are called
 // from there in a cascade of tick()'s...
 //---------------------------------------------
-MAKE_PTR_SUBC(SCHEDULER, FRAMEobs);
+MAKE_SHARED_PTR(SCHEDULER);
 class SCHEDULER: public FRAMEobs {
    protected:
       FRAMEobslist  _scheduled;  // List of scheduled objects

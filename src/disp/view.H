@@ -58,7 +58,7 @@ extern const string RKEY_LINE;
 extern const string RSIL_FRAME;
 extern const string SKYBOX_GRADIENT;
 
-MAKE_PTR_SUBC(VIEW, SCHEDULER);
+MAKE_SHARED_PTR(VIEW);
 //
 // Observe changes to VIEW's
 //
@@ -176,15 +176,15 @@ class REF_CLASS(VIEWimpl) {
 //     Contains a list of objects to be displayed, dispatches events to FSA's
 //
 //----------------------------------------------
-// MAKE_PTR_SUBC(VIEW, SCHEDULER); it's called higher up in the file
 
-#define CHANGED(X) VIEWobs::notify_viewobs(this, X) 
+#define CHANGED(X) VIEWobs::notify_viewobs(shared_from_this(), X)
 
 class ThreadData;
 //XXX - Added DATA_ITEM (seem to recall that the
 //parent class order matters in some way, hope this
 //is okay...)
-class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
+class VIEW : public SCHEDULER, public DISPobs, public DATA_ITEM,
+             public enable_shared_from_this<VIEW> {
  public: 
    enum filt {
       H_GEOM       = 0,
@@ -807,7 +807,7 @@ class VIEW: public SCHEDULER, public DISPobs, public DATA_ITEM  {
    //!METHS: callbacks provided by the view 
    void         notify_clearobs()       { set<CLEARobsptr>::iterator i;
                                           for (i=_clear_obs.begin(); i!=_clear_obs.end(); ++i)
-                                            (*i)->notify_clear(this);
+                                            (*i)->notify_clear(shared_from_this());
                                         }
    void         clear_obs  (CCLEARobsptr &o) { _clear_obs.insert(o); }
    void         unobs_clear(CCLEARobsptr &o) { _clear_obs.erase(o); }

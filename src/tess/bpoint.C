@@ -19,6 +19,7 @@
  * bpoint.C:
  **********************************************************************/
 #include "disp/colors.H"                // Color::grey7 etc.
+#include "disp/view.H"
 #include "geom/gl_view.H"
 #include "gtex/color_id_texture.H"
 #include "gtex/ref_image.H"

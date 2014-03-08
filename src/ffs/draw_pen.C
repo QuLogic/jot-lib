@@ -184,7 +184,7 @@ DrawPen::DrawPen(
    _view->cam()->data()->add_cb(this);
 
    // Sign up for FRAMEobs::tick() callbacks:
-   _view->schedule(this);
+   _view->schedule(shared_from_this());
 
    if (_instance)
       err_msg("DrawPen::DrawPen: Error: instance already exists");

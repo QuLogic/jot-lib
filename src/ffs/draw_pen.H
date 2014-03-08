@@ -39,7 +39,8 @@
  *****************************************************************/
  //! \brief Read in the mouse/tablet input (gesture) and determine 
  //! what action the user intended.
-class DrawPen : public Pen, public CAMobs, public FRAMEobs {
+class DrawPen : public Pen, public CAMobs, public FRAMEobs,
+                public enable_shared_from_this<DrawPen> {
  protected:
    enum draw_mode {
       DEFAULT,

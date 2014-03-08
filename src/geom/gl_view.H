@@ -24,8 +24,7 @@
 #include "geom/appear.H"
 #include "geom/gl_util.H"
 
-MAKE_PTR_SUBC(GL_VIEW, VIEW);
-typedef const GL_VIEWptr CGL_VIEWptr;
+MAKE_SHARED_PTR(GL_VIEW);
 //----------------------------------------------
 //
 //  GL_VIEW- is a GL-specific VIEW drawing implementation.

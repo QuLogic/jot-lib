@@ -80,7 +80,7 @@ void
 GEST_INT::activate()
 {
    // get tick callbacks:
-   _view->schedule(this);
+   _view->schedule(shared_from_this());
 
    // get down/motion/up events:
    VIEWint_list::get(_view)->add_interactor(&_fsa);
@@ -90,7 +90,7 @@ void
 GEST_INT::deactivate()
 {
    // tick callbacks:
-   _view->unschedule(this);
+   _view->unschedule(shared_from_this());
 
    // down/motion/up events:
    VIEWint_list::get(_view)->rem_interactor(&_fsa);
@@ -122,7 +122,7 @@ GEST_INT::down(CEvent &e, State *&s)
 
    // start a new one and make sure it's drawn
    _stack += new GESTURE(
-      this, _stack.num(), ptr->cur(), ptr->pressure(), _drawer, e
+      shared_from_this(), _stack.num(), ptr->cur(), ptr->pressure(), _drawer, e
       );
 
    BufferRefImage *buf = BufferRefImage::lookup(_view);

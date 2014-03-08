@@ -29,9 +29,6 @@
 #define CMVEC2 mlib::CXYvec
 #define MVEC2   mlib::XYvec
 
-class VIEWptr;
-#define CVIEWptr const VIEWptr
-
 class TEXTURE;
 
 class GEOM;

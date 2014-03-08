@@ -72,14 +72,14 @@ public:
   JOTclip_info() : FUNC_ITEM("CLIP_INFO") {}
   virtual void  put(TAGformat &d) const 
   { 
-     VIEW *v = VIEW::peek();
+     VIEWptr v = VIEW::peek();
      *d << (int) v->is_clipping() << v->clip_plane();
   }
   virtual void  get (TAGformat &d) 
   {
     int clipping; Wplane cplane;
     *d >> clipping >> cplane;
-     VIEW *v = VIEW::peek();
+     VIEWptr v = VIEW::peek();
      v->set_clip_plane(cplane);
      v->set_is_clipping(clipping==1);
   }

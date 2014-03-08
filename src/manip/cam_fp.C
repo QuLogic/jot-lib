@@ -533,10 +533,10 @@ Cam_int_fp::orbit(CEvent &e, State *&s)
    GEOMptr geom(ray_geom(r,GEOM::null));
 
    //start orbit
-   CamOrbit::cur() = new CamOrbit(cam, geom->bbox().center());
+   CamOrbit::cur() = make_shared<CamOrbit>(cam, geom->bbox().center());
 
    view->save_cam();
-   view->schedule(&*CamOrbit::cur());
+   view->schedule(CamOrbit::cur());
 
    return 0;
 }
@@ -558,9 +558,9 @@ Cam_int_fp::breathe(CEvent &e, State *&)
       }
    else
       {
-         CamBreathe::cur() = new CamBreathe(cam);
+         CamBreathe::cur() = make_shared<CamBreathe>(cam);
          view->save_cam();
-         view->schedule(&*CamBreathe::cur());
+         view->schedule(CamBreathe::cur());
          _breathing = true;
       }
 
@@ -681,10 +681,10 @@ Cam_int_fp::cruise(CEvent &e, State *&s)
    VIEWptr         view(e.view());
       
 
-   CamCruise::cur() = new CamCruise(cam, data->center());
+   CamCruise::cur() = make_shared<CamCruise>(cam, data->center());
 
    view->save_cam();
-   view->schedule(&*CamCruise::cur());
+   view->schedule(CamCruise::cur());
 
    return 0;
 }

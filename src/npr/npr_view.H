@@ -27,7 +27,7 @@
 #include "gtex/paper_effect.H"
 #include "gtex/halo_ref_image.H"
 
-MAKE_PTR_SUBC(NPRview, GL_VIEW);
+MAKE_SHARED_PTR(NPRview);
 class NPRview : public GL_VIEW {
  public:
    //******** MANAGERS ********

@@ -59,7 +59,8 @@ class SilDebugObs {
  * SilUI
  *****************************************************************/
 
-class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM {
+class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM,
+              public enable_shared_from_this<SilUI> {
 
  public:
    /******** WIDGET ID NUMBERS ********/

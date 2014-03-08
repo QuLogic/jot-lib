@@ -267,7 +267,7 @@ class JOTapp : public BaseJOTapp {
 
    virtual WINDOW*   new_window(WINSYS *win) { return new WINDOWjot(win);}
    virtual VIEWptr   new_view(WINSYS *win) {
-      return new VIEW("NPR View", win, new NPRview);
+      return make_shared<VIEW>("NPR View", win, new NPRview());
    }
 
    virtual void      init_scene();
@@ -376,7 +376,7 @@ JOTapp::init_dev_cb(WINDOW &base_window)
          TabletDesc::SMALL);
       _tablet->activate();
       _tab_map = new ButtonMapper(&_tablet->stylus(),&_tablet->stylus_buttons());
-      _tablet->add_handler(VIEWint_list::get(&*base_window._view));
+      _tablet->add_handler(VIEWint_list::get(base_window._view));
       _tablet->stylus().add_handler(base_window._win->curspush() );
    }
 
@@ -564,7 +564,7 @@ JOTapp::init_pens(WINDOW &base_window)
 
    // set up gesture interactor to process mouse/stylus events into
    // gestures:
-   _gest_int = new GEST_INT(base_window._view, down, move, up, b2d, b2u);
+   _gest_int = make_shared<GEST_INT>(base_window._view, down, move, up, b2d, b2u);
 
    // set up the DrawManip for manipulating objects:
    _draw_manip = new DrawManip(b2d, move, b2u);

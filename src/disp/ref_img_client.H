@@ -24,8 +24,7 @@
 #include "net/data_item.H"
 #include "disp/colors.H"
 
-#define CVIEWptr const VIEWptr
-class VIEWptr;
+MAKE_SHARED_PTR(VIEW);
 
 /*****************************************************************
  * RefImageClient:

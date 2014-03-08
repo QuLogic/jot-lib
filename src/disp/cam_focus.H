@@ -27,8 +27,9 @@
  *
  *      Animates a camera to focus on something
  *****************************************************************/
-MAKE_PTR_SUBC(CamFocus, FRAMEobs);
-class CamFocus : public FRAMEobs {
+MAKE_SHARED_PTR(CamFocus);
+class CamFocus : public FRAMEobs,
+                 public enable_shared_from_this<CamFocus> {
  public :
    //******** MANAGERS ********
    CamFocus(VIEWptr v, CCAMptr &dest);
@@ -85,17 +86,17 @@ class CamFocus : public FRAMEobs {
    void schedule() {
       if (view()) {
          view()->save_cam();     // allow undo
-         view()->schedule(this); // sign up for per-frame callbacks
+         view()->schedule(shared_from_this()); // sign up for per-frame callbacks
       }
    }
 
    // called in the destructor to deactivate this CamFocus:
    void unschedule() {
       if (view())
-         view()->unschedule(this);
+         view()->unschedule(shared_from_this());
    }
 
-   void set_cur(CamFocus* cf);
+   void set_cur(CamFocusptr cf);
 
    // time utilities:
    double cur_time()     const { return VIEW::peek()->frame_time(); }
@@ -119,8 +120,9 @@ class CamFocus : public FRAMEobs {
  *
  *      Animates a camera to make it seem like it's "breathing"
  *****************************************************************/
-MAKE_PTR_SUBC(CamBreathe, FRAMEobs);
-class CamBreathe : public FRAMEobs {
+MAKE_SHARED_PTR(CamBreathe);
+class CamBreathe : public FRAMEobs,
+                   public enable_shared_from_this<CamBreathe> {
  protected:
    CAMptr       _cam;
    mlib::Wpt    _from;
@@ -159,8 +161,9 @@ class CamBreathe : public FRAMEobs {
  *
  *      Animates a camera to orbit around a object
  *****************************************************************/
-MAKE_PTR_SUBC(CamOrbit, FRAMEobs);
-class CamOrbit : public FRAMEobs {
+MAKE_SHARED_PTR(CamOrbit);
+class CamOrbit : public FRAMEobs,
+                 public enable_shared_from_this<CamOrbit> {
  protected:
    CAMptr       _cam;
    mlib::Wpt    _from, _at,_up,_cent;
@@ -201,8 +204,9 @@ class CamOrbit : public FRAMEobs {
  *
  *      Animates a camera to Cruise around a object
  *****************************************************************/
-MAKE_PTR_SUBC(CamCruise, FRAMEobs);
-class CamCruise : public FRAMEobs {
+MAKE_SHARED_PTR(CamCruise);
+class CamCruise : public FRAMEobs,
+                  public enable_shared_from_this<CamCruise> {
  protected:
    CAMptr       _cam;
    double               _t;

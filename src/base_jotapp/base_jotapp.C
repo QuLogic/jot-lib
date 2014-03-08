@@ -127,7 +127,7 @@ BaseJOTapp::init()
       init_camera(win->_view);
       init_buttons(win->_view); // Create on-screen controls
    }
-   VIEW::push(&*_windows[0]->_view);    // VIEW #0 is the default view
+   VIEW::push(_windows[0]->_view);    // VIEW #0 is the default view
 
    init_scene();                        // Create basic scene
 
@@ -147,7 +147,7 @@ BaseJOTapp::init()
 
    // Add fps counter
    if (!Config::get_var_bool("JOT_SUPPRESS_FPS",false))
-      WORLD::timer_callback(new FPS());
+      WORLD::timer_callback(make_shared<FPS>());
 
    // Print helpful info.
    cerr << "Type 'H' to see the list of key commands" << endl << endl;
@@ -182,7 +182,7 @@ BaseJOTapp::init_top()
 void
 BaseJOTapp::init_world()
 {
-   _world = new WORLD();
+   _world = make_shared<WORLD>();
 
    WORLD::set_world  (&*_world);
 }
@@ -217,7 +217,7 @@ BaseJOTapp::new_view(WINSYS *win)
    // allows subclasses to make their own types of views without
    // repeating the code in BaseJOTapp::create_view.
 
-   return new VIEW("OGL View", win, new GL_VIEW);
+   return make_shared<VIEW>("OGL View", win, new GL_VIEW());
 }
 
 

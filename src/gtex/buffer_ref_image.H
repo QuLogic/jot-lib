@@ -42,7 +42,7 @@
 #define COUNTUP 4
 #define CBufferRefImage const BufferRefImage
 
-MAKE_PTR_SUBC(BufferRefImage, FRAMEobs);
+MAKE_SHARED_PTR(BufferRefImage);
 
 class BufferRefImage : public RefImage,
                        protected DISPobs,
@@ -50,7 +50,8 @@ class BufferRefImage : public RefImage,
                        protected CAMobs,
                        protected BMESHobs,
                        public FRAMEobs,
-                       protected VIEWobs
+                       protected VIEWobs,
+                       public enable_shared_from_this<BufferRefImage>
 {
  public:
    virtual ~BufferRefImage() { unobserve(); }

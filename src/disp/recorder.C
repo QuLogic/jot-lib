@@ -39,7 +39,7 @@ CameraPath::read_stream ( iostream& is ) {
    STDdstream in(&is);
    int fnum;
    double ftime;
-   CAMptr cptr = new CAM ( "state" );  
+   CAMptr cptr = make_shared<CAM>("state");
    in >> fnum;
    for ( int i=0; i < fnum; i++ ) { 
       cerr << "frame " << i << endl;

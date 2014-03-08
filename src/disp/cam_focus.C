@@ -164,11 +164,11 @@ CamFocus::setup(
    _u2 = u2;
    _c2 = c2;
 
-   set_cur(this);
+   set_cur(shared_from_this());
 }
 
 void
-CamFocus::set_cur(CamFocus* cf)
+CamFocus::set_cur(CamFocusptr cf)
 {
    cancel_cur();
    _cur = cf;
@@ -252,7 +252,7 @@ CamBreathe::CamBreathe(CAMptr  &p) :
    _Kf     = 0;
    _Kc     = 0;
    _Ku     = 0;
-   _breathe  = this;
+   _breathe = shared_from_this();
    _tick     = 0;
    _stop     = false;
    _pause = false;
@@ -350,7 +350,7 @@ CamOrbit::CamOrbit(CAMptr  &p, mlib::Wpt center) :
    _min    = _cam->data()->persp() ? 0.01 : 0.001;
    _width  = _cam->data()->width();
    _height = _cam->data()->height();
-   _orbit  = this;
+   _orbit  = shared_from_this();
    _tick   = 0;
    //_size   = 1;
    _pause = false;
@@ -373,7 +373,7 @@ CamCruise::CamCruise(CAMptr  &p, mlib::Wpt center) :
    _min    = _cam->data()->persp() ? 0.01 : 0.001;
    _width  = _cam->data()->width();
    _height = _cam->data()->height();
-   _cruise  = this;
+   _cruise = shared_from_this();
    _tick   = 0;
    _pause = true;
    _stop = false;

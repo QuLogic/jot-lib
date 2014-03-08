@@ -150,7 +150,7 @@ AuxRefImage::draw_objects(CGELlist& drawn) const
 
 AuxRefImage::AuxRefImage(CVIEWptr& v) :
    RefImage(v),
-   _cam(new CAM("AuxRefImage cam"))
+   _cam(make_shared<CAM>("AuxRefImage cam"))
 {
 }
 

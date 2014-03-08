@@ -82,8 +82,9 @@ class MenuCbMeth_t: public MenuCb_t {
 
 
 
-MAKE_PTR_SUBC(MMENU, FRAMEobs);
-class MMENU : public FRAMEobs, public Simple_int
+MAKE_SHARED_PTR(MMENU);
+class MMENU : public FRAMEobs, public Simple_int,
+              public enable_shared_from_this<MMENU>
 {
  public:
   enum DIR { N=0,NE,E,SE,S,SW,W,NW,NUM_DIRS };

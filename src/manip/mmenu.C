@@ -55,7 +55,7 @@ MMENU::down(
    DEVice_2d      *ptr  = btns->ptr2d();
    _view = e.view();
 
-  _view->schedule(this);
+  _view->schedule(shared_from_this());
 
   _t0   = the_time();
   _d    = ptr->cur();
@@ -137,7 +137,7 @@ MMENU::up(
          WORLD::undisplay(gp, false);
    }
 
-   _view->unschedule(this);
+   _view->unschedule(shared_from_this());
 
    if(_sel>=0){
       call(_sel);

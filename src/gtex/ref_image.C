@@ -1168,7 +1168,7 @@ VisRefImage::observe()
       xform_obs();
 
       // FRAMEobs:
-      WORLD::get_world()->schedule(this);
+      WORLD::get_world()->schedule(shared_from_this());
    }
 }
 
@@ -1192,7 +1192,7 @@ VisRefImage::unobserve()
       unobs_xform();
 
       // FRAMEobs:
-      WORLD::get_world()->unschedule(this);
+      WORLD::get_world()->unschedule(shared_from_this());
    }
 }
 

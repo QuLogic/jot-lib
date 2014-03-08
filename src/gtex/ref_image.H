@@ -715,7 +715,7 @@ class VisRefImageFactory;
  *
  *   Visibility reference image
  **********************************************************************/
-MAKE_PTR_SUBC(VisRefImage, FRAMEobs);
+MAKE_SHARED_PTR(VisRefImage);
 class VisRefImage : public    IDRefImage,
                     protected BMESHobs,
                     protected CAMobs,
@@ -723,7 +723,8 @@ class VisRefImage : public    IDRefImage,
                     protected EXISTobs,
                     public    FRAMEobs,
                     protected XFORMobs,
-                    public    BaseVisRefImage {
+                    public    BaseVisRefImage,
+                    private   enable_shared_from_this<VisRefImage> {
  public:
    //******** MANAGERS ********
    virtual ~VisRefImage() { unobserve(); }
