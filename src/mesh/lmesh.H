@@ -73,7 +73,7 @@ class LMESH : public BMESH {
    LMESHptr subdiv_mesh()         const { return _subdiv_mesh; }
 
    // Parent of this mesh
-   LMESHptr parent_mesh()         const { return _parent_mesh; }
+   LMESHptr parent_mesh()         const { return _parent_mesh->shared_from_this(); }
 
    // Subdivision child at level k relative to this one:
    // (k == 1 refers to immediate child)
@@ -102,7 +102,7 @@ class LMESH : public BMESH {
    bool allocate_subdiv_mesh();
 
    // The currently drawn mesh in the whole subdivision hierarchy:
-   LMESHptr cur_mesh() const { return control_mesh()->_cur_mesh; }
+   LMESHptr cur_mesh() const { return control_mesh()->_cur_mesh->shared_from_this(); }
 
    bool is_cur_mesh() const { return cur_mesh().get() == this; }
 
@@ -148,7 +148,7 @@ class LMESH : public BMESH {
 
    // Ensure subdiv meshes are updated to CURRENT level:
    void update() {
-      if (_cur_mesh.get() != this)
+      if (_cur_mesh != this)
          update_subdivision(cur_level());
    }
 
@@ -332,8 +332,8 @@ class LMESH : public BMESH {
  // PROTECTED
  //*******************************************************
  protected:
-   LMESHptr     _parent_mesh;  // subdivision parent
-   LMESHptr     _cur_mesh;     // current subdivision mesh
+   LMESH*       _parent_mesh;  // subdivision parent (always exists, so no ref)
+   LMESH*       _cur_mesh;     // current subdivision mesh (always a child, so no ref)
    LMESHptr     _subdiv_mesh;  // subdivision child
    int          _subdiv_level; // level of this mesh (control mesh = level 0)
    Bvert_list   _dirty_verts;  // verts whose subdiv verts need recalculating
@@ -344,9 +344,9 @@ class LMESH : public BMESH {
 
    //******** INTERNAL METHODS ********
 
-   void set_parent(LMESHptr parent);
+   void set_parent(LMESH* parent);
 
-   void set_cur_mesh(LMESHptr cur);
+   void set_cur_mesh(LMESH* cur);
 
    // Return the number of levels finer than this mesh
    // for which _subdiv_mesh is already allocated:

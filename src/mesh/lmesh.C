@@ -56,7 +56,7 @@ LMESH::LMESH(int num_v, int num_e, int num_f) :
 {
    // Some compilers complain if 'this' is used in
    // member variable initialization section above
-   _cur_mesh.reset(this);
+   _cur_mesh = this;
    _lmesh_tags = nullptr;            // non-static tags
 }
 
@@ -603,7 +603,7 @@ LMESH::allocate_subdiv_mesh()
    // Inherited stuff:
    _subdiv_mesh->_type = _type;
    _subdiv_mesh->_geom = _geom;
-   _subdiv_mesh->set_parent(shared_from_this());
+   _subdiv_mesh->set_parent(this);
    _subdiv_mesh->set_subdiv_loc_calc(_loc_calc->dup());
    _subdiv_mesh->set_subdiv_color_calc(_color_calc->dup());
 
@@ -700,7 +700,7 @@ LMESH::update_subdivision(int level)
    if (level <= 0 || !allocate_subdiv_mesh()) {
       if (cur_mesh().get() == this)
          return false;
-      control_mesh()->set_cur_mesh(shared_from_this());
+      control_mesh()->set_cur_mesh(this);
       return true;
    }
 
@@ -883,7 +883,7 @@ LMESH::delete_subdiv_mesh()
          ((Lpatch*)_patches[k])->clear_subdiv_strips(1);
    }
    if (is_control_mesh())
-      set_cur_mesh(shared_from_this());
+      set_cur_mesh(this);
    _subdiv_mesh = nullptr;    // deletes _subdiv_mesh thru ref-counting
 }
 
@@ -895,7 +895,7 @@ LMESH::delete_elements()
 }
 
 void 
-LMESH::set_parent(LMESHptr parent)
+LMESH::set_parent(LMESH* parent)
 {
    assert(parent);
    _parent_mesh = parent; 
@@ -910,14 +910,14 @@ LMESH::set_parent(LMESHptr parent)
 }
 
 void
-LMESH::set_cur_mesh(LMESHptr cur)
+LMESH::set_cur_mesh(LMESH* cur)
 {
    if (is_control_mesh()) {
       if (_cur_mesh != cur) {
-         bool coi = is_focus(_cur_mesh);
+         bool coi = is_focus(_cur_mesh->shared_from_this());
          _cur_mesh = cur;
          if (coi)
-            set_focus(_cur_mesh);
+            set_focus(_cur_mesh->shared_from_this());
          changed(RENDERING_CHANGED);
       }
    } else
@@ -947,7 +947,7 @@ LMESH::refine()
 void
 LMESH::unrefine()
 {
-   if (is_control_mesh() && _cur_mesh.get() != this) {
+   if (is_control_mesh() && _cur_mesh != this) {
       set_cur_mesh(_cur_mesh->_parent_mesh);
       while (edit_level() > cur_level())
          dec_edit_level();
