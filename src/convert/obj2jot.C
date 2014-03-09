@@ -111,7 +111,7 @@ skip_line(istream& in)
 }
 
 inline void
-read_vert(LMESH* mesh, istream& in)
+read_vert(LMESHptr mesh, istream& in)
 {
    double x, y, z;
    in >> x >> y >> z;
@@ -177,7 +177,7 @@ any_valid_indices(const T& l, int i, int j, int k)
 }
 
 inline void
-add_tri(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v3)
+add_tri(LMESHptr mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v3)
 {
    assert(mesh);
    //cerr << "add_tri: " << v1._v << " "<< v2._v << " " <<  v3._v << endl;
@@ -191,7 +191,7 @@ add_tri(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vtn& v1, const vtn& v2, co
 }
 
 inline void
-add_poly(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vector<vtn>& vtns)
+add_poly(LMESHptr mesh, Patch* p, CUVpt_list& uvs, const vector<vtn>& vtns)
 {
    assert(vtns.size() > 2);
 
@@ -207,7 +207,7 @@ add_poly(LMESH* mesh, Patch* p, CUVpt_list& uvs, const vector<vtn>& vtns)
 }
 
 inline void
-read_face(LMESH* mesh, CUVpt_list& uvs, Patch* p, istream& in)
+read_face(LMESHptr mesh, CUVpt_list& uvs, Patch* p, istream& in)
 {
    // The docs say each face has 3 vertices, but out there in the
    // world we're finding some with 4 or more.  So here we read
@@ -244,7 +244,7 @@ read_obj(vector<LMESHptr>& meshes, istream& in)
 {
    UVpt_list    uvs;
   
-   meshes.push_back(new LMESH);
+   meshes.push_back(make_shared<LMESH>());
    int curr_mesh = 0;
    Patch* curr_patch = nullptr;
 
@@ -255,7 +255,7 @@ read_obj(vector<LMESHptr>& meshes, istream& in)
          //curr_patch = meshes[curr_mesh]->new_patch();
          skip_line(in);
          //cerr << "Starting a new Mesh: " << endl;
-         //meshes.push_back(new LMESH);
+         //meshes.push_back(make_shared<LMESH>());
          //curr_mesh++;
       } else if(token == "usemtl") {         
          //cerr << "Starting a new patch: " << endl;

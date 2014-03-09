@@ -201,9 +201,10 @@ HatchingGroupFixed::put_visibility(TAGformat &d) const
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::put_visibility()"); 
 
-   BMESH *m = _patch->mesh();
-   if (LMESH::isa(m))
-      m = ((LMESH*)m)->cur_mesh();
+   BMESHptr m = _patch->mesh();
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(m);
+   if (lm)
+      m = lm->cur_mesh();
 
    Bface_list::size_type k;
    vector<int> indices;
@@ -231,9 +232,10 @@ HatchingGroupFixed::get_visibility(TAGformat &d)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::get_visibility()"); 
 
-   BMESH *m = _patch->mesh();
-   if (LMESH::isa(m))
-      m = ((LMESH*)m)->cur_mesh();
+   BMESHptr m = _patch->mesh();
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(m);
+   if (lm)
+      m = lm->cur_mesh();
 
    vector<int>::size_type k;
    int ctr=0;
@@ -333,7 +335,7 @@ HatchingGroupFixed::~HatchingGroupFixed()
 // notify_change()
 /////////////////////////////////////
 void
-HatchingGroupFixed::notify_change(BMESH *m, BMESH::change_t chg)
+HatchingGroupFixed::notify_change(BMESHptr m, BMESH::change_t chg)
 {
    assert(m == _patch->mesh());
 
@@ -362,7 +364,7 @@ HatchingGroupFixed::notify_change(BMESH *m, BMESH::change_t chg)
 // notify_xform()
 /////////////////////////////////////
 void
-HatchingGroupFixed::notify_xform(BMESH *m, CWtransf &t, CMOD& mod)
+HatchingGroupFixed::notify_xform(BMESHptr m, CWtransf &t, CMOD& mod)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingGroupFixed::notify_xform()"); 
 
@@ -1471,7 +1473,7 @@ HatchingHatchFixed::HatchingHatchFixed(
 // notify_xform()
 /////////////////////////////////////
 void
-HatchingHatchFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
+HatchingHatchFixed::notify_xform(BMESHptr, CWtransf& t, CMOD&)
 {
    size_t k;
 
@@ -1490,7 +1492,7 @@ HatchingHatchFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
 // notify_change()
 /////////////////////////////////////
 void
-HatchingHatchFixed::notify_change(BMESH *m, BMESH::change_t chg)
+HatchingHatchFixed::notify_change(BMESHptr m, BMESH::change_t chg)
 {
    assert(chg == BMESH::VERT_POSITIONS_CHANGED);
 
@@ -1672,7 +1674,7 @@ HatchingBackboneFixed::compute(
 // notify_xform()
 /////////////////////////////////////
 void
-HatchingBackboneFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
+HatchingBackboneFixed::notify_xform(BMESHptr, CWtransf& t, CMOD&)
 {
    vector<Vertebrae*>::size_type k;
 
@@ -1687,7 +1689,7 @@ HatchingBackboneFixed::notify_xform(BMESH *, CWtransf& t, CMOD&)
 // notify_change()
 /////////////////////////////////////
 void
-HatchingBackboneFixed::notify_change(BMESH *, BMESH::change_t chg)
+HatchingBackboneFixed::notify_change(BMESHptr, BMESH::change_t chg)
 {
    assert(chg == BMESH::VERT_POSITIONS_CHANGED);
 

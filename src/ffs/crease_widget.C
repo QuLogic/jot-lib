@@ -116,7 +116,7 @@ best_match_align(CBedge_list& edges, CGESTUREptr& g)
    if (!(g && g->is_stroke()))
       return nullptr;
 
-   BMESH* mesh = edges.mesh();
+   BMESHptr mesh = edges.mesh();
    if (!mesh) {
       err_adv(debug, "best_match_align: bad edge set");
       return nullptr;
@@ -194,7 +194,7 @@ best_match_cross(CBedge_list& edges, CGESTUREptr& g)
 
    PIXELline segment = g->endpt_line();
 
-   BMESH* mesh = edges.mesh();
+   BMESHptr mesh = edges.mesh();
    if (!mesh) {
       err_adv(debug, "best_match_cross: bad edge set");
       return nullptr;
@@ -404,7 +404,7 @@ CREASE_WIDGET::sharpen_cb(CGESTUREptr& gest, DrawState*& s)
       return 1;
    }
    if (std::find(_strip->edges().begin(), _strip->edges().end(), e) != _strip->edges().end()) {
-      LMESH* lm = lmesh();
+      LMESHptr lm = lmesh();
       if (lm)
          err_adv(debug, "before sharpen: %d dirty verts", lm->dirty_verts().size());
       if (e->crease_val()<USHRT_MAX)
@@ -468,7 +468,7 @@ inline unsigned short
 ctrl_crease_val(CBedge* e)
 {
    // Return crease value of the control edge (if any)
-   if (!(e && LMESH::isa(e->mesh())))
+   if (!(e && dynamic_pointer_cast<LMESH>(e->mesh())))
       return 0;
    Ledge* c = ((Ledge*)e)->ctrl_edge();
    return c ? c->crease_val() : 0;

@@ -90,16 +90,16 @@ main(int argc, char *argv[])
       return 1;
    }
 
-   BMESH* bmesh = new BMESH;
-   BMESH* lmesh = new LMESH;
+   BMESHptr bmesh = make_shared<BMESH>();
+   BMESHptr lmesh = make_shared<LMESH>();
 
-   cerr << "dynamic cast from BMESH* to BMESH* does ";
-   if (dynamic_cast<BMESH*>(bmesh) == nullptr)
+   cerr << "dynamic cast from BMESHptr to BMESHptr does ";
+   if (dynamic_pointer_cast<BMESH>(bmesh) == nullptr)
       cerr << "NOT ";
    cerr << "work" << endl;
 
-   cerr << "dynamic cast from LMESH* to LMESH* does ";
-   if (dynamic_cast<LMESH*>(lmesh) == nullptr)
+   cerr << "dynamic cast from LMESHptr to LMESHptr does ";
+   if (dynamic_pointer_cast<LMESH>(lmesh) == nullptr)
       cerr << "NOT ";
    cerr << "work" << endl;
    return 0;

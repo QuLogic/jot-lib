@@ -46,7 +46,7 @@ class VisibilityTest {
    bool is_visible(CWpt& p, double len) const { return visibility(p,len) > 0; }
 };
 
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 
 class PatchData;
 typedef const PatchData CPatchData;
@@ -133,8 +133,8 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //! \name Accessors
    //@{
       
-   BMESH*       mesh ()                 const      { return _mesh; }
-   void         set_mesh(BMESH* m)                 { _mesh = m; changed(); }
+   BMESHptr     mesh ()                 const      { return _mesh; }
+   void         set_mesh(BMESHptr m)               { _mesh = m; changed(); }
    const string&name ()                 const      { return _name;}
    void         set_name(const string &str)        { _name = str;}
    const string&texture_file ()         const      { return _texture_file;}
@@ -235,7 +235,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    virtual Patch* cur_patch() { return this; }
       
    //! \brief Convenience: the mesh of the current subdivision patch.
-   BMESH* cur_mesh();
+   BMESHptr cur_mesh();
       
    //! \brief The level of this Patch in the subdivision hierarchy
    //! (control mesh is 0, next level is 1, etc.).
@@ -537,7 +537,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //******** PROTECTED ********
  protected:
    
-   BMESH*            _mesh;             //!< owner
+   BMESHptr          _mesh;             //!< owner
    
    Bface_list        _faces;            //!< unordered faces
    vector<TriStrip*> _tri_strips;       //!< faces organized into tri strips
@@ -630,7 +630,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //@}
 
    //******** MANAGERS ********
-   Patch(BMESH* = nullptr);
+   Patch(BMESHptr = nullptr);
    friend class BMESH;
 
    //! \name Serialization Methods
@@ -870,7 +870,7 @@ Patch_list::min_alpha() const
    return ret;
 }
 
-inline BMESH*
+inline BMESHptr
 GTexture::mesh() const 
 {
    return _patch ? _patch->mesh() : nullptr;

@@ -299,7 +299,7 @@ HatchingCollection::reset(int /* is_reset */)
 // notify_xform()
 /////////////////////////////////////
 void
-HatchingCollection::notify_xform(BMESH *m, CWtransf &t, CMOD& mod)
+HatchingCollection::notify_xform(BMESHptr m, CWtransf &t, CMOD& mod)
 {
    err_mesg(ERR_LEV_SPAM, "HatchingCollection::notify_xform"); 
 
@@ -318,7 +318,7 @@ HatchingCollection::notify_xform(BMESH *m, CWtransf &t, CMOD& mod)
 // notify_change()
 /////////////////////////////////////
 void
-HatchingCollection::notify_change(BMESH *m, BMESH::change_t chg)
+HatchingCollection::notify_change(BMESHptr m, BMESH::change_t chg)
 {
    assert(m == _patch->mesh());
 

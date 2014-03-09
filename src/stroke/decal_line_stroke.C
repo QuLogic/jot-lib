@@ -29,7 +29,7 @@ static int dcl = DECODER_ADD(DecalLineStroke);
 TAGlist*            DecalLineStroke::_dls_tags = nullptr;
 
 // XXX hack for serialization
-BMESH *DecalLineStroke::_mesh = nullptr;
+BMESHptr DecalLineStroke::_mesh = nullptr;
 
 DecalLineStroke::DecalLineStroke(Patch* p) :
    OutlineStroke(p)

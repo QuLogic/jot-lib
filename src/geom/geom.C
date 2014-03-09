@@ -28,7 +28,7 @@
 
 using namespace mlib;
 
-BODY*       BODY::_factory = nullptr;
+BODYptr     BODY::_factory = nullptr;
 CXYpt_list  BODY::_dummy(0);
 
 int         MOD::_TICK              = 0;
@@ -210,7 +210,7 @@ GEOM::GEOM(
 {
    _do_halo = false;
    if (o && o->body()) {
-      _body = (BODY*)o->body()->dup();
+      _body = dynamic_cast<BODY*>(o->body()->dup())->shared_from_this();
       assert(_body != nullptr);
       _body->set_geom(this);
       *_body = *o->body();

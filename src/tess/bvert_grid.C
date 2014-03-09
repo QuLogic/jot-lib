@@ -77,7 +77,7 @@ BvertGrid::build(
    //   bottom row:
    _grid.push_back(bottom);
 
-   BMESH* m = bottom.mesh();    assert(m);
+   BMESHptr m = bottom.mesh();    assert(m);
 
    // Internal rows:
    for (Bvert_list::size_type j=1; j<left.size()-1; j++) {

@@ -34,7 +34,7 @@ static int foobag1 = DECODER_ADD(EdgeStrokePool);
 TAGlist*    EdgeStrokePool::_esp_tags   = nullptr;
 
 // XXX hack for serialization
-BMESH *     EdgeStrokePool::_mesh = nullptr;
+BMESHptr    EdgeStrokePool::_mesh = nullptr;
 int         EdgeStrokePool::foo = 0;
 
 /////////////////////////////////////////////////////////////////

@@ -25,7 +25,7 @@
 #include <vector>
 
 class Bsimplex;
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 class Patch;
 
 #define CDecalVertexData const DecalVertexData
@@ -106,7 +106,7 @@ class DecalLineStroke : public OutlineStroke {
    vector<vert_loc> _vert_locs;
 
    // XXX hack for serialization
-   static BMESH *_mesh;
+   static BMESHptr _mesh;
 
  protected:
 
@@ -151,8 +151,8 @@ class DecalLineStroke : public OutlineStroke {
    virtual DATA_ITEM*  dup() const     { return copy(); }
    virtual CTAGlist&   tags() const;
 
-   static BMESH *mesh()                { return _mesh;}
-   static void   set_mesh(BMESH *mesh) { _mesh = mesh;}
+   static BMESHptr mesh()                  { return _mesh;}
+   static void     set_mesh(BMESHptr mesh) { _mesh = mesh;}
 
    // prevent warnings:
    virtual void interpolate_vert(BaseStrokeVertex *v,

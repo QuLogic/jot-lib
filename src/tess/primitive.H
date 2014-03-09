@@ -91,7 +91,7 @@ class Primitive :  public Bsurface {
       );
 
    static Primitive* init(
-      LMESH*       skel_mesh,
+      LMESHptr     skel_mesh,
       Wpt_list     pts,
       CWvec&       n,
       MULTI_CMDptr cmd
@@ -177,7 +177,7 @@ class Primitive :  public Bsurface {
 
  public:
    //! Creates a blank Primitve for given mesh and skeleton mesh:
-   Primitive(LMESH* mesh, LMESH* skel);
+   Primitive(LMESHptr mesh, LMESHptr skel);
  protected:
 
    //******** BUILDING ********
@@ -219,7 +219,7 @@ class Primitive :  public Bsurface {
    void absorb_skel(Bcurve* c);
    void absorb_skel(Bpoint* p);
 
-   static Primitive* get_primitive(BMESH*);
+   static Primitive* get_primitive(BMESHptr);
 
    //! The following came from splitting up a large function in a big
    //! hurry in order to be able to use parts of it in a new context...

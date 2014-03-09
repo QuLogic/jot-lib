@@ -118,7 +118,7 @@ skip_line(istream& in)
 }
 
 inline void
-read_vert(LMESH* mesh, istream& in)
+read_vert(LMESHptr mesh, istream& in)
 {
    double x, y, z;
    in >> x >> y >> z;
@@ -184,7 +184,7 @@ any_valid_indices(const T& l, int i, int j, int k)
 }
 
 inline void
-add_tri(LMESH* mesh, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v3)
+add_tri(LMESHptr mesh, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v3)
 {
    assert(mesh);
    assert(all_valid_indices(mesh->verts(), v1._v, v2._v, v3._v));
@@ -197,7 +197,7 @@ add_tri(LMESH* mesh, CUVpt_list& uvs, const vtn& v1, const vtn& v2, const vtn& v
 }
 
 inline void
-add_poly(LMESH* mesh, CUVpt_list& uvs, const vector<vtn>& vtns)
+add_poly(LMESHptr mesh, CUVpt_list& uvs, const vector<vtn>& vtns)
 {
    assert(vtns.size() > 2);
 
@@ -213,7 +213,7 @@ add_poly(LMESH* mesh, CUVpt_list& uvs, const vector<vtn>& vtns)
 }
 
 inline void
-read_face(LMESH* mesh, CUVpt_list& uvs, istream& in)
+read_face(LMESHptr mesh, CUVpt_list& uvs, istream& in)
 {
    // The docs say each face has 3 vertices, but out there in the
    // world we're finding some with 4 or more.  So here we read
@@ -250,7 +250,7 @@ read_obj(istream& in)
 {
    UVpt_list    uvs;
 
-   LMESHptr mesh = new LMESH;
+   LMESHptr mesh = make_shared<LMESH>();
 
    string token;
    while (!(in.eof() || in.fail())) {

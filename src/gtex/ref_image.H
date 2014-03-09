@@ -843,13 +843,13 @@ class VisRefImage : public    IDRefImage,
       return ::get_ctrl_patch(get_simplex(cur, screen_rad));
    }
 
-   static BMESH* get_mesh(CNDCpt& cur = get_cursor(),
+   static BMESHptr get_mesh(CNDCpt& cur = get_cursor(),
                           double screen_rad=1) {
       // see mesh/bsimplex.H:
       return ::get_mesh(get_simplex(cur, screen_rad));
    }
 
-   static BMESH* get_ctrl_mesh(CNDCpt& cur = get_cursor(),
+   static BMESHptr get_ctrl_mesh(CNDCpt& cur = get_cursor(),
                                double screen_rad=1) {
       // see mesh/lmesh.H
       return ::get_ctrl_mesh(get_mesh(cur, screen_rad));
@@ -902,8 +902,8 @@ class VisRefImage : public    IDRefImage,
 
    //******** OBSERVER METHODS ********:
    // BMESHobs:
-   virtual void notify_change(BMESH*, BMESH::change_t)  { reset(); }
-   virtual void notify_xform (BMESH*, CWtransf&, CMOD&) { reset(); }
+   virtual void notify_change(BMESHptr, BMESH::change_t)  { reset(); }
+   virtual void notify_xform (BMESHptr, CWtransf&, CMOD&) { reset(); }
 
    // CAMobs:
    virtual void notify(CCAMdataptr&)    { reset(); }

@@ -70,10 +70,10 @@ class SubdivUpdater : public Bnode, public BMESHobs {
    CLMESHptr& mesh() { return _mesh; }
 
    // The control mesh in charge of the subdivision hierarchy::
-   LMESH* ctrl_mesh() const { return _mesh ? _mesh->control_mesh() : nullptr; }
+   LMESHptr ctrl_mesh() const { return _mesh ? _mesh->control_mesh() : nullptr; }
 
    // The currently displayed mesh in the subdivision hierarchy:
-   LMESH* cur_mesh() const { return _mesh ? _mesh->cur_mesh() : nullptr; }
+   LMESHptr cur_mesh() const { return _mesh ? _mesh->cur_mesh() : nullptr; }
 
    // The level of the currently displayed subdivision mesh:
    int cur_level() const { return _mesh ? _mesh->cur_level() : -1; }

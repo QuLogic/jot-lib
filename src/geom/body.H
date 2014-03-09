@@ -39,11 +39,10 @@ class FACElist : public vector<mlib::Point3i> {
       FACElist(int num=16) : vector<mlib::Point3i>() { reserve(num); }
 };
 
-#define CBODYptr const BODYptr
-MAKE_PTR_BASEC(BODY);
-class BODY : public REFcounter,
-             public DATA_ITEM,
-             public RefImageClient {
+MAKE_SHARED_PTR(BODY);
+class BODY : public DATA_ITEM,
+             public RefImageClient,
+             public enable_shared_from_this<BODY> {
    private:
       static mlib::CXYpt_list    _dummy;
    protected:
@@ -71,7 +70,7 @@ class BODY : public REFcounter,
      virtual BODYptr create_trunc_pyr(CMVEC2        &/*taper*/,
                                       CMVEC2        &/*shear*/)
         {return nullptr;}
-     static  BODY   *_factory;
+     static  BODYptr _factory;
      static  string  _base_name;
      static  TAGlist _body_tags;
    public:
@@ -99,11 +98,12 @@ class BODY : public REFcounter,
       mlib::Wtransf xf;
       return intersect(r, xf);
    }
+
      // transform body by xform
      virtual void     transform(mlib::CWtransf &xform, CMOD&) = 0;
-     virtual BODY    *subtract (BODYptr &subtractor) = 0;   // CSG subtract
-     virtual BODY    *intersect(BODYptr &intersector)= 0;  // CSG intersect
-     virtual BODY    *combine  (BODYptr &unionor    )= 0;  // CSG union
+     virtual BODYptr  subtract (BODYptr &subtractor) = 0;   // CSG subtract
+     virtual BODYptr  intersect(BODYptr &intersector)= 0;  // CSG intersect
+     virtual BODYptr  combine  (BODYptr &unionor    )= 0;  // CSG union
 
    virtual mlib::CEDGElist     &body_edges() = 0;
      // Not necessarily the vertices of the triangulation of the BODY
@@ -145,7 +145,7 @@ class BODY : public REFcounter,
      static BODYptr trunc_pyr (CMVEC2        &taper,    CMVEC2  &shear)
             {return _factory->create_trunc_pyr(taper, shear);}
      virtual BODYptr body_copy(int y = 1) {return copy(y);}
-     static int set_factory(BODY *b) {_factory = b; return _factory != nullptr;}
+     static int set_factory(BODYptr b) {_factory = b; return _factory != nullptr;}
 
      virtual CBBOX &get_bb() = 0;
      bool bb_valid() const { return _bb.valid();}

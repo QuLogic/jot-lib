@@ -759,9 +759,9 @@ class OBJReaderImpl {
       
    bool read(istream &in);
       
-   BMESH *get_mesh() const;
+   BMESHptr get_mesh() const;
       
-   void get_mesh(BMESH *mesh) const;
+   void get_mesh(BMESHptr mesh) const;
       
    friend class OBJReader;
       
@@ -807,18 +807,18 @@ class OBJReaderImpl {
    //! \name Mesh Building Functions
    //@{
       
-   void add_vertices(BMESH *mesh) const;
+   void add_vertices(BMESHptr mesh) const;
       
-   void add_patches(BMESH *mesh) const;
+   void add_patches(BMESHptr mesh) const;
 
-   void set_vert_normals(BMESH *mesh) const;
+   void set_vert_normals(BMESHptr mesh) const;
       
-   void add_face(BMESH *mesh, Patch *patch, unsigned long index) const;
+   void add_face(BMESHptr mesh, Patch *patch, unsigned long index) const;
       
-   void add_tri(BMESH *mesh, Patch *patch, const OBJFace &face,
+   void add_tri(BMESHptr mesh, Patch *patch, const OBJFace &face,
                 unsigned long idx0, unsigned long idx1, unsigned long idx2) const;
       
-   void add_creases(BMESH *mesh) const;
+   void add_creases(BMESHptr mesh) const;
       
    //@}
       
@@ -880,13 +880,13 @@ OBJReaderImpl::read(istream &in)
    
 }
       
-BMESH*
+BMESHptr
 OBJReaderImpl::get_mesh() const
 {
    
    if(!read_succeeded) return nullptr;
    
-   BMESH *mesh = new BMESH;
+   BMESHptr mesh = make_shared<BMESH>();
    
    get_mesh(mesh);
    
@@ -895,7 +895,7 @@ OBJReaderImpl::get_mesh() const
 }
 
 void
-OBJReaderImpl::get_mesh(BMESH *mesh) const
+OBJReaderImpl::get_mesh(BMESHptr mesh) const
 {
    
    // Do nothing if the read didn't succeed:
@@ -1135,7 +1135,7 @@ OBJReaderImpl::read_usemtl(istream &in, OBJReaderImpl *self)
 }
 
 void
-OBJReaderImpl::add_vertices(BMESH *mesh) const
+OBJReaderImpl::add_vertices(BMESHptr mesh) const
 {
    
    for (auto & vert : vertices) {
@@ -1145,7 +1145,7 @@ OBJReaderImpl::add_vertices(BMESH *mesh) const
 }
       
 void
-OBJReaderImpl::add_patches(BMESH *mesh) const
+OBJReaderImpl::add_patches(BMESHptr mesh) const
 {
    err_adv(debug, "OBJReaderImpl::add_patches: %d materials", int(materials.size()));
 
@@ -1193,7 +1193,7 @@ OBJReaderImpl::add_patches(BMESH *mesh) const
 }
 
 void
-OBJReaderImpl::set_vert_normals(BMESH *mesh) const
+OBJReaderImpl::set_vert_normals(BMESHptr mesh) const
 {
    assert(mesh);
    if (vertices.empty() || vertices.size() != normals.size()) {
@@ -1208,7 +1208,7 @@ OBJReaderImpl::set_vert_normals(BMESH *mesh) const
 }
 
 void
-OBJReaderImpl::add_face(BMESH *mesh, Patch *patch, unsigned long index) const
+OBJReaderImpl::add_face(BMESHptr mesh, Patch *patch, unsigned long index) const
 {
    
    assert(faces[index].good());
@@ -1239,7 +1239,7 @@ OBJReaderImpl::add_face(BMESH *mesh, Patch *patch, unsigned long index) const
  *
  */
 void
-OBJReaderImpl::add_tri(BMESH *mesh, Patch *patch, const OBJFace &face,
+OBJReaderImpl::add_tri(BMESHptr mesh, Patch *patch, const OBJFace &face,
                        unsigned long idx0, unsigned long idx1, unsigned long idx2) const
 {
    
@@ -1291,7 +1291,7 @@ OBJReaderImpl::add_tri(BMESH *mesh, Patch *patch, const OBJFace &face,
 }
 
 void
-OBJReaderImpl::add_creases(BMESH *mesh) const
+OBJReaderImpl::add_creases(BMESHptr mesh) const
 {
    
    for(int ei = 0; ei < mesh->nedges(); ++ei){
@@ -1388,7 +1388,7 @@ OBJReader::read(istream &in)
    
 }
 
-BMESH*
+BMESHptr
 OBJReader::get_mesh() const
 {
    
@@ -1397,7 +1397,7 @@ OBJReader::get_mesh() const
 }
 
 void
-OBJReader::get_mesh(BMESH *mesh) const
+OBJReader::get_mesh(BMESHptr mesh) const
 {
    
    impl->get_mesh(mesh);

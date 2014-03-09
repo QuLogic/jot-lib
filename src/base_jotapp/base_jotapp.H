@@ -34,7 +34,7 @@ class MoveMenu;
 class Cam_int;
 class Cam_int_fp;
 class Cam_int_edit;
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 class GEOM;
 
 /**********************************************************************
@@ -227,13 +227,13 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
  protected:
 
    // Default method for creating a new BMESH or derived type:
-   virtual BMESH* new_mesh() const;
+   virtual BMESHptr new_mesh() const;
 
    // Default method for creating GEOM or derived type to hold a mesh:
-   virtual GEOM* new_geom(BMESH* mesh, const string& name) const;
+   virtual GEOM* new_geom(BMESHptr mesh, const string& name) const;
 
    // Put the mesh in GEOM and add it to the scene:
-   bool create_mesh(BMESH* mesh, const string &file) const;
+   bool create_mesh(BMESHptr mesh, const string &file) const;
 
    // Add Interaction stuff
    virtual void init_win_cb(WINDOW &win);

@@ -34,7 +34,7 @@
 using namespace mlib;
 
 class Bvert;
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 
 /*!
  *  \brief Computes curvature data for a BMESH object.
@@ -48,7 +48,7 @@ class BMESHcurvature_data {
       //@{
    
       //! \brief Computes all curvature data for the given BMESH.
-      BMESHcurvature_data(const BMESH *mesh_in);
+      BMESHcurvature_data(const BMESHptr mesh_in);
       
       //@}
    
@@ -202,7 +202,7 @@ class BMESHcurvature_data {
    
    private:
    
-      const BMESH *mesh;
+      const BMESHptr mesh;
       
       std::vector<corner_areas_t> corner_areas;   //!< "Voronoi" corner areas for all faces.
       std::vector<double> vertex_areas;           //!< "Voronoi" areas for all vertices.

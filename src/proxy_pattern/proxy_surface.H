@@ -73,7 +73,7 @@ class ProxySurface {
    void create_proxy_surface();
    void apply_xform    ();
 
-   void grow_quad_from_edge(BMESH* m, EdgeStrip* boundery, int i);
+   void grow_quad_from_edge(BMESHptr m, EdgeStrip* boundery, int i);
    int  grow_proxy_surface();
    void trim_proxy_surface();
    void lod_update();

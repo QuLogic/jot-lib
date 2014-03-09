@@ -457,7 +457,7 @@ class PanelAction : public Action {
       CWplane&     P,      // plane
       CWpt&        c,      // center
       double       r,      // radius
-      LMESH*       mesh,   // mesh to use
+      LMESHptr     mesh,   // mesh to use
       int          samples,// number of control verticies
       MULTI_CMDptr cmd     // undoable command that this action is part of
       );

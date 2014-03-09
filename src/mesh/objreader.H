@@ -29,7 +29,7 @@
 
 #include <iostream>
 
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 
 class OBJReaderImpl;
 
@@ -51,11 +51,11 @@ class OBJReader {
       
    //! \brief Create a new BMESH object containing the data read in with the
    //! read function.
-   BMESH *get_mesh() const;
+   BMESHptr get_mesh() const;
       
    //! \brief Clear the given mesh object and fill it with the data read in
    //! with the read function.
-   void get_mesh(BMESH *mesh) const;
+   void get_mesh(BMESHptr mesh) const;
       
    unsigned long get_num_vertices() const;
    unsigned long get_num_texcoords() const;

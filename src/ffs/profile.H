@@ -65,7 +65,7 @@ class PROFILE : public DrawWidget {
    //******** DrawWidget METHODS ********
 
    virtual BMESHptr bmesh() const { return _mesh; }
-   virtual LMESH*   lmesh() const { return _mesh; }
+   virtual LMESHptr lmesh() const { return _mesh; }
 
    //******** GEL METHODS ******** 
 

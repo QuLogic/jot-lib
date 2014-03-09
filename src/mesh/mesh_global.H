@@ -63,15 +63,15 @@ class MeshGlobal {
    static CBface_list&      selected_faces() { return _selected_faces; }
 
    // returns a list of all currently selected faces from the given mesh
-   static Bface_list        selected_faces(BMESH* mesh);
+   static Bface_list        selected_faces(BMESHptr mesh);
 
    // returns a list of all currently selected faces from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // faces from any other meshes in its subdivision hierarchy
-   static Bface_list        selected_faces_all_levels(BMESH* mesh);
+   static Bface_list        selected_faces_all_levels(BMESHptr mesh);
 
    // deselect all selected elements of the given mesh (at all levels):
-   static void deselect_all(BMESH* mesh) {
+   static void deselect_all(BMESHptr mesh) {
       deselect(selected_faces_all_levels(mesh));
       deselect(selected_edges_all_levels(mesh));
       deselect(selected_verts_all_levels(mesh));
@@ -110,12 +110,12 @@ class MeshGlobal {
    static CBedge_list&      selected_edges() { return _selected_edges; }
 
    // returns a list of all currently selected edges from the given mesh
-   static Bedge_list        selected_edges(BMESH* mesh);
+   static Bedge_list        selected_edges(BMESHptr mesh);
   
    // returns a list of all currently selected edges from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // edges from any other meshes in the subdivision hierarchy
-   static Bedge_list        selected_edges_all_levels(BMESH* mesh);
+   static Bedge_list        selected_edges_all_levels(BMESHptr mesh);
 
    //************ VERT SELECTION *******
 
@@ -145,19 +145,19 @@ class MeshGlobal {
    static CBvert_list&      selected_verts() { return _selected_verts; }
 
    // returns a list of all currently selected verts from the given mesh
-   static Bvert_list        selected_verts(BMESH* mesh);
+   static Bvert_list        selected_verts(BMESHptr mesh);
   
    // returns a list of all currently selected verts from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // verts from any other meshes in the subdivision hierarchy
-   static Bvert_list        selected_verts_all_levels(BMESH* mesh);
+   static Bvert_list        selected_verts_all_levels(BMESHptr mesh);
 
    //************ SELECTION UPDATE *******
 
    // updates the list of currently selected components of the given
    // mesh to reflect a change in edit level. 'from' is the former
    // edit level, 'to' is the current edit level.
-   static void              edit_level_changed(BMESH* mesh, int from, int to);
+   static void              edit_level_changed(BMESHptr mesh, int from, int to);
 
    //******** DESELECT ALL ********
    static void deselect_all() {

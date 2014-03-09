@@ -102,7 +102,7 @@ class FeatureStrokeTexture : public OGLTexture,
    }
 
    // BMESHobs:
-   virtual void notify_xform(BMESH*, mlib::CWtransf&, CMOD&);
+   virtual void notify_xform(BMESHptr, mlib::CWtransf&, CMOD&);
 
    /******** DATA_ITEM METHODS ********/
    DEFINE_RTTI_METHODS2("FeatureStrokeTexture", OGLTexture, CDATA_ITEM *);

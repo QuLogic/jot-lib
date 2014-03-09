@@ -448,7 +448,7 @@ SilUI::SilUI(VIEWptr v) :
    _weight_heal    = min(max(Config::get_var_dbl("WEIGHT_HEAL",1.0,true),0.0),100.0);
 
 
-   BMESHptr b = new BMESH();
+   BMESHptr b = make_shared<BMESH>();
    b->Icosahedron();
    assert(b->patches().num() == 1);
    b->patch(0)->get_tex(NPRTexture::static_name());

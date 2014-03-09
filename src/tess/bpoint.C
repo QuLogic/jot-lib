@@ -189,7 +189,7 @@ Bpoint::Bpoint(Lvert* vert, CUVpt& uv, Map2D3D* map, int res_lev) :
    _map(nullptr)
 {
    assert(vert);
-   LMESH* m = vert->lmesh();
+   LMESHptr m = vert->lmesh();
    assert(m);
    set_mesh(m);
 
@@ -219,7 +219,7 @@ Bpoint::Bpoint(Lvert* vert, double& t, Map1D3D* map, int res_lev) :
    _map(nullptr)
 {
    assert(vert);
-   LMESH* m = vert->lmesh();
+   LMESHptr m = vert->lmesh();
    assert(m);
    set_mesh(m);
 
@@ -247,7 +247,7 @@ Bpoint::Bpoint(Lvert* vert, double& t, Map1D3D* map, int res_lev) :
 Bpoint::Bpoint(Lvert* vert, int res_lev)
 {
    assert(vert);
-   LMESH* m = vert->lmesh();
+   LMESHptr m = vert->lmesh();
    assert(m);
    set_mesh(m);
 
@@ -725,7 +725,7 @@ Bpoint::notify_vert_xformed(CWtransf& /* xf */)
 }
 
 void 
-Bpoint::notify_xform(BMESH*, CWtransf& xf, CMOD& mod)
+Bpoint::notify_xform(BMESHptr, CWtransf& xf, CMOD& mod)
 {
    bool debug = Config::get_var_bool("DEBUG_BNODE_XFORM");
    if (is_control() && _map) {

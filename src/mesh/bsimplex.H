@@ -35,7 +35,7 @@ typedef const Bvert CBvert;
 typedef const Bedge CBedge;
 typedef const Bface CBface;
 
-class BMESH;
+MAKE_SHARED_PTR(BMESH);
 class Bsimplex_list;
 /*****************************************************************
  * SimplexFilter:
@@ -83,8 +83,8 @@ class Bsimplex {
 
    //******** ACCESSORS ********
 
-   void   set_mesh(BMESH* mesh)         { _mesh = mesh; }
-   BMESH* mesh()                const   { return _mesh; }
+   void     set_mesh(BMESHptr mesh)       { _mesh = mesh; }
+   BMESHptr mesh()                const   { return _mesh; }
 
    //******** KEY/LOOKUP ********
 
@@ -266,7 +266,7 @@ class Bsimplex {
  protected:
    uintptr_t         _key;       // unique id for looking up this simplex
    uint              _flag;      // for graph searching and boolean states
-   BMESH*            _mesh;      // mesh containing this simplex
+   BMESHptr          _mesh;      // mesh containing this simplex
    SimplexDataList*  _data_list; // optional simplex data list
 
    //******** INTERNAL METHODS ********
@@ -308,7 +308,7 @@ is_face(CBsimplex* s)
    return (s && (s->dim() == 2));
 }
 
-inline BMESH*
+inline BMESHptr
 get_mesh(CBsimplex* s) 
 {
    return s ? s->mesh() : nullptr;

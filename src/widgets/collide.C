@@ -111,15 +111,16 @@ Collide::_update_scene()
    }
    //create a octree from the "land" model of the scene
    vector<OctreeNode*> nodes;
-   if (_land && BMESH::isa(_land->body())) {
-      Bvert_list list;
-      Bface_list fs;
-      vector<Wvec> bcs;
-      double spacing=0;
-      nodes.push_back(sps(BMESH::upcast(_land->body()),
-                   _height, _regularity, _min_dist, fs, bcs, spacing));
-      _RootNode = nodes[0];
-      _objs += 1;
+   if (_land) {
+      BMESHptr bm = dynamic_pointer_cast<BMESH>(_land->body());
+      if (bm) {
+         Bface_list fs;
+         vector<Wvec> bcs;
+         double spacing=0;
+         nodes.push_back(sps(bm, _height, _regularity, _min_dist, fs, bcs, spacing));
+         _RootNode = nodes[0];
+         _objs += 1;
+      }
    }
 
    //_spsTree = &_RootNodes;
@@ -203,12 +204,12 @@ Collide::getNearPoints(OctreeNode* node)
   {
   _size = s;
 
-  _BSphere = new BMESH;
+  _BSphere = make_shared<BMESH>();
   _BSphere->Sphere(_BSphere->new_patch());
   _BSphere->transform(Wtransf::scaling(_size,_size,_size));
 
 
-  _DestSphere = new BMESH;
+  _DestSphere = make_shared<BMESH>();
   _DestSphere->Sphere(_DestSphere->new_patch());
   _DestSphere->transform(Wtransf::scaling(_size,_size,_size));
   }

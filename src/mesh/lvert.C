@@ -164,7 +164,7 @@ Lvert::allocate_subdiv_vert()
 
    assert(!_subdiv_vertex);
 
-   LMESH* submesh = lmesh()->subdiv_mesh();
+   LMESHptr submesh = lmesh()->subdiv_mesh();
    assert(submesh);
    _subdiv_vertex = (Lvert*)submesh->add_vertex(_loc);   assert(_subdiv_vertex);
 

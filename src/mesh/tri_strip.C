@@ -203,7 +203,7 @@ TriStrip::get_strips(
    stack.clear();
    stack.push_back(start);
 
-   BMESH* mesh = start->mesh();
+   BMESHptr mesh = start->mesh();
 
    while (!stack.empty()) {
       start = stack.back();

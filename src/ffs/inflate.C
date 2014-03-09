@@ -270,12 +270,12 @@ INFLATE::setup(CBface_list& faces, double dist, double dur)
 {
    reset();
 
-   BMESH* m = faces.mesh();
+   BMESHptr m = faces.mesh();
    if (!m) {
       err_adv(debug, "INFLATE::setup: Error: null mesh");
       return 0;
    }
-   if (!LMESH::isa(m)) {
+   if (!dynamic_pointer_cast<LMESH>(m)) {
       err_adv(debug, "INFLATE::setup: Error: non-LMESH");
       return 0;
    }
@@ -301,7 +301,7 @@ INFLATE::setup(CBface_list& faces, double dist, double dur)
    _faces = faces;
    _mode = true;
    _d     = _boundary.cur_edges().avg_len();
-   _mesh  = (LMESH*)m;
+   _mesh  = dynamic_pointer_cast<LMESH>(m);
    _orig_face = faces[0];
    _preview_dist = dist;
 
@@ -328,7 +328,7 @@ INFLATE::setup(Bface *bf, double dist, double dur)
    // from f by h, relative to the local edge length.
 
    // reject garbage
-   if (!(bf && LMESH::isa(bf->mesh()))) {
+   if (!(bf && dynamic_pointer_cast<LMESH>(bf->mesh()))) {
       err_adv(debug, "INFLATE::setup: error: bad face");
       return 0;
    }
@@ -359,16 +359,16 @@ INFLATE::setup(Bface *bf, double dist, double dur)
    }
 
    Bface_list p = set;//get_top_level(set);
-   assert(LMESH::isa(p.mesh()));
+   assert(dynamic_pointer_cast<LMESH>(p.mesh()));
    err_adv(debug, "top level: %d faces (out of %d)",
            p.size(), p.mesh()->nfaces());
 
-   BMESH* m = p.mesh();
+   BMESHptr m = p.mesh();
    if (!m) {
       err_adv(debug, "INFLATE::setup: Error: null mesh");
       return 0;
    }
-   if (!LMESH::isa(m)) {
+   if (!dynamic_pointer_cast<LMESH>(m)) {
       err_adv(debug, "INFLATE::setup: Error: non-LMESH");
       return 0;
    }
@@ -394,7 +394,7 @@ INFLATE::setup(Bface *bf, double dist, double dur)
    _faces = p;
    _mode = false;
    _d     = _boundary.cur_edges().avg_len();
-   _mesh  = (LMESH*)m;
+   _mesh  = dynamic_pointer_cast<LMESH>(m);
    _orig_face = bf;
    _preview_dist = dist;
 

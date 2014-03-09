@@ -425,7 +425,7 @@ SWEEP_DISK::setup(Panel* p, Bpoint_list points, Bcurve_list curves, Bsurface_lis
    Wpt b = o + n.normalized()*len;
 
    // try basic setup
-   if (!SWEEP_BASE::setup(dynamic_cast<LMESH*>(faces.mesh()), o, b, default_timeout()))
+   if (!SWEEP_BASE::setup(dynamic_pointer_cast<LMESH>(faces.mesh()), o, b, default_timeout()))
       return false;
 
    // ******** From here on we accept it ********
@@ -491,7 +491,7 @@ SWEEP_DISK::setup(CGESTUREptr& gest, double dur)
    Wpt b = o + n.normalized()*len;
 
    // try basic setup
-   if (!SWEEP_BASE::setup(dynamic_cast<LMESH*>(faces.mesh()), o, b, dur))
+   if (!SWEEP_BASE::setup(dynamic_pointer_cast<LMESH>(faces.mesh()), o, b, dur))
       return false;
 
    // ******** From here on we accept it ********

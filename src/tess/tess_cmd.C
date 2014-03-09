@@ -349,7 +349,7 @@ gen_interp_row(CBvert_list& r, CBvert_list& s, double v)
    assert(r.size() == s.size());
    if (r.empty())
       return ret;
-   BMESH* mesh = r.mesh();
+   BMESHptr mesh = r.mesh();
    assert(mesh != nullptr && s.mesh() == mesh);
    assert(v > 0 && v < 1);
 
@@ -394,7 +394,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    assert(a.forms_chain() && b.forms_chain());
    assert(a.size() > 1 && a.size() == b.size());
 
-   BMESH* mesh = a.mesh();
+   BMESHptr mesh = a.mesh();
    assert(mesh != nullptr && b.mesh() == mesh && p != nullptr && p->mesh() == mesh);
    
    // Average vertical separation (WRT diagram above):
@@ -414,7 +414,7 @@ CREATE_RIBBONS_CMD::gen_ribbon(CBvert_list& a, CBvert_list& b, Patch* p)
    UVpt_list  prev_uvs = make_uvpt_list(uvals, 0);
    Bvert_list prev_row = b;
 
-   Bsurface* surf = new Bsurface((LMESH*)a.mesh());
+   Bsurface* surf = new Bsurface(static_pointer_cast<LMESH>(a.mesh()));
 
    for (int k=1; k<=n; k++) {
       // Work row by row to generate internal vertices, except on
@@ -451,7 +451,7 @@ CREATE_RIBBONS_CMD::gen_ribbons(CEdgeStrip& a, CEdgeStrip& b, Patch* p)
    // Process each separate connected component of the boundaries
    // independently.
 
-   BMESH* mesh = a.mesh();
+   BMESHptr mesh = a.mesh();
    assert(mesh != nullptr && b.mesh() == mesh && p != nullptr && p->mesh() == mesh);
    assert(_ribbon.empty());
 
@@ -484,7 +484,7 @@ CREATE_RIBBONS_CMD::is_ready() const
    assert(is_clear());
 
    // Both edge chains must belong to the same LMESH:
-   if (!dynamic_cast<LMESH*>(_a.mesh()) || _a.mesh() != _b.mesh()) {
+   if (!dynamic_pointer_cast<LMESH>(_a.mesh()) || _a.mesh() != _b.mesh()) {
       err_adv(_debug, "CREATE_RIBBONS_CMD::is_ready: invalid mesh");
       return false;
    }
@@ -549,7 +549,7 @@ CREATE_RIBBONS_CMD::doit()
    // If no patch was provided, create one and ensure that it gets
    // drawn by putting in in the drawables list of the control mesh
    if (!_patch) {
-      LMESHptr mesh = dynamic_cast<LMESH*>(_a.mesh());
+      LMESHptr mesh = dynamic_pointer_cast<LMESH>(_a.mesh());
       assert(mesh != nullptr);
       _patch = mesh->new_patch();
       assert(_patch && _patch->mesh() == mesh);

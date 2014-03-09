@@ -28,7 +28,7 @@ using namespace mlib;
 static int es = DECODER_ADD(EdgeStroke);
 
 // XXX hack for serialization
-BMESH *EdgeStroke::_mesh = nullptr;
+BMESHptr EdgeStroke::_mesh = nullptr;
 
 EdgeStroke::EdgeStroke() : 
    _strip(nullptr),

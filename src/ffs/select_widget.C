@@ -190,7 +190,7 @@ vert_min_subdiv_dist(Bface* f, CPIXEL& p)
 
    if (!f) return nullptr;
 
-   if (!LMESH::isa(f->mesh()))
+   if (!dynamic_pointer_cast<LMESH>(f->mesh()))
       return closest_vert(f, p);
 
    Lvert* v1 = ((Lvert*)f->v1())->cur_subdiv_vert();
@@ -223,7 +223,7 @@ get_cur_level_verts(Bvert* v, Bedge* e)
 
    Bvert_list ret;
 
-   LMESH* mesh = dynamic_cast<LMESH*>(e->mesh());
+   LMESHptr mesh = dynamic_pointer_cast<LMESH>(e->mesh());
    if (mesh) {
       ((Ledge*)e)->get_subdiv_verts(mesh->rel_cur_level(), ret);
    } else {

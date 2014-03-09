@@ -68,14 +68,14 @@ typedef const BitClearSimplexFilter CBitClearSimplexFilter;
  *****************************************************************/
 class MeshSimplexFilter : public SimplexFilter {
  public:
-   MeshSimplexFilter(BMESH* m) : _mesh(m) {}
+   MeshSimplexFilter(BMESHptr m) : _mesh(m) {}
 
    virtual bool accept(CBsimplex* s) const {
      return (s && s->mesh()==_mesh);
    }
 
  protected:
-   BMESH* _mesh;
+   BMESHptr _mesh;
 };
 typedef const MeshSimplexFilter CMeshSimplexFilter;
 

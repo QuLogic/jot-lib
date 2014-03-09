@@ -70,7 +70,7 @@ main(int argc, char *argv[])
    mesh->remove_duplicate_vertices(false); // don't keep the bastards
 
    // Split it:
-   vector<BMESH*> meshes = mesh->split_components();
+   vector<BMESHptr> meshes = mesh->split_components();
 
    err_msg("got %d meshes", meshes.size());
 
@@ -80,7 +80,7 @@ main(int argc, char *argv[])
       mesh->recenter();
    mesh->write_file(out_mesh.c_str());
 
-   for (vector<BMESH*>::size_type i=0; i<meshes.size(); i++) {
+   for (vector<BMESHptr>::size_type i=0; i<meshes.size(); i++) {
       char tmp[32];
       sprintf(tmp, "%d", (int)(i + 1));
       out_mesh = mesh_path + tmp + string(".sm");

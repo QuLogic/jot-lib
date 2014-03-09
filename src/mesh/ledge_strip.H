@@ -60,7 +60,7 @@ class LedgeStrip : public EdgeStrip {
 
    //******** ACCESSORS ********
 
-   LMESH* lmesh()               const   { return (LMESH*)mesh(); }
+   LMESHptr lmesh()             const   { return static_pointer_cast<LMESH>(mesh()); }
 
    int    cur_level()           const;  // level of "current" mesh in hierarchy
    int    rel_cur_level()       const;  // cur level relative to this mesh

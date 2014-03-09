@@ -76,7 +76,7 @@ Lpatch::get_child()
          return nullptr;
       }
 
-      LMESH* child_mesh = lmesh()->subdiv_mesh();
+      LMESHptr child_mesh = lmesh()->subdiv_mesh();
       if (!child_mesh) {
          err_msg("Lpatch::get_child: error: child mesh is NULL");
          return nullptr;

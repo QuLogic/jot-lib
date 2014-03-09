@@ -24,14 +24,14 @@
 int
 LedgeStrip::cur_level() const
 {
-   LMESH* m = lmesh();
+   LMESHptr m = lmesh();
    return m ? m->cur_level() : 0;
 }
 
 int
 LedgeStrip::rel_cur_level() const
 {
-   LMESH* m = lmesh();
+   LMESHptr m = lmesh();
    return m ? m->rel_cur_level() : 0;
 }
 

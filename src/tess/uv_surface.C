@@ -1257,7 +1257,7 @@ UVsurface::inset_quad(
 }
 
 void 
-UVsurface::notify_xform(BMESH*, CWtransf& xf, CMOD& mod)
+UVsurface::notify_xform(BMESHptr, CWtransf& xf, CMOD& mod)
 {
    bool debug = Config::get_var_bool("DEBUG_BNODE_XFORM");
    if (is_control() && _map) {

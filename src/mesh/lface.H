@@ -19,7 +19,7 @@
 #define LFACE_H_HAS_BEEN_INCLUDED
 
 #include "lvert.H"
-class LMESH;
+
 /**********************************************************************
  * Lface:
  *    A face for LMESH, a subdivision mesh
@@ -40,9 +40,9 @@ class Lface : public Bface {
    virtual ~Lface() { delete_subdiv_elements(); }
 
    //******** ACCESSORS ********
-   LMESH* lmesh()       const   { return (LMESH*)mesh(); }
-   Lvert* lv(int k)     const   { return (Lvert*) v(k); }
-   Ledge* le(int k)     const   { return (Ledge*) e(k); }
+   LMESHptr lmesh()       const   { return dynamic_pointer_cast<LMESH>(mesh()); }
+   Lvert*   lv(int k)     const   { return (Lvert*) v(k); }
+   Ledge*   le(int k)     const   { return (Ledge*) e(k); }
    
 
    //******** CONTROL ELEMENTS ********
@@ -171,7 +171,7 @@ class Lface : public Bface {
    // Creat a child face and copy selected attributes from the
    // parent to the child.
    Lface* gen_child_face(Bvert* v1, Bvert* v2, Bvert* v3,
-                         Patch* p, LMESH* m, bool center_face=false);
+                         Patch* p, LMESHptr m, bool center_face=false);
 };
 
 /*****************************************************************

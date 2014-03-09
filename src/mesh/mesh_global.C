@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "lmesh.H"
-#include "patch.H"
-#include "mesh_global.H"
 #include "std/config.H"
+#include "lmesh.H"
+#include "mesh_global.H"
+#include "patch.H"
 
 // static data
 Bface_list MeshGlobal::_selected_faces;
@@ -109,7 +109,7 @@ MeshGlobal::deselect_all_faces()
 }
 
 Bface_list 
-MeshGlobal::selected_faces(BMESH* mesh) 
+MeshGlobal::selected_faces(BMESHptr mesh)
 { 
    // returns a list of all currently selected faces from the given
    // mesh
@@ -118,10 +118,10 @@ MeshGlobal::selected_faces(BMESH* mesh)
 }
 
 Bface_list
-MeshGlobal::selected_faces_all_levels(BMESH* m)
+MeshGlobal::selected_faces_all_levels(BMESHptr m)
 {
    // returns a list of all currently selected faces from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // faces from any other meshes in its subdivision hierarchy
 
    Bface_list ret; 
@@ -131,14 +131,14 @@ MeshGlobal::selected_faces_all_levels(BMESH* m)
 
   // get the control mesh (this will just be m if
   // m in not an LMESH)
-   BMESH* cm = get_ctrl_mesh(m);
+   BMESHptr cm = get_ctrl_mesh(m);
 
    // return the faces selected from this mesh
    ret = ret + selected_faces(cm);
 
    // If this is an lmesh, also find the selected
    // faces for any sub mesh in the hierarchy
-   for (LMESH* lm = dynamic_cast<LMESH*>(cm); lm != nullptr; lm = lm->subdiv_mesh()) {
+   for (LMESHptr lm = dynamic_pointer_cast<LMESH>(cm); lm != nullptr; lm = lm->subdiv_mesh()) {
       ret = ret + selected_faces(lm);
    }
 
@@ -224,7 +224,7 @@ MeshGlobal::deselect(CBedge_list& edges)
 }
 
 Bedge_list 
-MeshGlobal::selected_edges(BMESH* mesh) 
+MeshGlobal::selected_edges(BMESHptr mesh)
 { 
    // returns a list of all currently selected edges from the given
    // mesh
@@ -233,10 +233,10 @@ MeshGlobal::selected_edges(BMESH* mesh)
 }
 
 Bedge_list
-MeshGlobal::selected_edges_all_levels(BMESH* m)
+MeshGlobal::selected_edges_all_levels(BMESHptr m)
 {
    // returns a list of all currently selected edges from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // edges from any other meshes in the subdivision hierarchy
 
    Bedge_list ret; 
@@ -246,7 +246,7 @@ MeshGlobal::selected_edges_all_levels(BMESH* m)
 
    // get the control mesh (this will just be m if
    // m in not an LMESH)
-   BMESH* cm = get_ctrl_mesh(m);
+   BMESHptr cm = get_ctrl_mesh(m);
 
    // return the edges selected from this mesh
    ret = ret + selected_edges(cm);
@@ -254,8 +254,8 @@ MeshGlobal::selected_edges_all_levels(BMESH* m)
    // if this is an lmesh, also find the selected
    // edges for any sub mesh in the hierarchy
 
-   if (LMESH::isa(cm)) {
-      LMESH* lm = (LMESH*)cm;
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(cm);
+   if (lm) {
       while(lm->subdiv_mesh()) {
          lm = lm->subdiv_mesh();
          ret = ret + selected_edges(lm);
@@ -344,7 +344,7 @@ MeshGlobal::deselect(CBvert_list& verts)
 }
 
 Bvert_list 
-MeshGlobal::selected_verts(BMESH* mesh) 
+MeshGlobal::selected_verts(BMESHptr mesh)
 { 
    // returns a list of all currently selected verts from the given
    // mesh
@@ -353,10 +353,10 @@ MeshGlobal::selected_verts(BMESH* mesh)
 }
 
 Bvert_list
-MeshGlobal::selected_verts_all_levels(BMESH* m)
+MeshGlobal::selected_verts_all_levels(BMESHptr m)
 {
    // returns a list of all currently selected verts from the given
-   // mesh. if the given mesh is an LMESH*, also returns selected
+   // mesh. if the given mesh is an LMESHptr, also returns selected
    // verts from any other meshes in the subdivision hierarchy
 
    Bvert_list ret; 
@@ -366,7 +366,7 @@ MeshGlobal::selected_verts_all_levels(BMESH* m)
 
    // get the control mesh (this will just be m if
    // m in not an LMESH)
-   BMESH* cm = get_ctrl_mesh(m);
+   BMESHptr cm = get_ctrl_mesh(m);
 
    // return the verts selected from this mesh
    ret = ret + selected_verts(cm);
@@ -374,8 +374,8 @@ MeshGlobal::selected_verts_all_levels(BMESH* m)
    // if this is an lmesh, also find the selected
    // verts for any sub mesh in the hierarchy
 
-   if (LMESH::isa(cm)) {
-      LMESH* lm = (LMESH*)cm;
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(cm);
+   if (lm) {
       while(lm->subdiv_mesh()) {
          lm = lm->subdiv_mesh();
          ret = ret + selected_verts(lm);
@@ -400,10 +400,10 @@ bool all_selected(CBedge_list& edges)
 }
 
 void
-debug_sel_faces_per_level(LMESH* m)
+debug_sel_faces_per_level(LMESHptr m)
 {
    cerr << "sel faces per level" << endl;
-   m = (LMESH*)get_ctrl_mesh(m);
+   m = dynamic_pointer_cast<LMESH>(get_ctrl_mesh(m));
 
    while(m) {
       cerr << "num sel faces level: " << m->subdiv_level() << ": "
@@ -414,7 +414,7 @@ debug_sel_faces_per_level(LMESH* m)
 }
 
 void              
-MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
+MeshGlobal::edit_level_changed(BMESHptr mesh, int from, int to)
 {
    // updates the list of selected components of the given
    // mesh to reflect a change in edit level. 'from' is the old
@@ -435,7 +435,7 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
    err_adv(debug, "from: %d", from);
    err_adv(debug, "to: %d", to);
 
-   if (!LMESH::isa(mesh)) {
+   if (!dynamic_pointer_cast<LMESH>(mesh)) {
       err_adv(debug, "no valid lmesh");
       // don't have an lmesh, so do nothing
       return;
@@ -448,7 +448,7 @@ MeshGlobal::edit_level_changed(BMESH* mesh, int from, int to)
    }
 
    // get the subdiv mesh corresponding to old edit level
-   LMESH* old_edit_mesh = get_subdiv_mesh(get_ctrl_mesh(mesh), from);
+   LMESHptr old_edit_mesh = get_subdiv_mesh(get_ctrl_mesh(mesh), from);
 
    if (old_edit_mesh == nullptr) {
       err_adv(debug, "null mesh for old level");

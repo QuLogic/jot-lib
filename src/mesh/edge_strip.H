@@ -103,7 +103,7 @@ class EdgeStrip {
 
    // Patch and mesh that own the strip:
    Patch* patch()          const { return _patch; }
-   BMESH* mesh()           const { return _verts.mesh(); }
+   BMESHptr mesh()         const { return _verts.mesh(); }
 
    // Returns edge and vert lists of this strip:
    CBedge_list& edges()    const { return _edges; }

@@ -46,7 +46,7 @@ main(int argc, char *argv[])
 
    err_adv(debug, "read %dx%d png", img.width(), img.height());
    
-   BMESHptr mesh = new LMESH;
+   BMESHptr mesh = make_shared<LMESH>();
 
    uint x, z;
 

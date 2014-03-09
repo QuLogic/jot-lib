@@ -246,7 +246,7 @@ class Panel:  public Bsurface {
 
    // Prepare for fresh tessellation (wipe old stuff):
    bool prepare_tessellation(CBcurve_list& contour);
-   bool prepare_tessellation(LMESH* m);
+   bool prepare_tessellation(LMESHptr m);
 
    bool tessellate_disk       (CBvert_list&  verts, bool create_mode = true);
    bool tessellate_disk       (CBcurve_list& contour, const vector<int> ns = vector<int>());

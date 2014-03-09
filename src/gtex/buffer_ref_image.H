@@ -128,8 +128,8 @@ class BufferRefImage : public RefImage,
    virtual void notify_xform (CGEOMptr&, STATE) { changed(); }
 
    // BMESHobs:
-   virtual void notify_xform (BMESH*, mlib::CWtransf&, CMOD&){ changed(); } 
-   virtual void notify_change(BMESH*, BMESH::change_t) { changed(); }
+   virtual void notify_xform (BMESHptr, mlib::CWtransf&, CMOD&){ changed(); }
+   virtual void notify_change(BMESHptr, BMESH::change_t) { changed(); }
 
    virtual void notify_view   (CVIEWptr &v, int) { if (v == _view) changed(); }
 };

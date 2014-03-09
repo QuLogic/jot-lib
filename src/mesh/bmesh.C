@@ -47,7 +47,7 @@ TAGlist BODY::_body_tags;
 // This makes sure that BMESH is used to create BODY's -
 // sub-classes can override this, but it should not be done in a
 // static constructor, since static constructor order is fickle
-static int dummy = BODY::set_factory(new BMESH);
+static int dummy = BODY::set_factory(make_shared<BMESH>());
 
 bool     BMESH::_random_sils = !Config::get_var_bool("NO_RANDOM_SILS",false);
 bool     BMESH::_freeze_sils  = false;
@@ -65,7 +65,7 @@ bool use_new_bface_io = Config::get_var_bool("JOT_USE_NEW_BFACE_IO",true);
 // On WIN32 this wasn't happening...
 
 BMESHobs_list BMESHobs::_all_observers;
-map<BMESH*,BMESHobs_list*> BMESHobs::_hash;
+map<BMESHptr,BMESHobs_list*> BMESHobs::_hash;
 
 // add BMESH to decoder hash table:
 static class DECODERS {
@@ -82,7 +82,7 @@ static class DECODERS {
  *****************************************************************/
 
 // XXX - this declaration doesn't work:
-//map<string,BMESH*> NameLookup<BMESH>::_map; // used in name lookups
+//map<string,BMESHptr> NameLookup<BMESH>::_map; // used in name lookups
 
 // these do (why??):
 template<class T> map<string,T*> NameLookup<T>::_map; // used in name lookups
@@ -168,12 +168,12 @@ BMESH::~BMESH()
       err_msg("BMESH::~BMESH called...");
 
    // Notify observers that it's gonna happen
-   BMESHobs::broadcast_delete(this);
+   BMESHobs::broadcast_delete(shared_from_this());
    
    // then delete mesh elements
    delete_elements();
 
-   if (is_focus(this))
+   if (is_focus(shared_from_this()))
       set_focus(nullptr);
 }
 
@@ -194,7 +194,7 @@ Bvert*
 BMESH::add_vertex(Bvert* v)
 {
    if (v) {
-      v->set_mesh(this);
+      v->set_mesh(shared_from_this());
       _verts.push_back(v);
    } else
       err_msg("BMESH::add_vertex:: error: vertex is nil");
@@ -220,7 +220,7 @@ Bedge*
 BMESH::add_edge(Bedge* e)
 {
    if (e) {
-      e->set_mesh(this);
+      e->set_mesh(shared_from_this());
       _edges.push_back(e);
    } else
       err_msg("BMESH::add_edge:: error: edge is nil");
@@ -234,7 +234,7 @@ BMESH::add_edge(Bvert* u, Bvert* v)
       err_msg("BMESH::add_edge: Error: vertices are nil");
    } else if (u == v) {
       err_msg("BMESH::add_edge: Error: repeated vertex");
-   } else if (!((u->mesh() == this) && (v->mesh() == this))) {
+   } else if (!((u->mesh().get() == this) && (v->mesh().get() == this))) {
       err_msg("BMESH::add_edge: Error: foreign vertices not allowed");
    } else {
       Bedge* ret = u->lookup_edge(v);
@@ -272,12 +272,12 @@ BMESH::add_face(Bface* f, Patch* p)
       return nullptr;
    }
 
-   f->set_mesh(this);
+   f->set_mesh(shared_from_this());
    _faces.push_back(f);
 
    // deal with the patch.
    // first do error-check
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       cerr << "BMESH::add_face: error: patch specified "
            << "belongs to a different mesh"  << endl;
       p = nullptr; // reject it
@@ -301,7 +301,7 @@ BMESH::add_face(Bvert* u, Bvert* v, Bvert* w, Patch* p)
       err_msg("BMESH::add_face: Error: repeated vertex");
       return nullptr;
    }
-   if (!((u->mesh() == this) && (v->mesh() == this) && (w->mesh() == this))) {
+   if (!((u->mesh().get() == this) && (v->mesh().get() == this) && (w->mesh().get() == this))) {
       err_msg("BMESH::add_face: Error: foreign vertices not allowed");
       return nullptr;
    }
@@ -461,7 +461,7 @@ BMESH::Cube(CWpt& a, CWpt& b, Patch* p)
    UVpt u00(0,0), u10(1,0), u11(1,1), u01(0,1);
 
    // Set up the Patch:
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       err_msg("BMESH::Cube: foreign patch, rejecting...");
       p = nullptr;
    }
@@ -494,7 +494,7 @@ BMESH::Octahedron(CWpt& bot, CWpt& m0, CWpt& m1,
    add_vertex(top);
 
    // Set up the Patch:
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       err_msg("BMESH::Octahedron: foreign patch, rejecting...");
       p = nullptr;
    }
@@ -529,7 +529,7 @@ BMESH::UV_BOX(Patch* &p)
    const double B = 1.0; 
 
    // Set up the Patch:
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       err_msg("BMESH::Sphere: foreign patch, rejecting...");
       p = nullptr;
    }
@@ -674,7 +674,7 @@ BMESH::Sphere(Patch* p)
       }
    }
    // Set up the Patch:
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       err_msg("BMESH::Sphere: foreign patch, rejecting...");
       p = nullptr;
    }
@@ -761,7 +761,7 @@ BMESH::Icosahedron(Patch* p)
    add_vertex(Wpt(-.850650808352039932, -.525731112119133606, 0));
 
    // Set up the Patch:
-   if (p && p->mesh() != this) {
+   if (p && p->mesh().get() != this) {
       err_msg("BMESH::Icosahedron: foreign patch, rejecting...");
       p = nullptr;
    }
@@ -967,7 +967,7 @@ BMESH::intersect(
    // Do reference image picking
    vis_ref->vis_update();
    Bsimplex* sim = vis_ref->vis_simplex(r.screen_point());
-   if (!(sim && sim->mesh() == this)) {
+   if (!(sim && sim->mesh().get() == this)) {
       return 0;
    }
 
@@ -1421,14 +1421,16 @@ BMESH::set_geom(GEOM *geom)
 CWtransf&
 BMESH::xform() const 
 {
-   ((BMESH*)this)->_obj_to_world = (_geom ? _geom->obj_to_world() : Identity);
+   // FIXME: const
+   const_cast<BMESH*>(this)->_obj_to_world = (_geom ? _geom->obj_to_world() : Identity);
    return _obj_to_world;
 }
 
 CWtransf&
 BMESH::inv_xform() const 
 {
-   ((BMESH*)this)->_world_to_obj = (_geom ? _geom->world_to_obj() : Identity); 
+   // FIXME: const
+   const_cast<BMESH*>(this)->_world_to_obj = (_geom ? _geom->world_to_obj() : Identity);
    return _world_to_obj;
 }
 
@@ -1436,8 +1438,9 @@ CWtransf&
 BMESH::obj_to_ndc() const 
 {
    if (_pm_stamp != VIEW::stamp()) {
-      ((BMESH*)this)->_pm_stamp = VIEW::stamp();
-      ((BMESH*)this)->_pm = VIEW::peek_cam()->ndc_projection() * xform();
+      // FIXME: const
+      const_cast<BMESH*>(this)->_pm_stamp = VIEW::stamp();
+      const_cast<BMESH*>(this)->_pm = VIEW::peek_cam()->ndc_projection() * xform();
    }
    return _pm;
 }
@@ -1456,9 +1459,10 @@ BMESH::eye_local() const
    // once each frame, if requested.
 
    if (_eye_local_stamp != VIEW::stamp()) {
-      ((BMESH*)this)->_eye_local_stamp = VIEW::stamp();
+      // FIXME: const
+      const_cast<BMESH*>(this)->_eye_local_stamp = VIEW::stamp();
       CWpt& eye = VIEW::peek_cam()->data()->from();
-      ((BMESH*)this)->_eye_local = inv_xform() * eye;
+      const_cast<BMESH*>(this)->_eye_local = inv_xform() * eye;
    }
    return _eye_local;
 }
@@ -1515,7 +1519,7 @@ void
 BMESH::send_update_notification()
 {
    // Send controllers a message to do their mesh modifications now:
-   BMESHobs::broadcast_update_request(this);
+   BMESHobs::broadcast_update_request(shared_from_this());
 
    // LMESH over-rides this to also compute subdivision meshes.
 }
@@ -1544,7 +1548,7 @@ BMESH::transform(CWtransf &xf, CMOD& m)
    _verts.transform(xf);
 
    // XXX - Swapped order of these notifications... (rdk) why? (lem)
-   BMESHobs::broadcast_xform(this, xf, m);
+   BMESHobs::broadcast_xform(shared_from_this(), xf, m);
 
    changed(VERT_POSITIONS_CHANGED);
 }
@@ -1631,7 +1635,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
       // If it's numerical digit then try to load as old .sm
       // This will go away...
       if (!ret) {
-         ret = new LMESH; // use LMESH by default for old .sm files
+         ret = make_shared<LMESH>(); // use LMESH by default for old .sm files
       }
       if (ret->read_stream(in)) {
          return ret;
@@ -1669,7 +1673,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
          }
 
          // Get the correct type (BMESH or LMESH) as specified in the file:
-         ret = dynamic_cast<BMESH*>(di->dup());
+         ret = dynamic_cast<BMESH*>(di->dup())->shared_from_this();
          if (!ret) {
             err_msg(
                "BMESH::read_jot_stream() - Error: Class '#%s' is not a BMESH subclass.",
@@ -1688,14 +1692,14 @@ BMESH::read_file(const char* filename)
 {
    // Read a mesh file into *this* mesh:
 
-   BMESHptr mesh = read_jot_file(filename, this);
+   BMESHptr mesh = read_jot_file(filename, shared_from_this());
    if (!mesh)
       return false;
 
    // In case this is a BMESH, but the file specified an LMESH,
    // then read_jot_file() would have returned an LMESH. Now
    // copy its data into this mesh:
-   if (this != &*mesh)
+   if (this != mesh.get())
       *this = *mesh;
 
    return true;
@@ -2598,7 +2602,7 @@ BMESH::get_enclosed_verts(
    ret.clear();
 
    // error-check
-   if (startface->mesh() != this) {
+   if (startface->mesh().get() != this) {
       err_msg("BMESH::get_enclosed_verts: startface is from wrong mesh");
       return;
    }
@@ -2676,7 +2680,7 @@ BMESH::remove_vertex(Bvert* v)
 int
 BMESH::remove_faces(CBface_list& faces)
 {
-   if (!faces.empty() && faces.mesh() != this) {
+   if (!faces.empty() && faces.mesh().get() != this) {
       cerr <<"BMESH::remove_faces(): ERROR, faces not all from this mesh"
            << endl;
       return 0;
@@ -2692,7 +2696,7 @@ BMESH::remove_faces(CBface_list& faces)
 int
 BMESH::remove_edges(CBedge_list& edges)
 {
-   if (!edges.empty() && edges.mesh() != this) {
+   if (!edges.empty() && edges.mesh().get() != this) {
       cerr <<"BMESH::remove_edges(): ERROR, edges not all from this mesh"
            << endl;
       return 0;
@@ -2708,7 +2712,7 @@ BMESH::remove_edges(CBedge_list& edges)
 int
 BMESH::remove_verts(CBvert_list& verts)
 {
-   if (!verts.empty() && verts.mesh() != this) {
+   if (!verts.empty() && verts.mesh().get() != this) {
       cerr <<"BMESH::remove_verts(): ERROR, verts not all from this mesh"
            << endl;
       return 0;
@@ -3027,7 +3031,7 @@ BMESH::split_faces(
       cur_pt = cur->plane_intersect(inv_xform() * Wline(pts[0]));
    }
 
-   if (!cur || cur->mesh() != this) {
+   if (!cur || cur->mesh().get() != this) {
       return 0;
    }
 
@@ -3220,7 +3224,7 @@ BMESH::try_collapse_edge(Bedge* e, Bvert* v)
 Patch*
 BMESH::new_patch()
 {
-   _patches   += new Patch(this);
+   _patches += new Patch(shared_from_this());
    if (subdiv_level() == 0)
       _drawables += _patches.last();
 
@@ -3232,7 +3236,7 @@ BMESH::unlist(Patch* p)
 {
    // Remove the Patch from the patch list; returns 1 on success
 
-   if (!(p && p->mesh() && p->mesh() == this))
+   if (!(p && p->mesh() && p->mesh().get() == this))
       return false;
    return _patches -= p;
 }
@@ -3240,8 +3244,6 @@ BMESH::unlist(Patch* p)
 void
 BMESH::changed(change_t change)
 {
-   REFlock lock(this);
-
    if (change == NO_CHANGE)
       return;
 
@@ -3319,7 +3321,7 @@ BMESH::changed(change_t change)
       ;
    }
 
-   BMESHobs::broadcast_change(this, change);
+   BMESHobs::broadcast_change(shared_from_this(), change);
 
    // Invalidate display lists:
    _version++;
@@ -4170,8 +4172,9 @@ BMESH::avg_len() const
          ret += _edges[k]->length();
       if (!_edges.empty())
          ret /= _edges.size();
-      ((BMESH*) this)->_avg_edge_len_valid = 1;
-      ((BMESH*) this)->_avg_edge_len = ret;
+      // FIXME: const
+      const_cast<BMESH*>(this)->_avg_edge_len_valid = 1;
+      const_cast<BMESH*>(this)->_avg_edge_len = ret;
    }
    return _avg_edge_len;
 }
@@ -4234,7 +4237,7 @@ BMESH::merge(BMESHptr m1, BMESHptr m2)
 }
 
 void
-BMESH::_merge(BMESH* m)
+BMESH::_merge(BMESHptr m)
 {
    // Merge the elements of mesh m into this one.
    //
@@ -4256,7 +4259,7 @@ BMESH::_merge(BMESH* m)
    // Suck in patches
    while (!m->_patches.empty()) {
       _patches += m->_patches.pop();
-      _patches.last()->set_mesh(this);
+      _patches.last()->set_mesh(shared_from_this());
    }
 
    // Suck in drawables
@@ -4289,7 +4292,7 @@ BMESH::_merge(BMESH* m)
    m->changed(TOPOLOGY_CHANGED);
 
    // Tell observers this mesh absorbed that one:
-   BMESHobs::broadcast_merge(this, &*m);
+   BMESHobs::broadcast_merge(shared_from_this(), m);
 }
 
 // assumes flags were cleared previously
@@ -4338,13 +4341,13 @@ BMESH::clear_flags()
    _faces.clear_flags();
 }
 
-vector<BMESH*>
+vector<BMESHptr>
 BMESH::split_components()
 {
    // Splits mesh into disconnected pieces.
    // Returns array of new meshes.
 
-   vector<BMESH*> new_meshes;
+   vector<BMESHptr> new_meshes;
 
    clear_flags();
 
@@ -4376,7 +4379,7 @@ BMESH::split_components()
             continue;
 
          // Make a new mesh after the first time.
-         BMESH* m = (BMESH*)dup();
+         BMESHptr m = dynamic_cast<BMESH*>(dup())->shared_from_this();
          new_meshes.push_back(m);
 
          size_t t;
@@ -4407,7 +4410,7 @@ BMESH::split_components()
             m->add_face(faces[t],p);
          }
 
-         if (m != this)
+         if (m.get() != this)
             m->changed(TOPOLOGY_CHANGED);
       }
    }
@@ -4417,7 +4420,7 @@ BMESH::split_components()
 
    changed(TOPOLOGY_CHANGED);
 
-   BMESHobs::broadcast_split(this, new_meshes);
+   BMESHobs::broadcast_split(shared_from_this(), new_meshes);
 
    return new_meshes;
 }
@@ -4605,7 +4608,8 @@ BMESH::z_span(double& zmin, double& zmax) const
 
    static Wpt_list pts(8);
 
-   if (!(((BMESH*)this)->get_bb().points(pts)))
+   // FIXME: const
+   if (!(const_cast<BMESH*>(this)->get_bb().points(pts)))
       return 2.0;       // z values lie between -1 and 1
 
    pts.xform(obj_to_ndc());
@@ -4690,7 +4694,7 @@ BMESH::update_patch_blend_weights()
            << endl;
    }
    _patch_blend_weights_valid = true;
-   PatchBlendWeight::compute_all(this, patch_blend_smooth_passes());
+   PatchBlendWeight::compute_all(shared_from_this(), patch_blend_smooth_passes());
 }
 
 /*****************************************************************
@@ -4720,7 +4724,7 @@ BMESHray::check(
  * BMESHobs
  ************************************************************/
 void
-BMESHobs::broadcast_change(BMESH* m, BMESH::change_t change)
+BMESHobs::broadcast_change(BMESHptr m, BMESH::change_t change)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_change(m, change);
@@ -4730,7 +4734,7 @@ BMESHobs::broadcast_change(BMESH* m, BMESH::change_t change)
 }
 
 void
-BMESHobs::broadcast_xform(BMESH* mesh, CWtransf& xf, CMOD& mod)
+BMESHobs::broadcast_xform(BMESHptr mesh, CWtransf& xf, CMOD& mod)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_xform(mesh, xf, mod);
@@ -4740,7 +4744,7 @@ BMESHobs::broadcast_xform(BMESH* mesh, CWtransf& xf, CMOD& mod)
 }
 
 void
-BMESHobs::broadcast_merge(BMESH* joined, BMESH* removed)
+BMESHobs::broadcast_merge(BMESHptr joined, BMESHptr removed)
 {
    // The 'joined' mesh just sucked everything out of the
    // 'removed' mesh, which is now an empty husk.
@@ -4768,7 +4772,7 @@ BMESHobs::broadcast_merge(BMESH* joined, BMESH* removed)
 }
 
 void
-BMESHobs::broadcast_split(BMESH* m, const vector<BMESH*>& new_meshes)
+BMESHobs::broadcast_split(BMESHptr m, const vector<BMESHptr>& new_meshes)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_split(m, new_meshes);
@@ -4781,7 +4785,7 @@ BMESHobs::broadcast_split(BMESH* m, const vector<BMESH*>& new_meshes)
 }
 
 void
-BMESHobs::broadcast_subdiv_gen(BMESH* m)
+BMESHobs::broadcast_subdiv_gen(BMESHptr m)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_subdiv_gen(m);
@@ -4791,7 +4795,7 @@ BMESHobs::broadcast_subdiv_gen(BMESH* m)
 }
 
 void
-BMESHobs::broadcast_delete(BMESH* m)
+BMESHobs::broadcast_delete(BMESHptr m)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_delete(m);
@@ -4804,7 +4808,7 @@ BMESHobs::broadcast_delete(BMESH* m)
 }
 
 void
-BMESHobs::broadcast_sub_delete(BMESH* m)
+BMESHobs::broadcast_sub_delete(BMESHptr m)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_sub_delete(m);
@@ -4814,7 +4818,7 @@ BMESHobs::broadcast_sub_delete(BMESH* m)
 }
 
 void
-BMESHobs::broadcast_update_request(BMESH* m)
+BMESHobs::broadcast_update_request(BMESHptr m)
 {
    // This is for observers who want to update the mesh
    // before it does something important like try to
@@ -4828,7 +4832,7 @@ BMESHobs::broadcast_update_request(BMESH* m)
  * BMESHobs
  ************************************************************/
 void
-BMESHobs_list::notify_change(BMESH* mesh, BMESH::change_t change) const
+BMESHobs_list::notify_change(BMESHptr mesh, BMESH::change_t change) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4836,7 +4840,7 @@ BMESHobs_list::notify_change(BMESH* mesh, BMESH::change_t change) const
 }
 
 void
-BMESHobs_list::notify_xform(BMESH* mesh, CWtransf& xf, CMOD& m) const
+BMESHobs_list::notify_xform(BMESHptr mesh, CWtransf& xf, CMOD& m) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4844,7 +4848,7 @@ BMESHobs_list::notify_xform(BMESH* mesh, CWtransf& xf, CMOD& m) const
 }
 
 void
-BMESHobs_list::notify_merge(BMESH* m1, BMESH* m2) const
+BMESHobs_list::notify_merge(BMESHptr m1, BMESHptr m2) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4852,7 +4856,7 @@ BMESHobs_list::notify_merge(BMESH* m1, BMESH* m2) const
 }
 
 void
-BMESHobs_list::notify_split(BMESH* mesh, const vector<BMESH*>& pieces) const
+BMESHobs_list::notify_split(BMESHptr mesh, const vector<BMESHptr>& pieces) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4860,7 +4864,7 @@ BMESHobs_list::notify_split(BMESH* mesh, const vector<BMESH*>& pieces) const
 }
 
 void
-BMESHobs_list::notify_subdiv_gen(BMESH* mesh) const
+BMESHobs_list::notify_subdiv_gen(BMESHptr mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4868,7 +4872,7 @@ BMESHobs_list::notify_subdiv_gen(BMESH* mesh) const
 }
 
 void
-BMESHobs_list::notify_delete(BMESH* mesh) const
+BMESHobs_list::notify_delete(BMESHptr mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4876,7 +4880,7 @@ BMESHobs_list::notify_delete(BMESH* mesh) const
 }
 
 void
-BMESHobs_list::notify_sub_delete(BMESH* mesh) const
+BMESHobs_list::notify_sub_delete(BMESHptr mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4884,7 +4888,7 @@ BMESHobs_list::notify_sub_delete(BMESH* mesh) const
 }
 
 void
-BMESHobs_list::notify_update_request(BMESH* mesh) const
+BMESHobs_list::notify_update_request(BMESHptr mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)

@@ -73,13 +73,13 @@ class HatchingCollection :
 	Patch *				patch() { return _patch; }	
 
    /******** BMESHobs METHODS *******/
-   virtual void    notify_change       (BMESH*, BMESH::change_t);
-   virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
-   //virtual void  notify_merge        (BMESH*, BMESH*)           {}
-   //virtual void  notify_split        (BMESH*, const vector<BMESH*>&) {}
-   //virtual void  notify_subdiv_gen   (BMESH*)                   {}
-   //virtual void  notify_delete       (BMESH*)                   {}
-   //virtual void  notify_sub_delete   (BMESH*)                   {}
+   virtual void    notify_change       (BMESHptr, BMESH::change_t);
+   virtual void    notify_xform        (BMESHptr, mlib::CWtransf&, CMOD&);
+   //virtual void  notify_merge        (BMESHptr, BMESHptr)           {}
+   //virtual void  notify_split        (BMESHptr, const vector<BMESHptr>&) {}
+   //virtual void  notify_subdiv_gen   (BMESHptr)                   {}
+   //virtual void  notify_delete       (BMESHptr)                   {}
+   //virtual void  notify_sub_delete   (BMESHptr)                   {}
 
    /******** UPobs METHODS ********/
 	virtual void		reset(int is_reset);

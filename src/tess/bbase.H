@@ -71,10 +71,10 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    CLMESHptr& mesh()            const   { return _mesh; }
 
    // The control mesh in charge of the subdivision hierarchy::
-   LMESH* ctrl_mesh()   const   { return _mesh ? _mesh->control_mesh() : nullptr; }
+   LMESHptr ctrl_mesh() const   { return _mesh ? _mesh->control_mesh() : nullptr; }
 
    // The currently displayed mesh in the subdivision hierarchy:
-   LMESH* cur_mesh()    const   { return _mesh ? _mesh->cur_mesh() : nullptr; }
+   LMESHptr cur_mesh()  const   { return _mesh ? _mesh->cur_mesh() : nullptr; }
 
    // The level of the currently displayed subdivision mesh:
    int cur_level()      const   { return _mesh ? _mesh->cur_level() : 0; }
@@ -423,17 +423,17 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
 
    //******** BMESHobs METHODS ********
 
-   virtual void notify_change    (BMESH*, BMESH::change_t)  {}
-   virtual void notify_xform     (BMESH*, CWtransf&, CMOD&) {}
-   virtual void notify_merge     (BMESH*, BMESH*);
-   virtual void notify_split     (BMESH*, const vector<BMESH*>&);
-   virtual void notify_delete    (BMESH*);
-   virtual void notify_sub_delete(BMESH*);
+   virtual void notify_change    (BMESHptr, BMESH::change_t)  {}
+   virtual void notify_xform     (BMESHptr, CWtransf&, CMOD&) {}
+   virtual void notify_merge     (BMESHptr, BMESHptr);
+   virtual void notify_split     (BMESHptr, const vector<BMESHptr>&);
+   virtual void notify_delete    (BMESHptr);
+   virtual void notify_sub_delete(BMESHptr);
 
-   virtual void notify_subdiv_gen(BMESH*);
+   virtual void notify_subdiv_gen(BMESHptr);
 
    // The mesh wants to be updated, so update it:
-   virtual void notify_update_request(BMESH* m);
+   virtual void notify_update_request(BMESHptr m);
 
    // For BMESHobs::name() return Bnode::name()
    virtual string name() const { return Bnode::name(); }
@@ -517,7 +517,7 @@ class _Bbase_list : public RIC_array<T> {
    }
 
    // Returns mesh that all belong to, or none
-   LMESH* mesh() const {
+   LMESHptr mesh() const {
       return (same_mesh() && !empty()) ? first()->mesh() : nullptr;
    }
 

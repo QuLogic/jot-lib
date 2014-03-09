@@ -47,7 +47,7 @@ class Lpatch : public Patch {
    //******** ACCESSORS ********
 
    // Owning mesh, conveniently cast to LMESH:
-   LMESH*  lmesh()       const { return static_cast<LMESH*>(_mesh); }
+   LMESHptr lmesh()      const { return static_pointer_cast<LMESH>(_mesh); }
    
    // Parent and child patches in the subdivision hierarchy:
    Patch* parent()       const { return static_cast<Patch*>(_parent); }
@@ -60,7 +60,7 @@ class Lpatch : public Patch {
    //******** SUBDIVISION HIERARCHY ********
 
    // Control mesh for the subdivision hierarchy:
-   LMESH* control_mesh() const { return _mesh ? lmesh()->control_mesh() : nullptr; }
+   LMESHptr control_mesh() const { return _mesh ? lmesh()->control_mesh() : nullptr; }
 
    // Level of the currently drawn mesh in the hierarchy:
    int cur_level()       const { return _mesh ? lmesh()->cur_level() : 0; }
@@ -159,7 +159,7 @@ class Lpatch : public Patch {
 
    // Normal people can't make these --
    // get yours from an LMESH:
-   Lpatch(LMESH *mesh) : Patch(mesh), _parent(nullptr), _child(nullptr) {}
+   Lpatch(LMESHptr mesh) : Patch(mesh), _parent(nullptr), _child(nullptr) {}
 
    // Clear subdivision strips down to given level:
    void clear_subdiv_strips(int level);

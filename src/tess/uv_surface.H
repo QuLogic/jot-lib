@@ -143,7 +143,7 @@ class UVsurface: public Bsurface {
 
    //******** BMESHobs METHODS ********
 
-   virtual void notify_xform(BMESH*, CWtransf&, CMOD&);
+   virtual void notify_xform(BMESHptr, CWtransf&, CMOD&);
 
    //******** Bnode METHODS ********
 

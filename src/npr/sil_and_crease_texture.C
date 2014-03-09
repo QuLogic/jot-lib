@@ -748,7 +748,7 @@ SilAndCreaseTexture::recreate_creases()
 
    _crease_stroke_pools.clear();
 
-   BMESH* mesh = _patch->mesh();
+   BMESHptr mesh = _patch->mesh();
 
    for (int k = mesh->nedges()-1; k>=0; k--)
       mesh->be(k)->compute_crease(_crease_thresh);

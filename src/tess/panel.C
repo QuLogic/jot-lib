@@ -330,7 +330,7 @@ Panel::create(const vector<Bcurve_list>& contours)
 static bool debug_tess = Config::get_var_bool("DEBUG_TESSELLATE",false);
 
 bool
-Panel::prepare_tessellation(LMESH* m)
+Panel::prepare_tessellation(LMESHptr m)
 {
    if (!(is_control() && m)) {
       err_adv(debug && !is_control(),
@@ -474,7 +474,7 @@ Panel::tessellate_disk(CBvert_list& verts, bool create_mode)
    }
 
    // Do common setup for tessellation
-   if (create_mode && !prepare_tessellation(dynamic_cast<LMESH*>(verts.mesh())))
+   if (create_mode && !prepare_tessellation(dynamic_pointer_cast<LMESH>(verts.mesh())))
       return false;
 
    // get "center of mass"

@@ -289,7 +289,7 @@ Bsurface::add_face_meme(Lface* f)
 void 
 Bsurface::add_face_memes(CBface_list& faces) 
 {
-   if (!(_mesh && dynamic_cast<LMESH*>(faces.mesh()) == _mesh)) {
+   if (!(_mesh && dynamic_pointer_cast<LMESH>(faces.mesh()) == _mesh)) {
       err_msg("Bsurface::add_face_memes: error: bad mesh");
       return;
    }

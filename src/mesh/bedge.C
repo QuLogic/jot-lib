@@ -18,11 +18,10 @@
 /**********************************************************************
  * bedge.C
  **********************************************************************/
-#include "disp/ray.H"
-#include "mesh/bmesh.H"
-#include "mesh/patch.H"
-#include "std/run_avg.H"
 #include "std/config.H"
+#include "std/run_avg.H"
+#include "disp/ray.H"
+#include "lmesh.H"
 #include "bfilters.H"
 #include "uv_data.H"
 #include "tex_coord_gen.H"

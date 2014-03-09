@@ -94,7 +94,7 @@ class CRV_SKETCH : public DrawWidget {
    //******** DrawWidget METHODS ********
 
    virtual BMESHptr bmesh() const { return _curve ? _curve->mesh() : nullptr; }
-   virtual LMESH* lmesh()   const { return _curve ? _curve->mesh() : nullptr; }
+   virtual LMESHptr lmesh() const { return _curve ? _curve->mesh() : nullptr; }
 
    virtual PIXEL_list shadow_pix() const { return _shadow_pixels; }
    virtual Bcurve* curve() const { return _curve; }

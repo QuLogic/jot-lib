@@ -23,12 +23,11 @@
 
 class Lvert;
 class Lface;
-class LMESH;
+MAKE_SHARED_PTR(LMESH);
 
 #define CLvert const Lvert
 #define CLedge const Ledge
 #define CLface const Lface
-#define CLMESH const LMESH
 /**********************************************************************
  * Ledge:
  *
@@ -69,9 +68,9 @@ class Ledge : public Bedge {
 
    //******** ACCESSORS ********
 
-   LMESH*  lmesh()      const   { return (LMESH*)mesh(); }
-   Lvert*  lv(int k)    const   { return (Lvert*) v(k); }
-   Lface*  lf(int k)    const   { return (Lface*) f(k); }
+   LMESHptr lmesh()      const   { return dynamic_pointer_cast<LMESH>(mesh()); }
+   Lvert*   lv(int k)    const   { return (Lvert*) v(k); }
+   Lface*   lf(int k)    const   { return (Lface*) f(k); }
 
    //******** SUBDIVISION ELEMENTS ********
 

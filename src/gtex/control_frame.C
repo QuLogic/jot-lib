@@ -163,7 +163,7 @@ ControlFrameTexture::build_strip(int k)
 
    // But now set flags for children of edges of the parent mesh.
    // (We don't draw these since they are drawn at some level < k):
-   if (LMESH::isa(_patch->mesh())) {
+   if (dynamic_pointer_cast<LMESH>(_patch->mesh())) {
       edges.filter(EdgeChildFilter()).set_flags(1);
    }
 
@@ -192,7 +192,7 @@ get_cur_sub_faces(Patch* p, Bface* f, Bface_list& ret)
   if (!(p && f &&  f->patch()->ctrl_patch() == p) )
     return;
  
-  if (LMESH::isa(f->mesh())) {
+  if (dynamic_pointer_cast<LMESH>(f->mesh())) {
      int lev = f->mesh()->rel_cur_level();
      if (lev >= 0)
         ((Lface*)f)->append_subdiv_faces(f->mesh()->rel_cur_level(), ret);
@@ -252,7 +252,7 @@ get_cur_sub_edges(Patch* p, Bedge* e, Bedge_list& ret)
   if ( !(p && e && e->patch()->ctrl_patch() == p) )
     return;
 
-  if (LMESH::isa(e->mesh())) {
+  if (dynamic_pointer_cast<LMESH>(e->mesh())) {
      int lev = e->mesh()->rel_cur_level();
      if (lev >= 0)
         ((Ledge*)e)->append_subdiv_edges(e->mesh()->rel_cur_level(), ret);
@@ -321,7 +321,7 @@ get_cur_sub_vert(Patch* p, Bvert* v, Bvert_list& ret)
    if ( !(p && q && q->ctrl_patch() == p) )
       return;
 
-   if (LMESH::isa(v->mesh())) {
+   if (dynamic_pointer_cast<LMESH>(v->mesh())) {
       int lev = v->mesh()->rel_cur_level();
       if (lev >= 0) {
          Lvert* u = ((Lvert*)v)->subdiv_vert(lev);

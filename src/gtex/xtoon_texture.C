@@ -1446,7 +1446,7 @@ ToonTexCB::faceCB(CBvert* v, CBface*f) {
      if (ntt_smooth_enabled) {
        sn = v->get_all_faces().n_ring_faces(ntt_smooth_rings).avg_normal();
      } else if (ntt_elliptic_enabled){
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wvec c_to_v = v->wloc() - mesh->get_bb().center();
        Wvec dim = mesh->get_bb().dim();
        double a = dim[0]*0.5;
@@ -1454,11 +1454,11 @@ ToonTexCB::faceCB(CBvert* v, CBface*f) {
        double c = dim[2]*0.5;
        sn = Wvec(c_to_v[0]/a, c_to_v[1]/b, c_to_v[2]/c).normalized();
      } else if (ntt_spheric_enabled){
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wpt c = mesh->get_bb().center();
        sn = (v->wloc()-c).normalized();
      } else if (ntt_cylindric_enabled){
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wpt c = mesh->get_bb().center();
        Wvec axis;
        Wvec dim = mesh->get_bb().dim();

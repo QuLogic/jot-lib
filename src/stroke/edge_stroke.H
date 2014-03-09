@@ -127,8 +127,8 @@ class EdgeStroke : public OutlineStroke {
 
    void   set_vis_step_pix_size(double s)      { _vis_step_pix_size = s; }
 
-   static BMESH*       mesh()                  { return _mesh;       }
-   static void         set_mesh(BMESH *mesh)   { _mesh = mesh;       }
+   static BMESHptr     mesh()                  { return _mesh;       }
+   static void         set_mesh(BMESHptr mesh) { _mesh = mesh;       }
 
    void  apply_offset(BaseStrokeVertex* v, BaseStrokeOffset* o);
 
@@ -156,7 +156,7 @@ class EdgeStroke : public OutlineStroke {
    double _vis_step_pix_size;  // refinement step size (for visibility) in pixels
 
    // XXX hack for serialization
-   static BMESH *_mesh;
+   static BMESHptr _mesh;
 
  protected:
 

@@ -178,7 +178,7 @@ extract_rect_side(CBface_list& rect, Bedge* edge)
 inline Bface_list
 ctrl_faces(Bface_list& region)
 {
-   if (!LMESH::isa(region.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(region.mesh()))
       return Bface_list();
    Bface_list ret(region.size()/4);
    for (Bface_list::size_type i = 0; i < region.size(); i++) {
@@ -228,7 +228,7 @@ ROOF::init(CGESTUREptr& g)
       return false;
 
    Bedge* e = nullptr;
-   BMESH* m = nullptr;
+   BMESHptr m = nullptr;
    CPIXEL p = g->start();
    ROOFptr me = get_instance();
 

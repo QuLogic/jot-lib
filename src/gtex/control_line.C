@@ -55,7 +55,7 @@ ControlLineTexture::draw_non_filled_tris(double alpha)
 }
 
 inline bool
-do_solid(BMESH* m)
+do_solid(BMESHptr m)
 {
    // when secondary faces are shown, we want to see thru
    // the outer layers, so don't draw the solid color texture

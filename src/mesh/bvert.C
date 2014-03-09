@@ -1307,7 +1307,7 @@ Bvert_list::connected_verts(Bsimplex* s)
    if (L.empty()) {
       return ret;
    }
-   BMESH* m = L.mesh();
+   BMESHptr m = L.mesh();
    assert(m);
    m->verts().clear_flags();
    add_verts_recursively(ret, L);

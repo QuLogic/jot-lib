@@ -86,13 +86,13 @@ ToneStripCB::faceCB(CBvert* v, CBface* f)
     }
       break;
     case ToneStripCB::SPHERIC: {
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wpt c = mesh->get_bb().center();
        bNorm = (v->loc()-c).normalized();
     }
       break;
     case ToneStripCB::ELLIPTIC: {
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wvec c_to_v = v->loc() - mesh->get_bb().center();
        Wvec dim = mesh->get_bb().dim();
        double a = dim[0]*0.5;
@@ -102,7 +102,7 @@ ToneStripCB::faceCB(CBvert* v, CBface* f)
     }
       break;
     case ToneStripCB::CYLINDRIC: {
-       BMESH* mesh = v->mesh();
+       BMESHptr mesh = v->mesh();
        Wpt c = mesh->get_bb().center();
        Wvec axis;
        Wvec dim = mesh->get_bb().dim();

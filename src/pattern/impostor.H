@@ -27,7 +27,7 @@
 class Impostor : public GEL {
  public:
    //******** MANAGERS ********
-   Impostor(BMESH* m=nullptr);
+   Impostor(BMESHptr m=nullptr);
    virtual ~Impostor();
 
    //******** GEL METHODS ********
@@ -37,13 +37,13 @@ class Impostor : public GEL {
    DEFINE_RTTI_METHODS3("Impostor", Impostor*, GEL, CDATA_ITEM*);
 
    
-   void        set_mesh(BMESH* m) { _mesh = m; }
+   void        set_mesh(BMESHptr m) { _mesh = m; }
 
    //******** Helper Functions ********
    void    draw_start();
    void    draw_end();
  protected:
-   BMESH*   _mesh;
+   BMESHptr _mesh;
   
 };
 

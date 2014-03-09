@@ -98,7 +98,7 @@ class DrawWidget : public GEOM,
       // method DISPobs::notify() to check whether the mesh has been
       // undisplayed (and if so, deactivate the widget).
       virtual BMESHptr bmesh() const { return nullptr; }
-      virtual LMESH* lmesh()   const { return LMESH::upcast(bmesh()); }
+      virtual LMESHptr lmesh() const { return dynamic_pointer_cast<LMESH>(bmesh()); }
    
       //******** MODE NAME ********
    

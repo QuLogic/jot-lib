@@ -29,8 +29,7 @@
 
 class Patch;
 
-class BMESH;
-typedef const BMESH CBMESH;
+MAKE_SHARED_PTR(BMESH);
 
 /**********************************************************************
  * Bedge:

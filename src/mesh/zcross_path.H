@@ -280,7 +280,7 @@ public:
    //int    num()                 const { return _points.num(); }
    int    num()               const { return _segs.size(); }
 
-   BMESH* mesh() const
+   BMESHptr mesh() const
    {
       return empty() ? nullptr : _segs[0].f()->mesh();
    }

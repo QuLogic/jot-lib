@@ -45,7 +45,7 @@ static const bool debug_samples =
    Config::get_var_bool("DEBUG_D2D_SAMPLES",false);
 
 //********************** MANAGERS **********************
-Patch::Patch(BMESH* mesh) :
+Patch::Patch(BMESHptr mesh) :
    _mesh(mesh),
    _faces(0),
    _creases(nullptr),

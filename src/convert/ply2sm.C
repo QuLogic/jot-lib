@@ -226,7 +226,7 @@ Write out a jot .sm file.
 void
 write_sm()
 {
-   LMESHptr mesh = new LMESH;
+   LMESHptr mesh = make_shared<LMESH>();
    
    int i=0;
 

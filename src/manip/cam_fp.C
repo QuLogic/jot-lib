@@ -36,7 +36,7 @@ class CAMwidget_anchor : public GEOM {
  public:
    CAMwidget_anchor() : GEOM() {
       // Start with an empty LMESH:
-      LMESHptr mesh = new LMESH();
+      LMESHptr mesh = make_shared<LMESH>();
 
       // Ensure mesh knows its containing GEOM:
       mesh->set_geom(this);

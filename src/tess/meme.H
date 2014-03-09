@@ -62,8 +62,8 @@ class Meme : public SimplexData {
    DEFINE_RTTI_METHODS3("Meme", Meme*, SimplexData, CSimplexData*);
 
    //******** ACCESSORS ********
-   Bbase* bbase()       const   { return _owner; }
-   BMESH* mesh()        const   { return _simplex->mesh(); }
+   Bbase*   bbase()     const   { return _owner; }
+   BMESHptr mesh()      const   { return _simplex->mesh(); }
 
    int bnode_num()      const;
 

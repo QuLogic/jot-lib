@@ -215,7 +215,7 @@ get_distance(CPIXEL_list& A, CPIXEL_list& B, double& ret)
  *****************************************************************/
 //! Create an empty Primitive associated with the given
 //! surface LMESH and skeleton LMESH.
-Primitive::Primitive(LMESH* mesh, LMESH* skel)
+Primitive::Primitive(LMESHptr mesh, LMESHptr skel)
 {
 
    // Ensure preconditions
@@ -346,7 +346,7 @@ displace(CBvert_list& verts, CWvec&n)
 inline Bface_list
 gen_ribbon(CEdgeStrip& boundary, CVertMapper& vmap, Patch* p)
 {
-   BMESH* mesh = boundary.mesh();
+   BMESHptr mesh = boundary.mesh();
    assert(mesh && p);
 
    // du is a step in UV-space corresponding to 1 edge length,
@@ -418,7 +418,7 @@ Primitive::create_wafer(CWpt_list& pts, Bpoint* skel)
 }
 
 Primitive* 
-Primitive::init(LMESH* skel_mesh, Wpt_list pts, CWvec& n, MULTI_CMDptr cmd)
+Primitive::init(LMESHptr skel_mesh, Wpt_list pts, CWvec& n, MULTI_CMDptr cmd)
 {
    bool debug = ::debug || Config::get_var_bool("DEBUG_PRIMITIVE_INIT",false);
    err_adv(debug, "Primitive::init");
@@ -564,7 +564,7 @@ Primitive::build_ball(Bpoint* skel, double pix_rad)
 
 //! Return a Primitive to manage a portion of the given mesh.
 Primitive* 
-Primitive::get_primitive(BMESH* mesh)
+Primitive::get_primitive(BMESHptr mesh)
 {
    //
    // We need to find the "skeleton" mesh associated w/ this mesh,
@@ -574,7 +574,8 @@ Primitive::get_primitive(BMESH* mesh)
       Config::get_var_bool("DEBUG_GET_PRIMITIVE",false);
 
    // Ensure it is an LMESH:
-   if (!LMESH::isa(mesh)) {
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(mesh);
+   if (!lm) {
       err_adv(debug, "Primitive::get_primitive: error: non LMESH");
       return nullptr;
    }
@@ -588,12 +589,12 @@ Primitive::get_primitive(BMESH* mesh)
 
    // Check all the meshes in the TEXBODY looking for one to use
    // as the skeleton mesh:
-   LMESH* skel = nullptr;
+   LMESHptr skel = nullptr;
    CBMESH_list& meshes = tex->meshes();
    for (int i=0; i<meshes.num() && skel==nullptr; i++) {
       if (meshes[i] != mesh &&
          !meshes[i]->is_surface() &&
-          (skel = LMESH::upcast(meshes[i]))) {
+          (skel = dynamic_pointer_cast<LMESH>(meshes[i]))) {
          err_adv(debug, "Primitive::get_primitive: found existing skel mesh");
          break;
       }
@@ -604,13 +605,13 @@ Primitive::get_primitive(BMESH* mesh)
       // Maintain the policy that skeleton meshes come first,
       // because TEXBODY::cur_rep() selects the last one as
       // the "primary" mesh.
-      skel = new LMESH;
+      skel = make_shared<LMESH>();
       tex->push(skel);  // add the skel before the surface mesh
       err_adv(debug, "Primitive::get_primitive: created new skel mesh");
    }
 
    // Create and return the Primitive
-   return new Primitive((LMESH*)mesh, skel);
+   return new Primitive(lm, skel);
 }
 
 //! Return the existing skeleton point that is nearest to
@@ -739,7 +740,7 @@ Primitive::build_roof(
    }
 
    // Create a Primitive
-   LMESH* m = (LMESH*)(bases.mesh());
+   LMESHptr m = static_pointer_cast<LMESH>(bases.mesh());
    Primitive* ret = new Primitive(m, m);
    if (!(ret && ret->_skel_mesh)) {
       err_adv(debug, "Primitive::extend_branch: no %s found",
@@ -2288,7 +2289,7 @@ Primitive::create_xf_meme(Lvert* vert, CoordFrame* frame)
 void
 Primitive::create_xf_memes(CBvert_list& verts, CoordFrame* f)
 {
-   assert(LMESH::isa(verts.mesh()));
+   assert(dynamic_pointer_cast<LMESH>(verts.mesh()));
    for (Bvert_list::size_type i=0; i<verts.size(); i++)
       create_xf_meme((Lvert*)verts[i], f);
 }

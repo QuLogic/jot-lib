@@ -108,7 +108,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
 
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
-   BMESH* mesh = nullptr;
+   BMESHptr mesh = nullptr;
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
@@ -122,7 +122,7 @@ OVERSKETCH::find_matching_sil(CGESTUREptr& g)
       }
       mesh = e->mesh();
    }
-   if (!LMESH::isa(mesh)) {
+   if (!dynamic_pointer_cast<LMESH>(mesh)) {
       err_adv(debug, "   found non-LMESH, rejecting");
       return false;
    }
@@ -157,7 +157,7 @@ OVERSKETCH::find_matching_sil(CPIXEL_list& pts, CEdgeStrip& sils)
       if (do_match(pts, sils.edge(i)))
          _selected_sils.add(sils.vert(i), sils.edge(i));
 
-   _mesh = dynamic_cast<LMESH*>(_selected_sils.mesh());
+   _mesh = dynamic_pointer_cast<LMESH>(_selected_sils.mesh());
    if (_mesh) {
       int n = _selected_sils.num_line_strips();
       _selected_sils = _selected_sils.get_unified();
@@ -176,7 +176,7 @@ OVERSKETCH::find_matching_sil(CPIXEL_list& pts, CEdgeStrip& sils)
 inline Bface_list
 ctrl_faces(CBedge_list& edges)
 {
-   if (!LMESH::isa(edges.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(edges.mesh()))
       return Bface_list();
    Bface_list ret(edges.size());
    for (Bedge_list::size_type i=0; i<edges.size(); i++) {
@@ -193,7 +193,7 @@ OVERSKETCH::select_faces()
       err_adv(debug, "OVERSKETCH::select_faces: no selected sils");
       return;
    }
-   LMESH* m = dynamic_cast<LMESH*>(_selected_sils.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(_selected_sils.mesh());
    assert(m && _selected_sils.same_mesh());
    MeshGlobal::deselect_all();
 //   MeshGlobal::select(ctrl_faces(_selected_sils.edges()));
@@ -412,8 +412,8 @@ compute_yardstick(CBedge_list& edges, bool debug=false)
 {
    double ret = 0.6 * edges.strong_edges().avg_len();
 
-   BMESH* mk = edges.mesh();
-   BMESH* m0 = get_top_level(edges.get_faces()).mesh();
+   BMESHptr mk = edges.mesh();
+   BMESHptr m0 = get_top_level(edges.get_faces()).mesh();
 
    int    lk = 0;       // mesh level of edges
    int    l0 = 0;       // mesh level of edges' control region

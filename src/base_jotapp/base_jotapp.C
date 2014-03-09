@@ -468,7 +468,7 @@ BaseJOTapp::load_scene()
    }
 
    if (0) {
-      LMESHptr m = new LMESH;
+      LMESHptr m = make_shared<LMESH>();
       m->Sphere();
       create_mesh(m, "sphere");
    }
@@ -501,7 +501,7 @@ strip_ext(const string& base)
 }
 
 bool
-BaseJOTapp::create_mesh(BMESH* mesh, const string &file) const
+BaseJOTapp::create_mesh(BMESHptr mesh, const string &file) const
 {
    // Put the mesh in GEOM and add it to the scene:
 
@@ -530,14 +530,14 @@ BaseJOTapp::create_mesh(BMESH* mesh, const string &file) const
    return true;
 }
 
-BMESH* 
+BMESHptr
 BaseJOTapp::new_mesh() const
 {
-   return new BMESH;
+   return make_shared<BMESH>();
 }
 
 GEOM* 
-BaseJOTapp::new_geom(BMESH* mesh, const string& name) const
+BaseJOTapp::new_geom(BMESHptr mesh, const string& name) const
 {
    // Default method for creating GEOM or derived type to hold a mesh:
 
@@ -560,7 +560,7 @@ BaseJOTapp::load_sm_file(const string &file)
 bool
 BaseJOTapp::load_png_file(const string &file)
 {
-/*   LMESHptr m = new LMESH;
+/*   LMESHptr m = make_shared<LMESH>();
    m->Sphere();
    m->set_render_style("Flat Shading");
    return create_mesh(m, "sphere");*/

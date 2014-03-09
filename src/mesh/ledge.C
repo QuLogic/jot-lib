@@ -371,7 +371,7 @@ Ledge::allocate_subdiv_elements()
 
    assert(!_subdiv_vertex);
 
-   LMESH* submesh = lmesh()->subdiv_mesh();
+   LMESHptr submesh = lmesh()->subdiv_mesh();
    assert(submesh);
 
    // Allocate subdiv vertex in middle:
@@ -598,7 +598,7 @@ get_subdiv_chain(Bvert* v1, Bvert* v2, int level, Bvert_list& ret)
       return 0;
    }
 
-   if (!(v1->mesh() == v2->mesh() && LMESH::isa(v1->mesh()))){
+   if (!(v1->mesh() == v2->mesh() && dynamic_pointer_cast<LMESH>(v1->mesh()))){
       err_adv(debug, "get_subdiv_chain: non-LMESH (level %d)", level);
       return 0;
    }

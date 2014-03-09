@@ -366,7 +366,7 @@ EXTENDER::add(Bface_list faces, double)
       return false;
    }
 
-   if (!LMESH::isa(faces.mesh())) {
+   if (!dynamic_pointer_cast<LMESH>(faces.mesh())) {
       return false;
    }
 
@@ -685,7 +685,7 @@ EXTENDER::circle_cb(CGESTUREptr& gest, DrawState*& s)
    }
 
    // We only deal with LMESHes
-   if (!LMESH::isa(bf->mesh())) {
+   if (!dynamic_pointer_cast<LMESH>(bf->mesh())) {
       err_adv(debug, "EXTENDER::circle_cb: intersected non-LMESH");
       return 1; // This means we used up the gesture
    }
@@ -790,7 +790,7 @@ EXTENDER::circle_cb(CGESTUREptr& gest, DrawState*& s)
       // Have to do everything ourselves...
 
       // We'll need these...
-      BMESH*    bmesh = f->mesh();
+      BMESHptr  bmesh = f->mesh();
       Patch*        p = f->patch();     // XXX - needs work
 
       // Get the 4 points of the propsed hole:

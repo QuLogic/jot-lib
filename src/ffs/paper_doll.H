@@ -54,7 +54,7 @@ class PAPER_DOLL : public DrawWidget {
    //******** DrawWidget METHODS ********
 
    virtual BMESHptr bmesh() const { return _prim ? _prim->mesh() : nullptr; }
-   virtual LMESH* lmesh()   const { return _prim ? _prim->mesh() : nullptr; }
+   virtual LMESHptr lmesh() const { return _prim ? _prim->mesh() : nullptr; }
 
    //******** GEL METHODS ******** 
 

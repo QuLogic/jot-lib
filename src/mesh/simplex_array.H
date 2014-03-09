@@ -81,9 +81,9 @@ class SimplexArray : public vector<T> {
    }
 
    // If whole list is from same mesh, returns the mesh:
-   BMESH* mesh() const {
+   BMESHptr mesh() const {
       if (empty()) return nullptr;
-      BMESH* ret = (*this)[0]->mesh();
+      BMESHptr ret = (*this)[0]->mesh();
       for (size_t i=1; i<size(); i++)
          if (ret != (*this)[i]->mesh())
             return nullptr;
@@ -94,11 +94,11 @@ class SimplexArray : public vector<T> {
    // the same mesh
    bool same_mesh() const { return empty() || mesh() != nullptr; }
    
-   vector<BMESH*> get_meshes() const {
-     vector<BMESH*> ret;
-     set<BMESH*> unique;
+   vector<BMESHptr> get_meshes() const {
+     vector<BMESHptr> ret;
+     set<BMESHptr> unique;
      for (size_t i=0; i<size(); i++) {
-       pair<set<BMESH*>::iterator,bool> result;
+       pair<set<BMESHptr>::iterator,bool> result;
        result = unique.insert((*this)[i]->mesh());
        if (result.second)
           ret.push_back(*result.first);

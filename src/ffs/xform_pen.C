@@ -80,7 +80,7 @@ XformPen::tap_cb(CGESTUREptr& tap, DrawState*& s)
       err_adv(debug, "XformPen::tap_cb: missed face");
       return cancel_cb(tap, s);
    }
-   BMESH* m = f->mesh();
+   BMESHptr m = f->mesh();
    if (!m) {
       err_adv(debug, "XformPen::tap_cb: hit face, no mesh");
       return cancel_cb(tap, s);

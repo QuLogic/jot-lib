@@ -34,7 +34,7 @@ class BALLwidget_anchor : public GEOM {
  public:
    BALLwidget_anchor() : GEOM() {
       // Start with an empty LMESH:
-      LMESHptr mesh = new LMESH();
+      LMESHptr mesh = make_shared<LMESH>();
 
       // Ensure mesh knows its containing GEOM:
       mesh->set_geom(this);
@@ -72,7 +72,7 @@ class GRIDwidget_anchor : public GEOM {
  public:
    GRIDwidget_anchor(Wtransf ff) : GEOM() {
       // Start with an empty LMESH:
-      LMESHptr mesh = new LMESH();
+      LMESHptr mesh = make_shared<LMESH>();
 
       // Ensure mesh knows its containing GEOM:
       mesh->set_geom(this);
@@ -139,14 +139,14 @@ TestSPSapp::load_scene()
 
    for (int i=0; i<EXIST.num(); i++) {
       GEOMptr geom = GEOM::upcast(EXIST[i]);
-      if (geom && BMESH::isa(geom->body())) {
+      if (geom && dynamic_pointer_cast<BMESH>(geom->body())) {
          Bvert_list list;
          Bface_list fs;
          vector<Wvec> bcs;
          double spacing;
-         //generate_samples(BMESH::upcast(geom->body()), 1.0, fs, bcs);
-         //generate_samples(BMESH::upcast(geom->body()), fs, bcs, HEIGHT, MIN_DIST);
-         _nodes.push_back(sps(BMESH::upcast(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing));
+         //generate_samples(dynamic_pointer_cast<BMESH>(geom->body()), 1.0, fs, bcs);
+         //generate_samples(dynamic_pointer_cast<BMESH>(geom->body()), fs, bcs, HEIGHT, MIN_DIST);
+         _nodes.push_back(sps(dynamic_pointer_cast<BMESH>(geom->body()), HEIGHT, REGULARITY, MIN_DIST, fs, bcs, spacing));
          for (Bface_list::size_type i = 0; i < fs.size(); i++) {
             Wpt pt;
             fs[i]->bc2pos(bcs[i], pt);

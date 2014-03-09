@@ -234,8 +234,9 @@ HatchingGroupFree::get_mapping(TAGformat &d)
    UVdata *uvdata;
    int index;
 
-   BMESH *mesh = _patch->mesh();
-   if (LMESH::isa(mesh)) mesh = ((LMESH*)mesh)->cur_mesh();
+   BMESHptr mesh = _patch->mesh();
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(mesh);
+   if (mesh) mesh = lm->cur_mesh();
    CBface_list& faces = mesh->faces();
 
    *d >> index;

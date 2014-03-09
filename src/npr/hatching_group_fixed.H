@@ -94,13 +94,13 @@ class HatchingGroupFixed : public HatchingGroup,
    /******** BMESHobs METHODS *******/
    //Called by HatchingCollection which is
    //the subscriber of the notifications...
-   virtual void    notify_change       (BMESH*, BMESH::change_t);
-   virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
-   //virtual void  notify_merge        (BMESH*, BMESH*)           {}
-   //virtual void  notify_split        (BMESH*, const vector<BMESH*>&){}
-   //virtual void  notify_subdiv_gen   (BMESH*)                   {}
-   //virtual void  notify_delete       (BMESH*)                   {}
-   //virtual void  notify_sub_delete   (BMESH*)                   {}
+   virtual void    notify_change       (BMESHptr, BMESH::change_t);
+   virtual void    notify_xform        (BMESHptr, mlib::CWtransf&, CMOD&);
+   //virtual void  notify_merge        (BMESHptr, BMESHptr)           {}
+   //virtual void  notify_split        (BMESHptr, const vector<BMESHptr>&){}
+   //virtual void  notify_subdiv_gen   (BMESHptr)                   {}
+   //virtual void  notify_delete       (BMESHptr)                   {}
+   //virtual void  notify_sub_delete   (BMESHptr)                   {}
 
    /******** HatchingGroupBase METHODS *******/
 
@@ -209,8 +209,8 @@ class HatchingHatchFixed :
    //Called by HatchingGroupFixed which is
    //notified by HatchingCollection, the 
    //subscriber of the notifications...
-   virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
-   virtual void    notify_change       (BMESH*, BMESH::change_t);
+   virtual void    notify_xform        (BMESHptr, mlib::CWtransf&, CMOD&);
+   virtual void    notify_change       (BMESHptr, BMESH::change_t);
 
       /******** DATA_ITEM METHODS ********/
  public:
@@ -296,8 +296,8 @@ class HatchingBackboneFixed :
       //Called by HatchingGroupFixed which is
       //notified by HatchingCollection, the 
       //subscriber of the notifications...
-      virtual void    notify_xform        (BMESH*, mlib::CWtransf&, CMOD&);
-      virtual void    notify_change       (BMESH*, BMESH::change_t);
+      virtual void    notify_xform        (BMESHptr, mlib::CWtransf&, CMOD&);
+      virtual void    notify_change       (BMESHptr, BMESH::change_t);
 
 
  public:

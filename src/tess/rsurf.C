@@ -1105,7 +1105,7 @@ bool
 Rsurface::sew_ribbons(CBface_list& side_b, MULTI_CMDptr cmd)
 {
    err_adv(debug, "Rsurface::sew_ribbons");
-   LMESH* mesh = dynamic_cast<LMESH*>(side_b.mesh());
+   LMESHptr mesh = dynamic_pointer_cast<LMESH>(side_b.mesh());
    if (!mesh) {
       err_adv(debug, "  can't get side B mesh");
       return 0;
@@ -1306,7 +1306,7 @@ Rsurface::find_b(CBface_list& A, Bface_list& B)
 
    B.clear();
 
-   LMESH* m = dynamic_cast<LMESH*>(A.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(A.mesh());
    if (!m)
       return 0;
 

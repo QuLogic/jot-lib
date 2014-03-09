@@ -445,7 +445,7 @@ void
 outputMesh(ostream &os)
 {
    // fprintf(stderr, "Starting to output\n");
-   BMESHptr mesh = new BMESH;
+   BMESHptr mesh = make_shared<BMESH>();
   
    for (vector<SbVec3f>::size_type i = 0; i < points.size(); i++) {
       const float *data = points[i].getValue();

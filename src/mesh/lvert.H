@@ -85,10 +85,10 @@ class Lvert : public Bvert {
 
    //******** ACCESSORS ********
 
-   LMESH* lmesh()                 const   { return (LMESH*)mesh(); }
-   Ledge* le(int k)               const   { return (Ledge*)_adj[k]; }
-   Lvert* lv(int k)               const   { return (Lvert*)nbr(k); }
-   Lvert* subdiv_vertex()         const   { return _subdiv_vertex; }
+   LMESHptr lmesh()                 const   { return dynamic_pointer_cast<LMESH>(mesh()); }
+   Ledge*   le(int k)               const   { return (Ledge*)_adj[k]; }
+   Lvert*   lv(int k)               const   { return (Lvert*)nbr(k); }
+   Lvert*   subdiv_vertex()         const   { return _subdiv_vertex; }
 
  public:
 

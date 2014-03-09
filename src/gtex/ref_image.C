@@ -1405,7 +1405,7 @@ VisRefImage::get_sub_face(
 
    if (level == 0)
       return f;
-   else if (f && LMESH::isa(f->mesh()))
+   else if (f && dynamic_pointer_cast<LMESH>(f->mesh()))
       return ((Lface*)f)->bc_to_level(level, bc);
    else
       return nullptr;
@@ -1420,7 +1420,7 @@ VisRefImage::get_edit_face(
 {
    Bface* f = get_face_bc(bc, ndc, rad);
 
-   if (f && LMESH::isa(f->mesh()))
+   if (f && dynamic_pointer_cast<LMESH>(f->mesh()))
       return ((Lface*)f)->bc_to_edit_level(bc);
    else
       return nullptr;

@@ -53,8 +53,8 @@ class Patch;
  *      Subdivision surfaces are implemented in the subclass LMESH.
  */
 /**********************************************************************/
-MAKE_PTR_SUBC(BMESH,BODY);
-typedef const BMESHptr CBMESHptr;
+MAKE_SHARED_PTR(BMESH);
+typedef const BMESH CBMESH;
 class BMESH : public BODY, public NameLookup<BMESH> {
  public:
 
@@ -240,14 +240,14 @@ class BMESH : public BODY, public NameLookup<BMESH> {
     */
    EdgeStrip* get_crease_strip() const {
       if (!_creases) {
-         ((BMESH*)this)->_creases = new_edge_strip();
+         const_cast<BMESH*>(this)->_creases = new_edge_strip(); // FIXME: Why is this const?
          _creases->build_with_tips(edges(),CreaseEdgeFilter());
       }
       return _creases;
    }
    EdgeStrip* get_border_strip() const {
       if (!_borders) {
-         ((BMESH*)this)->_borders = new_edge_strip();
+         const_cast<BMESH*>(this)->_borders = new_edge_strip(); // FIXME: Why is this const?
          _borders->build_with_tips(edges(),BorderEdgeFilter());
       }
       return _borders;
@@ -397,7 +397,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    /// Approximate pixel extent based on bounding box
    double pix_size() const { 
       if (_pix_size_stamp != VIEW::stamp())
-         ((BMESH*)this)->compute_pix_size();
+         const_cast<BMESH*>(this)->compute_pix_size(); // FIXME: Why is this const?
       return _pix_size;
    }
    void compute_pix_size();
@@ -411,7 +411,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    //******** TOPOLOGY ********
    int type() const {
       if (!_type_valid)
-         ((BMESH*)this)->check_type();
+         const_cast<BMESH*>(this)->check_type(); // FIXME: Why is this const?
       return _type;
    }
    bool is_points()             const   { return (type() & POINTS)         != 0; }
@@ -441,7 +441,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    vector<Bface_list> get_components() const;
 
    /// split mesh into connected components:
-   virtual vector<BMESH*> split_components();
+   virtual vector<BMESHptr> split_components();
 
    void split_patches();
 
@@ -622,9 +622,9 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    virtual void transform(CWtransf &xform, CMOD& m = MOD());
 
    // CSG methods:
-   virtual BODY* subtract (BODYptr&) { return nullptr; } // CSG subtract
-   virtual BODY* combine  (BODYptr&) { return nullptr; } // CSG union
-   virtual BODY* intersect(BODYptr&) { return nullptr; } // CSG intersect
+   virtual BODYptr subtract (BODYptr&) { return nullptr; } // CSG subtract
+   virtual BODYptr combine  (BODYptr&) { return nullptr; } // CSG union
+   virtual BODYptr intersect(BODYptr&) { return nullptr; } // CSG intersect
 
    virtual void         set_vertices(CWpt_list &) { }
    virtual CWpt_list&   vertices();
@@ -663,6 +663,14 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    virtual STDdstream  &format(STDdstream &d) const;
    virtual STDdstream  &decode(STDdstream &d);
 
+   shared_ptr<const BMESH> shared_from_this() const {
+      return static_pointer_cast<const BMESH>(BODY::shared_from_this());
+   }
+
+   shared_ptr<BMESH> shared_from_this() {
+      return static_pointer_cast<BMESH>(BODY::shared_from_this());
+   }
+
    //******** NPR SOFT SHADOWS ********
 
    // these return references for use in I/O TAG_val methods:
@@ -684,7 +692,8 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    
    BMESHcurvature_data *curvature() const {
       if (!_curv_data)
-         _curv_data = new BMESHcurvature_data(this);
+         // FIXME: const
+         _curv_data = new BMESHcurvature_data(const_pointer_cast<BMESH>(shared_from_this()));
       return _curv_data;
    }
         
@@ -826,7 +835,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
    bool remove_patch(int k);
 
    /// internal version of merge(), after error checking:
-   virtual void _merge(BMESH* mesh);
+   virtual void _merge(BMESHptr mesh);
 
    /*! In BMESH, just calls BMESHobs::broadcast_update_request(this),
     * but in LMESH also updates subdivision meshes: */
@@ -846,17 +855,17 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 inline BMESHptr
 gel_to_bmesh(CGELptr &gel) 
 {
-   return BMESH::upcast(gel_to_body(gel));
+   return dynamic_pointer_cast<BMESH>(gel_to_body(gel));
 }
 
 inline GEL*
-bmesh_to_gel(BMESH* mesh)
+bmesh_to_gel(BMESHptr mesh)
 {
    return mesh ? mesh->geom() : nullptr;
 }
 
 inline GEOM*
-bmesh_to_geom(BMESH* mesh)
+bmesh_to_geom(BMESHptr mesh)
 {
    return mesh ? mesh->geom() : nullptr;
 }
@@ -865,7 +874,7 @@ bmesh_to_geom(BMESH* mesh)
  * given BMESH, and upcasting it to a given type, if valid.
  */
 template <class T>
-inline T* mesh_geom(BMESH* mesh, T* init) 
+inline T* mesh_geom(BMESHptr mesh, T* init)
 {
    GEOM* geom = bmesh_to_geom(mesh);
    return T::isa(geom) ? (T*)geom : init; 
@@ -901,14 +910,14 @@ class BMESHobs_list : public set<BMESHobs*> {
    //******** CONVENIENCE METHODS ********
 
    // Forward notifications to all observers in the list:
-   void notify_change        (BMESH*, BMESH::change_t)  const;
-   void notify_xform         (BMESH*, CWtransf&, CMOD&) const;
-   void notify_merge         (BMESH*, BMESH*)           const;
-   void notify_split         (BMESH*, const vector<BMESH*>&) const;
-   void notify_subdiv_gen    (BMESH* parent)            const;
-   void notify_delete        (BMESH*)                   const;
-   void notify_sub_delete    (BMESH*)                   const;
-   void notify_update_request(BMESH*)                   const;
+   void notify_change        (BMESHptr, BMESH::change_t)  const;
+   void notify_xform         (BMESHptr, CWtransf&, CMOD&) const;
+   void notify_merge         (BMESHptr, BMESHptr)         const;
+   void notify_split         (BMESHptr, const vector<BMESHptr>&) const;
+   void notify_subdiv_gen    (BMESHptr parent)            const;
+   void notify_delete        (BMESHptr)                   const;
+   void notify_sub_delete    (BMESHptr)                   const;
+   void notify_update_request(BMESHptr)                   const;
 
    //******** UTILITIES ********
 
@@ -931,10 +940,10 @@ class BMESHobs {
 
    // Used by observers to subscribe or unsubscribe 
    // to mesh notifications for a given BMESH:
-   void subscribe_mesh_notifications(BMESH* m) {
+   void subscribe_mesh_notifications(BMESHptr m) {
       bmesh_obs_list(m).insert(this);
    }
-   void unsubscribe_mesh_notifications(BMESH* m) {
+   void unsubscribe_mesh_notifications(BMESHptr m) {
       bmesh_obs_list(m).erase(this);
    }
 
@@ -951,29 +960,29 @@ class BMESHobs {
 
    // Virtual methods filled in by BMESHobs subclasses, 
    // to respond to various BMESH events:
-   virtual void notify_change    (BMESH*, BMESH::change_t)  {}
-   virtual void notify_xform     (BMESH*, CWtransf&, CMOD&) {}
-   virtual void notify_merge     (BMESH*, BMESH*)           {}
-   virtual void notify_split     (BMESH*, const vector<BMESH*>&) {}
-   virtual void notify_subdiv_gen(BMESH*)                   {}
-   virtual void notify_delete    (BMESH*)                   {}
-   virtual void notify_sub_delete(BMESH*)                   {}
+   virtual void notify_change    (BMESHptr, BMESH::change_t)  {}
+   virtual void notify_xform     (BMESHptr, CWtransf&, CMOD&) {}
+   virtual void notify_merge     (BMESHptr, BMESHptr)         {}
+   virtual void notify_split     (BMESHptr, const vector<BMESHptr>&) {}
+   virtual void notify_subdiv_gen(BMESHptr)                   {}
+   virtual void notify_delete    (BMESHptr)                   {}
+   virtual void notify_sub_delete(BMESHptr)                   {}
 
    // This is for observers who want to update the mesh before it
    // does something important like try to draw itself:
-   virtual void notify_update_request(BMESH*)               {}
+   virtual void notify_update_request(BMESHptr)               {}
 
    //******** STATICS ********
 
    // These are called by a BMESH to notify observers:
-   static  void broadcast_change        (BMESH*, BMESH::change_t);
-   static  void broadcast_xform         (BMESH*, CWtransf& xf, CMOD&);
-   static  void broadcast_merge         (BMESH* joined, BMESH* removed);
-   static  void broadcast_split         (BMESH*, const vector<BMESH*>&);
-   static  void broadcast_subdiv_gen    (BMESH*);
-   static  void broadcast_delete        (BMESH*);
-   static  void broadcast_sub_delete    (BMESH*);
-   static  void broadcast_update_request(BMESH*);
+   static  void broadcast_change        (BMESHptr, BMESH::change_t);
+   static  void broadcast_xform         (BMESHptr, CWtransf& xf, CMOD&);
+   static  void broadcast_merge         (BMESHptr joined, BMESHptr removed);
+   static  void broadcast_split         (BMESHptr, const vector<BMESHptr>&);
+   static  void broadcast_subdiv_gen    (BMESHptr);
+   static  void broadcast_delete        (BMESHptr);
+   static  void broadcast_sub_delete    (BMESHptr);
+   static  void broadcast_update_request(BMESHptr);
 
    //******** UTILITIES ********
 
@@ -981,23 +990,23 @@ class BMESHobs {
    virtual string name() const { return "bmesh_obs"; }
 
    // Returns the observer list for a particular mesh:
-   static const BMESHobs_list& observers(BMESH* m)  {
+   static const BMESHobs_list& observers(BMESHptr m)  {
       return bmesh_obs_list(m);
    }
 
-   static void print_names(BMESH* m) { observers(m).print_names(); }
+   static void print_names(BMESHptr m) { observers(m).print_names(); }
 
  protected:
    // Hash table that maps an observer list to a particular mesh:
-   static map<BMESH*,BMESHobs_list*> _hash;
+   static map<BMESHptr,BMESHobs_list*> _hash;
 
    // List of observers that want to get notified if ANY mesh
    // changes:
    static BMESHobs_list _all_observers;
 
    // Returns the observer list for a particular mesh:
-   static BMESHobs_list& bmesh_obs_list(BMESH* m)  {
-      map<BMESH*,BMESHobs_list*>::iterator it = _hash.find(m);
+   static BMESHobs_list& bmesh_obs_list(BMESHptr m)  {
+      map<BMESHptr,BMESHobs_list*>::iterator it = _hash.find(m);
       BMESHobs_list *list;
       if (it == _hash.end()) {
         list = new BMESHobs_list;
@@ -1032,7 +1041,7 @@ class BMESHray : public RAYhit {
    Bsimplex* simplex()          const   { return _simplex; }
    void      set_simplex(Bsimplex *s)   { _simplex = s; }
 
-   BMESH* mesh() const { return _simplex ? _simplex->mesh() : nullptr; }
+   BMESHptr mesh() const { return _simplex ? _simplex->mesh() : nullptr; }
 
    //******** CONVENIENT CASTS ********
    Bvert* vert() const { return bvert(_simplex); }

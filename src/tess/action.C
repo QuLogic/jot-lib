@@ -51,7 +51,7 @@ lookup_mesh(int mesh_num)
       err_adv(debug, "lookup_mesh: error: invalid mesh num");
       return nullptr;
    }
-   return LMESH::upcast(tx->mesh(mesh_num));
+   return dynamic_pointer_cast<LMESH>(tx->mesh(mesh_num));
 }
 
 inline int
@@ -602,7 +602,7 @@ BcurveAction::apply_indices(const Action_list& list)
 
    if (debug) {
       cerr << "BcurveAction::apply_indices: "
-           << "mesh: " << (LMESH*)_mesh
+           << "mesh: " << static_pointer_cast<LMESH>(_mesh)
            << ", b1: " << _b1
            << ", b2: " << _b2
            << endl;
@@ -784,7 +784,7 @@ PanelAction::create(
    CWplane&     P,      // plane
    CWpt&        c,      // center
    double       r,      // radius
-   LMESH*       mesh,   // mesh to use
+   LMESHptr     mesh,   // mesh to use
    int          samples,// number of control verticies
    MULTI_CMDptr cmd     // undoable command that this action is part of
    )

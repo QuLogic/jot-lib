@@ -176,7 +176,7 @@ class ZCrossExtractor {
    //! \name Constructors
    //@{
       
-   ZCrossExtractor(const BMESH *mesh_in,
+   ZCrossExtractor(const BMESHptr mesh_in,
                    ScalarField sfield_in = ScalarField(),
                    Confidence conf_in = Confidence(),
                    FaceGenerator fgen_in = FaceGenerator())
@@ -196,7 +196,7 @@ class ZCrossExtractor {
    //! \name Accessors
    //@{
       
-   const BMESH *get_mesh() const { return mesh; }
+   const BMESHptr get_mesh() const { return mesh; }
       
    //@}
       
@@ -232,7 +232,7 @@ class ZCrossExtractor {
    
    std::vector<bool> face_markers;
       
-   const BMESH *mesh;
+   const BMESHptr mesh;
       
    ScalarField sfield;
    Confidence conf;

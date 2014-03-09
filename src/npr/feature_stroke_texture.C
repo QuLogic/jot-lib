@@ -544,7 +544,7 @@ FeatureStrokeTexture::get_decal_stroke_pool()
 }
 
 void
-FeatureStrokeTexture::notify_xform(BMESH* m, CWtransf& t, CMOD&)
+FeatureStrokeTexture::notify_xform(BMESHptr m, CWtransf& t, CMOD&)
 {
    err_mesg(ERR_LEV_SPAM, "FeatureStrokeTexture::notify_xform()");
 

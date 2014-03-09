@@ -61,9 +61,9 @@ void diagonalize_curv(const Wvec &old_u, const Wvec &old_v,
                       const Wvec &new_norm,
                       Wvec &pdir1, Wvec &pdir2, double &k1, double &k2);
 
-inline void compute_edge_vectors(const BMESH *mesh, int face_idx, Wvec edges[3]);
+inline void compute_edge_vectors(const BMESHptr mesh, int face_idx, Wvec edges[3]);
 inline void compute_ntb_coord_sys(const Wvec edges[3], Wvec &n, Wvec &t, Wvec &b);
-inline void compute_initial_vertex_coord_sys(const BMESH *mesh,
+inline void compute_initial_vertex_coord_sys(const BMESHptr mesh,
                                              vector<Wvec> &pdir1, vector<Wvec> &pdir2);
 
 /* BMESHcurvature_data Constructors */
@@ -72,7 +72,7 @@ inline void compute_initial_vertex_coord_sys(const BMESH *mesh,
  *  Computes curvature and curvature derivatives for the given BMESH.
  *
  */
-BMESHcurvature_data::BMESHcurvature_data(const BMESH *mesh_in)
+BMESHcurvature_data::BMESHcurvature_data(const BMESHptr mesh_in)
    : mesh(mesh_in), mesh_feature_size(0.0)
 {
    
@@ -662,7 +662,7 @@ diagonalize_curv(const Wvec &old_u, const Wvec &old_v,
 
 inline
 void
-compute_edge_vectors(const BMESH *mesh, int face_idx, Wvec edges[3])
+compute_edge_vectors(const BMESHptr mesh, int face_idx, Wvec edges[3])
 {
    
    // Edges
@@ -686,7 +686,7 @@ compute_ntb_coord_sys(const Wvec edges[3], Wvec &n, Wvec &t, Wvec &b)
 
 inline
 void
-compute_initial_vertex_coord_sys(const BMESH *mesh,
+compute_initial_vertex_coord_sys(const BMESHptr mesh,
                                  vector<Wvec> &pdir1, vector<Wvec> &pdir2)
 {
    

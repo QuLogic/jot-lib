@@ -48,7 +48,7 @@ class BvertGrid {
    CWpt&  loc (int i, int j)    const { return _grid[j][i]->loc(); }
    UVpt   uv  (int i, int j)    const { return mlib::UVpt(i*_du, j*_dv); }
 
-   BMESH* mesh()                const { return _mesh; }
+   BMESHptr mesh()              const { return _mesh; }
 
    // rows
    CBvert_list& row(int j) const { return _grid[j]; }
@@ -115,7 +115,7 @@ class BvertGrid {
    int          _ColsCache;     // numcols - 1
    double       _du;            // change in u from one column to the next
    double       _dv;            // change in v from one row to the next
-   BMESH*       _mesh;
+   BMESHptr     _mesh;
 
    //******** INTERNAL METHODS ********
 

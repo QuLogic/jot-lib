@@ -129,10 +129,10 @@ class TEXBODY : public GEOM, public XFORMobs {
    bool has_skels()     const;
 
    // Is it a skeleton mesh of this TEXBODY?
-   bool is_skel(BMESH* m) const { return skel_meshes().contains(m); }
+   bool is_skel(BMESHptr m) const { return skel_meshes().contains(m); }
 
    // Is it a skeleton enclosed in a surface?
-   bool is_inner_skel(BMESH* m) const;
+   bool is_inner_skel(BMESHptr m) const;
 
    void add_post_drawer(RefImageClient* p) { _post_drawers.add_uniquely(p); }
    void rem_post_drawer(RefImageClient* p) { _post_drawers -= p; }
@@ -207,12 +207,12 @@ class TEXBODY : public GEOM, public XFORMobs {
 
    // access FFS meshes from *this* TEXBODY:
    LMESHptr get_skel_mesh() const {
-      return LMESH::upcast(
+      return dynamic_pointer_cast<LMESH>(
          _meshes.valid_index(SKELETON_MESH) ? _meshes[SKELETON_MESH] : nullptr
          );
    }
    LMESHptr get_surf_mesh() const {
-      return LMESH::upcast(
+      return dynamic_pointer_cast<LMESH>(
          _meshes.valid_index(SURFACE_MESH) ? _meshes[SURFACE_MESH] : nullptr
          );
    }

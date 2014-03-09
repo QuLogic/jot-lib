@@ -69,7 +69,7 @@ TEXBODY::TEXBODY(CGEOMptr& geom, const string& name) :
       // copy the shape:
       if (geom->body()) {
          // copy it into an LMESH and add it to the representations
-         BMESHptr mesh = new LMESH;
+         BMESHptr mesh = make_shared<LMESH>();
          *mesh = *geom->body();
          add
             (mesh);
@@ -335,7 +335,7 @@ is_skel(BMESHptr& m)
 }
 
 bool
-TEXBODY::is_inner_skel(BMESH* m) const
+TEXBODY::is_inner_skel(BMESHptr m) const
 {
    // Is it a skeleton enclosed in a surface?
    // (Hence, maybe it can skip drawing??)
@@ -445,7 +445,7 @@ TEXBODY::get_inflate_mesh(BMESHptr mesh)
    }
 
    // Didn't work, so make a new one:
-   if (add(dynamic_cast<BMESH*>(mesh->dup()))) {
+   if (add(BMESHptr(static_cast<BMESH*>(mesh->dup())))) {
       return _meshes.last();
    }
    return nullptr;
@@ -757,7 +757,7 @@ TEXBODY::get_mesh_data_file(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    string filename;
@@ -823,7 +823,7 @@ TEXBODY::get_mesh_data(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    string str;
@@ -877,7 +877,7 @@ TEXBODY::get_mesh_data_update_file(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    *d >> _mesh_update_file;
@@ -922,7 +922,7 @@ TEXBODY::get_mesh_data_update(TAGformat &d)
 {   
    BMESHptr cur = cur_rep();
    if (!cur)
-      add(cur = new LMESH);
+      add(cur = make_shared<LMESH>());
    assert(cur);
 
    string name;
@@ -972,7 +972,7 @@ TEXBODY::get_mesh_file(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
 
@@ -1003,7 +1003,7 @@ TEXBODY::get_mesh(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    // XXX -- Assuming this is an ASCII stream
@@ -1028,7 +1028,7 @@ TEXBODY::get_mesh_update_file(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    string filename;
@@ -1052,7 +1052,7 @@ TEXBODY::get_mesh_update(TAGformat &d)
    BMESHptr cur = cur_rep();
    if (!cur)
       add
-         (cur = new LMESH);
+         (cur = make_shared<LMESH>());
    assert(cur);
 
    // XXX -- Assuming this is an ASCII stream
@@ -1223,7 +1223,7 @@ TEXBODY::get_ffs_mesh(mesh_t mesh_id, MULTI_CMDptr cmd)
    assert(c);
    CBMESH_list& m = c->meshes();
    assert(m.num() == NUM_MESH_T);
-   LMESHptr ret = LMESH::upcast(m[mesh_id]);
+   LMESHptr ret = dynamic_pointer_cast<LMESH>(m[mesh_id]);
    assert(ret);
    return ret;
 }
@@ -1231,7 +1231,7 @@ TEXBODY::get_ffs_mesh(mesh_t mesh_id, MULTI_CMDptr cmd)
 LMESHptr
 TEXBODY::create_mesh(const string& base_name)
 {
-   LMESHptr ret = new LMESH;
+   LMESHptr ret = make_shared<LMESH>();
 
    // Assign a unique name to the mesh:
    assert(ret && !ret->has_name());

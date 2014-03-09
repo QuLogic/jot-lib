@@ -68,7 +68,7 @@ class REPARENT_CMD : public COMMAND {
 REPARENT_CMD::REPARENT_CMD(Bvert* o, Bvert* c) : _o(nullptr), _c(nullptr)
 {
    assert(o && c && o->mesh() == c->mesh());
-   if (!LMESH::isa(o->mesh()))
+   if (!dynamic_pointer_cast<LMESH>(o->mesh()))
       return;
    _o = (Lvert*)o;
    _c = (Lvert*)c;
@@ -350,7 +350,7 @@ REDEF_EDGE_CMD::undoit()
 JOIN_SEAM_CMD::JOIN_SEAM_CMD(CBvert_list& o, CBvert_list& c) :
    _cmds(make_shared<MULTI_CMD>())
 {
-   LMESH* m = dynamic_cast<LMESH*>(c.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(c.mesh());
    if (!(m && m == o.mesh() && c.size() == o.size())) {
       err_adv(debug, "JOIN_SEAM_CMD::JOIN_SEAM_CMD: bad chains");
       return;
@@ -526,7 +526,7 @@ FIT_VERTS_CMD::FIT_VERTS_CMD(CBvert_list& verts, CWpt_list& new_locs)
               verts.size(), new_locs.size());
       return;
    }
-   if (!LMESH::isa(verts.mesh())) {
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh())) {
       err_msg("FIT_VERTS_CMD::FIT_VERTS_CMD: error: need LMESH");
       return;
    }
@@ -541,7 +541,7 @@ FIT_VERTS_CMD::is_good() const
    return (
       _verts.size() == _new_locs.size() &&
       _verts.size() == _old_lists.back().size() &&
-      (is_empty() || LMESH::isa(_verts.mesh()))
+      (is_empty() || dynamic_pointer_cast<LMESH>(_verts.mesh()))
       );
 }
 
@@ -556,7 +556,7 @@ get_parents(
    assert(children.size() == child_locs.size());
    parents.clear();
    parent_locs.clear();
-   if (!LMESH::isa(children.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(children.mesh()))
       return;
    for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
@@ -619,7 +619,7 @@ FIT_VERTS_CMD::fit_verts(CBvert_list& verts, CWpt_list& new_locs, int lev)
       LMESH::update_subdivision(parents, 1);
    }
 
-   BMESH* mesh = verts.mesh();
+   BMESHptr mesh = verts.mesh();
    if (mesh)
       mesh->changed(BMESH::VERT_POSITIONS_CHANGED);
    else
@@ -734,7 +734,7 @@ MOVE_VERT_CMD::undoit()
 inline vector<double>
 get_offsets(CBvert_list& verts)
 {
-   if (!LMESH::isa(verts.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh()))
       return vector<double>(0);
 
    vector<double> ret(verts.size());
@@ -755,7 +755,7 @@ get_parents(
    assert(children.size() == child_offsets.size());
    parents.clear();
    parent_offsets.clear();
-   if (!LMESH::isa(children.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(children.mesh()))
       return;
    for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
@@ -776,7 +776,7 @@ SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD(
               verts.size(), offsets.size());
       return;
    }
-   if (!LMESH::isa(verts.mesh())) {
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh())) {
       err_msg("SUBDIV_OFFSET_CMD::SUBDIV_OFFSET_CMD: error: need LMESH");
       return;
    }
@@ -796,14 +796,14 @@ SUBDIV_OFFSET_CMD::is_good() const
 {
    return (
       _verts.size() == _offsets.size() &&
-      (is_empty() || LMESH::isa(_verts.mesh()))
+      (is_empty() || dynamic_pointer_cast<LMESH>(_verts.mesh()))
       );
 }
 
 inline Wpt_list
 get_smooth_locs(CBvert_list& verts)
 {
-   if (!LMESH::isa(verts.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh()))
       return Wpt_list();
 
    Wpt_list ret(verts.size());
@@ -815,7 +815,7 @@ get_smooth_locs(CBvert_list& verts)
 inline vector<Wvec>
 get_parent_norms(CBvert_list& verts)
 {
-   if (!LMESH::isa(verts.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh()))
       return vector<Wvec>();
 
    vector<Wvec> ret(verts.size());
@@ -825,7 +825,7 @@ get_parent_norms(CBvert_list& verts)
 }
 
 inline void
-mesh_changed(BMESH* mesh, int line_num)
+mesh_changed(BMESHptr mesh, int line_num)
 {
    if (mesh)
       mesh->changed(BMESH::TOPOLOGY_CHANGED);

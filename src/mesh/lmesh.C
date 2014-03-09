@@ -56,7 +56,7 @@ LMESH::LMESH(int num_v, int num_e, int num_f) :
 {
    // Some compilers complain if 'this' is used in
    // member variable initialization section above
-   _cur_mesh = this;
+   _cur_mesh.reset(this);
    _lmesh_tags = nullptr;            // non-static tags
 }
 
@@ -67,7 +67,7 @@ LMESH::~LMESH()
    delete _color_calc;
 }
 
-LMESH* 
+LMESHptr
 LMESH::get_lmesh(const string& exact_name)
 {
    // Return an LMESH with the given name.  If one already exists,
@@ -85,11 +85,11 @@ LMESH::get_lmesh(const string& exact_name)
    }
 
    // Does a mesh with the requested name exist?
-   BMESH* mesh = NameLookup<BMESH>::lookup(exact_name);
+   BMESHptr mesh = dynamic_cast<BMESH*>(NameLookup<BMESH>::lookup(exact_name))->shared_from_this();
 
    // If no mesh of that name exists, create a new one:
    if (!mesh) {
-      LMESH* ret = new LMESH;
+      LMESHptr ret = make_shared<LMESH>();
       assert(ret && !ret->has_name());
       ret->set_name(exact_name);
       return ret;
@@ -97,13 +97,14 @@ LMESH::get_lmesh(const string& exact_name)
 
    // A BMESH with the requested name already exists;
    // if it is not also an LMESH, this is an error:
-   if (debug && !LMESH::isa(mesh)) {
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(mesh);
+   if (debug && !lm) {
       cerr << "LMESH::get_lmesh: error: found requested name: "
            << exact_name
            << ", but it is not an LMESH"
            << endl;
    }
-   return dynamic_cast<LMESH*>(mesh);
+   return lm;
 }
 
 void
@@ -228,7 +229,7 @@ LMESH::clear_creases()
 Patch*
 LMESH::new_patch()
 {
-   Patch* ret = new Lpatch(this);
+   Patch* ret = new Lpatch(shared_from_this());
 
    _patches += ret;
    if (is_control_mesh())
@@ -265,7 +266,7 @@ LMESH::new_face(
 int
 LMESH::remove_vertex(Bvert* bv)
 {
-   assert(bv && bv->mesh() == this);
+   assert(bv && bv->mesh().get() == this);
    Lvert* v = (Lvert*)bv;
 
    // Get it out of the dirty list
@@ -284,7 +285,7 @@ LMESH::remove_edge(Bedge* be)
    // first, before the edge is detached
    // and loses its connectivity info
 
-   assert(be && be->mesh() == this);
+   assert(be && be->mesh().get() == this);
    Ledge* e = (Ledge*)be;
 
    e->delete_subdiv_elements();
@@ -298,7 +299,7 @@ LMESH::remove_face(Bface* bf)
    // first, before the face is detached
    // and loses its connectivity info
 
-   assert(bf && bf->mesh() == this);
+   assert(bf && bf->mesh().get() == this);
    Lface* f = (Lface*)bf;
 
    f->delete_subdiv_elements();
@@ -362,7 +363,7 @@ LMESH::changed(change_t change)
 //       _subdiv_mesh->changed(change);
 
    // notify subdiv meshes
-   for (LMESH* m = _subdiv_mesh; m; m = m->_subdiv_mesh)
+   for (LMESHptr m = _subdiv_mesh; m; m = m->_subdiv_mesh)
       m->BMESH::changed(change);
 
    // ensure control mesh knows to invalidate display lists etc.
@@ -478,13 +479,13 @@ LMESH::transform(CWtransf &xform, CMOD& mod)
 }
 
 void
-LMESH::_merge(BMESH* bm)
+LMESH::_merge(BMESHptr bm)
 {
    // merge the given mesh into this one.
 
    // error checking was done before this protected method was called.
    // so this convenient cast is safe:
-   LMESH* m = static_cast<LMESH*>(bm);
+   LMESHptr m = static_pointer_cast<LMESH>(bm);
 
    // merge subdivision meshes (recursively) first. but if this one
    // has fewer levels of subdivision, truncate the other one to the
@@ -587,7 +588,7 @@ LMESH::allocate_subdiv_mesh()
       return 1; // It was easy
 
    // Actually have to do it:
-   _subdiv_mesh = new LMESH(
+   _subdiv_mesh = make_shared<LMESH>(
       nverts()     + nedges(),       // number of vertices
       2*nedges() + 3*nfaces(),       // number of edges
       4*nfaces()                     // number of faces
@@ -602,12 +603,12 @@ LMESH::allocate_subdiv_mesh()
    // Inherited stuff:
    _subdiv_mesh->_type = _type;
    _subdiv_mesh->_geom = _geom;
-   _subdiv_mesh->set_parent(this);
+   _subdiv_mesh->set_parent(shared_from_this());
    _subdiv_mesh->set_subdiv_loc_calc(_loc_calc->dup());
    _subdiv_mesh->set_subdiv_color_calc(_color_calc->dup());
 
    // Tell observers the subdivision mesh was allocated:
-   BMESHobs::broadcast_subdiv_gen(this);
+   BMESHobs::broadcast_subdiv_gen(shared_from_this());
 
    return 1; // success
 }
@@ -664,7 +665,7 @@ debug_check_verts(const string& msg, CBvert_list& verts, CBvert_list& dirty_vert
 }
 
 inline string
-get_name(LMESH* m)
+get_name(LMESHptr m)
 {
    return (m && m->geom()) ? m->geom()->name() :
       (m ? "null geom" : "null mesh");
@@ -692,14 +693,14 @@ LMESH::update_subdivision(int level)
    // to "handle" it. But that observer (e.g. a Bsurface) may not
    // have actually handled it yet, preferring to wait for the
    // update request which is going out now:
-   BMESHobs::broadcast_update_request(this);
+   BMESHobs::broadcast_update_request(shared_from_this());
 
    // If level <= 0 there is nothing to do.
    // If can't allocate subdiv mesh, give up:
    if (level <= 0 || !allocate_subdiv_mesh()) {
-      if (cur_mesh() == this)
+      if (cur_mesh().get() == this)
          return false;
-      control_mesh()->set_cur_mesh(this);
+      control_mesh()->set_cur_mesh(shared_from_this());
       return true;
    }
 
@@ -713,7 +714,7 @@ LMESH::update_subdivision(int level)
       }
       if (level > 0 && ret) {
          err_adv(debug, "%s: level %d updating subdiv mesh",
-                 ::get_name(this).c_str(), _subdiv_level);
+                 ::get_name(shared_from_this()).c_str(), _subdiv_level);
       }
    }
    err_adv(ret && debug,
@@ -815,7 +816,7 @@ LMESH::update_subdivision(CBface_list& faces, int k)
    if (faces.empty())
       return true;
 
-   LMESH* m = dynamic_cast<LMESH*>(faces.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(faces.mesh());
    if (!m) {
       err_adv(debug, "  error: non-LMESH");
       return false;
@@ -854,7 +855,7 @@ LMESH::subdivide_in_place()
 
       // copy it for safety
       // (blowing us away blows it away)
-      LMESHptr sub = new LMESH;
+      LMESHptr sub = make_shared<LMESH>();
       *sub = *_subdiv_mesh;
 
       // now blow us away and replace
@@ -868,7 +869,7 @@ void
 LMESH::delete_subdiv_mesh()
 {
    // Notify observers that it's gonna happen
-   BMESHobs::broadcast_sub_delete(this);
+   BMESHobs::broadcast_sub_delete(shared_from_this());
 
    if (is_control_mesh() && _subdiv_mesh) {
       int k;
@@ -882,7 +883,7 @@ LMESH::delete_subdiv_mesh()
          ((Lpatch*)_patches[k])->clear_subdiv_strips(1);
    }
    if (is_control_mesh())
-      set_cur_mesh(this);
+      set_cur_mesh(shared_from_this());
    _subdiv_mesh = nullptr;    // deletes _subdiv_mesh thru ref-counting
 }
 
@@ -894,12 +895,12 @@ LMESH::delete_elements()
 }
 
 void 
-LMESH::set_parent(LMESH* parent) 
+LMESH::set_parent(LMESHptr parent)
 {
    assert(parent);
    _parent_mesh = parent; 
    _subdiv_level = parent->subdiv_level() + 1;
-   LMESH* c = control_mesh();
+   LMESHptr c = control_mesh();
    assert(c != nullptr);
    if (c->has_name()) {
       char tmp[32];
@@ -909,7 +910,7 @@ LMESH::set_parent(LMESH* parent)
 }
 
 void
-LMESH::set_cur_mesh(LMESH* cur)
+LMESH::set_cur_mesh(LMESHptr cur)
 {
    if (is_control_mesh()) {
       if (_cur_mesh != cur) {
@@ -946,7 +947,7 @@ LMESH::refine()
 void
 LMESH::unrefine()
 {
-   if (is_control_mesh() && _cur_mesh != this) {
+   if (is_control_mesh() && _cur_mesh.get() != this) {
       set_cur_mesh(_cur_mesh->_parent_mesh);
       while (edit_level() > cur_level())
          dec_edit_level();
@@ -1140,7 +1141,7 @@ get_parents(CBvert_list& verts, Bvert_list& vp, Bedge_list& ep)
    if (verts.empty())
       return;
 
-   assert(LMESH::isa(verts.mesh()));
+   assert(dynamic_pointer_cast<LMESH>(verts.mesh()));
 
    for (Bvert_list::size_type i=0; i<verts.size(); i++)
       add_p((Lvert*)verts[i], vp, ep);
@@ -1212,7 +1213,7 @@ LMESH::get_subdiv_inputs(CBvert_list& verts)
    // Require verts share common LMESH
    // XXX - could relax this, provided we test each Bvert
    //       to ensure it is really an Lvert.
-   if (!isa(verts.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(verts.mesh()))
       return Bvert_list();
 
    // Get direct parent vertices and edges
@@ -1257,9 +1258,9 @@ bmesh_to_lmesh(BMESHptr mesh)
    // from the given mesh, and return the LMESH.
 
    if (!mesh) return nullptr;
-   LMESHptr ret = dynamic_cast<LMESH*>(&*mesh);
+   LMESHptr ret = dynamic_pointer_cast<LMESH>(mesh);
    if (!ret) {
-      ret = new LMESH;
+      ret = make_shared<LMESH>();
       *ret = *mesh;
    }
    return ret;

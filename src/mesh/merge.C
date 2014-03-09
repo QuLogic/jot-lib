@@ -32,7 +32,7 @@
 inline BMESHptr
 read_mesh(char* infile)
 {
-   BMESHptr ret = new BMESH;
+   BMESHptr ret = make_shared<BMESH>();
    if (!ret->read_file(infile))
       return nullptr;
    return ret;

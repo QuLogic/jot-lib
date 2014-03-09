@@ -70,7 +70,7 @@ FLOOR::FLOOR(
    set_name("FLOOR");
 
    // build the mesh:
-   BMESHptr m = new BMESH;
+   BMESHptr m = make_shared<BMESH>();
    set_body(m);
    m->Cube(Wpt(-1,-1,-1), Wpt(1,1,1));
    assert(m->npatches() == 1);
@@ -234,7 +234,7 @@ dist(CBvert* v, CWpt& c, CWvec& n)
 }
 
 void
-FLOOR::realign(BMESH* m, MULTI_CMDptr cmd)
+FLOOR::realign(BMESHptr m, MULTI_CMDptr cmd)
 {
    bool debug = Config::get_var_bool("DEBUG_FLOOR_REALIGN",false);
    if (!(m && m->nverts() > 0)) {

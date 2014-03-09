@@ -347,7 +347,7 @@ DrawPen::tapat(PIXEL x)
       err_adv(debug, "select bsurface");
    } else {
       err_adv(debug, "select mesh");
-      BMESH* m = VisRefImage::get_mesh();
+      BMESHptr m = VisRefImage::get_mesh();
       if (m == FLOOR::lookup_mesh()) {
          // don't focus on the floor
          BMESH::set_focus(nullptr,nullptr);
@@ -758,7 +758,7 @@ cov_inf_punch(Skin* c_skin, CBface_list& region, MULTI_CMDptr cmd)
       templists = get_c_verts(templists[0]);
       for (auto & list : templists) {
          Bcurve* b_curve = new Bcurve(list, c_p_skin,
-                                      dynamic_cast<LMESH*>(region.mesh())->subdiv_level());
+                                      dynamic_pointer_cast<LMESH>(region.mesh())->subdiv_level());
          cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
       }
       push(p_region, cmd);
@@ -813,7 +813,7 @@ check_inf_region(Bface_list region)
 static bool
 try_punch(CBface_list& region, bool debug)
 {
-   BMESH* mesh = region.mesh();
+   BMESHptr mesh = region.mesh();
    if (!mesh || FLOOR::isa(mesh->geom())) {
       err_adv(debug, "bad mesh");
       return 0;
@@ -865,7 +865,7 @@ try_punch(CBface_list& region, bool debug)
             uvpts.update_length();
             Bcurve* new_curve =
                new Bcurve(cvlist, uvpts, surf->map(),
-                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
+                          dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
             cmd->add(make_shared<SHOW_BBASE_CMD>(new_curve));
          }
 
@@ -882,7 +882,7 @@ try_punch(CBface_list& region, bool debug)
          for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
-                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
+                          dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
             cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
          }
 
@@ -896,7 +896,7 @@ try_punch(CBface_list& region, bool debug)
          for (auto & list : curve_verts_lists) {
             Bcurve* b_curve =
                new Bcurve(list, c_skin,
-                          dynamic_cast<LMESH*>(mesh)->subdiv_level());
+                          dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
             cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
          }
          
@@ -915,7 +915,7 @@ try_punch(CBface_list& region, bool debug)
 
             for (auto & list : curve_verts_lists) {
                Bcurve* b_curve = new Bcurve(list, c_skin,
-                  dynamic_cast<LMESH*>(mesh)->subdiv_level());
+                  dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
                cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
             }
 
@@ -968,7 +968,7 @@ try_punch(Bface* f, CSimplexFilter& impassable, bool debug=false)
 }
 
 inline bool
-has_sel_edges(BMESH* m)
+has_sel_edges(BMESHptr m)
 {
    return !MeshGlobal::selected_edges(m).empty();
 }
@@ -989,7 +989,7 @@ DrawPen::slash_tap_cb(CGESTUREptr& tap, DrawState*&)
       return 0;
    }
 
-   BMESH* m = f->mesh();
+   BMESHptr m = f->mesh();
    assert(f->mesh());
 
    // punch out the whole set of selected faces for this mesh

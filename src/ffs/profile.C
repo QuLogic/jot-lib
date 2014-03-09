@@ -176,7 +176,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    PIXEL_list temp_list;
    bool recording = false;
    Primitive* p = nullptr;
-   BMESH* mesh = nullptr;
+   BMESHptr mesh = nullptr;
 
    // find all the sections
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
@@ -201,7 +201,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
       }
       if (temp_p) mesh = temp_p->mesh();
    }
-   if (!LMESH::isa(mesh)) {
+   if (!dynamic_pointer_cast<LMESH>(mesh)) {
       err_adv(debug, "   found non-LMESH, rejecting");
       return false;
    }
@@ -215,7 +215,7 @@ PROFILE::find_matching_xsec(CGESTUREptr& g)
    err_adv(debug, "   gesture aligns with cross section");
    err_adv(debug, "   mesh level %d", mesh->subdiv_level());
 
-   _mesh = dynamic_cast<LMESH*>(_selected_edges.mesh());
+   _mesh = dynamic_pointer_cast<LMESH>(_selected_edges.mesh());
    _n = _a = _b = 0;
    _mode = 1; // _mode is set to editing the cross section
    activate();
@@ -407,7 +407,7 @@ PROFILE::find_matching_sil(CGESTUREptr& g)
 
    SilEdgeFilter sil_filter;
    const  PIXEL_list& pts = g->pts();
-   BMESH* mesh = nullptr;
+   BMESHptr mesh = nullptr;
    for (PIXEL_list::size_type i=0; i<pts.size(); i++) {
       Bedge* e = (Bedge*)
          vis_ref->find_near_simplex(pts[i], SIL_SEARCH_RAD, sil_filter);
@@ -421,7 +421,7 @@ PROFILE::find_matching_sil(CGESTUREptr& g)
       }
       mesh = e->mesh();
    }
-   if (!LMESH::isa(mesh)) {
+   if (!dynamic_pointer_cast<LMESH>(mesh)) {
       err_adv(debug, "   found non-LMESH, rejecting");
       return false;
    }
@@ -460,7 +460,7 @@ PROFILE::find_matching_sil(CPIXEL_list& pts, CEdgeStrip& sils)
       if (do_match(pts, sils.edge(i)) && check_tube_side(sils.edge(i)))
          _selected_edges.add(sils.vert(i), sils.edge(i));
 
-   _mesh = dynamic_cast<LMESH*>(_selected_edges.mesh());
+   _mesh = dynamic_pointer_cast<LMESH>(_selected_edges.mesh());
    _n = _a = _b = 0;
    _mode = 0; // _mode set to editting silhouette
    if (_mesh) {
@@ -570,7 +570,7 @@ PROFILE::select_faces()
       err_adv(debug, "PROFILE::select_faces: no selected edges");
       return;
    }
-   LMESH* m = dynamic_cast<LMESH*>(_selected_edges.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(_selected_edges.mesh());
    assert(m && _selected_edges.same_mesh());
    MeshGlobal::deselect_all();
 
@@ -908,7 +908,7 @@ get_parents(
    assert(children.size() == child_offsets.size());
    parents.clear();
    parent_offsets.clear();
-   if (!LMESH::isa(children.mesh()))
+   if (!dynamic_pointer_cast<LMESH>(children.mesh()))
       return;
    for (Bvert_list::size_type i=0; i<children.size(); i++) {
       Lvert* p = ((Lvert*)children[i])->parent_vert(1);
@@ -971,8 +971,8 @@ compute_yardstick(CBedge_list& edges, bool debug=false)
 {
    double ret = 0.6 * edges.strong_edges().avg_len();
 
-   BMESH* mk = edges.mesh();
-   BMESH* m0 = get_top_level(edges.get_faces()).mesh();
+   BMESHptr mk = edges.mesh();
+   BMESHptr m0 = get_top_level(edges.get_faces()).mesh();
 
    int    lk = 0;       // mesh level of edges
    int    l0 = 0;       // mesh level of edges' control region

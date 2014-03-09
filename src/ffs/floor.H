@@ -99,7 +99,7 @@ class FLOOR : public DrawWidget {
    static void toggle();
 
    //! If it's active, displace the floor to be "under" the given mesh:
-   static void realign(BMESH* m, MULTI_CMDptr cmd);
+   static void realign(BMESHptr m, MULTI_CMDptr cmd);
 
    //! If it's active, transform the floor
    static void transform(CWtransf& xf, MULTI_CMDptr cmd) {
@@ -210,7 +210,7 @@ class FLOOR : public DrawWidget {
    //! Okay to draw FLOOR?
    bool should_draw() const;
 
-   BMESHptr mesh() const { return BMESH::upcast(body()); }
+   BMESHptr mesh() const { return dynamic_pointer_cast<BMESH>(body()); }
 
    //******** GEOM VIRTUAL METHODS ********
 

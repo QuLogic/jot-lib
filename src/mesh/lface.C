@@ -44,7 +44,7 @@ Lface::delete_subdiv_elements()
    lv(2)->mark_dirty();
    lv(3)->mark_dirty();
 
-   LMESH* submesh = lmesh()->subdiv_mesh();
+   LMESHptr submesh = lmesh()->subdiv_mesh();
    assert(submesh);
 
    // Removing a face (or edge) also causes it to remove
@@ -184,7 +184,7 @@ Lface::gen_child_face(
    Bvert* v2,
    Bvert* v3,
    Patch* p,
-   LMESH* m,
+   LMESHptr m,
    bool center_face
    )
 {
@@ -257,7 +257,7 @@ Lface::allocate_subdiv_elements()
 
    assert(lmesh() != nullptr);
    lmesh()->allocate_subdiv_mesh();
-   LMESH* submesh = lmesh()->subdiv_mesh();
+   LMESHptr submesh = lmesh()->subdiv_mesh();
    assert(submesh != nullptr);
 
 

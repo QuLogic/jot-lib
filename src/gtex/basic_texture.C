@@ -153,7 +153,7 @@ OGLTexture::set_face_culling() const
    static bool no_cull = Config::get_var_bool("JOT_NO_FACE_CULLING",false);
 
    // If it's not VERBOTEN, and there's a reason to cull, then do:
-   BMESH* m = get_cur_mesh(mesh());
+   BMESHptr m = get_cur_mesh(mesh());
    bool ret = (!no_cull && m && m->is_closed_surface());
    if (ret) glEnable (GL_CULL_FACE);        
    else     glDisable(GL_CULL_FACE);

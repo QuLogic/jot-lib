@@ -142,7 +142,7 @@ get_inflate_mesh(LMESHptr skel_mesh)
    TEXBODY* tex = dynamic_cast<TEXBODY*>(skel_mesh->geom());
    if (!tex)
       return nullptr;
-   return LMESH::upcast(tex->get_inflate_mesh(skel_mesh));
+   return dynamic_pointer_cast<LMESH>(tex->get_inflate_mesh(skel_mesh));
 }
 
 inline bool
@@ -471,7 +471,7 @@ PAPER_DOLL::init(CBcurve_list& contour)
       err_adv(debug, "PAPER_DOLL::init: empty contour");
       return false;
    }
-   LMESH* skel_mesh = contour.mesh();
+   LMESHptr skel_mesh = contour.mesh();
    if (!skel_mesh) {
       err_adv(debug, "PAPER_DOLL::init: curves don't share a mesh");
       return false;
@@ -546,7 +546,7 @@ PAPER_DOLL::init(Primitive* p)
 Primitive*
 PAPER_DOLL::build_primitive(CBface_list& o_faces)
 {
-   LMESHptr skel_mesh = dynamic_cast<LMESH*>(o_faces.mesh());
+   LMESHptr skel_mesh = dynamic_pointer_cast<LMESH>(o_faces.mesh());
    assert(skel_mesh);
    LMESHptr mesh = get_inflate_mesh(skel_mesh);
    assert(mesh);

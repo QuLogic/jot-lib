@@ -340,14 +340,14 @@ enum file_cb_t {
 //    specific mesh.  Here we return the mesh that is currently
 //    the "focus", or (if none), the one that is currently under
 //    the cursor.
-inline BMESH*
+inline BMESHptr
 find_mesh()
 {
-   BMESH* ret = BMESH::focus();
+   BMESHptr ret = BMESH::focus();
    return ret ? ret : VisRefImage::get_mesh();
 }
 
-inline BMESH*
+inline BMESHptr
 find_ctrl_mesh()
 {
    return get_ctrl_mesh(find_mesh());
@@ -588,7 +588,7 @@ normalized_pix_area(CBface* f, CWpt& eye, CWvec& t, CWvec& x, CWvec& y)
 }
 
 inline double
-avg_bface_pix_area(BMESH* mesh)
+avg_bface_pix_area(BMESHptr mesh)
 {
    if (!mesh) return 0;
 
@@ -1217,11 +1217,10 @@ quit(const Event&, State *&)
 int
 refine(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
-
-   LMESH* ctrl_mesh = (LMESH*)m;
 
    if (Config::get_var_bool("DEBUG_VOLUME_PRESERVATION",false))
       cerr << "Current mesh volume=" << ctrl_mesh->volume() <<endl;
@@ -1239,12 +1238,12 @@ refine(const Event&, State *&)
 int
 cycle_subdiv_loc_calc(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
 
    static int k=0;
-   LMESH* ctrl_mesh = (LMESH*)m;
    SubdivLocCalc* calc = nullptr;
    switch (++k % 3) {
     case 0: calc = new LoopLoc;           break;
@@ -1271,11 +1270,12 @@ clear_selections(const Event&, State *&)
 int
 unrefine(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
 
-   ((LMESH*)m)->unrefine();
+   ctrl_mesh->unrefine();
 
    return 0;
 }
@@ -1285,13 +1285,17 @@ control_mesh(CBMESHptr& m)
 {
    // return the control mesh for the given mesh.
    // if it's not a LMESH just return the mesh itself.
-   return (m && LMESH::isa(&*m)) ? BMESHptr(((LMESH*)&*m)->control_mesh()) : m;
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(m);
+   if (m && lm)
+      return lm->control_mesh();
+   else
+      return m;
 }
 
 int 
 toggle_sil_frame(const Event&, State *&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -1322,7 +1326,7 @@ toggle_transp(const Event&e, State *&)
 int
 write(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
 
    if (!mesh) {
       cerr << "write - No mesh... aborting.\n";
@@ -1345,7 +1349,7 @@ write(const Event&, State *&)
 int
 print_mesh(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
    if (mesh)
       mesh->print();
    return 0;
@@ -1354,7 +1358,7 @@ print_mesh(const Event&, State *&)
 int
 write_xformed(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
    if (!mesh) {
       return 0;
    }
@@ -1403,7 +1407,7 @@ save_config(const Event &e, State *&)
 int
 clear_creases(const Event&, State*&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -1432,7 +1436,7 @@ toggle_no_text(const Event&, State*&)
 int
 recreate_creases(const Event&, State *&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 

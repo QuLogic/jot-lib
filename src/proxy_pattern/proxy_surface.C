@@ -69,7 +69,7 @@ ProxySurface::create_proxy_surface()
    if (_proxy_mesh || !_patch) {
       return;
    }
-   _proxy_mesh = new BMESH;
+   _proxy_mesh = make_shared<BMESH>();
    
     mlib::NDCZpt a_t, c_t;
     _patch->mesh()->get_bb().ndcz_bounding_box(_patch->obj_to_ndc(),a_t,c_t);
@@ -229,7 +229,7 @@ ProxySurface::lod_update()
 }
 
 void 
-ProxySurface::grow_quad_from_edge(BMESH* m, EdgeStrip* boundary, int i)
+ProxySurface::grow_quad_from_edge(BMESHptr m, EdgeStrip* boundary, int i)
 {
    // i is the position of the edge in the boundary
    Bedge* e = boundary->edge(i);

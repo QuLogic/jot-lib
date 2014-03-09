@@ -25,7 +25,7 @@
  * Impostor
  *****************************************************************/
 
-Impostor::Impostor(BMESH* m)
+Impostor::Impostor(BMESHptr m)
 {
    _mesh = m;
 }

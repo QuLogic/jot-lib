@@ -299,7 +299,7 @@ Bbase::get_inflate_mesh() const
       return nullptr;
    }
 
-   LMESHptr ret = LMESH::upcast(tex->get_inflate_mesh(mesh()));
+   LMESHptr ret = dynamic_pointer_cast<LMESH>(tex->get_inflate_mesh(mesh()));
    if (!ret) {
       return nullptr;
    }
@@ -748,34 +748,35 @@ Bbase::identifier() const
  * BMESHobs METHODS
  *****************************************************************/
 void 
-Bbase::notify_merge(BMESH* joined, BMESH* removed) 
+Bbase::notify_merge(BMESHptr joined, BMESHptr removed)
 {
    // if our mesh got merged into another, record the new mesh
    if (_mesh == removed) {
-      assert(LMESH::isa(joined));
+      LMESHptr lm = dynamic_pointer_cast<LMESH>(joined);
+      assert(lm);
 
       if (Config::get_var_bool("DEBUG_MESH_MERGE",false))
          err_msg("%s::notify_merge: changing meshes...", identifier().c_str());
 
-      set_mesh((LMESH*)joined);
+      set_mesh(lm);
    }
 }
 
 void 
-Bbase::notify_split(BMESH*, const vector<BMESH*>&)
+Bbase::notify_split(BMESHptr, const vector<BMESHptr>&)
 {
    err_msg("Bbase::notify_split: not implemented");
 }
 
 void
-Bbase::notify_delete(BMESH*)
+Bbase::notify_delete(BMESHptr)
 {
    err_msg("Bbase::notify_delete: not implemented");
    set_mesh(nullptr);
 }
 
 void
-Bbase::notify_sub_delete(BMESH*)
+Bbase::notify_sub_delete(BMESHptr)
 {
    // the subdiv mesh got deleted
    err_msg("Bbase::notify_sub_delete: level %d", _bbase_level);
@@ -785,7 +786,7 @@ Bbase::notify_sub_delete(BMESH*)
 }
 
 void 
-Bbase::notify_subdiv_gen(BMESH*) 
+Bbase::notify_subdiv_gen(BMESHptr)
 {
    if (Config::get_var_bool("DEBUG_BBASE_SUBDIV_GEN",false))
       err_msg("%s::notify_subdiv_gen: at res level %d",
@@ -798,7 +799,7 @@ Bbase::notify_subdiv_gen(BMESH*)
 }
 
 void 
-Bbase::notify_update_request(BMESH* m) 
+Bbase::notify_update_request(BMESHptr m)
 {
    // The mesh wants to be updated, so update it:
 

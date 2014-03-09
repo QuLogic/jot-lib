@@ -36,7 +36,7 @@ class EdgeStrokePool : public BStrokePool {
                           // associated with the strokes in this pool.
 
    // XXX hack for serialization
-   static BMESH *_mesh;
+   static BMESHptr _mesh;
 
  public:
    // XXX hack for simplex data key
@@ -115,8 +115,8 @@ class EdgeStrokePool : public BStrokePool {
    istream &read_stream(istream &is);
    ostream &write_stream(ostream &os) const;
 
-   static BMESH *mesh()                { return _mesh;}
-   static void   set_mesh(BMESH *mesh) { _mesh = mesh;}
+   static BMESHptr mesh()                  { return _mesh;}
+   static void     set_mesh(BMESHptr mesh) { _mesh = mesh;}
 };
 
 

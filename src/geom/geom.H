@@ -222,7 +222,7 @@ class GEOM : public GEL, public APPEAR {
    virtual int draw_img(const RefImgDrawer& r, bool enable_shading=true);
 
    // used in draw_img():
-   virtual RefImageClient* ric() { return body(); }
+   virtual RefImageClient* ric() { return body().get(); } // FIXME: Not shared!
  public:
 
    //******** DATA_ITEM VIRTUAL METHODS ********

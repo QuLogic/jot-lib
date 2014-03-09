@@ -167,7 +167,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
    //******** ACCESSORS ********
 
    Patch*       patch()         const   { return _patch; }
-   BMESH*       mesh()          const; // defined in patch.H
+   BMESHptr     mesh()          const; // defined in patch.H
 
    StripCB*     cb()            const   { return _cb; }
    void         set_cb(StripCB* cb)     { delete _cb; _cb = cb; } 

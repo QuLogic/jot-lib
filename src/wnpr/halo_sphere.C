@@ -28,7 +28,7 @@ static bool debug = Config::get_var_bool("DEBUG_HALO_SPHERE",false);
 HaloSphere::HaloSphere()
 {
    //setup the halo mesh
-   sphere_mesh =  new BMESH;
+   sphere_mesh = make_shared<BMESH>();
    sphere_mesh->Sphere();
    sphere_mesh->fix_orientation(); // XXX - hack! fix this!!
    sphere_mesh->set_render_style("GLSL Toon Halo");

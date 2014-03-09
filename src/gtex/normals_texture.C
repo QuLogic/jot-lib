@@ -60,7 +60,7 @@ VertNormalsTexture::draw(CVIEWptr& v)
       return _patch->num_faces();
    }
 
-   CBMESH* mesh = _patch->mesh();
+   CBMESHptr mesh = _patch->mesh();
    if (!mesh) {
       err_msg( "VertNormalsTexture::draw: mesh is nil");
       return 0;
@@ -151,7 +151,7 @@ VertUVTexture::draw(CVIEWptr& v)
       return _patch->num_faces();
    }
 
-   CBMESH* mesh = _patch->mesh();
+   CBMESHptr mesh = _patch->mesh();
    if (!mesh) {
       err_msg( "VertNormalsTexture::draw: mesh is nil");
       return 0;

@@ -285,8 +285,8 @@ public :
    // CAMobs:
    virtual void   notify(CCAMdataptr&)                   { mark_all_dirty(); }
    // BMESHobs
-   virtual void   notify_xform (BMESH*, mlib::CWtransf&, CMOD&){ mark_all_dirty(); }
-   virtual void   notify_change(BMESH*, BMESH::change_t) { mark_all_dirty(); }
+   virtual void   notify_xform (BMESHptr, mlib::CWtransf&, CMOD&){ mark_all_dirty(); }
+   virtual void   notify_change(BMESHptr, BMESH::change_t) { mark_all_dirty(); }
    // XFORMobs
    virtual void   notify_xform(CGEOMptr&g, STATE)
    {

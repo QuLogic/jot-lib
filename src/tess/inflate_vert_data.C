@@ -50,7 +50,7 @@ InflateVertData::gen_twins(Bvert* v, double h, CSimplexFilter& filter)
 
    // check on the mesh
    assert(v && v->mesh());
-   BMESH* mesh = v->mesh();
+   BMESHptr mesh = v->mesh();
 
    // get the data
    InflateVertData* vd = get_data(v);

@@ -232,7 +232,7 @@ class Bpoint : public Bbase{
    virtual void delete_elements();
 
    // Bpoints do not currently do subdivision
-   virtual void notify_subdiv_gen(BMESH*) {}
+   virtual void notify_subdiv_gen(BMESHptr) {}
 
    // The vertex moved:
    virtual void notify_vert_changed(VertMeme*);
@@ -251,7 +251,7 @@ class Bpoint : public Bbase{
 
    //******** BMESHobs METHODS ********
 
-   virtual void notify_xform(BMESH*, CWtransf&, CMOD&);
+   virtual void notify_xform(BMESHptr, CWtransf&, CMOD&);
 
    //******** Bnode METHODS ********
    virtual Bnode_list inputs() const;

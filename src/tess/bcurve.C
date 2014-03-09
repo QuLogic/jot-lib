@@ -650,7 +650,7 @@ Bcurve::Bcurve(
    // create bcurve that lives on a specified set of vertices on a skin
    bool debug = Config::get_var_bool("DEBUG_BCURVE_ON_SKIN",false);
 
-   LMESH* m = dynamic_cast<LMESH*>(verts.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(verts.mesh());
    assert(m);
    set_mesh(m);
 
@@ -809,7 +809,7 @@ Bcurve::Bcurve(
 
    bool debug = Config::get_var_bool("DEBUG_BCURVE_ON_VERTS",false);
 
-   LMESH* m = dynamic_cast<LMESH*>(verts.mesh());
+   LMESHptr m = dynamic_pointer_cast<LMESH>(verts.mesh());
    assert(m);
    set_mesh(m);
 
@@ -2225,7 +2225,7 @@ Bcurve::hit_curve(CNDCpt& p, double rad, Wpt& hit, Bedge** edge)
 }
 
 void 
-Bcurve::notify_xform(BMESH*, CWtransf& xf, CMOD& mod)
+Bcurve::notify_xform(BMESHptr, CWtransf& xf, CMOD& mod)
 {
    apply_xf(xf, mod);
 }

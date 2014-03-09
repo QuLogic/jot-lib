@@ -39,10 +39,10 @@ class PatchBlendWeight : public SimplexData {
 
    // reset and then compute all weights, using
    // the specified number of smoothing steps:
-   static void compute_all(CBMESH* mesh, int num_passes);
+   static void compute_all(CBMESHptr mesh, int num_passes);
 
    // remove all weights stored on the mesh:
-   static void clear(CBMESH* mesh);
+   static void clear(CBMESHptr mesh);
 
    // get the weight of the given patch at the given vertex:
    static double get_weight(Patch* p, CBvert* v);

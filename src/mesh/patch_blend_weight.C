@@ -18,7 +18,7 @@
 #include "patch_blend_weight.H"
 
 void 
-PatchBlendWeight::compute_all(CBMESH* mesh, int num_passes) 
+PatchBlendWeight::compute_all(CBMESHptr mesh, int num_passes)
 {
    assert(mesh && num_passes >= 0);
    clear(mesh);
@@ -38,7 +38,7 @@ PatchBlendWeight::compute_all(CBMESH* mesh, int num_passes)
 }
 
 void 
-PatchBlendWeight::clear(CBMESH* mesh) 
+PatchBlendWeight::clear(CBMESHptr mesh)
 {
    // remove all weights stored on the mesh:
    if (mesh) {

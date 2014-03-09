@@ -85,7 +85,7 @@ main(int argc, char *argv[])
      keyword[0] = 0; // start fresh
    } while (!cin.eof());   
    
-   BMESHptr mesh = new BMESH;
+   BMESHptr mesh = make_shared<BMESH>();
    
    for (Wpt_list::size_type i=1; i<pts.size(); i++) {
      mesh->add_vertex(pts[i]);

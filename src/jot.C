@@ -273,10 +273,10 @@ class JOTapp : public BaseJOTapp {
    virtual void      init_scene();
 
    // JOTapp uses LMESHes (supporting subdivision) instead of plain BMESHes:
-   virtual BMESH* new_mesh() const { return new LMESH; }
+   virtual BMESHptr new_mesh() const { return make_shared<LMESH>(); }
 
    // JOTapp uses TEXBODYs instead of plain GEOMs:
-   virtual GEOM* new_geom(BMESH* mesh, const string& name) const {
+   virtual GEOM* new_geom(BMESHptr mesh, const string& name) const {
       return new TEXBODY(mesh, name);
    }
 
@@ -752,14 +752,14 @@ enum file_cb_t
 //    specific mesh.  Here we return the mesh that is currently
 //    the "focus", or (if none), the one that is currently under
 //    the cursor.
-inline BMESH*
+inline BMESHptr
 find_mesh()
 {
-   BMESH* ret = BMESH::focus();
+   BMESHptr ret = BMESH::focus();
    return ret ? ret : VisRefImage::get_mesh();
 }
 
-inline BMESH*
+inline BMESHptr
 find_ctrl_mesh()
 {
    return get_ctrl_mesh(find_mesh());
@@ -1067,7 +1067,7 @@ normalized_pix_area(CBface* f, CWpt& eye, CWvec& t, CWvec& x, CWvec& y)
 }
 
 inline double
-avg_bface_pix_area(BMESH* mesh)
+avg_bface_pix_area(BMESHptr mesh)
 {
    if (!mesh) return 0;
 
@@ -1147,7 +1147,7 @@ debug_primary_edges()
 {
    // show the primary edges of the vertex under the cursor.
    // used for debugging subdivision of non-manifold surfaces
-   BMESH* mesh = get_cur_mesh(find_mesh());
+   BMESHptr mesh = get_cur_mesh(find_mesh());
    if (!mesh) {
       err_msg("No mesh found");
       return;
@@ -1186,7 +1186,7 @@ debug_primary_edges()
 inline void
 debug_memes()
 {
-   BMESH* mesh = get_cur_mesh(find_mesh());
+   BMESHptr mesh = get_cur_mesh(find_mesh());
    if (!mesh) {
       err_msg("No mesh found");
       return;
@@ -1212,9 +1212,9 @@ debug_memes()
 }
 
 void
-unrefine_to_ctrl(BMESH* m)
+unrefine_to_ctrl(BMESHptr m)
 {
-   LMESH* ctrl = ((LMESH*)m)->control_mesh();
+   LMESHptr ctrl = dynamic_pointer_cast<LMESH>(m)->control_mesh();
    while (ctrl->cur_mesh() != ctrl) {
       ctrl->unrefine();
    }
@@ -1934,11 +1934,10 @@ quit(const Event&, State *&)
 int
 refine(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
-
-   LMESH* ctrl_mesh = (LMESH*)m;
 
    if (Config::get_var_bool("DEBUG_VOLUME_PRESERVATION",false))
       cerr << "Current mesh volume=" << ctrl_mesh->volume() <<endl;
@@ -1956,12 +1955,12 @@ refine(const Event&, State *&)
 int
 cycle_subdiv_loc_calc(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
 
    static int k=0;
-   LMESH* ctrl_mesh = (LMESH*)m;
    SubdivLocCalc* calc = nullptr;
    switch (++k % 3) {
     case 0:
@@ -2023,8 +2022,9 @@ switch_rep(const Event&, State *&)
 int
 switch_mode(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
 
    if (SWEEP_DISK::get_active_instance()) {
@@ -2059,11 +2059,12 @@ switch_mode(const Event&, State *&)
 int
 unrefine(const Event&, State *&)
 {
-   BMESH* m = find_ctrl_mesh();
-   if (!m || !LMESH::isa(m))
+   BMESHptr m = find_ctrl_mesh();
+   LMESHptr ctrl_mesh = dynamic_pointer_cast<LMESH>(m);
+   if (!m || !ctrl_mesh)
       return 0;
 
-   ((LMESH*)m)->unrefine();
+   ctrl_mesh->unrefine();
 
    return 0;
 }
@@ -2080,13 +2081,17 @@ control_mesh(CBMESHptr& m)
 {
    // return the control mesh for the given mesh.
    // if it's not a LMESH just return the mesh itself.
-   return (m && LMESH::isa(&*m)) ? BMESHptr(((LMESH*)&*m)->control_mesh()) : m;
+   LMESHptr lm = dynamic_pointer_cast<LMESH>(m);
+   if (m && lm)
+      return lm->control_mesh();
+   else
+      return m;
 }
 
 int
 toggle_sil_frame(const Event&, State *&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -2116,7 +2121,7 @@ toggle_transp(const Event&e, State *&)
 int
 write(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
 
    if (!mesh) {
       cerr << "write - No mesh... aborting.\n";
@@ -2151,7 +2156,7 @@ write(const Event&, State *&)
 int
 print_mesh(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
    if (mesh)
       mesh->print();
    return 0;
@@ -2160,7 +2165,7 @@ print_mesh(const Event&, State *&)
 int
 write_xformed(const Event&, State *&)
 {
-   BMESH* mesh = find_mesh();
+   BMESHptr mesh = find_mesh();
    if (!mesh) {
       return 0;
    }
@@ -2234,7 +2239,7 @@ rotate_screen_grab(const Event& e, State *&s)
 int
 clear_creases(const Event&, State*&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -2268,7 +2273,7 @@ toggle_no_text(const Event&, State*&)
 int
 inc_edit_level(const Event&, State*&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -2284,7 +2289,7 @@ inc_edit_level(const Event&, State*&)
 int
 dec_edit_level(const Event&, State*&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -2335,7 +2340,7 @@ toggle_show_secondary_faces(const Event&, State *&)
 int
 recreate_creases(const Event&, State *&)
 {
-   BMESH* mesh = find_ctrl_mesh();
+   BMESHptr mesh = find_ctrl_mesh();
    if (!mesh)
       return 0;
 
@@ -2381,7 +2386,7 @@ split_mesh(const Event &e, State *&)
        (mesh = gel_to_bmesh(r.geom()))) {
       WORLD::message("Split components");
 
-      vector<BMESH*> new_meshes = mesh->split_components();
+      vector<BMESHptr> new_meshes = mesh->split_components();
 
       for (auto & new_mesh : new_meshes)
          WORLD::create(new TEXBODY(new_mesh,

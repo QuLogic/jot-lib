@@ -30,7 +30,7 @@ ImagePlate::ImagePlate(const string& filename) : GEOM()
 {
    _do_halo = false;
 
-   BMESHptr m = new BMESH;
+   BMESHptr m = make_shared<BMESH>();
 
    TEXTUREglptr texture = make_shared<TEXTUREgl>(filename, GL_TEXTURE_2D, TexUnit::PERLIN + GL_TEXTURE0);
 

@@ -45,7 +45,7 @@ SKY_BOX::SKY_BOX()
 //   set_color(Color::blue);
 
    // build the skybox mesh:
-   LMESHptr sky_mesh = new LMESH;
+   LMESHptr sky_mesh = make_shared<LMESH>();
    Patch* p = nullptr;
    //sky_mesh->Sphere();
 
@@ -104,7 +104,7 @@ SKY_BOX::~SKY_BOX()
 Patch*
 SKY_BOX::get_patch()
 {
-   BMESHptr mesh = BMESH::upcast(_body);
+   BMESHptr mesh = dynamic_pointer_cast<BMESH>(_body);
    return (mesh && mesh->npatches() > 0) ? mesh->patch(0) : nullptr;
 }
 

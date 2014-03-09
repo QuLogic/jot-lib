@@ -197,7 +197,7 @@ Skin::create_cover_skin(
 
    assert(cmd != nullptr);
 
-   BMESH* b_mesh = region.mesh();
+   BMESHptr b_mesh = region.mesh();
    VertMapper b_map(true);
 
    if (!b_map.is_valid()) {
@@ -206,7 +206,7 @@ Skin::create_cover_skin(
    }
 
    // need an LMESH that contains all faces
-   LMESH* mesh = dynamic_cast<LMESH*>(b_mesh);
+   LMESHptr mesh = dynamic_pointer_cast<LMESH>(b_mesh);
 
    Skin* cur = new Skin(mesh, region, b_map, 0, false, "cover", cmd);
    cur->set_all_sticky();
@@ -255,7 +255,7 @@ Skin::create_multi_sleeve(
    Bface_list all_skel_faces = interior + exterior;
 
    // need an LMESH that contains all faces
-   LMESH* mesh = dynamic_cast<LMESH*>(all_skel_faces.mesh());
+   LMESHptr mesh = dynamic_pointer_cast<LMESH>(all_skel_faces.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
       return nullptr;
@@ -266,7 +266,7 @@ Skin::create_multi_sleeve(
 
    err_adv(debug, "  skel region res level: %d", R);
 
-   LMESH* ctrl = mesh->control_mesh();
+   LMESHptr ctrl = mesh->control_mesh();
    int old_lev = ctrl->cur_level();
    int ref_lev = mesh->subdiv_level() + R;
    ctrl->update_subdivision(ref_lev);
@@ -731,7 +731,7 @@ Skin::copy_edges(CBedge_list& edges) const
 }
 
 inline void
-show_polys(BMESH* m)
+show_polys(BMESHptr m)
 {
    // for debugging: show polyline edges of a mesh
 
@@ -1139,7 +1139,7 @@ apply_smoothing(CVertMemeList& memes)
 }
 
 inline void
-do_smoothing(CVertMemeList& memes, int iters, BMESH* mesh)
+do_smoothing(CVertMemeList& memes, int iters, BMESHptr mesh)
 {
    assert(mesh);
    for (int i=0; i<iters; i++) {
@@ -1229,7 +1229,7 @@ Skin::create_inflate(
    assert(cmd != nullptr);
 
    // need an LMESH that contains all faces
-   LMESH* mesh = dynamic_cast<LMESH*>(skel.mesh());
+   LMESHptr mesh = dynamic_pointer_cast<LMESH>(skel.mesh());
    if (!mesh) {
       err_adv(debug, "  bad skel mesh");
       return nullptr;
