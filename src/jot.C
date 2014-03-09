@@ -267,7 +267,8 @@ class JOTapp : public BaseJOTapp {
 
    virtual WINDOW*   new_window(WINSYS *win) { return new WINDOWjot(win);}
    virtual VIEWptr   new_view(WINSYS *win) {
-      return make_shared<VIEW>("NPR View", win, new NPRview());
+      VIEW *v = new VIEW("NPR View", win, new NPRview());
+      return v->shared_from_this();
    }
 
    virtual void      init_scene();

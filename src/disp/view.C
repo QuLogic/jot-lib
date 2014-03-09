@@ -1247,6 +1247,9 @@ VIEW::VIEW(
    _frame_time(0),
    _win(w)
 {
+   // FIXME: This is dangerous, but we know only two places create VIEWs,
+   // and they don't create an extra shared_ptr. This should be fixed though.
+   VIEWptr me = VIEWptr(this);
 #ifdef USE_PTHREAD
    ThreadToView::make_if_needed();
 #endif
@@ -1260,10 +1263,10 @@ VIEW::VIEW(
 
    disp_obs();  // observe all changes to DRAWN
 
-   _animator = new Animator(shared_from_this());
+   _animator = new Animator(me);
    assert(_animator);
 
-   _recorder = new Recorder(shared_from_this());
+   _recorder = new Recorder(me);
    assert(_recorder);
 
    _num_views++;
@@ -1283,9 +1286,9 @@ VIEW::VIEW(
       }
    }
    
-   VIEWS.add(shared_from_this());
+   VIEWS.add(me);
 
-   _impl->set_view(shared_from_this());
+   _impl->set_view(me);
 }
 
 void

@@ -217,7 +217,8 @@ BaseJOTapp::new_view(WINSYS *win)
    // allows subclasses to make their own types of views without
    // repeating the code in BaseJOTapp::create_view.
 
-   return make_shared<VIEW>("OGL View", win, new GL_VIEW());
+   VIEW *v = new VIEW("OGL View", win, new GL_VIEW());
+   return v->shared_from_this();
 }
 
 
