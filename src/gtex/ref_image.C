@@ -1077,7 +1077,12 @@ IDRefImage::is_patch_sil_edge_near(
 // factory class for producing VisRefImages
 class VisRefImageFactory : public BaseVisRefImageFactory {
  public:
-   virtual BaseVisRefImage* produce(CVIEWptr& v) { return new VisRefImage(v); }
+   virtual BaseVisRefImage* produce(CVIEWptr& v) {
+      auto vri = shared_ptr<VisRefImage>(new VisRefImage(v));
+      vri->observe();
+      // FIXME: Because it's observing, the shared pointer is held there...
+      return vri.get();
+   }
 };
 
 VisRefImage::VisRefImage(CVIEWptr& v) :
@@ -1085,7 +1090,6 @@ VisRefImage::VisRefImage(CVIEWptr& v) :
    _countup(0)
 {
    reset();
-   observe();
 }
 
 void

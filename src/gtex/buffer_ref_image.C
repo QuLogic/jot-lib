@@ -96,8 +96,9 @@ BufferRefImage::BufferRefImage(CVIEWptr& v) : RefImage(v)
 
    // XXX - This should be in observe/unobserve, but it breaks it -- I
    // dunno why...
-        
-   WORLD::get_world()->schedule(shared_from_this());
+
+   // FIXME: this shared_ptr is hacky, but only the observer has it...
+   WORLD::get_world()->schedule(shared_ptr<BufferRefImage>(this));
 }
 
 

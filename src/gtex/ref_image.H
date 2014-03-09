@@ -724,7 +724,7 @@ class VisRefImage : public    IDRefImage,
                     public    FRAMEobs,
                     protected XFORMobs,
                     public    BaseVisRefImage,
-                    private   enable_shared_from_this<VisRefImage> {
+                    public    enable_shared_from_this<VisRefImage> {
  public:
    //******** MANAGERS ********
    virtual ~VisRefImage() { unobserve(); }
