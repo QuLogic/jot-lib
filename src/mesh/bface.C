@@ -65,8 +65,10 @@ Bface::index() const
 {
    // index in BMESH Bface array:
 
-   if (!_mesh) return -1;
-   return _mesh->faces().get_index((Bface*)this);
+   if (auto m = mesh())
+      return m->faces().get_index((Bface*)this);
+   else
+      return -1;
 }
 
 void
@@ -125,7 +127,7 @@ Bface::front_facing() const
       int b = ((
          (ignore_xf ?
           VIEW::peek_cam()->data()->from() :
-          _mesh->eye_local()
+          mesh()->eye_local()
             ) - _v1->loc()) * norm()) > 0;
       ((Bface*)this)->set_bit(FRONT_FACING_BIT,b);
    }
@@ -140,10 +142,10 @@ Bface::find_intersect_sim(
    Bsimplex* ret = ndc_walk(target_pt);
    if (is_face(ret)) 
       hit_pt =
-         ((Bface*)ret)->plane_intersect(_mesh->inv_xform()*Wline(target_pt));
+         ((Bface*)ret)->plane_intersect(mesh()->inv_xform()*Wline(target_pt));
    else if(is_edge(ret))
       hit_pt =
-         ((Bedge*)ret)->line().intersect(_mesh->inv_xform()*Wline(target_pt));
+         ((Bedge*)ret)->line().intersect(mesh()->inv_xform()*Wline(target_pt));
    else if (is_vert(ret))
       hit_pt = ((Bvert*)ret)->loc();
 
@@ -349,17 +351,17 @@ Bface::view_intersect(
    Wpt eye = XYpt(p);
 
    // Make object-space ray:
-   Wline ray = _mesh->inv_xform()*Wline(p); // ray in object space
+   Wline ray = mesh()->inv_xform()*Wline(p); // ray in object space
    Wpt hit;
 
    // Try for exact intersection:
    double d;
    if (ray_intersect(ray, hit, d)) {
       // Direct hit
-      nearpt = _mesh->xform()*hit;
+      nearpt = mesh()->xform()*hit;
       dist   = nearpt.dist(eye);
       d2d    = PIXEL(nearpt).dist(PIXEL(p));
-      n      = (_mesh->inv_xform().transpose()*norm()).normalized();
+      n      = (mesh()->inv_xform().transpose()*norm()).normalized();
       return true;
    }
 
@@ -381,7 +383,7 @@ Bface::view_intersect(
       swap(hit1, hit3);
       swap(n1, n3);
    }
-   nearpt = _mesh->xform()*hit1;
+   nearpt = mesh()->xform()*hit1;
    dist   = nearpt.dist(eye);
    d2d    = PIXEL(nearpt).dist(PIXEL(p));
    n      = n1;

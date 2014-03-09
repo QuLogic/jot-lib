@@ -47,12 +47,12 @@ Bedge::~Bedge()
       MeshGlobal::deselect(this);
 
    // adjacent faces may not outlive this edge
-   if (_mesh) {
-      if (_f1) _mesh->remove_face(_f1);
-      if (_f2) _mesh->remove_face(_f2);
+   if (auto m = mesh()) {
+      if (_f1) m->remove_face(_f1);
+      if (_f2) m->remove_face(_f2);
       if (_adj) {
          for (Bface_list::size_type i=0; i<_adj->size(); i++)
-            _mesh->remove_face((*_adj)[i]);
+            m->remove_face((*_adj)[i]);
       }
    }   
 
@@ -65,8 +65,10 @@ Bedge::index() const
 {
    // index in BMESH Bedge array:
 
-   if (!_mesh) return -1;
-   return _mesh->edges().get_index((Bedge*)this);
+   if (auto m = mesh())
+      return m->edges().get_index((Bedge*)this);
+   else
+      return -1;
 }
    
 int
@@ -235,7 +237,7 @@ Bedge::view_intersect(
       n1 = (ray.point() - nearpt).normalized();
 
    // Transform the normal properly:
-   n = (_mesh->inv_xform().transpose()*n1).normalized();
+   n = (mesh()->inv_xform().transpose()*n1).normalized();
 
    return 1;
 }

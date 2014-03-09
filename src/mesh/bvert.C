@@ -32,9 +32,9 @@ Bvert::~Bvert()
 
    // must be isolated vertex -- make sure
    // adjacent edges are removed:
-   if (_mesh) {
+   if (auto m = mesh()) {
       while (degree() > 0)
-         _mesh->remove_edge(_adj.back());
+         m->remove_edge(_adj.back());
    }
 }
 
@@ -43,8 +43,10 @@ Bvert::index() const
 {
    // index in BMESH Bvert array:
 
-   if (!_mesh) return -1;
-   return _mesh->verts().get_index((Bvert*)this);
+   if (auto m = mesh())
+      return m->verts().get_index((Bvert*)this);
+   else
+      return -1;
 }
 
 void
@@ -77,13 +79,13 @@ Bvert::operator -=(Bedge* e)
 NDCZpt
 Bvert::ndc() const
 {
-   return NDCZpt(_loc,_mesh->obj_to_ndc());
+   return NDCZpt(_loc, mesh()->obj_to_ndc());
 }
 
 Wpt
 Bvert::wloc() const
 {
-   return _mesh->xform()*_loc;
+   return mesh()->xform()*_loc;
 }
 
 void
@@ -562,10 +564,10 @@ Bvert::wnorm() const
    // normal transformed to world space
    // xf.inverse().transpose() * norm
 
-   if (!_mesh)
+   if (auto m = mesh())
+      return (m->inv_xform().transpose() * norm()).normalized();
+   else
       return norm();
-   
-   return (_mesh->inv_xform().transpose() * norm()).normalized();
 }
 
 void
@@ -838,7 +840,7 @@ Bvert::view_intersect(
       n1 = eye - loc();
 
    // Transform the normal properly:
-   n = (_mesh->inv_xform().transpose()*n1).normalized();
+   n = (mesh()->inv_xform().transpose()*n1).normalized();
 
    return 1;
 }
@@ -896,7 +898,7 @@ BMESHcurvature_data::curv_tensor_t
 Bvert::curv_tensor() const
 {
    
-   return _mesh->curvature()->curv_tensor(this);
+   return mesh()->curvature()->curv_tensor(this);
    
 }
 
@@ -904,7 +906,7 @@ BMESHcurvature_data::diag_curv_t
 Bvert::diag_curv() const
 {
    
-   return _mesh->curvature()->diag_curv(this);
+   return mesh()->curvature()->diag_curv(this);
    
 }
 
@@ -912,7 +914,7 @@ double
 Bvert::k1() const
 {
    
-   return _mesh->curvature()->k1(this);
+   return mesh()->curvature()->k1(this);
    
 }
 
@@ -920,7 +922,7 @@ double
 Bvert::k2() const
 {
    
-   return _mesh->curvature()->k2(this);
+   return mesh()->curvature()->k2(this);
    
 }
 
@@ -928,7 +930,7 @@ Wvec
 Bvert::pdir1() const
 {
    
-   return _mesh->curvature()->pdir1(this);
+   return mesh()->curvature()->pdir1(this);
    
 }
 
@@ -936,7 +938,7 @@ Wvec
 Bvert::pdir2() const
 {
    
-   return _mesh->curvature()->pdir2(this);
+   return mesh()->curvature()->pdir2(this);
    
 }
 
@@ -944,7 +946,7 @@ BMESHcurvature_data::dcurv_tensor_t
 Bvert::dcurv_tensor() const
 {
    
-   return _mesh->curvature()->dcurv_tensor(this);
+   return mesh()->curvature()->dcurv_tensor(this);
    
 }
 

@@ -81,9 +81,9 @@ Lvert::~Lvert()
 
    // if the vertex dies, it takes neighboring edges and
    // faces with it:
-   if (_mesh) {
+   if (auto m = mesh()) {
       while (degree() > 0)
-         _mesh->remove_edge(_adj.back());
+         m->remove_edge(_adj.back());
    }
 }
 
@@ -147,7 +147,8 @@ Lvert::cur_subdiv_vert()
 {
    // Return subdiv vertex at current subdiv level of the mesh:
 
-   return _mesh ? subdiv_vert(_mesh->rel_cur_level()) : nullptr;
+   auto m = mesh();
+   return m ? subdiv_vert(m->rel_cur_level()) : nullptr;
 }
 
 /*****************************************************************

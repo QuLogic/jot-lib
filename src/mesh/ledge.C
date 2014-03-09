@@ -31,12 +31,12 @@ Ledge::~Ledge()
    // that will trigger a call to an Ledge virtual method,
    // but since the Ledge destructor will have completed,
    // the result is a seg fault.
-   if (_mesh) {
-      if (_f1) _mesh->remove_face(_f1);
-      if (_f2) _mesh->remove_face(_f2);
+   if (auto m = mesh()) {
+      if (_f1) m->remove_face(_f1);
+      if (_f2) m->remove_face(_f2);
       if (_adj) {
          for (Bface_list::size_type i=0; i<_adj->size(); i++)
-            _mesh->remove_face((*_adj)[i]);
+            m->remove_face((*_adj)[i]);
       }
    }
 

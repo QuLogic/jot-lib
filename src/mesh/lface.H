@@ -88,7 +88,10 @@ class Lface : public Bface {
 
    // Similar to above, using the mesh edit level:
    Lface* bc_to_edit_level(Wvec& bc)  const {
-      return bc_to_level(_mesh->edit_level(), bc);
+      if (auto m = mesh())
+         return bc_to_level(m->edit_level(), bc);
+      else
+         return nullptr;
    }
    
    //******** SUBDIVISION ELEMENTS ********

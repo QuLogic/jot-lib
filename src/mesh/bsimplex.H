@@ -78,13 +78,13 @@ class Bsimplex {
 
    //******** MANAGERS ********
 
-   Bsimplex() : _key(0), _flag(0), _mesh(nullptr), _data_list(nullptr) {}
+   Bsimplex() : _key(0), _flag(0), _mesh(), _data_list(nullptr) {}
    virtual ~Bsimplex();
 
    //******** ACCESSORS ********
 
    void     set_mesh(BMESHptr mesh)       { _mesh = mesh; }
-   BMESHptr mesh()                const   { return _mesh; }
+   BMESHptr mesh()                const   { return _mesh.lock(); }
 
    //******** KEY/LOOKUP ********
 
@@ -266,7 +266,7 @@ class Bsimplex {
  protected:
    uintptr_t         _key;       // unique id for looking up this simplex
    uint              _flag;      // for graph searching and boolean states
-   BMESHptr          _mesh;      // mesh containing this simplex
+   weak_ptr<BMESH>   _mesh;      // mesh containing this simplex
    SimplexDataList*  _data_list; // optional simplex data list
 
    //******** INTERNAL METHODS ********
