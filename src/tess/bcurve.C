@@ -1335,7 +1335,7 @@ Bcurve::delete_elements()
    }
 
    // Eliminate interior vertices:
-   for (Bvert_list::size_type i=1; i<ctrl.size()-1; i++) {
+   for (Bvert_list::size_type i=1; i+1<ctrl.size(); i++) {
       if (debug)
          err_msg("Bcurve::delete_elements: removing interior vertex %d/%d",
                  i, ctrl.size()-1);
