@@ -103,10 +103,10 @@ make_params(int n)
 
    // Generate array of evenly spaced t-values:
    param_list_t params(n + 1);
-   params.push_back(0.0);            // first
+   params[0] = 0.0;                    // first
    for (int i=1; i<n; i++)
-      params.push_back(dt*i);        // interior
-   params.push_back(1.0);            // last
+      params[i] = dt * i;              // interior
+   params[n] = 1.0;                    // last
    return params;
 }
 

@@ -343,7 +343,7 @@ Bbase::tick()
    // Before recomputing, update upstream nodes
    inputs().update();
 
-   VertMemeList active_memes;
+   VertMemeList active_memes(_vmemes.size());
    for (VertMemeList::size_type i=0; i<_vmemes.size(); i++) {
       VertMeme* v = _vmemes[i];
       if (v && v->is_boss() && v->is_warm())
@@ -452,7 +452,7 @@ Bbase::find_boss_vmemes(CBvert_list& verts)
 {
    // Convenience: lookup boss memes for a whole list of vertices
 
-   VertMemeList ret;
+   VertMemeList ret(verts.num());
    for (int i=0; i<verts.num(); i++) {
       VertMeme* vm = find_boss_vmeme(verts[i]);
       if (vm)
@@ -466,7 +466,7 @@ Bbase::find_boss_ememes(CBedge_list& edges)
 {
    // Convenience: lookup boss memes for a whole list of edges
 
-   EdgeMemeList ret;
+   EdgeMemeList ret(edges.num());
    for (int i=0; i<edges.num(); i++) {
       EdgeMeme* vm = find_boss_ememe(edges[i]);
       if (vm)

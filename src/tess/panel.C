@@ -280,7 +280,8 @@ Panel::create(CBcurve_list& contour, const vector<int> ns)
        ret->tessellate_disk (contour, ns))          // go for disk
       return ret;
 
-   vector<Bcurve_list> multi(1, contour);
+   vector<Bcurve_list> multi(1);
+   multi[0] = contour;
    if (ret->tessellate_multi(multi))            // fall back on basics
       return ret;
 
@@ -575,7 +576,7 @@ Panel::split_tri(Bpoint* bp, Bcurve* bc, CPIXEL_list& pts, bool scribble)
    Bcurve_list c = _bcurves;
    if (c[0] == bc)
       c.shift(1);
-   vector<int> ns(4);
+   vector<int> ns(3);
    for (int i = 0; i < 3; i++) {
       if (c[i]!=bc || scribble)
          ns[i] = 1;
@@ -1038,13 +1039,14 @@ Panel::tessellate_tri(Bcurve_list c, vector<int> ns)
       if (s < c[0]->length())
          c.shift(1);
       assert(s == c[0]->length()); // first must be shortest now
-   } else if (ns[0] != 1) {
+   } else {
       // cycle the curves until ns[0] is 1
-      if (ns[1] == 1) {
+      if (ns[0] != 1) {
          c.shift(1);
-         std::rotate(ns.begin(), ns.begin() + 1, ns.end());
-      } else if (ns[2] == 1) {
-         c.shift(2);
+         std::rotate(ns.begin(), ns.begin() + 2, ns.end());
+      }
+      if (ns[0] != 1) {
+         c.shift(1);
          std::rotate(ns.begin(), ns.begin() + 2, ns.end());
       }
       assert(ns[0] == 1);
