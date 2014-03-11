@@ -728,14 +728,14 @@ UVsurface::build_revolve(
    vector<UVpt_list>  uvpts(nrows);
 
    // First row:
-   uvpts.push_back(make_uvpt_list(uvals, vvals[0]));
-   verts.push_back(bot_sub_verts);
+   uvpts[0] = make_uvpt_list(uvals, vvals[0]);
+   verts[0] = bot_sub_verts;
    ret->add_memes(verts[0], uvpts[0]);
 
    // Remaining rows:
    for (int j=1; j<nrows; j++) {
-      verts.push_back((j == nrows-1) ? top_sub_verts : Bvert_list());
-      uvpts.push_back(UVpt_list());
+      verts[j] = (j == nrows-1) ? top_sub_verts : Bvert_list();
+      uvpts[j] = UVpt_list();
       if (verts[j].size() == 1) {
          // cone top
          assert(j == nrows-1 && is_cone_top);
@@ -918,8 +918,8 @@ UVsurface::build_coons_patch(
 
    // First row:
    // XXX - should fix to compute the real uv coords properly
-   uvpts.push_back(make_uvpt_list(c1_uvals, d1_vvals[0]));
-   verts.push_back(c1_verts);
+   uvpts[0] = make_uvpt_list(c1_uvals, d1_vvals[0]);
+   verts[0] = c1_verts;
    ret->add_memes(verts[0], uvpts[0]);
 
    // Remaining rows:
@@ -927,13 +927,13 @@ UVsurface::build_coons_patch(
       if (j == nrows-1) {
          // last row
          // XXX - should fix to compute the real uv coords properly
-         uvpts.push_back(make_uvpt_list(c2_uvals, d1_vvals.back()));
-         verts.push_back(c2_verts);
+         uvpts[j] = make_uvpt_list(c2_uvals, d1_vvals.back());
+         verts[j] = c2_verts;
          ret->add_memes(verts.back(), uvpts.back());
       } else {
          // middle rows
-         verts.push_back(Bvert_list());
-         uvpts.push_back(UVpt_list());
+         verts[j] = Bvert_list();
+         uvpts[j] = UVpt_list();
          // XXX - use uvals
          ret->build_row(d1_vvals[j], ncols, verts[j], uvpts[j],
                      d1_verts[j], d2_verts[j]);

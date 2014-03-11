@@ -1561,13 +1561,13 @@ Bcurve::rem_edge_meme(EdgeMeme* e)
                  _ememes.size(),
                  bbase_level()
             );
+      }
 
-         // The curve should not be drawn now:
-         // XXX - necessary?
-         if (is_control() && !_strip.empty()) {
-            _strip.reset();
-            _mesh->drawables() -= this;
-         }
+      // The curve should not be drawn now:
+      // XXX - necessary?
+      if (is_control() && !_strip.empty()) {
+         _strip.reset();
+         _mesh->drawables() -= this;
       }
    }
 }
