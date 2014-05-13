@@ -110,13 +110,6 @@ class DrawWidget : public GEOM,
    
       bool handle_gesture(CGESTUREptr& gest) { return _fsa.handle_event(gest); }
    
-      //******** CONVENIENCE ********
-   
-      // DrawWidget::null is used in ray_geom() to get a DrawWidget
-      // from a RAYhit after doing intersection, e.g.:
-      //   DrawWidgetptr widget = ray_geom(ray, DrawWidget::null);
-      static DrawWidget *null; 
-   
       //******** GEL METHODS ********
    
       virtual bool needs_blend() const { return alpha() < 1; }

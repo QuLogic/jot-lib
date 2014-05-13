@@ -131,7 +131,7 @@ FilmTrans::down(
 
    _view = e.view();
    if (_view->intersect(r,VIEW::H_TEXT).success() && GEOM::isa(r.geom())) {
-      geom = ray_geom(r, GEOM::null);
+      geom = ray_geom<GEOM>(r);
       if (geom->interactive(e, s, &r)) {
          _obj      = nullptr;
          _no_xform = 1;

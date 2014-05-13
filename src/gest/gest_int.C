@@ -114,8 +114,8 @@ GEST_INT::down(CEvent &e, State *&s)
 
    // here they go:
    if (e.view()->intersect(r).success() &&
-       ray_geom(r,GEOM::null) &&
-       ray_geom(r,GEOM::null)->interactive(e,s))
+       ray_geom<GEOM>(r) &&
+       ray_geom<GEOM>(r)->interactive(e,s))
       return 0;
 
    // as usual, it's up to us to handle this gesture ourselves!

@@ -151,10 +151,6 @@ class GEOM : public GEL, public APPEAR {
       { return 0; }
    virtual BBOX     bbox             (int i=0)      const;
 
-   //******** STATICS ********
-
-   static  GEOM*        null;
-
    //******** HALOING ********
 
    // static interface:

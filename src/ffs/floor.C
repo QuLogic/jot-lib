@@ -40,7 +40,6 @@
 using namespace mlib;
 
 FLOORptr FLOOR::_instance;
-FLOOR*   FLOOR::null=nullptr;         // for use in ray_geom()
 
 inline KeyLineTexture*
 get_keyline(Patch* p)

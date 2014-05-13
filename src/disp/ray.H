@@ -130,14 +130,14 @@ inline int operator == (CRAYnear &r, int b)  { return r.success() == b; }
 
 template <class T>
 inline T* 
-ray_geom(CRAYhit& ray, T* init) 
+ray_geom(CRAYhit& ray)
 {
    return T::upcast(ray.geom());
 }
 
 template <class T>
 inline T* 
-ray_geom(CRAYnear& ray, T* init) 
+ray_geom(CRAYnear& ray)
 {
    return T::upcast(ray.geom());
 }

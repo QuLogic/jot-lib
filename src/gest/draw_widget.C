@@ -30,7 +30,6 @@
  *****************************************************************/
 
 DrawWidgetptr DrawWidget::_active;
-DrawWidget*   DrawWidget::null = nullptr;
 
 DrawWidget::DrawWidget(double dur) :
    GEOM(static_name()),

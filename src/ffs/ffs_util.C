@@ -62,7 +62,7 @@ FFS::get_draw_plane(CPIXEL_list& p, Wvec& t, Wvec& b)
    for (PIXEL_list::size_type i=0; i<p.size(); i++) {
       BMESHray ray(p[i]);
       view->intersect(ray);
-      if (ray.success() && ray_geom(ray, FLOOR::null)) {
+      if (ray.success() && ray_geom<FLOOR>(ray)) {
          FLOORptr floor = FLOOR::lookup();
          assert(floor != nullptr);
          t = floor->t();

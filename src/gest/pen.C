@@ -94,8 +94,8 @@ Pen::check_interactive(CEvent &e, State *&s)
    RAYhit r(ptr->cur());
 
    return (e.view()->intersect(r).success() &&
-           ray_geom(r,GEOM::null) &&
-           ray_geom(r,GEOM::null)->interactive(e,s));
+           ray_geom<GEOM>(r) &&
+           ray_geom<GEOM>(r)->interactive(e,s));
 }
 
 void  

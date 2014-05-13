@@ -33,7 +33,6 @@ CXYpt_list  BODY::_dummy(0);
 
 int         MOD::_TICK              = 0;
 int         MOD::_START             = 0;
-GEOM*       GEOM::null;
 TAGlist*    GEOM::_geom_tags;
 
 bool GEOM::_do_halo_view = Config::get_var_bool("DO_VIEW_HALOS",false);

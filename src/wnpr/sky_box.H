@@ -60,7 +60,6 @@ class SKY_BOX : public GEOM {
          cerr << "SKY_BOX::clean_on_exit()\n";
       _sky_instance = nullptr;
    }
-   static SKY_BOX* null;
 
    static SKY_BOXptr lookup() {
       return _sky_instance ? _sky_instance : SKY_BOXptr(new SKY_BOX());

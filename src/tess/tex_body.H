@@ -157,11 +157,6 @@ class TEXBODY : public GEOM, public XFORMobs {
    static void display  (CBMESHptr& mesh, MULTI_CMDptr cmd=nullptr);
    static void undisplay(CBMESHptr& mesh, MULTI_CMDptr cmd=nullptr);
 
-   // TEXBODY::null is used in ray_geom() to get a TEXBODY
-   // from a RAYhit after doing intersection, e.g.:
-   //   TEXBODYptr tex = ray_geom(ray,TEXBODY::null);
-   static TEXBODY *null; 
-
    // Get all currently displayed meshes:
    static BMESH_list all_drawn_meshes();
 

@@ -77,7 +77,7 @@ hit_floor(CPIXEL& x)
 {
    BMESHray ray(x);
    VIEW::peek()->intersect(ray);
-   return ray_geom(ray, FLOOR::null);
+   return ray_geom<FLOOR>(ray);
 }
 
 inline bool
@@ -1070,7 +1070,7 @@ DrawPen::dot_cb(CGESTUREptr& gest, DrawState*&)
    // Use floor:
    BMESHray ray(c);
    _view->intersect(ray);
-   FLOOR* floor = ray_geom(ray, FLOOR::null);
+   FLOOR* floor = ray_geom<FLOOR>(ray);
    if (floor) {
       Wplane P = floor->plane();
       BpointAction::create(mesh, Wpt(P, Wline(c)), floor->n(), floor->t(), res_lev, cmd);
@@ -1165,7 +1165,7 @@ DrawPen::scribble_cb(CGESTUREptr& gest, DrawState*&)
          BMESHray ray(xy);
          _view->intersect(ray);
          // Don't erase floor this way
-         if (ray.success() && !ray_geom(ray, FLOOR::null))
+         if (ray.success() && !ray_geom<FLOOR>(ray))
             gel = ray.geom();
       }
    }

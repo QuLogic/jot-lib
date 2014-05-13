@@ -136,8 +136,6 @@ class FLOOR : public DrawWidget {
    // prevent warnings
    static  DATA_ITEM  *lookup(const string& d) { return DATA_ITEM::lookup(d); }
 
-   static FLOOR* null;
-
    //******** GEOM methods ********
 
    virtual void    write_xform(CWtransf&, CWtransf&, CMOD &);

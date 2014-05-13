@@ -795,7 +795,7 @@ Cam_int_edit::edit_down (
    CAMdataptr  data(_view->cam()->data());
    RAYhit      r   (_view->intersect(ptr->cur()));
    if (r.success()) 
-      _model = (ray_geom(r,GEOM::null));
+      _model = ray_geom<GEOM>(r);
    return 0;
                 
 }

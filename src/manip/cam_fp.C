@@ -530,7 +530,7 @@ Cam_int_fp::orbit(CEvent &e, State *&s)
          return 0;
       }
 
-   GEOMptr geom(ray_geom(r,GEOM::null));
+   GEOMptr geom(ray_geom<GEOM>(r));
 
    //start orbit
    CamOrbit::cur() = make_shared<CamOrbit>(cam, geom->bbox().center());
@@ -998,7 +998,7 @@ Cam_int_fp::focus(
    CAMdataptr      data(cam->data());
 
    RAYhit  r   (view->intersect(ptr->cur()));
-   GEOMptr geom(ray_geom(r,GEOM::null));
+   GEOMptr geom(ray_geom<GEOM>(r));
    if (geom) {
       XYvec    vec  (VEXEL(25,0));
       RAYhit   sil_r(ptr->cur() + vec);
@@ -1192,7 +1192,7 @@ Cam_int_fp::up(
    } else if (ptr->cur().dist(_down_pt_2d) < DOT_DIST) {
       RAYhit ray(view->intersect(ptr->cur()));
       if (ray.success()) {
-         GEOMptr geom(ray_geom(ray,GEOM::null));
+         GEOMptr geom(ray_geom<GEOM>(ray));
          if (CamOrbit::cur()) {CamOrbit::cur()->set_target(ray.surf());}
 
          // Create the anchor (blue ball) on the surface:

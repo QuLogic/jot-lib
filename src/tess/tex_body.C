@@ -34,7 +34,6 @@
 using namespace mlib;
 
 //******** STATIC MEMBER DATA ********
-TEXBODY*   TEXBODY::null          = nullptr;
 TAGlist*   TEXBODY::_texbody_tags = nullptr;
 TEXBODYptr TEXBODY::_focus;
 
