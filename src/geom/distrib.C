@@ -811,13 +811,12 @@ void
 DISTRIB::notify_save(
    NetStream     &s,
    save_status_t &status,
-   bool           to_file,
    bool           full_scene
    )
 {
    if (status == SAVEobs::SAVE_ERROR_NONE)
    {
-      status = save_stream(s, to_file, full_scene);
+      status = save_stream(s, full_scene);
    }
    else
    {
@@ -831,7 +830,6 @@ DISTRIB::notify_save(
 SAVEobs::save_status_t
 DISTRIB::save_stream(
    NetStream   &s, 
-   bool         to_file,
    bool         full_scene
    )
 {
@@ -846,7 +844,7 @@ DISTRIB::save_stream(
       {
          err_adv(debug, "DISTRIB::save_stream: Saving ASCII stream...");
 
-         ret = save(s, to_file, full_scene);
+         ret = save(s, true, full_scene);
 
          if (ret)
          {
@@ -863,7 +861,7 @@ DISTRIB::save_stream(
       {
          err_adv(debug, "DISTRIB::save_stream: Saving Non-ASCII stream...");
 
-         ret = save(s, to_file, full_scene);
+         ret = save(s, true, full_scene);
 
          if (ret)
          {

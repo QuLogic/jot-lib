@@ -388,19 +388,11 @@ void
 IOManager::notify_presave(
    NetStream     &s,
    save_status_t &save_status,
-   bool           to_file,
    bool           full_scene
    )
 {
    bool ret;
    string path,file,ext;
-
-   //Actually, this never happens, nevertheless...
-   if (!to_file) 
-   {
-      err_mesg(ERR_LEV_INFO, "IOManager::notify_presave() - *WARNING* Saving to non-file source. Aborting..."); 
-      return;
-   }
 
    switch(state_())
    {
@@ -529,20 +521,11 @@ void
 IOManager::notify_postsave(
    NetStream     &s,
    save_status_t &save_status,
-   bool           to_file,
    bool           full_scene
    )
 {
  
    string path;
-
-   //Actually, this never happens, nevertheless...
-   if (!to_file) 
-   {
-      err_mesg(ERR_LEV_INFO, "IOManager::notify_postsave() - *WARNING* Saving to non-file source. Aborting..."); 
-      assert(state_() == STATE_IDLE);
-      return;
-   }
 
    assert(state_() == ((full_scene)?(STATE_SCENE_SAVE):(STATE_PARTIAL_SAVE)));
 

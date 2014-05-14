@@ -1509,7 +1509,7 @@ JOTapp::do_save(string fullpath)
 
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
-   SAVEobs::notify_save_obs(s, status, true, true);
+   SAVEobs::notify_save_obs(s, status, true);
    VIEW::peek()->set_cursor(old_cursor);
 
    if (status == SAVEobs::SAVE_ERROR_NONE) {

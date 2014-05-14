@@ -363,7 +363,7 @@ Animator::format(STDdstream &d)  const
 
          {
             NetStream s(sname, NetStream::ascii_w);
-            SAVEobs::notify_save_obs(s, sstatus, true, false);
+            SAVEobs::notify_save_obs(s, sstatus, false);
 
             if (sstatus != SAVEobs::SAVE_ERROR_NONE) {
                cerr << "Animator::format: Error saving scene update frame: "

@@ -398,18 +398,17 @@ void
 SAVEobs::notify_save_obs(
    NetStream &s, 
    save_status_t &status,
-   bool to_file, 
    bool full_scene) 
 {
    SAVEobs_list::iterator i;
    DISTRIB::get_distrib();
    status = SAVE_ERROR_NONE;
    for (i=presaveobs_list()->begin(); i!=presaveobs_list()->end(); ++i)
-      (*i)->notify_presave(s, status, to_file, full_scene);
+      (*i)->notify_presave(s, status, full_scene);
    for (i=saveobs_list()->begin(); i!=saveobs_list()->end(); ++i)
-      (*i)->notify_save(s, status, to_file, full_scene);
+      (*i)->notify_save(s, status, full_scene);
    for (i=postsaveobs_list()->begin(); i!=postsaveobs_list()->end(); ++i)
-      (*i)->notify_postsave(s, status, to_file, full_scene);
+      (*i)->notify_postsave(s, status, full_scene);
 }
 
 void

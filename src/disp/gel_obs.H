@@ -209,11 +209,11 @@ class SAVEobs {
    static SAVEobs_list *postsaveobs_list(){ if (!_postsave_obs) _postsave_obs=new SAVEobs_list; return _postsave_obs; }
  public:
    virtual ~SAVEobs() {}
-   virtual void notify_presave (NetStream &s, save_status_t &status, bool to_file, bool full_scene) {}
-   virtual void notify_postsave(NetStream &s, save_status_t &status, bool to_file, bool full_scene) {}
-   virtual void notify_save    (NetStream &s, save_status_t &status, bool to_file, bool full_scene) {}
+   virtual void notify_presave (NetStream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_postsave(NetStream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_save    (NetStream &s, save_status_t &status, bool full_scene) {}
 
-   static  void notify_save_obs(NetStream &s, save_status_t &status, bool to_file, bool full_scene); 
+   static  void notify_save_obs(NetStream &s, save_status_t &status, bool full_scene);
 
    /* ---  object save observer --- */
    void   presave_obs  ()  { presaveobs_list()->insert(this); }

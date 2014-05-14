@@ -61,8 +61,8 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
    virtual void notify_postload(NetStream &, load_status_t &, bool);
 
    /******** SAVEobs METHODS ********/
-   virtual void notify_presave (NetStream &, save_status_t &, bool, bool); 
-   virtual void notify_postsave(NetStream &, save_status_t &, bool, bool); 
+   virtual void notify_presave (NetStream &, save_status_t &, bool);
+   virtual void notify_postsave(NetStream &, save_status_t &, bool);
 
    /******** DATA_ITEM METHODS ********/
    DEFINE_RTTI_METHODS_BASE("IOManager", CDATA_ITEM*);
