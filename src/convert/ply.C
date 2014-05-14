@@ -2432,7 +2432,7 @@ PlyFile *read_ply(FILE *fp)
   char **elem_names;
 
   ply = ply_read (fp, &num_elems, &elem_names);
-  for (int i; i < num_elems; i++)
+  for (int i = 0; i < num_elems; i++)
     free(elem_names[i]);
   free(elem_names);
 
