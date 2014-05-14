@@ -688,17 +688,6 @@ NetStream::sample()
 
 /* -----------------------  Network Class   ------------------------------- */
 
-void
-Network::barrier()
-{
-   for (int i=0; i<nStreams_; i++)
-      *streams_[i] << NETbarrier << NETflush;
-
-   while (_at_barrier < nStreams_)
-      _manager->loop(0);
-   _at_barrier-=nStreams_;
-}
-
 int
 Network::processing(void) const
 {

@@ -177,8 +177,6 @@ class Network: public FD_EVENT {
    const string &name    (void)  const     { return name_; }
    int        processing (void)  const;
 
-   #undef barrier
-   void       barrier    ();
    void       add_net_obs(Network_obs *o)  { _obs_list.insert(o); }
    void       rem_net_obs(Network_obs *o)  { _obs_list.erase(o); }
    void       notify_net (Network_obs::event e,
