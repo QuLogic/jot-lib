@@ -124,17 +124,6 @@ class NetStream : public STDdstream, public FD_EVENT {
 };
 
 
-class Network_obs
-{
- public:
-   enum event {accept_str=0, remove_str};
-
-   virtual ~Network_obs() {}
-            Network_obs() {}
-
-   virtual void notify_net( const event &e, NetStream *s ) = 0;
-};
-
 //!CLASS:  Network
 //: Network server
 class Network: public FD_EVENT {
@@ -159,7 +148,6 @@ class Network: public FD_EVENT {
    void         _die       (const char *msg);
    void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 
                                             s->subscribe(tags_); }
-   set<Network_obs *>  _obs_list;
    int           _at_barrier;
 
  public:
@@ -176,13 +164,6 @@ class Network: public FD_EVENT {
    int        num_streams(void)  const     { return nStreams_; }
    const string &name    (void)  const     { return name_; }
    int        processing (void)  const;
-
-   void       add_net_obs(Network_obs *o)  { _obs_list.insert(o); }
-   void       rem_net_obs(Network_obs *o)  { _obs_list.erase(o); }
-   void       notify_net (Network_obs::event e,
-                          NetStream *s) { set<Network_obs *>::iterator i;
-                                          for (i=_obs_list.begin(); i!=_obs_list.end(); ++i)
-                                             (*i)->notify_net(e,s); }
 };
 
 

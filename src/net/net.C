@@ -702,9 +702,6 @@ Network::remove_stream(
    NetStream *s
    ) 
 {
-   // notify observers.  (Do this before deleting the stream)
-   notify_net(Network_obs::remove_str, s);
-
    int i=0;
    while (i<nStreams_ && streams_[i] != s) ++i;
    if (i < nStreams_) {
