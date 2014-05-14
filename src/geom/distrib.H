@@ -45,7 +45,6 @@ class DISTRIB : public Network,
  protected:
    /******** MEMBER VARIABLES ********/
    bool              _cam_loaded;
-   bool              _processing_gate;
 
  public:
    /******** STATIC MEMBER METHODS ********/
@@ -59,7 +58,6 @@ class DISTRIB : public Network,
  public:   
    /******** MEMBER METHODS ********/
    void     set_cam_loaded ()             { _cam_loaded = true;      }
-   void     set_processing_gate(bool pg)  { _processing_gate = pg;   }
 
  protected:   
    /******** INTERNAL MEMBER METHODS ********/
@@ -73,7 +71,6 @@ class DISTRIB : public Network,
  public:   
    /******** Network METHODS ********/
    virtual int       interpret(NETenum, NetStream *);
-   int               processing() const            { return _processing_gate && 0; }
 
    /******** *Obs METHODS ********/
  public:

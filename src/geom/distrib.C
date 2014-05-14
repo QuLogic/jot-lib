@@ -373,15 +373,11 @@ class JOTgrab: public FUNC_ITEM
       if (_g) 
       {
          _save = _g;
-         // enable networking
-         DISTRIB::get_distrib()->set_processing_gate(false);
          if (_grab)  
             GRABBED.grab(_g);
          else 
             GRABBED.release(_g);
          _save = nullptr;
-         // disable networking
-         DISTRIB::get_distrib()->set_processing_gate(true);
       }
    }
 };
@@ -514,8 +510,7 @@ DISTRIB* DISTRIB::get_distrib()
 /////////////////////////////////////
 DISTRIB::DISTRIB(FD_MANAGER *manager):
    Network(manager), 
-      _cam_loaded(false), 
-      _processing_gate(1)
+      _cam_loaded(false)
 {
    // Creating the following objects is done for the side effect
    // (in FUNC_ITEM constructor) of adding them to the DECODER
@@ -990,7 +985,7 @@ DISTRIB::notify_exist(
       }
    }
    if (!f) {
-      if (!processing() && NETWORK.get(g))
+      if (NETWORK.get(g))
          *this << NETcontext << JOTdestroy(g)  << JOTdone();
    }
 }
@@ -1005,7 +1000,7 @@ DISTRIB::notify_color(
    APPEAR   *
    )
 {
-   if (NETWORK.get(g) && !processing())
+   if (NETWORK.get(g))
       *this << NETcontext << JOTcolor(g) << JOTdone();
 }
 
@@ -1017,7 +1012,7 @@ DISTRIB::notify_transp(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g) && !processing())
+   if (NETWORK.get(g))
        *this << NETcontext << JOTtransp(g) << JOTdone();
 }
 
@@ -1029,7 +1024,7 @@ DISTRIB::notify_geom(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g) && !processing()){
+   if (NETWORK.get(g)) {
       ; // what do we distribute here?
    }
 }
@@ -1043,8 +1038,7 @@ DISTRIB::notify(
    )
 {
    // broadcast new camera position
-   if (!processing())
-      *this << NETcontext << JOTcam(data) << JOTdone();
+   *this << NETcontext << JOTcam(data) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1055,8 +1049,7 @@ DISTRIB::notify_jot_var(
    DATA_ITEM *item
    )
 {
-   if (!processing())
-      (*this) << NETcontext << *item << JOTdone();
+   (*this) << NETcontext << *item << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1068,7 +1061,7 @@ DISTRIB::notify_hash(
    hashdist *h
    )
 {
-   if (NETWORK.get(g) && !processing())
+   if (NETWORK.get(g))
       *this << NETcontext << JOThash(g, h) << JOTdone();
 }
 
@@ -1080,7 +1073,7 @@ DISTRIB::notify_texture(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g) && !processing())
+   if (NETWORK.get(g))
       *this << NETcontext << JOTtexture(g) << JOTdone();
 }
 
@@ -1094,7 +1087,7 @@ DISTRIB::notify_xform(
    )
 {
 
-  if (NETWORK.get(g) && !processing()){
+  if (NETWORK.get(g)) {
     if (state == XFORMobs::PRIMARY || state == XFORMobs::DROP)
       *this << NETcontext << JOTxform(g) << JOTdone();
     else if(state== XFORMobs::START||state==XFORMobs::END){
@@ -1116,12 +1109,12 @@ DISTRIB::notify(
    if (flag) {
       for (i = 0; i < VIEWS.num(); i++)
          VIEWS[i]->display(g);
-      if (!processing() && NETWORK.get(g))
+      if (NETWORK.get(g))
          *this << NETcontext << JOTdisplay(g)  << JOTdone();
    } else {
       for (i = 0; i < VIEWS.num(); i++)
          VIEWS[i]->undisplay(g);
-      if (!processing() && NETWORK.get(g))
+      if (NETWORK.get(g))
          *this << NETcontext << JOTdisplay(g,0)<< JOTdone();
    }
 }
@@ -1135,7 +1128,7 @@ DISTRIB::notify_grab(
    int      flag
    )
 {
-   if (!processing() && NETWORK.get(g) && JOTgrab::_save != g)
+   if (NETWORK.get(g) && JOTgrab::_save != g)
       *this << NETcontext << JOTgrab(g,flag) << JOTdone();
 }
 
