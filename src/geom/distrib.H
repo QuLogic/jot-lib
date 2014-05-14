@@ -26,19 +26,6 @@
 #include "geom/world.H" 
 #include "geom/winsys.H" 
 
-//XXX - Used to be DLL functions...
-extern "C" void distrib();
-extern "C" void distrib_startnet(int);
-extern "C" void distrib_client(FD_MANAGER *, char *, int);
-extern "C" void distrib_cam(STDdstream *, CCAMdataptr &);
-extern "C" void distrib_win(STDdstream *, WINSYS *);
-extern "C" void distrib_view(STDdstream *, CVIEWptr &);
-extern "C" void distrib_done(STDdstream *);
-extern "C" void distrib_send_geom(CGEOMptr &);
-extern "C" void distrib_render_mode();
-extern "C" void distrib_clip_info();
-extern "C" void distrib_display_geom( CGELptr &, int);
-
 /*****************************************************************
  * Distrib
  *****************************************************************/
@@ -63,8 +50,7 @@ class DISTRIB : public Network,
  public:
    /******** STATIC MEMBER METHODS ********/
    static bool       cam_loaded     ()             { return _d && _d->_cam_loaded;}
-   static void       set_distrib    (DISTRIB *d)   { _d = d; }
-   static DISTRIB*   get_distrib    ()             { return _d; }
+   static DISTRIB*   get_distrib    ();
 
  public:   
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/

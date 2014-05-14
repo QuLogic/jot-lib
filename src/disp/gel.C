@@ -402,7 +402,7 @@ SAVEobs::notify_save_obs(
    bool full_scene) 
 {
    SAVEobs_list::iterator i;
-   distrib();
+   DISTRIB::get_distrib();
    status = SAVE_ERROR_NONE;
    for (i=presaveobs_list()->begin(); i!=presaveobs_list()->end(); ++i)
       (*i)->notify_presave(s, status, to_file, full_scene);
@@ -420,7 +420,7 @@ LOADobs::notify_load_obs(
    bool full_scene )
 {
    LOADobs_list::iterator i;
-   distrib();
+   DISTRIB::get_distrib();
    status = LOAD_ERROR_NONE;
    for (i=preloadobs_list()->begin(); i!=preloadobs_list()->end(); ++i)
       (*i)->notify_preload(s, status, to_file, full_scene);

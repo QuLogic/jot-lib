@@ -509,6 +509,17 @@ class JOTtransp : public FUNC_ITEM
 
 DISTRIB*       DISTRIB::_d = nullptr;
 
+DISTRIB* DISTRIB::get_distrib()
+{
+   if (!_d)
+   {
+      err_adv(debug, "DISTRIB.C::get_distrib(): Instantiating DISTRIB...");
+      _d = new DISTRIB(FD_MANAGER::mgr());
+   }
+
+   return _d;
+}
+
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
@@ -1236,176 +1247,3 @@ DISTRIB::notify_grab(
       *this << NETcontext << JOTgrab(g,flag) << JOTdone();
 }
 
-
-
-
-/*****************************************************************
- * XXX - Old DLL functions...
- *****************************************************************/
-
-/////////////////////////////////////
-// distrib()
-/////////////////////////////////////
-extern "C"
-void
-distrib()
-{
-   DISTRIB *net = DISTRIB::get_distrib();
-   
-   if (!net) 
-   {
-      err_adv(debug, "DISTRIB.C::distrib: Instantiating DISTRIB...");
-      net = new DISTRIB(FD_MANAGER::mgr());
-      DISTRIB::set_distrib(net);
-   } 
-}
-
-/////////////////////////////////////
-// distrib_startnet()
-/////////////////////////////////////
-extern "C"
-void
-distrib_startnet(
-   int  port
-   )
-{
-   distrib();   // make sure a DISTRIB object exists
-
-   DISTRIB *net = DISTRIB::get_distrib();
-
-   err_msg("DISTRIB.C::distrib_startnet: Starting a networked environment...");
-
-   net->start(port);
-}
-
-/////////////////////////////////////
-// distrib_client()
-/////////////////////////////////////
-extern "C"
-void
-distrib_client(
-   FD_MANAGER *,
-   char       *host,
-   int         port
-   )
-{
-   distrib();   // make sure a DISTRIB object exists
-
-   err_msg("DISTRIB.C::distrib_client: Attaching to networked environment...");
-
-   DISTRIB *net = DISTRIB::get_distrib();
-
-   int MAXTRY = Config::get_var_int("MAX_TRY", 200, true);
-
-   for(int i=0;i<MAXTRY;i++) 
-   {
-      net->start(host, port);
-      
-      if (net->num_streams() != 0) break;
-
-      err_msg("DISTRIB.C::distrib_client: Trying to connect...");
-#ifdef WIN32
-      Sleep(1);
-#else
-      sleep(1);
-#endif
-   }
-
-   if (net->num_streams() == 0)
-      err_msg("DISTRIB.C::distrib_client: ...giving up.");
-   else
-      err_msg("DISTRIB.C::distrib_client: ...connected!!");
-}
-
-/////////////////////////////////////
-// distrib_cam()
-/////////////////////////////////////
-extern "C"
-void
-distrib_cam(STDdstream *ds, CCAMdataptr &data)
-{
-   *ds << JOTcam(data);
-}
-
-/////////////////////////////////////
-// distrib_view()
-/////////////////////////////////////
-extern "C"
-void
-distrib_view(STDdstream *ds, CVIEWptr &v)
-{
-   *ds << JOTview(v);
-}
-
-/////////////////////////////////////
-// distrib_win()
-/////////////////////////////////////
-extern "C"
-void
-distrib_win(STDdstream *ds, WINSYS *data)
-{
-   *ds << JOTwin(data);
-}
-
-
-/////////////////////////////////////
-// distrib_done()
-/////////////////////////////////////
-extern "C"
-void
-distrib_done(STDdstream *ds)
-{
-   *ds << JOTdone();
-}
-
-/////////////////////////////////////
-// distrib_send_geom()
-/////////////////////////////////////
-extern "C"
-void
-distrib_send_geom(CGEOMptr &obj)
-{
-   if (DISTRIB::get_distrib()) 
-   {
-      *DISTRIB::get_distrib() << NETcontext << JOTupdate_geom(obj) << JOTdone();
-   }
-}
-
-/////////////////////////////////////
-// distrib_render_mode()
-/////////////////////////////////////
-extern "C"
-void
-distrib_render_mode()
-{
-   if (DISTRIB::get_distrib()) 
-   {
-      *DISTRIB::get_distrib() << NETcontext << JOTrender_mode() << JOTdone();
-   }
-}
-
-/////////////////////////////////////
-// distrib_clip_info()
-/////////////////////////////////////
-extern "C"
-void
-distrib_clip_info()
-{
-   if (DISTRIB::get_distrib()) 
-   {
-      *DISTRIB::get_distrib() << NETcontext << JOTclip_info() << JOTdone();
-   }
-}
-
-/////////////////////////////////////
-// distrib_display_geom()
-/////////////////////////////////////
-extern "C"
-void
-distrib_display_geom( CGELptr &gel, int display_flag)
-{
-   if (DISTRIB::get_distrib())
-   {
-      *DISTRIB::get_distrib() << NETcontext << JOTdisplay(gel, display_flag) << JOTdone();
-   }
-}
