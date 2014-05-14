@@ -372,33 +372,6 @@ NetStream::NetStream(
 
 NetStream::~NetStream()
 { 
-
-   if (_fd >= 0) 
-   {
-      // Without the following line, jot kills certain shells on exit, since
-      // stdin is left in non-blocking mode
-      set_blocking(true);
-#ifndef WIN32
-      close(_fd);
-#else
-      //XXX - Pretty sure this is right... That is, 
-      //though we use CreateFile to get a HANDLE,
-      //_open_osfhandle returns a handle we close
-      //with _close, which also closes the underlying
-      //HANDLE (or so it seems)
-      int ret;
-      if ((_fd == fileno(stdin)) || (_iostream)) //ascii
-      {
-         ret = _close(_fd);
-         assert(ret==0);
-      }
-      else
-      {
-         ret = CloseHandle((HANDLE)_fd);
-         assert(ret!=0);
-      }
-#endif
-   }
 }
 
 void
@@ -416,7 +389,6 @@ NetStream::_die(
       cerr << "NetStream(" << name_ << "): " << msg << ": ";
       perror(nullptr);
    }
-   _fd = -1;
 }
 
 ssize_t 
@@ -431,9 +403,9 @@ NetStream::read_from_net(
 
    while (nbytes) {
 #ifdef WIN32
-      int readb = read_win32(_fd, tmpbuf, nbytes);
+      int readb = read_win32(-1, tmpbuf, nbytes);
 #else
-      int readb = ::read(_fd, tmpbuf, nbytes);
+      int readb = ::read(-1, tmpbuf, nbytes);
 #endif
 
       if (errno == EAGAIN) { // if nothing's left to read, then
@@ -484,7 +456,7 @@ NetStream::set_blocking(bool val) const
       cerr << "NetStream::set_blocking - not supported" << endl;
 #else
    int flags;
-   if((flags = fcntl(_fd, F_GETFL, 0))<0) {
+   if((flags = fcntl(-1, F_GETFL, 0))<0) {
       err_ret("NetStream::set_blocking: fcntl(..,F_GETFL)");
       return;
    }
@@ -493,7 +465,7 @@ NetStream::set_blocking(bool val) const
    } else {
       flags |= O_NDELAY;
    }
-   if (fcntl(_fd, F_SETFL, flags)<0) {
+   if (fcntl(-1, F_SETFL, flags)<0) {
       err_ret("NetStream::set_blocking: fcntl(..,F_GETFL)");
       return;
    }
@@ -508,9 +480,9 @@ NetStream::write_to_net(
 {
    set_blocking(true);
 #ifdef WIN32
-   ssize_t   bytes_written = write_win32(_fd, buf, nbytes);
+   ssize_t   bytes_written = write_win32(-1, buf, nbytes);
 #else
-   ssize_t   bytes_written = ::write(_fd, buf, nbytes);
+   ssize_t   bytes_written = ::write(-1, buf, nbytes);
 #endif
    set_blocking(false);
 

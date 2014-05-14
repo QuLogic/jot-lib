@@ -92,7 +92,7 @@ class NetStream : public STDdstream, public FD_EVENT {
    void       subscribe  (const string &t){ tags_.push_back(t); }
    void       subscribe  (const vector<string> &t){ tags_  = t; }
 
-   bool       attached   (void) const  { return (!!iostr()) || (_fd != -1); }
+   bool       attached   (void) const  { return !!iostr(); }
 
    void       add_network(Network *n)  { network_ = n; }
    void       flush_data (void);
