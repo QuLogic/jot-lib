@@ -27,8 +27,6 @@ using namespace mlib;
  * Globals
  *****************************************************************/
 
-hashvar<int>   net_read_in_progress("NET_READ_IN_PROGRESS", 0, 0, 0);
-
 // Gloval used to let NETcontext objects know who broadcasted object...
 NetStream*     broadcaster = nullptr;
 
@@ -323,21 +321,7 @@ class JOTcreate : public FUNC_ITEM {
       }
       if (_g) 
       {
-            // Don't want to get in a loop by resending this JOTcreate,
-            // so we just turn off networking of this object temporarily
-            // Note that if we suspended all display observers then this
-            // object wouldn't appear locally
-            // XXX - assumes no nested net reads
-   
-            // XXX - Hack to make sure we aren't reading from a file, if we
-            // don't do this, distributing after reading from a file looks
-            // like a loop to be avoided
-            // XXX - assume that our STDdstream is a NetStream
-            NetStream *ns = (NetStream *) &*d;
-            if (ns->port() > 0)
-               net_read_in_progress.set(_g, 1);
             WORLD::create(_g);
-            net_read_in_progress.del(_g);
       } 
       else 
       {
@@ -1064,9 +1048,6 @@ DISTRIB::notify_exist(
    int      f
    )
 {
-   // If a network read is in progress for this object, skip
-   if (net_read_in_progress.get(g)) return;
-
    if (f)  {
       if (NETWORK.get(g)) {
          DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
@@ -1197,9 +1178,6 @@ DISTRIB::notify(
    int      flag
    )
 {
-   // If a network read is in progress for this object, skip
-   if (net_read_in_progress.get(g)) return;
-
    int i;
    if (flag) {
       for (i = 0; i < VIEWS.num(); i++)

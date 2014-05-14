@@ -82,14 +82,11 @@ class NetStream : public STDdstream, public FD_EVENT {
        ascii_rw = 0x7
    };
 
-              NetStream (int port, const char         *name);
-              NetStream (int fd,   struct sockaddr_in *client,bool block=false);
               NetStream (const string &name, StreamFlags);
    virtual   ~NetStream();
 
    string     name       (void) const  { return name_; }
    string     print_name (void) const  { return print_name_; }
-   int        port       (void) const  { return port_; }
    int        processing (void) const  { return processing_; }
    Network*   network    (void) const  { return network_; }
    void       subscribe  (const string &t){ tags_.push_back(t); }
@@ -97,17 +94,11 @@ class NetStream : public STDdstream, public FD_EVENT {
 
    bool       attached   (void) const  { return (!!iostr()) || (_fd != -1); }
 
-   void       set_port   (int p);
    void       add_network(Network *n)  { network_ = n; }
    void       flush_data (void);
    int        read_stuff   (void);
    
    virtual void sample();
-
-   // Do not block when using TCP - send packet ASAP
-   void       no_tcp_delay();
-
-   static void no_linger(int fd);
 
  protected:
    void        set_blocking(bool val) const;
@@ -126,7 +117,6 @@ class NetStream : public STDdstream, public FD_EVENT {
 
    vector<string> tags_;
    string   name_;
-   int      port_;
    int      msgSize_;
    int      processing_;
    string   print_name_;
@@ -149,14 +139,12 @@ class Network_obs
 //: Network server
 class Network: public FD_EVENT {
    friend class NetStream;
-   static int   NETWORK_SERVER_BACKLOG;
 
  protected:
    FD_MANAGER  *_manager;
    int          nStreams_;
    NetStream   *streams_[256];
    vector<string> tags_;
-   int          port_;    // port number we're listening for connections on
    string       name_;    // name of the host we're running on
    int          first_;   // whether this is the primary connection server
 
@@ -170,7 +158,6 @@ class Network: public FD_EVENT {
    virtual void  remove_stream(NetStream *s);
 
    void         _die       (const char *msg);
-   const char   *configure (int port, int backlog = NETWORK_SERVER_BACKLOG);
    void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 
                                             s->subscribe(tags_); }
    virtual void accept_stream(void);
@@ -184,10 +171,6 @@ class Network: public FD_EVENT {
                                        _at_barrier(0) { }
    virtual   ~Network() {}
 
-   void       connect_to (NetStream *s);
-   void       start      (           int port=0);
-   void       start      (char *host,int port) { start();
-                                         connect_to(new NetStream(port,host)); }
    void       flush_data ();
   
    void       subscribe  (const string &tag){ tags_.push_back(tag);
@@ -195,7 +178,6 @@ class Network: public FD_EVENT {
                                                  streams_[i]->subscribe(tag); }
    NetStream *operator[] (int i)           { return streams_[i]; }
    int        num_streams(void)  const     { return nStreams_; }
-   int        port       (void)  const     { return port_; }
    const string &name    (void)  const     { return name_; }
    int        processing (void)  const;
 

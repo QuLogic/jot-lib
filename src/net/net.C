@@ -70,11 +70,6 @@
 #endif
 
 struct sockaddr_in;
-struct hostent;
-
-#ifdef sun
-extern "C" int gethostname(char *, int);
-#endif
 
 // AIX, Linux, and SunOS 5.7 have socklen_t, others don't
 #if !defined(_AIX) && !defined(_SOCKLEN_T) && !defined(linux) && !defined(__linux__)
@@ -304,215 +299,14 @@ num_bytes_to_read(int fildes)
 }
 
 
-static char *
-get_host_print_name(
-   int         port,
-   const char *hname = nullptr
-   )
-{
-   static char nbuff[255];
-   static char buff[255];
-   if (!hname) {
-      gethostname(buff, 255);
-      hname = buff;
-   }
-
-   struct hostent *entry = gethostbyname(hname);
-   sprintf(nbuff, "%s(%d)", entry ? entry->h_name : hname, port);
-
-   return nbuff;
-}
-
-static int NET_exception = 0;
-
-
-extern "C" {
-static 
-void
-net_exception_handler(int)
-{
-   NET_exception = 1;
-   signal(SIGPIPE, net_exception_handler);
-}
-}
-
 static bool debug = Config::get_var_bool("DEBUG_NET_STREAM",false);
 
-/* -----------------------  NetHost Class   ------------------------------- */
-//**********************************************************************
-//
-//  CLASS:  NetHost
-//  DESCR:  Provides information about a particular machine
-//          on the network.
-//
-//  USAGE:
-// 
-//     NetHost aHost("markov");
-//     NetHost sameHost("128.148.31.79");
-//     
-#define CNetHost const NetHost
-class NetHost {
- protected:
-   unsigned long addr_;
-   string        name_;
-   int           port_;
-
- public:
-
-            NetHost   (const  char    *hostname);
-            NetHost   (struct sockaddr_in *addr);
-            NetHost   (CNetHost &rhs) : addr_(rhs.addr_),name_(rhs.name_),port_(rhs.port_) { }
-   NetHost& operator= (CNetHost &rhs) { addr_ = rhs.addr_; name_ = rhs.name_;
-                                        port_ = rhs.port_; return *this; }
-
-   int     port(void)       const     { return port_; }
-   string  name(void)       const     { return name_; }
-   void    get_address(struct sockaddr_in *addr) const {
-      // DON'T free this memory; copy it
-      // returns architecture-dependent address information
-      memset(addr, 0, sizeof(sockaddr_in));
-      addr->sin_family = AF_INET;
-      addr->sin_addr.s_addr = addr_;
-   }
-};
-
-NetHost::NetHost(
-   const char *hostname
-   )
-{
-   struct hostent *entry;
-
-   assert(hostname != nullptr);
-
-   if (isdigit(hostname[0])) {
-      unsigned long netAddr = inet_addr(hostname);
-      entry = gethostbyaddr((const char*) &netAddr, sizeof(netAddr), AF_INET);
-      if (entry) {
-         name_ = string(entry->h_name);
-      } else name_ = hostname;
-      addr_ = netAddr;
-      port_ = -1;
-   } else {
-      entry = gethostbyname(hostname);
-
-      if (entry == nullptr) {
-         cerr << "NetHost: Could not resolve hostname!" << endl;
-         exit(1);
-      }
-
-      name_ = string(entry->h_name);
-      addr_ = *(unsigned long*)(entry->h_addr_list[0]);
-      port_ = -1;
-   }
-
-}
-
-NetHost::NetHost(
-   struct sockaddr_in *addr
-   )
-{
-   assert(addr != nullptr);
-
-   struct hostent *entry;
-
-   entry = gethostbyaddr((const char*) &addr->sin_addr,
-                          sizeof(addr->sin_addr),
-                          addr->sin_family);
-
-   if (entry == nullptr) {
-      perror("NetHost(sockaddr): gethostbyaddr");
-      exit(1);
-   }
-
-   port_ = ntohs(addr->sin_port);
-   name_ = string(entry->h_name);
-   addr_ = *(unsigned long*)(entry->h_addr_list[0]);
-}
-
-
 /* -----------------------  NetStream Class ------------------------------- */
-
-void
-NetStream::set_port(
-   int p
-   )
-{
-   port_ = p;
-   print_name_ = get_host_print_name(port(), name().c_str());
-}
-
-NetStream::NetStream(
-   int            port, 
-   const char    *name
-   ) : name_(name), port_(port), msgSize_(-1), 
-       processing_(0), print_name_(get_host_print_name(port,name))
-{
-   NetHost            host(name);
-   struct sockaddr_in serv_addr;
-
-   host.get_address(&serv_addr);
-   serv_addr.sin_port = htons((short) port);
-
-   if ((_fd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-      _die("socket");
-
-   else if (connect(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
-
-      _die("connect");
-
-   else
-      no_linger(_fd);
-
-   block(false);
-
-   if (_fd != -1) {
-      set_blocking(false);
-      no_tcp_delay(); // don't wait for large packets before sending a message
-   }
-
-}
-
-NetStream::NetStream(
-   int                 fd, 
-   struct sockaddr_in *client,
-   bool                should_block
-   ): name_(""), port_(-1), msgSize_(-1), processing_(0)
-{
-   _fd = fd;
-   if (!should_block) set_blocking(false);
-
-   if (client == nullptr)
-   {
-      char tmp[32];
-      sprintf(tmp, "%d", fd);
-      name_ = string(tmp);
-      port_ = 0;
-      print_name_ = string("file descriptor ") + name_;
-      // XXX - assumes fd is not a socket and doesn't need no_tcp_delay()
-   } 
-   else 
-   {
-      NetHost host(client);
-      name_       = host.name();
-      port_       = -1;  // host.port();
-      print_name_ = string(get_host_print_name(port_, name_.c_str()));
-
-      no_linger(_fd);
-      if (_fd != -1) 
-      {
-         // don't wait for large packets before sending a message
-         no_tcp_delay();
-      }
-   }
-
-   block(false);
-}
 
 NetStream::NetStream(
    const string            &name,
    NetStream::StreamFlags   flags) :
       name_(name), 
-      port_(0), 
       msgSize_(-1), 
       processing_(0), 
       print_name_(name)
@@ -581,11 +375,6 @@ NetStream::~NetStream()
 
    if (_fd >= 0) 
    {
-      if (port_ > 0) 
-      {
-         // Only print out the following when reading from the net
-         cerr <<  "NetStream : returning file descriptor :" << _fd << endl;
-      }
       // Without the following line, jot kills certain shells on exit, since
       // stdin is left in non-blocking mode
       set_blocking(true);
@@ -618,33 +407,13 @@ NetStream::remove_me()
    network_->remove_stream(this);
 }
 
-void
-NetStream::no_tcp_delay(
-   )
-{
-   // DON'T "BLOCK" WHEN USING TCP
-   //"on the sender's side, to insure that TCP doesn't send too many small
-   //packets, it refuses to send a packet if there is an ack outstanding
-   //unless it is has good-sized (i.e., big) packet to send. This feature
-   //can be turned off (e.g., X turns it off) by specifying the TCP_NODELAY
-   //option to setsockopt -- see the man pages for setsockopt and tcp." -twd
-   if (!Config::get_var_bool("DO_TCP_DELAY",false,true)) {
-      int on=1;
-      if (setsockopt(_fd, IPPROTO_TCP, TCP_NODELAY, (char *)&on, sizeof(on))) {
-         cerr << "NetStream::no_tcp_delay-  setsockopt(TCP_NODELAY) on " <<
-            print_name() << " (" << _fd<< ")";
-         perror("");
-      }
-   }
-}
-
 void 
 NetStream::_die(
    const char *msg
    )
 {
    if (!Config::get_var_bool("NO_CONNECT_ERRS",false,true)) {
-      cerr << "NetStream(" << name_ << ":" << port_ << "): " << msg << ": ";
+      cerr << "NetStream(" << name_ << "): " << msg << ": ";
       perror(nullptr);
    }
    _fd = -1;
@@ -692,11 +461,6 @@ NetStream::read_from_net(
             stime = the_time();
 
          if (the_time() - stime > 1 || errno != EAGAIN) {
-            if (port_ > 0) {
-               // Only print out a message if reading from the net
-               cerr << "NetStream::read_from_net - read error: peer reset"
-                    << endl;
-            }
             return -1;
          }
 #endif
@@ -750,30 +514,12 @@ NetStream::write_to_net(
 #endif
    set_blocking(false);
 
-   if (bytes_written < 0 || NET_exception) {
+   if (bytes_written < 0) {
       perror("NetStream::write_to_net: Warning: ");
-      NET_exception = 0;
    } else if (bytes_written < (ssize_t)nbytes)
       cerr << "Couldn't flush the buffer.  Some data wasn't written. (nbytes="
            << nbytes << " written=" << bytes_written << ")\n";
    return bytes_written;
-}
-
-void
-NetStream::no_linger(int fd)
-{
-   int           reuse = 1;
-   struct linger ling;
-
-   ling.l_onoff  = 0;
-   ling.l_linger = 0;
-
-   if (setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *)&ling, sizeof(ling))) {
-      perror("NetStream::no_linger.  setsockopt - SO_LINGER :");
-   }
-   if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse))) {
-      perror("NetStream::no_linger.  setsockopt - SO_REUSEADDR:");
-   }
 }
 
 int
@@ -790,7 +536,7 @@ NetStream::interpret()
       switch (code) {
             case NETadd_connection: {
                *this >> buff >> port;  
-               NetStream *s = new NetStream(port, buff);
+               NetStream *s = nullptr; //new NetStream(port, buff);
                if (s->fd() != -1)
                   network_->add_stream(s);
                network_->interpret(code, this);
@@ -802,15 +548,15 @@ NetStream::interpret()
             }
             brcase NETidentify :
                *this >> port;  
-               set_port(port);
+               //set_port(port);
                if (network_->first_) {
                   cerr << "NetStream accepts server -->" << print_name()<<endl;
                   for (int i=0; i<network_->nStreams_; i++)  {
                      NetStream *s = network_->streams_[i];
-                     if (s->port() != -1 && s != this) {
+                     if (0 != -1 && s != this) {
                         *this << NETadd_connection 
                               << s->name()
-                              << s->port()
+                              << 0
                               << NETflush;
                      }
                   }
@@ -942,22 +688,6 @@ NetStream::sample()
 
 /* -----------------------  Network Class   ------------------------------- */
 
-// Default number of connections the operating system should queue.
-int Network::NETWORK_SERVER_BACKLOG = 5;
-
-void
-Network::connect_to(
-   NetStream *s
-   )
-{
-   if (s && s->fd() != -1) {
-      add_stream(s); 
-      if (Config::get_var_bool("PRINT_ERRS",false,true))
-          cerr << "Network::connect_to - sending identity to server" << endl;
-      *s << NETidentify << port_ << NETflush;
-  }
-}
-
 void
 Network::barrier()
 {
@@ -991,7 +721,7 @@ Network::wait_for_connect()
 
    // Should really handle EWOULDBLOCK...
 
-   if (!(newStream = new NetStream(newFd, &cli_addr)))
+   if (!(newStream = nullptr))//new NetStream(newFd, &cli_addr)))
       _die("out of memory");
 
    return newStream;
@@ -1045,74 +775,6 @@ Network::_die(
    exit(1);
 }
 
-
-const char *
-Network::configure(
-   int port, 
-   int backlog
-   )
-{
-   struct sockaddr_in serv_addr;
-   char   buff[255];
-
-   port_ = port;
-   gethostname(buff, 255);
-   name_ = string(buff);
-
-   // Make the socket
-   if ((_fd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
-      return "socket";
-
-   // Set up our address
-   memset(&serv_addr, 0, sizeof(serv_addr));
-   serv_addr.sin_family = AF_INET;
-   serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-   serv_addr.sin_port = htons((short) port);
-
-   // Tell the socket to not linger if the process is killed.
-   NetStream::no_linger(_fd);
-
-   if (bind(_fd, (struct sockaddr*) &serv_addr, sizeof(serv_addr)) < 0)
-      return "bind";
-
-   if (port == 0) {
-      socklen_t foo(sizeof(struct sockaddr_in));
-      getsockname(_fd,  (struct sockaddr *)&serv_addr, &foo);
-      port_ = int(ntohs(serv_addr.sin_port));
-   }
-
-   // set port up to queue up to 'backlog' connection requests
-   if (listen(_fd, backlog) < 0)
-      return "listen";
-
-   // now that our file descriptor, _fd, has been setup, we need
-   // to register ourself (really our _fd) with the file descriptor
-   // manager.
-   Register(); // register the master socket that waits for new connections
-
-   cerr << "Network: server "<<name_<<" on port "<< port_<< endl;
-
-   signal(SIGPIPE, net_exception_handler);
-
-   return nullptr;
-}
-
-
-void
-Network::start(
-   int myPort
-   )
-{ 
-   const char *msg;
-
-   // if myPort is 0, then we arbitrarily determine that this Network
-   // will be responsible for configuring all new clients when they
-   // arrive -- see accept_stream()
-   first_ = (myPort == 0 ? 0 : 1);
-   // setup master socket to wait for connections:
-   if ((msg = configure(myPort))) 
-      _die(msg);
-}
 
 void  
 Network::flush_data()
