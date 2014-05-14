@@ -63,19 +63,6 @@
 /* #include "net/net.H" */
 #endif
 
-
-/* include for TCP_NODELAY*/
-#ifndef WIN32
-#include <netinet/tcp.h>
-#endif
-
-struct sockaddr_in;
-
-// AIX, Linux, and SunOS 5.7 have socklen_t, others don't
-#if !defined(_AIX) && !defined(_SOCKLEN_T) && !defined(linux) && !defined(__linux__)
-typedef int socklen_t;
-#endif
-
 #ifdef WIN32
 
 //XXX - This stomped the ability to
@@ -136,42 +123,6 @@ write_win32(int fildes, const void *buf, size_t nbyte)
             // Free the buffer.
             LocalFree( lpMsgBuf );
 
-         }
-      }
-   }
-   return val;
-}
-
-ssize_t
-read_win32(int fildes, void *buf, size_t nbyte)
-{
-   DWORD val=0;
-
-   DWORD filetype = GetFileType((HANDLE) fildes);
-
-   if (fildes == fileno(stdin))
-   {
-      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, nullptr);
-   }
-   else if (filetype == FILE_TYPE_DISK) 
-   {
-      ReadFile((HANDLE)fildes, buf, nbyte, &val, nullptr);
-   } 
-   else if (filetype == FILE_TYPE_CHAR) 
-   {
-      ReadConsole(GetStdHandle(STD_INPUT_HANDLE), buf, nbyte, &val, nullptr);
-   } 
-   else 
-   {
-      OVERLAPPED overlap;
-      overlap.hEvent = nullptr;
-      if (ReadFile((HANDLE) fildes, buf, nbyte, &val, &overlap)==FALSE) 
-      {
-         if (!GetOverlappedResult((HANDLE) fildes, &overlap, &val, TRUE)) 
-         {
-            const DWORD error = GetLastError();
-            cerr << "read_win32, error is: " << error << " - "
-               << " - " << fildes << endl;
          }
       }
    }
@@ -308,7 +259,6 @@ NetStream::NetStream(
    NetStream::StreamFlags   flags) :
       name_(name), 
       msgSize_(-1), 
-      processing_(0), 
       print_name_(name)
 {
    int readable  = flags & read;
@@ -374,73 +324,6 @@ NetStream::~NetStream()
 { 
 }
 
-void 
-NetStream::_die(
-   const char *msg
-   )
-{
-   if (!Config::get_var_bool("NO_CONNECT_ERRS",false,true)) {
-      cerr << "NetStream(" << name_ << "): " << msg << ": ";
-      perror(nullptr);
-   }
-}
-
-ssize_t 
-NetStream::read_from_net(
-   void   *buf, 
-   size_t  nbytes
-   ) const
-{
-   char  *tmpbuf  = (char*) buf;
-   int    numread = 0;
-   double stime   = 0;
-
-   while (nbytes) {
-#ifdef WIN32
-      int readb = read_win32(-1, tmpbuf, nbytes);
-#else
-      int readb = ::read(-1, tmpbuf, nbytes);
-#endif
-
-      if (errno == EAGAIN) { // if nothing's left to read, then
-         if (Config::get_var_bool("PRINT_ERRS",false,true)) 
-            cerr << "  bytes read from network (EAGAIN) = " << numread << endl;
-         return numread + (readb == -1 ? 0:readb);  //just return what we have
-     }
-
-      if (readb < 0) {
-         perror("NetStream::read_from_net : Warning - ");
-         return -1;
-      }
-
-      if (readb == 0 && nbytes > 0) 
-      {
-#ifdef WIN32
-         //XXX - errno not set on WIN32 when there's not enough
-         //to read on a non-blocking fd... should prolly
-         //set some state in read_win32 to reflect this, but
-         //for now just assume this is the reason and
-         //return without error...
-         return numread + (readb == -1 ? 0:readb);
-#else
-         if (stime == 0)
-            stime = the_time();
-
-         if (the_time() - stime > 1 || errno != EAGAIN) {
-            return -1;
-         }
-#endif
-      }
-
-      nbytes -= readb;
-      tmpbuf += readb;
-      numread+= readb;
-   }
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) 
-      cerr << "  bytes read from network = " << numread << endl;
-   return numread;
-}
-
 void
 NetStream::set_blocking(bool val) const
 {
@@ -488,72 +371,6 @@ NetStream::write_to_net(
    return bytes_written;
 }
 
-int
-NetStream::interpret()
-{
-   char    buff_[256], *buff = buff_;
-   NETenum code;
-   int     port;
-   processing_ = 1;
-   int     ret = 0;
-
-   while (_in_queue.in_avail() > 0) {
-      *this >> code;
-      switch (code) {
-            case NETadd_connection: {
-               *this >> buff >> port;  
-               NetStream *s = nullptr; //new NetStream(port, buff);
-               if (s->fd() != -1)
-                  network_->add_stream(s);
-               network_->interpret(code, this);
-            }
-            brcase NETquit: {
-               network_->interpret(code, this);
-               network_->remove_stream(this);
-               ret = 1;  // this return value should terminate this NetStream
-            }
-            brcase NETidentify :
-               *this >> port;  
-               //set_port(port);
-               if (network_->first_) {
-                  cerr << "NetStream accepts server -->" << print_name()<<endl;
-                  for (int i=0; i<network_->nStreams_; i++)  {
-                     NetStream *s = network_->streams_[i];
-                     if (0 != -1 && s != this) {
-                        *this << NETadd_connection 
-                              << s->name()
-                              << 0
-                              << NETflush;
-                     }
-                  }
-               }
-            brcase NETtext:
-               *this >> buff;
-               cerr << "(* " << print_name() << " *) " << buff << endl;
-            brcase NETbroadcast: { 
-               string flag;
-               *this >> flag;
-               vector<string>::iterator it;
-               it = std::find(tags_.begin(), tags_.end(), flag);
-               if (it == tags_.end()) {
-                  /* clear input queue */
-                  _in_queue.pubseekoff(0, ios_base::beg, ios_base::in | ios_base::out);
-                  if (Config::get_var_bool("PRINT_ERRS",false,true))
-                     cerr << "Ignoring broadcast " << flag << endl;
-               }
-            }
-            brcase NETbarrier: network_->_at_barrier++;
-            brdefault : 
-               //XXX - Added a way to bail out of bad stream...
-               if (network_->interpret(code, this)) return 1;
-         }
-   }
-   processing_ = 0;
-
-   return ret;
-}
-
-
 void NetStream::flush_data()
 {
    streamsize count = _out_queue.in_avail();
@@ -572,115 +389,7 @@ void NetStream::flush_data()
 }
 
 
-int
-NetStream::read_stuff()
-{
-
-   const unsigned int BUFSIZE= 666666;
-   char buff[BUFSIZE];
-   int  num_read = 0;
-
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: ReadStuff called\n";
-
-   // If we do not have a message size (msgSize_), read it from the network
-   if (msgSize_ == -1) {
-
-      char packbuf_space[sizeof(int) + 1];
-      char *packbuf = packbuf_space;
-      int nread = read_from_net(packbuf, sizeof(int));
-      if (nread < 0)
-         return nread;
-      int count = 0;
-      UGA_UNPACK_INTEGER(msgSize_, packbuf, count);
-      if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: msgSize is " << msgSize_ << endl;
-   }
-
-   // After we know the message size, we read everything that is available on
-   // the network, in blocks of BUFSIZE bytes
-   do {
-      int nread = read_from_net(buff, BUFSIZE);
-      if (nread <= 0) 
-           return nread;
-      else num_read = nread;
-      if (msgSize_ > (int)BUFSIZE) {
-         //XXX - Better error checking... (I hope)
-         if (num_read != (int)BUFSIZE) return num_read;
-         _in_queue.sputn(buff, BUFSIZE);
-         msgSize_ -= BUFSIZE;
-         if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: Big message, storing first BUFSIZE bytes (msgSize = " << msgSize_ << endl;
-         num_read  = 0;
-      }
-   } while (num_read == 0);
-
-   // If we have read at least one full message...
-   char *tbuf = buff; 
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: processing num_read " << num_read << endl;
-   if (num_read >= msgSize_) {
-      // For each full message...
-      while (num_read && num_read >= msgSize_) {
-        _in_queue.sputn(tbuf, msgSize_); // Stuff the message onto queue
-        num_read -= msgSize_;                  // skip to end of this message
-        tbuf     += msgSize_;
-
-        if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: processing full_message " << msgSize_ << " (num_read = " << num_read << endl;
-
-        if (interpret() != 0)                  // Let app decode message
-           return 1;  // this flag terminates this NetStream connection
-
-        // If we still have more data to process read the next message size
-        if (num_read > 0) {
-           int count = 0;
-           UGA_UNPACK_INTEGER(msgSize_, tbuf, count); // tbuf is updated
-           num_read -= count;
-           if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: next message" << msgSize_ << " (num_read = " << num_read << endl;
-        } else
-           msgSize_ = -1; // Otherwise, clear the message size
-      }
-   }
-   // Anything left over is less than a complete message, so we store it
-   // away in _in_queue and decrease our msgSize_ request accordingly
-   _in_queue.sputn(tbuf, num_read);
-   msgSize_ -= num_read;
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) cerr << "NetStream: saved for next time " << num_read << " (msgSize = " << msgSize_ << endl;
-   return 0;
-}
-
-void
-NetStream::sample()
-{
-   if (read_stuff() != 0)
-      network()->remove_stream(this);
-}
-
 /* -----------------------  Network Class   ------------------------------- */
-
-int
-Network::processing(void) const
-{
-   int yes = 0; 
-   for (int i=0; !yes && i < nStreams_; i++) 
-      yes = streams_[i]->processing(); 
-   return yes;
-}
-
-void 
-Network::_die(
-   const char *msg
-   )
-{
-   cerr << "Network(" << name_ << "): " << msg << ": ";
-   perror(nullptr);
-   exit(1);
-}
-
-
-void  
-Network::flush_data()
-{ 
-   for (int i=0; i<nStreams_; i++) 
-      streams_[i]->flush_data(); 
-}
-
 
 STDdstream &
 operator >> (

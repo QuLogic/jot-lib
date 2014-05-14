@@ -73,7 +73,7 @@ class DISTRIB : public Network,
  public:   
    /******** Network METHODS ********/
    virtual int       interpret(NETenum, NetStream *);
-   int               processing() const            { return _processing_gate && Network::processing(); }
+   int               processing() const            { return _processing_gate && 0; }
 
    /******** *Obs METHODS ********/
  public:

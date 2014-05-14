@@ -87,24 +87,18 @@ class NetStream : public STDdstream, public FD_EVENT {
 
    string     name       (void) const  { return name_; }
    string     print_name (void) const  { return print_name_; }
-   int        processing (void) const  { return processing_; }
    Network*   network    (void) const  { return network_; }
-   void       subscribe  (const string &t){ tags_.push_back(t); }
-   void       subscribe  (const vector<string> &t){ tags_  = t; }
 
    bool       attached   (void) const  { return !!iostr(); }
 
    void       add_network(Network *n)  { network_ = n; }
    void       flush_data (void);
-   int        read_stuff   (void);
    
-   virtual void sample();
+   virtual void sample() {};
 
  protected:
    void        set_blocking(bool val) const;
    ssize_t     write_to_net (const void *buf, size_t nbyte) const;
-   ssize_t     read_from_net(      void *buf, size_t nbyte) const;
-   int         interpret    (void);
    virtual size_t recv(char *, int)
                  { cerr << "NetStream: recv unimplemented\n"; return 0; }
    virtual size_t send(const char *data, int count)
@@ -112,12 +106,8 @@ class NetStream : public STDdstream, public FD_EVENT {
 
  private:
    
-   void _die(const char *msg);
-
-   vector<string> tags_;
    string   name_;
    int      msgSize_;
-   int      processing_;
    string   print_name_;
    Network *network_;
 };
@@ -130,37 +120,20 @@ class Network: public FD_EVENT {
 
  protected:
    FD_MANAGER  *_manager;
-   int          nStreams_;
-   NetStream   *streams_[256];
-   vector<string> tags_;
    string       name_;    // name of the host we're running on
-   int          first_;   // whether this is the primary connection server
 
    virtual void  sample    ()                 { }
-   virtual void  Unregister(NetStream *s)     { _manager->rem(s); }
-   virtual void  Register  (NetStream *s)     { _manager->add(s);
-                                                s->add_network(this); }
    virtual int  interpret (NETenum code, NetStream *sender) = 0;
 
-   void         _die       (const char *msg);
-   void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 
-                                            s->subscribe(tags_); }
-   int           _at_barrier;
 
  public:
-              Network(FD_MANAGER *m) : _manager(m), nStreams_(0),name_(""),
-                                       _at_barrier(0) { }
+              Network(FD_MANAGER *m) : _manager(m), name_("")
+                                       { }
    virtual   ~Network() {}
 
-   void       flush_data ();
-  
-   void       subscribe  (const string &tag){ tags_.push_back(tag);
-                                              for (int i=0; i < nStreams_; i++)
-                                                 streams_[i]->subscribe(tag); }
-   NetStream *operator[] (int i)           { return streams_[i]; }
-   int        num_streams(void)  const     { return nStreams_; }
+   NetStream *operator[] (int i)           { return nullptr; }
+   int        num_streams(void)  const     { return 0; }
    const string &name    (void)  const     { return name_; }
-   int        processing (void)  const;
 };
 
 
