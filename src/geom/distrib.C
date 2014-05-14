@@ -608,7 +608,7 @@ DISTRIB::interpret(
          ret = 1;
          err_msg(
             "DISTRIB::interpret: Code: '%d' from '%s' is not NETcontext",
-               int(code), sender->print_name().c_str());
+               int(code), sender->name().c_str());
      }
    }
    return ret;

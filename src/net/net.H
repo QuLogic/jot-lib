@@ -86,7 +86,6 @@ class NetStream : public STDdstream, public FD_EVENT {
    virtual   ~NetStream();
 
    string     name       (void) const  { return name_; }
-   string     print_name (void) const  { return print_name_; }
    Network*   network    (void) const  { return network_; }
 
    bool       attached   (void) const  { return !!iostr(); }
@@ -107,8 +106,6 @@ class NetStream : public STDdstream, public FD_EVENT {
  private:
    
    string   name_;
-   int      msgSize_;
-   string   print_name_;
    Network *network_;
 };
 

@@ -257,9 +257,7 @@ static bool debug = Config::get_var_bool("DEBUG_NET_STREAM",false);
 NetStream::NetStream(
    const string            &name,
    NetStream::StreamFlags   flags) :
-      name_(name), 
-      msgSize_(-1), 
-      print_name_(name)
+      name_(name)
 {
    int readable  = flags & read;
    int writeable = flags & write;
