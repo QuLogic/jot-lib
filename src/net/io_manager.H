@@ -57,8 +57,8 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
    static string  save_prefix()     { return instance()->save_prefix_(); }
 
    /******** LOADobs METHODS ********/
-   virtual void notify_preload (NetStream &, load_status_t &, bool, bool); 
-   virtual void notify_postload(NetStream &, load_status_t &, bool, bool); 
+   virtual void notify_preload (NetStream &, load_status_t &, bool);
+   virtual void notify_postload(NetStream &, load_status_t &, bool);
 
    /******** SAVEobs METHODS ********/
    virtual void notify_presave (NetStream &, save_status_t &, bool, bool); 

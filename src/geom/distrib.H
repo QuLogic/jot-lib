@@ -68,7 +68,7 @@ class DISTRIB : public Network,
    bool     load(NetStream &);
    bool     save(NetStream &, bool to_file, bool full_scene);
    
-   LOADobs::load_status_t  load_stream(NetStream &, bool from_file, bool full_scene);
+   LOADobs::load_status_t  load_stream(NetStream &, bool full_scene);
    SAVEobs::save_status_t  save_stream(NetStream &, bool to_file,   bool full_scene);
 
  public:   
@@ -91,7 +91,7 @@ class DISTRIB : public Network,
    virtual void    notify         (CCAMdataptr &data);
    virtual void    notify_hash    (CGELptr &, hashdist *);
    virtual void    notify_texture (CGEOMptr &);
-   virtual void    notify_load    (NetStream &s, LOADobs::load_status_t &status, bool from_file, bool full_scene);
+   virtual void    notify_load    (NetStream &s, LOADobs::load_status_t &status, bool full_scene);
    virtual void    notify_save    (NetStream &s, SAVEobs::save_status_t &status, bool to_file, bool full_scene);
 
 };

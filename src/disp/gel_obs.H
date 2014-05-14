@@ -254,11 +254,11 @@ class  LOADobs {
    static LOADobs_list *postloadobs_list(){ if (!_postload_obs) _postload_obs=new LOADobs_list; return _postload_obs; }
  public:
    virtual ~LOADobs() {}
-   virtual void notify_preload (NetStream &s, load_status_t &status, bool from_file, bool full_scene) {}
-   virtual void notify_postload(NetStream &s, load_status_t &status, bool from_file, bool full_scene) {}
-   virtual void notify_load    (NetStream &s, load_status_t &status, bool from_file, bool full_scene) {}
+   virtual void notify_preload (NetStream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_postload(NetStream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_load    (NetStream &s, load_status_t &status, bool full_scene) {}
       
-   static  void notify_load_obs(NetStream &s, load_status_t &status, bool to_file, bool full_scene);
+   static  void notify_load_obs(NetStream &s, load_status_t &status, bool full_scene);
 
    /* ---  object load observer --- */
    void   preload_obs ()        { preloadobs_list()->insert(this); }

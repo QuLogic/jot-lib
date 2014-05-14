@@ -608,7 +608,7 @@ BaseJOTapp::load_jot_file(const string &file)
 
    NetStream s(file, NetStream::ascii_r);
 
-   LOADobs::notify_load_obs(s, status, true, true);
+   LOADobs::notify_load_obs(s, status, true);
 
    return (status == LOADobs::LOAD_ERROR_NONE);
 }

@@ -258,7 +258,7 @@ Animator::pre_draw_CB()
       LOADobs::load_status_t status;
       cerr <<  "loading in " << fname << endl;
       NetStream s(fname, NetStream::ascii_r);
-      LOADobs::notify_load_obs(s, status, true, false);
+      LOADobs::notify_load_obs(s, status, false);
 
       _last_loaded = _cur_frame;
    }
@@ -352,7 +352,7 @@ Animator::format(STDdstream &d)  const
          //just in case we're overwriting...
          {
             NetStream l(lname, NetStream::ascii_r);
-            LOADobs::notify_load_obs(l, lstatus, true, false);
+            LOADobs::notify_load_obs(l, lstatus, false);
 
             if (lstatus != LOADobs::LOAD_ERROR_NONE) {
                cerr << "Animator::format: Error loading scene update frame: "

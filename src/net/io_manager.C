@@ -139,7 +139,6 @@ void
 IOManager::notify_preload(
    NetStream     &s,
    load_status_t &load_status,
-   bool           from_file,
    bool           full_scene
    )
 {
@@ -147,14 +146,6 @@ IOManager::notify_preload(
    bool ret;
    string path,file,ext;
    string cpath,cfile,cext;
-
-   //Actually, this never happens, nevertheless...
-   if (!from_file) 
-   {
-      err_mesg(ERR_LEV_INFO, "IOManager::notify_preload() - *WARNING* Loading from non-file source. Aborting..."); 
-      return;
-   }
-
 
    switch(state_())
    {
@@ -285,19 +276,10 @@ void
 IOManager::notify_postload(
    NetStream     &s,
    load_status_t &load_status,
-   bool           from_file,
    bool           full_scene
    )
 {
    string path;
-
-   //Actually, this never happens, nevertheless...
-   if (!from_file) 
-   {
-      err_mesg(ERR_LEV_INFO, "IOManager::notify_postload() - *WARNING* Loading from non-file source. Aborting..."); 
-      assert(state_() == STATE_IDLE);
-      return;
-   }
 
    assert(state_() == ((full_scene)?(STATE_SCENE_LOAD):(STATE_PARTIAL_LOAD)) );
 

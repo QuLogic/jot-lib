@@ -416,16 +416,15 @@ void
 LOADobs::notify_load_obs(
    NetStream &s,
    load_status_t &status,
-   bool to_file,
    bool full_scene )
 {
    LOADobs_list::iterator i;
    DISTRIB::get_distrib();
    status = LOAD_ERROR_NONE;
    for (i=preloadobs_list()->begin(); i!=preloadobs_list()->end(); ++i)
-      (*i)->notify_preload(s, status, to_file, full_scene);
+      (*i)->notify_preload(s, status, full_scene);
    for (i=loadobs_list()->begin(); i!=loadobs_list()->end(); ++i)
-      (*i)->notify_load(s, status, to_file, full_scene);
+      (*i)->notify_load(s, status, full_scene);
    for (i=postloadobs_list()->begin(); i!=postloadobs_list()->end(); ++i)
-      (*i)->notify_postload(s, status, to_file, full_scene);
+      (*i)->notify_postload(s, status, full_scene);
 }

@@ -681,7 +681,6 @@ DISTRIB::load(NetStream &cli)
 LOADobs::load_status_t
 DISTRIB::load_stream(
    NetStream &s,
-   bool       from_file,
    bool       full_scene)
 {
    bool ret;
@@ -721,30 +720,22 @@ DISTRIB::load_stream(
          }
          else
          {
-            if (!from_file)
+            err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", header.c_str());
+            err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
+
+            ret = LOADER::load(s.name());
+
+            if (!ret)
             {
-               err_msg("DISTRIB::load_stream: *LOAD FAILED* Not '#jot' header: '%s'", header.c_str());
+               err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
+               err_msg("DISTRIB::load_stream: *LOAD FAILED*");
                result = LOADobs::LOAD_ERROR_READ;
             }
             else
             {
-               err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", header.c_str());
-               err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
-
-               ret = LOADER::load(s.name());
-
-               if (!ret) 
-               {
-                  err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
-                  err_msg("DISTRIB::load_stream: *LOAD FAILED*");
-                  result = LOADobs::LOAD_ERROR_READ;
-               }
-               else
-               {
-                  err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded.");
-                  err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-                  result = LOADobs::LOAD_ERROR_AUX;
-               }
+               err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded.");
+               err_adv(debug, "DISTRIB::load_stream: ...load successful!");
+               result = LOADobs::LOAD_ERROR_AUX;
             }
          }
       }
@@ -763,31 +754,23 @@ DISTRIB::load_stream(
          }
          else
          {
-            if (!from_file)
+            err_msg("DISTRIB::load_stream: Conventional load failed!");
+            err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
+
+            ret = LOADER::load(s.name());
+
+            if (!ret)
             {
+               err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
                err_msg("DISTRIB::load_stream: *LOAD FAILED*");
                result = LOADobs::LOAD_ERROR_READ;
             }
             else
             {
-               err_msg("DISTRIB::load_stream: Conventional load failed!");
-               err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
-
-               ret = LOADER::load(s.name());
-
-               if (!ret) 
-               {
-                  err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
-                  err_msg("DISTRIB::load_stream: *LOAD FAILED*");
-                  result = LOADobs::LOAD_ERROR_READ;
-               }
-               else
-               {
-                  err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded");
-                  err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-                  result = LOADobs::LOAD_ERROR_AUX;
-               }
-            }         
+               err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded");
+               err_adv(debug, "DISTRIB::load_stream: ...load successful!");
+               result = LOADobs::LOAD_ERROR_AUX;
+            }
          }
       }
    }
@@ -808,13 +791,12 @@ void
 DISTRIB::notify_load(
    NetStream     &s,
    load_status_t &status,
-   bool           from_file,
    bool           full_scene
    )
 {
    if (status == LOADobs::LOAD_ERROR_NONE)
    {
-      status = load_stream(s, from_file,full_scene);
+      status = load_stream(s, full_scene);
    }
    else
    {

@@ -931,7 +931,7 @@ do_load(string fullpath)
 	
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
-   LOADobs::notify_load_obs(s, status, true, true);
+   LOADobs::notify_load_obs(s, status, true);
    VIEW::peek()->set_cursor(old_cursor);
 
    if (status == LOADobs::LOAD_ERROR_NONE) {
