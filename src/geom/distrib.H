@@ -62,11 +62,10 @@ class DISTRIB : public Network,
    void     set_processing_gate(bool pg)  { _processing_gate = pg;   }
 
  protected:   
-   /******** INERNAL MEMBER METHODS ********/
-   bool     should_save(CGEOMptr &g);
+   /******** INTERNAL MEMBER METHODS ********/
 
    bool     load(NetStream &);
-   bool     save(NetStream &, bool to_file, bool full_scene);
+   bool     save(NetStream &, bool full_scene);
    
    LOADobs::load_status_t  load_stream(NetStream &, bool full_scene);
    SAVEobs::save_status_t  save_stream(NetStream &, bool full_scene);
@@ -74,8 +73,6 @@ class DISTRIB : public Network,
  public:   
    /******** Network METHODS ********/
    virtual int       interpret(NETenum, NetStream *);
-   virtual void      add_client(NetStream  *);
-   virtual void      remove_stream(NetStream  *);
    int               processing() const            { return _processing_gate && Network::processing(); }
 
    /******** *Obs METHODS ********/

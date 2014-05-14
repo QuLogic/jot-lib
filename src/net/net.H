@@ -109,7 +109,6 @@ class NetStream : public STDdstream, public FD_EVENT {
                  { cerr << "NetStream: recv unimplemented\n"; return 0; }
    virtual size_t send(const char *data, int count)
                  { return write_to_net((const void *)data, (size_t)count); }
-   void        remove_me(); // Remove this stream from its Network
 
  private:
    
@@ -142,8 +141,6 @@ class Network: public FD_EVENT {
    virtual void  Register  (NetStream *s)     { _manager->add(s);
                                                 s->add_network(this); }
    virtual int  interpret (NETenum code, NetStream *sender) = 0;
-   virtual void  add_client(NetStream *cli);
-   virtual void  remove_stream(NetStream *s);
 
    void         _die       (const char *msg);
    void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 

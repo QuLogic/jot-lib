@@ -374,12 +374,6 @@ NetStream::~NetStream()
 { 
 }
 
-void
-NetStream::remove_me()
-{
-   network_->remove_stream(this);
-}
-
 void 
 NetStream::_die(
    const char *msg
@@ -668,29 +662,6 @@ Network::processing(void) const
       yes = streams_[i]->processing(); 
    return yes;
 }
-
-void 
-Network::remove_stream(
-   NetStream *s
-   ) 
-{
-   int i=0;
-   while (i<nStreams_ && streams_[i] != s) ++i;
-   if (i < nStreams_) {
-      Unregister(s);
-      streams_[i] = streams_[--nStreams_];
-      delete s;
-   }
-}
-
-void
-Network::add_client(
-   NetStream *cli
-   )
-{ 
-   *cli << NETtext << "Initialize World" << NETflush; 
-}
-
 
 void 
 Network::_die(

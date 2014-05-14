@@ -828,7 +828,7 @@ DISTRIB::save_stream(
       {
          err_adv(debug, "DISTRIB::save_stream: Saving ASCII stream...");
 
-         ret = save(s, true, full_scene);
+         ret = save(s, full_scene);
 
          if (ret)
          {
@@ -845,7 +845,7 @@ DISTRIB::save_stream(
       {
          err_adv(debug, "DISTRIB::save_stream: Saving Non-ASCII stream...");
 
-         ret = save(s, true, full_scene);
+         ret = save(s, full_scene);
 
          if (ret)
          {
@@ -877,7 +877,6 @@ DISTRIB::save_stream(
 bool
 DISTRIB::save(
    NetStream& s, 
-   bool       to_file,
    bool       full_scene
    )
 {
@@ -898,29 +897,23 @@ DISTRIB::save(
    // If no object depends on an undisplayed object, then
    // we don't save it to a file
    CGELlist &drawn = DRAWN;
-   GELlist   undisplayed, filter;
+   GELlist   filter;
    for (i = geoms.num() - 1; i >= 0; i--) {
       if (NETWORK.get(geoms[i]) &&    // object is networked
           !NO_SAVE.get(geoms[i]) &&   // object is savable
           !drawn.contains(geoms[i])) { // object isn't drawn
-         if (!to_file || should_save(geoms[i])) {
-            // if we're not writing to a file or someone depends on this obj...
-            // Save out this object, but make sure it is undisplayed as well
-            undisplayed += geoms[i];
-         } else {
-            // Don't save out this object
-            filter += geoms[i];
-            if (Config::get_var_bool("DEBUG_NET_STREAM",false)) {
-               cerr << "DISTRIB::save: filtered out: "
-                    << geoms[i]->name()
-                    << "\n  networked: "
-                    << (NETWORK.get(geoms[i]) ? "yes" : "no")
-                    << ", save: "
-                    << (NO_SAVE.get(geoms[i]) ? "no" : "yes")
-                    << ", DRAWN index: "
-                    << drawn.get_index(geoms[i])
-                    << endl;
-            }
+         // Don't save out this object
+         filter += geoms[i];
+         if (Config::get_var_bool("DEBUG_NET_STREAM",false)) {
+            cerr << "DISTRIB::save: filtered out: "
+                 << geoms[i]->name()
+                 << "\n  networked: "
+                 << (NETWORK.get(geoms[i]) ? "yes" : "no")
+                 << ", save: "
+                 << (NO_SAVE.get(geoms[i]) ? "no" : "yes")
+                 << ", DRAWN index: "
+                 << drawn.get_index(geoms[i])
+                 << endl;
          }
       }
    }
@@ -946,10 +939,7 @@ DISTRIB::save(
 
    if (full_scene)
    {
-      if (to_file)
-      {
-         s << JOTio(IOManager::instance());
-      }
+      s << JOTio(IOManager::instance());
 
       // GEOMS
       for (i = 0; i < geoms.num(); i++) {
@@ -965,20 +955,11 @@ DISTRIB::save(
          } 
       }
 
-      // Undisplays
-      for (i = 0; i < undisplayed.num(); i++) {
-         s << JOTdisplay(undisplayed[i], 0);
-      }
-
       // Other stuff
-      if (to_file) {
-         s << JOTcam(VIEW::peek()->cam()->data());
-         s << JOTwin(VIEW::peek()->win());
-         s << JOTview(VIEW::peek());
-      }
+      s << JOTcam(VIEW::peek()->cam()->data());
+      s << JOTwin(VIEW::peek()->win());
+      s << JOTview(VIEW::peek());
    } else {
-      assert(to_file);
-
       // GEOMS
       for (i = geoms.num() - 1; i >= 0 ; i--) {
          if (NETWORK.get(geoms[i]) &&
@@ -999,44 +980,6 @@ DISTRIB::save(
    s << JOTdone();
 #endif
    return !s.fail();
-}
-
-/////////////////////////////////////
-// add_client()
-/////////////////////////////////////
-void  
-DISTRIB::add_client(NetStream *cli)  
-{
-   // only save the scene to the new client if not running in the Cave
-   // (because that's the way it was first implemented, but seems to be
-   // wrong) or if using the Cave AND we're the front wall.
-   //
-   // Everything to do with CAVE support has been removed...
-      save(*cli, false, true);
-}
-
-/////////////////////////////////////
-// remove_stream()
-/////////////////////////////////////
-void
-DISTRIB::remove_stream(NetStream  *s)
-{
-   // call base class's method 1st
-   Network::remove_stream(s);
-
-}
-
-/////////////////////////////////////
-// should_save()
-/////////////////////////////////////
-//
-// g is an undisplayed object - does anything that will be saved out depend
-// on this object?
-//
-bool
-DISTRIB::should_save(CGEOMptr &g)
-{
-   return false;
 }
 
 /////////////////////////////////////
