@@ -708,25 +708,6 @@ Network::processing(void) const
    return yes;
 }
 
-NetStream *
-Network::wait_for_connect()
-{
-   struct sockaddr_in  cli_addr;
-   socklen_t           clilen = sizeof(cli_addr);
-   int                 newFd;
-   NetStream          *newStream;
-
-   if ((newFd = accept(_fd, (struct sockaddr*) &cli_addr, &clilen)) < 0)
-      _die("accept");
-
-   // Should really handle EWOULDBLOCK...
-
-   if (!(newStream = nullptr))//new NetStream(newFd, &cli_addr)))
-      _die("out of memory");
-
-   return newStream;
-}
-
 void 
 Network::remove_stream(
    NetStream *s
@@ -742,18 +723,6 @@ Network::remove_stream(
       streams_[i] = streams_[--nStreams_];
       delete s;
    }
-}
-
-void 
-Network::accept_stream(void) 
-{
-   NetStream *s = wait_for_connect();
-   cerr << "Network   accept_stream from ---->" << s->name() << endl;
-   add_stream(s);
-   add_client(s);
-
-   // notify observers
-   notify_net(Network_obs::accept_str, s);
 }
 
 void

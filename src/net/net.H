@@ -148,11 +148,10 @@ class Network: public FD_EVENT {
    string       name_;    // name of the host we're running on
    int          first_;   // whether this is the primary connection server
 
-   virtual void  sample    ()                 { accept_stream(); }
+   virtual void  sample    ()                 { }
    virtual void  Unregister(NetStream *s)     { _manager->rem(s); }
    virtual void  Register  (NetStream *s)     { _manager->add(s);
                                                 s->add_network(this); }
-   virtual void  Register  ()                 { _manager->add(this); }
    virtual int  interpret (NETenum code, NetStream *sender) = 0;
    virtual void  add_client(NetStream *cli);
    virtual void  remove_stream(NetStream *s);
@@ -160,9 +159,6 @@ class Network: public FD_EVENT {
    void         _die       (const char *msg);
    void          add_stream(NetStream *s) { Register(streams_[nStreams_++]=s); 
                                             s->subscribe(tags_); }
-   virtual void accept_stream(void);
-   NetStream    *wait_for_connect();
-
    set<Network_obs *>  _obs_list;
    int           _at_barrier;
 
