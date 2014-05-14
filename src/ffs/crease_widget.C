@@ -348,8 +348,6 @@ CREASE_WIDGET::add(Bedge* e)
    return true;
 }
 
-const double SIL_SEARCH_RAD = 12;
-
 void
 CREASE_WIDGET::reset()
 {

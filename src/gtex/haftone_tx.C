@@ -27,7 +27,6 @@
 
 const int CORR_RES   = 256; // resolution of the tone correction
 const int LOD_RES    =  16; // resolution of the lod correction
-const int PROCEDURAL = -1;
 
 static bool debug = Config::get_var_bool("DEBUG_HALFTONE", false);
 static bool enable_alpha_transitions =

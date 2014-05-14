@@ -42,7 +42,6 @@ using namespace mlib;
  *****************************************************************/
 vector<ColorUI*>         ColorUI::_ui;
 
-const static int WIN_WIDTH=300; 
 const static int PRESET_NUMBER=12; 
 
 ColorUI::ColorUI(BaseUI* parent) :

@@ -46,9 +46,6 @@ using namespace mlib;
 
 vector<ProxyTextureUI*> ProxyTextureUI::_ui;
 
-const static int WIN_WIDTH=300; 
-const static int MAX_LAYERS = 4;
-
 ProxyTextureUI::ProxyTextureUI(BaseUI* parent) :
      BaseUI(parent,"Haching UI")
 {
@@ -120,9 +117,6 @@ ProxyTextureUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       if(_panel[i])
       _panel[i]->set_alignment(GLUI_ALIGN_LEFT);
    }
-
-   int w = _rollout[ROLLOUT_MAIN]->get_w();
-   w = max(WIN_WIDTH, w);
 
    update_non_lives();
 }

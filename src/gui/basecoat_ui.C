@@ -44,8 +44,6 @@ using namespace mlib;
 
 vector<BasecoatUI*> BasecoatUI::_ui;
 
-const static int WIN_WIDTH=300; 
-
 BasecoatUI::BasecoatUI(BaseUI* parent) :
      BaseUI(parent,"Basecoat UI") 
 {
@@ -159,9 +157,6 @@ BasecoatUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    }
 
    update();
-
-   //int w = _rollout[ROLLOUT_MAIN]->get_w();
-   //w = max(WIN_WIDTH, w);
 }
 
 void

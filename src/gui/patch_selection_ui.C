@@ -39,7 +39,6 @@ using namespace mlib;
  * PatchSelectionUI
  *****************************************************************/
 vector<PatchSelectionUI*>         PatchSelectionUI::_ui;
-const static int MY_WIDTH = 100;
 const static int MAX_LAYERS = 4;
 const static int MAX_CHANNELS = 4;
 

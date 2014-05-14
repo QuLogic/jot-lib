@@ -49,9 +49,7 @@ using namespace mlib;
 
 vector<HatchingUI*> HatchingUI::_ui;
 
-const static int WIN_WIDTH=300; 
 const static int MAX_LAYERS   = 4;
-const static int MAX_CHANNELS = 4;
 
 
 HatchingUI::HatchingUI(BaseUI* parent) :
@@ -203,9 +201,6 @@ HatchingUI::build(GLUI* glui, GLUI_Panel* base, bool open)
       if(_panel[i])
       _panel[i]->set_alignment(GLUI_ALIGN_LEFT);
    }
-
-   int w = _rollout[ROLLOUT_HATCHING]->get_w();
-   w = max(WIN_WIDTH, w);
 
    update_non_lives();
 }

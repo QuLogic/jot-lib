@@ -44,8 +44,6 @@ using namespace mlib;
 
 vector<DetailCtrlUI*> DetailCtrlUI::_ui;
 
-const static int WIN_WIDTH=300; 
-
 DetailCtrlUI::DetailCtrlUI(BaseUI* parent) :
      BaseUI(parent,"Detail Control UI"), _detail_type(0)
 {
@@ -203,9 +201,6 @@ DetailCtrlUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    }
 
    update();
-
-   //int w = _rollout[ROLLOUT_MAIN]->get_w();
-   //w = max(WIN_WIDTH, w);
 }
 
 void

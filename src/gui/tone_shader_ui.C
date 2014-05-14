@@ -42,8 +42,6 @@ using namespace mlib;
 
 vector<ToneShaderUI*> ToneShaderUI::_ui;
 
-const static int WIN_WIDTH=300; 
-
 ToneShaderUI::ToneShaderUI(BaseUI* parent) :
      BaseUI(parent,"Tone Shader UI")
 {
@@ -176,9 +174,6 @@ ToneShaderUI::build(GLUI* glui, GLUI_Panel* base, bool open)
    }
 
    update();
-
-   //int w = _rollout[ROLLOUT_MAIN]->get_w();
-   //w = max(WIN_WIDTH, w);
 }
 
 void
