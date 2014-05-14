@@ -642,18 +642,9 @@ DISTRIB::load(NetStream &cli)
       "DISTRIB::load: About to check stream...");
 
    // just start interpreting the stream ...
-   if (cli.istr()) 
-   { 
-      err_adv((print_errs>0), 
-         "DISTRIB::load: About to interpret...");
-      retval = !!interpret(NETcontext, &cli);
-   } 
-   // otherwise, read the data, then interpret
-   else if (cli.read_stuff()) 
-   {           
-      err_msg("DISTRIB::load: Bad netstream.");
-      retval = true;
-   }
+   err_adv((print_errs>0),
+      "DISTRIB::load: About to interpret...");
+   retval = !!interpret(NETcontext, &cli);
 
    DRAWN.flush();
    return retval;
