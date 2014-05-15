@@ -27,17 +27,9 @@ using namespace mlib;
 
 GrabVar GRABBED;
 MAKE_HASHVAR    (NETWORK,           int,  0);
-MAKE_NET_HASHVAR(NO_COLOR_MOD,      int,  0);
 MAKE_NET_HASHVAR(NO_XFORM_MOD,      int,  0);
-MAKE_NET_HASHVAR(NO_DISP_MOD,       int,  0);
-MAKE_NET_HASHVAR(NO_SCALE_MOD,      int,  0);
 MAKE_NET_HASHVAR(NO_COPY,           int,  0);
-MAKE_NET_HASHVAR(NO_EXTNETWORK,     int,  0);
 MAKE_NET_HASHVAR(PICKABLE,          int,  1);
-MAKE_NET_HASHVAR(NO_SAVE,           int,  0);
-MAKE_NET_HASHVAR(NO_CONSTRAINT_MOD, int,  0);
-MAKE_NET_HASHVAR(CONSTRAINT_VECTOR, Wvec, Wvec(0,1,0));
-MAKE_NET_HASHVAR(CONSTRAINT_POINT,  Wpt,  Wpt (0,0,0));
 
 const string GEL::_name("work'er");
 TAGlist  *GEL::_gel_tags = nullptr;

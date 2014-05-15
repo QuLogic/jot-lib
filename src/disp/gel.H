@@ -273,17 +273,9 @@ extern DrawnList    DRAWN;
 
 // -------- define hash variables for GEL objects
 extern GrabVar      GRABBED;
-extern hashvar<int> NO_COLOR_MOD, NO_XFORM_MOD, NO_DISP_MOD, NO_COPY,
+extern hashvar<int> NO_XFORM_MOD, NO_COPY,
                               PICKABLE,
-                              NETWORK,       // list of networked objects
-                              NO_CONSTRAINT_MOD,
-                              NO_SCALE_MOD,  // Don't scale object
-                              NO_EXTNETWORK, // Don't do external geometry 
-                                             // for this obj
-                              NO_SAVE;       // Network, but don't send whole
-                                             // object
-extern hashvar<mlib::Wpt>  CONSTRAINT_POINT;
-extern hashvar<mlib::Wvec> CONSTRAINT_VECTOR;
+                              NETWORK;       // list of networked objects
 
 #endif // GEL_H_IS_INCLUDED
 

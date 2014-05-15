@@ -93,9 +93,7 @@ ModeName::init()
       return;
    _mode_name = new MODE_TEXT();
    NETWORK     .set(_mode_name, 0);
-   NO_COLOR_MOD.set(_mode_name, 1);
    NO_XFORM_MOD.set(_mode_name, 1);
-   NO_DISP_MOD .set(_mode_name, 1);
    NO_COPY     .set(_mode_name, 1);
 
    WORLD::create(_mode_name, false);

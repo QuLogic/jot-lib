@@ -50,9 +50,7 @@ FPS::FPS()
 
    GEOMptr text(&*_text);
    NETWORK       .set(text, 0);
-   NO_COLOR_MOD  .set(text, 1);
    NO_XFORM_MOD  .set(text, 1);
-   NO_DISP_MOD   .set(text, 1);
    NO_COPY       .set(text, 1);
    DONOT_CLIP_OBJ.set(text, 1);
 

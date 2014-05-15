@@ -113,7 +113,6 @@ FLOOR::FLOOR(
    //
    // XXX - is this just ancient obsolete stuff no one understands?
    NETWORK.set(_instance, 0);
-   NO_COLOR_MOD.set(_instance, 1);
    NO_XFORM_MOD.set(_instance, 1);
    WORLD::create(_instance, false);
    WORLD::undisplay(this, false);

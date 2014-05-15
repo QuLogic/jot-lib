@@ -892,7 +892,6 @@ DISTRIB::save(
    GELlist   filter;
    for (i = geoms.num() - 1; i >= 0; i--) {
       if (NETWORK.get(geoms[i]) &&    // object is networked
-          !NO_SAVE.get(geoms[i]) &&   // object is savable
           !drawn.contains(geoms[i])) { // object isn't drawn
          // Don't save out this object
          filter += geoms[i];
@@ -901,8 +900,6 @@ DISTRIB::save(
                  << geoms[i]->name()
                  << "\n  networked: "
                  << (NETWORK.get(geoms[i]) ? "yes" : "no")
-                 << ", save: "
-                 << (NO_SAVE.get(geoms[i]) ? "no" : "yes")
                  << ", DRAWN index: "
                  << drawn.get_index(geoms[i])
                  << endl;
@@ -936,7 +933,6 @@ DISTRIB::save(
       // GEOMS
       for (i = 0; i < geoms.num(); i++) {
          if (NETWORK.get(geoms[i]) &&
-             !NO_SAVE.get(geoms[i]) &&
              !filter.contains(geoms[i])) {
             if (debug) {
                cerr << "DISTRIB::save: Writing GEOM: "
@@ -955,7 +951,6 @@ DISTRIB::save(
       // GEOMS
       for (i = geoms.num() - 1; i >= 0 ; i--) {
          if (NETWORK.get(geoms[i]) &&
-             !NO_SAVE.get(geoms[i]) &&
              filter.get_index(geoms[i]) == BAD_IND) {
             err_adv(debug, "DISTRIB::save: Writing GEOM Update'%s'..." ,
                     geoms[i]->name().c_str());
@@ -986,8 +981,7 @@ DISTRIB::notify_exist(
    if (f)  {
       if (NETWORK.get(g)) {
          DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
-         if (!(GEOM::isa(g) && NO_SAVE.get(g)))
-            *this << NETcontext<< JOTsend_geom(g) << JOTcreate(g) << JOTdone();
+         *this << NETcontext<< JOTsend_geom(g) << JOTcreate(g) << JOTdone();
       }
    }
    if (!f) {
