@@ -112,31 +112,6 @@ class COLORobs {
 
 
 
-#define CTRANSPobs_list const TRANSPobs_list
-#define CTRANSPobs      const TRANSPobs
-class TRANSPobs;
-typedef set<TRANSPobs*> TRANSPobs_list;
-//--------------------------------------------
-// TRANSPobs -
-//   An object that can be notified when some
-// other object's transp has changed
-//--------------------------------------------
-class TRANSPobs {
-   static TRANSPobs_list _all_transp;
- public:
-   virtual ~TRANSPobs() {}
-   virtual void notify_transp    (CGEOMptr &) = 0;
-   static  void notify_transp_obs(CGEOMptr &g) {
-     TRANSPobs_list::iterator i;
-     for (i=_all_transp.begin(); i!=_all_transp.end(); ++i)
-       (*i)->notify_transp(g);
-   }
-
-   /* ---  object transp observer --- */
-   void   transp_obs  ()            { _all_transp.insert(this); }
-   void   unobs_transp()            { _all_transp.erase(this); }
-};
-
 #define CCSGobs_list const CSGobs_list
 #define CCSGobs      const CSGobs
 class CSGobs;

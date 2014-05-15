@@ -418,10 +418,6 @@ GEOM::unset_texture()
 }
 
 
-/* ---- TRANSPobs routines ----- */
-
-TRANSPobs_list TRANSPobs::_all_transp;
-
 /* ---- COLORobs routines ----- */
 
 COLORobs_list   *COLORobs::_all_col = nullptr;

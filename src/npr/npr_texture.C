@@ -296,8 +296,6 @@ NPRTexture::draw_id_ref_pre1()
             _patch->mesh()->geom()->set_transp(0.9999f);
          else
             _patch->mesh()->geom()->unset_transp();
-
-         TRANSPobs::notify_transp_obs(_patch->mesh()->geom());
       }
    }
 
