@@ -35,7 +35,7 @@ class DISTRIB : public FD_EVENT,
                 public COLORobs,   public EXISTobs,
                 public GEOMobs,    public TRANSPobs,  
                 public SAVEobs,    public LOADobs,  public CAMobs,     
-                /*public BOOTHobs,*/   public HASHobs,  public TEXTUREobs, 
+                /*public BOOTHobs,*/   public HASHobs,
                 public JOTvar_obs
 {
  protected:
@@ -82,7 +82,6 @@ class DISTRIB : public FD_EVENT,
    virtual void    notify_geom    (CGEOMptr &);
    virtual void    notify         (CCAMdataptr &data);
    virtual void    notify_hash    (CGELptr &, hashdist *);
-   virtual void    notify_texture (CGEOMptr &);
    virtual void    notify_load    (NetStream &s, LOADobs::load_status_t &status, bool full_scene);
    virtual void    notify_save    (NetStream &s, SAVEobs::save_status_t &status, bool full_scene);
 

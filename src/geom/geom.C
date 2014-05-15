@@ -408,7 +408,6 @@ GEOM::set_texture(CTEXTUREptr& t)
 {  
    REFlock lock(this);
    APPEAR::set_texture(t);
-   TEXTUREobs::notify_texture_obs(this);
 }
 
 void
@@ -416,7 +415,6 @@ GEOM::unset_texture()
 {
    REFlock lock(this);
    APPEAR::unset_texture();
-   TEXTUREobs::notify_texture_obs(this);
 }
 
 
@@ -431,10 +429,6 @@ TRANSPobs_list TRANSPobs::_all_transp;
 /* ---- COLORobs routines ----- */
 
 COLORobs_list   *COLORobs::_all_col = nullptr;
-
-/* ---- TEXTUREobs routines ----- */
-
-TEXTUREobs_list *TEXTUREobs::_all_texture = nullptr;
 
 /* ---- XFORMobs routines ----- */
 

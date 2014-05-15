@@ -196,7 +196,6 @@ class JOTtexture : public FUNC_ITEM
             geom->get_texture(d);
          else
             geom->unset_texture();
-         TEXTUREobs::notify_texture_obs(geom);
       }
    }
 };
@@ -542,7 +541,6 @@ DISTRIB::DISTRIB():
    save_obs();
    load_obs();
    hash_obs();
-   texture_obs();
    jot_var_obs();
 
    if (Config::get_var_bool("DISTRIB_CAMERA",false,true))
@@ -1036,16 +1034,6 @@ void
 DISTRIB::notify_hash(
    CGELptr  &g,
    hashdist *h
-   )
-{
-}
-
-/////////////////////////////////////
-// notify_texture()
-/////////////////////////////////////
-void
-DISTRIB::notify_texture(
-   CGEOMptr &g
    )
 {
 }

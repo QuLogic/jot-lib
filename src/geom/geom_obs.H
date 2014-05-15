@@ -137,34 +137,6 @@ class TRANSPobs {
    void   unobs_transp()            { _all_transp.erase(this); }
 };
 
-#define CTEXTUREobs_list const TEXTUREobs_list
-#define CTEXTUREobs      const TEXTUREobs
-class TEXTUREobs;
-typedef set<TEXTUREobs*> TEXTUREobs_list;
-//--------------------------------------------
-// TEXTUREobs -
-//   An object that can be notified when some
-// other object's texture has changed
-//--------------------------------------------
-class TEXTUREobs {
-   static TEXTUREobs_list *_all_texture;
-
-   static TEXTUREobs_list *texobs_list() { if (!_all_texture)
-         _all_texture = new TEXTUREobs_list; return _all_texture; }
- public:
-   virtual ~TEXTUREobs() {}
-   virtual void notify_texture    (CGEOMptr &) = 0;
-   static  void notify_texture_obs(CGEOMptr &g) {
-     TEXTUREobs_list::iterator i;
-     for (i=texobs_list()->begin(); i!=texobs_list()->end(); ++i)
-       (*i)->notify_texture(g);
-   }
-
-   /* ---  object texture observer --- */
-   void   texture_obs  ()            { texobs_list()->insert(this); }
-   void   unobs_texture()            { texobs_list()->erase(this); }
-};
-
 #define CCSGobs_list const CSGobs_list
 #define CCSGobs      const CSGobs
 class CSGobs;
