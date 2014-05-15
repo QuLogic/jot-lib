@@ -1445,7 +1445,6 @@ NPRSolidTexture::get_layer_name(TAGformat &d)
 
    string str, lay, space;
    *d >> str;     
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
    {
@@ -1500,7 +1499,6 @@ NPRSolidTexture::get_tex_name(TAGformat &d)
 
    string str, tex, space;
    *d >> str;     
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
    {

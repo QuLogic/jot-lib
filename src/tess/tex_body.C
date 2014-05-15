@@ -1006,7 +1006,6 @@ TEXBODY::get_mesh(TAGformat &d)
    assert(cur);
 
    // XXX -- Assuming this is an ASCII stream
-   assert((*d).ascii());
    cur->read_stream(*(*d).istr());
 
    //Implictly, _mesh_file should be NULL_STR since we loaded
@@ -1055,7 +1054,6 @@ TEXBODY::get_mesh_update(TAGformat &d)
    assert(cur);
 
    // XXX -- Assuming this is an ASCII stream
-   assert((*d).ascii());
 
    cur->read_update_stream(*(*d).istr());
 

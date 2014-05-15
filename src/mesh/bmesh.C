@@ -3433,19 +3433,13 @@ BMESH::put_vertices(TAGformat &d) const
    //       want to avoid super long lines that may be
    //       causing bugs...
    d.id();
-   if ((*d).ascii()) {
-      (*d) << "{";
-   } else {
-      (*d) << verts.size();
-   }
+   (*d) << "{";
    for (Wpt_list::size_type i=0; i<verts.size();i++) {
       (*d) << " " << verts[i];
       (*d).write_newline();
    }
-   if ((*d).ascii()) {
-      (*d) << "}";
-      (*d).write_newline();
-   }
+   (*d) << "}";
+   (*d).write_newline();
    d.end_id();
 }
 
@@ -3492,19 +3486,13 @@ BMESH::put_faces(TAGformat &d) const
    //       want to avoid super long lines that may be
    //       causing bugs...
    d.id();
-   if ((*d).ascii()) {
-      (*d) << "{";
-   } else {
-      (*d) << faces.size();
-   }
+   (*d) << "{";
    for (auto & face : faces) {
       (*d) << " " << face;
       (*d).write_newline();
    }
-   if ((*d).ascii()) {
-      (*d) << "}";
-      (*d).write_newline();
-   }
+   (*d) << "}";
+   (*d).write_newline();
    d.end_id();
 }
 
@@ -3571,10 +3559,7 @@ inline STDdstream&
 operator<<(STDdstream &ds, const UVforIO2& v)
 {
    if (v.is_good()) {
-      if (ds.ascii())
-         ds << "{" << v._face << v._uvs << "}";
-      else
-         ds << v._face << v._uvs;
+      ds << "{" << v._face << v._uvs << "}";
    }
    return ds;
 }
@@ -3582,12 +3567,8 @@ operator<<(STDdstream &ds, const UVforIO2& v)
 inline STDdstream&
 operator>>(STDdstream &ds, UVforIO2 &v)
 {
-   if (ds.ascii()) {
-      char brace;
-      ds >> brace >> v._face >> v._uvs >> brace;
-   } else {
-      ds >> v._face >> v._uvs;
-   }
+   char brace;
+   ds >> brace >> v._face >> v._uvs >> brace;
    return ds;
 }
 
@@ -3761,20 +3742,14 @@ class UVforIO
 
 inline STDdstream &operator<<(STDdstream &ds, const UVforIO  &v)
 {
-   if (ds.ascii())
-      ds << "{" << v._face << v._uv1 << v._uv2 << v._uv3 << "}";
-   else
-      ds << v._face << v._uv1 << v._uv2 << v._uv3;
+   ds << "{" << v._face << v._uv1 << v._uv2 << v._uv3 << "}";
    return ds;
 }
 
 inline STDdstream &operator>>(STDdstream &ds, UVforIO &v)
 {
-   if (ds.ascii()) {
-      char brace;
-      ds >> brace >> v._face >> v._uv1 >> v._uv2 >> v._uv3 >> brace;
-   } else
-      ds >> v._face >> v._uv1 >> v._uv2 >> v._uv3;
+   char brace;
+   ds >> brace >> v._face >> v._uv1 >> v._uv2 >> v._uv3 >> brace;
    return ds;
 }
 

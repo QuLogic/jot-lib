@@ -414,9 +414,6 @@ Animator::get_name (TAGformat &d)
    string str, space;
    *d >> str;
 
-   if (!(*d).ascii())
-      *d >> space;
-
    if (str == "NULL_STR") {
       _name = "";
       err_mesg(ERR_LEV_SPAM, "Animator::get_name() - Loaded NULL string.");

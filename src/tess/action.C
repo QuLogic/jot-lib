@@ -182,7 +182,6 @@ inline STDdstream&
 operator<<(STDdstream& ds, const Action_list& al) 
 {
    // write the list of actions to the output stream:
-   assert(ds.ascii());
    al.prepare_writing();
    ds << "{ ";
    for (Action_list::size_type i=0; i<al.size(); i++)
@@ -195,7 +194,6 @@ inline STDdstream&
 operator>>(STDdstream& ds, Action_list& al) 
 {
    // read a list of actions from an input stream:
-   assert(ds.ascii());
    char brace; ds >> brace;
    al.clear();
    while (ds.check_end_delim()) {

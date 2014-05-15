@@ -159,14 +159,12 @@ public:
 };
 
 inline STDdstream &operator<<(STDdstream &ds, const HatchingFixedVertex  &v) 
-       { if (ds.ascii()) ds << "{" << v.ind << v.bar <<"}";
-         else ds << v.ind << v.bar;
+       { ds << "{" << v.ind << v.bar <<"}";
          return ds; }
 
 inline STDdstream &operator>>(STDdstream &ds, HatchingFixedVertex &v) 
-       { if (ds.ascii()) { char brace;
-              ds >> brace >> v.ind >> v.bar >> brace;}
-         else ds >> v.ind >> v.bar;
+       { char brace;
+         ds >> brace >> v.ind >> v.bar >> brace;
          return ds;}
 
 /*****************************************************************

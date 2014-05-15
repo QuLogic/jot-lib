@@ -47,14 +47,7 @@ class JOTdone : public FUNC_ITEM
    JOTdone() :FUNC_ITEM("DONE") { }
    virtual STDdstream &format(STDdstream &ds) const 
    { 
-      if (ds.ascii())
-      {
-         return ds << NETflush;
-      }
-      else
-      {
-         return DATA_ITEM::format(ds) << NETflush; 
-      }
+      return ds << NETflush;
    }
    virtual void        put(TAGformat  &)   const { }
    virtual void        get(TAGformat  &)         { }
@@ -570,10 +563,7 @@ DISTRIB::interpret(
                ret = 1;
                break;
             }
-            if (sender->STDdstream::ascii())
-            {
-               sender->check_end_delim(); // forces an eof() if done
-            }
+            sender->check_end_delim(); // forces an eof() if done
          } while (!sender->eof());
      }
      brcase NETswap_ack: // only master wall receives NETswap_ack's
@@ -641,86 +631,48 @@ DISTRIB::load_stream(
 
    if (s.attached())
    {
-      //Netstream has valid handle or stream...
-      if (s.STDdstream::ascii())
+      err_adv(debug, "DISTRIB::load_stream: Loading ASCII stream...");
+
+      //Should begin with a '#jot' header...
+      s >> header;
+
+      if (header == "#jot")
       {
-         err_adv(debug, "DISTRIB::load_stream: Loading ASCII stream...");
-
-         //Should begin with a '#jot' header...
-         s >> header;
-
-         if (header == "#jot") 
+         err_adv(debug,
+                 "DISTRIB::load_stream: Founder expected header: '%s'",
+                 header.c_str());
+         err_adv(debug,
+                 "DISTRIB::load_stream: Attempting conventional load...");
+         ret = load(s);
+         if (!ret)
          {
-            err_adv(debug,
-                    "DISTRIB::load_stream: Founder expected header: '%s'",
-                    header.c_str());
-            err_adv(debug,
-                    "DISTRIB::load_stream: Attempting conventional load...");
-            ret = load(s);
-            if (!ret)
-            {
-               result = LOADobs::LOAD_ERROR_NONE;
-               err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-            }
-            else
-            {
-               result = LOADobs::LOAD_ERROR_JOT;
-               err_msg("DISTRIB::load_stream: *LOAD FAILED*");
-            }
+            result = LOADobs::LOAD_ERROR_NONE;
+            err_adv(debug, "DISTRIB::load_stream: ...load successful!");
          }
          else
          {
-            err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", header.c_str());
-            err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
-
-            ret = LOADER::load(s.name());
-
-            if (!ret)
-            {
-               err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
-               err_msg("DISTRIB::load_stream: *LOAD FAILED*");
-               result = LOADobs::LOAD_ERROR_READ;
-            }
-            else
-            {
-               err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded.");
-               err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-               result = LOADobs::LOAD_ERROR_AUX;
-            }
+            result = LOADobs::LOAD_ERROR_JOT;
+            err_msg("DISTRIB::load_stream: *LOAD FAILED*");
          }
       }
       else
       {
-         err_adv(debug, "DISTRIB::load_stream: Loading Non-ASCII stream...");
+         err_msg("DISTRIB::load_stream: Not '#jot' header: '%s'", header.c_str());
+         err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
 
-         err_adv(debug, "DISTRIB::load_stream: Attempting conventional load...");
-
-         ret = load(s);
+         ret = LOADER::load(s.name());
 
          if (!ret)
          {
-            err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-            result = LOADobs::LOAD_ERROR_NONE;
+            err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
+            err_msg("DISTRIB::load_stream: *LOAD FAILED*");
+            result = LOADobs::LOAD_ERROR_READ;
          }
          else
          {
-            err_msg("DISTRIB::load_stream: Conventional load failed!");
-            err_msg("DISTRIB::load_stream: Attempting to use auxillary LOADERs...");
-
-            ret = LOADER::load(s.name());
-
-            if (!ret)
-            {
-               err_adv(debug, "DISTRIB::load_stream: Auxillary LOADERs failed!!!");
-               err_msg("DISTRIB::load_stream: *LOAD FAILED*");
-               result = LOADobs::LOAD_ERROR_READ;
-            }
-            else
-            {
-               err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded");
-               err_adv(debug, "DISTRIB::load_stream: ...load successful!");
-               result = LOADobs::LOAD_ERROR_AUX;
-            }
+            err_msg("DISTRIB::load_stream: Auxillary LOADERs succeeded.");
+            err_adv(debug, "DISTRIB::load_stream: ...load successful!");
+            result = LOADobs::LOAD_ERROR_AUX;
          }
       }
    }
@@ -789,40 +741,19 @@ DISTRIB::save_stream(
 
    if (s.attached())
    {
-      //Netstream has valid handle or stream...
-      if (s.STDdstream::ascii())
+      err_adv(debug, "DISTRIB::save_stream: Saving ASCII stream...");
+
+      ret = save(s, full_scene);
+
+      if (ret)
       {
-         err_adv(debug, "DISTRIB::save_stream: Saving ASCII stream...");
-
-         ret = save(s, full_scene);
-
-         if (ret)
-         {
-            result = SAVEobs::SAVE_ERROR_NONE;
-            err_adv(debug, "DISTRIB::save_stream: ...save succeeded.");
-         }
-         else
-         {
-            result = SAVEobs::SAVE_ERROR_WRITE;
-            err_msg("DISTRIB::save_stream: **SAVE FAILED**");
-         }
+         result = SAVEobs::SAVE_ERROR_NONE;
+         err_adv(debug, "DISTRIB::save_stream: ...save succeeded.");
       }
       else
       {
-         err_adv(debug, "DISTRIB::save_stream: Saving Non-ASCII stream...");
-
-         ret = save(s, full_scene);
-
-         if (ret)
-         {
-            result = SAVEobs::SAVE_ERROR_NONE;
-            err_adv(debug, "DISTRIB::save_stream: ...save succeeded.");
-         }
-         else
-         {
-            result = SAVEobs::SAVE_ERROR_WRITE;
-            err_msg("DISTRIB::save_stream: **SAVE FAILED**");
-         }
+         result = SAVEobs::SAVE_ERROR_WRITE;
+         err_msg("DISTRIB::save_stream: **SAVE FAILED**");
       }
    }
    else
@@ -885,14 +816,7 @@ DISTRIB::save(
 
    s.block(false);  // Make sure we are non-blocking
 
-   if (!s.STDdstream::ascii())
-   {
-      s << NETcontext;  // only send the context to network connections
-   }
-   else 
-   {
-      s << "#jot\n";
-   }
+   s << "#jot\n";
 
    //Bail out early if the IO already failed...
    if (s.fail())

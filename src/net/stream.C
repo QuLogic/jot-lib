@@ -244,48 +244,42 @@ STDdstream::read_delim()
 string
 STDdstream::get_string_with_spaces()
 {
-   if (ascii()) 
+   const int bufsize = 1024;
+   char buf[bufsize];
+   int  i = 0;
+   char ch = ' ';
+   bool done = 0;
+   while (!done)
    {
-      const int bufsize = 1024;
-      char buf[bufsize];
-      int  i = 0;
-      char ch = ' ';
-      int done = 0; // bool is in mlib, so I won't use it
-      while (!done) 
+      istr()->get(ch);
+      // Done when we hit a curly or newline
+      done = (ch == '}') || (ch == '{') || (ch == '\n');
+      if (done)
       {
-         istr()->get(ch);
-         // Done when we hit a curly or newline
-         done = (ch == '}') || (ch == '{') || (ch == '\n');
-         if (done) 
+         // shift character back onto stream
+         istr()->putback(ch);
+         // Remove spaces at end
+         int j;
+         for (j = i-1; j >= 0 && (buf[j] == ' ' || buf[j]=='\t'); j--)
          {
-            // shift character back onto stream
-            istr()->putback(ch);
-            // Remove spaces at end
-            int j;
-            for (j = i-1; j >= 0 && (buf[j] == ' ' || buf[j]=='\t'); j--) 
-            {
-               istr()->putback(buf[j]);
-            }
-            i = j + 1;
-         } 
-         else 
-         {
-            done = (i > bufsize-1) || !istr()->good();
-            if (!done) buf[i++] = ch;
+            istr()->putback(buf[j]);
          }
+         i = j + 1;
       }
-      buf[i] = '\0';
-      // Find first character that isn't a space
-      int start = 0;
-      while (buf[start] == ' ' || buf[start] == '\t') 
+      else
       {
-         start++;
+         done = (i > bufsize-1) || !istr()->good();
+         if (!done) buf[i++] = ch;
       }
-      return string(buf + start);
    }
-   string the_string;
-   (*this) >> the_string;
-   return the_string;
+   buf[i] = '\0';
+   // Find first character that isn't a space
+   int start = 0;
+   while (buf[start] == ' ' || buf[start] == '\t')
+   {
+      start++;
+   }
+   return string(buf + start);
 }
 
 
@@ -305,35 +299,16 @@ static int   packcount;  /* dummy */
 STDdstream &
 operator >> (STDdstream &ds, char * &data)
 {  
-   if (ds.ascii())
-   {
-      *ds.istr() >> data;
-      ds._fail = ds.istr()->fail();
-   }
-   else {
-      ds.read_delim();
-
-      int len;
-      ds >> len;
-      ds.read(data, len * sizeof(char));
-      data[len] = '\0';
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 
 STDdstream &
 operator << (STDdstream &ds, const char * const data)
 {
-   if (ds.ascii()) 
-   {
-      *ds.ostr() << data;
-      ds._fail = ds.ostr()->fail();
-   } else {
-      ds.write_delim(' ');   // write out the delimiter
-
-      ds << strlen(data);
-      ds.write(data, strlen(data) * sizeof(char));
-   }
+   *ds.ostr() << data;
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -348,26 +323,9 @@ operator >> (STDdstream &ds, string &data)
    char      buff[buflen];
    char     *usebuff = buff;
 
-   if (ds.ascii()) 
-   {
-      *ds.istr() >> usebuff;
-      ds._fail = ds.istr()->fail();
-      data = string(usebuff);
-   } else {
-      ds.read_delim();
-
-      ds >> len;
-      if (len + 1 > buflen) {
-         usebuff = new char[len + 1];
-      }
-      ds.read(usebuff, len * sizeof(char));
-      usebuff[len] = '\0';
-
-      data = string(usebuff);
- 
-      if (len + 1 > buflen)
-         delete [] usebuff;
-   }
+   *ds.istr() >> usebuff;
+   ds._fail = ds.istr()->fail();
+   data = string(usebuff);
 
    return ds;
 }
@@ -375,17 +333,8 @@ operator >> (STDdstream &ds, string &data)
 STDdstream &
 operator << (STDdstream &ds, const string &data)
 {
-   if (ds.ascii())
-   {
-      *ds.ostr() << data.c_str() << " ";
-      ds._fail = ds.ostr()->fail();
-   }
-   else {
-      ds.write_delim(' '); // write out the delimiter 
-
-      ds << data.length();
-      ds.write(data.c_str(), data.length());
-   }
+   *ds.ostr() << data.c_str() << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -395,32 +344,15 @@ operator << (STDdstream &ds, const string &data)
 STDdstream &
 operator >> (STDdstream &ds, short &data)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> data;
-       ds._fail = ds.istr()->fail();
-   }
-   else {
-      assert(0);
-//      INIT_UNPACK;
-//      UGA_UNPACK_WORD (data, packbuf, packcount, short);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, short data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      assert(0);
-//      INIT_PACK;
-//      UGA_PACK_WORD (data, packbuf, packcount);
-//      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -430,31 +362,15 @@ operator << (STDdstream &ds, short data)
 STDdstream &
 operator >> (STDdstream &ds, int &data)
 {  
-   if (ds.ascii()) 
-   {
-      *ds.istr() >> data;
-      ds._fail = ds.istr()->fail();
-   } 
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_WORD (data, packbuf, packcount, int);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, int data)
 {
-   if (ds.ascii()) 
-   {
-      *ds.ostr() << data << " ";
-      ds._fail = ds.ostr()->fail();
-   } 
-   else {
-      assert(0);
-//      INIT_PACK;
-//      UGA_PACK_WORD (data, packbuf, packcount);
-//      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -464,30 +380,15 @@ operator << (STDdstream &ds, int data)
 STDdstream &
 operator >> (STDdstream &ds, long &data)
 {  
-   if (ds.ascii()) 
-   {
-      *ds.istr() >> data;
-      ds._fail = ds.istr()->fail();
-   }
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_WORD (data, packbuf, packcount, long);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, long data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      INIT_PACK;
-      UGA_PACK_WORD (data, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -497,30 +398,15 @@ operator << (STDdstream &ds, long data)
 STDdstream &
 operator >> (STDdstream &ds, unsigned short &data)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> data;
-       ds._fail = ds.istr()->fail();
-   }
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_WORD (data, packbuf, packcount, unsigned short);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, unsigned short data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      INIT_PACK;
-      UGA_PACK_WORD (data, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -530,30 +416,15 @@ operator << (STDdstream &ds, unsigned short data)
 STDdstream &
 operator >> (STDdstream &ds, unsigned int &data)
 {  
-   if (ds.ascii()) 
-   {
-      *ds.istr() >> data;
-      ds._fail = ds.istr()->fail();
-   }
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_WORD (data, packbuf, packcount, unsigned int);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, unsigned int data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      INIT_PACK;
-      UGA_PACK_WORD (data, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -563,30 +434,15 @@ operator << (STDdstream &ds, unsigned int data)
 STDdstream &
 operator >> (STDdstream &ds, unsigned long &data)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> data;
-       ds._fail = ds.istr()->fail();
-   }
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_WORD (data, packbuf, packcount, unsigned long);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, unsigned long data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      INIT_PACK;
-      UGA_PACK_WORD (data, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -596,34 +452,15 @@ operator << (STDdstream &ds, unsigned long data)
 STDdstream &
 operator >> (STDdstream &ds, float &temp)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> temp;
-       ds._fail = ds.istr()->fail();
-   }
-   else {
-      // This is called data because INIT_UNPACK uses the size of "data"
-      double data;
-      INIT_UNPACK;
-      UGA_UNPACK_DOUBLE (data, packbuf, packcount);
-      temp = (float)data;
-   }
+   *ds.istr() >> temp;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, float data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      double temp = data;
-      INIT_PACK;
-      UGA_PACK_DOUBLE (temp, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -633,30 +470,15 @@ operator << (STDdstream &ds, float data)
 STDdstream &
 operator >> (STDdstream &ds, double &data)
 {  
-   if (ds.ascii()) 
-   {
-      *ds.istr() >> data;
-      ds._fail = ds.istr()->fail();
-   } 
-   else {
-      INIT_UNPACK;
-      UGA_UNPACK_DOUBLE (data, packbuf, packcount);
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, double data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      INIT_PACK;
-      UGA_PACK_DOUBLE (data, packbuf, packcount);
-      DONE_PACK;
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -666,31 +488,15 @@ operator << (STDdstream &ds, double data)
 STDdstream &
 operator >> (STDdstream &ds, char &data)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> data;
-       ds._fail = ds.istr()->fail();
-   }
-   else  {
-      ds.read_delim();
-
-      ds.read (&data, sizeof(char));
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, char data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      ds.write_delim(' ');
-
-      ds.write (&data, sizeof(char));
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -700,31 +506,15 @@ operator << (STDdstream &ds, char data)
 STDdstream &
 operator >> (STDdstream &ds, unsigned char &data)
 {  
-   if (ds.ascii()) 
-   {
-       *ds.istr() >> data;
-       ds._fail = ds.istr()->fail();
-   }
-   else {
-      ds.read_delim();
-
-      ds.read((char *)&data, sizeof(unsigned char));
-   }
+   *ds.istr() >> data;
+   ds._fail = ds.istr()->fail();
    return ds;
 }
 STDdstream &
 operator << (STDdstream &ds, unsigned char data)
 {
-   if (ds.ascii()) 
-   {
-       *ds.ostr() << data << " ";
-       ds._fail = ds.ostr()->fail();
-   }
-   else {
-      ds.write_delim(' ');   // write out the delimiter 
-
-      ds.write((const char *)&data, sizeof(unsigned char));
-   }
+   *ds.ostr() << data << " ";
+   ds._fail = ds.ostr()->fail();
    return ds;
 }
 
@@ -732,8 +522,7 @@ operator << (STDdstream &ds, unsigned char data)
 void
 STDdstream::ws(const char *x)
 {
-   if (ascii())
-      (*this) << x;
+   (*this) << x;
 }
 
 // end of file stream.C

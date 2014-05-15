@@ -38,12 +38,13 @@
  * 		these primitive routines.
  */
 class STDdstream {
- public:
+ protected:
    STDdstream();
 
    // New policy: 5/2004:
    //   The STDdstream either contains an iostream, 
    //   or it contains just an istream or just an ostream.
+ public:
    STDdstream(iostream* s);     // has both
    STDdstream( istream* i);     // has just istream
    STDdstream( ostream* o);     // has just ostream
@@ -58,15 +59,13 @@ class STDdstream {
    istream*  istr()  const { return _iostream ? (istream*)_iostream : _istream; }
    ostream*  ostr()  const { return _iostream ? (ostream*)_iostream : _ostream; }
 
-   bool    ascii() const { return istr() || ostr(); }
-
    void    read_open_delim();
    void    read_close_delim();
 
-   void    write_open_delim()         { write_delim('{');if(ascii()) _indent++;}
-   void    write_close_delim()        { write_delim('}');if(ascii()) _indent--;}
-   void    write_newline()            { if (ascii()) {ws("\n");
-                                        for (int i=0;i<_indent;i++) ws("\t"); }}
+   void    write_open_delim()         { write_delim('{'); _indent++;}
+   void    write_close_delim()        { write_delim('}'); _indent--;}
+   void    write_newline()            { ws("\n");
+                                        for (int i=0;i<_indent;i++) ws("\t"); }
    void    write_delim(char);
    char    read_delim();
 

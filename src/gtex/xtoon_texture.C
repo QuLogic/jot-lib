@@ -2005,7 +2005,6 @@ XToonTexture::get_layer_name(TAGformat &d)
 
    string str, lay, space;
    *d >> str;      
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
    {
@@ -2060,7 +2059,6 @@ XToonTexture::get_tex_name(TAGformat &d)
 
    string str, space;
    *d >> str;      
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") 
    {

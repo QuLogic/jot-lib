@@ -559,8 +559,6 @@ VIEW::get_view_paper_name (TAGformat &d)
    string str, tex, space;
    *d >> str;      
 
-   if (!(*d).ascii()) *d >> space; 
-
    if (str == "NULL_STR") 
    {
       tex = "";
@@ -708,8 +706,6 @@ VIEW::get_view_texture (TAGformat &d)
    string str, space;
    *d >> str;      
 
-   if (!(*d).ascii()) *d >> space; 
-   
    if (str == "NULL_STR") 
    {
       err_mesg(ERR_LEV_SPAM, "VIEW::get_view_texture() - Loaded NULL string.");

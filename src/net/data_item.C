@@ -127,14 +127,9 @@ class COMMENT : public TAG {
       STDdstream &decode(CDATA_ITEM *, STDdstream &d) {
          _delim.set_stream(&d);
          _delim.read_id();
-         if (d.ascii()) {
-            const int size = 1024;
-            char name[size];
-            d.istr()->getline(name, 1024);
-         } else {
-            string str;
-            d >> str;
-         }
+         const int size = 1024;
+         char name[size];
+         d.istr()->getline(name, 1024);
          return d;
       }
       virtual const string &name() const { return _name; }

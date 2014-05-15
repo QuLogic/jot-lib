@@ -626,7 +626,6 @@ BaseStroke::get_texture_file(TAGformat &d)
 
    string str, tex, space;
    *d >> str;      
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") {
       tex = "";
@@ -692,7 +691,6 @@ BaseStroke::get_paper_file(TAGformat &d)
 
    string str, paper, space;
    *d >> str;      
-   if (!(*d).ascii()) *d >> space; 
 
    if (str == "NULL_STR") {
       paper = "";

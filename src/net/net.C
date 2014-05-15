@@ -301,12 +301,6 @@ NetStream::NetStream(
    _istream = dynamic_cast<istream*>(fs);
    _ostream = dynamic_cast<ostream*>(fs);
 
-   if (debug) {
-      cerr << "NetStream::NetStream: is_ascii: "
-           << (STDdstream::ascii() ? "true" : "false")
-           << endl;
-   }
-
    // XXX - Can't get the file descriptor from the stream.
    //       Hopefully we don't need it:
    _fd = -1;  

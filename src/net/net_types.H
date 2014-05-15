@@ -35,90 +35,76 @@
 
 template <class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Vec2<V> &v) 
-       { if (ds.ascii()) ds << "{" << v[0] << v[1] << "}";
-         else ds << v[0] << v[1];
+       { ds << "{" << v[0] << v[1] << "}";
          return ds; }
 
 template <class V>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Vec2<V> &v) 
-       { if (ds.ascii()) {char brace; ds >> brace >> v[0] >> v[1] >> brace;}
-         else ds >> v[0] >> v[1];
+       { char brace; ds >> brace >> v[0] >> v[1] >> brace;
          return ds; }
 
 template <class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Vec3<V> &v)
-       { if (ds.ascii()) ds <<"{"<< v[0] << v[1] << v[2]<<"}";
-         else ds << v[0] << v[1] << v[2];
+       { ds <<"{"<< v[0] << v[1] << v[2]<<"}";
          return ds; }
 
 template <class V>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Vec3<V> &v)
-       { if (ds.ascii()) { char brace; 
-              ds >> brace >> v[0] >> v[1] >> v[2] >> brace; }
-         else ds >> v[0] >> v[1] >> v[2];
+       { char brace;
+         ds >> brace >> v[0] >> v[1] >> v[2] >> brace;
          return ds;}
 
 template <class P, class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Point3<P,V> &v) 
-       { if (ds.ascii()) ds << "{" << v[0]<< v[1]<< v[2]<<"}";
-         else ds << v[0] << v[1] << v[2];
+       { ds << "{" << v[0]<< v[1]<< v[2]<<"}";
          return ds; }
 
 template <class P, class V>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Point3<P,V> &v) 
-       { if (ds.ascii()) { char brace;
-              ds >> brace >> v[0] >> v[1] >> v[2] >> brace;}
-         else ds >> v[0] >> v[1] >> v[2];
+       { char brace;
+         ds >> brace >> v[0] >> v[1] >> v[2] >> brace;
          return ds;}
 
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Point3i  &v) 
-       { if (ds.ascii()) ds << "{" << v[0]<< v[1]<< v[2]<<"}";
-         else ds << v[0] << v[1] << v[2];
+       { ds << "{" << v[0]<< v[1]<< v[2]<<"}";
          return ds; }
 
 inline STDdstream &operator>>(STDdstream &ds, mlib::Point3i &v) 
-       { if (ds.ascii()) { char brace;
-              ds >> brace >> v[0] >> v[1] >> v[2] >> brace;}
-         else ds >> v[0] >> v[1] >> v[2];
+       { char brace;
+         ds >> brace >> v[0] >> v[1] >> v[2] >> brace;
          return ds;}
 
 
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Point2i  &v) 
-       { if (ds.ascii()) ds << "{" << v[0]<< v[1]<<"}";
-         else ds << v[0] << v[1];
+       { ds << "{" << v[0]<< v[1]<<"}";
          return ds; }
 
 inline STDdstream &operator>>(STDdstream &ds, mlib::Point2i &v) 
-       { if (ds.ascii()) { char brace;
-              ds >> brace >> v[0] >> v[1] >> brace;}
-         else ds >> v[0] >> v[1];
+       { char brace;
+         ds >> brace >> v[0] >> v[1] >> brace;
          return ds;}
 
 inline STDdstream &operator<<(STDdstream &ds, const bool &b) 
       { int val = (b)?(1):(0);
-         if (ds.ascii()) ds << "{" << val << "}";
-         else ds << val;
+         ds << "{" << val << "}";
          return ds; }
 
 inline STDdstream &operator>>(STDdstream &ds, bool &b) 
        { int val;
-         if (ds.ascii()) { char brace;
-              ds >> brace >> val >> brace;}
-         else ds >> val;
+         char brace;
+         ds >> brace >> val >> brace;
          b = (val==1)?(true):(false);
          return ds;}
 
 
 template <class P, class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Point2<P,V> &v) 
-       { if (ds.ascii()) ds << "{" << v[0] << v[1] << "}";
-         else ds << v[0] << v[1];
+       { ds << "{" << v[0] << v[1] << "}";
          return ds; }
 
 template <class P, class V>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Point2<P,V> &v) 
-       { if (ds.ascii()) { char brace; ds >> brace >>v[0] >> v[1] >> brace;}
-         else ds >> v[0] >> v[1];
+       { char brace; ds >> brace >>v[0] >> v[1] >> brace;
          return ds; }
 
 
@@ -134,33 +120,27 @@ inline STDdstream &operator<<(STDdstream &ds, const mlib::Line<L,P,V> &l)
 
 template <class M, class P, class V, class L, class Q>
 inline STDdstream &operator>>(STDdstream &ds,  mlib::Mat4<M,P,V,L,Q> &mat)
-       { if (ds.ascii()) {
-            char brace;
-            ds >> brace;
-            for (int i=0; i < 4; i++)  {
-                 ds >> brace;
-                 for (int j=0; j < 4; j++)
-                    ds >> mat(i,j);
-                 ds >> brace;
-            }
-            ds >> brace;
-         } else 
-             for (int i=0; i < 4; i++) for (int j=0; j < 4; j++) ds >> mat(i,j);
+       { char brace;
+         ds >> brace;
+         for (int i=0; i < 4; i++) {
+              ds >> brace;
+              for (int j=0; j < 4; j++)
+                 ds >> mat(i,j);
+              ds >> brace;
+         }
+         ds >> brace;
          return ds; }
 
 template <class M, class P, class V, class L, class Q>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Mat4<M,P,V,L,Q> &mat)
-     { if (ds.ascii()) {
-          ds << "{";
-          for (int i=0; i < 4; i++) {
-              ds << "{";
-              for (int j=0; j < 4; j++) 
-                  ds << mat(i,j);
-              ds << "}";
-          }
-          ds << "}";
-       } else 
-          for (int i=0; i < 4; i++) for (int j=0; j < 4; j++) ds << mat(i,j);
+     { ds << "{";
+       for (int i=0; i < 4; i++) {
+           ds << "{";
+           for (int j=0; j < 4; j++)
+               ds << mat(i,j);
+           ds << "}";
+       }
+       ds << "}";
        return ds; }
         
 template <class Q, class M, class P, class V, class L>
@@ -173,92 +153,61 @@ inline STDdstream &operator>>(STDdstream &ds, mlib::Quat<Q,M,P,V,L> &quat)
 
 template <class PLANE, class P, class V, class L>
 inline STDdstream  &operator<<(STDdstream &ds, const mlib::Plane<PLANE,P,V,L> &plane)
-     { if (ds.ascii()) 
-            return ds << "{" << plane.normal() << plane.d()<< "}"; 
-       else return ds << plane.normal() << plane.d(); }
+     { return ds << "{" << plane.normal() << plane.d()<< "}"; }
 
 template <class PLANE, class P, class V, class L>
 inline STDdstream &operator>>(STDdstream &ds, mlib::Plane<PLANE,P,V,L> &plane)
-     { if (ds.ascii()) { char brace; 
-            return ds >> brace >> plane.normal() >> plane.d() >> brace; }
-       else return ds >> plane.normal() >> plane.d(); }
+     { char brace;
+       return ds >> brace >> plane.normal() >> plane.d() >> brace; }
 
 template <class T>
 inline STDdstream  &operator<<(STDdstream &ds, const ARRAY<T> &list) {
-   if (ds.ascii())
-      ds << "{";
-   else
-      ds << list.num();
+   ds << "{";
    for (int i=0; i<list.num();i++) {
       ds << list[i];
    }
-   if (ds.ascii())
-      ds << "}"; 
+   ds << "}";
    return ds; 
 }
 
 template <class T>
 inline STDdstream &operator>>(STDdstream &ds, ARRAY<T> &list) {
-   if (ds.ascii()) { 
-      char brace; ds >> brace;
-      while (ds.check_end_delim()) {
-         // Declare 'var' inside this loop (not outside) in case it is
-         // an ARRAY type. Since the list is not being cleared before
-         // we read from the stream, we want it to start out empty
-         // each time thru this loop.
-         T var; 
-         ds >> var;
-         list.add(var);
-      } 
-      return ds >> brace; 
-   } else {
-      int num;  ds >> num;
-      for (int i = 0; i < num; i++) {
-         T var;         // See comment above.
-         ds >> var;
-         list.add(var);
-      } 
-      return ds;
+   char brace; ds >> brace;
+   while (ds.check_end_delim()) {
+      // Declare 'var' inside this loop (not outside) in case it is
+      // an ARRAY type. Since the list is not being cleared before
+      // we read from the stream, we want it to start out empty
+      // each time thru this loop.
+      T var;
+      ds >> var;
+      list.add(var);
    } 
+   return ds >> brace;
 }
 
 template <class T>
 inline STDdstream  &operator<<(STDdstream &ds, const vector<T> &list) {
-   if (ds.ascii())
-      ds << "{";
-   else
-      ds << list.size();
+   ds << "{";
    for (auto & elem : list) {
       ds << elem;
    }
-   if (ds.ascii())
-      ds << "}";
+   ds << "}";
    return ds;
 }
 
 template <class T>
 inline STDdstream &operator>>(STDdstream &ds, vector<T> &list) {
-   if (ds.ascii()) {
-      char brace; ds >> brace;
-      while (ds.check_end_delim()) {
-         // Declare 'var' inside this loop (not outside) in case it is
-         // an vector type. Since the list is not being cleared before
-         // we read from the stream, we want it to start out empty
-         // each time thru this loop.
-         T var;
-         ds >> var;
-         list.push_back(var);
-      }
-      return ds >> brace;
-   } else {
-      int num;  ds >> num;
-      for (int i = 0; i < num; i++) {
-         T var;         // See comment above.
-         ds >> var;
-         list.push_back(var);
-      }
-      return ds;
+   char brace; ds >> brace;
+   while (ds.check_end_delim()) {
+      // Declare 'var' inside this loop (not outside) in case it is
+      // an vector type. Since the list is not being cleared before
+      // we read from the stream, we want it to start out empty
+      // each time thru this loop.
+      T var;
+      ds >> var;
+      list.push_back(var);
    }
+   return ds >> brace;
 }
 
 // XXX - should move to mlib Point2.H and Vec2.H
