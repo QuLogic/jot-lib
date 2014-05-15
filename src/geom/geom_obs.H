@@ -162,31 +162,6 @@ class CSGobs {
    void   unobs_csg()            { _all_csg.erase(this); }
 };
 
-#define CGEOMobs_list const GEOMobs_list
-#define CGEOMobs      const GEOMobs
-class GEOMobs;
-typedef set<GEOMobs*> GEOMobs_list;
-//--------------------------------------------
-// GEOMobs -
-//   An object that can be notified when some
-// other object's geom has changed
-//--------------------------------------------
-class GEOMobs {
-   static GEOMobs_list _all_geom;
- public:
-   virtual ~GEOMobs() {}
-   virtual void notify_geom    (CGEOMptr &l) = 0;
-   static  void notify_geom_obs(CGEOMptr &l) {
-     GEOMobs_list::iterator i;
-     for (i=_all_geom.begin(); i!=_all_geom.end(); ++i)
-       (*i)->notify_geom(l);
-   }
-
-   /* ---  object geom observer --- */
-   void   geom_obs  ()            { _all_geom.insert(this); }
-   void   unobs_geom()            { _all_geom.erase(this); }
-};
-
 #endif // GEOM_OBS_H_HAS_BEEN_INCLUDED
 
 // end of file geom_obs.H

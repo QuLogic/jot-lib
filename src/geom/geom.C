@@ -418,10 +418,6 @@ GEOM::unset_texture()
 }
 
 
-/* ---- GEOMobs routines ----- */
-
-GEOMobs_list GEOMobs::_all_geom;
-
 /* ---- TRANSPobs routines ----- */
 
 TRANSPobs_list TRANSPobs::_all_transp;

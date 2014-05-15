@@ -536,7 +536,6 @@ DISTRIB::DISTRIB():
    disp_obs();
    color_obs();
    exist_obs();
-   geom_obs();
    transp_obs();
    save_obs();
    load_obs();
@@ -990,16 +989,6 @@ DISTRIB::notify_color(
 /////////////////////////////////////
 void      
 DISTRIB::notify_transp(
-   CGEOMptr &g
-   )
-{
-}
-
-/////////////////////////////////////
-// notify_geom()
-/////////////////////////////////////
-void      
-DISTRIB::notify_geom(
    CGEOMptr &g
    )
 {
