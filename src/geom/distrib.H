@@ -30,7 +30,7 @@
  *****************************************************************/
 
 class DISTRIB : public FD_EVENT,
-                public XFORMobs,   public DISPobs,
+                public DISPobs,
                 public COLORobs,   public EXISTobs,
                 public TRANSPobs,
                 public SAVEobs,    public LOADobs,  public CAMobs
@@ -70,7 +70,6 @@ class DISTRIB : public FD_EVENT,
 
    /******** *Obs METHODS ********/
  public:
-   virtual void    notify_xform   (CGEOMptr &, STATE state);
    virtual void    notify         (CGELptr  &, int flag);
    virtual void    notify_exist   (CGELptr  &, int flag);
    virtual void    notify_color   (CGEOMptr &, APPEAR *);

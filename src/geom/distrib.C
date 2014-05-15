@@ -532,7 +532,6 @@ DISTRIB::DISTRIB():
    new JOTtransp   (GEOMptr());
    new JOTtexture  (GEOMptr());
 
-   xform_obs();
    disp_obs();
    color_obs();
    exist_obs();
@@ -1000,17 +999,6 @@ DISTRIB::notify_transp(
 void
 DISTRIB::notify(
    CCAMdataptr  &data
-   )
-{
-}
-
-/////////////////////////////////////
-// notify_xform()
-/////////////////////////////////////
-void
-DISTRIB::notify_xform(
-   CGEOMptr &g,
-   STATE     state
    )
 {
 }
