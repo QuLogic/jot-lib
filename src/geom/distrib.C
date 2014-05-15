@@ -19,6 +19,7 @@
 #include "geom/world.H" 
 #include "geom/gl_view.H"
 #include "geom/texturegl.H"
+#include "net/io_manager.H"
 #include "std/config.H"
 
 using namespace mlib;

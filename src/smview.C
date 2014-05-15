@@ -40,6 +40,7 @@
 
 using namespace mlib;
 
+#include "net/io_manager.H"
 #include "std/run_avg.H"
 #include "std/stop_watch.H"
 #include "std/support.H"

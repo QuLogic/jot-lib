@@ -52,6 +52,7 @@
 
 using namespace mlib;
 
+#include "net/io_manager.H"
 #include "npr/npr_control_frame.H"
 #include "npr/npr_texture.H"
 #include "npr/npr_view.H"

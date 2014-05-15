@@ -19,7 +19,6 @@
 #define _JOT_GEOM_DISTRIB_H
 
 #include "net/net.H"      
-#include "net/io_manager.H"
 #include "disp/cam.H"
 #include "geom/geom.H" 
 #include "geom/world.H" 
@@ -29,8 +28,7 @@
  * Distrib
  *****************************************************************/
 
-class DISTRIB : public FD_EVENT,
-                public DISPobs,
+class DISTRIB : public DISPobs,
                 public EXISTobs,
                 public SAVEobs,    public LOADobs
 {
@@ -65,7 +63,6 @@ class DISTRIB : public FD_EVENT,
    SAVEobs::save_status_t  save_stream(NetStream &, bool full_scene);
 
    int       interpret(NETenum, NetStream *);
-   virtual void sample() {};
 
    /******** *Obs METHODS ********/
  public:
