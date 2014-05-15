@@ -57,8 +57,6 @@ enum NETenum {
      NETswap_ack
 };
 
-class  Network;
-
 //!CLASS:  NetStream
 //:  Provides a channel for communications.
 //
@@ -70,7 +68,6 @@ class  Network;
 //
 //!USAGE: NetStream mycli("in.cs.brown.edu", 21);
 class NetStream : public STDdstream, public FD_EVENT {
-   friend class Network;
  public:
    enum StreamFlags {
        write    = 0x1,
@@ -86,11 +83,9 @@ class NetStream : public STDdstream, public FD_EVENT {
    virtual   ~NetStream();
 
    string     name       (void) const  { return name_; }
-   Network*   network    (void) const  { return network_; }
 
    bool       attached   (void) const  { return !!iostr(); }
 
-   void       add_network(Network *n)  { network_ = n; }
    void       flush_data (void);
    
    virtual void sample() {};
@@ -106,48 +101,13 @@ class NetStream : public STDdstream, public FD_EVENT {
  private:
    
    string   name_;
-   Network *network_;
 };
-
-
-//!CLASS:  Network
-//: Network server
-class Network: public FD_EVENT {
-   friend class NetStream;
-
- protected:
-   FD_MANAGER  *_manager;
-   string       name_;    // name of the host we're running on
-
-   virtual void  sample    ()                 { }
-   virtual int  interpret (NETenum code, NetStream *sender) = 0;
-
-
- public:
-              Network(FD_MANAGER *m) : _manager(m), name_("")
-                                       { }
-   virtual   ~Network() {}
-
-   NetStream *operator[] (int i)           { return nullptr; }
-   int        num_streams(void)  const     { return 0; }
-   const string &name    (void)  const     { return name_; }
-};
-
 
 STDdstream & operator >> (STDdstream &,  NETenum    &);
 STDdstream & operator << (STDdstream &,  NETenum     );
 
-template <class T>
-inline Network &
-operator << (Network &n, const T &d) {
-   for (int i=0; i<n.num_streams(); i++)
-      *((STDdstream *)n[i]) << d;
-   return n;
-}
-
 #ifdef WIN32
 ssize_t write_win32(int fildes, const void *buf, size_t nbyte);
-ssize_t read_win32 (int fildes, void *buf, size_t nbyte);
 int num_bytes_to_read(int fildes);
 #else
 int num_bytes_to_read(int fildes);

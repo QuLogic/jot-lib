@@ -68,7 +68,6 @@
 //XXX - This stomped the ability to
 //reference StreamFlags::write, read, etc.
 //#define write write_win32
-//#define read read_win32
 
 ssize_t
 write_win32(int fildes, const void *buf, size_t nbyte)
@@ -386,8 +385,6 @@ void NetStream::flush_data()
    flush();
 }
 
-
-/* -----------------------  Network Class   ------------------------------- */
 
 STDdstream &
 operator >> (

@@ -35,6 +35,14 @@ static bool debug = Config::get_var_bool("DEBUG_DISTRIB",false);
 /*****************************************************************
  * Function items for networking
  *****************************************************************/
+template <class T>
+inline DISTRIB &
+operator << (DISTRIB &n, const T &d) {
+   /* Do nothing. Used to forward input to all NetStreams contained in
+    * Network, but that is no longer used. */
+   return n;
+}
+
 // 
 // These are commands that can be sent over the net or read from a file
 //
@@ -494,7 +502,7 @@ DISTRIB* DISTRIB::get_distrib()
    if (!_d)
    {
       err_adv(debug, "DISTRIB.C::get_distrib(): Instantiating DISTRIB...");
-      _d = new DISTRIB(FD_MANAGER::mgr());
+      _d = new DISTRIB();
    }
 
    return _d;
@@ -508,8 +516,7 @@ DISTRIB* DISTRIB::get_distrib()
 /////////////////////////////////////
 // Constructor
 /////////////////////////////////////
-DISTRIB::DISTRIB(FD_MANAGER *manager):
-   Network(manager), 
+DISTRIB::DISTRIB():
       _cam_loaded(false)
 {
    // Creating the following objects is done for the side effect
@@ -630,7 +637,6 @@ DISTRIB::load(NetStream &cli)
    DRAWN.flush();
    DRAWN.buffer();
 
-   cli.add_network(this);
    bool retval = false;
 
    err_adv((print_errs>0), 

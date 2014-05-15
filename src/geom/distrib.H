@@ -30,7 +30,7 @@
  * Distrib
  *****************************************************************/
 
-class DISTRIB : public Network,  
+class DISTRIB : public FD_EVENT,
                 public XFORMobs,   public GRABobs,  public DISPobs,
                 public COLORobs,   public EXISTobs,
                 public GEOMobs,    public TRANSPobs,  
@@ -53,7 +53,7 @@ class DISTRIB : public Network,
 
  public:   
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
-   DISTRIB(FD_MANAGER *manager);
+   DISTRIB();
 
  public:   
    /******** MEMBER METHODS ********/
@@ -68,9 +68,8 @@ class DISTRIB : public Network,
    LOADobs::load_status_t  load_stream(NetStream &, bool full_scene);
    SAVEobs::save_status_t  save_stream(NetStream &, bool full_scene);
 
- public:   
-   /******** Network METHODS ********/
-   virtual int       interpret(NETenum, NetStream *);
+   int       interpret(NETenum, NetStream *);
+   virtual void sample() {};
 
    /******** *Obs METHODS ********/
  public:
