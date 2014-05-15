@@ -33,7 +33,7 @@ class DISTRIB : public FD_EVENT,
                 public DISPobs,
                 public COLORobs,   public EXISTobs,
                 public TRANSPobs,
-                public SAVEobs,    public LOADobs,  public CAMobs
+                public SAVEobs,    public LOADobs
 {
  protected:
    /******** STATIC MEMBER VARIABLES ********/
@@ -74,7 +74,6 @@ class DISTRIB : public FD_EVENT,
    virtual void    notify_exist   (CGELptr  &, int flag);
    virtual void    notify_color   (CGEOMptr &, APPEAR *);
    virtual void    notify_transp  (CGEOMptr &);
-   virtual void    notify         (CCAMdataptr &data);
    virtual void    notify_load    (NetStream &s, LOADobs::load_status_t &status, bool full_scene);
    virtual void    notify_save    (NetStream &s, SAVEobs::save_status_t &status, bool full_scene);
 

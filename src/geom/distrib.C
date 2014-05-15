@@ -538,10 +538,6 @@ DISTRIB::DISTRIB():
    transp_obs();
    save_obs();
    load_obs();
-
-   if (Config::get_var_bool("DISTRIB_CAMERA",false,true))
-      VIEW::peek()->cam()->data()->add_cb(this);
-
 }
 
 /////////////////////////////////////
@@ -989,16 +985,6 @@ DISTRIB::notify_color(
 void      
 DISTRIB::notify_transp(
    CGEOMptr &g
-   )
-{
-}
-
-/////////////////////////////////////
-// notify()
-/////////////////////////////////////
-void
-DISTRIB::notify(
-   CCAMdataptr  &data
    )
 {
 }
