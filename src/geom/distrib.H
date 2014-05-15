@@ -36,22 +36,13 @@ class DISTRIB : public DISPobs,
    /******** STATIC MEMBER VARIABLES ********/
    static DISTRIB*   _d;
 
- protected:
-   /******** MEMBER VARIABLES ********/
-   bool              _cam_loaded;
-
  public:
    /******** STATIC MEMBER METHODS ********/
-   static bool       cam_loaded     ()             { return _d && _d->_cam_loaded;}
    static DISTRIB*   get_distrib    ();
 
  public:   
    /******** CONSTRUCTOR/DECONSTRUCTOR *******/
    DISTRIB();
-
- public:   
-   /******** MEMBER METHODS ********/
-   void     set_cam_loaded ()             { _cam_loaded = true;      }
 
  protected:   
    /******** INTERNAL MEMBER METHODS ********/

@@ -28,9 +28,6 @@ using namespace mlib;
  * Globals
  *****************************************************************/
 
-// Gloval used to let NETcontext objects know who broadcasted object...
-NetStream*     broadcaster = nullptr;
-
 static bool debug = Config::get_var_bool("DEBUG_DISTRIB",false);
 
 /*****************************************************************
@@ -241,7 +238,6 @@ class JOTcam : public FUNC_ITEM {
    {
       CAMdataptr cam(VIEWS[0]->cam()->data());
       *d >> cam;
-      _d->set_cam_loaded();
    }
 };
 
@@ -509,8 +505,7 @@ DISTRIB* DISTRIB::get_distrib()
 /////////////////////////////////////
 // Constructor
 /////////////////////////////////////
-DISTRIB::DISTRIB():
-      _cam_loaded(false)
+DISTRIB::DISTRIB()
 {
    // Creating the following objects is done for the side effect
    // (in FUNC_ITEM constructor) of adding them to the DECODER
@@ -557,7 +552,6 @@ DISTRIB::interpret(
       case NETcontext: 
       {
          static int print_errs = (Config::get_var_bool("PRINT_ERRS",false,true) != 0);
-         broadcaster = sender;
          do 
          {
             DATA_ITEM *di = DATA_ITEM::Decode(*sender);
@@ -581,7 +575,6 @@ DISTRIB::interpret(
                sender->check_end_delim(); // forces an eof() if done
             }
          } while (!sender->eof());
-         broadcaster = nullptr;
      }
      brcase NETswap_ack: // only master wall receives NETswap_ack's
      {
