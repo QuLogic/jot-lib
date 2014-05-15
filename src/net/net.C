@@ -47,7 +47,6 @@
 #include "std/support.H"
 #include "std/time.H"
 #include "net.H"
-#include "pack.H"
 
 /* Includes for open()*/
 #include <sys/stat.h>

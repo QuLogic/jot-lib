@@ -25,7 +25,6 @@
 
 #include "std/support.H"
 #include "net.H"
-#include "pack.H"
 #include "stream.H"
 static const int DSTREAM_READ_AHEAD_FACTOR = 4;
 
@@ -283,16 +282,6 @@ STDdstream::get_string_with_spaces()
 }
 
 
-static char  packbuf_space[sizeof(double)];
-static char *packbuf;
-static int   packcount;  /* dummy */
-
-#define INIT_PACK         (packcount = 0, packbuf = packbuf_space)
-#define DONE_PACK         ds.write_delim(' '); ds.write(packbuf_space, packcount);
-
-#define INIT_UNPACK       packbuf = packbuf_space;      \
-                          ds.read_delim(); ds.read(packbuf, sizeof(data))
-
 /* -------------------------------------------------------------------------
  * DESCR   :	Stream pack/unpack for char *
  * ------------------------------------------------------------------------- */
@@ -318,7 +307,6 @@ operator << (STDdstream &ds, const char * const data)
 STDdstream &
 operator >> (STDdstream &ds, string &data)
 {  
-   int len;
    const int buflen = 4096;
    char      buff[buflen];
    char     *usebuff = buff;
