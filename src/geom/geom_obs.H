@@ -83,35 +83,6 @@ class XFORMobs {
 };
 
 
-#define CCOLORobs_list const COLORobs_list
-#define CCOLORobs      const COLORobs
-class COLORobs;
-typedef set<COLORobs*> COLORobs_list;
-//--------------------------------------------
-// COLORobs -
-//   An object that can be notified when some
-// other object's color has changed
-//--------------------------------------------
-class COLORobs {
-   static COLORobs_list *_all_col;
-   static COLORobs_list *col_list() { if (!_all_col)
-         _all_col = new COLORobs_list; return _all_col; }
- public:
-   virtual ~COLORobs() {}
-   virtual void notify_color    (CGEOMptr &, APPEAR *app) = 0;
-   static  void notify_color_obs(CGEOMptr &g, APPEAR *app = nullptr) {
-     COLORobs_list::iterator i;
-     for (i=col_list()->begin(); i!=col_list()->end(); ++i)
-       (*i)->notify_color(g, app ? app : (APPEAR *) &*g);
-   }
-
-   /* ---  object color observer --- */
-   void   color_obs  ()            { col_list()->insert(this); }
-   void   unobs_color()            { col_list()->erase(this); }
-};
-
-
-
 #define CCSGobs_list const CSGobs_list
 #define CCSGobs      const CSGobs
 class CSGobs;

@@ -533,7 +533,6 @@ DISTRIB::DISTRIB():
    new JOTtexture  (GEOMptr());
 
    disp_obs();
-   color_obs();
    exist_obs();
    save_obs();
    load_obs();
@@ -964,18 +963,6 @@ DISTRIB::notify_exist(
          DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
       }
    }
-}
-
-
-/////////////////////////////////////
-// notify_color()
-/////////////////////////////////////
-void      
-DISTRIB::notify_color(
-   CGEOMptr &g,
-   APPEAR   *
-   )
-{
 }
 
 /////////////////////////////////////

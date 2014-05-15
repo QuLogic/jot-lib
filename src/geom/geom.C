@@ -392,7 +392,6 @@ GEOM::set_color(
 { 
    REFlock lock(this);
    APPEAR::set_color(c); 
-   COLORobs::notify_color_obs(this); 
 }
 
 void 
@@ -400,7 +399,6 @@ GEOM::unset_color()
 { 
    REFlock lock(this);
    APPEAR::unset_color(); 
-   COLORobs::notify_color_obs(this); 
 }
 
 void
@@ -417,10 +415,6 @@ GEOM::unset_texture()
    APPEAR::unset_texture();
 }
 
-
-/* ---- COLORobs routines ----- */
-
-COLORobs_list   *COLORobs::_all_col = nullptr;
 
 /* ---- XFORMobs routines ----- */
 
