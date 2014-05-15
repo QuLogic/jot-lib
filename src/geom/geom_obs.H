@@ -82,32 +82,6 @@ class XFORMobs {
    }
 };
 
-
-#define CCSGobs_list const CSGobs_list
-#define CCSGobs      const CSGobs
-class CSGobs;
-typedef set<CSGobs*> CSGobs_list;
-//--------------------------------------------
-// CSGobs -
-//   An object that can be notified when some
-// other object's csg has changed
-//--------------------------------------------
-class CSGobs {
-   static CSGobs_list _all_csg;
- public:
-   virtual ~CSGobs() {}
-   virtual void notify_csg    (const GEOMlist &l) = 0;
-   static  void notify_csg_obs(const GEOMlist &l) {
-     CSGobs_list::iterator i;
-     for (i=_all_csg.begin(); i!=_all_csg.end(); ++i)
-       (*i)->notify_csg(l);
-   }
-
-   /* ---  object csg observer --- */
-   void   csg_obs  ()            { _all_csg.insert(this); }
-   void   unobs_csg()            { _all_csg.erase(this); }
-};
-
 #endif // GEOM_OBS_H_HAS_BEEN_INCLUDED
 
 // end of file geom_obs.H

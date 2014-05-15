@@ -257,7 +257,6 @@ CSG_DEF::compute_csg(
    } else {
       geom()->reset_csg_body(mod);
    }
-   CSGobs::notify_csg_obs(geom());
 }
 
 
