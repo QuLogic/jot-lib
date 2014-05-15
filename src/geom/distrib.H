@@ -20,7 +20,6 @@
 
 #include "net/net.H"      
 #include "net/io_manager.H"
-#include "disp/jot_vars.H" 
 #include "disp/cam.H"
 #include "geom/geom.H" 
 #include "geom/world.H" 
@@ -34,8 +33,7 @@ class DISTRIB : public FD_EVENT,
                 public XFORMobs,   public DISPobs,
                 public COLORobs,   public EXISTobs,
                 public GEOMobs,    public TRANSPobs,  
-                public SAVEobs,    public LOADobs,  public CAMobs,     
-                public JOTvar_obs
+                public SAVEobs,    public LOADobs,  public CAMobs
 {
  protected:
    /******** STATIC MEMBER VARIABLES ********/
@@ -72,7 +70,6 @@ class DISTRIB : public FD_EVENT,
 
    /******** *Obs METHODS ********/
  public:
-   virtual void    notify_jot_var (DATA_ITEM *);
    virtual void    notify_xform   (CGEOMptr &, STATE state);
    virtual void    notify         (CGELptr  &, int flag);
    virtual void    notify_exist   (CGELptr  &, int flag);

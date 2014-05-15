@@ -21,36 +21,6 @@
 #include "std/support.H"
 #include "net/data_item.H"
 
-/* ---------------------- JOTvar classes ------------------------------ */
-//
-// this is a generic class for observing all JOTvars.  
-// Observers are notified with the DATA_ITEM corresponding to the
-// JOTvar that changed.  Observers are not expected to look at the
-// values in the JOTvar, but instead are only expected to call 
-// DATA_ITEM methods such as format or decode.
-//
-class JOTvar_obs;
-typedef set<JOTvar_obs *> JOTvar_obs_list;
-class JOTvar_obs {
-   static JOTvar_obs_list  *_jot_var_obs_list;
-   JOTvar_obs_list *jot_var_obs_list(){ if (!_jot_var_obs_list) 
-                                          _jot_var_obs_list=new JOTvar_obs_list;
-                                         return _jot_var_obs_list; }
- public:
-   virtual ~JOTvar_obs() {}
-   static  void notify_jot_var_obs(DATA_ITEM *item) {
-                                     if (!_jot_var_obs_list) return;
-                                     JOTvar_obs_list::iterator i;
-                                     for (i=_jot_var_obs_list->begin(); i!=_jot_var_obs_list->end(); ++i)
-                                       (*i)->notify_jot_var(item);
-                                   }
-   virtual void notify_jot_var(DATA_ITEM *item) = 0;
-   
-           void jot_var_obs()     { jot_var_obs_list()->insert(this); }
-           void unobs_jot_var()   { jot_var_obs_list()->erase (this); }
-};
-
-
 //
 //  Special TAG for JOTvars.  This TAG is different from a normal TAG_val
 // because the TAG stores the object where the value is stored and ignores
@@ -123,8 +93,7 @@ class JOTvar : public DATA_ITEM {
                                        DATA_ITEM::add_decoder(_inst_name,this);}
 
          void         set(TYPE v)         { _val = v;// set val & notify net,etc
-                                            check_inst_name();
-                                          JOTvar_obs::notify_jot_var_obs(this);}
+                                            check_inst_name();}
          TYPE         get()         const { return _val; }
 
  virtual const string &obj_name()   const { return _obj->name();}

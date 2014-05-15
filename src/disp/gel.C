@@ -47,7 +47,6 @@ SAVEobs_list    *SAVEobs::_postsave_obs= nullptr;
 LOADobs_list    *LOADobs::_load_obs    = nullptr;
 LOADobs_list    *LOADobs::_preload_obs = nullptr;
 LOADobs_list    *LOADobs::_postload_obs= nullptr;
-JOTvar_obs_list *JOTvar_obs::_jot_var_obs_list = nullptr;
 
 
 GEL::GEL():DATA_ITEM(1) 

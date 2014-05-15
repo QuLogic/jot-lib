@@ -540,7 +540,6 @@ DISTRIB::DISTRIB():
    transp_obs();
    save_obs();
    load_obs();
-   jot_var_obs();
 
    if (Config::get_var_bool("DISTRIB_CAMERA",false,true))
       VIEW::peek()->cam()->data()->add_cb(this);
@@ -1012,16 +1011,6 @@ DISTRIB::notify_geom(
 void
 DISTRIB::notify(
    CCAMdataptr  &data
-   )
-{
-}
-
-/////////////////////////////////////
-// notify_jot_var()
-/////////////////////////////////////
-void
-DISTRIB::notify_jot_var(
-   DATA_ITEM *item
    )
 {
 }
