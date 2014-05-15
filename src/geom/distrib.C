@@ -534,7 +534,6 @@ DISTRIB::DISTRIB():
    new JOTtexture  (GEOMptr());
 
    xform_obs();
-   grab_obs();
    disp_obs();
    color_obs();
    exist_obs();
@@ -1079,16 +1078,5 @@ DISTRIB::notify(
       for (i = 0; i < VIEWS.num(); i++)
          VIEWS[i]->undisplay(g);
    }
-}
-
-/////////////////////////////////////
-// notify_grab()
-/////////////////////////////////////
-void      
-DISTRIB::notify_grab(
-   CGELptr &g,
-   int      flag
-   )
-{
 }
 

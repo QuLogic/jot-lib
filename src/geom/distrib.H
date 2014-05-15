@@ -31,7 +31,7 @@
  *****************************************************************/
 
 class DISTRIB : public FD_EVENT,
-                public XFORMobs,   public GRABobs,  public DISPobs,
+                public XFORMobs,   public DISPobs,
                 public COLORobs,   public EXISTobs,
                 public GEOMobs,    public TRANSPobs,  
                 public SAVEobs,    public LOADobs,  public CAMobs,     
@@ -75,7 +75,6 @@ class DISTRIB : public FD_EVENT,
  public:
    virtual void    notify_jot_var (DATA_ITEM *);
    virtual void    notify_xform   (CGEOMptr &, STATE state);
-   virtual void    notify_grab    (CGELptr  &, int flag);
    virtual void    notify         (CGELptr  &, int flag);
    virtual void    notify_exist   (CGELptr  &, int flag);
    virtual void    notify_color   (CGEOMptr &, APPEAR *);

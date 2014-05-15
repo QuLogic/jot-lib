@@ -41,7 +41,6 @@ TAGlist  *GEL::_gel_tags = nullptr;
 GELdistobs_list *GELdistobs::_dist_obs = nullptr;
 EXISTobs_list   *EXISTobs::_exist_obs  = nullptr;
 DUPobs_list     *DUPobs::_dup_obs      = nullptr;
-GRABobs_list    *GRABobs::_grab_obs    = nullptr;
 SAVEobs_list    *SAVEobs::_save_obs    = nullptr;
 SAVEobs_list    *SAVEobs::_presave_obs = nullptr;
 SAVEobs_list    *SAVEobs::_postsave_obs= nullptr;

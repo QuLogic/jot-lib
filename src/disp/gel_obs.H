@@ -151,36 +151,6 @@ class DUPobs {
 };
 
 
-#define CGRABobs_list const GRABobs_list
-#define CGRABobs      const GRABobs
-class GRABobs;
-typedef set<GRABobs*> GRABobs_list;
-//--------------------------------------------
-// GRABobs -
-//   An object that can be notified when some
-// other object is grabbed
-//--------------------------------------------
-class GRABobs {
-      static  GRABobs_list *_grab_obs;
-      static GRABobs_list *grabobs_list() { if (!_grab_obs) 
-                                               _grab_obs=new GRABobs_list;
-                                            return _grab_obs; }
-   public:
-      virtual ~GRABobs() {}
-      virtual void notify_grab    (CGELptr &,  int flag) = 0;
-      static  void notify_grab_obs(CGELptr &g, int flag) {
-                                     if (!_grab_obs) return;
-                                     GRABobs_list::iterator i;
-                                     for (i=grabobs_list()->begin(); i!=grabobs_list()->end(); ++i)
-                                       (*i)->notify_grab(g,flag);
-                                   }
-
-   /* ---  object xform observer --- */
-      void   grab_obs  ()            { grabobs_list()->insert(this); }
-      void   unobs_grab()            { grabobs_list()->erase(this); }
-};
-
-
 #define CSAVEobs_list const SAVEobs_list
 #define CSAVEobs      const SAVEobs
 class SAVEobs;

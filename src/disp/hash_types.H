@@ -191,8 +191,8 @@ class hashenum : public hashdist {
 class GrabVar : public hashvar<int> {
   public :
    GrabVar() : hashvar<int>("GRABBED", 0, 0) { }
-           void grab      (CGELptr &g) { set(g, get(g)+1); GRABobs::notify_grab_obs(g,1); }
-           void release   (CGELptr &g) { set(g, get(g)-1); GRABobs::notify_grab_obs(g,0); }
+           void grab      (CGELptr &g) { set(g, get(g)+1); }
+           void release   (CGELptr &g) { set(g, get(g)-1); }
    virtual void notify_dup(CGELptr &, CGELptr &) { }
 };
 
