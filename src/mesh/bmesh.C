@@ -65,7 +65,7 @@ bool use_new_bface_io = Config::get_var_bool("JOT_USE_NEW_BFACE_IO",true);
 // On WIN32 this wasn't happening...
 
 BMESHobs_list BMESHobs::_all_observers;
-map<BMESHptr,BMESHobs_list*> BMESHobs::_hash;
+map<BMESH*,BMESHobs_list*> BMESHobs::_hash;
 
 // add BMESH to decoder hash table:
 static class DECODERS {
@@ -168,12 +168,12 @@ BMESH::~BMESH()
       err_msg("BMESH::~BMESH called...");
 
    // Notify observers that it's gonna happen
-   BMESHobs::broadcast_delete(shared_from_this());
+   BMESHobs::broadcast_delete(this);
    
    // then delete mesh elements
    delete_elements();
 
-   if (is_focus(shared_from_this()))
+   if (focus().get() == this)
       set_focus(nullptr);
 }
 
@@ -4795,7 +4795,7 @@ BMESHobs::broadcast_subdiv_gen(BMESHptr m)
 }
 
 void
-BMESHobs::broadcast_delete(BMESHptr m)
+BMESHobs::broadcast_delete(BMESH* m)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_delete(m);
@@ -4808,7 +4808,7 @@ BMESHobs::broadcast_delete(BMESHptr m)
 }
 
 void
-BMESHobs::broadcast_sub_delete(BMESHptr m)
+BMESHobs::broadcast_sub_delete(BMESH* m)
 {
    // Notify observers who watch all meshes
    _all_observers.notify_sub_delete(m);
@@ -4872,7 +4872,7 @@ BMESHobs_list::notify_subdiv_gen(BMESHptr mesh) const
 }
 
 void
-BMESHobs_list::notify_delete(BMESHptr mesh) const
+BMESHobs_list::notify_delete(BMESH* mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)
@@ -4880,7 +4880,7 @@ BMESHobs_list::notify_delete(BMESHptr mesh) const
 }
 
 void
-BMESHobs_list::notify_sub_delete(BMESHptr mesh) const
+BMESHobs_list::notify_sub_delete(BMESH* mesh) const
 {
    BMESHobs_list::iterator i;
    for (i=begin(); i!=end(); ++i)

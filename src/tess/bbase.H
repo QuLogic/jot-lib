@@ -427,7 +427,7 @@ class Bbase : public Bnode, public RefImageClient, public BMESHobs {
    virtual void notify_xform     (BMESHptr, CWtransf&, CMOD&) {}
    virtual void notify_merge     (BMESHptr, BMESHptr);
    virtual void notify_split     (BMESHptr, const vector<BMESHptr>&);
-   virtual void notify_delete    (BMESHptr);
+   virtual void notify_delete    (const BMESH*);
    virtual void notify_sub_delete(BMESHptr);
 
    virtual void notify_subdiv_gen(BMESHptr);

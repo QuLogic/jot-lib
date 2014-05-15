@@ -869,7 +869,7 @@ void
 LMESH::delete_subdiv_mesh()
 {
    // Notify observers that it's gonna happen
-   BMESHobs::broadcast_sub_delete(shared_from_this());
+   BMESHobs::broadcast_sub_delete(this);
 
    if (is_control_mesh() && _subdiv_mesh) {
       int k;

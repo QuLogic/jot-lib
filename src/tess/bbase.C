@@ -769,7 +769,7 @@ Bbase::notify_split(BMESHptr, const vector<BMESHptr>&)
 }
 
 void
-Bbase::notify_delete(BMESHptr)
+Bbase::notify_delete(const BMESH*)
 {
    err_msg("Bbase::notify_delete: not implemented");
    set_mesh(nullptr);

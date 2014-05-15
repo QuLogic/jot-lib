@@ -915,8 +915,8 @@ class BMESHobs_list : public set<BMESHobs*> {
    void notify_merge         (BMESHptr, BMESHptr)         const;
    void notify_split         (BMESHptr, const vector<BMESHptr>&) const;
    void notify_subdiv_gen    (BMESHptr parent)            const;
-   void notify_delete        (BMESHptr)                   const;
-   void notify_sub_delete    (BMESHptr)                   const;
+   void notify_delete        (BMESH*)                     const;
+   void notify_sub_delete    (BMESH*)                     const;
    void notify_update_request(BMESHptr)                   const;
 
    //******** UTILITIES ********
@@ -965,8 +965,8 @@ class BMESHobs {
    virtual void notify_merge     (BMESHptr, BMESHptr)         {}
    virtual void notify_split     (BMESHptr, const vector<BMESHptr>&) {}
    virtual void notify_subdiv_gen(BMESHptr)                   {}
-   virtual void notify_delete    (BMESHptr)                   {}
-   virtual void notify_sub_delete(BMESHptr)                   {}
+   virtual void notify_delete    (BMESH*)                     {}
+   virtual void notify_sub_delete(BMESH*)                     {}
 
    // This is for observers who want to update the mesh before it
    // does something important like try to draw itself:
@@ -980,8 +980,8 @@ class BMESHobs {
    static  void broadcast_merge         (BMESHptr joined, BMESHptr removed);
    static  void broadcast_split         (BMESHptr, const vector<BMESHptr>&);
    static  void broadcast_subdiv_gen    (BMESHptr);
-   static  void broadcast_delete        (BMESHptr);
-   static  void broadcast_sub_delete    (BMESHptr);
+   static  void broadcast_delete        (BMESH*);
+   static  void broadcast_sub_delete    (BMESH*);
    static  void broadcast_update_request(BMESHptr);
 
    //******** UTILITIES ********
@@ -998,15 +998,18 @@ class BMESHobs {
 
  protected:
    // Hash table that maps an observer list to a particular mesh:
-   static map<BMESHptr,BMESHobs_list*> _hash;
+   static map<BMESH*,BMESHobs_list*> _hash;
 
    // List of observers that want to get notified if ANY mesh
    // changes:
    static BMESHobs_list _all_observers;
 
+   static BMESHobs_list& bmesh_obs_list(BMESHptr m) {
+      return bmesh_obs_list(m.get());
+   }
    // Returns the observer list for a particular mesh:
-   static BMESHobs_list& bmesh_obs_list(BMESHptr m)  {
-      map<BMESHptr,BMESHobs_list*>::iterator it = _hash.find(m);
+   static BMESHobs_list& bmesh_obs_list(BMESH* m)  {
+      auto it = _hash.find(m);
       BMESHobs_list *list;
       if (it == _hash.end()) {
         list = new BMESHobs_list;
