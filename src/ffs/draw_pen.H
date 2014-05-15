@@ -52,11 +52,11 @@ class DrawPen : public Pen, public CAMobs, public FRAMEobs,
    //******** MANAGERS ********
 
    DrawPen(CGEST_INTptr &gest_int, CEvent &d, CEvent &m, CEvent &u);
-   virtual ~DrawPen() {}
+   virtual ~DrawPen() { _instance = nullptr; }
 
    //******** STATICS ********
 
-   static DrawPen* instance() { return _instance; }
+   static DrawPen* get_instance(CGEST_INTptr &gest_int, CEvent &d, CEvent &m, CEvent &u);
 
    //******** GESTURE CALLBACK METHODS ********
 
@@ -115,7 +115,7 @@ class DrawPen : public Pen, public CAMobs, public FRAMEobs,
    bool                 _tap_callback;
    PIXEL                _tap_callback_loc;
 
-   static DrawPen*      _instance; // there's just one
+   static shared_ptr<DrawPen> _instance; // there's just one
 
    //! For creating callbacks to use with GESTUREs:
    typedef CallMeth_t<DrawPen,GESTUREptr> draw_cb_t;

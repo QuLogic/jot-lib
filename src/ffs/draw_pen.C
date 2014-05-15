@@ -141,7 +141,26 @@ class WidgetGuard : public DrawGuard {
 /*****************************************************************
  * DrawPen
  *****************************************************************/
-DrawPen* DrawPen::_instance = nullptr;
+shared_ptr<DrawPen> DrawPen::_instance = nullptr;
+
+DrawPen*
+DrawPen::get_instance(
+   CGEST_INTptr &gest_int,
+   CEvent&       d,
+   CEvent&       m,
+   CEvent&       u
+   )
+{
+   if (_instance)
+      return _instance.get();
+
+   _instance = make_shared<DrawPen>(gest_int, d, m, u);
+
+   // Sign up for FRAMEobs::tick() callbacks:
+   _instance->_view->schedule(_instance);
+
+   return _instance.get();
+}
 
 DrawPen::DrawPen(
    CGEST_INTptr &gest_int,
@@ -155,6 +174,9 @@ DrawPen::DrawPen(
    _tap_timer(0),
    _tap_callback(false)
 {
+   if (_instance)
+      err_msg("DrawPen::DrawPen: Error: instance already exists");
+
    // Set up Event FSA:
    // XXX - obsolete:
    _dragging += Arc(m, Cb((_callb::_method) &DrawPen::drag_move_cb));
@@ -182,13 +204,6 @@ DrawPen::DrawPen(
 
    // Sign up for CAMobs callbacks:
    _view->cam()->data()->add_cb(this);
-
-   // Sign up for FRAMEobs::tick() callbacks:
-   _view->schedule(shared_from_this());
-
-   if (_instance)
-      err_msg("DrawPen::DrawPen: Error: instance already exists");
-   _instance = this;
 }
 
 // ***************** Method from FRAMEobs. Get called per frame

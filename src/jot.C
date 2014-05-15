@@ -588,7 +588,7 @@ JOTapp::init_pens(WINDOW &base_window)
 
    // Free-From Sketch Pens:
    if (do_ffs) {
-      _draw_pen = new DrawPen(_gest_int, down, move, up);
+      _draw_pen = DrawPen::get_instance(_gest_int, down, move, up);
       _pen_manager->add_pen(_draw_pen);
       _pen_manager->select_pen(_draw_pen);
       floor->show();
