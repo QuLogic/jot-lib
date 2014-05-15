@@ -305,8 +305,6 @@ NetStream::NetStream(
       cerr << "NetStream::NetStream: is_ascii: "
            << (STDdstream::ascii() ? "true" : "false")
            << endl;
-//       *this << string("fooyah");
-//       *_ostream << std::endl;
    }
 
    // XXX - Can't get the file descriptor from the stream.
@@ -368,23 +366,6 @@ NetStream::write_to_net(
    return bytes_written;
 }
 
-void NetStream::flush_data()
-{
-   streamsize count = _out_queue.in_avail();
-   if (count <= 0) return;
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) 
-      cerr << "NetStream: sending message to net of length " << count << endl;
-   
-   // Pack up 
-   int packcount = 0;
-   char packbuf_space[sizeof(int)];
-   char *packbuf = packbuf_space;
-   UGA_PACK_WORD(count, packbuf, packcount);
-
-   write_to_net(packbuf_space, packcount);
-   flush();
-}
-
 
 STDdstream &
 operator >> (
@@ -407,11 +388,10 @@ operator << (
 {
    switch (m) {
        case NETflush  : 
-                        if (ds.ascii()) {
+                        {
                             *ds.ostr() << endl;
                             ds.ostr()->flush();
                         }
-                        else ((NetStream &)ds).flush_data();
         default        : { int x(m);
                           ds << x;
                         }

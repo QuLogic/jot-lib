@@ -86,8 +86,6 @@ class NetStream : public STDdstream, public FD_EVENT {
 
    bool       attached   (void) const  { return !!iostr(); }
 
-   void       flush_data (void);
-   
    virtual void sample() {};
 
  protected:
