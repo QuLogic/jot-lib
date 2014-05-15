@@ -35,13 +35,6 @@ static bool debug = Config::get_var_bool("DEBUG_DISTRIB",false);
 /*****************************************************************
  * Function items for networking
  *****************************************************************/
-template <class T>
-inline DISTRIB &
-operator << (DISTRIB &n, const T &d) {
-   /* Do nothing. Used to forward input to all NetStreams contained in
-    * Network, but that is no longer used. */
-   return n;
-}
 
 // 
 // These are commands that can be sent over the net or read from a file
@@ -981,12 +974,7 @@ DISTRIB::notify_exist(
    if (f)  {
       if (NETWORK.get(g)) {
          DATA_ITEM::add_decoder(g->name(), (DATA_ITEM *)&*g, 0);
-         *this << NETcontext<< JOTsend_geom(g) << JOTcreate(g) << JOTdone();
       }
-   }
-   if (!f) {
-      if (NETWORK.get(g))
-         *this << NETcontext << JOTdestroy(g)  << JOTdone();
    }
 }
 
@@ -1000,8 +988,6 @@ DISTRIB::notify_color(
    APPEAR   *
    )
 {
-   if (NETWORK.get(g))
-      *this << NETcontext << JOTcolor(g) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1012,8 +998,6 @@ DISTRIB::notify_transp(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g))
-       *this << NETcontext << JOTtransp(g) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1024,9 +1008,6 @@ DISTRIB::notify_geom(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g)) {
-      ; // what do we distribute here?
-   }
 }
 
 /////////////////////////////////////
@@ -1037,8 +1018,6 @@ DISTRIB::notify(
    CCAMdataptr  &data
    )
 {
-   // broadcast new camera position
-   *this << NETcontext << JOTcam(data) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1049,7 +1028,6 @@ DISTRIB::notify_jot_var(
    DATA_ITEM *item
    )
 {
-   (*this) << NETcontext << *item << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1061,8 +1039,6 @@ DISTRIB::notify_hash(
    hashdist *h
    )
 {
-   if (NETWORK.get(g))
-      *this << NETcontext << JOThash(g, h) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1073,8 +1049,6 @@ DISTRIB::notify_texture(
    CGEOMptr &g
    )
 {
-   if (NETWORK.get(g))
-      *this << NETcontext << JOTtexture(g) << JOTdone();
 }
 
 /////////////////////////////////////
@@ -1086,14 +1060,6 @@ DISTRIB::notify_xform(
    STATE     state
    )
 {
-
-  if (NETWORK.get(g)) {
-    if (state == XFORMobs::PRIMARY || state == XFORMobs::DROP)
-      *this << NETcontext << JOTxform(g) << JOTdone();
-    else if(state== XFORMobs::START||state==XFORMobs::END){
-       //*this << NETcontext << JOTxform_to_undo(g,state) << JOTdone();
-    }
-  }
 }
 
 /////////////////////////////////////
@@ -1109,13 +1075,9 @@ DISTRIB::notify(
    if (flag) {
       for (i = 0; i < VIEWS.num(); i++)
          VIEWS[i]->display(g);
-      if (NETWORK.get(g))
-         *this << NETcontext << JOTdisplay(g)  << JOTdone();
    } else {
       for (i = 0; i < VIEWS.num(); i++)
          VIEWS[i]->undisplay(g);
-      if (NETWORK.get(g))
-         *this << NETcontext << JOTdisplay(g,0)<< JOTdone();
    }
 }
 
@@ -1128,7 +1090,5 @@ DISTRIB::notify_grab(
    int      flag
    )
 {
-   if (NETWORK.get(g) && JOTgrab::_save != g)
-      *this << NETcontext << JOTgrab(g,flag) << JOTdone();
 }
 
