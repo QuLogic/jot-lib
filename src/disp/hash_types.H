@@ -24,28 +24,6 @@
 
 /* ------------------- Hash table variables ----------------------------- */
 
-class   HASHobs;
-class   hashdist;
-typedef set<HASHobs *> HASHobs_list;
-class HASHobs {
-   static HASHobs_list  *_hash_obs_list;
-   HASHobs_list *hash_list()     { if (!_hash_obs_list) 
-                                      _hash_obs_list = new HASHobs_list;
-                                   return _hash_obs_list; }
-   public:
-   virtual ~HASHobs() {}
-   static  void notify_hash_obs(CGELptr &o, hashdist *h) {
-                                  if (!_hash_obs_list) return;
-                                  HASHobs_list::iterator i;
-                                  for (i=_hash_obs_list->begin(); i!=_hash_obs_list->end(); ++i)
-                                    (*i)->notify_hash(o,h);
-                                }
-   virtual void notify_hash(CGELptr &old, hashdist *h) = 0;
-   
-           void hash_obs()       { hash_list()->insert(this); }
-           void unobs_hash()     { hash_list()->erase (this); }
-};
-
 class hashdist : public DATA_ITEM, public GELdistobs,
                  public EXISTobs,   public DUPobs {
    protected:
@@ -114,9 +92,7 @@ class hashvar : public hashdist {
            T     get(CGELptr &g) const { return find(g) ? 
                                             ((TDI<T> *)find(g))->get() : _val; }
            void  set(GELptr g, T v)     { del(g);
-                                          add(g, (void *)new TDI<T>(v));
-                                          if (_dist)
-                                          HASHobs::notify_hash_obs(g,this); }
+                                          add(g, (void *)new TDI<T>(v)); }
    virtual void notify_dup(CGELptr &old, CGELptr &newg)
                                           { if (find(old)) set(newg, get(old));}
    virtual void put_var(TAGformat &d, CGELptr &g) const {
@@ -143,9 +119,7 @@ class hashptr : public hashdist {
                ~hashptr()          { del_hash_items();} // Can't do in ~hashdist
            T    get(CGELptr &g)    { return find(g) ? (T)find(g) : _val;}
            void set(GELptr g, T v) { if (v) v->Own(); 
-                                            del(g); add(g, (void *)v);
-                                            if (_dist)
-                                            HASHobs::notify_hash_obs(g,this); }
+                                            del(g); add(g, (void *)v); }
 
                          // Don't know about serializing of pointers
    virtual void put_var     (TAGformat &, CGELptr&) const { }
@@ -166,9 +140,7 @@ class hashenum : public hashdist {
            T    get(CGELptr &g) const { return (T)(find(g) ? 
                                           ((TDI<int> *)find(g))->get() : _val);}
            void set(GELptr g, T v)    { del(g);
-                                        add(g, (void *) new TDI<int>((int)v));
-                                        if (_dist)
-                                            HASHobs::notify_hash_obs(g,this); }
+                                        add(g, (void *) new TDI<int>((int)v)); }
    
     // 2005 VS generates compiler warnings for this funcion 		   
    //virtual string enum_to_str(T e) const { char b[20];sprintf(b,"%d",(int)e);
