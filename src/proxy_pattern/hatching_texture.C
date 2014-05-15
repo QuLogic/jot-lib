@@ -29,6 +29,7 @@ hatching_texture.C
 **********************************************************************/
 HatchingTexture::HatchingTexture(Patch* patch) :
 BasicTexture(patch, new GLStripCB),
+_proxy_texture(0),
 _draw_proxy_mesh(false)
 {
 
