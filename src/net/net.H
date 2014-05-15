@@ -67,7 +67,7 @@ enum NETenum {
 //          each client connection.
 //
 //!USAGE: NetStream mycli("in.cs.brown.edu", 21);
-class NetStream : public STDdstream, public FD_EVENT {
+class NetStream : public STDdstream {
  public:
    enum StreamFlags {
        write    = 0x1,
@@ -85,8 +85,6 @@ class NetStream : public STDdstream, public FD_EVENT {
    string     name       (void) const  { return name_; }
 
    bool       attached   (void) const  { return !!iostr(); }
-
-   virtual void sample() {};
 
  protected:
    void        set_blocking(bool val) const;

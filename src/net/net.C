@@ -300,10 +300,6 @@ NetStream::NetStream(
    _istream = dynamic_cast<istream*>(fs);
    _ostream = dynamic_cast<ostream*>(fs);
 
-   // XXX - Can't get the file descriptor from the stream.
-   //       Hopefully we don't need it:
-   _fd = -1;  
-
    block(false);
 }
 

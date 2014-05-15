@@ -254,7 +254,7 @@ dup_group(HatchingGroup* g)
 
       // open a stream to write to the tmp file:
       NetStream out(tmp, NetStream::ascii_w);
-      if (out.fd() < 0) {
+      if (!out.attached()) {
          err_ret("dup_group: error: can't open %s for writing", tmp.c_str());
          return nullptr;
       }
@@ -266,7 +266,7 @@ dup_group(HatchingGroup* g)
 
    // open a stream to read from the tmp file:
    NetStream in(tmp, NetStream::ascii_r);
-   if (in.fd() < 0) {
+   if (!in.attached()) {
       err_ret("dup_group: error: can't open %s for reading", tmp.c_str());
       return nullptr;
    }
