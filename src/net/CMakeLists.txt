@@ -13,3 +13,13 @@ TARGET_LINK_LIBRARIES(net
 	mlib
 	std)
 
+ADD_EXECUTABLE(netiotest EXCLUDE_FROM_ALL
+	io.C
+	net.C
+	stream.C
+	jotappconfig.C
+	data_item.C)
+
+TARGET_LINK_LIBRARIES(netiotest
+	std)
+
