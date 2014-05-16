@@ -26,7 +26,6 @@
 #include "std/support.H"
 #include "net.H"
 #include "stream.H"
-static const int DSTREAM_READ_AHEAD_FACTOR = 4;
 
 /* -----------------------  Private Methods  ------------------------------- */
 
@@ -88,111 +87,6 @@ STDdstream::check_end_delim()
    return brace != '}';
 }
 
-/* -------------------------------------------------------------------------
- * DESCR   :	Writes byte data to the output buffer.  If the stream is
- * 		set for non-blocking i/o, flushes are performed
- * 		periodically, but not necessarily after each @write@. 
- * ------------------------------------------------------------------------- */
-void
-STDdstream::write (
-   const char *const data,
-   int               count
-   )
-{
-   _out_queue.sputn(data, count);
-
-   // Don't flush here - message size won't be prepended. - lsh
-   if (_block)
-      flush();
-      
-   /* Since flushes aren't guaranteed anyway, we don't care what happened */
-   if (!_block)
-      _fail = false;
-}
-
-
-/* -------------------------------------------------------------------------
- * DESCR   :	Reads data from the input buffer.  When the buffer is
- * 		depleted, the stream makes a receive request for the
- * 		appropriate number of bytes.  If there is a short count on
- * 		non-blocking i/o, the short bytes are left in the buffer
- * 		and the fail flag is set.
- * ------------------------------------------------------------------------- */
-void
-STDdstream::read (
-   char  *data,
-   int    count,
-   int    pop    // flag for removing the read characters from input buffer
-   )
-{
-   char *buffer = nullptr;
-   size_t recv_request, recv_result;
-
-   while ((int)_in_queue.in_avail() < count) {
-      if (!buffer) {
-         recv_request = count * DSTREAM_READ_AHEAD_FACTOR;
-         buffer = new char [recv_request];
-      }
-
-      recv_result = recv(buffer, recv_request);
-      
-      if (recv_result)
-         _in_queue.sputn(buffer, recv_result);
-
-      if (!_block)
-         break;
-   }
-   if (buffer)
-      delete[] buffer;
-
-   if ((int)_in_queue.in_avail() >= count) {
-      if (pop)
-           _in_queue.sgetn(data, count);
-      else memcpy(data, _in_queue.str().data(), count);
-
-      _fail = false;
-   }
-   else {
-      cerr << "Failed to read message" << endl;
-      _fail = true;
-   }
-}
-
-
-/* -------------------------------------------------------------------------
- * DESCR   :	Attempts to flush data from the output buffer using the
- * 		@send@ method.  If there is a short count on the @send@
- * 		operation and the non-blocking flag is set, the remaining
- * 	        bytes are left in the buffer and the fail flag is set.
- * ------------------------------------------------------------------------- */
-void
-STDdstream::flush (void)
-{
-   char *buffer = nullptr;
-   size_t send_request, send_result;
-
-   while (_out_queue.in_avail() > 0) {
-      if (!buffer) {
-         send_request = _out_queue.in_avail();
-         buffer = new char [send_request];
-      }
-
-      memcpy(buffer, _out_queue.str().data(), send_request);
-      send_result = send(buffer, send_request);
-      
-      if (send_result)
-         _out_queue.sgetn(buffer, send_result);
-
-      if (!_block)
-         break;
-   }
-   if (buffer)
-      delete[] buffer;
-
-   _fail = (_out_queue.in_avail() > 0);
-}
-
-
 /* --------------------  Public Multi-Methods   ---------------------------- */
 
 void
@@ -213,14 +107,6 @@ void
 STDdstream::write_delim(char c)
 {
    (*this) << c;
-}
-
-char
-STDdstream::read_delim()
-{
-   char delim;
-   read(&delim, sizeof(char));
-   return delim;
 }
 
 string

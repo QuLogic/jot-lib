@@ -38,20 +38,9 @@
 
 #include <fstream>
 
-#ifdef WIN32
-#define signal(x,y)
-#else
-#include <csignal>
-#endif
-
 #include "std/support.H"
 #include "std/time.H"
 #include "net.H"
-
-/* Includes for open()*/
-#include <sys/stat.h>
-#include <fcntl.h>
-
 
 /* Includes for ioctl (for num_bytes_to_read()) */
 #if defined(__linux__) || defined(linux) || defined(_AIX)
@@ -62,71 +51,6 @@
 /* #include "net/net.H" */
 #endif
 
-#ifdef WIN32
-
-//XXX - This stomped the ability to
-//reference StreamFlags::write, read, etc.
-//#define write write_win32
-
-ssize_t
-write_win32(int fildes, const void *buf, size_t nbyte)
-{
-   DWORD val=0;
-   if (GetFileType((HANDLE)fildes) == FILE_TYPE_DISK) 
-   {
-      if (!WriteFile((HANDLE)fildes, buf, nbyte, &val, nullptr))
-      {
-         //cerr << "write_win32: error " << GetLastError() << endl;
-
-         LPVOID lpMsgBuf;
-         FormatMessage( 
-             FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-             FORMAT_MESSAGE_FROM_SYSTEM | 
-             FORMAT_MESSAGE_IGNORE_INSERTS,
-             nullptr,
-             GetLastError(),
-             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-             (LPTSTR) &lpMsgBuf,
-             0,
-             nullptr
-         );
-
-         cerr << "write_win32() - Error! Message: " << (LPCTSTR)lpMsgBuf << "\n";
-         // Free the buffer.
-         LocalFree( lpMsgBuf );
-      }
-   } 
-   else 
-   {
-      OVERLAPPED overlap;
-      overlap.hEvent = nullptr;
-      if (!WriteFile((HANDLE)fildes, buf, nbyte, &val, &overlap))
-      {
-         if (!GetOverlappedResult((HANDLE)fildes, &overlap, &val, TRUE))
-         {
-            LPVOID lpMsgBuf;
-            FormatMessage( 
-                FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-                FORMAT_MESSAGE_FROM_SYSTEM | 
-                FORMAT_MESSAGE_IGNORE_INSERTS,
-                nullptr,
-                GetLastError(),
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                (LPTSTR) &lpMsgBuf,
-                0,
-                nullptr
-            );
-
-            cerr << "write_win32() - Error! Message: " << (LPCTSTR)lpMsgBuf << "\n";
-            // Free the buffer.
-            LocalFree( lpMsgBuf );
-
-         }
-      }
-   }
-   return val;
-}
-#endif
 
 int
 num_bytes_to_read(int fildes)
@@ -306,53 +230,6 @@ NetStream::NetStream(
 
 NetStream::~NetStream()
 { 
-}
-
-void
-NetStream::set_blocking(bool val) const
-{
-#ifdef WIN32
-   // XXX - add support for non-blocking i/o
-   if (Config::get_var_bool("PRINT_ERRS",false,true)) 
-      cerr << "NetStream::set_blocking - not supported" << endl;
-#else
-   int flags;
-   if((flags = fcntl(-1, F_GETFL, 0))<0) {
-      err_ret("NetStream::set_blocking: fcntl(..,F_GETFL)");
-      return;
-   }
-   if (val) {
-      flags &= ~O_NDELAY;
-   } else {
-      flags |= O_NDELAY;
-   }
-   if (fcntl(-1, F_SETFL, flags)<0) {
-      err_ret("NetStream::set_blocking: fcntl(..,F_GETFL)");
-      return;
-   }
-#endif
-}
-
-ssize_t 
-NetStream::write_to_net(
-   const void *buf, 
-   size_t      nbytes
-   ) const
-{
-   set_blocking(true);
-#ifdef WIN32
-   ssize_t   bytes_written = write_win32(-1, buf, nbytes);
-#else
-   ssize_t   bytes_written = ::write(-1, buf, nbytes);
-#endif
-   set_blocking(false);
-
-   if (bytes_written < 0) {
-      perror("NetStream::write_to_net: Warning: ");
-   } else if (bytes_written < (ssize_t)nbytes)
-      cerr << "Couldn't flush the buffer.  Some data wasn't written. (nbytes="
-           << nbytes << " written=" << bytes_written << ")\n";
-   return bytes_written;
 }
 
 

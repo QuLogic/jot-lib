@@ -51,10 +51,6 @@ class STDdstream {
 
    virtual ~STDdstream ()  {}
 
-   void    write(const char * const data, int count);
-   void    read (      char *       data, int count, int pop = 1);
-   void    flush();
-
    iostream* iostr() const { return _iostream; }
    istream*  istr()  const { return _iostream ? (istream*)_iostream : _istream; }
    ostream*  ostr()  const { return _iostream ? (ostream*)_iostream : _ostream; }
@@ -67,7 +63,6 @@ class STDdstream {
    void    write_newline()            { ws("\n");
                                         for (int i=0;i<_indent;i++) ws("\t"); }
    void    write_delim(char);
-   char    read_delim();
 
    bool    check_end_delim();
    bool    eof()   { return istr()->eof(); }
@@ -83,11 +78,6 @@ class STDdstream {
 
  protected:
 
-   virtual size_t send (const char *data, int count) { return _in_queue.sputn(data, count); }
-   virtual size_t recv (char *data, int count)       { return _out_queue.sgetn(data, count); }
-
-   stringbuf    _in_queue;
-   stringbuf    _out_queue;
    iostream*    _iostream;      // iostream, may be null
    istream*     _istream;       // just an in stream (used when iostream is null)
    ostream*     _ostream;       // just an out stream (used when iostream is null)
@@ -126,8 +116,6 @@ class STDdstream {
 };
 
 /* --------------------------      Methods     ----------------------------- */
-
-inline STDdstream & flush (STDdstream &ds)  { ds.flush(); return (ds); }
 
 STDdstream & operator >> (STDdstream &, char &);
 STDdstream & operator >> (STDdstream &, char *&);

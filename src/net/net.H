@@ -86,14 +86,6 @@ class NetStream : public STDdstream {
 
    bool       attached   (void) const  { return !!iostr(); }
 
- protected:
-   void        set_blocking(bool val) const;
-   ssize_t     write_to_net (const void *buf, size_t nbyte) const;
-   virtual size_t recv(char *, int)
-                 { cerr << "NetStream: recv unimplemented\n"; return 0; }
-   virtual size_t send(const char *data, int count)
-                 { return write_to_net((const void *)data, (size_t)count); }
-
  private:
    
    string   name_;
