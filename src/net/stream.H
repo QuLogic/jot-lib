@@ -70,7 +70,7 @@ class STDdstream {
    char    read_delim();
 
    bool    check_end_delim();
-   bool    eof()   { return istr() ? istr()->eof() : _in_queue.in_avail()<1; }
+   bool    eof()   { return istr()->eof(); }
 
    void    ws(const char *);
    bool    operator ! ()        const { return _fail; }

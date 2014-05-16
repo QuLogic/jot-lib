@@ -80,17 +80,11 @@ bool
 STDdstream::check_end_delim()
 {
    int brace;
-   if (istr()) {
-      std::istream::sentry s(*istr(), false);
-      if (s)
-         brace = istr()->rdbuf()->sgetc();
-      else
-         brace = EOF;
-   } else {
-      char c;
-      read(&c, sizeof(char), 0);
-      brace = c;
-   }
+   std::istream::sentry s(*istr(), false);
+   if (s)
+      brace = istr()->rdbuf()->sgetc();
+   else
+      brace = EOF;
    return brace != '}';
 }
 
@@ -204,32 +198,21 @@ STDdstream::flush (void)
 void
 STDdstream::read_close_delim()
 {
-   if (istr()) {
-       char brace;
-       (*this) >> brace;
-   } else { 
-       read_delim();
-   }
+   char brace;
+   (*this) >> brace;
 }
 
 void
 STDdstream::read_open_delim()
 {
-   if (istr()) {
-       char brace;
-       (*this) >> brace;
-   } else { 
-       read_delim();
-   }
+   char brace;
+   (*this) >> brace;
 }
 
 void
 STDdstream::write_delim(char c)
 {
-   if (ostr()) 
-      (*this) << c;
-   else
-      write(&c, sizeof(char));
+   (*this) << c;
 }
 
 char
