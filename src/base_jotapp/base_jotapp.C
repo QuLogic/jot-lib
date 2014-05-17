@@ -902,7 +902,6 @@ BaseJOTapp::timeout()
    // This method is the timeout callback, 
    // which is called periodically to redraw
 
-   _world->poll();      // does nothing (at least for desktop jot)
    _world->tick();      // frame observers get their shot at the CPU
    _world->draw();      // each view gets a draw call
 }

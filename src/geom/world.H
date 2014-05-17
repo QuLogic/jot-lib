@@ -167,8 +167,6 @@ virtual void      quit() const;              // quits program
           FRAMEobslist &scheduled ()          { return _scheduled; }
          CFRAMEobslist &scheduled ()  const   { return _scheduled; }
 
-   virtual void         poll(void);      // poll pollable dev's
-
    virtual void         draw(void);      // Draw all views
 
 

@@ -45,7 +45,6 @@
 #include "mesh/bmesh.H"
 #include "mesh/patch.H" //add patches -sginsber
 #include "dev/dev.H"
-#include "dev/devpoll.H"
 #include "mesh/gtexture.H"
 
 // Reference dev symbols

@@ -18,7 +18,6 @@
 #include "std/support.H"
 #include <GL/glew.h>
 
-#include "dev/devpoll.H"
 #include "disp/colors.H"
 #include "geom/body.H"
 #include "geom/text2d.H"
@@ -120,15 +119,6 @@ WORLD::WORLD()
    _threads = 0;
    _doMultithread = Config::get_var_bool("JOT_MULTITHREAD",false,true);
 #endif
-}
-
-// call 'exec_poll()' on all pollable device objects
-void
-WORLD::poll(void)
-{
-   vector<DEVpoll *> &p = DEVpoll::pollable();
-   for (auto & elem : p)
-      elem->exec_poll();
 }
 
 #ifdef USE_PTHREAD
