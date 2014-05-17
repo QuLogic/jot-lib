@@ -40,8 +40,7 @@ STDdstream::STDdstream():
    _ostream(nullptr),
    _indent(0),
    _name(""),
-   _fail(false),
-   _block(true)
+   _fail(false)
 {
 }
 
@@ -51,8 +50,7 @@ STDdstream::STDdstream(const string &name, STDdstream::StreamFlags flags):
    _ostream(nullptr),
    _indent(0),
    _name(name),
-   _fail(false),
-   _block(false)
+   _fail(false)
 {
    int readable  = flags & read;
    int writeable = flags & write;
@@ -94,8 +92,7 @@ STDdstream::STDdstream(iostream* s):
    _ostream(nullptr),
    _indent(0),
    _name(""),
-   _fail(false),
-   _block(true)
+   _fail(false)
 {
 }
 
@@ -105,8 +102,7 @@ STDdstream::STDdstream(istream* s):
    _ostream(nullptr),
    _indent(0),
    _name(""),
-   _fail(false),
-   _block(true)
+   _fail(false)
 {
 }
 
@@ -116,8 +112,7 @@ STDdstream::STDdstream(ostream* s):
    _ostream(s),
    _indent(0),
    _name(""),
-   _fail(false),
-   _block(true)
+   _fail(false)
 {
 }
 

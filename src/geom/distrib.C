@@ -814,8 +814,6 @@ DISTRIB::save(
 
    // Now save things...
 
-   s.block(false);  // Make sure we are non-blocking
-
    s << "#jot\n";
 
    //Bail out early if the IO already failed...

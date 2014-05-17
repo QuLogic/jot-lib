@@ -95,8 +95,6 @@ class STDdstream {
    void    ws(const char *);
    bool    operator ! ()        const { return _fail; }
    bool    fail       ()        const { return _fail; }
-   bool    block      ()        const { return _block; }
-   bool    block(bool flag)           { bool old=_block; _block = flag; return old; }
    // Get a string with spaces in it - the same as STDdstream >> string when
    // using a binary stream, but different when doing ascii
    string get_string_with_spaces();
@@ -111,7 +109,6 @@ class STDdstream {
  private:
    string       _name;
    bool         _fail;
-   bool         _block;
 
  //So _fail can get set by ascii IO...
    friend STDdstream & operator >> (STDdstream &, char &);
