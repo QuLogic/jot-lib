@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "net.H"
+#include "stream.H"
 
 int
 main()
 {
-   NetStream n1("/tmp/x", NetStream::write);
-   NetStream n2("/tmp/x", NetStream::read);
+   STDdstream n1("/tmp/x", STDdstream::write);
+   STDdstream n2("/tmp/x", STDdstream::read);
 
    n1 << 3 << string("hello") << 5 << NETflush;
 

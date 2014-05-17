@@ -57,12 +57,12 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
    static string  save_prefix()     { return instance()->save_prefix_(); }
 
    /******** LOADobs METHODS ********/
-   virtual void notify_preload (NetStream &, load_status_t &, bool);
-   virtual void notify_postload(NetStream &, load_status_t &, bool);
+   virtual void notify_preload (STDdstream &, load_status_t &, bool);
+   virtual void notify_postload(STDdstream &, load_status_t &, bool);
 
    /******** SAVEobs METHODS ********/
-   virtual void notify_presave (NetStream &, save_status_t &, bool);
-   virtual void notify_postsave(NetStream &, save_status_t &, bool);
+   virtual void notify_presave (STDdstream &, save_status_t &, bool);
+   virtual void notify_postsave(STDdstream &, save_status_t &, bool);
 
    /******** DATA_ITEM METHODS ********/
    DEFINE_RTTI_METHODS_BASE("IOManager", CDATA_ITEM*);

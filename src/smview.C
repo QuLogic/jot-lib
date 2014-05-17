@@ -865,7 +865,7 @@ do_save(string fullpath)
 
    cerr << "\ndo_save() - Saving...\n";
 
-   NetStream s(fullpath, NetStream::ascii_w);
+   STDdstream s(fullpath, STDdstream::ascii_w);
 
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
@@ -923,7 +923,7 @@ do_load(string fullpath)
 
    cerr << "\ndo_load() - Loading...\n";
 
-   NetStream s(fullpath, NetStream::ascii_r);
+   STDdstream s(fullpath, STDdstream::ascii_r);
 
    // Clear the scene first, then hope nothing goes wrong in
    // loading cuz if it does we should then unclear the

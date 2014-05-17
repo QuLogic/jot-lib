@@ -20,6 +20,7 @@
 
 #include "std/support.H"
 #include "std/time.H"
+#include "dev/tty.H"
 #include "geom/geom.H"
 #include "geom/command.H"
 
@@ -44,7 +45,6 @@ MAKE_SHARED_PTR(WORLD);
 //    Top level SCHEDULER, handles UNDO list, messages
 //    wraps object create/display/undisplay/deletion,
 //-----------------------------------------------
-class NetStream;
 class RenderThread;
 class ThreadSync;
 class WORLD : public SCHEDULER {

@@ -536,7 +536,7 @@ DISTRIB::DISTRIB()
 int
 DISTRIB::interpret(
    NETenum    code, 
-   NetStream *sender
+   STDdstream *sender
    )
 {
    int ret = 0;
@@ -589,11 +589,11 @@ DISTRIB::interpret(
 // load()
 /////////////////////////////////////
 //
-// Load data from a NetStream
+// Load data from a STDdstream
 //
 // Return true if failed, false if successful
 bool
-DISTRIB::load(NetStream &cli)
+DISTRIB::load(STDdstream &cli)
 {
 
    static int print_errs = (Config::get_var_bool("PRINT_ERRS",false,true) != 0);
@@ -620,7 +620,7 @@ DISTRIB::load(NetStream &cli)
 /////////////////////////////////////
 LOADobs::load_status_t
 DISTRIB::load_stream(
-   NetStream &s,
+   STDdstream &s,
    bool       full_scene)
 {
    bool ret;
@@ -629,7 +629,7 @@ DISTRIB::load_stream(
 
    string header;
 
-   if (s.attached())
+   if (s.iostr())
    {
       err_adv(debug, "DISTRIB::load_stream: Loading ASCII stream...");
 
@@ -691,7 +691,7 @@ DISTRIB::load_stream(
 /////////////////////////////////////
 void      
 DISTRIB::notify_load(
-   NetStream     &s,
+   STDdstream     &s,
    load_status_t &status,
    bool           full_scene
    )
@@ -711,7 +711,7 @@ DISTRIB::notify_load(
 /////////////////////////////////////
 void      
 DISTRIB::notify_save(
-   NetStream     &s,
+   STDdstream     &s,
    save_status_t &status,
    bool           full_scene
    )
@@ -731,7 +731,7 @@ DISTRIB::notify_save(
 /////////////////////////////////////
 SAVEobs::save_status_t
 DISTRIB::save_stream(
-   NetStream   &s, 
+   STDdstream   &s,
    bool         full_scene
    )
 {
@@ -739,7 +739,7 @@ DISTRIB::save_stream(
 
    SAVEobs::save_status_t result;
 
-   if (s.attached())
+   if (s.iostr())
    {
       err_adv(debug, "DISTRIB::save_stream: Saving ASCII stream...");
 
@@ -769,11 +769,11 @@ DISTRIB::save_stream(
 // save()
 /////////////////////////////////////
 //
-// Save data to a NetStream
+// Save data to a STDdstream
 //
 bool
 DISTRIB::save(
-   NetStream& s, 
+   STDdstream& s,
    bool       full_scene
    )
 {

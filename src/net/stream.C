@@ -23,6 +23,8 @@
  *
  * ------------------------------------------------------------------------- */
 
+#include <fstream>
+
 #include "std/support.H"
 #include "net.H"
 #include "stream.H"
@@ -37,9 +39,53 @@ STDdstream::STDdstream():
    _istream(nullptr),
    _ostream(nullptr),
    _indent(0),
+   _name(""),
    _fail(false),
    _block(true)
 {
+}
+
+STDdstream::STDdstream(const string &name, STDdstream::StreamFlags flags):
+   _iostream(nullptr),
+   _istream(nullptr),
+   _ostream(nullptr),
+   _indent(0),
+   _name(name),
+   _fail(false),
+   _block(false)
+{
+   int readable  = flags & read;
+   int writeable = flags & write;
+
+   fstream *fs = nullptr;
+   if (readable && writeable) {
+      // We don't expect this to happen...
+      // Because it's writeable, we'll truncate the file.
+      // But it's also readable; is truncating the desired behavior?
+      cerr << "STDdstream::STDdstream: warning: "
+           << "stream is readable AND writeable. Truncating file: "
+           << name
+           << endl;
+      fs = new fstream(name.c_str(), fstream::in | fstream::out | fstream::trunc);
+   } else if (writeable) {
+      fs = new fstream(name.c_str(), fstream::out | fstream::trunc);
+   } else if (readable) {
+      fs = new fstream(name.c_str(), fstream::in);
+   } else {
+      // this never happens, does it?
+      assert(0);
+   }
+   assert(fs);
+   if (!fs->is_open()) {
+      cerr << "STDdstream::STDdstream: error: failed to create fstream"
+           << endl;
+      delete fs;
+      fs = nullptr;
+   }
+
+   _iostream = fs;
+   _istream = dynamic_cast<istream*>(fs);
+   _ostream = dynamic_cast<ostream*>(fs);
 }
 
 STDdstream::STDdstream(iostream* s):
@@ -47,6 +93,7 @@ STDdstream::STDdstream(iostream* s):
    _istream(nullptr),
    _ostream(nullptr),
    _indent(0),
+   _name(""),
    _fail(false),
    _block(true)
 {
@@ -57,6 +104,7 @@ STDdstream::STDdstream(istream* s):
    _istream(s),
    _ostream(nullptr),
    _indent(0),
+   _name(""),
    _fail(false),
    _block(true)
 {
@@ -67,6 +115,7 @@ STDdstream::STDdstream(ostream* s):
    _istream(nullptr),
    _ostream(s),
    _indent(0),
+   _name(""),
    _fail(false),
    _block(true)
 {
@@ -150,6 +199,35 @@ STDdstream::get_string_with_spaces()
    return string(buf + start);
 }
 
+
+/* -------------------------------------------------------------------------
+ * DESCR   :	Stream pack/unpack for NETenum *
+ * ------------------------------------------------------------------------- */
+STDdstream &
+operator >> (STDdstream &ds, NETenum &m)
+{
+   int x;
+   ds >> x;
+   m = NETenum(x);
+   return ds;
+}
+
+STDdstream &
+operator << (STDdstream &ds, NETenum m)
+{
+   switch (m) {
+      case NETflush:
+      {
+         *ds.ostr() << endl;
+         ds.ostr()->flush();
+      }
+      default: {
+         int x(m);
+         ds << x;
+      }
+   }
+   return ds;
+}
 
 /* -------------------------------------------------------------------------
  * DESCR   :	Stream pack/unpack for char *

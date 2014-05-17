@@ -18,7 +18,7 @@
 #ifndef _JOT_GEOM_DISTRIB_H
 #define _JOT_GEOM_DISTRIB_H
 
-#include "net/net.H"      
+#include "net/stream.H"
 #include "disp/cam.H"
 #include "geom/geom.H" 
 #include "geom/world.H" 
@@ -47,20 +47,20 @@ class DISTRIB : public DISPobs,
  protected:   
    /******** INTERNAL MEMBER METHODS ********/
 
-   bool     load(NetStream &);
-   bool     save(NetStream &, bool full_scene);
+   bool     load(STDdstream &);
+   bool     save(STDdstream &, bool full_scene);
    
-   LOADobs::load_status_t  load_stream(NetStream &, bool full_scene);
-   SAVEobs::save_status_t  save_stream(NetStream &, bool full_scene);
+   LOADobs::load_status_t  load_stream(STDdstream &, bool full_scene);
+   SAVEobs::save_status_t  save_stream(STDdstream &, bool full_scene);
 
-   int       interpret(NETenum, NetStream *);
+   int       interpret(NETenum, STDdstream *);
 
    /******** *Obs METHODS ********/
  public:
    virtual void    notify         (CGELptr  &, int flag);
    virtual void    notify_exist   (CGELptr  &, int flag);
-   virtual void    notify_load    (NetStream &s, LOADobs::load_status_t &status, bool full_scene);
-   virtual void    notify_save    (NetStream &s, SAVEobs::save_status_t &status, bool full_scene);
+   virtual void    notify_load    (STDdstream &s, LOADobs::load_status_t &status, bool full_scene);
+   virtual void    notify_save    (STDdstream &s, SAVEobs::save_status_t &status, bool full_scene);
 
 };
 

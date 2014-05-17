@@ -26,6 +26,18 @@
 
 /* --------------------------      Types       ----------------------------- */
 
+enum NETenum {
+     NETadd_connection,
+     NETquit,
+     NETtext,
+     NETflush,
+     NETcontext,
+     NETidentify,
+     NETbroadcast,
+     NETbarrier,
+     NETswap_ack
+};
+
 /*
  * TITLE   :    Data Stream Class
  * DESCR   :	This class provides safe data transfer for objects and
@@ -45,11 +57,24 @@ class STDdstream {
    //   The STDdstream either contains an iostream, 
    //   or it contains just an istream or just an ostream.
  public:
+   enum StreamFlags {
+       write    = 0x1,
+       read     = 0x2,
+       rw       = 0x3,
+       ascii    = 0x4,
+       ascii_w  = 0x5,
+       ascii_r  = 0x6,
+       ascii_rw = 0x7
+   };
+
+   STDdstream(const string &name, StreamFlags);
    STDdstream(iostream* s);     // has both
    STDdstream( istream* i);     // has just istream
    STDdstream( ostream* o);     // has just ostream
 
-   virtual ~STDdstream ()  {}
+   ~STDdstream ()  {}
+
+   string    name(void) const { return _name; }
 
    iostream* iostr() const { return _iostream; }
    istream*  istr()  const { return _iostream ? (istream*)_iostream : _istream; }
@@ -84,6 +109,7 @@ class STDdstream {
    int          _indent;
 
  private:
+   string       _name;
    bool         _fail;
    bool         _block;
 
@@ -117,6 +143,7 @@ class STDdstream {
 
 /* --------------------------      Methods     ----------------------------- */
 
+STDdstream & operator >> (STDdstream &, NETenum &);
 STDdstream & operator >> (STDdstream &, char &);
 STDdstream & operator >> (STDdstream &, char *&);
 STDdstream & operator >> (STDdstream &, short &);
@@ -129,6 +156,7 @@ STDdstream & operator >> (STDdstream &, unsigned long &);
 STDdstream & operator >> (STDdstream &, float &);
 STDdstream & operator >> (STDdstream &, double &); 
 
+STDdstream & operator << (STDdstream &, NETenum);
 STDdstream & operator << (STDdstream &, char);
 STDdstream & operator << (STDdstream &, const char * const);
 STDdstream & operator << (STDdstream &, short);

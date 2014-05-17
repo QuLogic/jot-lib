@@ -179,11 +179,11 @@ class SAVEobs {
    static SAVEobs_list *postsaveobs_list(){ if (!_postsave_obs) _postsave_obs=new SAVEobs_list; return _postsave_obs; }
  public:
    virtual ~SAVEobs() {}
-   virtual void notify_presave (NetStream &s, save_status_t &status, bool full_scene) {}
-   virtual void notify_postsave(NetStream &s, save_status_t &status, bool full_scene) {}
-   virtual void notify_save    (NetStream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_presave (STDdstream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_postsave(STDdstream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_save    (STDdstream &s, save_status_t &status, bool full_scene) {}
 
-   static  void notify_save_obs(NetStream &s, save_status_t &status, bool full_scene);
+   static  void notify_save_obs(STDdstream &s, save_status_t &status, bool full_scene);
 
    /* ---  object save observer --- */
    void   presave_obs  ()  { presaveobs_list()->insert(this); }
@@ -224,11 +224,11 @@ class  LOADobs {
    static LOADobs_list *postloadobs_list(){ if (!_postload_obs) _postload_obs=new LOADobs_list; return _postload_obs; }
  public:
    virtual ~LOADobs() {}
-   virtual void notify_preload (NetStream &s, load_status_t &status, bool full_scene) {}
-   virtual void notify_postload(NetStream &s, load_status_t &status, bool full_scene) {}
-   virtual void notify_load    (NetStream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_preload (STDdstream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_postload(STDdstream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_load    (STDdstream &s, load_status_t &status, bool full_scene) {}
       
-   static  void notify_load_obs(NetStream &s, load_status_t &status, bool full_scene);
+   static  void notify_load_obs(STDdstream &s, load_status_t &status, bool full_scene);
 
    /* ---  object load observer --- */
    void   preload_obs ()        { preloadobs_list()->insert(this); }

@@ -137,7 +137,7 @@ IOManager::~IOManager()
 /////////////////////////////////////
 void      
 IOManager::notify_preload(
-   NetStream     &s,
+   STDdstream     &s,
    load_status_t &load_status,
    bool           full_scene
    )
@@ -274,7 +274,7 @@ IOManager::notify_preload(
 /////////////////////////////////////
 void      
 IOManager::notify_postload(
-   NetStream     &s,
+   STDdstream     &s,
    load_status_t &load_status,
    bool           full_scene
    )
@@ -386,7 +386,7 @@ IOManager::notify_postload(
 /////////////////////////////////////
 void      
 IOManager::notify_presave(
-   NetStream     &s,
+   STDdstream     &s,
    save_status_t &save_status,
    bool           full_scene
    )
@@ -519,7 +519,7 @@ IOManager::notify_presave(
 /////////////////////////////////////
 void      
 IOManager::notify_postsave(
-   NetStream     &s,
+   STDdstream     &s,
    save_status_t &save_status,
    bool           full_scene
    )

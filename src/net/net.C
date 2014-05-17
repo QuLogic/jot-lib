@@ -29,17 +29,8 @@
 #ifdef macosx
 #include <sys/ioctl.h>
 #endif
-#include <cstdlib>
-#include <cstdio>
-#include <cstring>
-#include <cassert>
-#include <cctype>
-#include <cerrno>
-
-#include <fstream>
 
 #include "std/support.H"
-#include "std/time.H"
 #include "net.H"
 
 /* Includes for ioctl (for num_bytes_to_read()) */
@@ -169,100 +160,6 @@ num_bytes_to_read(int fildes)
    }
    return num;
 #endif
-}
-
-
-static bool debug = Config::get_var_bool("DEBUG_NET_STREAM",false);
-
-/* -----------------------  NetStream Class ------------------------------- */
-
-NetStream::NetStream(
-   const string            &name,
-   NetStream::StreamFlags   flags) :
-      name_(name)
-{
-   int readable  = flags & read;
-   int writeable = flags & write;
-
-   fstream* fs = nullptr;
-   if (readable && writeable) {
-      // We don't expect this to happen...
-      // Because it's writeable, we'll truncate the file.
-      // But it's also readable; is truncating the desired behavior?
-      cerr << "NetStream::NetStream: warning: "
-           << "stream is readable AND writeable. Truncating file: "
-           << name
-           << endl;
-      fs = new fstream(name.c_str(), fstream::in | fstream::out | fstream::trunc);
-   } else if (writeable) {
-      if (debug) {
-         cerr << "NetStream::NetStream: creating fstream for writing: "
-              << name
-              << endl;
-      }
-      fs = new fstream(name.c_str(), fstream::out | fstream::trunc);
-   } else if (readable) {
-      if (debug) {
-         cerr << "NetStream::NetStream: creating fstream for reading: "
-              << name
-              << endl;
-      }
-      fs = new fstream(name.c_str(), fstream::in);
-   } else {
-      // this never happens, does it?
-      assert(0);
-   }
-   assert(fs);
-   if (!fs->is_open()) {
-      cerr << "NetStream::NetStream: error: failed to create fstream"
-           << endl;
-      delete fs;
-      fs = nullptr;
-   }
-
-   _iostream = fs;
-   _istream = dynamic_cast<istream*>(fs);
-   _ostream = dynamic_cast<ostream*>(fs);
-
-   block(false);
-}
-
-
-NetStream::~NetStream()
-{ 
-}
-
-
-STDdstream &
-operator >> (
-   STDdstream &ds,  
-   NETenum    &m
-   )
-{
-   int x;
-   ds >> x;
-   m = NETenum(x);
-   return ds;
-}
-
-
-STDdstream &
-operator << (
-   STDdstream &ds,  
-   NETenum     m
-   ) 
-{
-   switch (m) {
-       case NETflush  : 
-                        {
-                            *ds.ostr() << endl;
-                            ds.ostr()->flush();
-                        }
-        default        : { int x(m);
-                          ds << x;
-                        }
-   }
-   return ds;
 }
 
 

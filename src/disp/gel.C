@@ -385,7 +385,7 @@ DISPobs::notify_disp_obs(
 
 void 
 SAVEobs::notify_save_obs(
-   NetStream &s, 
+   STDdstream &s,
    save_status_t &status,
    bool full_scene) 
 {
@@ -402,7 +402,7 @@ SAVEobs::notify_save_obs(
 
 void
 LOADobs::notify_load_obs(
-   NetStream &s,
+   STDdstream &s,
    load_status_t &status,
    bool full_scene )
 {

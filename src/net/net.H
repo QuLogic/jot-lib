@@ -40,59 +40,6 @@
 #endif
 
 #include "std/support.H"
-#include "stream.H"
-#include "dev/tty.H"
-
-#include <set>
-
-enum NETenum { 
-     NETadd_connection, 
-     NETquit, 
-     NETtext, 
-     NETflush, 
-     NETcontext,
-     NETidentify,
-     NETbroadcast,
-     NETbarrier,
-     NETswap_ack
-};
-
-//!CLASS:  NetStream
-//:  Provides a channel for communications.
-//
-//          Clients can connect to another server by creating a
-//          NetStream.
-//
-//          NetServer returns new NetStream instances for
-//          each client connection.
-//
-//!USAGE: NetStream mycli("in.cs.brown.edu", 21);
-class NetStream : public STDdstream {
- public:
-   enum StreamFlags {
-       write    = 0x1,
-       read     = 0x2,
-       rw       = 0x3,
-       ascii    = 0x4,
-       ascii_w  = 0x5,
-       ascii_r  = 0x6,
-       ascii_rw = 0x7
-   };
-
-              NetStream (const string &name, StreamFlags);
-   virtual   ~NetStream();
-
-   string     name       (void) const  { return name_; }
-
-   bool       attached   (void) const  { return !!iostr(); }
-
- private:
-   
-   string   name_;
-};
-
-STDdstream & operator >> (STDdstream &,  NETenum    &);
-STDdstream & operator << (STDdstream &,  NETenum     );
 
 #ifdef WIN32
 ssize_t write_win32(int fildes, const void *buf, size_t nbyte);

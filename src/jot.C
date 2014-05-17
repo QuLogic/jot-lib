@@ -1506,7 +1506,7 @@ JOTapp::do_save(string fullpath)
 
    cerr << "\ndo_save() - Saving...\n";
 
-   NetStream s(fullpath, NetStream::ascii_w);
+   STDdstream s(fullpath, STDdstream::ascii_w);
 
    int old_cursor = VIEW::peek()->get_cursor();
    VIEW::peek()->set_cursor(WINSYS::CURSOR_WAIT);
@@ -1572,7 +1572,7 @@ JOTapp::do_load(string fullpath)
 {
    LOADobs::load_status_t status;
 
-   NetStream s(fullpath, NetStream::ascii_r);
+   STDdstream s(fullpath, STDdstream::ascii_r);
 
    string ext = get_extension(fullpath);
    assert(instance());
