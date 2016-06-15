@@ -22,8 +22,8 @@
 #ifndef RSURF_H_IS_INCLUDED
 #define RSURF_H_IS_INCLUDED
 
-#include "bsurface.H"
-#include "vert_pair.H"
+#include "bsurface.hpp"
+#include "vert_pair.hpp"
 
 /*****************************************************************
  * Rmeme:
@@ -91,7 +91,7 @@ class Rmeme : public VertMeme {
    //******** VertMeme VIRTUAL METHODS ********
 
    // Methods for generating vert memes in the child Bbase.
-   // (See meme.H for more info):
+   // (See meme.hpp for more info):
    virtual VertMeme* _gen_child(Lvert*)                                  const;
    virtual VertMeme* _gen_child(Lvert*, VertMeme*)                       const;
    virtual VertMeme* _gen_child(Lvert*, VertMeme*, VertMeme*, VertMeme*) const;

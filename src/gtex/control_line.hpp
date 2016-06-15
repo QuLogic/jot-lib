@@ -18,12 +18,12 @@
 #ifndef CONTROL_LINE_H_IS_INCLUDED
 #define CONTROL_LINE_H_IS_INCLUDED
 
-#include "geom/gl_view.H"
+#include "geom/gl_view.hpp"
 
-#include "solid_color.H"
-#include "toon_texture_1D.H" //less buggy toon shader
-#include "control_frame.H"
-#include "sils_texture.H"
+#include "solid_color.hpp"
+#include "toon_texture_1D.hpp" //less buggy toon shader
+#include "control_frame.hpp"
+#include "sils_texture.hpp"
 
 /**********************************************************************
  * ControlLineTexture:

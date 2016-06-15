@@ -22,8 +22,8 @@
 // PatchUI
 ////////////////////////////////////////////
 
-#include "mesh/patch.H"
-#include "gui/base_ui.H"
+#include "mesh/patch.hpp"
+#include "gui/base_ui.hpp"
 
 #include <vector>
 

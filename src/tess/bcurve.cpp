@@ -16,26 +16,26 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include <fstream>
-#include "disp/colors.H"                // Color::grey7 etc.
-#include "geom/gl_view.H"               // for GL_VIEW::init_line_smooth()
-#include "geom/world.H"
-#include "gtex/color_id_texture.H"      // for ColorIDTexture::draw_edges()
-#include "gtex/ref_image.H"             // for VisRefImage::lookup()
-#include "mesh/mi.H"
-#include "mlib/statistics.H"
-#include "npr/ffstexture.H"
-#include "npr/wpath_stroke.H"
-#include "std/config.H"
+#include "disp/colors.hpp"                // Color::grey7 etc.
+#include "geom/gl_view.hpp"               // for GL_VIEW::init_line_smooth()
+#include "geom/world.hpp"
+#include "gtex/color_id_texture.hpp"      // for ColorIDTexture::draw_edges()
+#include "gtex/ref_image.hpp"             // for VisRefImage::lookup()
+#include "mesh/mi.hpp"
+#include "mlib/statistics.hpp"
+#include "npr/ffstexture.hpp"
+#include "npr/wpath_stroke.hpp"
+#include "std/config.hpp"
 
-#include "ti.H"
-#include "action.H"
-#include "tess_cmd.H"
-#include "tex_body.H"
-#include "bcurve.H"
-#include "bsurface.H"
-#include "uv_surface.H"
-#include "skin.H"
-#include "skin_meme.H"
+#include "ti.hpp"
+#include "action.hpp"
+#include "tess_cmd.hpp"
+#include "tex_body.hpp"
+#include "bcurve.hpp"
+#include "bsurface.hpp"
+#include "uv_surface.hpp"
+#include "skin.hpp"
+#include "skin_meme.hpp"
 
 using namespace mlib;
 using namespace tess;
@@ -585,7 +585,7 @@ Bcurve::Bcurve(
 
    if (res_lev < 0) {
       err_adv(debug_res_level,
-              "Bcurve.C line %d Warning using default res level = 3", __LINE__);
+              "Bcurve.cpp line %d Warning using default res level = 3", __LINE__);
       res_lev = 3;
    }
    set_res_level(res_lev);
@@ -747,7 +747,7 @@ Bcurve::Bcurve(
 
    if (res_lev < 0) {
       err_adv(debug_res_level,
-              "Bcurve.C line %d Warning using default res level = 3", __LINE__);
+              "Bcurve.cpp line %d Warning using default res level = 3", __LINE__);
       res_lev = 3;
    }
    set_res_level(res_lev);
@@ -875,7 +875,7 @@ Bcurve::Bcurve(
 
    if (res_lev < 0) {
       err_adv(debug_res_level,
-              "Bcurve.C line %d Warning using default res level = 3", __LINE__);
+              "Bcurve.cpp line %d Warning using default res level = 3", __LINE__);
       res_lev = 3;
    }
    set_res_level(res_lev);

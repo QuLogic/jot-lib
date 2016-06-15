@@ -18,9 +18,9 @@
 #ifndef SIMPLEX_FILTER_H_IS_INCLUDED
 #define SIMPLEX_FILTER_H_IS_INCLUDED
 
-#include "bsimplex.H"
+#include "bsimplex.hpp"
 
-// Base class SimplexFilter is defined in Bsimplex.H
+// Base class SimplexFilter is defined in Bsimplex.hpp
 
 /*****************************************************************
  * BitSetSimplexFilter:

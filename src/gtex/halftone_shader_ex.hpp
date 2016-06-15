@@ -22,7 +22,7 @@
 #ifndef HALFTONE_SHADER_EX_IS_INCLUDED
 #define HALFTONE_SHADER_EX_IS_INCLUDED
 
-#include "glsl_shader.H"
+#include "glsl_shader.hpp"
 
 
 // --compile_time;

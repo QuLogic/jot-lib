@@ -18,7 +18,7 @@
 #ifndef FFS_CONTROL_FRAME_H_IS_INCLUDED
 #define FFS_CONTROL_FRAME_H_IS_INCLUDED
 
-#include "gtex/control_frame.H"
+#include "gtex/control_frame.hpp"
 
 /**********************************************************************
  * ControlFrameTexture:

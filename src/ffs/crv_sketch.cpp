@@ -17,23 +17,23 @@
  *****************************************************************/
 
 /*!
- *  \file crv_sketch.C
+ *  \file crv_sketch.cpp
  *  \brief Contains the definition of the CRV_SKETCH widget.
  *
  *  \ingroup group_FFS
- *  \sa crv_sketch.H
+ *  \sa crv_sketch.hpp
  *
  */
 
-#include "geom/gl_util.H"       // for GL_COL()
-#include "geom/gl_view.H"       // for GL_VIEW::init_line_smooth()
-#include "geom/world.H"         // for WORLD::undisplay()
-#include "gtex/ref_image.H"     // for VisRefImage
-#include "mesh/mi.H"            
-#include "std/config.H" 
+#include "geom/gl_util.hpp"       // for GL_COL()
+#include "geom/gl_view.hpp"       // for GL_VIEW::init_line_smooth()
+#include "geom/world.hpp"         // for WORLD::undisplay()
+#include "gtex/ref_image.hpp"     // for VisRefImage
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
 
-#include "crv_sketch.H"
-#include "tess/tess_cmd.H"
+#include "crv_sketch.hpp"
+#include "tess/tess_cmd.hpp"
 
 using namespace mlib;
 
@@ -1367,7 +1367,7 @@ CRV_SKETCH::re_match(PIXEL_list& drawnlist,
 bool  
 CRV_SKETCH::is_cusp(CWpt& a, CWpt& p, CWpt& b, CWvec& n)
 {
-   // this is the same version as in sweep.C in draw
+   // this is the same version as in sweep.cpp in draw
 
    // Returns true if the sequence of points a, p, b
    // projected to image space lies all on one side of the

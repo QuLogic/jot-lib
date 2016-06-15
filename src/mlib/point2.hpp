@@ -19,7 +19,7 @@
 #define POINT2_H_IS_INCLUDED
 
 /*!
- *  \file Point2.H
+ *  \file Point2.hpp
  *  \brief Contains the declarations of the Point2 and Point2list classes.
  *  \ingroup group_MLIB
  *
@@ -27,9 +27,9 @@
 
 #include <cmath>
 
-#include "mlib/pointlist.H"
-#include "std/support.H"
-#include "mlib/vec2.H"
+#include "mlib/pointlist.hpp"
+#include "std/support.hpp"
+#include "mlib/vec2.hpp"
 
 #include <vector>
 
@@ -280,6 +280,6 @@ class Point2list : public Pointlist<L,P,V,S> {
 } // namespace mlib
  
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "point2.C"
+#include "point2.cpp"
 #endif
 #endif // POINT2_H_IS_INCLUDED

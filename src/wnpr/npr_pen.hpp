@@ -23,8 +23,8 @@
 ////////////////////////////////////////////
 
 
-#include "stroke/gesture_stroke_drawer.H"
-#include "gest/pen.H"
+#include "stroke/gesture_stroke_drawer.hpp"
+#include "gest/pen.hpp"
 
 class NPRPenUI;
 class NPRTexture;

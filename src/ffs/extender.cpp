@@ -17,30 +17,30 @@
  *****************************************************************/
 
 /*!
- *  \file extender.C
+ *  \file extender.cpp
  *  \brief Contains the definition of the EXTENDER widget.
  *
  *  \ingroup group_FFS
- *  \sa extender.H
+ *  \sa extender.hpp
  *
  */
-#include "disp/colors.H"
-#include "geom/gl_util.H"       // for GL_COL()
-#include "geom/gl_view.H"       // for GL_VIEW::init_line_smooth()
-#include "geom/world.H"         // for WORLD::undisplay()
-#include "gtex/basic_texture.H" // for GLStripCB
-#include "gtex/ref_image.H"     // for VisRefImage
-#include "npr/ffstexture.H"
-#include "tess/primitive.H"
-#include "tess/uv_surface.H"
-#include "tess/tex_body.H"
-#include "tess/ti.H"
-#include "std/config.H"
+#include "disp/colors.hpp"
+#include "geom/gl_util.hpp"       // for GL_COL()
+#include "geom/gl_view.hpp"       // for GL_VIEW::init_line_smooth()
+#include "geom/world.hpp"         // for WORLD::undisplay()
+#include "gtex/basic_texture.hpp" // for GLStripCB
+#include "gtex/ref_image.hpp"     // for VisRefImage
+#include "npr/ffstexture.hpp"
+#include "tess/primitive.hpp"
+#include "tess/uv_surface.hpp"
+#include "tess/tex_body.hpp"
+#include "tess/ti.hpp"
+#include "std/config.hpp"
 
-#include "ffs/draw_pen.H"
-#include "ffs/floor.H"
+#include "ffs/draw_pen.hpp"
+#include "ffs/floor.hpp"
 
-#include "extender.H"
+#include "extender.hpp"
 
 using namespace mlib;
 using namespace tess;
@@ -881,7 +881,7 @@ EXTENDER::line_cb(CGESTUREptr& gest, DrawState*& s)
 //! possibly rejects the stroke. Otherwise it creates a Primitive
 //! instance and calls the member function Primitive::extend() to
 //! generate the new geometry. For more info see comments in
-//! tess/primitive.H above the declaration of Primitive::extend().
+//! tess/primitive.hpp above the declaration of Primitive::extend().
 int  
 EXTENDER::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 {

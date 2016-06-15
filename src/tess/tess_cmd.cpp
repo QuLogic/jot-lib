@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "map3d/param_list.H"
-#include "mesh/patch.H"
-#include "tess_cmd.H"
-#include "ti.H"
+#include "map3d/param_list.hpp"
+#include "mesh/patch.hpp"
+#include "tess_cmd.hpp"
+#include "ti.hpp"
 
 /*****************************************************************
  * MOVE_CMD

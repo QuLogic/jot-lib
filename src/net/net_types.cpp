@@ -16,6 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/support.H"
-#include "net_types.H"
+#include "std/support.hpp"
+#include "net_types.hpp"
 

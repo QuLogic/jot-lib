@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/ray.H"
-#include "disp/colors.H"
-#include "geom/world.H"   // XXX - for debugging
-#include "mlib/statistics.H"
-#include "std/config.H"
-#include "lpatch.H"
+#include "disp/ray.hpp"
+#include "disp/colors.hpp"
+#include "geom/world.hpp"   // XXX - for debugging
+#include "mlib/statistics.hpp"
+#include "std/config.hpp"
+#include "lpatch.hpp"
 
 using namespace mlib;
 
@@ -29,7 +29,7 @@ using namespace std;
 
 // add LMESH to decoder hash table:
 /*
-// XXX - Moved this to bmesh.C
+// XXX - Moved this to bmesh.cpp
 // to work around a static initialization
 // order problem with BMESHobs not having
 // its static members available before

@@ -18,9 +18,9 @@
 #ifndef TABLET_H
 #define TABLET_H
 
-#include "std/support.H"
-#include "dev/tty.H"
-#include "dev/dev.H"
+#include "std/support.hpp"
+#include "dev/tty.hpp"
+#include "dev/dev.hpp"
 
 class TabletDesc {
  public :

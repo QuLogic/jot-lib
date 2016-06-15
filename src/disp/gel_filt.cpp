@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/gel_filt.H"
+#include "disp/gel_filt.hpp"
 
 MAKE_NET_HASHVAR(WIDGET_3D, int, 0);
 

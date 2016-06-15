@@ -35,7 +35,7 @@
 #ifndef EDGE_FRAME_H_IS_INCLUDED
 #define EDGE_FRAME_H_IS_INCLUDED
 
-#include "simplex_frame.H"
+#include "simplex_frame.hpp"
 
 /*****************************************************************
  * EdgeFrame:

@@ -19,14 +19,14 @@
 #define POINT3I_H_IS_INCLUDED
 
 /*!
- *  \file Point3i.H
+ *  \file Point3i.hpp
  *  \brief Contains the definition of the Point3i class.
  *  \ingroup group_MLIB
  *
  */
 
 #include <cmath>
-#include "std/support.H"
+#include "std/support.hpp"
 
 namespace mlib {
 

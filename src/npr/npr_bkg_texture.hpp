@@ -19,8 +19,8 @@
 #ifndef NPR_BKG_TEXTURE_H_IS_INCLUDED
 #define NPR_BKG_TEXTURE_H_IS_INCLUDED
 
-#include "geom/texturegl.H"    // for ConventionalTexture
-#include "gtex/basic_texture.H"
+#include "geom/texturegl.hpp"    // for ConventionalTexture
+#include "gtex/basic_texture.hpp"
 
 class NPRBkgTexCB : public GLStripCB {
  public:

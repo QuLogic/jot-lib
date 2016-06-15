@@ -18,8 +18,8 @@
 #ifndef IMPOSTOR_H_IS_INCLUDED
 #define IMPOSTOR_H_IS_INCLUDED
 
-#include "mesh/bmesh.H" 
-#include "disp/gel.H"
+#include "mesh/bmesh.hpp"
+#include "disp/gel.hpp"
 
 class Impostor : public GEL {
  public:

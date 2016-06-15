@@ -18,8 +18,8 @@
 #ifndef UV_SURFACE_H_IS_INCLUDED
 #define UV_SURFACE_H_IS_INCLUDED
 
-#include "map3d/map2d3d.H"
-#include "bsurface.H"
+#include "map3d/map2d3d.hpp"
+#include "bsurface.hpp"
 
 class UVmeme;
 /*****************************************************************
@@ -161,7 +161,7 @@ class UVsurface: public Bsurface {
    // Generate quads between 2 rows of vertices with given uv-coords:
    void build_band(CBvert_list&, CBvert_list&, CUVpt_list&, mlib::CUVpt_list&);
 
-   // build a fan around the given vertex (diagram in uv_surface.C)
+   // build a fan around the given vertex (diagram in uv_surface.cpp)
    void build_fan(Bvert*, CUVpt&, CBvert_list&, mlib::CUVpt_list&);
 };
 typedef const UVsurface CUVsurface;
@@ -244,7 +244,7 @@ class UVmeme : public VertMeme {
    //******** VertMeme VIRTUAL METHODS ********
 
    // Methods for generating vert memes in the child Bbase.
-   // (See meme.H for more info):
+   // (See meme.hpp for more info):
    virtual VertMeme* _gen_child(Lvert*)                                  const;
    virtual VertMeme* _gen_child(Lvert*, VertMeme*)                       const;
    virtual VertMeme* _gen_child(Lvert*, VertMeme*, VertMeme*, VertMeme*) const;

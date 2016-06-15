@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 // comments to be added
-#include "sps.H"
+#include "sps.hpp"
 #include <queue>
 #include <list>
 

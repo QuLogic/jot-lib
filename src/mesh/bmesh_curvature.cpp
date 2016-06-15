@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file bmesh_curvature.C
+ *  \file bmesh_curvature.cpp
  *  \brief Contains the implementation of the curvature computation classes
  *  for the BMESH class.
  *
@@ -33,16 +33,16 @@
 
 using namespace std;
 
-#include "mlib/points.H"
-#include "mlib/linear_sys.H"
+#include "mlib/points.hpp"
+#include "mlib/linear_sys.hpp"
 
 using namespace mlib;
 
-#include "mesh/bvert.H"
-#include "mesh/bface.H"
-#include "mesh/bmesh.H"
+#include "mesh/bvert.hpp"
+#include "mesh/bface.hpp"
+#include "mesh/bmesh.hpp"
 
-#include "mesh/bmesh_curvature.H"
+#include "mesh/bmesh_curvature.hpp"
 
 /* Helper Functions for Computing Curvature */
 

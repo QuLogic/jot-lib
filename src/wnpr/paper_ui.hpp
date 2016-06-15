@@ -18,7 +18,7 @@
 #ifndef PAPER_UI_H_IS_INCLUDED
 #define PAPER_UI_H_IS_INCLUDED
 
-#include "geom/file_listbox.H"
+#include "geom/file_listbox.hpp"
 
 /*****************************************************************
  * PaperUI

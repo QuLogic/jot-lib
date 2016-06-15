@@ -28,8 +28,8 @@
 //
 ////////////////////////////////////////////
 
-#include "npr/hatching_group.H"
-#include "manip/manip.H"
+#include "npr/hatching_group.hpp"
+#include "manip/manip.hpp"
 
 #include <vector>
 

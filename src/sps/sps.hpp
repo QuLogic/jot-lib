@@ -18,7 +18,7 @@
 // comments to be added
 #ifndef SPS_H_IS_INCLUDED
 #define SPS_H_IS_INCLUDED
-#include "mesh/bmesh.H"
+#include "mesh/bmesh.hpp"
 
 
 class OctreeNode : public BBOX {

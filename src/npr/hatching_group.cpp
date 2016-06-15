@@ -30,7 +30,7 @@
 
 
 
-#include "npr/hatching_group.H"
+#include "npr/hatching_group.hpp"
 
 /*****************************************************************
  * HatchingGroupParams

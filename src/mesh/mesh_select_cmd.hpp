@@ -19,18 +19,18 @@
 #define MESH_SELECT_CMD_H_IS_INCLUDED
 
 /*!
- *  \file mesh_select_cmd.H
+ *  \file mesh_select_cmd.hpp
  *  \brief Contains the definition of the MESH_SELECT_CMD class.  A COMMAND class
  *  for selecting faces, edges and vertices on a mesh.
  *
- *  \sa mesh_select_cmd.C
+ *  \sa mesh_select_cmd.cpp
  *
  */
 
-#include "geom/command.H"
-#include "mesh/bvert.H"
-#include "mesh/bedge.H"
-#include "mesh/bface.H"
+#include "geom/command.hpp"
+#include "mesh/bvert.hpp"
+#include "mesh/bedge.hpp"
+#include "mesh/bface.hpp"
 
 MAKE_SHARED_PTR(MESH_SELECT_CMD);
 

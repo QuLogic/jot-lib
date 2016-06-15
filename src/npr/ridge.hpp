@@ -18,8 +18,8 @@
 #ifndef RIDGE_H_IS_INCLUDED
 #define RIDGE_H_IS_INCLUDED
 
-#include "gtex/glsl_shader.H"
-#include "gtex/tone_shader.H"
+#include "gtex/glsl_shader.hpp"
+#include "gtex/tone_shader.hpp"
 
 /**********************************************************************
  * RidgeShader:

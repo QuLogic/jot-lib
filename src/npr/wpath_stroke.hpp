@@ -18,12 +18,12 @@
 #ifndef WPATH_STROKE_HEADER
 #define WPATH_STROKE_HEADER
 
-#include "gtex/ref_image.H"
-#include "geom/text2d.H"   
-#include "npr/zxedge_stroke_texture.H"
-#include "std/config.H" 
-#include "stroke/sil_stroke_pool.H"
-#include "stroke/base_stroke.H"
+#include "gtex/ref_image.hpp"
+#include "geom/text2d.hpp"
+#include "npr/zxedge_stroke_texture.hpp"
+#include "std/config.hpp"
+#include "stroke/sil_stroke_pool.hpp"
+#include "stroke/base_stroke.hpp"
 
 /*****************************************************************
  * Wpath_stroke -

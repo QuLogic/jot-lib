@@ -32,13 +32,13 @@
 #include <cctype>      // isspace()
 #include <fstream>
 
-#include "geom/gl_view.H"
-#include "gtex/paper_effect.H"
-#include "mesh/ioblock.H"
-#include "net/io_manager.H"
-#include "std/config.H"
+#include "geom/gl_view.hpp"
+#include "gtex/paper_effect.hpp"
+#include "mesh/ioblock.hpp"
+#include "net/io_manager.hpp"
+#include "std/config.hpp"
 
-#include "npr_texture.H"
+#include "npr_texture.hpp"
 
 using namespace mlib;
 

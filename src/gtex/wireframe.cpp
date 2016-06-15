@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "std/config.H"
-#include "geom/gl_view.H"
-#include "mesh/bfilters.H"
-#include "wireframe.H"
-#include "ref_image.H" // for debugging d2d samples
+#include "disp/colors.hpp"
+#include "std/config.hpp"
+#include "geom/gl_view.hpp"
+#include "mesh/bfilters.hpp"
+#include "wireframe.hpp"
+#include "ref_image.hpp" // for debugging d2d samples
 
 static bool debug = Config::get_var_bool("DEBUG_WIREFRAME", false);
 

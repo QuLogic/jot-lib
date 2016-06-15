@@ -18,11 +18,11 @@
 #ifndef _JOT_GEOM_DISTRIB_H
 #define _JOT_GEOM_DISTRIB_H
 
-#include "net/stream.H"
-#include "disp/cam.H"
-#include "geom/geom.H" 
-#include "geom/world.H" 
-#include "geom/winsys.H" 
+#include "net/stream.hpp"
+#include "disp/cam.hpp"
+#include "geom/geom.hpp"
+#include "geom/world.hpp"
+#include "geom/winsys.hpp"
 
 /*****************************************************************
  * Distrib

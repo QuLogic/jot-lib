@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "file.H" 
+#include "file.hpp"
 
 #ifndef WIN32
 #include <dirent.h>

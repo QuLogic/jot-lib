@@ -18,8 +18,8 @@
 #ifndef KEY_LINE_H_IS_INCLUDED
 #define KEY_LINE_H_IS_INCLUDED
 
-#include "basic_texture.H"
-#include "glsl_toon.H" 
+#include "basic_texture.hpp"
+#include "glsl_toon.hpp"
 
 class SolidColorTexture;
 class GLSLToonShader;

@@ -19,13 +19,13 @@
 #define LINE_H_IS_INCLUDED
 
 /*!
- *  \file Line.H
+ *  \file Line.hpp
  *  \brief Contains the definition of the Line class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "mlib/global.H"
+#include "mlib/global.hpp"
 
 namespace mlib {
 

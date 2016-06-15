@@ -25,8 +25,8 @@
  *      the files bar0.sm, bar1.sm, and bar2.sm.
  **********************************************************************/
 #include <fstream>
-#include "std/config.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 int 
 main(int argc, char *argv[])

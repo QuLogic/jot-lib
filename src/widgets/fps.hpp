@@ -18,9 +18,9 @@
 #ifndef FPS_H_IS_INCLUDED
 #define FPS_H_IS_INCLUDED
 
-#include "std/stop_watch.H"
-#include "disp/gel.H"
-#include "geom/text2d.H"
+#include "std/stop_watch.hpp"
+#include "disp/gel.hpp"
+#include "geom/text2d.hpp"
 
 /*****************************************************************
  * FPS:

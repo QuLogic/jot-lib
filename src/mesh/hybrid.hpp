@@ -18,7 +18,7 @@
 #ifndef HYBRID_H_IS_INCLUDED
 #define HYBRID_H_IS_INCLUDED
 
-#include "subdiv_calc.H"
+#include "subdiv_calc.hpp"
 
 //
 // A Bface is a triangle if it is non-null and

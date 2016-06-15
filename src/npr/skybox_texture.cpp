@@ -18,10 +18,10 @@
 //skybox texture
 //by Karol Szerszen
 
-#include "geom/gl_view.H"
-#include "mesh/uv_data.H"
-#include "skybox_texture.H"
-#include "gtex/gl_sphir_tex_coord_gen.H"
+#include "geom/gl_view.hpp"
+#include "mesh/uv_data.hpp"
+#include "skybox_texture.hpp"
+#include "gtex/gl_sphir_tex_coord_gen.hpp"
 
 /*****************************************************************
  * StripTexCoordsCB:

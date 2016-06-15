@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "std/config.H"
-#include "pattern_pen_ui.H"
-#include "gesture_cell_drawer.H"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
+#include "pattern_pen_ui.hpp"
+#include "gesture_cell_drawer.hpp"
 
 using namespace mlib;
 

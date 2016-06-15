@@ -18,12 +18,12 @@
 #ifndef BBASE_H_IS_INCLUDED
 #define BBASE_H_IS_INCLUDED
 
-#include "map3d/bnode.H"
-#include "mesh/lmesh.H"
-#include "std/stop_watch.H"
-#include "std/config.H"
+#include "map3d/bnode.hpp"
+#include "mesh/lmesh.hpp"
+#include "std/stop_watch.hpp"
+#include "std/config.hpp"
 
-#include "meme.H"
+#include "meme.hpp"
 
 #include <vector>
 

@@ -16,18 +16,18 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file appear.C
+ *  \file appear.cpp
  *  \brief Contains the implementation of the APPEAR class.
  *
- *  \sa appear.H
+ *  \sa appear.hpp
  *
  */
 
-#include "appear.H"
-#include "net/stream.H"
-#include "net/net_types.H"
-#include "geom/texturegl.H"
-#include "std/config.H"
+#include "appear.hpp"
+#include "net/stream.hpp"
+#include "net/net_types.hpp"
+#include "geom/texturegl.hpp"
+#include "std/config.hpp"
 
 void
 APPEAR::get_texture(TAGformat &d)

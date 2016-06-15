@@ -18,8 +18,8 @@
 #ifndef _GESTURE_CARRIER_DRAWER_H_
 #define _GESTURE_CARRIER_DRAWER_H_
 
-#include "gest/gesture.H"
-#include "mlib/points.H"
+#include "gest/gesture.hpp"
+#include "mlib/points.hpp"
 
 
 /*****************************************************************

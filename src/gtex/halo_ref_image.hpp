@@ -18,9 +18,9 @@
 #ifndef HALO_IMAGE_H_IS_INCLUDED
 #define HALO_IMAGE_H_IS_INCLUDED
 
-#include "ref_image.H"
-#include "halo_blur_shader.H"
-#include "util.H"
+#include "ref_image.hpp"
+#include "halo_blur_shader.hpp"
+#include "util.hpp"
 
 #include <map>
 

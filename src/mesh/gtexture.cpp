@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/gtexture.H"
-#include "mesh/patch.H"
-#include "mlib/points.H"
+#include "mesh/gtexture.hpp"
+#include "mesh/patch.hpp"
+#include "mlib/points.hpp"
 
 const string GTexture::_type_name("GTEXTURE");
 const string GTexture::_begin_tag(string("#BEGIN ") + _type_name + string("\n"));

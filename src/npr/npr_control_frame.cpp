@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "mesh/ledge_strip.H"
-#include "mesh/bfilters.H"
-#include "stroke/base_stroke.H"
-#include "npr_control_frame.H"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "mesh/ledge_strip.hpp"
+#include "mesh/bfilters.hpp"
+#include "stroke/base_stroke.hpp"
+#include "npr_control_frame.hpp"
 
 using mlib::Wpt_list;
 using mlib::NDCpt;

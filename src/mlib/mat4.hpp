@@ -18,15 +18,15 @@
 #ifndef MAT4_H_IS_INCLUDED
 #define MAT4_H_IS_INCLUDED
 
-/*! \file Mat4.H
+/*! \file Mat4.hpp
  *  \brief Contains the declaration of the Mat4 class, a 4x4 matrix class.
  *  \ingroup group_MLIB
  *
  */
  
-#include "mlib/vec4.H"
-#include "mlib/point3.H"
-#include "mlib/line.H"
+#include "mlib/vec4.hpp"
+#include "mlib/point3.hpp"
+#include "mlib/line.hpp"
 
 namespace mlib {
 
@@ -387,7 +387,7 @@ std::ostream &operator <<(std::ostream &os, const Mat4<M,P,V,L,Q> &x);
 } // namespace mlib
 
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "mat4.C"
+#include "mat4.cpp"
 #endif
 
 #endif // MAT4_H_IS_INCLUDED

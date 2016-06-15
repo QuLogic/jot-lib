@@ -18,16 +18,16 @@
 #ifndef GEOM_H_IS_INCLUDED
 #define GEOM_H_IS_INCLUDED
 
-#include "disp/gel.H"
-#include "disp/ref_img_drawer.H"
-#include "mlib/points.H"
-#include "net/data_item.H"
-#include "net/stream.H"
-#include "std/support.H"
+#include "disp/gel.hpp"
+#include "disp/ref_img_drawer.hpp"
+#include "mlib/points.hpp"
+#include "net/data_item.hpp"
+#include "net/stream.hpp"
+#include "std/support.hpp"
 
-#include "geom/body.H"
-#include "geom/fsa.H"
-#include "geom/appear.H"
+#include "geom/body.hpp"
+#include "geom/fsa.hpp"
+#include "geom/appear.hpp"
 
 // this defines a GEOMptr which inherits (sort of) from a
 // GELptr.  Thus, GEOMptr's can be used wherever GELptr's are.
@@ -262,7 +262,7 @@ STDdstream  &operator>>(STDdstream &d, GEOMptr &p);
 
 // ---------- define observers for GEOM operations
 
-#include "geom/geom_obs.H"
+#include "geom/geom_obs.hpp"
 
 // ---------- define hash variables for GEOM objects
 

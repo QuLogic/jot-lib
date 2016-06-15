@@ -21,10 +21,10 @@
 #ifndef MESH_OP_H_IS_INCLUDED
 #define MESH_OP_H_IS_INCLUDED
 
-#include "geom/command.H"
-#include "mesh/lmesh.H"
-#include "skin.H"
-#include "skin_meme.H"
+#include "geom/command.hpp"
+#include "mesh/lmesh.hpp"
+#include "skin.hpp"
+#include "skin_meme.hpp"
 
 #include <vector>
 

@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/view.H"
-#include "disp/colors.H"
-#include "geom/world.H"
-#include "gtex/util.H"
-#include "std/config.H"
+#include "disp/view.hpp"
+#include "disp/colors.hpp"
+#include "geom/world.hpp"
+#include "gtex/util.hpp"
+#include "std/config.hpp"
 
-#include "tess/mesh_op.H"
-#include "tess/skin.H"
-#include "tess/skin_meme.H"
-#include "tess/subdiv_updater.H"
-#include "tess/mesh_op.H"
+#include "tess/mesh_op.hpp"
+#include "tess/skin.hpp"
+#include "tess/skin_meme.hpp"
+#include "tess/subdiv_updater.hpp"
+#include "tess/mesh_op.hpp"
 
 using namespace mlib;
 

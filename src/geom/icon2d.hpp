@@ -18,13 +18,13 @@
 #ifndef ICON2D_H_IS_INCLUDED
 #define ICON2D_H_IS_INCLUDED
 
-#include "std/support.H"
-#include "disp/cam.H"
-#include "disp/ray.H"
-#include "geom/geom.H"
-#include "disp/view.H"
-#include "dlhandler/dlhandler.H"
-#include "geom/texturegl.H"
+#include "std/support.hpp"
+#include "disp/cam.hpp"
+#include "disp/ray.hpp"
+#include "geom/geom.hpp"
+#include "disp/view.hpp"
+#include "dlhandler/dlhandler.hpp"
+#include "geom/texturegl.hpp"
 
 // this defines a ICON2Dptr which inherits (sort of) from a
 // GEOMptr.  Thus, ICON2Dptr's can be used wherever GEOMptr's are.

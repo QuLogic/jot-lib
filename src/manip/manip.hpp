@@ -18,12 +18,12 @@
 #ifndef MANIP_H_IS_INCLUDED
 #define MANIP_H_IS_INCLUDED
 
-#include "std/support.H"
-#include "dev/dev.H"
-#include "disp/view.H"
-#include "disp/cam.H"
-#include "geom/geom.H" // Defines State as State_t <- Consider moving this?
-#include "geom/fsa.H" // for Interactor<>, State_t
+#include "std/support.hpp"
+#include "dev/dev.hpp"
+#include "disp/view.hpp"
+#include "disp/cam.hpp"
+#include "geom/geom.hpp" // Defines State as State_t <- Consider moving this?
+#include "geom/fsa.hpp" // for Interactor<>, State_t
 
 class UPobs {
    public :

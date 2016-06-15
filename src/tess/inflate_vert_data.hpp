@@ -18,7 +18,7 @@
 #ifndef INFLATE_VERT_DATA_H_IS_INCLUDED
 #define INFLATE_VERT_DATA_H_IS_INCLUDED
 
-#include "mesh/lface.H"
+#include "mesh/lface.hpp"
 
 #include <vector>
 

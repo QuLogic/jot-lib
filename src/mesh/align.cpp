@@ -19,8 +19,8 @@
  *      read an .sm file, transform it so its principal directions
  *      align with world X, Y, Z axes.
  **********************************************************************/
-#include "std/config.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 inline double 
 cross_mult(int i, int j, const vector<Wvec>& v)

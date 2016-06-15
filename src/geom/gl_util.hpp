@@ -19,18 +19,18 @@
 #define GL_UTIL_H_IS_INCLUDED
 
 /*!
- *  \file gl_util.H
+ *  \file gl_util.hpp
  *  \brief Contains several OpenGL related utility functions.
  *
  */
 
 #include <cassert>
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/color.H"
-#include "mlib/points.H"
+#include "disp/color.hpp"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 

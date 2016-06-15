@@ -19,15 +19,15 @@
 #define CIRCLE_WIDGET_H_IS_INCLUDED
 
 /*!
- *  \file circle_widget.H
+ *  \file circle_widget.hpp
  *  \brief Contains the declaration of the CIRCLE_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa circle_widget.C
+ *  \sa circle_widget.cpp
  *
  */
 
-#include "gest/draw_widget.H"
+#include "gest/draw_widget.hpp"
 
 MAKE_PTR_SUBC(CIRCLE_WIDGET,DrawWidget);
 typedef const CIRCLE_WIDGET    CCIRCLE_WIDGET;

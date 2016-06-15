@@ -19,13 +19,13 @@
 #define POINTLIST_H_IS_INCLUDED
 
 /*!
- *  \file Pointlist.H
+ *  \file Pointlist.hpp
  *  \brief Contains the declaration of the Pointlist class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 #include <vector>
 
@@ -279,7 +279,7 @@ class Pointlist : public vector<P> {
 } // namespace mlib
 
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "pointlist.C"
+#include "pointlist.cpp"
 #endif
 
 #endif // POINTLIST_H_IS_INCLUDED

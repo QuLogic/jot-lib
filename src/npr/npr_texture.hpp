@@ -33,19 +33,19 @@
 #include <set>
 #include <vector>
 
-#include "wnpr/sil_ui.H"
-#include "gtex/ref_image.H"
-#include "mesh/patch.H"
-#include "gtex/sils_texture.H"     
-#include "gtex/solid_color.H" 
-#include "npr/feature_stroke_texture.H"
-#include "npr/hatching_collection.H"
-#include "npr/npr_bkg_texture.H"
-#include "npr/npr_solid_texture.H"
-#include "gtex/xtoon_texture.H"
-#include "gtex/glsl_xtoon.H"
-#include "npr/npr_control_frame.H"
-#include "std/config.H"
+#include "wnpr/sil_ui.hpp"
+#include "gtex/ref_image.hpp"
+#include "mesh/patch.hpp"
+#include "gtex/sils_texture.hpp"
+#include "gtex/solid_color.hpp"
+#include "npr/feature_stroke_texture.hpp"
+#include "npr/hatching_collection.hpp"
+#include "npr/npr_bkg_texture.hpp"
+#include "npr/npr_solid_texture.hpp"
+#include "gtex/xtoon_texture.hpp"
+#include "gtex/glsl_xtoon.hpp"
+#include "npr/npr_control_frame.hpp"
+#include "std/config.hpp"
 
 class DecalLineStroke;
 class BaseStroke;

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "subdiv_calc.H"
-#include "lmesh.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "subdiv_calc.hpp"
+#include "lmesh.hpp"
+#include "mi.hpp"
 
 Ledge::~Ledge() 
 {

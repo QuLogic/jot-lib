@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "creases_texture.H"
+#include "geom/gl_view.hpp"
+#include "creases_texture.hpp"
 
 /**********************************************************************
  * CreasesTexture:

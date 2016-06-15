@@ -19,10 +19,10 @@
 #define _RECT_CELL_H_
 
 #include <vector>
-#include "gest/gesture.H"
-#include "pattern/gesture_cell.H"
-#include "pattern/gesture_stroke.H"
-#include "mlib/points.H"
+#include "gest/gesture.hpp"
+#include "pattern/gesture_cell.hpp"
+#include "pattern/gesture_stroke.hpp"
+#include "mlib/points.hpp"
 
 class RectCell : public GestureCell{
 public:

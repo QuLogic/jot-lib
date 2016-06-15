@@ -18,8 +18,8 @@
 #ifndef SIL_STROKE_POOL_HEADER
 #define SIL_STROKE_POOL_HEADER
 
-#include "stroke/b_stroke_pool.H"
-#include "npr/zxedge_stroke_texture.H"
+#include "stroke/b_stroke_pool.hpp"
+#include "npr/zxedge_stroke_texture.hpp"
 
 #define CSilStrokePool const SilStrokePool
 

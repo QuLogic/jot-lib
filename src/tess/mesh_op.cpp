@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/world.H"
-#include "std/config.H"
-#include "mesh/mi.H"
+#include "disp/colors.hpp"
+#include "geom/world.hpp"
+#include "std/config.hpp"
+#include "mesh/mi.hpp"
 
-#include "tess/bbase.H"
-#include "tess/mesh_op.H"
+#include "tess/bbase.hpp"
+#include "tess/mesh_op.hpp"
 
 using namespace mlib;
 
@@ -830,7 +830,7 @@ mesh_changed(BMESHptr mesh, int line_num)
    if (mesh)
       mesh->changed(BMESH::TOPOLOGY_CHANGED);
    else
-      err_adv(debug, "mesh_op.C:%d: warning: mesh is null", line_num);
+      err_adv(debug, "mesh_op.cpp:%d: warning: mesh is null", line_num);
 }
 
 bool

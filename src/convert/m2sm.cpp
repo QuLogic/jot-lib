@@ -18,8 +18,8 @@
 /**********************************************************************
  *   convert from Hugues Hoppe's .m format to jot .sm format.
  **********************************************************************/
-#include "std/config.H"
-#include "mesh/mi.H"
+#include "std/config.hpp"
+#include "mesh/mi.hpp"
 
 void
 read_vert(Wpt_list& pts) 

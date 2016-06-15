@@ -19,8 +19,8 @@
 #ifndef LVERT_STRIP_H_IS_INCLUDED
 #define LVERT_STRIP_H_IS_INCLUDED
 
-#include "vert_strip.H"         // base class
-#include "lface.H"              // subdivision faces, edges, verts
+#include "vert_strip.hpp"         // base class
+#include "lface.hpp"              // subdivision faces, edges, verts
 
 /**********************************************************************
  * LvertStrip:

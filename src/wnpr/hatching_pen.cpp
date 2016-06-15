@@ -28,12 +28,12 @@
 
 
 
-#include "npr/npr_texture.H"
-#include "npr/hatching_group.H"
+#include "npr/npr_texture.hpp"
+#include "npr/hatching_group.hpp"
 
-#include "hatching_pen.H"
+#include "hatching_pen.hpp"
 
-#include "hatching_pen_ui.H"
+#include "hatching_pen_ui.hpp"
 
 using mlib::NDCpt;
 using mlib::NDCpt_list;
@@ -177,7 +177,7 @@ HatchingPen::deactivate(State* s)
 }
 
 
-#include "mesh/uv_data.H"
+#include "mesh/uv_data.hpp"
 
 /////////////////////////////////////
 // key()
@@ -807,7 +807,7 @@ HatchingPen::handle_event(CEvent&, State* &)
    return 0;
 }
 
-#include "stroke/base_stroke.H"
+#include "stroke/base_stroke.hpp"
 
 /////////////////////////////////////
 // update_gesture_proto()

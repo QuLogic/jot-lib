@@ -17,25 +17,25 @@
  *****************************************************************/
 
 /*!
- *  \file roof.C
+ *  \file roof.cpp
  *  \brief Contains the definition of the ROOF widget.
  *
  *  \ingroup group_FFS
- *  \sa roof.H
+ *  \sa roof.hpp
  *
  */
-#include "disp/colors.H"
-#include "geom/gl_util.H"       // for GL_COL()
-#include "geom/gl_view.H"       // for GL_VIEW::init_line_smooth()
-#include "geom/world.H"         // for WORLD::undisplay()
-#include "gtex/basic_texture.H" // for GLStripCB
-#include "gtex/ref_image.H"     // for VisRefImage
-#include "tess/primitive.H"
-#include "tess/ti.H"
+#include "disp/colors.hpp"
+#include "geom/gl_util.hpp"       // for GL_COL()
+#include "geom/gl_view.hpp"       // for GL_VIEW::init_line_smooth()
+#include "geom/world.hpp"         // for WORLD::undisplay()
+#include "gtex/basic_texture.hpp" // for GLStripCB
+#include "gtex/ref_image.hpp"     // for VisRefImage
+#include "tess/primitive.hpp"
+#include "tess/ti.hpp"
 
-#include "ffs/floor.H"
+#include "ffs/floor.hpp"
 
-#include "roof.H"
+#include "roof.hpp"
 
 using namespace mlib;
 using namespace tess;

@@ -25,11 +25,11 @@
 
 #include <set>
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 #include <fcntl.h>
 
-#include "std/platform.H" //#include <windows.h>
+#include "std/platform.hpp" //#include <windows.h>
 
 #ifdef WIN32
 typedef unsigned int speed_t;

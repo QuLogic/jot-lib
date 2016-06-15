@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file pen_manager.C
+ *  \file pen_manager.cpp
  *  \brief Contains the implementation of the PenManager class.
  *
- *  \sa pen_manager.H pen.H pen.C
+ *  \sa pen_manager.hpp pen.hpp pen.cpp
  *
  */
 
@@ -27,9 +27,9 @@
 
 using namespace std;
 
-#include "gest/pen.H"
+#include "gest/pen.hpp"
 
-#include "pen_manager.H"
+#include "pen_manager.hpp"
 
 PenManager::~PenManager()
 {

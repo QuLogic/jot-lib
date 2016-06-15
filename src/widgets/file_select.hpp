@@ -18,8 +18,8 @@
 #ifndef FILE_SELECT_H_INCLUDED
 #define FILE_SELECT_H_INCLUDED
 
-#include "std/support.H"
-#include "std/config.H"
+#include "std/support.hpp"
+#include "std/config.hpp"
 
 /*****************************************************************
  * FileSelect

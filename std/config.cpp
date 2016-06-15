@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "config.H"
-#include "error.H"
+#include "config.hpp"
+#include "error.hpp"
 
 /*****************************************************************
  * Config

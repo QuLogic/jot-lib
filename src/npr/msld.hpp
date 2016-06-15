@@ -18,7 +18,7 @@
 #ifndef MSLD_H_IS_INCLUDED
 #define MSLD_H_IS_INCLUDED
 
-#include "gtex/glsl_shader.H"
+#include "gtex/glsl_shader.hpp"
 
 /**********************************************************************
  * MSLDShader:

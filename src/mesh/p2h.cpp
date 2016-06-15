@@ -19,9 +19,9 @@
  *  read a "paper texture" png file and output a corresponding
  *  halftone screen. (take alpha values and write to rgb channels).
  **********************************************************************/
-#include "geom/image.H"
-#include "std/config.H"
-#include "mi.H"
+#include "geom/image.hpp"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 #include <string>
 

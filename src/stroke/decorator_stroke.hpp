@@ -18,7 +18,7 @@
 #ifndef DECORATOR_STROKE_HEADER
 #define DECORATOR_STROKE_HEADER
 
-#include "view_stroke.H"
+#include "view_stroke.hpp"
 
 #include <vector>
 

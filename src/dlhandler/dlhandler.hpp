@@ -17,9 +17,9 @@
  *****************************************************************/
 #ifndef _JOT_DLHANDLER_DLHANDLER_H
 #define _JOT_DLHANDLER_DLHANDLER_H
-#include "std/support.H"
-#include "disp/view.H"
-#include "std/thread_mutex.H"
+#include "std/support.hpp"
+#include "disp/view.hpp"
+#include "std/thread_mutex.hpp"
 
 //
 // Keep track of display list and whether it is valid

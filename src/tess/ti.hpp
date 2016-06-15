@@ -23,13 +23,13 @@
  *
  *      Convenient inlined methods for the tess library.
  *****************************************************************/
-#include "disp/view.H"
-#include "gtex/basic_texture.H"
-#include "mesh/mi.H"
-#include "tess/tex_body.H"
-#include "tess/bsurface.H"
-#include "tess/tess_cmd.H"
-#include "tess/disk_map.H"
+#include "disp/view.hpp"
+#include "gtex/basic_texture.hpp"
+#include "mesh/mi.hpp"
+#include "tess/tex_body.hpp"
+#include "tess/bsurface.hpp"
+#include "tess/tess_cmd.hpp"
+#include "tess/disk_map.hpp"
 
 namespace tess {
 
@@ -183,7 +183,7 @@ class InflateCreaseFilter : public SimplexFilter {
 // returns the distinct normals separated by edges of the
 // selected type (or by border edges)
 //
-// XXX - move to bvert.H
+// XXX - move to bvert.hpp
 //
 inline vector<Wvec>
 get_norms(CBvert* v, CSimplexFilter& filter)

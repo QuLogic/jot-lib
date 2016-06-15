@@ -18,7 +18,7 @@
 #ifndef ZXSILS_TEXTURE_H_IS_INCLUDED
 #define ZXSILS_TEXTURE_H_IS_INCLUDED
 
-#include "color_id_texture.H"
+#include "color_id_texture.hpp"
 
 
 /**********************************************************************

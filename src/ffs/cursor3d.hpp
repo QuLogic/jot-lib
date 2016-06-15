@@ -19,18 +19,18 @@
 #define CURSOR3D_H_IS_INCLUDED
 
 /*!
- *  \file cursor3d.H
+ *  \file cursor3d.hpp
  *  \brief Contains the declaration of the Cursor3D class.
  *
  *  \ingroup group_FFS
- *  \sa cursor3d.C
+ *  \sa cursor3d.cpp
  *
  */
 
 #include <map>
-#include "disp/colors.H"
-#include "gest/draw_widget.H"
-#include "tess/tess_cmd.H"
+#include "disp/colors.hpp"
+#include "gest/draw_widget.hpp"
+#include "tess/tess_cmd.hpp"
 
 using namespace mlib;
 

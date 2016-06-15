@@ -18,7 +18,7 @@
 #ifndef MEME_H_IS_INCLUDED
 #define MEME_H_IS_INCLUDED
 
-#include "mesh/lface.H"
+#include "mesh/lface.hpp"
 
 #include <vector>
 

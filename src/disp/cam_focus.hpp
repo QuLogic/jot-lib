@@ -18,7 +18,7 @@
 #ifndef CAM_FOCUS_H_IS_INCLUDED
 #define CAM_FOCUS_H_IS_INCLUDED
 
-#include "disp/view.H"
+#include "disp/view.hpp"
 
 
 

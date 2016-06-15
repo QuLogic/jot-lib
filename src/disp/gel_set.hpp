@@ -26,7 +26,7 @@
 #ifndef _GEL_SET_H_
 #define _GEL_SET_H_
 
-#include "disp/gel.H"
+#include "disp/gel.hpp"
 
 MAKE_PTR_SUBC(GELset,GEL);
 typedef const GELset CGELset;

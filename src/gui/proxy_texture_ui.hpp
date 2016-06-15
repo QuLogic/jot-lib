@@ -22,8 +22,8 @@
 // HacthingUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
-#include "gui/base_ui.H"
+#include "disp/view.hpp"
+#include "gui/base_ui.hpp"
 
 #include <vector>
 

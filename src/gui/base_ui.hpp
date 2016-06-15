@@ -18,7 +18,7 @@
 #ifndef _BASE_UI_H_IS_INCLUDED_
 #define _BASE_UI_H_IS_INCLUDED_
 
-#include "net/rtti.H"
+#include "net/rtti.hpp"
 
 #include <map>
 

@@ -16,23 +16,23 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file mode_name.C
+ *  \file mode_name.cpp
  *  \brief Contains the implementation of the ModeName class.
  *
- *  \sa mode_name.H
+ *  \sa mode_name.hpp
  *
  */
 
-#include "std/support.H"
-#include "net/rtti.H"
-#include "mlib/points.H"
+#include "std/support.hpp"
+#include "net/rtti.hpp"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 
-#include "geom/world.H"
-#include "geom/text2d.H"
+#include "geom/world.hpp"
+#include "geom/text2d.hpp"
 
-#include "mode_name.H"
+#include "mode_name.hpp"
 
 /*!
  *  \brief A specialization of the TEXT2D class that is used by the ModeName

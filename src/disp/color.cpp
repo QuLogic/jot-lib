@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "disp/colors.H"
+#include "std/config.hpp"
+#include "disp/colors.hpp"
 
 // Color constants
 CCOLOR COLOR::black(0.0,0.0,0.0);

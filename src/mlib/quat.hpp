@@ -19,13 +19,13 @@
 #define QUAT_H_IS_INCLUDED
 
 /*!
- *  \file Quat.H
+ *  \file Quat.hpp
  *  \brief Contains the definition of the Quat class.  A quaternion class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "mlib/global.H"
+#include "mlib/global.hpp"
 
 namespace mlib {
 
@@ -162,7 +162,7 @@ operator<<(ostream &os, const Quat<QUAT,M,P,V,L> &p)
 } // namespace mlib
 
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "quat.C"
+#include "quat.cpp"
 #endif
 
 #endif // QUAT_H_IS_INCLUDED

@@ -21,10 +21,10 @@
 #ifndef MI_H_HAS_BEEN_INCLUDED
 #define MI_H_HAS_BEEN_INCLUDED
 
-#include "std/run_avg.H"
+#include "std/run_avg.hpp"
 
-#include "mesh/bfilters.H"
-#include "mesh/lmesh.H"
+#include "mesh/bfilters.hpp"
+#include "mesh/lmesh.hpp"
 
 /*****************************************************************
  * Bsimplex:
@@ -227,7 +227,7 @@ is_maximal(CBedge_list& edges)
 }
 
 /*****************************************************************
- * from inflate.C
+ * from inflate.cpp
  *****************************************************************/
 #ifndef log2
 #ifndef macosx

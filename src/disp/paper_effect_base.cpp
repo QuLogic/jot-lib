@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "paper_effect_base.H"
+#include "paper_effect_base.hpp"
 
 /////////////////////////////////////
 // Static Variable Initialization

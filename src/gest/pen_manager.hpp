@@ -19,16 +19,16 @@
 #define PEN_MANAGER_H_IS_INCLUDED
 
 /*!
- *  \file pen_manager.H
+ *  \file pen_manager.hpp
  *  \brief Contains the defintion of the PenManager class.
  *
- *  \sa pen_manager.C pen.H pen.C
+ *  \sa pen_manager.cpp pen.hpp pen.cpp
  *
  */
 
 #include <vector>
 
-#include "geom/fsa.H"
+#include "geom/fsa.hpp"
 
 class Pen;
 

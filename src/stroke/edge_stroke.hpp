@@ -18,9 +18,9 @@
 #ifndef EDGE_STROKE_HEADER
 #define EDGE_STROKE_HEADER
 
-#include "std/config.H"
-#include "stroke/outline_stroke.H"
-#include "mesh/edge_strip.H"
+#include "std/config.hpp"
+#include "stroke/outline_stroke.hpp"
+#include "mesh/edge_strip.hpp"
 
 class Patch;
 

@@ -18,8 +18,8 @@
 
 #define _INCLUDE_XOPEN_SOURCE
 /* -----------------------------  Ifdefs  ---------------------------------- */
-#include "std/config.H"
-#include "tty.H"
+#include "std/config.hpp"
+#include "tty.hpp"
 
 #ifdef sgi
 #include <bstring.h>  /* sgi */

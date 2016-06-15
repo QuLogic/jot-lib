@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/patch.H"
-#include "mesh/mi.H"
-#include "mesh/uv_data.H"
-#include "std/config.H"
+#include "mesh/patch.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/uv_data.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 

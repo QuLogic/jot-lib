@@ -18,7 +18,7 @@
 #ifndef _COORD_FRAME_H_IS_INCLUDED_
 #define _COORD_FRAME_H_IS_INCLUDED_
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 #include <set>
 

@@ -18,7 +18,7 @@
 #ifndef CONFIGCLASS_H
 #define CONFIGCLASS_H
 
-#include "support.H"
+#include "support.hpp"
 #include <set>
 
 /**********************************************************************

@@ -17,19 +17,19 @@
  *****************************************************************/
 #include <map>
 
-#include "halftone_shader_ex.H"
-#include "gtex/gl_extensions.H"
-#include "gtex/util.H"
-#include "gtex/glsl_toon.H"             // Temp for testing ref images.
-#include "gtex/ref_image.H"
-#include "mesh/patch.H"
+#include "halftone_shader_ex.hpp"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/util.hpp"
+#include "gtex/glsl_toon.hpp"             // Temp for testing ref images.
+#include "gtex/ref_image.hpp"
+#include "mesh/patch.hpp"
 
-#include "mesh/uv_data.H"
-#include "mesh/lmesh.H"
-#include "mesh/ledge_strip.H"
-#include "mesh/vert_attrib.H"
+#include "mesh/uv_data.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/ledge_strip.hpp"
+#include "mesh/vert_attrib.hpp"
 
-#include "gl_sphir_tex_coord_gen.H"
+#include "gl_sphir_tex_coord_gen.hpp"
 
 
 

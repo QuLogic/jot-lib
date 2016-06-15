@@ -18,8 +18,8 @@
 #ifndef GESTURE_STROKE_DRAWER_H_HAS_BEEN_INCLUDED
 #define GESTURE_STROKE_DRAWER_H_HAS_BEEN_INCLUDED
 
-#include "gest/gesture.H"
-#include "stroke/base_stroke.H"
+#include "gest/gesture.hpp"
+#include "stroke/base_stroke.hpp"
 
 
 /*****************************************************************

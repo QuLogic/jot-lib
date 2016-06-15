@@ -34,7 +34,7 @@
 #ifndef _STROKE_GEN_H_
 #define _STROKE_GEN_H_
 
-#include "base_stroke.H"
+#include "base_stroke.hpp"
 
 #include <vector>
 

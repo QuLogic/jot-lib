@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Point3.C
+ *  \file Point3.cpp
  *  \brief Contains the implementation of non-inline functions of the Point3 class
  *  and the Point3list class.
  *  \ingroup group_MLIB
@@ -24,11 +24,11 @@
  */
 
 #include <climits>
-#include "mlib/point3.H"
-#include "mlib/vec3.H"
-#include "mlib/mat4.H"
-#include "mlib/plane.H"
-#include "mlib/line.H"
+#include "mlib/point3.hpp"
+#include "mlib/vec3.hpp"
+#include "mlib/mat4.hpp"
+#include "mlib/plane.hpp"
+#include "mlib/line.hpp"
 
 template <typename P>
 MLIB_INLINE

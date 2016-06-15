@@ -18,7 +18,7 @@
 #ifndef __SHADOW_H__
 #define __SHADOW_H__
 
-#include "geom/geom.H"
+#include "geom/geom.hpp"
 
 #ifndef SHADOW_PTR_DEFINED
 #define SHADOW_PTR_DEFINED

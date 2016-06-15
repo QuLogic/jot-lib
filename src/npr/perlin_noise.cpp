@@ -28,7 +28,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <climits>
-#include "std/support.H"
+#include "std/support.hpp"
 
 typedef struct vect {
     float x, y, z, w;

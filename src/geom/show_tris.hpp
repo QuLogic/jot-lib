@@ -18,9 +18,9 @@
 #ifndef SHOW_TRIS_H_IS_INCLUDED
 #define SHOW_TRIS_H_IS_INCLUDED
 
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "geom/gl_util.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/gl_util.hpp"
 
 #include <vector>
 

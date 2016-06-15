@@ -17,17 +17,17 @@
  *****************************************************************/
 #include <map>
 
-#include "mesh/mi.H"
-#include "dots_ex.H"
-#include "gtex/glsl_toon.H"
-#include "gtex/ref_image.H"
+#include "mesh/mi.hpp"
+#include "dots_ex.hpp"
+#include "gtex/glsl_toon.hpp"
+#include "gtex/ref_image.hpp"
 
-#include "mesh/uv_data.H"
-#include "mesh/lmesh.H"
-#include "mesh/ledge_strip.H"
+#include "mesh/uv_data.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/ledge_strip.hpp"
 
-#include "mesh/vert_attrib.H"
-#include "gl_sphir_tex_coord_gen.H"
+#include "mesh/vert_attrib.hpp"
+#include "gl_sphir_tex_coord_gen.hpp"
 
 
 

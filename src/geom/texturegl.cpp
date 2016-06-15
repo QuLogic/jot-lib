@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "gtex/gl_extensions.H"
+#include "disp/colors.hpp"
+#include "gtex/gl_extensions.hpp"
 
-#include "texturegl.H"
-#include "appear.H"
-#include "gl_view.H"
+#include "texturegl.hpp"
+#include "appear.hpp"
+#include "gl_view.hpp"
 
 #include <GL/glu.h>
 

@@ -19,8 +19,8 @@
 #ifndef OUTLINE_STROKE_HEADER
 #define OUTLINE_STROKE_HEADER
 
-#include "stroke/base_stroke.H"
-#include "mesh/patch.H"
+#include "stroke/base_stroke.hpp"
+#include "mesh/patch.hpp"
 
 // This class exists to allow customized offset scaling for mak's
 // outline strokes.  Eventually, these policies will probably be

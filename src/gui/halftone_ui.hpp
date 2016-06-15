@@ -22,11 +22,11 @@
 // HalftoneUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
-#include "gui/base_ui.H"
+#include "disp/view.hpp"
+#include "gui/base_ui.hpp"
 
-#include "patch_selection_ui.H"
-#include "gtex/haftone_tx.H"
+#include "patch_selection_ui.hpp"
+#include "gtex/haftone_tx.hpp"
 
 #include <vector>
 

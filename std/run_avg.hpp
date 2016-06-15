@@ -18,7 +18,7 @@
 #ifndef RUNNING_AVG_IS_INCLUDED
 #define RUNNING_AVG_IS_INCLUDED
 
-#include "std/platform.H"
+#include "std/platform.hpp"
 
 /*****************************************************************
  * RunningAvg:

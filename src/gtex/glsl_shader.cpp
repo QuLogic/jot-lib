@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include <fstream>
-#include "gtex/gl_extensions.H"
-#include "gtex/util.H"
-#include "geom/gl_util.H"
-#include "mesh/patch.H"
-#include "paper_effect.H"
-#include "glsl_shader.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/util.hpp"
+#include "geom/gl_util.hpp"
+#include "mesh/patch.hpp"
+#include "paper_effect.hpp"
+#include "glsl_shader.hpp"
 
 using namespace mlib;
 

@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Quat.C
+ *  \file Quat.cpp
  *  \brief Contains the implementation of the non-inline functions of the Quat
  *  class.
  *  \ingroup group_MLIB
@@ -25,7 +25,7 @@
  *  (available at ftp://ftp.cis.upenn.edu/pub/graphics/shoemake/quatut.ps.Z).
  *
  */
-#include "mlib/quat.H"
+#include "mlib/quat.hpp"
 
 /* Constructors */
 

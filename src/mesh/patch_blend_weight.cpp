@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "patch_blend_weight.H"
+#include "patch_blend_weight.hpp"
 
 void 
 PatchBlendWeight::compute_all(CBMESHptr mesh, int num_passes)

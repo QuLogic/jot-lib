@@ -18,7 +18,7 @@
 #ifndef SKEL_FRAME_H_IS_INCLUDED
 #define SKEL_FRAME_H_IS_INCLUDED
 
-#include "mesh/vert_frame.H"
+#include "mesh/vert_frame.hpp"
 
 /************************************************************
  * SkelFrame:

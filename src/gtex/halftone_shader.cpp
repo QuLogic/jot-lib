@@ -16,13 +16,13 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "gtex/gl_extensions.H"
-#include "gtex/util.H"
-#include "gtex/glsl_toon.H"             // Temp for testing ref images.
-#include "gtex/ref_image.H"
-//#include "geom/gl_util.H"
-#include "mesh/patch.H"
-#include "halftone_shader.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/util.hpp"
+#include "gtex/glsl_toon.hpp"             // Temp for testing ref images.
+#include "gtex/ref_image.hpp"
+//#include "geom/gl_util.hpp"
+#include "mesh/patch.hpp"
+#include "halftone_shader.hpp"
 
 /**********************************************************************
  * HalftoneShader:

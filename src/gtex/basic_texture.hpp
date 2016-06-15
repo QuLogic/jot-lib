@@ -18,10 +18,10 @@
 #ifndef _JOT_GTEX_BASIC_TEXTURE_H
 #define _JOT_GTEX_BASIC_TEXTURE_H
 
-#include "dlhandler/dlhandler.H"
-#include "mesh/gtexture.H"
-#include "std/config.H"
-#include "gtex/util.H"
+#include "dlhandler/dlhandler.hpp"
+#include "mesh/gtexture.hpp"
+#include "std/config.hpp"
+#include "gtex/util.hpp"
 
 /**********************************************************************
  *

@@ -19,20 +19,20 @@
 // ProxyTextureUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "proxy_pattern/proxy_texture.H"
-#include "proxy_texture_ui.H"
-#include "color_ui.H"
-#include "patch_selection_ui.H"
+#include "proxy_pattern/proxy_texture.hpp"
+#include "proxy_texture_ui.hpp"
+#include "color_ui.hpp"
+#include "patch_selection_ui.hpp"
 
-#include "gui.H"
+#include "gui.hpp"
 
 using namespace mlib;
 

@@ -18,7 +18,7 @@
 #ifndef IO_MANAGER_H_IS_INCLUDED
 #define IO_MANAGER_H_IS_INCLUDED
 
-#include "disp/gel.H"
+#include "disp/gel.hpp"
 
 /*****************************************************************
  * IOManager

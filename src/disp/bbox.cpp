@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
-#include "disp/bbox.H"
-#include "disp/gel.H"
-#include "disp/ray.H"
-#include "disp/view.H"
+#include "std/support.hpp"
+#include "disp/bbox.hpp"
+#include "disp/gel.hpp"
+#include "disp/ray.hpp"
+#include "disp/view.hpp"
 
 using namespace mlib;
 
@@ -399,7 +399,7 @@ BBOX2D::dist(
          XYpt b = _max;
          XYpt c = _min;
          XYpt d = _min + XYvec(w,0);
-         // XXX - need method in mlib/line.H: Line::dist_to_seg(const P&)
+         // XXX - need method in mlib/line.hpp: Line::dist_to_seg(const P&)
          dist = ::min(dist, XYline(a,b).project_to_seg(p).dist(p));
          dist = ::min(dist, XYline(a,c).project_to_seg(p).dist(p));
          dist = ::min(dist, XYline(c,d).project_to_seg(p).dist(p));
@@ -496,7 +496,7 @@ BBOXpix::dist(CPIXEL   &p) const
     PIXEL b = _max;
     PIXEL c = _min;
     PIXEL d = _min + VEXEL(w,0);
-    // XXX - need method in mlib/line.H: Line::dist_to_seg(const P&)
+    // XXX - need method in mlib/line.hpp: Line::dist_to_seg(const P&)
     dist = ::min(dist, PIXELline(a,b).project_to_seg(p).dist(p));
     dist = ::min(dist, PIXELline(a,c).project_to_seg(p).dist(p));
     dist = ::min(dist, PIXELline(c,d).project_to_seg(p).dist(p));

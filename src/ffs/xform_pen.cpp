@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "ffs/cursor3d.H"
-#include "ffs/floor.H"
-#include "ffs/xform_pen.H"
+#include "ffs/cursor3d.hpp"
+#include "ffs/floor.hpp"
+#include "ffs/xform_pen.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_XFORM_PEN", false);
 

@@ -18,10 +18,10 @@
 #ifndef KBD_NAV_H_IS_INCLUDED
 #define KBD_NAV_H_IS_INCLUDED
 
-#include "std/time.H"
-#include "disp/gel.H"
-#include "disp/view.H"
-#include "manip/manip.H"
+#include "std/time.hpp"
+#include "disp/gel.hpp"
+#include "disp/view.hpp"
+#include "manip/manip.hpp"
 
 MAKE_SHARED_PTR(kbd_nav);
 class kbd_nav : public FRAMEobs, public Key_int,

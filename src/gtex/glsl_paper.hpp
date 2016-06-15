@@ -18,7 +18,7 @@
 #ifndef GLSL_PAPER_H_IS_INCLUDED
 #define GLSL_PAPER_H_IS_INCLUDED
 
-#include "glsl_shader.H"
+#include "glsl_shader.hpp"
 
 /**********************************************************************
  * GLSLPaperShader:

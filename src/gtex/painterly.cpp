@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/mi.H"
-#include "std/stop_watch.H"
-#include "gtex/ref_image.H"
-#include "gtex/halo_ref_image.H"
-#include "glui/glui_jot.H"
+#include "mesh/mi.hpp"
+#include "std/stop_watch.hpp"
+#include "gtex/ref_image.hpp"
+#include "gtex/halo_ref_image.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "painterly.H"
+#include "painterly.hpp"
 
 TAGlist* Painterly::_painterly_tags = nullptr;
 

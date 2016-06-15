@@ -19,16 +19,16 @@
 #define PROFILE_H_IS_INCLUDED
 
 /*!
- *  \file profile.H
+ *  \file profile.hpp
  *  \brief Contains the declaration of the PROFILE widget (applicable to primitives).
  *
  *  \ingroup group_FFS
- *  \sa profile.C
+ *  \sa profile.cpp
  *
  */
 
-#include "mesh/lmesh.H"
-#include "gest/draw_widget.H"
+#include "mesh/lmesh.hpp"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * PROFILE:

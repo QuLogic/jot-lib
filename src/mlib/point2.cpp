@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Point2.C
+ *  \file Point2.cpp
  *  \brief Contains the implementation of non-inline functions of the Point2 class
  *  and the Point2list class.
  *  \ingroup group_MLIB
@@ -24,8 +24,8 @@
  */
 
 #include <climits>
-#include "point2.H"
-#include "vec2.H"
+#include "point2.hpp"
+#include "vec2.hpp"
 
 namespace mlib {
 

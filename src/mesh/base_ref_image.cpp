@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "base_ref_image.H"
+#include "base_ref_image.hpp"
 
 map<VIEWimpl*,BaseVisRefImage*> BaseVisRefImage::_hash;
 BaseVisRefImageFactory*         BaseVisRefImage::_factory = nullptr;

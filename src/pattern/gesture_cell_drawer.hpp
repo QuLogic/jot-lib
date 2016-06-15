@@ -19,10 +19,10 @@
 #define _GESTURE_CELL_DRAWER_H_
 
 #include <vector>
-#include "gest/gesture.H"
-#include "mlib/points.H"
-#include "disp/gel_set.H"
-#include "gesture_cell.H"
+#include "gest/gesture.hpp"
+#include "mlib/points.hpp"
+#include "disp/gel_set.hpp"
+#include "gesture_cell.hpp"
 
 /*****************************************************************
  * GestureCellDrawer

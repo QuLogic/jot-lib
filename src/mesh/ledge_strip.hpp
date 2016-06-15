@@ -19,8 +19,8 @@
 #ifndef LEDGE_STRIP_H_IS_INCLUDED
 #define LEDGE_STRIP_H_IS_INCLUDED
 
-#include "edge_strip.H"         // base class
-#include "lface.H"              // subdivision faces, edges, verts
+#include "edge_strip.hpp"         // base class
+#include "lface.hpp"              // subdivision faces, edges, verts
 
 /**********************************************************************
  * LedgeStrip:

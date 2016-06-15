@@ -19,10 +19,10 @@
 #define KEY_MENU_H_IS_INCLUDED
 
 /*!
- *  \file key_menu.H
+ *  \file key_menu.hpp
  *  \brief Contains the definition of the KeyMenu class.
  *
- *  \sa key_menu.C
+ *  \sa key_menu.cpp
  *
  */
 
@@ -30,8 +30,8 @@
 #include <vector>
 #include <string>
 
-#include "geom/fsa.H"
-#include "geom/geom.H"
+#include "geom/fsa.hpp"
+#include "geom/geom.hpp"
 
 struct KeyMenuItem;
 

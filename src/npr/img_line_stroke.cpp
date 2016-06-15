@@ -24,10 +24,10 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "gtex/ref_image.H" 
-#include "gtex/glsl_paper.H"
-#include "mesh/uv_data.H" 
-#include "img_line_stroke.H"
+#include "gtex/ref_image.hpp"
+#include "gtex/glsl_paper.hpp"
+#include "mesh/uv_data.hpp"
+#include "img_line_stroke.hpp"
 
 static int foo = DECODER_ADD(ImageLineStroke);
 

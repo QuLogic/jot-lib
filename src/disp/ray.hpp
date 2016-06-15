@@ -18,9 +18,9 @@
 #ifndef RAY_H_IS_INCLUDED
 #define RAY_H_IS_INCLUDED
 
-#include "std/support.H"
-#include "mlib/points.H"
-#include "disp/gel.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "disp/gel.hpp"
 
 using namespace mlib;
 

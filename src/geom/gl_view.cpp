@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/animator.H"
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "geom/geom.H"
-#include "disp/recorder.H"
-#include "std/thread_mutex.H" 
+#include "disp/animator.hpp"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/geom.hpp"
+#include "disp/recorder.hpp"
+#include "std/thread_mutex.hpp"
 
 using namespace mlib;
 
@@ -106,7 +106,7 @@ GL_VIEW::paint()
       _view->win()->draw();
 
       switch (_view->stereo()) {
-       default              : cerr << "Unknown stereo mode in GL_VIEW.C" << endl;
+       default              : cerr << "Unknown stereo mode in GL_VIEW.cpp" << endl;
        brcase NONE          : tris += draw_frame();
        brcase LEFT_EYE_MONO : tris += draw_frame(CAMdata::LEFT);
        brcase RIGHT_EYE_MONO: tris += draw_frame(CAMdata::RIGHT);

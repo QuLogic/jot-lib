@@ -18,8 +18,8 @@
 #ifndef INCLUDE_TESS_DEBUG_H
 #define INCLUDE_TESS_DEBUG_H
 
-#include "geom/world.H"
-#include "mesh/bvert.H"
+#include "geom/world.hpp"
+#include "mesh/bvert.hpp"
 
 inline void
 show_vert(CBvert* v, int size, CCOLOR& c)

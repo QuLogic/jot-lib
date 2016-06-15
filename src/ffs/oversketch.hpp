@@ -19,16 +19,16 @@
 #define OVERSKETCH_H_IS_INCLUDED
 
 /*!
- *  \file oversketch.H
+ *  \file oversketch.hpp
  *  \brief Contains the declaration of the OVERSKETCH widget.
  *
  *  \ingroup group_FFS
- *  \sa oversketch.C
+ *  \sa oversketch.cpp
  *
  */
 
-#include "mesh/lmesh.H"
-#include "gest/draw_widget.H"
+#include "mesh/lmesh.hpp"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * OVERSKETCH:

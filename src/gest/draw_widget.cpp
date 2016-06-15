@@ -16,11 +16,11 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/world.H"         // for WORLD::create() etc.
+#include "geom/world.hpp"         // for WORLD::create() etc.
 
-#include "gest/mode_name.H"
+#include "gest/mode_name.hpp"
 
-#include "draw_widget.H"
+#include "draw_widget.hpp"
 
 /*****************************************************************
  * DrawWidget

@@ -20,13 +20,13 @@
 * and LuboSampling
 */
 #include <cmath>
-#include "mesh/lmesh.H"
-#include "npr/npr_view.H"
-#include "zxedge_stroke_texture.H"
-#include "sil_and_crease_texture.H"
-#include "std/config.H"
-#include "gtex/curvature_ui.H"
-// Must have std/support.H (actually windows.h) before gl.h so
+#include "mesh/lmesh.hpp"
+#include "npr/npr_view.hpp"
+#include "zxedge_stroke_texture.hpp"
+#include "sil_and_crease_texture.hpp"
+#include "std/config.hpp"
+#include "gtex/curvature_ui.hpp"
+// Must have std/support.hpp (actually windows.h) before gl.h so
 // Windows is happy:
 #include <GL/glu.h>
 
@@ -1540,7 +1540,7 @@ my_angle(CBvert* a, CBvert* b, CBvert* c)
    // convenience: get the exterior angle formed by the
    // 3 vertices in the given order
 
-   // XXX - should be in mesh/bvert.H (eventually)
+   // XXX - should be in mesh/bvert.hpp (eventually)
    if (!(a && b && c))
       return 0;
    return my_angle(a->loc(), b->loc(), c->loc());

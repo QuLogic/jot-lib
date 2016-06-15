@@ -18,7 +18,7 @@
 #ifndef FILE_H_IN_DA_HAUS
 #define FILE_H_IN_DA_HAUS
 
-#include "support.H" 
+#include "support.hpp"
 #include <vector>
 
 bool     rename_(const string &, const string &);

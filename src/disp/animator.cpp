@@ -16,9 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "disp/animator.H"
-#include "net/io_manager.H"
-#include "std/config.H"
+#include "disp/animator.hpp"
+#include "net/io_manager.hpp"
+#include "std/config.hpp"
 
 // The disp library shouldn't reference anything in the geom
 // library.  (Doing so causes link problems in some apps,
@@ -32,7 +32,7 @@ show_msg(const string& msg)
    err_msg("%s", msg.c_str());
 }
 #else
-#include "geom/world.H"
+#include "geom/world.hpp"
 inline void
 show_msg(const string& msg)
 {

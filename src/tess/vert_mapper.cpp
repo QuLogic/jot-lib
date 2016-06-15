@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "vert_mapper.H"
+#include "std/config.hpp"
+#include "vert_mapper.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_VERT_MAPPER",false);
 

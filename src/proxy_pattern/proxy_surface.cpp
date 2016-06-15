@@ -15,17 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "disp/bbox.H"
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "mesh/bvert.H"
-#include "mesh/mi.H"
-#include "mesh/uv_data.H"
-#include "npr/hatching_group_base.H"
-#include "std/run_avg.H"
+#include "disp/colors.hpp"
+#include "disp/bbox.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "mesh/bvert.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/uv_data.hpp"
+#include "npr/hatching_group_base.hpp"
+#include "std/run_avg.hpp"
 
-#include "proxy_surface.H"
+#include "proxy_surface.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_PROXY_SURFACE",false);
 

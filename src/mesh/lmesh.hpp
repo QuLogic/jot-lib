@@ -18,15 +18,15 @@
 #ifndef LMESH_H_HAS_BEEN_INCLUDED
 #define LMESH_H_HAS_BEEN_INCLUDED
 
-#include "lstrip.H"
-#include "ledge_strip.H"
-#include "lvert_strip.H"
-#include "subdiv_calc.H"
+#include "lstrip.hpp"
+#include "ledge_strip.hpp"
+#include "lvert_strip.hpp"
+#include "subdiv_calc.hpp"
 
 /*****************************************************************
  * LMESH:
  *
- *    Subdivision mesh based on rules defined in subdiv_calc.H
+ *    Subdivision mesh based on rules defined in subdiv_calc.hpp
  *****************************************************************/
 #define CLMESH const LMESH
 MAKE_SHARED_PTR(LMESH);

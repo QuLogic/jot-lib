@@ -19,7 +19,7 @@
 #define NEAREST_PT_H_IS_INCLUDED
 
 /*!
- *  \file nearest_pt.H
+ *  \file nearest_pt.hpp
  *  \brief Contains the nearest_pt_to_line_seg function.
  *  \ingroup group_MLIB
  *

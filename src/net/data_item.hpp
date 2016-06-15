@@ -18,11 +18,11 @@
 #ifndef JOT_DATA_ITEM_H_IS_INCLUDED
 #define JOT_DATA_ITEM_H_IS_INCLUDED
 
-#include "mlib/points.H"
-#include "net/stream.H"
-#include "net/net_types.H"
+#include "mlib/points.hpp"
+#include "net/stream.hpp"
+#include "net/net_types.hpp"
 
-#include "rtti.H"
+#include "rtti.hpp"
 
 #include <map>
 

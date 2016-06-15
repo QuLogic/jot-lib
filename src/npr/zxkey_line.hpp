@@ -18,7 +18,7 @@
 #ifndef ZZXKEY_LINE_H_IS_INCLUDED
 #define ZZXKEY_LINE_H_IS_INCLUDED
 
-#include "gtex/basic_texture.H"
+#include "gtex/basic_texture.hpp"
 
 class ZXedgeStrokeTexture;
 

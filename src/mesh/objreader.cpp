@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file objreader.C
+ *  \file objreader.cpp
  *  \brief Contains the implementation of the OBJReader class.
  *
- *  \sa objreader.H
+ *  \sa objreader.hpp
  *
  */
 
@@ -34,15 +34,15 @@
 
 using namespace std;
 
-#include "geom/texturegl.H"
-#include "mesh/bmesh.H"
-#include "mesh/patch.H"
-#include "mlib/points.H"
-#include "std/config.H"
+#include "geom/texturegl.hpp"
+#include "mesh/bmesh.hpp"
+#include "mesh/patch.hpp"
+#include "mlib/points.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 
-#include "objreader.H"
+#include "objreader.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_OBJ_READER",false);
 

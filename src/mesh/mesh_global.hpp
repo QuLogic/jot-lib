@@ -19,8 +19,8 @@
 #ifndef MESH_GLOBAL_H_IS_INCLUDED
 #define MESH_GLOBAL_H_IS_INCLUDED
 
-#include "bedge.H"
-#include "bface.H"
+#include "bedge.hpp"
+#include "bface.hpp"
 
 /*****************************************************************
  * MeshGlobal:

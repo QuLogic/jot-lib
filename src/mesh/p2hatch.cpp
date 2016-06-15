@@ -17,7 +17,7 @@
  *****************************************************************/
 /**********************************************************************
  *   Read a set of hatching textures and combine them into one for use
- *   by the "dynamic 2D patterns" hatching shader (gtex/hatching_tx.H). 
+ *   by the "dynamic 2D patterns" hatching shader (gtex/hatching_tx.hpp).
  *
  *   The input images should form a sequence that shows how a given
  *   hatching pattern gets darker by adding more strokes. The images
@@ -25,9 +25,9 @@
  *   over a uniform tone. Darker images contain all the strokes of
  *   lighter ones...
  **********************************************************************/
-#include "geom/image.H"
-#include "std/config.H"
-#include "mi.H"
+#include "geom/image.hpp"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 #include <string>
 

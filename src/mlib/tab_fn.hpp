@@ -19,13 +19,13 @@
 #define TAB_FN_H_IS_INCLUDED
 
 /*!
- *  \file tab_fn.H
+ *  \file tab_fn.hpp
  *  \brief Contains the definition of the TabulatedFunction class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "std/error.H"
+#include "std/error.hpp"
 
 namespace mlib {
 

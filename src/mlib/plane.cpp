@@ -16,14 +16,14 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Plane.C
+ *  \file Plane.cpp
  *  \brief Implementation of non-inline methods of class Plane.
  *  \ingroup group_MLIB
  *
  */
 
-#include "line.H"
-#include "plane.H"
+#include "line.hpp"
+#include "plane.hpp"
 
 /* Constructors */
 

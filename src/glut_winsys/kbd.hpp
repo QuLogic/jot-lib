@@ -19,8 +19,8 @@
 #ifndef GLUT_KBD_H
 #define GLUT_KBD_H
 
-#include "std/support.H"
-#include "dev/dev.H"
+#include "std/support.hpp"
+#include "dev/dev.hpp"
 
 #include <vector>
 

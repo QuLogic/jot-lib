@@ -40,7 +40,7 @@
 #ifndef QUAD_CELL_H_IS_INCLUDED
 #define QUAD_CELL_H_IS_INCLUDED
 
-#include "mesh/bmesh.H"
+#include "mesh/bmesh.hpp"
 #include <vector>
 
 class BaseStroke;

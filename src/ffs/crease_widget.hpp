@@ -19,16 +19,16 @@
 #define CREASE_WIDGET_H_IS_INCLUDED
 
 /*!
- *  \file crease_widget.H
+ *  \file crease_widget.hpp
  *  \brief Contains the declaration of the CREASE_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa crease_widget.C
+ *  \sa crease_widget.cpp
  *
  */
  
-#include "mesh/lmesh.H"
-#include "gest/draw_widget.H"
+#include "mesh/lmesh.hpp"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * CREASE_WIDGET:

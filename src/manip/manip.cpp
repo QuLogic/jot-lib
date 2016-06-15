@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
-#include "disp/ray.H"
-#include "geom/fsa.H"
-#include "geom/geom.H"
-#include "geom/world.H"
-#include "manip/manip.H"
+#include "std/support.hpp"
+#include "disp/ray.hpp"
+#include "geom/fsa.hpp"
+#include "geom/geom.hpp"
+#include "geom/world.hpp"
+#include "manip/manip.hpp"
 
 using mlib::Wpt;
 using mlib::CWpt;

@@ -18,8 +18,8 @@
 #ifndef SIMPLEX_ARRAY_H_IS_INCLUDED
 #define SIMPLEX_ARRAY_H_IS_INCLUDED
 
-#include "bsimplex.H"
-#include "simplex_filter.H"
+#include "bsimplex.hpp"
+#include "simplex_filter.hpp"
 
 #include <set>
 #include <vector>
@@ -307,9 +307,9 @@ class SimplexArray : public vector<T> {
 
 // Actual classes based on above template:
 class Bsimplex_list;    // defined below
-class Bvert_list;       // defined in bedge.H
-class Bedge_list;       // defined in bvert.H
-class Bface_list;       // defined in Bface.H
+class Bvert_list;       // defined in bedge.hpp
+class Bedge_list;       // defined in bvert.hpp
+class Bface_list;       // defined in Bface.hpp
 
 /************************************************************
  * Bsimplex_list

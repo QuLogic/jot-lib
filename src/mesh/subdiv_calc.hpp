@@ -18,8 +18,8 @@
 #ifndef SUBDIV_CALC_H_IS_INCLUDED
 #define SUBDIV_CALC_H_IS_INCLUDED
 
-#include "bfilters.H"
-#include "lvert.H"
+#include "bfilters.hpp"
+#include "lvert.hpp"
 
 #include <vector>
 

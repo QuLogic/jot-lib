@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"                // Color::blue_pencil_d
-#include "gtex/util.H"                  // for draw_strip
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // GLStripCB
-#include "tess/panel.H"                 // Panel
-#include "tess/vert_mapper.H"
-#include "tess/tex_body.H"
-#include "tess/tess_cmd.H"
-#include "tess/mesh_op.H"               // FIT_VERTS_CMD
-#include "tess/ti.H"                    // create_disk_map
+#include "disp/colors.hpp"                // Color::blue_pencil_d
+#include "gtex/util.hpp"                  // for draw_strip
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // GLStripCB
+#include "tess/panel.hpp"                 // Panel
+#include "tess/vert_mapper.hpp"
+#include "tess/tex_body.hpp"
+#include "tess/tess_cmd.hpp"
+#include "tess/mesh_op.hpp"               // FIT_VERTS_CMD
+#include "tess/ti.hpp"                    // create_disk_map
 
-#include "paper_doll.H"
+#include "paper_doll.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_PAPER_DOLL",false);
 

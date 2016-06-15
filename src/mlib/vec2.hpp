@@ -19,15 +19,15 @@
 #define VEC2_H_IS_INCLUDED
 
 /*!
- *  \file Vec2.H
+ *  \file Vec2.hpp
  *  \brief Contains the definition of the Vec2 class, a 2D vector class.
  *  \ingroup group_MLIB
  *
  */
 
 #include <cmath>
-#include "mlib/global.H"
-#include "mlib/point3.H"
+#include "mlib/global.hpp"
+#include "mlib/point3.hpp"
 
 namespace mlib {
 

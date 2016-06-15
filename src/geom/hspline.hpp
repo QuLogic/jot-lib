@@ -24,7 +24,7 @@
 #ifndef __HSPLINE_HEADER
 #define __HSPLINE_HEADER
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 #include <vector>
 

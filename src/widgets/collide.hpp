@@ -18,11 +18,11 @@
 #ifndef COLLIDE_H_IS_INCLUDED
 #define COLLIDE_H_IS_INCLUDED
 
-#include "sps/sps.H"
-#include "disp/view.H"
-#include "disp/gel.H"
-#include "disp/base_collide.H"
-#include "std/stop_watch.H"
+#include "sps/sps.hpp"
+#include "disp/view.hpp"
+#include "disp/gel.hpp"
+#include "disp/base_collide.hpp"
+#include "std/stop_watch.hpp"
 
 #define GRAVITY_TYPES = 3;
 

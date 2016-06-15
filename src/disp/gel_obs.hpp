@@ -18,7 +18,7 @@
 #ifndef GEL_OBS_H_HAS_BEEN_INCLUDED
 #define GEL_OBS_H_HAS_BEEN_INCLUDED
 
-#include "disp/gel.H"
+#include "disp/gel.hpp"
 #include <map>
 #include <set>
 
@@ -33,7 +33,7 @@ typedef set<GELdistobs *> GELdistobs_list;
 //--------------------------------------------
 class GELdistobs {
    protected:
-      // needs to be a pointer, see gel.C
+      // needs to be a pointer, see gel.cpp
       static   GELdistobs_list  *_dist_obs;
       static GELdistobs_list *distobs_list() { if (!_dist_obs)
                             _dist_obs = new GELdistobs_list; return _dist_obs; }
@@ -63,7 +63,7 @@ typedef set<EXISTobs*> EXISTobs_list;
 class EXISTobs {
    protected :
    static  GELlist         _created;
-   // needs to be a pointer, see gel.C
+   // needs to be a pointer, see gel.cpp
    static  EXISTobs_list  *_exist_obs;
    static EXISTobs_list *existobs_list()  { if (!_exist_obs) 
                                                _exist_obs = new EXISTobs_list;
@@ -132,7 +132,7 @@ typedef set<DUPobs*> DUPobs_list;
 //--------------------------------------------
 class DUPobs {
    protected :
-   // needs to be a pointer, see gel.C
+   // needs to be a pointer, see gel.cpp
    static  DUPobs_list  *_dup_obs;
    DUPobs_list *dupobs_list()  { if (!_dup_obs) _dup_obs = new DUPobs_list;
                                    return _dup_obs; }

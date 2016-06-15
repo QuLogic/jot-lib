@@ -18,13 +18,13 @@
 #ifndef GEST_INT_H_HAS_BEEN_INCLUDED
 #define GEST_INT_H_HAS_BEEN_INCLUDED
 
-#include "geom/fsa.H"
-#include "manip/manip.H"
-#include "std/stop_watch.H"
+#include "geom/fsa.hpp"
+#include "manip/manip.hpp"
+#include "std/stop_watch.hpp"
 
 #include <set>
 
-#include "gesture.H"
+#include "gesture.hpp"
 
 // gesture observer class (defined below)
 class GestObs;

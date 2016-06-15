@@ -19,18 +19,18 @@
 #define POINT3_H_IS_INCLUDED
 
 /*!
- *  \file Point3.H
+ *  \file Point3.hpp
  *  \brief Contains the declarations of the Point3 and Point3list classes.
  *  \ingroup group_MLIB
  *
  */
 
-#include "mlib/pointlist.H"
-#include "mlib/mat4.H"
-#include "mlib/vec3.H"
-#include "mlib/line.H"
-#include "mlib/nearest_pt.H"
-#include "std/support.H"
+#include "mlib/pointlist.hpp"
+#include "mlib/mat4.hpp"
+#include "mlib/vec3.hpp"
+#include "mlib/line.hpp"
+#include "mlib/nearest_pt.hpp"
+#include "std/support.hpp"
 
 #include <vector>
 
@@ -277,7 +277,7 @@ class Point3list : public Pointlist<L,P,V,S> {
 } // namespace mlib
 
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "point3.C"
+#include "point3.cpp"
 #endif
 
 #endif // POINT3_H_IS_INCLUDED

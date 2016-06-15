@@ -19,25 +19,25 @@
 // NPRPenUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
-#include "std/file.H"
+#include "std/support.hpp"
+#include "std/file.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-// #include "draw/draw.H"
-#include "base_jotapp/base_jotapp.H"
-#include "npr_pen.H"
-#include "npr_pen_ui.H"
-#include "tess/tex_body.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+// #include "draw/draw.hpp"
+#include "base_jotapp/base_jotapp.hpp"
+#include "npr_pen.hpp"
+#include "npr_pen_ui.hpp"
+#include "tess/tex_body.hpp"
+#include "std/config.hpp"
 
-#include "npr/npr_texture.H"
-#include "npr/npr_bkg_texture.H"
-#include "npr/npr_solid_texture.H"
-#include "gtex/glsl_xtoon.H"
-#include "gtex/xtoon_texture.H"
+#include "npr/npr_texture.hpp"
+#include "npr/npr_bkg_texture.hpp"
+#include "npr/npr_solid_texture.hpp"
+#include "gtex/glsl_xtoon.hpp"
+#include "gtex/xtoon_texture.hpp"
 
 using namespace mlib;
 

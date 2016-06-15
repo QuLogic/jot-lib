@@ -21,7 +21,7 @@
 #ifndef HALO_SPHERE_H_IS_INCLUDED
 #define HALO_SPHERE_H_IS_INCLUDED
 
-#include "tess/tex_body.H"
+#include "tess/tex_body.hpp"
 
 //default scale for the bounding box size
 #define DEFAULT_HALO_SCALE 1.0

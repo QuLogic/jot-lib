@@ -19,14 +19,14 @@
 #define GL_EXTENSIONS_H_IS_INCLUDED
 
 /*!
- *  \file gl_extensions.H
+ *  \file gl_extensions.hpp
  *  \brief To use OpenGL extensions, just include this header.
  *
- *  \sa gl_extensions.C
+ *  \sa gl_extensions.cpp
  *
  */
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
 /*!

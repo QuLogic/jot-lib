@@ -26,12 +26,12 @@
 #ifndef NET_TYPES_HAS_BEEN_INCLUDED
 #define NET_TYPES_HAS_BEEN_INCLUDED
 
-#include "std/support.H"
-#include "mlib/points.H"
-#include "mlib/point2i.H"
-#include "mlib/point3i.H"
-#include "stream.H"
-#include "net.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "mlib/point2i.hpp"
+#include "mlib/point3i.hpp"
+#include "stream.hpp"
+#include "net.hpp"
 
 template <class V>
 inline STDdstream &operator<<(STDdstream &ds, const mlib::Vec2<V> &v) 
@@ -210,7 +210,7 @@ inline STDdstream &operator>>(STDdstream &ds, vector<T> &list) {
    return ds >> brace;
 }
 
-// XXX - should move to mlib Point2.H and Vec2.H
+// XXX - should move to mlib Point2.hpp and Vec2.hpp
 template <class P, class V>
 inline istream&
 operator>>(istream &is, mlib::Point2<P,V> &v) {

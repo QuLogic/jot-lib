@@ -18,7 +18,7 @@
 #ifndef FACE_PAIR_H_IS_INCLUDED
 #define FACE_PAIR_H_IS_INCLUDED
 
-#include "mesh/bface.H"
+#include "mesh/bface.hpp"
 
 /*****************************************************************
  * FacePair: (copied from class VertPair)
@@ -26,7 +26,7 @@
  *  Simplex data stored on a given face with an associated key,
  *  records a "partner" face.
  *
- *  Used by Rmemes (see Rsurf.H) to represent a surface that is
+ *  Used by Rmemes (see Rsurf.hpp) to represent a surface that is
  *  "inflated" from a given surface region (as a Bface_list).
  *  FacePair is a SimplexData stored on the original faces via a
  *  known lookup key that is unique to those faces.  Given the

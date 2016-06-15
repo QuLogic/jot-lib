@@ -19,11 +19,11 @@
 #define ZCROSS_EXTRACT_H_IS_INCLUDED
 
 /*!
- *  \file zcross_extractor.H
+ *  \file zcross_extractor.hpp
  *  \brief Contains the definition of the ZCrossExtractor class.  A class for
  *  extracting zero crossing lines of arbitrary scalar fields on a mesh.
  *
- *  \sa zcross_extractor.C
+ *  \sa zcross_extractor.cpp
  *
  */
 
@@ -31,10 +31,10 @@
 #include <cassert>
 #include <limits>
 
-#include "std/support.H"
-#include "mlib/points.H"
-#include "mesh/bmesh.H"
-#include "mesh/zcross_path.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "mesh/bmesh.hpp"
+#include "mesh/zcross_path.hpp"
 
 /*!
  *  \brief A function intended to cast from a signed value to an unsigned value

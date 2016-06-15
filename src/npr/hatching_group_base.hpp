@@ -33,11 +33,11 @@
 //
 ////////////////////////////////////////////
 
-#include "mesh/simplex_filter.H"
-#include "npr/hatching_group.H"
-#include "stroke/hatching_stroke.H"
-#include "disp/view.H"
-#include "std/stop_watch.H"
+#include "mesh/simplex_filter.hpp"
+#include "npr/hatching_group.hpp"
+#include "stroke/hatching_stroke.hpp"
+#include "disp/view.hpp"
+#include "std/stop_watch.hpp"
 
 #include <vector>
 

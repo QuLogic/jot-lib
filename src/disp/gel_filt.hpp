@@ -18,7 +18,7 @@
 #ifndef __GEL_FILTER_H__
 #define __GEL_FILTER_H__
 
-#include "gel.H"
+#include "gel.hpp"
 
 /*****************************************************************
  * Virtual base class for accepting or rejecting a GEL based

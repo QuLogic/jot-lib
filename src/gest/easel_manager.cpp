@@ -16,17 +16,17 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file easel_manager.C
+ *  \file easel_manager.cpp
  *  \brief Contains the implementation of the EaselManager class.
  *
- *  \sa easel_manager.H
+ *  \sa easel_manager.hpp
  *
  */
 
-#include "geom/world.H"
-#include "gest/vieweasel.H"
+#include "geom/world.hpp"
+#include "gest/vieweasel.hpp"
 
-#include "easel_manager.H"
+#include "easel_manager.hpp"
 
 void
 EaselManager::make_new_easel(const VIEWptr &v)

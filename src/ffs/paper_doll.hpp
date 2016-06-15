@@ -18,10 +18,10 @@
 #ifndef PAPER_DOLL_H_IS_INCLUDED
 #define PAPER_DOLL_H_IS_INCLUDED
 
-#include "mesh/lmesh.H"
-#include "tess/bcurve.H"
-#include "tess/primitive.H"
-#include "gest/draw_widget.H"
+#include "mesh/lmesh.hpp"
+#include "tess/bcurve.hpp"
+#include "tess/primitive.hpp"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * PAPER_DOLL:

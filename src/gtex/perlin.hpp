@@ -22,8 +22,8 @@
 #ifndef PERLIN_TEX_H_IS_INCLUDED
 #define PERLIN_TEX_H_IS_INCLUDED
 
-#include "geom/texturegl.H"
-#include "util.H"               // TexUnit
+#include "geom/texturegl.hpp"
+#include "util.hpp"               // TexUnit
  
 //on the fly noise properties
 #define START_FREQ  4

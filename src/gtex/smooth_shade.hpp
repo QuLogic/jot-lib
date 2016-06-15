@@ -19,15 +19,15 @@
 #define SMOOTH_SHADE_H_IS_INCLUDED
 
 /*!
- *  \file smooth_shade.H
+ *  \file smooth_shade.hpp
  *  \brief Contains the definition of the SmoothShadeTexture class and related
  *  classes.
  *
- *  \sa smooth_shade.C
+ *  \sa smooth_shade.cpp
  *
  */
 
-#include "basic_texture.H"
+#include "basic_texture.hpp"
 
 /*!
  *  \brief A callback class for rendering each faces of a Patch with a smooth

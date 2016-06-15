@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mlib/vec3.H" // XXX - Probably doesn't need to be included here.
-#include "geom/geom.H"
-#include "geom/world.H"
-#include "geom/body.H"
-#include "std/config.H"
+#include "mlib/vec3.hpp" // XXX - Probably doesn't need to be included here.
+#include "geom/geom.hpp"
+#include "geom/world.hpp"
+#include "geom/body.hpp"
+#include "std/config.hpp"
 
 
 using mlib::Wtransf;

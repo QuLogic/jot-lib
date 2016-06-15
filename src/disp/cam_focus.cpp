@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/cam_focus.H"
-#include "std/config.H"
+#include "disp/cam_focus.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 

@@ -18,7 +18,7 @@
 #ifndef CREASES_TEXTURE_H_IS_INCLUDED
 #define CREASES_TEXTURE_H_IS_INCLUDED
 
-#include "basic_texture.H"
+#include "basic_texture.hpp"
 
 /**********************************************************************
  * CreasesTexture:

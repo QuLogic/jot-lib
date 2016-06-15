@@ -29,8 +29,8 @@
 //
 ////////////////////////////////////////////
 
-#include "npr/hatching_group.H"
-#include "npr/hatching_group_base.H"
+#include "npr/hatching_group.hpp"
+#include "npr/hatching_group_base.hpp"
 
 #include <set>
 #include <vector>

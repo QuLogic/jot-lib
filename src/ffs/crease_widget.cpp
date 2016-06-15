@@ -16,22 +16,22 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file crease_widget.C
+ *  \file crease_widget.cpp
  *  \brief Contains the definition of the CREASE_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa crease_widget.C
+ *  \sa crease_widget.cpp
  *
  */
  
-#include "disp/colors.H"                // Color::blue_pencil_d
-#include "gtex/util.H"                  // for draw_strip
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // GLStripCB
-#include "std/run_avg.H"
-#include "tess/mesh_op.H"
+#include "disp/colors.hpp"                // Color::blue_pencil_d
+#include "gtex/util.hpp"                  // for draw_strip
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // GLStripCB
+#include "std/run_avg.hpp"
+#include "tess/mesh_op.hpp"
 
-#include "crease_widget.H"
+#include "crease_widget.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_CREASE_WIDGET",false);
 

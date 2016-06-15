@@ -17,22 +17,22 @@
  *****************************************************************/
 
 /*!
- *  \file oversketch.C
+ *  \file oversketch.cpp
  *  \brief Contains the definition of the OVERSKETCH widget.
  *
  *  \ingroup group_FFS
- *  \sa oversketch.H
+ *  \sa oversketch.hpp
  *
  */
 
-#include "disp/colors.H"                // Color::blue_pencil_d
-#include "gtex/util.H"                  // for draw_strip
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // GLStripCB
-#include "tess/mesh_op.H"               // FIT_VERTS_CMD
-#include "tess/primitive.H"
+#include "disp/colors.hpp"                // Color::blue_pencil_d
+#include "gtex/util.hpp"                  // for draw_strip
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // GLStripCB
+#include "tess/mesh_op.hpp"               // FIT_VERTS_CMD
+#include "tess/primitive.hpp"
 
-#include "oversketch.H"
+#include "oversketch.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_OVERSKETCH",false);
 

@@ -17,30 +17,30 @@
  *****************************************************************/
 
 /*!
- *  \file inflate.C
+ *  \file inflate.cpp
  *  \brief Contains the definition of the INFLATE widget and INFLATE_CMD.
  *
  *  \ingroup group_FFS
- *  \sa inflate.H
+ *  \sa inflate.hpp
  *
  */
 
-#include "disp/colors.H"                // Color::grey7 etc.
-#include "geom/gl_view.H"               // for GL_VIEW::init_line_smooth()
-#include "geom/world.H"                 // for WORLD::undisplay()
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // for GLStripCB
-#include "mesh/mi.H"
-#include "std/config.H"
-#include "std/run_avg.H"
+#include "disp/colors.hpp"                // Color::grey7 etc.
+#include "geom/gl_view.hpp"               // for GL_VIEW::init_line_smooth()
+#include "geom/world.hpp"                 // for WORLD::undisplay()
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // for GLStripCB
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
+#include "std/run_avg.hpp"
 
-#include "tess/ti.H"
-#include "tess/skin.H"
-#include "tess/tess_cmd.H"
-#include "tess/tess_debug.H"
-#include "tess/uv_surface.H"
+#include "tess/ti.hpp"
+#include "tess/skin.hpp"
+#include "tess/tess_cmd.hpp"
+#include "tess/tess_debug.hpp"
+#include "tess/uv_surface.hpp"
 
-#include "inflate.H"
+#include "inflate.hpp"
 
 using namespace mlib;
 

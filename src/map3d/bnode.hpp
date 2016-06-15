@@ -18,12 +18,12 @@
 #ifndef BNODE_H_IS_INCLUDED
 #define BNODE_H_IS_INCLUDED
 
-#include "geom/mod.H"
-#include "net/rtti.H"
-#include "std/support.H"
-#include "std/config.H"
+#include "geom/mod.hpp"
+#include "net/rtti.hpp"
+#include "std/support.hpp"
+#include "std/config.hpp"
 
-#include "net/data_item.H"
+#include "net/data_item.hpp"
 
 class Bnode;
 

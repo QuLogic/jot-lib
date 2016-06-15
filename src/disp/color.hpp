@@ -17,7 +17,7 @@
  *****************************************************************/
 #ifndef _COLOR_H_INC
 #define _COLOR_H_INC
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 
 class COLOR;
@@ -61,7 +61,7 @@ class COLOR : public mlib::Point3<COLOR, COLVEC> {
    }
 
    // basic color constants:
-   // (more are defined in colors.H):
+   // (more are defined in colors.hpp):
    static CCOLOR     black;     // 0 0 0
    static CCOLOR     white;     // 1 1 1
 

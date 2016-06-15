@@ -18,8 +18,8 @@
 #ifndef TTY_UNIX_HAS_BEEN_INCLUDED
 #define TTY_UNIX_HAS_BEEN_INCLUDED
 
-#include "std/support.H"
-#include "dev/tty.H"
+#include "std/support.hpp"
+#include "dev/tty.hpp"
 
 #include <vector>
 

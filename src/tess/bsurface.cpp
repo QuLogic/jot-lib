@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/gl_view.H"       // GL_VIEW::init_line_smooth()
-#include "gtex/basic_texture.H"
-#include "gtex/ref_image.H"     // for VisRefImage::lookup()
-#include "std/config.H"
-#include "geom/world.H" 
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"       // GL_VIEW::init_line_smooth()
+#include "gtex/basic_texture.hpp"
+#include "gtex/ref_image.hpp"     // for VisRefImage::lookup()
+#include "std/config.hpp"
+#include "geom/world.hpp"
 
-#include "bpoint.H"
-#include "bcurve.H"
-#include "bsurface.H"
+#include "bpoint.hpp"
+#include "bcurve.hpp"
+#include "bsurface.hpp"
 
 using namespace mlib;
 

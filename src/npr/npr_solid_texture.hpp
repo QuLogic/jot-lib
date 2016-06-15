@@ -19,8 +19,8 @@
 #ifndef NPR_SOLID_TEXTURE_H_IS_INCLUDED
 #define NPR_SOLID_TEXTURE_H_IS_INCLUDED
 
-#include "geom/texturegl.H"    // for ConventionalTexture
-#include "gtex/basic_texture.H"
+#include "geom/texturegl.hpp"    // for ConventionalTexture
+#include "gtex/basic_texture.hpp"
 
 class NPRSolidTexCB : public GLStripCB {
  public:

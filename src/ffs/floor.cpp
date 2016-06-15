@@ -17,25 +17,25 @@
  *****************************************************************/
 
 /*!
- *  \file floor.C
+ *  \file floor.cpp
  *  \brief Contains the definition of the FLOOR interactor.
  *
  *  \ingroup group_FFS
- *  \sa floor.H
+ *  \sa floor.hpp
  *
  */
 
-#include "disp/colors.H"
-#include "disp/cam_focus.H"
-#include "ffs_util.H"
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "gtex/key_line.H" 
-#include "gtex/sil_frame.H" 
-#include "gtex/solid_color.H"
-#include "std/config.H" 
+#include "disp/colors.hpp"
+#include "disp/cam_focus.hpp"
+#include "ffs_util.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "gtex/key_line.hpp"
+#include "gtex/sil_frame.hpp"
+#include "gtex/solid_color.hpp"
+#include "std/config.hpp"
 
-#include "floor.H"
+#include "floor.hpp"
 
 using namespace mlib;
 

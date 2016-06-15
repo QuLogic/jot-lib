@@ -30,7 +30,7 @@
 ////////////////////////////////////////////
 
 
-#include "wnpr/stroke_ui.H"
+#include "wnpr/stroke_ui.hpp"
 
 #include <vector>
 

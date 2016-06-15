@@ -29,7 +29,7 @@
 // Karol Szerszen
 //***************
 
-#include "geom/geom.H"
+#include "geom/geom.hpp"
 
 MAKE_PTR_SUBC(SKY_BOX,GEOM);
 typedef const SKY_BOXptr CSKY_BOXptr;

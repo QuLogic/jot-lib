@@ -18,12 +18,12 @@
 #ifndef IMG_LINE_H_IS_INCLUDED
 #define IMG_LINE_H_IS_INCLUDED
 
-#include "geom/texture.H"     
-#include "gtex/glsl_toon.H"     
-#include "gtex/ref_image.H"
-#include "npr/ridge.H"
-#include "npr/binary_image.H"
-#include "stroke/base_stroke.H"
+#include "geom/texture.hpp"
+#include "gtex/glsl_toon.hpp"
+#include "gtex/ref_image.hpp"
+#include "npr/ridge.hpp"
+#include "npr/binary_image.hpp"
+#include "stroke/base_stroke.hpp"
 
 #include <vector>
 

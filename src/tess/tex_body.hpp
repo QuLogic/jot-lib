@@ -18,8 +18,8 @@
 #ifndef TEX_BODY_H_IS_INCLUDED
 #define TEX_BODY_H_IS_INCLUDED
 
-#include "geom/geom.H"
-#include "mesh/lmesh.H"
+#include "geom/geom.hpp"
+#include "mesh/lmesh.hpp"
 
 class Action;
 class Script;

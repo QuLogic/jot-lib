@@ -18,12 +18,12 @@
 #ifndef GEL_H_IS_INCLUDED
 #define GEL_H_IS_INCLUDED
 
-#include "std/support.H"
-#include "net/data_item.H"
-#include "net/stream.H"
-#include "mlib/points.H"
-#include "disp/bbox.H"
-#include "disp/ref_img_client.H"
+#include "std/support.hpp"
+#include "net/data_item.hpp"
+#include "net/stream.hpp"
+#include "mlib/points.hpp"
+#include "disp/bbox.hpp"
+#include "disp/ref_img_client.hpp"
 
 
 class   RAYhit;
@@ -199,7 +199,7 @@ public :
       return false;
    }
 
-   // defined in ray.H to placate VS .NET compiler:
+   // defined in ray.hpp to placate VS .NET compiler:
    RAYhit& intersect(RAYhit& r, mlib::CWtransf& m=mlib::Identity) const;
 
   using RIC_list<T>::num;
@@ -268,8 +268,8 @@ extern ExistList    EXIST;
 extern DrawnList    DRAWN;
 
 // -------- define observers for GEL operations
-#include "disp/gel_obs.H" 
-#include "disp/hash_types.H"
+#include "disp/gel_obs.hpp"
+#include "disp/hash_types.hpp"
 
 // -------- define hash variables for GEL objects
 extern GrabVar      GRABBED;

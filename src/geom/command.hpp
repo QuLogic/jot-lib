@@ -19,18 +19,18 @@
 #define COMMAND_H_IS_INCLUDED
 
 /*!
- *  \file command.H
+ *  \file command.hpp
  *  \brief Contains the definition of the COMMAND class.  A class
  *  representing a command that can be done and undone.  Some derived
  *  classes are also defined here.
  *
- *  \sa command.C
+ *  \sa command.cpp
  *
  */
 
-#include "geom/geom.H"
-#include "disp/view.H"
-#include "std/ref.H" // for REFcounter
+#include "geom/geom.hpp"
+#include "disp/view.hpp"
+#include "std/ref.hpp" // for REFcounter
 
 class COMMAND;
 typedef const COMMAND CCOMMAND;

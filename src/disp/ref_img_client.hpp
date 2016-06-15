@@ -18,8 +18,8 @@
 #ifndef REF_IMG_CLIENT_IS_INCLUDED
 #define REF_IMG_CLIENT_IS_INCLUDED
 
-#include "net/data_item.H"
-#include "disp/colors.H"
+#include "net/data_item.hpp"
+#include "disp/colors.hpp"
 
 MAKE_SHARED_PTR(VIEW);
 

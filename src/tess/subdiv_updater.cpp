@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "subdiv_updater.H"
+#include "subdiv_updater.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_SUBDIV_UPDATER",false);
 

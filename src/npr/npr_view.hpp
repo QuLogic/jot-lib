@@ -19,10 +19,10 @@
 #ifndef NPRVIEW_HEADER
 #define NPRVIEW_HEADER
 
-#include "geom/gl_view.H"
-#include "gtex/ref_image.H"
-#include "gtex/paper_effect.H"
-#include "gtex/halo_ref_image.H"
+#include "geom/gl_view.hpp"
+#include "gtex/ref_image.hpp"
+#include "gtex/paper_effect.hpp"
+#include "gtex/halo_ref_image.hpp"
 
 MAKE_SHARED_PTR(NPRview);
 class NPRview : public GL_VIEW {

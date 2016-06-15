@@ -19,19 +19,19 @@
 #define APPEAR_H_IS_INCLUDED
 
 /*!
- *  \file appear.H
+ *  \file appear.hpp
  *  \brief Contains the definition of the APPEAR class.
  *
- *  \sa appear.C
+ *  \sa appear.cpp
  *
  */
 
-#include "disp/color.H"
-#include "geom/texture.H"
-#include "mlib/points.H"
-#include "net/data_item.H"
-#include "net/stream.H"
-#include "std/config.H"
+#include "disp/color.hpp"
+#include "geom/texture.hpp"
+#include "mlib/points.hpp"
+#include "net/data_item.hpp"
+#include "net/stream.hpp"
+#include "std/config.hpp"
 
 #include <vector>
 

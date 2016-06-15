@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "std/config.H"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
 
-#include "gesture_carrier_drawer.H"
+#include "gesture_carrier_drawer.hpp"
 
 using namespace mlib;
 
@@ -66,7 +66,7 @@ GestureCarrierDrawer::draw_first_carrier(const GESTURE* gest, CVIEWptr& v)
   glEnd();
   
   // I tried to implement some code for corner getting highlighted
-  // it is on the gesture.C version on Unnameable
+  // it is on the gesture.cpp version on Unnameable
   
   GL_VIEW::end_line_smooth();
   

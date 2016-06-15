@@ -18,8 +18,8 @@
 #ifndef CONTROL_FRAME_H_IS_INCLUDED
 #define CONTROL_FRAME_H_IS_INCLUDED
 
-#include "disp/colors.H"
-#include "color_id_texture.H"
+#include "disp/colors.hpp"
+#include "color_id_texture.hpp"
 
 /**********************************************************************
  * ControlFrameTexture:

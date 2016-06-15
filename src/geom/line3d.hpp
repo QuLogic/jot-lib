@@ -18,7 +18,7 @@
 #ifndef LINE_3D_H_IS_INCLUDED
 #define LINE_3D_H_IS_INCLUDED
 
-#include "disp/gel.H"
+#include "disp/gel.hpp"
 
 /*****************************************************************
  * LINE3D:

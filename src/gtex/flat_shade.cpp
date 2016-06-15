@@ -16,23 +16,23 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file flat_shade.C
+ *  \file flat_shade.cpp
  *  \brief Contains the implementation fo the FlatShadeTexture GTexture and
  *  related classes.
  *
- *  \sa flat_shade.H
+ *  \sa flat_shade.hpp
  *
  */
 
-#include "disp/colors.H"
-#include "geom/texturegl.H"
-#include "geom/gl_view.H"
-#include "gtex/util.H"
-#include "mesh/uv_data.H"
-#include "mesh/lmesh.H"
-#include "mesh/ledge_strip.H"
+#include "disp/colors.hpp"
+#include "geom/texturegl.hpp"
+#include "geom/gl_view.hpp"
+#include "gtex/util.hpp"
+#include "mesh/uv_data.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/ledge_strip.hpp"
 
-#include "flat_shade.H"
+#include "flat_shade.hpp"
 
 bool FlatShadeTexture::_debug_uv = false;
 

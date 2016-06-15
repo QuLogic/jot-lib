@@ -23,8 +23,8 @@
  *   component with negative "volume." Otherwise reverses all the
  *   normals for the whole mesh.
  **********************************************************************/
-#include "std/config.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 int 
 main(int argc, char *argv[])

@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file curvature_texture.C
+ *  \file curvature_texture.cpp
  *  \brief Contains the implementation of the classes that implement the
  *  curvature visualization gTexture.
  *
@@ -24,13 +24,13 @@
 
 #include <cassert>
 
-#include "gtex/gl_extensions.H"
+#include "gtex/gl_extensions.hpp"
 #include <GL/glu.h>
 
-#include "gtex/rendering_mode.H"
-#include "gtex/curvature_texture.H"
+#include "gtex/rendering_mode.hpp"
+#include "gtex/curvature_texture.hpp"
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 using namespace std;
 using namespace mlib;

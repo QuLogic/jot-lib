@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
-#include "std/config.H"
-#include "disp/cam_focus.H"
-#include "net/stream.H"
-#include "net/net_types.H"
+#include "std/support.hpp"
+#include "std/config.hpp"
+#include "disp/cam_focus.hpp"
+#include "net/stream.hpp"
+#include "net/net_types.hpp"
 
 
 using namespace mlib;
@@ -204,7 +204,7 @@ CAMdata::setup_vectors(
  * if needed for stereo viewing.
  *
  * The matrix returned should be loaded into the MODELVIEW stack whenever 
- * drawing is about to start. This is already done by gl_view.C. 
+ * drawing is about to start. This is already done by gl_view.cpp.
  *
  * This matrix is cached for each eye.
  * -------------------------------------------------------------------------

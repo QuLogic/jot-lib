@@ -19,16 +19,16 @@
 #define FLAT_SHADE_H_IS_INCLUDED
 
 /*!
- *  \file flat_shade.H
+ *  \file flat_shade.hpp
  *  \brief Contains the definition of the FlatShadeTexture GTexture and related
  *  classes.
  *
- *  \sa flat_shade.C
+ *  \sa flat_shade.cpp
  *
  */
 
-#include "basic_texture.H"
-#include "gl_sphir_tex_coord_gen.H"
+#include "basic_texture.hpp"
+#include "gl_sphir_tex_coord_gen.hpp"
 
 /*!
  *  \brief A callback class for rendering each face of a Patch with a flat

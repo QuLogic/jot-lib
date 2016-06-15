@@ -17,30 +17,30 @@
  *****************************************************************/
 
 /*!
- *  \file sweep.C
+ *  \file sweep.cpp
  *  \brief Contains the definitions of SWEEP_BASE, SWEEP_POINT, SWEEP_LINE, and SWEP_DISK.
  *
  *  \ingroup group_FFS
- *  \sa sweep.H
+ *  \sa sweep.hpp
  *
  */
 
-#include "disp/colors.H"                // named colors, e.g. blue_pencil
-#include "geom/world.H"                 // for WORLD::undisplay()
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // for GLStripCB
-#include "mesh/mi.H"                    // mesh inline methods
+#include "disp/colors.hpp"                // named colors, e.g. blue_pencil
+#include "geom/world.hpp"                 // for WORLD::undisplay()
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // for GLStripCB
+#include "mesh/mi.hpp"                    // mesh inline methods
 
-#include "tess/bcurve.H"                // Bcurve
-#include "tess/action.H"
-#include "tess/uv_surface.H"            // UVsurface
-#include "tess/ti.H"                    // tess inline methods
-#include "std/config.H"                 // variables
+#include "tess/bcurve.hpp"                // Bcurve
+#include "tess/action.hpp"
+#include "tess/uv_surface.hpp"            // UVsurface
+#include "tess/ti.hpp"                    // tess inline methods
+#include "std/config.hpp"                 // variables
 
-#include "ffs/ffs_util.H"
+#include "ffs/ffs_util.hpp"
 
-//#include "floor.H"
-#include "sweep.H"
+//#include "floor.hpp"
+#include "sweep.hpp"
 
 using namespace mlib;
 using namespace tess;

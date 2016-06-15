@@ -18,8 +18,8 @@
 #ifndef BFACE_H_HAS_BEEN_INCLUDED
 #define BFACE_H_HAS_BEEN_INCLUDED
 
-#include "bvert.H"
-//#include "vert_attrib.H"
+#include "bvert.hpp"
+//#include "vert_attrib.hpp"
 
 #include <vector>
 

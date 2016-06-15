@@ -53,7 +53,7 @@ WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 #include <math.h>
 #include <string.h>
 
-#include "ply.H"
+#include "ply.hpp"
 
 const char *type_names[] = {  /* names of scalar types */
 "invalid",

@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "gtex/gl_extensions.H"
-#include "gtex/paper_effect.H"
-#include "geom/gl_view.H"
-#include "mesh/uv_data.H"
-#include "npr_solid_texture.H"
-#include "std/config.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/paper_effect.hpp"
+#include "geom/gl_view.hpp"
+#include "mesh/uv_data.hpp"
+#include "npr_solid_texture.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 

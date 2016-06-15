@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"        // Color::grey7 etc.
-#include "geom/gl_view.H"       // GL_VIEW::draw_pts()
-#include "geom/world.H"         // WORLD::is_displayed()
-#include "gtex/ref_image.H"     // for VisRefImage::lookup()
-#include "mesh/mi.H"
-#include "std/config.H"
+#include "disp/colors.hpp"        // Color::grey7 etc.
+#include "geom/gl_view.hpp"       // GL_VIEW::draw_pts()
+#include "geom/world.hpp"         // WORLD::is_displayed()
+#include "gtex/ref_image.hpp"     // for VisRefImage::lookup()
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
 
-#include "tess/tex_body.H"
-#include "tess/bpoint.H"
-#include "tess/bcurve.H"
-#include "tess/bsurface.H"
+#include "tess/tex_body.hpp"
+#include "tess/bpoint.hpp"
+#include "tess/bcurve.hpp"
+#include "tess/bsurface.hpp"
 
-#include "tess/uv_surface.H"         // debug: UVmeme
-#include "tess/blending_meme.H"      // debug: BlendingMeme
+#include "tess/uv_surface.hpp"         // debug: UVmeme
+#include "tess/blending_meme.hpp"      // debug: BlendingMeme
 
 using namespace mlib;
 

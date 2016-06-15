@@ -29,9 +29,9 @@
 //
 ////////////////////////////////////////////
 
-#include "npr/hatching_group.H"
-#include "npr/hatching_group_base.H"
-#include "mesh/uv_mapping.H"
+#include "npr/hatching_group.hpp"
+#include "npr/hatching_group_base.hpp"
+#include "mesh/uv_mapping.hpp"
 
 class HatchingBackboneFree;
 class HatchingGroupFreeInst;

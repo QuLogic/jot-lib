@@ -18,7 +18,7 @@
 #ifndef PAINTERLY_H_IS_INCLUDED
 #define PAINTERLY_H_IS_INCLUDED
 
-#include "gtex/glsl_layer_base.H"
+#include "gtex/glsl_layer_base.hpp"
 
 /**********************************************************************
  * layer_paint_t

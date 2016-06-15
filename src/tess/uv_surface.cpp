@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/world.H"
-#include "mesh/mi.H"
-#include "std/config.H"
-#include "panel.H"
-#include "tess_cmd.H"
-#include "uv_surface.H"
+#include "geom/world.hpp"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
+#include "panel.hpp"
+#include "tess_cmd.hpp"
+#include "uv_surface.hpp"
 
 using namespace mlib;
 

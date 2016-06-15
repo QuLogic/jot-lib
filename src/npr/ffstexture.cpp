@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "npr_texture.H"
-#include "ffstexture.H"
-#include "ffs_control_frame.H"
+#include "npr_texture.hpp"
+#include "ffstexture.hpp"
+#include "ffs_control_frame.hpp"
 
 #include <fstream>
 

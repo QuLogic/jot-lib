@@ -18,9 +18,9 @@
 #ifndef AUX_REF_IMAGE_HEADER
 #define AUX_REF_IMAGE_HEADER
 
-#include "std/support.H"
-#include "geom/image.H"
-#include "gtex/ref_image.H"
+#include "std/support.hpp"
+#include "geom/image.hpp"
+#include "gtex/ref_image.hpp"
 
 #include <map>
 

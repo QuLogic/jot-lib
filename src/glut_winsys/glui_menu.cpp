@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "glui_menu.H" 
-#include "glui/glui_jot.H"
+#include "glui_menu.hpp"
+#include "glui/glui_jot.hpp"
 
 vector<MenuItem *> GLUIMoveMenu::_menu_items(10);
 

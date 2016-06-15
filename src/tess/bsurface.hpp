@@ -18,11 +18,11 @@
 #ifndef BSURFACE_H_IS_INCLUDED
 #define BSURFACE_H_IS_INCLUDED
 
-#include "mesh/lpatch.H"
-#include "mesh/uv_data.H"
+#include "mesh/lpatch.hpp"
+#include "mesh/uv_data.hpp"
 
-#include "bpoint.H"
-#include "bcurve.H"
+#include "bpoint.hpp"
+#include "bcurve.hpp"
 
 /*****************************************************************
  * Bsurface:

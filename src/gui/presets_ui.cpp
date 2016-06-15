@@ -19,15 +19,15 @@
 // PresetsUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "presets_ui.H"
+#include "presets_ui.hpp"
 
 #include <vector>
 using namespace mlib;

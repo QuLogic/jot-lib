@@ -18,7 +18,7 @@
 #ifndef LFACE_H_HAS_BEEN_INCLUDED
 #define LFACE_H_HAS_BEEN_INCLUDED
 
-#include "lvert.H"
+#include "lvert.hpp"
 
 /**********************************************************************
  * Lface:

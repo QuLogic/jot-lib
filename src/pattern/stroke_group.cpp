@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "stroke_group.H"
-#include "stroke_path.H"
+#include "stroke_group.hpp"
+#include "stroke_path.hpp"
 
 #include <queue>
 #include <vector>
-#include "geom/world.H"
+#include "geom/world.hpp"
 
 using namespace mlib;
 

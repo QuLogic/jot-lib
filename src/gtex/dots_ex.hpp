@@ -18,7 +18,7 @@
 #ifndef DOTS_EX_H_IS_INCLUDED
 #define DOTS_EX_H_IS_INCLUDED
 
-#include "glsl_shader.H"
+#include "glsl_shader.hpp"
 
 /**********************************************************************
  * DotsShader_EX:

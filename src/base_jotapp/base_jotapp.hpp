@@ -19,16 +19,16 @@
 #define BASEJOTAPP_H
 
 #include <vector>
-#include "std/config.H"
-#include "disp/view.H"
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "gest/easel_manager.H"
-#include "gest/pen_manager.H"
-#include "manip/manip.H"
-#include "manip/key_menu.H"
-#include "net/data_item.H"
-#include "geom/icon2d.H" 
+#include "std/config.hpp"
+#include "disp/view.hpp"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "gest/easel_manager.hpp"
+#include "gest/pen_manager.hpp"
+#include "manip/manip.hpp"
+#include "manip/key_menu.hpp"
+#include "net/data_item.hpp"
+#include "geom/icon2d.hpp"
 
 class MoveMenu;
 class Cam_int;

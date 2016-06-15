@@ -17,23 +17,23 @@
  *****************************************************************/
 
 /*!
- *  \file select_widget.C
+ *  \file select_widget.cpp
  *  \brief Contains the definition of the SELECT_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa select_widget.H
+ *  \sa select_widget.hpp
  *
  */
 
-#include "geom/gl_view.H"     // for GL_VIEW::draw_pts()
-#include "gtex/ref_image.H"
-#include "mesh/lmesh.H"
-#include "mesh/mi.H"
-#include "mesh/mesh_select_cmd.H"
-#include "tess/tex_body.H"
+#include "geom/gl_view.hpp"     // for GL_VIEW::draw_pts()
+#include "gtex/ref_image.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/mesh_select_cmd.hpp"
+#include "tess/tex_body.hpp"
 
-#include "ffs/floor.H"
-#include "ffs/select_widget.H"
+#include "ffs/floor.hpp"
+#include "ffs/select_widget.hpp"
 
 using namespace mlib;
 

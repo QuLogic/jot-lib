@@ -18,8 +18,8 @@
 #ifndef GLUI_DIALOGS_H_INCLUDED
 #define GLUI_DIALOGS_H_INCLUDED
 
-#include "widgets/file_select.H"
-#include "widgets/alert_box.H" 
+#include "widgets/file_select.hpp"
+#include "widgets/alert_box.hpp"
 
 #include <set>
 #include <vector>

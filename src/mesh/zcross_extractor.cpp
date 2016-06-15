@@ -16,14 +16,14 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file zcross_extractor.C
+ *  \file zcross_extractor.cpp
  *  \brief Contains the implementation of the ZCrossExtractor class.
  *
- *  \sa zcross_extractor.H
+ *  \sa zcross_extractor.hpp
  *
  */
 
-#include "mesh/zcross_extractor.H"
+#include "mesh/zcross_extractor.hpp"
 
 ZCrossPreviousFaceGenerator::ZCrossPreviousFaceGenerator()
 {

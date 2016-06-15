@@ -19,14 +19,14 @@
 #define VEC3_H_IS_INCLUDED
 
 /*!
- *  \file Vec3.H
+ *  \file Vec3.hpp
  *  \brief Contains the defintion of the Vec3 class, a 3D vector class.
  *  \ingroup group_MLIB
  *
  */
 
 #include <cmath>
-#include "global.H"
+#include "global.hpp"
 
 namespace mlib {
 

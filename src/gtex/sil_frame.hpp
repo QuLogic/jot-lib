@@ -18,8 +18,8 @@
 #ifndef SIL_FRAME_H_IS_INCLUDED
 #define SIL_FRAME_H_IS_INCLUDED
 
-#include "sils_texture.H"
-#include "creases_texture.H"
+#include "sils_texture.hpp"
+#include "creases_texture.hpp"
 
 /**********************************************************************
  * SilFrameTexture:

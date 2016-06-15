@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "glsl_normal.H"
-#include "gtex/glsl_toon.H"
-#include "gtex/ref_image.H"
+#include "gtex/gl_extensions.hpp"
+#include "glsl_normal.hpp"
+#include "gtex/glsl_toon.hpp"
+#include "gtex/ref_image.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_GLSL_NORMAL", false);
 

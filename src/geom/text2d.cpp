@@ -20,11 +20,11 @@
  *    USER: lsh
  *    DATE: Tue Apr  1 22:57:46 US/Eastern 1997
  *************************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/colors.H"
-#include "geom/text2d.H"
+#include "disp/colors.hpp"
+#include "geom/text2d.hpp"
 
 using namespace mlib;
 

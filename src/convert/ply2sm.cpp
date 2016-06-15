@@ -38,10 +38,10 @@
 
  *****************************************************************/
 
-#include "mesh/lmesh.H"
-#include "std/config.H"
+#include "mesh/lmesh.hpp"
+#include "std/config.hpp"
 
-#include "ply.H"
+#include "ply.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_PLY2SM",false,true);
 

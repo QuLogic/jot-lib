@@ -18,8 +18,8 @@
 #ifndef SIMPLEX_DATA_H_IS_INCLUDED
 #define SIMPLEX_DATA_H_IS_INCLUDED
 
-#include "net/rtti.H"
-#include "mlib/points.H"
+#include "net/rtti.hpp"
+#include "mlib/points.hpp"
 
 #include <vector>
 

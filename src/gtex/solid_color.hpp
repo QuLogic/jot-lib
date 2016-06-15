@@ -18,7 +18,7 @@
 #ifndef SOLID_COLOR_H_IS_INCLUDED
 #define SOLID_COLOR_H_IS_INCLUDED
 
-#include "basic_texture.H"
+#include "basic_texture.hpp"
 
 /**********************************************************************
  * SolidColorTexture:

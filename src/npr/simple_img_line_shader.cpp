@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "simple_img_line_shader.H"
-#include "gtex/ref_image.H"
-#include "gtex/patch_id_texture.H"
-#include "gtex/color_id_texture.H"
+#include "gtex/gl_extensions.hpp"
+#include "simple_img_line_shader.hpp"
+#include "gtex/ref_image.hpp"
+#include "gtex/patch_id_texture.hpp"
+#include "gtex/color_id_texture.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_IMAGE_LINE_SHADER", false);
 

@@ -18,8 +18,8 @@
 #ifndef MAP1D3D_H_IS_INCLUDED
 #define MAP1D3D_H_IS_INCLUDED
 
-#include "map0d3d.H"
-#include "param_list.H"
+#include "map0d3d.hpp"
+#include "param_list.hpp"
 
 #include <vector>
 

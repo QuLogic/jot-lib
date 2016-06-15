@@ -18,7 +18,7 @@
 #ifndef FRAME_TIME_OBSERVER_H_IS_INCLUDED
 #define FRAME_TIME_OBSERVER_H_IS_INCLUDED
 
-#include "disp/view.H"
+#include "disp/view.hpp"
 
 /*****************************************************************
  * FRAME_TIME_OBSERVER:

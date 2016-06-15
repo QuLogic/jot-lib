@@ -18,7 +18,7 @@
 #ifndef HATCHING_TX_H_IS_INCLUDED
 #define HATCHING_TX_H_IS_INCLUDED
 
-#include "glsl_layer_base.H"
+#include "glsl_layer_base.hpp"
 
 /**********************************************************************
  * layer_hatching_t

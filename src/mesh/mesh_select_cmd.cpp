@@ -16,20 +16,20 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file mesh_select_cmd.C
+ *  \file mesh_select_cmd.cpp
  *  \brief Contains the implementation of the MESH_SELECT_CMD class.
  *
- *  \sa mesh_select_cmd.H
+ *  \sa mesh_select_cmd.hpp
  *
  */
 
-#include "mesh/bvert.H"
-#include "mesh/bedge.H"
-#include "mesh/bface.H"
-#include "mesh/bmesh.H"
-#include "mesh/mesh_global.H"
+#include "mesh/bvert.hpp"
+#include "mesh/bedge.hpp"
+#include "mesh/bface.hpp"
+#include "mesh/bmesh.hpp"
+#include "mesh/mesh_global.hpp"
 
-#include "mesh_select_cmd.H"
+#include "mesh_select_cmd.hpp"
 
 MESH_SELECT_CMD::MESH_SELECT_CMD(Bvert *v)
 {

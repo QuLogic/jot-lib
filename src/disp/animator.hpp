@@ -22,8 +22,8 @@
  * Animator
  *****************************************************************/
 
-#include "disp/view.H"
-#include "std/stop_watch.H"
+#include "disp/view.hpp"
+#include "std/stop_watch.hpp"
 
 class Animator : public DATA_ITEM { 
  private:

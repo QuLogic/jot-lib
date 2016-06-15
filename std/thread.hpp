@@ -18,8 +18,8 @@
 
 #ifndef _JOT_STD_THREAD_H
 #define _JOT_STD_THREAD_H
-#include "std/support.H"
-#include "thread_mutex.H"
+#include "std/support.hpp"
+#include "thread_mutex.hpp"
 
 // This file should contain generalized thread support, but for now
 // it's just a pthread implmentation of a thread syncronization primitive.

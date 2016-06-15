@@ -18,8 +18,8 @@
 #ifndef MOVE_MENU_DEF
 #define MOVE_MENU_DEF
 
-#include "std/support.H"
-#include "mlib/points.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
 
 #include <vector>
 

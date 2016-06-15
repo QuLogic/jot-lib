@@ -19,11 +19,11 @@
 #define OBJ_READER_H_IS_INCLUDED
 
 /*!
- *  \file objreader.H
+ *  \file objreader.hpp
  *  \brief Contains the definition of the OBJReader class.  A class for reading
  *  .obj files into meshes.
  *
- *  \sa objreader.C
+ *  \sa objreader.cpp
  *
  */
 

@@ -18,8 +18,8 @@
 #ifndef MAP2D3D_H_IS_INCLUDED
 #define MAP2D3D_H_IS_INCLUDED
 
-#include "map1d3d.H"
-#include "mlib/points.H"
+#include "map1d3d.hpp"
+#include "mlib/points.hpp"
 
 #include <vector>
 

@@ -18,11 +18,11 @@
 #ifndef GLSL_SHADER_H_IS_INCLUDED
 #define GLSL_SHADER_H_IS_INCLUDED
 
-#include "geom/texturegl.H"
-#include "geom/gl_util.H"
-#include "util.H"               // TexUnit
-#include "basic_texture.H"
-#include "perlin.H" //header file still included so it can use the namespace
+#include "geom/texturegl.hpp"
+#include "geom/gl_util.hpp"
+#include "util.hpp"               // TexUnit
+#include "basic_texture.hpp"
+#include "perlin.hpp" //header file still included so it can use the namespace
 
 /**********************************************************************
  * GLSLShader:
@@ -41,7 +41,7 @@
  *   variables to the program. To send values of attribute
  *   variables to the program, use a custom StripCB.
  *
- *   See glsl_toon.H for an example of using this class.
+ *   See glsl_toon.hpp for an example of using this class.
  *
  **********************************************************************/
 

@@ -16,24 +16,24 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file ffs_util.C
+ *  \file ffs_util.cpp
  *  \brief Contains the implmentation of utility functions for the ffs module.
  *
  *  \ingroup group_FFS
- *  \sa ffs_util.H
+ *  \sa ffs_util.hpp
  *
  */
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 
-#include "mesh/bmesh.H"
-#include "disp/view.H"
-#include "ffs/cursor3d.H"
-#include "ffs/floor.H"
+#include "mesh/bmesh.hpp"
+#include "disp/view.hpp"
+#include "ffs/cursor3d.hpp"
+#include "ffs/floor.hpp"
 
-#include "ffs_util.H"
+#include "ffs_util.hpp"
 
 using namespace FFS;
 

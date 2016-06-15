@@ -25,9 +25,9 @@
 
 #include <fstream>
 
-#include "std/support.H"
-#include "net.H"
-#include "stream.H"
+#include "std/support.hpp"
+#include "net.hpp"
+#include "stream.hpp"
 
 /* -----------------------  Private Methods  ------------------------------- */
 

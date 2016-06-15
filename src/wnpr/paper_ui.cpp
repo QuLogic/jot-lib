@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "disp/view.H"
-#include "geom/winsys.H"
-#include "gtex/paper_effect.H"
-#include "glui/glui_jot.H"
+#include "disp/view.hpp"
+#include "geom/winsys.hpp"
+#include "gtex/paper_effect.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "paper_ui.H"
+#include "paper_ui.hpp"
 
 void
 PaperUI::button_press_cb()

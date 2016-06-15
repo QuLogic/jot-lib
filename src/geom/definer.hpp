@@ -18,12 +18,12 @@
 #ifndef DEFINER_H
 #define DEFINER_H
 
-#include "std/support.H"
-#include "net/data_item.H"
-#include "net/stream.H"
-#include "mlib/points.H"
-#include "mod.H"
-#include "body.H"
+#include "std/support.hpp"
+#include "net/data_item.hpp"
+#include "net/stream.hpp"
+#include "mlib/points.hpp"
+#include "mod.hpp"
+#include "body.hpp"
 
 #include <vector>
 

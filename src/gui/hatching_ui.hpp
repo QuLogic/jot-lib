@@ -22,11 +22,11 @@
 // HacthingUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
-#include "gui/base_ui.H"
-#include "gtex/hatching_tx.H"
+#include "disp/view.hpp"
+#include "gui/base_ui.hpp"
+#include "gtex/hatching_tx.hpp"
 
-#include "patch_selection_ui.H"
+#include "patch_selection_ui.hpp"
 
 #include <vector>
 

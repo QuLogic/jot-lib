@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "distrib.H"
-#include "geom/world.H" 
-#include "geom/gl_view.H"
-#include "geom/texturegl.H"
-#include "net/io_manager.H"
-#include "std/config.H"
+#include "distrib.hpp"
+#include "geom/world.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/texturegl.hpp"
+#include "net/io_manager.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 
@@ -483,7 +483,7 @@ DISTRIB* DISTRIB::get_distrib()
 {
    if (!_d)
    {
-      err_adv(debug, "DISTRIB.C::get_distrib(): Instantiating DISTRIB...");
+      err_adv(debug, "DISTRIB.cpp::get_distrib(): Instantiating DISTRIB...");
       _d = new DISTRIB();
    }
 

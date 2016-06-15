@@ -18,8 +18,8 @@
 #ifndef SIMPLEX_FRAME_H_IS_INCLUDED
 #define SIMPLEX_FRAME_H_IS_INCLUDED
 
-#include "map3d/coord_frame.H"
-#include "bvert.H"
+#include "map3d/coord_frame.hpp"
+#include "bvert.hpp"
 
 /*****************************************************************
  * SimplexFrame:

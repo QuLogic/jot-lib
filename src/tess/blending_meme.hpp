@@ -18,7 +18,7 @@
 #ifndef BLENDING_MEME_H_IS_INCLUDED
 #define BLENDING_MEME_H_IS_INCLUDED
 
-#include "bsurface.H"
+#include "bsurface.hpp"
 
 /*****************************************************************
  * BlendingMeme:
@@ -50,7 +50,7 @@ class BlendingMeme : public VertMeme {
    virtual bool is_boss_like();
 
    // Methods for generating vert memes in the child Bbase.
-   // (See meme.H for more info):
+   // (See meme.hpp for more info):
    virtual VertMeme* _gen_child(Lvert*) const;
    virtual VertMeme* _gen_child(Lvert* lv, VertMeme*) const {
       // we don't need no steenkin averaging

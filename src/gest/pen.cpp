@@ -16,19 +16,19 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file pen.C
+ *  \file pen.cpp
  *  \brief Contains the implementation of the Pen class.
  *
- *  \sa pen.C
+ *  \sa pen.cpp
  *
  */
 
-#include "mesh/bmesh.H"
-#include "mesh/base_ref_image.H"
-#include "std/config.H"
-#include "geom/winsys.H"
+#include "mesh/bmesh.hpp"
+#include "mesh/base_ref_image.hpp"
+#include "std/config.hpp"
+#include "geom/winsys.hpp"
 
-#include "pen.H"
+#include "pen.hpp"
 
 /**********************************************************************
  * Pen:

@@ -18,7 +18,7 @@
 #ifndef GLSL_HALO_H_IS_INCLUDED
 #define GLSL_HALO_H_IS_INCLUDED
 
-#include "glsl_toon.H"
+#include "glsl_toon.hpp"
 
 /**********************************************************************
  * GLSLHaloShader:

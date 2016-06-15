@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "feature_stroke_texture.H"
-#include "gtex/color_id_texture.H"
-#include "gtex/ref_image.H"
-#include "stroke/decal_line_stroke.H"
-#include "mesh/ioblock.H"
-#include "geom/gl_view.H"
+#include "feature_stroke_texture.hpp"
+#include "gtex/color_id_texture.hpp"
+#include "gtex/ref_image.hpp"
+#include "stroke/decal_line_stroke.hpp"
+#include "mesh/ioblock.hpp"
+#include "geom/gl_view.hpp"
 
 using namespace mlib;
 

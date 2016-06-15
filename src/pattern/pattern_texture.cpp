@@ -20,17 +20,17 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "mesh/ledge_strip.H"
-#include "mesh/bfilters.H"
-#include "gtex/hidden_line.H"
-#include "mesh/uv_data.H"
-#include "stroke/base_stroke.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "mesh/ledge_strip.hpp"
+#include "mesh/bfilters.hpp"
+#include "gtex/hidden_line.hpp"
+#include "mesh/uv_data.hpp"
+#include "stroke/base_stroke.hpp"
 
-//#include "pattern_stroke.H"
-#include "pattern_texture.H"
+//#include "pattern_stroke.hpp"
+#include "pattern_texture.hpp"
 
 TAGlist *       PatternTexture::_pt_tags = nullptr;
 static bool debug = Config::get_var_bool("DEBUG_TEXTURE",false);

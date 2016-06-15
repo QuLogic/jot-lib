@@ -19,8 +19,8 @@
 #define _RECORDER_UI_H_IS_INCLUDED_
 
 
-#include "disp/recorder.H"
-#include "glui/glui_jot.H"
+#include "disp/recorder.hpp"
+#include "glui/glui_jot.hpp"
 
 /*****************************************************************
  * RecorderUI

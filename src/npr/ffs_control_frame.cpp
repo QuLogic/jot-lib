@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "geom/gl_view.H"
-#include "mesh/lpatch.H"
-#include "mesh/mi.H"
-#include "gtex/paper_effect.H"
-#include "std/config.H"
+#include "gtex/gl_extensions.hpp"
+#include "geom/gl_view.hpp"
+#include "mesh/lpatch.hpp"
+#include "mesh/mi.hpp"
+#include "gtex/paper_effect.hpp"
+#include "std/config.hpp"
 
-#include "ffs_control_frame.H"
+#include "ffs_control_frame.hpp"
 
 int
 FFSControlFrameTexture::draw(CVIEWptr& v)

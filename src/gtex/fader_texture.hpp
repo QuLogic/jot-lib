@@ -18,7 +18,7 @@
 #ifndef FADER_TEXTURE_H_IS_INCLUDED
 #define FADER_TEXTURE_H_IS_INCLUDED
 
-#include "mesh/gtexture.H"
+#include "mesh/gtexture.hpp"
 
 /**********************************************************************
  * FaderTexture:

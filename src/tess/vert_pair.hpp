@@ -18,9 +18,9 @@
 #ifndef VERT_PAIR_H_IS_INCLUDED
 #define VERT_PAIR_H_IS_INCLUDED
 
-#include "mesh/bvert.H"
-#include "mesh/edge_strip.H"
-#include "face_pair.H"
+#include "mesh/bvert.hpp"
+#include "mesh/edge_strip.hpp"
+#include "face_pair.hpp"
 
 /*****************************************************************
  * VertPair:
@@ -28,7 +28,7 @@
  *  Simplex data stored on a given vertex with an associated key,
  *  records a "partner" vertex.
  *
- *  Used by Rmemes (see Rsurf.H) to represent a surface that is
+ *  Used by Rmemes (see Rsurf.hpp) to represent a surface that is
  *  "inflated" from a given surface region (as a Bface_list).
  *  VertPair is a SimplexData stored on vertices of the original
  *  faces via a known lookup key that is unique to those faces.

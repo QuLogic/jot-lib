@@ -19,16 +19,16 @@
 #define SELECT_WIDGET_H_IS_INCLUDED
 
 /*!
- *  \file select_widget.H
+ *  \file select_widget.hpp
  *  \brief Contains the declaration of the SELECT_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa select_widget.C
+ *  \sa select_widget.cpp
  *
  */
 
-#include "gest/draw_widget.H"
-#include "gtex/line_drawing.H"
+#include "gest/draw_widget.hpp"
+#include "gtex/line_drawing.hpp"
 
 /*****************************************************************
  * SELECT_WIDGET:

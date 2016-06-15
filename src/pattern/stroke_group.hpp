@@ -18,12 +18,12 @@
 #ifndef STROKE_GROUP_H
 #define STROKE_GROUP_H
 
-#include "disp/bbox.H"
-#include "pattern/gesture_cell.H"
-#include "mlib/points.H"
+#include "disp/bbox.hpp"
+#include "pattern/gesture_cell.hpp"
+#include "mlib/points.hpp"
 #include <vector>
 #include <list>
-//#include "pattern/stroke_path.H"
+//#include "pattern/stroke_path.hpp"
 
 #ifdef SINGLE
 #define REAL float

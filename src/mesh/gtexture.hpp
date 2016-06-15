@@ -18,10 +18,10 @@
 #ifndef GTEXTURE_H_IS_INCLUDED
 #define GTEXTURE_H_IS_INCLUDED
 
-//#include "patch.H"
-#include "disp/ref_img_client.H"
-#include "disp/view.H"
-#include "stripcb.H"
+//#include "patch.hpp"
+#include "disp/ref_img_client.hpp"
+#include "disp/view.hpp"
+#include "stripcb.hpp"
 
 #include <vector>
 
@@ -29,7 +29,7 @@ class Patch;
 class GTexture;
 typedef const GTexture CGTexture;
 /*!
- *  \brief Convenience methods defined in gtexture.H
+ *  \brief Convenience methods defined in gtexture.hpp
  *
  */
 class GTexture_list : public RIC_array<GTexture> {
@@ -164,7 +164,7 @@ class GTexture : public DATA_ITEM, public RefImageClient {
    //******** ACCESSORS ********
 
    Patch*       patch()         const   { return _patch; }
-   BMESHptr     mesh()          const; // defined in patch.H
+   BMESHptr     mesh()          const; // defined in patch.hpp
 
    StripCB*     cb()            const   { return _cb; }
    void         set_cb(StripCB* cb)     { delete _cb; _cb = cb; } 

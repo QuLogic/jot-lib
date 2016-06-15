@@ -16,21 +16,21 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file patch.C
+ *  \file patch.cpp
  *  \brief Contains the implementation of the Patch class.
  *
- *  \sa patch.H
+ *  \sa patch.hpp
  *
  */
 
-#include "ioblock.H"
-#include "gtexture.H"
-#include "bfilters.H"
-#include "patch.H"
-#include "std/config.H"
-#include "sps/sps.H"
+#include "ioblock.hpp"
+#include "gtexture.hpp"
+#include "bfilters.hpp"
+#include "patch.hpp"
+#include "std/config.hpp"
+#include "sps/sps.hpp"
 
-// example defined in src/jot.C:
+// example defined in src/jot.cpp:
 init_fade_func_t Patch::_init_fade = nullptr;
 
 TAGlist*        Patch::_patch_tags      = nullptr;

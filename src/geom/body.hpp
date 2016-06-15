@@ -18,13 +18,13 @@
 #ifndef BODY_JOT_H
 #define BODY_JOT_H
 
-#include "disp/bbox.H"
-#include "disp/ref_img_client.H"
-#include "mlib/point3i.H"
-#include "mlib/points.H"
-#include "net/data_item.H"
-#include "std/support.H"
-#include "mod.H"
+#include "disp/bbox.hpp"
+#include "disp/ref_img_client.hpp"
+#include "mlib/point3i.hpp"
+#include "mlib/points.hpp"
+#include "net/data_item.hpp"
+#include "std/support.hpp"
+#include "mod.hpp"
 
 #define CMVEC2 mlib::CXYvec
 #define MVEC2   mlib::XYvec

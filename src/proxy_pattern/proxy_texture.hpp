@@ -23,8 +23,8 @@
 #ifndef PROXY_TEXTURE_H
 #define PROXY_TEXTURE_H
 
-#include "gtex/basic_texture.H"
-#include "proxy_surface.H"
+#include "gtex/basic_texture.hpp"
+#include "proxy_surface.hpp"
 
 #include <string>
 #include <vector>

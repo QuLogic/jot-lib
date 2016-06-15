@@ -18,9 +18,9 @@
 #ifndef BEDGE_H_HAS_BEEN_INCLUDED
 #define BEDGE_H_HAS_BEEN_INCLUDED
 
-#include "net/data_item.H"
-#include "simplex_filter.H"
-#include "simplex_array.H"
+#include "net/data_item.hpp"
+#include "simplex_filter.hpp"
+#include "simplex_array.hpp"
 
 #include <vector>
 
@@ -86,7 +86,7 @@ class Bedge : public Bsimplex {
 
    // Clear flag of this edge and adjacent faces:
    // (clearing propagates from dim 0 to dim 2)
-   void clear_flag02(); // defined in bface.H
+   void clear_flag02(); // defined in bface.hpp
    
    //******** GEOMETRIC MEASURES ********
 
@@ -120,7 +120,7 @@ class Bedge : public Bsimplex {
    // Return the other vertex of the other face.
    // E.g., if f is _f1, return the other vertex of _f2;
    // and vice versa:
-   Bvert* opposite_vert(CBface* f) const; // Defined in bface.H:
+   Bvert* opposite_vert(CBface* f) const; // Defined in bface.hpp:
 
    // Opposite vertex on face 1 or 2, respectively:
    Bvert* opposite_vert1() const { return opposite_vert(_f2); }
@@ -145,7 +145,7 @@ class Bedge : public Bsimplex {
 
    // tell whether this edge is adjacent to to the given vertex or face:
    bool contains(CBvert* v)   const   { return (_v1 == v || _v2 == v); }
-   bool contains(CBface* f)   const;    // defined in bface.H
+   bool contains(CBface* f)   const;    // defined in bface.hpp
 
    // does this edge connect the given vertices?
    bool same_verts(CBvert* u, CBvert* v)  const {
@@ -743,11 +743,11 @@ class Bedge_list : public SimplexArray<Bedge_list,Bedge*> {
    Bface_list get_faces() const;
 
    // Returns list of primary faces adjacent to these edges:
-   // (defined inline in Bface.H)
+   // (defined inline in Bface.hpp)
    Bface_list get_primary_faces() const;        
 
    // Returns Bverts of this edge list that are "fold"
-   // vertices WRT these edges (see bedge.C):
+   // vertices WRT these edges (see bedge.cpp):
    Bvert_list fold_verts() const;
 
    // Check to see if a set of edges is simple,

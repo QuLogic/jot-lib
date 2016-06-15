@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "gtex/glsl_perlin_test.H"
-#include "mesh/bmesh.H"
-#include "npr/skybox_texture.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "gtex/glsl_perlin_test.hpp"
+#include "mesh/bmesh.hpp"
+#include "npr/skybox_texture.hpp"
 
-#include "sky_box.H"
+#include "sky_box.hpp"
 
 
 /*************************************************

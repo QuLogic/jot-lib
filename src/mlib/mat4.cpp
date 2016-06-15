@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mlib/mat4.H"
-#include "mlib/vec3.H"
-#include "mlib/global.H"
+#include "mlib/mat4.hpp"
+#include "mlib/vec3.hpp"
+#include "mlib/global.hpp"
 
 /*!
- *  \file Mat4.C
+ *  \file Mat4.cpp
  *  \brief Contains the definitions of member functions for the Mat4 class.
  *  \ingroup group_MLIB
  *

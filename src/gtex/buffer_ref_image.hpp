@@ -18,8 +18,8 @@
 #ifndef BUFFER_REF_IMAGE_HEADER
 #define BUFFER_REF_IMAGE_HEADER
 
-#include "std/support.H"
-#include "gtex/ref_image.H"
+#include "std/support.hpp"
+#include "gtex/ref_image.hpp"
 
 #include <map>
 

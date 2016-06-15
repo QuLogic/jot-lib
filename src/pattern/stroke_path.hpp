@@ -20,10 +20,10 @@
 
 #include <vector>
 #include <vector>
-#include "disp/bbox.H"
-#include "pattern/gesture_cell.H"
-#include "pattern/gesture_stroke.H"
-#include "mlib/points.H"
+#include "disp/bbox.hpp"
+#include "pattern/gesture_cell.hpp"
+#include "pattern/gesture_stroke.hpp"
+#include "mlib/points.hpp"
 
 class StrokePaths{
 public:

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "geom/gl_view.H"
-#include "sils_texture.H"
+#include "std/config.hpp"
+#include "geom/gl_view.hpp"
+#include "sils_texture.hpp"
 
 /**********************************************************************
  * SilsTexture:

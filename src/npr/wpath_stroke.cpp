@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "base_jotapp/base_jotapp.H"
-#include "disp/ref_img_client.H"
-#include "mesh/lmesh.H"
-#include "wnpr/line_pen.H"
-#include "wnpr/sil_ui.H"
-#include "npr/npr_view.H"
-#include "wpath_stroke.H"
+#include "base_jotapp/base_jotapp.hpp"
+#include "disp/ref_img_client.hpp"
+#include "mesh/lmesh.hpp"
+#include "wnpr/line_pen.hpp"
+#include "wnpr/sil_ui.hpp"
+#include "npr/npr_view.hpp"
+#include "wpath_stroke.hpp"
 
 #include <fstream>
 

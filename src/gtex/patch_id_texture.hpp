@@ -18,7 +18,7 @@
 #ifndef PATCH_ID_TEXTURE_H_IS_INCLUDED
 #define PATCH_ID_TEXTURE_H_IS_INCLUDED
 
-#include "solid_color.H"
+#include "solid_color.hpp"
 
 /**********************************************************************
  * PatchIDStripCB:

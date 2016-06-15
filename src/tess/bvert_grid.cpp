@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "bvert_grid.H"
+#include "bvert_grid.hpp"
 
 #include <iterator>
 

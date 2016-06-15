@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "mesh/patch.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "mesh/patch.hpp"
 
-#include "key_line.H"
-#include "solid_color.H"
-#include "sil_frame.H"
+#include "key_line.hpp"
+#include "solid_color.hpp"
+#include "sil_frame.hpp"
 
 bool KeyLineTexture::_show_hidden = false;
 

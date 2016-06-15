@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "mesh/mi.H"
-#include "mesh/lmesh.H"
+#include "std/config.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/lmesh.hpp"
 
 using namespace mlib;
 
@@ -31,9 +31,9 @@ loop_alpha(int n)
       return 5.0/3*n;
 
    // Function alpha (which depends on a vertex's degree), from
-   // section 2.1 of Hoppe et al. Siggraph 94 (see subdiv_calc.H).
+   // section 2.1 of Hoppe et al. Siggraph 94 (see subdiv_calc.hpp).
    //
-   // This was supposed to go in subdiv_calc.H but the sun compiler
+   // This was supposed to go in subdiv_calc.hpp but the sun compiler
    // has been taking prissiness to an extreme.
    //
    // return values are cached for vertex degrees up to 31

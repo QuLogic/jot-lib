@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "pattern/eigen_solver.H"
+#include "pattern/eigen_solver.hpp"
 
 using namespace mlib;
 

@@ -18,8 +18,8 @@
 #ifndef FFSTEXTURE_H_IS_INCLUDED
 #define FFSTEXTURE_H_IS_INCLUDED
 
-#include "npr/npr_texture.H"
-#include "std/config.H"
+#include "npr/npr_texture.hpp"
+#include "std/config.hpp"
 
 class FFSControlFrameTexture;
 

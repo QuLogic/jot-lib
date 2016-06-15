@@ -18,8 +18,8 @@
 #ifndef DISK_MAP_H_IS_INCLUDED
 #define DISK_MAP_H_IS_INCLUDED
 
-#include "map3d/map0d3d.H"
-#include "subdiv_updater.H"
+#include "map3d/map0d3d.hpp"
+#include "subdiv_updater.hpp"
 
 /*****************************************************************
  * DiskMap:
@@ -37,7 +37,7 @@
  *   frame. The map() function returns the local coordinate
  *   transformed by the coordinate frame.
  *
- *   For an example, see tess/primitive.C, where a DiskMap
+ *   For an example, see tess/primitive.cpp, where a DiskMap
  *   is used to define the location of a skeleton Bpoint so
  *   that it tracks the base surface to which the primitive
  *   is attached.

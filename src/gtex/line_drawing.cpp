@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file line_drawing.C
+ *  \file line_drawing.cpp
  *  \brief Contains the implementation of the classes that implement the
  *  "Line Drawing" rendering style gTexture.
  *
@@ -31,13 +31,13 @@
 
 using namespace std;
 
-#include "gtex/gl_extensions.H"
-#include "gtex/rendering_mode.H"
-#include "gtex/basic_texture.H"
-#include "gtex/solid_color.H"
-#include "gtex/line_drawing.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/rendering_mode.hpp"
+#include "gtex/basic_texture.hpp"
+#include "gtex/solid_color.hpp"
+#include "gtex/line_drawing.hpp"
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 

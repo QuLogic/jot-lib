@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "buffer_ref_image.H"
-#include "geom/world.H"
-#include "geom/gl_view.H"
+#include "buffer_ref_image.hpp"
+#include "geom/world.hpp"
+#include "geom/gl_view.hpp"
 
 /**********************************************************************
  * BufferRefImage:

@@ -19,7 +19,7 @@
 #define BMESH_CURVATURE_H_IS_INCLUDED
 
 /*!
- *  \file bmesh_curvature.H
+ *  \file bmesh_curvature.hpp
  *  \brief Contains the declaration of the curvature computation classes
  *  for the BMESH class.
  *
@@ -30,7 +30,7 @@
 
 #include <vector>
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 using namespace mlib;
 
 class Bvert;

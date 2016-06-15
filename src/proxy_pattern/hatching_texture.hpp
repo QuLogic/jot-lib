@@ -18,10 +18,10 @@
 #ifndef HATCHING_TEXTURE_H
 #define HATCHING_TEXTURE_H
 
-#include "std/config.H"
-#include "mesh/patch.H"
-#include "proxy_surface.H"
-#include "gtex/basic_texture.H"
+#include "std/config.hpp"
+#include "mesh/patch.hpp"
+#include "proxy_surface.hpp"
+#include "gtex/basic_texture.hpp"
 
 #include <vector>
 

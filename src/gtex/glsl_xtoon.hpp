@@ -18,7 +18,7 @@
 #ifndef GLSL_XTOON_H_IS_INCLUDED
 #define GLSL_XTOON_H_IS_INCLUDED
 
-#include "glsl_shader.H"
+#include "glsl_shader.hpp"
 
 /**********************************************************************
  * GLSLToonXShader:

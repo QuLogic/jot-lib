@@ -18,11 +18,11 @@
 #ifndef SKIN_H_IS_INCLUDED
 #define SKIN_H_IS_INCLUDED
 
-#include "geom/command.H"
+#include "geom/command.hpp"
 
-#include "tess/bsurface.H"
-#include "tess/vert_mapper.H"
-#include "tess/ti.H"
+#include "tess/bsurface.hpp"
+#include "tess/vert_mapper.hpp"
+#include "tess/ti.hpp"
 
 #include <vector>
 

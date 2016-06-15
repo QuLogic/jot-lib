@@ -19,18 +19,18 @@
 #define TRACE_H_IS_INCLUDED
 
 /*!
- *  \file trace.H
+ *  \file trace.hpp
  *  \brief Contains the declaration of the TRACE widget.
  *
  *  \ingroup group_FFS
- *  \sa trace.C
+ *  \sa trace.cpp
  *
  */
 
-#include "geom/image.H"
-#include "geom/texturegl.H"
-#include "tess/bcurve.H"
-#include "gest/draw_widget.H"
+#include "geom/image.hpp"
+#include "geom/texturegl.hpp"
+#include "tess/bcurve.hpp"
+#include "gest/draw_widget.hpp"
 
 enum trace_file_cb_t {
       FILE_LOAD_TRACE_CB = 0,

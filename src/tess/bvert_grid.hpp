@@ -18,7 +18,7 @@
 #ifndef BVERT_GRID_H_IS_INCLUDED
 #define BVERT_GRID_H_IS_INCLUDED
 
-#include "mesh/bmesh.H"
+#include "mesh/bmesh.hpp"
 
 #include <vector>
 

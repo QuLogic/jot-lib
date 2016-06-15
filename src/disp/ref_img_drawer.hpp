@@ -18,9 +18,9 @@
 #ifndef REF_IMG_DRAWER_IS_INCLUDED
 #define REF_IMG_DRAWER_IS_INCLUDED
 
-#include "disp/ref_img_client.H"
-#include "disp/view.H"
-#include "disp/colors.H"
+#include "disp/ref_img_client.hpp"
+#include "disp/view.hpp"
+#include "disp/colors.hpp"
 
 /*****************************************************************
  * RefImgDrawer and subclasses:

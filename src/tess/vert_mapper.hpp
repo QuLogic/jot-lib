@@ -21,8 +21,8 @@
 #ifndef VERT_MAPPER_H_IS_INCLUDED
 #define VERT_MAPPER_H_IS_INCLUDED
 
-#include "mesh/edge_strip.H"
-#include "mesh/bface.H"
+#include "mesh/edge_strip.hpp"
+#include "mesh/bface.hpp"
 
 /*****************************************************************
  * VertMapper

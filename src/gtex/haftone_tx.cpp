@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/mi.H"
-#include "haftone_tx.H"
-#include "std/stop_watch.H"
+#include "mesh/mi.hpp"
+#include "haftone_tx.hpp"
+#include "std/stop_watch.hpp"
 
-#include "gtex/ref_image.H"
-#include "gtex/halo_ref_image.H"
+#include "gtex/ref_image.hpp"
+#include "gtex/halo_ref_image.hpp"
 
 const int CORR_RES   = 256; // resolution of the tone correction
 const int LOD_RES    =  16; // resolution of the lod correction

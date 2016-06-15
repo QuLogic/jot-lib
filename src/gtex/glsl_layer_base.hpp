@@ -23,10 +23,10 @@
 #ifndef LAYER_BASE_H_IS_INCLUDED
 #define LAYER_BASE_H_IS_INCLUDED
 
-#include "gtex/glsl_shader.H"
-#include "gtex/solid_color.H"
-#include "gtex/tone_shader.H"
-#include "gtex/util.H"
+#include "gtex/glsl_shader.hpp"
+#include "gtex/solid_color.hpp"
+#include "gtex/tone_shader.hpp"
+#include "gtex/util.hpp"
 
 #include <vector>
 
@@ -214,7 +214,7 @@ class GLSLShader_Layer_Base : public GLSLShader {
 
    // keeps track of used texture stages
    // the lowest free stage is determined by TexUnit::PATTERN_TEX
-   // defined in /gtex/util.H
+   // defined in /gtex/util.hpp
    map<GLint, TEXTUREglptr> _patterns;
 
    vector<int> _used_texture_stages;   //unsorted

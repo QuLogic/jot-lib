@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/mi.H"
-#include "std/config.H"
-#include "mlib/polyline.H"
-#include "bvert_grid.H"
-#include "panel.H"
-#include "ti.H"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
+#include "mlib/polyline.hpp"
+#include "bvert_grid.hpp"
+#include "panel.hpp"
+#include "ti.hpp"
 
 using namespace mlib;
 using namespace tess;
@@ -1393,7 +1393,7 @@ Panel::tessellate_quad(CBcurve_list& c, const vector<int> ns)
    }
 
    // We still have to set interior vertex locations.
-   // Use Coons patch definition (see bvert_grid.C):
+   // Use Coons patch definition (see bvert_grid.cpp):
    if (!grid.interp_boundary()) {
       err_adv(debug, "  can't interp boundary");
       return 0;

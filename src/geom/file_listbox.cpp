@@ -16,13 +16,13 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/support.H"
-#include "std/file.H"
-#include "disp/view.H"
-#include "geom/winsys.H"
-#include "glui/glui_jot.H"
+#include "std/support.hpp"
+#include "std/file.hpp"
+#include "disp/view.hpp"
+#include "geom/winsys.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "file_listbox.H"
+#include "file_listbox.hpp"
 
 vector<FileListbox*> FileListbox::_file_list_boxes;
 

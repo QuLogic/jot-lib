@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gesture_stroke.H"
-#include "mlib/points.H"
-#include "disp/gel.H"
+#include "gesture_stroke.hpp"
+#include "mlib/points.hpp"
+#include "disp/gel.hpp"
 
 using namespace mlib;
 

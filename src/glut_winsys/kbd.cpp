@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "glut_winsys.H"
-#include "tty_glut.H"
-#include "glui/glui_jot.H"
-#include "kbd.H"
-#include "geom/fsa.H"
-#include "std/config.H"
+#include "glut_winsys.hpp"
+#include "tty_glut.hpp"
+#include "glui/glui_jot.hpp"
+#include "kbd.hpp"
+#include "geom/fsa.hpp"
+#include "std/config.hpp"
 
 using mlib::PIXEL;
 using mlib::CXYpt;

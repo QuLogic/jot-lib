@@ -19,7 +19,7 @@
 #define RENDERING_MODE_H_IS_INCLUDED
 
 /*!
- *  \file rendering_mode.H
+ *  \file rendering_mode.hpp
  *  \brief Contains the definitions of classes that make it easier to create
  *  gTextures that have multiple rendering modes.  That is, they have multiple
  *  ways to achieve the same effect.  The mode that is used usually depends on
@@ -27,9 +27,9 @@
  *
  */
 
-#include "mesh/patch.H"
+#include "mesh/patch.hpp"
 
-#include "gtex/basic_texture.H"
+#include "gtex/basic_texture.hpp"
 
 /*!
  *  \brief The abstract interface for a rendering mode.

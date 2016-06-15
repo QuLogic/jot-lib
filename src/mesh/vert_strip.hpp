@@ -18,7 +18,7 @@
 #ifndef VERT_STRIP_H_IS_INCLUDED
 #define VERT_STRIP_H_IS_INCLUDED
 
-#include "bvert.H"
+#include "bvert.hpp"
 
 #include <vector>
 

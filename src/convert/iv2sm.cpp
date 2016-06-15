@@ -40,12 +40,12 @@
 #include <cstdlib>
 #include <fstream>
 
-#include "std/support.H"
-#include "std/stop_watch.H"
-#include "mesh/bmesh.H"
-#include "mesh/patch.H" //add patches -sginsber
-#include "dev/dev.H"
-#include "mesh/gtexture.H"
+#include "std/support.hpp"
+#include "std/stop_watch.hpp"
+#include "mesh/bmesh.hpp"
+#include "mesh/patch.hpp" //add patches -sginsber
+#include "dev/dev.hpp"
+#include "mesh/gtexture.hpp"
 
 // Reference dev symbols
 DEVice_2d *DEVice_2d::last = nullptr;
@@ -248,7 +248,7 @@ ind_tri_strip(SoIndexedTriangleStripSet *tristrip, SoCallbackAction *cb)
    tris.clear();
 
    // Add triangles
-   // (from soft/ml/oiv/nsg_inv_fields.C, map_faces_to_nsg())
+   // (from soft/ml/oiv/nsg_inv_fields.cpp, map_faces_to_nsg())
    // cerr << "tristrip - tris" << endl;
    const int32_t *tri_coords = tristrip->coordIndex.getValues(0);
    int firstvert  = -1;

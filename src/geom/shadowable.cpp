@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "world.H"
-#include "shadowable.H"
-#include "shadow.H"
+#include "world.hpp"
+#include "shadowable.hpp"
+#include "shadow.hpp"
 
 using mlib::Wplane;
 

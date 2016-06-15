@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "pattern/stroke_pattern_drawer.H"
-#include "geom/gl_view.H"
-#include "pattern/stroke_group.H"
-#include "pattern/stroke_path.H"
+#include "pattern/stroke_pattern_drawer.hpp"
+#include "geom/gl_view.hpp"
+#include "pattern/stroke_group.hpp"
+#include "pattern/stroke_path.hpp"
 
 
 

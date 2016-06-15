@@ -19,11 +19,11 @@
  * Legacy toon shader, 1D textures, no pixel shaders
  **********************************************************************/
 
-#include "gtex/gl_extensions.H"
-#include "gtex/paper_effect.H"
-#include "geom/gl_view.H"
-#include "std/config.H"
-#include "toon_texture_1D.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/paper_effect.hpp"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
+#include "toon_texture_1D.hpp"
 
 /**********************************************************************
  * Globals

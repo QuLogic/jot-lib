@@ -18,7 +18,7 @@
 #ifndef _GESTURE_BOX_DRAWER_H_
 #define _GESTURE_BOX_DRAWER_H_
 
-#include "gest/gesture.H"
+#include "gest/gesture.hpp"
 
 
 /*****************************************************************

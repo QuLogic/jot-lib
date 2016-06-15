@@ -27,14 +27,14 @@
 
 
 
-#include "npr/hatching_collection.H"
-#include "npr/hatching_group_free.H"
-#include "npr/hatching_group_fixed.H"
+#include "npr/hatching_collection.hpp"
+#include "npr/hatching_group_free.hpp"
+#include "npr/hatching_group_fixed.hpp"
 
-#include "base_jotapp/base_jotapp.H"
-#include "manip/cam_pz.H"
-#include "manip/cam_fp.H"
-#include "manip/cam_edit.H"
+#include "base_jotapp/base_jotapp.hpp"
+#include "manip/cam_pz.hpp"
+#include "manip/cam_fp.hpp"
+#include "manip/cam_edit.hpp"
 
 using mlib::CWtransf;
 using mlib::CNDCpt;

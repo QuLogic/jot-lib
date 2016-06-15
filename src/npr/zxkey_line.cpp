@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "gtex/solid_color.H"
-#include "mesh/patch.H"
+#include "geom/gl_view.hpp"
+#include "gtex/solid_color.hpp"
+#include "mesh/patch.hpp"
 
-#include "zxedge_stroke_texture.H"
-#include "zxkey_line.H"
+#include "zxedge_stroke_texture.hpp"
+#include "zxkey_line.hpp"
 
 /**********************************************************************
  * ZkeyLineTexture:

@@ -18,7 +18,7 @@
 #ifndef XF_MEME_IS_INCLUDED
 #define XF_MEME_IS_INCLUDED
 
-#include "tess/meme.H"
+#include "tess/meme.hpp"
 
 /*****************************************************************
  * XFMeme:

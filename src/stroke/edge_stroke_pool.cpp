@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "edge_stroke_pool.H"
-#include "edge_stroke.H"
-#include "gtex/gl_extensions.H"
-#include "mesh/bmesh.H"
-#include "std/config.H"
+#include "edge_stroke_pool.hpp"
+#include "edge_stroke.hpp"
+#include "gtex/gl_extensions.hpp"
+#include "mesh/bmesh.hpp"
+#include "std/config.hpp"
 
 #include <iterator>
 

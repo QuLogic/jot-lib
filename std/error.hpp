@@ -18,7 +18,7 @@
 #ifndef ERROR_H_IS_INCLUDED
 #define ERROR_H_IS_INCLUDED
 
-#include "platform.H"
+#include "platform.hpp"
 
 
 // Warning Level

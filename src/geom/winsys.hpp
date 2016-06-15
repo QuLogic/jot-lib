@@ -17,10 +17,10 @@
  *****************************************************************/
 #ifndef WINSYS_INC
 #define WINSYS_INC
-#include "disp/view.H"
-#include "dev/dev.H"
-//#include "widgets/file_select.H"
-//#include "widgets/alert_box.H"
+#include "disp/view.hpp"
+#include "dev/dev.hpp"
+//#include "widgets/file_select.hpp"
+//#include "widgets/alert_box.hpp"
 
 // Callback base 
 class MAPPED_CB {

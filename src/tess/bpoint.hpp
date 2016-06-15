@@ -18,11 +18,11 @@
 #ifndef BPOINT_H_IS_INCLUDED
 #define BPOINT_H_IS_INCLUDED
 
-#include "map3d/map0d3d.H"
-#include "map3d/map2d3d.H"
-#include "mesh/vert_frame.H"
+#include "map3d/map0d3d.hpp"
+#include "map3d/map2d3d.hpp"
+#include "mesh/vert_frame.hpp"
 
-#include "tess/bbase.H"
+#include "tess/bbase.hpp"
 
 class Bpoint;
 class Bcurve;
@@ -375,7 +375,7 @@ class BpointFilter : public SimplexFilter {
 /*****************************************************************
  * BpointFrame:
  *
- *    Used in primitive.C to let a skeleton Bpoint control
+ *    Used in primitive.cpp to let a skeleton Bpoint control
  *    a Primitive surface. We want the coordinate frame of
  *    the skeleton point to influence the surface.
  *

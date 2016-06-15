@@ -25,7 +25,7 @@
  */
 
 /*!
- *  \file global.H
+ *  \file global.hpp
  *  \brief The basic include file for mlib; defines constants and
  *         inline utility functions.
  *  \ingroup group_MLIB
@@ -39,7 +39,7 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 /*!
  *  \brief Namespace containing all the related code for Jot Math Library (mlib).

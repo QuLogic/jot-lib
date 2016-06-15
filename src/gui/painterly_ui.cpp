@@ -19,23 +19,23 @@
 // PainterlyUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 #include <fstream>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "proxy_pattern/proxy_pen_ui.H"
-#include "painterly_ui.H"
-#include "color_ui.H"
-#include "light_ui.H"
+#include "proxy_pattern/proxy_pen_ui.hpp"
+#include "painterly_ui.hpp"
+#include "color_ui.hpp"
+#include "light_ui.hpp"
 
-#include "presets_ui.H"
-#include "tone_shader_ui.H"
-#include "gui.H"
+#include "presets_ui.hpp"
+#include "tone_shader_ui.hpp"
+#include "gui.hpp"
 
 using namespace mlib;
 

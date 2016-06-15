@@ -19,20 +19,20 @@
 #define _DRAW_PEN_H_IS_INCLUDED_
 
 /*!
- *  \file draw_pen.H
+ *  \file draw_pen.hpp
  *  \brief Contains the declaration of the DrawPen Pen.
  *
  *  \ingroup group_FFS
- *  \sa draw_pen.C
+ *  \sa draw_pen.cpp
  *
  */
 
-#include "tess/bsurface.H"
+#include "tess/bsurface.hpp"
 
-#include "gest/pen.H"
-#include "ffs/cursor3d.H"
-#include "ffs/floor.H"
-#include "ffs/ffs_util.H"
+#include "gest/pen.hpp"
+#include "ffs/cursor3d.hpp"
+#include "ffs/floor.hpp"
+#include "ffs/ffs_util.hpp"
 
 /*****************************************************************
  * DrawPen

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H" 
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "b_stroke_pool.H"
+#include "b_stroke_pool.hpp"
 
 using namespace mlib;
 

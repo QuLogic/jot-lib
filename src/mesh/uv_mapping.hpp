@@ -34,7 +34,7 @@
 //
 ////////////////////////////////////////////
 
-#include "bface.H"
+#include "bface.hpp"
 
 #include <vector>
 

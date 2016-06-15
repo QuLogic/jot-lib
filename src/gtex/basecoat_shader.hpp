@@ -18,7 +18,7 @@
 #ifndef BASECOAT_SHADER_H_IS_INCLUDED
 #define BASECOAT_SHADER_H_IS_INCLUDED
 
-#include "tone_shader.H"
+#include "tone_shader.hpp"
 
 /**********************************************************************
  * BasecoatShader:

@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "mesh/lstrip.H"
-#include "mesh/lmesh.H"
+#include "mesh/lstrip.hpp"
+#include "mesh/lmesh.hpp"
 
 void
 Lstrip::delete_substrips()

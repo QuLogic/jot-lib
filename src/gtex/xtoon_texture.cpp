@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "gtex/paper_effect.H"
-#include "geom/gl_view.H"
-#include "std/config.H"
-#include "xtoon_texture.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/paper_effect.hpp"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
+#include "xtoon_texture.hpp"
 
 #include <iostream>
 

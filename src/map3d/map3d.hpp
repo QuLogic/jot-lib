@@ -18,8 +18,8 @@
 #ifndef MAP_3D_H_IS_INCUDED
 #define MAP_3D_H_IS_INCUDED
 
-#include "mlib/points.H"
-#include "bnode.H"
+#include "mlib/points.hpp"
+#include "bnode.hpp"
 
 using namespace mlib;
 

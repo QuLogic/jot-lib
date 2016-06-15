@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file curvature_ui.C
+ *  \file curvature_ui.cpp
  *
  *  \brief Contains the implementation of the class for the UI for manipulating
  *  curvature related GTextures.
  *
- *  \sa curvature_ui.H
+ *  \sa curvature_ui.hpp
  *
  */
 
@@ -29,16 +29,16 @@
 
 using namespace std;
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "glui/glui_jot.H"
+#include "geom/winsys.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "gtex/line_drawing.H"
-#include "gtex/curvature_texture.H"
+#include "gtex/line_drawing.hpp"
+#include "gtex/curvature_texture.hpp"
 
-#include "curvature_ui.H"
+#include "curvature_ui.hpp"
 
 /*!
  *  \brief Controls the UI for curvature related GTextures.

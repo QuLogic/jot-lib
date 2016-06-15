@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/util.H"
-#include "mesh/patch.H"
-#include "mlib/point2i.H"
+#include "gtex/util.hpp"
+#include "mesh/patch.hpp"
+#include "mlib/point2i.hpp"
 
-#include "img_line.H"
+#include "img_line.hpp"
 
 #include <queue>
 

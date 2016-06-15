@@ -19,17 +19,17 @@
 #define SWEEP_H_IS_INCLUDED
 
 /*!
- *  \file sweep.H
+ *  \file sweep.hpp
  *  \brief Contains the declarations of SWEEP_BASE, SWEEP_POINT, SWEEP_LINE, and SWEP_DISK.
  *
  *  \ingroup group_FFS
- *  \sa sweep.C
+ *  \sa sweep.cpp
  *
  */
 
-#include "npr/stylized_line3d.H"
-#include "gest/draw_widget.H"
-#include "tess/panel.H"                 // Panel
+#include "npr/stylized_line3d.hpp"
+#include "gest/draw_widget.hpp"
+#include "tess/panel.hpp"                 // Panel
 
 /*****************************************************************
  * SWEEP_BASE:

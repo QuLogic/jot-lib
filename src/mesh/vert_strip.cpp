@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "patch.H"
-#include "stripcb.H"
-#include "vert_strip.H"
+#include "patch.hpp"
+#include "stripcb.hpp"
+#include "vert_strip.hpp"
 
 /**********************************************************************
  * VertStrip:

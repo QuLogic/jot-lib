@@ -18,7 +18,7 @@
 #ifndef LVERT_H_HAS_BEEN_INCLUDED
 #define LVERT_H_HAS_BEEN_INCLUDED
 
-#include "ledge.H"
+#include "ledge.hpp"
 
 template <class T> class SubdivCalc;
 typedef SubdivCalc<Wpt> LocCalc;

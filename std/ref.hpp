@@ -23,8 +23,8 @@
 #include <iostream>
 #include <memory>
 
-#include "platform.H"
-#include "thread_mutex.H"
+#include "platform.hpp"
+#include "thread_mutex.hpp"
 
 #ifdef _AIX
 #include <sys/atomic_op.h>

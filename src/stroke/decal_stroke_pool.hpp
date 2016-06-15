@@ -18,7 +18,7 @@
 #ifndef DECAL_STROKE_POOL_HEADER
 #define DECAL_STROKE_POOL_HEADER
 
-#include "stroke/b_stroke_pool.H"
+#include "stroke/b_stroke_pool.hpp"
 
 #define CDecalStrokePool const DecalStrokePool
 

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/world.H"
-#include "gtex/util.H"  // XXX - remove after done debugging
-#include "std/config.H"
-#include "mesh/uv_data.H"
+#include "geom/world.hpp"
+#include "gtex/util.hpp"  // XXX - remove after done debugging
+#include "std/config.hpp"
+#include "mesh/uv_data.hpp"
 
 using namespace mlib;
 
@@ -734,7 +734,7 @@ UVdata::set_subdiv_uv(Lvert* v, Lface* f)
 /*****************************************************************
  * Computing subdivision uv-coords
  *****************************************************************/
-#include "subdiv_calc.H"
+#include "subdiv_calc.hpp"
 
 // Need this operator defined to instantiate LoopCalc<UVpt> below:
 UVpt

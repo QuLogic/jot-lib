@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "decal_stroke_pool.H"
-#include "gtex/gl_extensions.H"
+#include "decal_stroke_pool.hpp"
+#include "gtex/gl_extensions.hpp"
 
 void
 DecalStrokePool::draw_flat(CVIEWptr& v) {

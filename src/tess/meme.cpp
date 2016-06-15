@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/mi.H"
-#include "std/config.H"
-#include "meme.H"
-#include "bbase.H"
-#include "primitive.H"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
+#include "meme.hpp"
+#include "bbase.hpp"
+#include "primitive.hpp"
 
 using namespace mlib;
 

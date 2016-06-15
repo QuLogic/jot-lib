@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "std/config.H"
-#include "mi.H"
+#include "disp/colors.hpp"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 using namespace mlib;
 

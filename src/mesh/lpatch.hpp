@@ -18,8 +18,8 @@
 #ifndef LPATCH_H_HAS_BEEN_INCLUDED
 #define LPATCH_H_HAS_BEEN_INCLUDED
 
-#include "patch.H"
-#include "lmesh.H"
+#include "patch.hpp"
+#include "lmesh.hpp"
 
 /**********************************************************************
  * Lpatch:

@@ -18,7 +18,7 @@
 #ifndef BSIMPLEX_H_IS_INCLUDED
 #define BSIMPLEX_H_IS_INCLUDED
 
-#include "simplex_data.H"
+#include "simplex_data.hpp"
 
 #include <vector>
 
@@ -38,7 +38,7 @@ class Bsimplex_list;
  * SimplexFilter:
  *
  *      Accepts or rejects a simplex based on some criteria.
- *      Other filters are defined in bsimplex.H and bedge.H
+ *      Other filters are defined in bsimplex.hpp and bedge.hpp
  *      (and elsewhere).
  *****************************************************************/
 class SimplexFilter {

@@ -18,7 +18,7 @@
 #ifndef COLOR_ID_TEXTURE_H_IS_INCLUDED
 #define COLOR_ID_TEXTURE_H_IS_INCLUDED
 
-#include "solid_color.H"
+#include "solid_color.hpp"
 
 /**********************************************************************
  * ColorIDStripCB:

@@ -19,7 +19,7 @@
 #define LEDGE_H_HAS_BEEN_INCLUDED
 
 #include <climits>
-#include "bmesh.H"
+#include "bmesh.hpp"
 
 class Lvert;
 class Lface;
@@ -152,7 +152,7 @@ class Ledge : public Bedge {
       Bsimplex* sim = ctrl_element();
       return is_edge(sim) ? (Ledge*)sim : nullptr;
    }
-   Lface* ctrl_face() const;    // defined in bface.H
+   Lface* ctrl_face() const;    // defined in bface.hpp
 
    void set_parent(Bsimplex* p) { _parent = p; }
 
@@ -214,7 +214,7 @@ class Ledge : public Bedge {
    void claim_child(Lvert* child);
 
    // Used in push_multi() and push_primary().
-   // Full comments in ledge.C:
+   // Full comments in ledge.cpp:
    void get_sub_faces(Bface* f, Bedge* &e1, Bface* &sf1, Bedge* &e2, Bface* &sf2);
 
  private:

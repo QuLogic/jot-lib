@@ -18,15 +18,15 @@
 #ifndef MAT3_H_IS_INCLUDED
 #define MAT3_H_IS_INCLUDED
 
-/*! \file Mat3.H
+/*! \file Mat3.hpp
  *  \brief Contains the declaration of the Mat3 class, a 3x3 matrix class.
  *  \ingroup group_MLIB
  *
  */
  
-#include "mlib/vec3.H"
-#include "mlib/point3.H"
-#include "mlib/line.H"
+#include "mlib/vec3.hpp"
+#include "mlib/point3.hpp"
+#include "mlib/line.hpp"
 
 namespace mlib {
 

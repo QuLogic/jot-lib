@@ -21,10 +21,10 @@
 #include <map>
 #include <vector>
 
-#include "disp/color.H"
-#include "disp/view.H"
-#include "geom/texture.H"
-#include "net/data_item.H"
+#include "disp/color.hpp"
+#include "disp/view.hpp"
+#include "geom/texture.hpp"
+#include "net/data_item.hpp"
 
 /*****************************************************************
  * BaseStrokeOffset

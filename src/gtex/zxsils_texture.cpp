@@ -16,9 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/config.H"
-#include "geom/gl_view.H"
-#include "zxsils_texture.H"
+#include "std/config.hpp"
+#include "geom/gl_view.hpp"
+#include "zxsils_texture.hpp"
 
 using mlib::Wpt;
 

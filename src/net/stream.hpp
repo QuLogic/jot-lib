@@ -20,7 +20,7 @@
 
 #include <sstream>
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 /* --------------------------    Constants     ----------------------------- */
 

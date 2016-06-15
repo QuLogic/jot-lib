@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "mi.H"
-#include "lmesh.H"
+#include "std/config.hpp"
+#include "mi.hpp"
+#include "lmesh.hpp"
 
 int 
 main(int argc, char *argv[])

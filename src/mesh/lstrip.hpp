@@ -19,8 +19,8 @@
 #ifndef LSTRIP_H_IS_INCLUDED
 #define LSTRIP_H_IS_INCLUDED
 
-#include "tri_strip.H"
-#include "lface.H"
+#include "tri_strip.hpp"
+#include "lface.hpp"
 
 /**********************************************************************
  * Lstrip:

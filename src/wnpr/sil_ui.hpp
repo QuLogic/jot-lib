@@ -22,9 +22,9 @@
 // SilUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
-#include "mesh/patch.H"
-#include "npr/sil_and_crease_texture.H"
+#include "disp/view.hpp"
+#include "mesh/patch.hpp"
+#include "npr/sil_and_crease_texture.hpp"
 
 #include <map>
 #include <vector>

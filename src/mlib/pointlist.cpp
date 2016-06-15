@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Pointlist.C
+ *  \file Pointlist.cpp
  *  \brief Contains the implementation of non-inline functions of the Pointlist
  *  class.
  *  \ingroup group_MLIB
@@ -25,9 +25,9 @@
 
 #include <climits>
 
-#include "mlib/global.H"
+#include "mlib/global.hpp"
 
-#include "mlib/pointlist.H"
+#include "mlib/pointlist.hpp"
 
 /* Point List Property Queries */
 

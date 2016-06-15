@@ -19,19 +19,19 @@
 #define FSA_H_IS_INCLUDED
 
 /*!
- *  \file fsa.H
+ *  \file fsa.hpp
  *  \brief Contains the definition of FSA (finite state automata) classes.
  *
  *  \note Some other classes are in here as well, but they should probably be
  *  moved elsewhere.
  *
- *  \sa fsa.C
+ *  \sa fsa.cpp
  *
  */
 
-#include "std/support.H"
-#include "disp/view.H"
-#include "dev/dev.H"
+#include "std/support.hpp"
+#include "disp/view.hpp"
+#include "dev/dev.hpp"
 
 #include <map>
 #include <vector>
@@ -452,7 +452,7 @@ class Event : public Evd {
 // about DEV's events, these types don't really belong
 // here.  However, DEV doesn't know anything about FSA's
 // either, so it doesn't belong there.   Perhaps there
-// should be an event.H or something that wraps FSA's and
+// should be an event.hpp or something that wraps FSA's and
 // DEV events together....
 //--------------------------------------------------------
 typedef Arc_t<Event>   Arc  ;

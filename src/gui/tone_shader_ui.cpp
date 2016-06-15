@@ -19,17 +19,17 @@
 // ToneShaderUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "gtex/tone_shader.H"
+#include "gtex/tone_shader.hpp"
 
-#include "tone_shader_ui.H"
+#include "tone_shader_ui.hpp"
 
 using namespace mlib;
 

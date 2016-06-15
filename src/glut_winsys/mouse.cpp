@@ -16,17 +16,17 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "dev/dev.H"
-#include "mlib/points.H"
-#include "std/stop_watch.H"
-#include "std/config.H"
+#include "dev/dev.hpp"
+#include "mlib/points.hpp"
+#include "std/stop_watch.hpp"
+#include "std/config.hpp"
 
 #include <GL/glut.h>
-#include "glut_winsys.H"
-#include "tty_glut.H"
-#include "mouse.H"
+#include "glut_winsys.hpp"
+#include "tty_glut.hpp"
+#include "mouse.hpp"
 
-#include "kbd.H"
+#include "kbd.hpp"
 
 using mlib::PIXEL;
 using mlib::CXYpt;

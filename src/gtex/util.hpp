@@ -18,12 +18,12 @@
 #ifndef GTEX_UTIL_H_IS_INCLUDED
 #define GTEX_UTIL_H_IS_INCLUDED
 
-#include "geom/gl_view.H"
-#include "geom/world.H"
-#include "geom/show_tris.H"
-#include "mesh/edge_strip.H"
-#include "mesh/stripcb.H"
-#include "mesh/lmesh.H"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"
+#include "geom/show_tris.hpp"
+#include "mesh/edge_strip.hpp"
+#include "mesh/stripcb.hpp"
+#include "mesh/lmesh.hpp"
 
 /**********************************************************************
  * namespace TexUnit:

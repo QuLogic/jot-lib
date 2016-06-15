@@ -16,18 +16,18 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file vieweasel.C
+ *  \file vieweasel.cpp
  *  \brief Contains the implementation of the VIEW_EASEL class.
  *  \author Jonathan M. Cohen (jmc)
  *  \date Fri Jun 12 16:06:40 US/Eastern 1998
  *
- *  \sa vieweasel.H
+ *  \sa vieweasel.hpp
  *
  */
 
-#include "geom/world.H"
+#include "geom/world.hpp"
 
-#include "vieweasel.H"
+#include "vieweasel.hpp"
 
 using mlib::XYpt;
 

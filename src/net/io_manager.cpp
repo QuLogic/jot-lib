@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "io_manager.H"
-#include "std/file.H"
+#include "io_manager.hpp"
+#include "std/file.hpp"
 
 /*****************************************************************
  * IOManager

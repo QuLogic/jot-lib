@@ -19,7 +19,7 @@
 #ifndef GL_TEX_COORD_GEN_H_IS_INCLUDED
 #define GL_TEX_COORD_GEN_H_IS_INCLUDED
 
-#include "mesh/tex_coord_gen.H"
+#include "mesh/tex_coord_gen.hpp"
 
 class GLTexCoordGen : public TexCoordGen {
  protected:

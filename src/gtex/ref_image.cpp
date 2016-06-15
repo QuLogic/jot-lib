@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/ref_image.H"
-#include "gtex/aux_ref_image.H"
-#include "gtex/buffer_ref_image.H"
-#include "gtex/halo_ref_image.H" //blasphemy !! base class including a derived class
+#include "gtex/ref_image.hpp"
+#include "gtex/aux_ref_image.hpp"
+#include "gtex/buffer_ref_image.hpp"
+#include "gtex/halo_ref_image.hpp" //blasphemy !! base class including a derived class
 
 using namespace mlib;
 

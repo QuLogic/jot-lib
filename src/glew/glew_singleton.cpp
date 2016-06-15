@@ -1,8 +1,8 @@
 /*!
- *  \file glew_singleton.C
+ *  \file glew_singleton.cpp
  *  \brief Contains the implementation of the GLEWSingleton class.
  *
- *  \sa glew_singleton.H
+ *  \sa glew_singleton.hpp
  *
  */
 
@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#include "glew/glew_singleton.H"
+#include "glew/glew_singleton.hpp"
 #include <GL/glew.h>
 
 GLEWSingleton::GLEWSingleton()

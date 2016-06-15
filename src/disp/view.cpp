@@ -17,21 +17,21 @@
  *****************************************************************/
 
 #include <fstream>
-#include "std/config.H"
+#include "std/config.hpp"
 
-#include "std/stop_watch.H"
-#include "std/thread.H"
+#include "std/stop_watch.hpp"
+#include "std/thread.hpp"
 
-#include "disp/colors.H"
-#include "disp/ray.H"
-#include "disp/gel.H"
-#include "disp/cam_focus.H"
-#include "disp/recorder.H"
-#include "disp/animator.H"
-#include "disp/frame_time_observer.H"
-#include "disp/paper_effect_base.H"
-#include "disp/jitter.H"
-#include "net/io_manager.H"
+#include "disp/colors.hpp"
+#include "disp/ray.hpp"
+#include "disp/gel.hpp"
+#include "disp/cam_focus.hpp"
+#include "disp/recorder.hpp"
+#include "disp/animator.hpp"
+#include "disp/frame_time_observer.hpp"
+#include "disp/paper_effect_base.hpp"
+#include "disp/jitter.hpp"
+#include "net/io_manager.hpp"
 
 using namespace mlib;
 
@@ -1531,7 +1531,7 @@ VIEW::intersect_others(
 
    // XXX -
    //   should use TEXT2D::static_name() below,
-   //   but can't reference geom/text2d.H
+   //   but can't reference geom/text2d.hpp
    GELFILTclass_desc_excl no_text("TEXT2D");    
 
    filter_list.push_back(&others);
@@ -1573,7 +1573,7 @@ VIEW::intersect(
 
    // XXX -
    //   should use TEXT2D::static_name() below,
-   //   but can't reference geom/text2d.H
+   //   but can't reference geom/text2d.hpp
    GELFILTclass_desc_excl no_text("TEXT2D");    
 
    if ((filter & H_TEXT) == 0)

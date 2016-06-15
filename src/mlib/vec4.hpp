@@ -19,7 +19,7 @@
 #define VEC4_H_IS_INCLUDED
 
 /*!
- *  \file Vec4.H
+ *  \file Vec4.hpp
  *  \brief Contains the declaration of the Vec4 class, a 4D vector class.
  *  \ingroup group_MLIB
  *
@@ -28,10 +28,10 @@
  *
  */
 
-//#include "mlib/point3.H"
-#include "mlib/points.H"
-#include "mlib/vec3.H"
-#include "mlib/global.H"
+//#include "mlib/point3.hpp"
+#include "mlib/points.hpp"
+#include "mlib/vec3.hpp"
+#include "mlib/global.hpp"
 
 namespace mlib {
 

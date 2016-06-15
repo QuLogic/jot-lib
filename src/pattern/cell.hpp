@@ -18,7 +18,7 @@
 #ifndef _CELL_H_
 #define _CELL_H_
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 class Stroke;
 

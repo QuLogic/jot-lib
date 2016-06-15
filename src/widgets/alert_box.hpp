@@ -18,7 +18,7 @@
 #ifndef ALERT_BOX_H_INCLUDED
 #define ALERT_BOX_H_INCLUDED
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 /*****************************************************************
  * AlertBox

@@ -31,10 +31,10 @@
 ////////////////////////////////////////////
 
 
-#include "std/config.H"
-#include "geom/world.H"
-#include "gtex/ref_image.H"
-#include "npr/hatching_group_base.H"
+#include "std/config.hpp"
+#include "geom/world.hpp"
+#include "gtex/ref_image.hpp"
+#include "npr/hatching_group_base.hpp"
 
 using namespace mlib;
 

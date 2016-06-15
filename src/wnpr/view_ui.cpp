@@ -28,17 +28,17 @@
 #define ID_SHIFT                 10
 #define ID_MASK                  ((1<<ID_SHIFT)-1)
 
-#include "std/support.H"
-#include "std/file.H"
+#include "std/support.hpp"
+#include "std/file.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "gtex/paper_effect.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "gtex/paper_effect.hpp"
+#include "std/config.hpp"
 
-#include "view_ui.H"
+#include "view_ui.hpp"
 
 using namespace mlib;
 

@@ -19,19 +19,19 @@
 #define DRAW_WIDGET_H_IS_INCLUDED
 
 /*!
- *  \file draw_widget.H
+ *  \file draw_widget.hpp
  *  \brief Contains the definition of the DrawWidget class.
  *
- *  \sa draw_widget.C
+ *  \sa draw_widget.cpp
  *
  */
 
-#include "geom/geom.H"          // for GEOM baseclass
-#include "manip/manip.H"        // for Interactor base class
-#include "mesh/lmesh.H"         // for BMESHobs and LMESH
-#include "std/stop_watch.H"     // for timing
+#include "geom/geom.hpp"          // for GEOM baseclass
+#include "manip/manip.hpp"        // for Interactor base class
+#include "mesh/lmesh.hpp"         // for BMESHobs and LMESH
+#include "std/stop_watch.hpp"     // for timing
 
-#include "gest/gest_guards.H"   // GESTURE FSA
+#include "gest/gest_guards.hpp"   // GESTURE FSA
 
 MAKE_PTR_SUBC(DrawWidget,GEOM);
 typedef const DrawWidget    CDrawWidget;

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "stroke_pattern.H"
-#include "stroke_group.H"
-#include "stroke_path.H"
+#include "stroke_pattern.hpp"
+#include "stroke_group.hpp"
+#include "stroke_path.hpp"
 
 using namespace std;
 using namespace mlib;;

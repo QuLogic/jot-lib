@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/world.H"
-#include "gtex/util.H"
-#include "std/config.H"
+#include "disp/colors.hpp"
+#include "geom/world.hpp"
+#include "gtex/util.hpp"
+#include "std/config.hpp"
 
-#include "tess/tess_debug.H"
-#include "tess/ti.H"
-#include "tess/rsurf.H"
+#include "tess/tess_debug.hpp"
+#include "tess/ti.hpp"
+#include "tess/rsurf.hpp"
 
 using namespace mlib;
 
@@ -819,7 +819,7 @@ Rsurface::produce_child()
    err_adv(debug, "Rsurface::produce_child: level %d", bbase_level());
 }
 
-#include "geom/gl_util.H"
+#include "geom/gl_util.hpp"
 void 
 Rsurface::draw_debug()
 {

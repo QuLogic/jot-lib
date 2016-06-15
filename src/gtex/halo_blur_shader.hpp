@@ -18,8 +18,8 @@
 #ifndef HALO_BLUR_SHADER_H_IS_INCLUDED
 #define HALO_BLUR_SHADER_H_IS_INCLUDED
 
-#include "glsl_shader.H"
-#include "gtex/tone_shader.H"
+#include "glsl_shader.hpp"
+#include "gtex/tone_shader.hpp"
 
 /**********************************************************************
  * HaloBlurShader:

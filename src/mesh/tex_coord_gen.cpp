@@ -20,7 +20,7 @@
 // by Karol Szerszen
 
 
-#include "tex_coord_gen.H"
+#include "tex_coord_gen.hpp"
 
 
 double 

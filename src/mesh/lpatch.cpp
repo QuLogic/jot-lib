@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "lpatch.H"
-#include "std/config.H"
+#include "lpatch.hpp"
+#include "std/config.hpp"
 
 
 static bool debug = Config::get_var_bool("DEBUG_LPATCH",false);

@@ -18,10 +18,10 @@
 //halo sphere
 //by Karol Szerszen
 
-#include "geom/gl_view.H"
-#include "gtex/wireframe.H" // for debugging
+#include "geom/gl_view.hpp"
+#include "gtex/wireframe.hpp" // for debugging
 
-#include "halo_sphere.H"
+#include "halo_sphere.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_HALO_SPHERE",false);
 

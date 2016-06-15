@@ -19,15 +19,15 @@
 #define EASEL_MANAGER_H_IS_INCLUDED
 
 /*!
- *  \file easel_manager.H
+ *  \file easel_manager.hpp
  *  \file Contains the definition of the EaselManager class.
  *
- *  \sa easel_manager.H
+ *  \sa easel_manager.hpp
  *
  */
 
-#include "gest/vieweasel.H"
-#include "std/support.H"
+#include "gest/vieweasel.hpp"
+#include "std/support.hpp"
 
 class EaselManager {
    

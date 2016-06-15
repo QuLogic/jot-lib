@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "lvert_strip.H"
-#include "lmesh.H"
+#include "lvert_strip.hpp"
+#include "lmesh.hpp"
 
 int
 LvertStrip::cur_level() const

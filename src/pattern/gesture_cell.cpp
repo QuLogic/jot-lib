@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gesture_cell.H"
-#include "mlib/points.H"
-#include "pattern_pen_ui.H"
+#include "gesture_cell.hpp"
+#include "mlib/points.hpp"
+#include "pattern_pen_ui.hpp"
 
 using namespace mlib;
 

@@ -19,21 +19,21 @@
 #define PATCH_H_IS_INCLUDED
 
 /*!
- *  \file patch.H
+ *  \file patch.hpp
  *  \brief Contains the definition of the Patch class and related classes.
  *
- *  \sa patch.C
+ *  \sa patch.cpp
  *
  */
 
-#include "disp/ref_img_drawer.H"
-#include "geom/appear.H"        // base class of Patch
+#include "disp/ref_img_drawer.hpp"
+#include "geom/appear.hpp"        // base class of Patch
 
-#include "mesh/bface.H"
-#include "mesh/edge_strip.H"
-#include "mesh/gtexture.H"
-#include "mesh/tex_coord_gen.H"
-#include "mesh/zcross_path.H"
+#include "mesh/bface.hpp"
+#include "mesh/edge_strip.hpp"
+#include "mesh/gtexture.hpp"
+#include "mesh/tex_coord_gen.hpp"
+#include "mesh/zcross_path.hpp"
 
 #include <vector>
 
@@ -276,7 +276,7 @@ class Patch : public DATA_ITEM, public APPEAR, public RefImageClient {
    //! \name Convenience - Mesh Accessors
    //@{
 
-   // defined in bmesh.H:
+   // defined in bmesh.hpp:
    CWtransf& xform()      const;
    CWtransf& inv_xform()  const;
    CWtransf& obj_to_ndc() const;
@@ -776,7 +776,7 @@ class PatchFaceFilter : public SimplexFilter {
 
 /*****************************************************************/
 /*!
- * \brief List of Patches w/ convenience methods (defined in patch.H)
+ * \brief List of Patches w/ convenience methods (defined in patch.hpp)
  */
 /*****************************************************************/
 class Patch_list : public RIC_array<Patch> {
@@ -831,7 +831,7 @@ typedef const Patch_list CPatch_list;
 /*****************************************************************
  * Patch_list
  *
- *   Defined in bmesh.H, inlined convenience methods defined here.
+ *   Defined in bmesh.hpp, inlined convenience methods defined here.
  *****************************************************************/
 inline void
 Patch_list::creases_changed() const

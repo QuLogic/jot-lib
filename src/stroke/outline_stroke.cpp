@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "outline_stroke.H"
-#include "gtex/glsl_paper.H"
+#include "outline_stroke.hpp"
+#include "gtex/glsl_paper.hpp"
 
 static bool use_glsl_paper = Config::get_var_bool("ENABLE_GLSL_PAPER",true);
 

@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "test_app.H"
-#include "gtex/smooth_shade.H"  // used in BALLwidget_anchor
-#include "gtex/wireframe.H"  // used in GRIDwidget_anchor
-#include "mesh/lmesh.H"
+#include "test_app.hpp"
+#include "gtex/smooth_shade.hpp"  // used in BALLwidget_anchor
+#include "gtex/wireframe.hpp"  // used in GRIDwidget_anchor
+#include "mesh/lmesh.hpp"
 
 const int HEIGHT = 6;
 const double REGULARITY = 20;

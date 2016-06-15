@@ -20,7 +20,7 @@
 #define GLUI_JOT_H
 
 #include <GL/glui.h>
-#include "glui_custom_controls.H"
+#include "glui_custom_controls.hpp"
 #include <cassert>
 
 /********************************* jot_check_glui_item_fit() **************/

@@ -17,20 +17,20 @@
  *****************************************************************/
 
 /*!
- *  \file draw_manip.C
+ *  \file draw_manip.cpp
  *  \brief Class for manipulating FFS objects via middle button.
  *
  *  \ingroup group_FFS
- *  \sa draw_manip.H
+ *  \sa draw_manip.hpp
  *
  */
 
-#include "geom/world.H"
-#include "tess/bcurve.H"
+#include "geom/world.hpp"
+#include "tess/bcurve.hpp"
 
-#include "floor.H"
-#include "draw_manip.H"
-#include "crv_sketch.H"
+#include "floor.hpp"
+#include "draw_manip.hpp"
+#include "crv_sketch.hpp"
 
 using namespace mlib;
 

@@ -19,12 +19,12 @@
 #define POINTS_H_IS_INCLUDED
 
 /*!
- *  \file points.H
+ *  \file points.hpp
  *  \brief Definitions of geometry classes for various coordinate systems.
  *  \ingroup group_MLIB
  *
  *  \remark This file should probably be renamed to something like
- *  coordinate_systems.H.
+ *  coordinate_systems.hpp.
  *
  */
 
@@ -204,14 +204,14 @@ typedef const class UVline              CUVline;
 
 } // namespace mlib
 
-#include "mlib/global.H"
-#include "mlib/point2.H"
-#include "mlib/point3.H"
-#include "mlib/plane.H"
-#include "mlib/mat3.H"
-#include "mlib/mat4.H"
-#include "mlib/quat.H"
-#include "mlib/nearest_pt.H"
+#include "mlib/global.hpp"
+#include "mlib/point2.hpp"
+#include "mlib/point3.hpp"
+#include "mlib/plane.hpp"
+#include "mlib/mat3.hpp"
+#include "mlib/mat4.hpp"
+#include "mlib/quat.hpp"
+#include "mlib/nearest_pt.hpp"
 
 namespace mlib {
 

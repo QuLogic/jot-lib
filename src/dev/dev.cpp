@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "dev.H"
+#include "dev.hpp"
 
 using namespace mlib;
 

@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/colors.H"
-#include "geom/body.H"
-#include "geom/text2d.H"
-#include "geom/line3d.H"
-#include "geom/world.H"
-#include "geom/winsys.H"
+#include "disp/colors.hpp"
+#include "geom/body.hpp"
+#include "geom/text2d.hpp"
+#include "geom/line3d.hpp"
+#include "geom/world.hpp"
+#include "geom/winsys.hpp"
 
-#include "std/config.H"
-#include "std/thread.H"
-#include "std/time.H"
-#include "std/run_avg.H"
+#include "std/config.hpp"
+#include "std/thread.hpp"
+#include "std/time.hpp"
+#include "std/run_avg.hpp"
 
 using namespace mlib;
 
@@ -213,7 +213,7 @@ WORLD::clean_on_exit() const
 
    // Kill off all the ref counted GELs in the EXIST list to
    // ensure they properly die off while all the required static
-   // observed HASHes are still around. See draw/floor.H for an
+   // observed HASHes are still around. See draw/floor.hpp for an
    // example where one must explicitly add another clean_on_exit
    // routine via onexit() to ensure extra static ref counted
    // GEL pointers are killed off to ensure object destruction

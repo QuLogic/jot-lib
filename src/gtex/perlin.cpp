@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "gtex/util.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/util.hpp"
 
-#include "perlin.H"
+#include "perlin.hpp"
 
 
 Perlin* Perlin:: _instance=nullptr;

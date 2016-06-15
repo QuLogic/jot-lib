@@ -20,16 +20,16 @@
 
 /*****************************************************************
  *      Definitions of additional named colors.  New named colors
- *      can be added here without changing color.H. The reason to
- *      avoid changing color.H is that many jot files depend on
+ *      can be added here without changing color.hpp. The reason to
+ *      avoid changing color.hpp is that many jot files depend on
  *      it, so changes to that file lead to a long recompile.
  *      Relatively few files depend on this header, so new colors
  *      can be defined here without causing excessively long
  *      recompilation times.
  *****************************************************************/
-#include "disp/rgba.H"  // should be moved to disp
-#include "std/config.H"
-#include "color.H"
+#include "disp/rgba.hpp"  // should be moved to disp
+#include "std/config.hpp"
+#include "color.hpp"
 
 namespace Color {
 

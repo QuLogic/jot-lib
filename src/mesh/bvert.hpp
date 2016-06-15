@@ -18,10 +18,10 @@
 #ifndef BVERT_H_HAS_BEEN_INCLUDED
 #define BVERT_H_HAS_BEEN_INCLUDED
 
-#include "disp/color.H"
-#include "disp/bbox.H"
-#include "mesh/bedge.H"
-#include "mesh/bmesh_curvature.H"
+#include "disp/color.hpp"
+#include "disp/bbox.hpp"
+#include "mesh/bedge.hpp"
+#include "mesh/bmesh_curvature.hpp"
 
 #include <vector>
 
@@ -159,7 +159,7 @@ class Bvert : public Bsimplex {
    void get_faces(vector<Bface*>& ret) const;
 
    // like above, but returns the list by copying
-   // defined in bface.H
+   // defined in bface.hpp
    Bface_list get_faces() const;
 
    // Return a list of quads in the star of this vertex.
@@ -174,7 +174,7 @@ class Bvert : public Bsimplex {
    // including faces adjacent to non-manifold ("multi") edges:
    void  get_all_faces(vector<Bface*>& ret) const;
 
-   Bface_list get_all_faces() const; // defined in bface.H
+   Bface_list get_all_faces() const; // defined in bface.hpp
 
    int num_tris() const;
    int num_quads() const;

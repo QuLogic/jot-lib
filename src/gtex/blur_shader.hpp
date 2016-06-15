@@ -18,8 +18,8 @@
 #ifndef BLUR_SHADER_H_IS_INCLUDED
 #define BLUR_SHADER_H_IS_INCLUDED
 
-#include "glsl_shader.H"
-#include "gtex/tone_shader.H"
+#include "glsl_shader.hpp"
+#include "gtex/tone_shader.hpp"
 
 /**********************************************************************
  * BlurShader:

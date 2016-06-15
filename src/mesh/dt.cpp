@@ -18,9 +18,9 @@
 /**********************************************************************
  *  apply a distance transform to an input image...
  **********************************************************************/
-#include "geom/image.H"
-#include "std/config.H"
-#include "mi.H"
+#include "geom/image.hpp"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 #include <string>
 
@@ -58,7 +58,7 @@ compute_val(Image& img, uint x, uint y)
 {
    COLOR c = img.get_color(x,y);
    if (c[0] != c[1]) {
-      cerr << "dt.C:compute_val: error: red/green channel mis-match" << endl;
+      cerr << "dt.cpp:compute_val: error: red/green channel mis-match" << endl;
       return;
    }
 //    if (c[0] != 0)

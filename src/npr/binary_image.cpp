@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "binary_image.H"
+#include "gtex/gl_extensions.hpp"
+#include "binary_image.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_BINARY_IMAGE", false);
 

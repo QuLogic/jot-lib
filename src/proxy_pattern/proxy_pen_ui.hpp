@@ -18,7 +18,7 @@
 #ifndef _PROXY_PEN_UI_H_IS_INCLUDED_
 #define _PROXY_PEN_UI_H_IS_INCLUDED_
 
-#include "gui/base_ui.H"
+#include "gui/base_ui.hpp"
 
 class ProxyPen;
 class BaseStroke;

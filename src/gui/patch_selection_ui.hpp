@@ -22,9 +22,9 @@
 // PatchSelectionUI
 ////////////////////////////////////////////
 
-#include "glui/glui_jot.H"
-#include "gui/base_ui.H"
-#include "gui/gui.H"
+#include "glui/glui_jot.hpp"
+#include "gui/base_ui.hpp"
+#include "gui/gui.hpp"
 
 #include <vector>
 

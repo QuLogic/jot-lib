@@ -18,10 +18,10 @@
 #ifndef DOTS_TX_H_IS_INCLUDED
 #define DOTS_TX_H_IS_INCLUDED
 
-#include "glsl_shader.H"
-#include "gtex/tone_shader.H"
-#include "glsl_layer_base.H"
-#include "hatching_tx.H"
+#include "glsl_shader.hpp"
+#include "gtex/tone_shader.hpp"
+#include "glsl_layer_base.hpp"
+#include "hatching_tx.hpp"
 
 /*****************************************************************
  * halftone_layer_t

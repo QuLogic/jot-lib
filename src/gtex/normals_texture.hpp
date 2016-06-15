@@ -18,7 +18,7 @@
 #ifndef NORMALS_TEXTURE_H_IS_INCLUDED
 #define NORMALS_TEXTURE_H_IS_INCLUDED
 
-#include "smooth_shade.H"
+#include "smooth_shade.hpp"
 #include <map>
 
 /**********************************************************************

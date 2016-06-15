@@ -22,11 +22,11 @@
 // ImageLineUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
-#include "base_ui.H"
+#include "disp/view.hpp"
+#include "base_ui.hpp"
 
-#include "patch_selection_ui.H"
-#include "gtex/glsl_toon.H"
+#include "patch_selection_ui.hpp"
+#include "gtex/glsl_toon.hpp"
 
 #include <map>
 #include <vector>

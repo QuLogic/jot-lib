@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/patch_color.H"
+#include "gtex/patch_color.hpp"
 
-#include "patch_pen.H"
+#include "patch_pen.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_PATCH_PEN", false);
 

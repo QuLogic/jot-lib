@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "tess/skin.H"
-#include "tess/skin_meme.H"
+#include "tess/skin.hpp"
+#include "tess/skin_meme.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_SKIN",false);
 

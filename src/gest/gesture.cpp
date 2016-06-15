@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"
-#include "geom/gl_view.H"
-#include "geom/world.H"         // for DEBUG_ELLIPSE
-#include "gest_int.H"
-#include "mlib/point2.H"        // XXX - Probably doesn't need to be included.
-#include "std/config.H"
-#include "std/run_avg.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"         // for DEBUG_ELLIPSE
+#include "gest_int.hpp"
+#include "mlib/point2.hpp"        // XXX - Probably doesn't need to be included.
+#include "std/config.hpp"
+#include "std/run_avg.hpp"
 
 using namespace mlib;
 
@@ -953,7 +953,7 @@ get_section(PIXEL_list& pts, double s0, double s1)
    // Pull out the section of the given PIXEL_list corresponding
    // to the interval in parameter space from s0 to s1.
 
-   // XXX - belongs in mlib/points.H
+   // XXX - belongs in mlib/points.hpp
 
    pts.update_length();
 
@@ -1353,7 +1353,7 @@ GestureDrawer::draw(const GESTURE* gest, CVIEWptr& v)
    glEnd();
 
    // I tried to implement some code for corner getting highlighted
-   // it is on the gesture.C version on Unnameable
+   // it is on the gesture.cpp version on Unnameable
 
    GL_VIEW::end_line_smooth();
 

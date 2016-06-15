@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "map2d3d.H"
-#include "std/config.H"
+#include "map2d3d.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 
@@ -78,7 +78,7 @@ Map1D3D::deriv(double t, double l) const
 {
    // Base class does numerical derivative.
 
-   // See comment in map1d3d.H about how we deal w/
+   // See comment in map1d3d.hpp about how we deal w/
    // parameters outside the range [0,1).
 
    // Step size for numerical derivative.
@@ -248,7 +248,7 @@ Wpt_listMap::map(double t) const
 {
    // Point on curve at parameter value t.
 
-   // See comment in map1d3d.H about how we deal w/
+   // See comment in map1d3d.hpp about how we deal w/
    // parameters outside the range [0,1).
 
    if (is_closed()) {

@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "glsl_layer_base.H"
-#include "mesh/patch_blend_weight.H"
+#include "glsl_layer_base.hpp"
+#include "mesh/patch_blend_weight.hpp"
 
 /*****************************************************************
  * layer_base_t

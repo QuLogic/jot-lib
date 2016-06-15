@@ -19,14 +19,14 @@
 #define PLANE_H_IS_INCLUDED
 
 /*!
- *  \file Plane.H
+ *  \file Plane.hpp
  *  \brief Contains the definition of the Plane class.  A 3D oriented plane class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "mlib/point2.H"
-#include "mlib/point3.H"
+#include "mlib/point2.hpp"
+#include "mlib/point3.hpp"
 
 namespace mlib {
 
@@ -203,7 +203,7 @@ axis_ang(
 } // namespace mlib
 
 #ifdef JOT_NEEDS_TEMPLATES_IN_H_FILE
-#include "plane.C"
+#include "plane.cpp"
 #endif
 
 #endif // PLANE_H_IS_INCLUDED

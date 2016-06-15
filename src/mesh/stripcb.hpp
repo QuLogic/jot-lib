@@ -18,7 +18,7 @@
 #ifndef STRIPCB_H_IS_INCLUDED
 #define STRIPCB_H_IS_INCLUDED
 
-#include "mesh/bface.H"
+#include "mesh/bface.hpp"
 
 /**********************************************************************
  * StripCB:

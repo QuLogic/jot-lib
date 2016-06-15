@@ -32,19 +32,19 @@
 
 using namespace std;
 
-#include "std/config.H"
-#include "std/run_avg.H"
-#include "mlib/points.H"
+#include "std/config.hpp"
+#include "std/run_avg.hpp"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 
-#include "gtex/ref_image.H"
-#include "npr/hatching_group_base.H"
+#include "gtex/ref_image.hpp"
+#include "npr/hatching_group_base.hpp"
 
-#include "pattern/pattern_texture.H"
-#include "pattern/pattern_stroke.H"
+#include "pattern/pattern_texture.hpp"
+#include "pattern/pattern_stroke.hpp"
 
-#include "pattern_grid.H"
+#include "pattern_grid.hpp"
 
 float PatternGrid::MAX_DIFF_THRESHOLD = 0.3f;
 

@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/ray.H"
-#include "geom/gl_view.H"
-#include "geom/texturegl.H"
-#include "geom/world.H"
-#include "gtex/glsl_toon.H"
-#include "gtex/glsl_halo.H"
-#include "mesh/lmesh.H"
-#include "net/io_manager.H"
+#include "disp/ray.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/texturegl.hpp"
+#include "geom/world.hpp"
+#include "gtex/glsl_toon.hpp"
+#include "gtex/glsl_halo.hpp"
+#include "mesh/lmesh.hpp"
+#include "net/io_manager.hpp"
 
-#include "tex_body.H"
-#include "panel.H"
-#include "action.H"
+#include "tex_body.hpp"
+#include "panel.hpp"
+#include "action.hpp"
 
 using namespace mlib;
 

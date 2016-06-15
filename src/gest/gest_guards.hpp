@@ -18,9 +18,9 @@
 #ifndef DRAW_FSA_H_HAS_BEEN_INCLUDED
 #define DRAW_FSA_H_HAS_BEEN_INCLUDED
 
-#include "geom/fsa.H"
+#include "geom/fsa.hpp"
 
-#include "gesture.H"
+#include "gesture.hpp"
 
 #ifdef WIN32
 #ifdef DrawState

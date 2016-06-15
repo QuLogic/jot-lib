@@ -18,7 +18,7 @@
 #ifndef GLSL_SOLID_H_IS_INCLUDED
 #define GLSL_SOLID_H_IS_INCLUDED
 
-#include "glsl_paper.H"
+#include "glsl_paper.hpp"
 
 /**********************************************************************
  * GLSLSolidShader:

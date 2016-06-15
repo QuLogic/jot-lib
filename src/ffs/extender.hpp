@@ -19,17 +19,17 @@
 #define EXTENDER_H_IS_INCLUDED
 
 /*!
- *  \file extender.H
+ *  \file extender.hpp
  *  \brief Contains the declaration of the EXTENDER widget.
  *
  *  \ingroup group_FFS
- *  \sa extender.C
+ *  \sa extender.cpp
  *
  */
 
-#include "mesh/ledge_strip.H"
+#include "mesh/ledge_strip.hpp"
 
-#include "gest/draw_widget.H"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * EXTENDER:

@@ -19,10 +19,10 @@
 #define _BBOX_CELL_H_
 
 #include <vector>
-#include "pattern/gesture_cell.H"
-#include "pattern/gesture_stroke.H"
-#include "disp/bbox.H"
-#include "mlib/points.H"
+#include "pattern/gesture_cell.hpp"
+#include "pattern/gesture_stroke.hpp"
+#include "disp/bbox.hpp"
+#include "mlib/points.hpp"
 
 class BBoxCell : public GestureCell {
 public:

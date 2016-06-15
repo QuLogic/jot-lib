@@ -19,15 +19,15 @@
 #define VIEW_EASEL_H_IS_INCLUDED
 
 /*!
- *  \file vieweasel.H
+ *  \file vieweasel.hpp
  *  \brief Contains the definition of the VIEW_EASEL class.
  *
- *  \sa vieweasel.C
+ *  \sa vieweasel.cpp
  *
  */
 
-#include "disp/view.H"
-// #include "draw/trace.H"
+#include "disp/view.hpp"
+// #include "draw/trace.hpp"
 
 MAKE_SHARED_PTR(VIEW_EASEL);
 

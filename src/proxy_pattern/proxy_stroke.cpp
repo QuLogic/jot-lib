@@ -31,13 +31,13 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "gtex/ref_image.H" 
-#include "mesh/uv_data.H" 
+#include "gtex/ref_image.hpp"
+#include "mesh/uv_data.hpp"
 
-#include "proxy_stroke.H"
-#include "proxy_surface.H"
-#include "hatching_texture.H"
-#include "gtex/glsl_paper.H"
+#include "proxy_stroke.hpp"
+#include "proxy_surface.hpp"
+#include "hatching_texture.hpp"
+#include "gtex/glsl_paper.hpp"
 
 static int foo = DECODER_ADD(ProxyStroke);
 

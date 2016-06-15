@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/ray.H"
-#include "geom/gl_util.H"
-#include "geom/world.H"
-#include "gtex/ref_image.H"
-#include "mesh/mi.H"    
+#include "disp/ray.hpp"
+#include "geom/gl_util.hpp"
+#include "geom/world.hpp"
+#include "gtex/ref_image.hpp"
+#include "mesh/mi.hpp"
 
-#include "ffstexture.H"
-#include "stylized_line3d.H"
+#include "ffstexture.hpp"
+#include "stylized_line3d.hpp"
 
 using mlib::CWpt_list;
 

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "halo_blur_shader.H"
-#include "gtex/ref_image.H"
+#include "gtex/gl_extensions.hpp"
+#include "halo_blur_shader.hpp"
+#include "gtex/ref_image.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_BLUR_SHADER", false);
 

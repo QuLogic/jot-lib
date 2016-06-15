@@ -16,12 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/colors.H"
-#include "geom/gl_util.H"       // float4
-#include "geom/icon2d.H"
+#include "disp/colors.hpp"
+#include "geom/gl_util.hpp"       // float4
+#include "geom/icon2d.hpp"
 
 using namespace mlib;
 

@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file key_menu.C
+ *  \file key_menu.cpp
  *  \brief Contains the implementation of the KeyMenu class.
  *
- *  \sa key_menu.H
+ *  \sa key_menu.hpp
  *
  */
 
@@ -29,9 +29,9 @@
 
 using namespace std;
 
-#include "geom/fsa.H"
+#include "geom/fsa.hpp"
 
-#include "key_menu.H"
+#include "key_menu.hpp"
 
 /*!
  *  \param[in] start_in The FSA State where keyboard events will originate from.

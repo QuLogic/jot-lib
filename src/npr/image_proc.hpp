@@ -42,7 +42,7 @@
 
 
 
-#include "gtex/ref_image.H"
+#include "gtex/ref_image.hpp"
 
 #include <valarray>
 

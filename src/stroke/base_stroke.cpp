@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/view.H"
-#include "gtex/gl_extensions.H" // has to come before any gl.h include
-#include "gtex/paper_effect.H"
-#include "geom/texturegl.H"
-#include "geom/gl_util.H"
-#include "std/config.H"
-#include "base_stroke.H"
+#include "disp/view.hpp"
+#include "gtex/gl_extensions.hpp" // has to come before any gl.h include
+#include "gtex/paper_effect.hpp"
+#include "geom/texturegl.hpp"
+#include "geom/gl_util.hpp"
+#include "std/config.hpp"
+#include "base_stroke.hpp"
 
 using namespace mlib;
 
@@ -1532,7 +1532,7 @@ BaseStroke::compute_overdraw()
    }
 }
 
-#include "geom/gl_view.H"
+#include "geom/gl_view.hpp"
 /////////////////////////////////////
 // draw_body()
 /////////////////////////////////////

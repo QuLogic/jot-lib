@@ -19,8 +19,8 @@
 #ifndef GLUT_WINSYS_H_IS_INCLUDED
 #define GLUT_WINSYS_H_IS_INCLUDED
 
-#include "std/support.H"
-#include "geom/winsys.H"
+#include "std/support.hpp"
+#include "geom/winsys.hpp"
 
 #include <vector>
 

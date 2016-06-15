@@ -17,24 +17,24 @@
  *****************************************************************/
 
 /*!
- *  \file profile.C
+ *  \file profile.cpp
  *  \brief Contains the definition of the PROFILE widget.
  *
  *  \ingroup group_FFS
- *  \sa profile.H
+ *  \sa profile.hpp
  *
  */
 
-#include "disp/colors.H"                // Color::blue_pencil_d
-#include "gtex/util.H"                  // for draw_strip
-#include "gtex/ref_image.H"             // for VisRefImage
-#include "gtex/basic_texture.H"         // GLStripCB
-#include "tess/mesh_op.H"               // SUBDIV_OFFSET_CMD
-#include "tess/primitive.H"
-#include "tess/xf_meme.H"
+#include "disp/colors.hpp"                // Color::blue_pencil_d
+#include "gtex/util.hpp"                  // for draw_strip
+#include "gtex/ref_image.hpp"             // for VisRefImage
+#include "gtex/basic_texture.hpp"         // GLStripCB
+#include "tess/mesh_op.hpp"               // SUBDIV_OFFSET_CMD
+#include "tess/primitive.hpp"
+#include "tess/xf_meme.hpp"
 #include <map>
 
-#include "profile.H"
+#include "profile.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_PROFILE",false);
 

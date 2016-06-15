@@ -18,12 +18,12 @@
 #ifndef _GESTURE_STROKE_H_
 #define _GESTURE_STROKE_H_
 
-#include "pattern/stroke.H"
-#include "pattern/gesture_cell.H"
-#include "stroke/gesture_stroke_drawer.H"
-#include "gest/gesture.H"
-#include "disp/bbox.H"
-#include "mlib/points.H"
+#include "pattern/stroke.hpp"
+#include "pattern/gesture_cell.hpp"
+#include "stroke/gesture_stroke_drawer.hpp"
+#include "gest/gesture.hpp"
+#include "disp/bbox.hpp"
+#include "mlib/points.hpp"
 
 class GestureStroke : public Stroke {
 public:

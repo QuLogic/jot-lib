@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "impostor.H"
-#include "geom/gl_view.H"
+#include "impostor.hpp"
+#include "geom/gl_view.hpp"
 
 /*****************************************************************
  * Impostor

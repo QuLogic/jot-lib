@@ -18,8 +18,8 @@
 #ifndef _STROKE_H_
 #define _STROKE_H_
 
-#include "pattern/gesture_cell.H"
-#include "mlib/points.H"
+#include "pattern/gesture_cell.hpp"
+#include "mlib/points.hpp"
 
 class Stroke {
 public:

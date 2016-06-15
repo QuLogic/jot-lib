@@ -18,7 +18,7 @@
 #ifndef BASE_COLLIDE_H_IS_INCLUDED
 #define BASE_COLLIDE_H_IS_INCLUDED
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 /*****************************************************************
  * BaseCollide:

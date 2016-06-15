@@ -18,10 +18,10 @@
 #ifndef XFORM_PEN_H_IS_INCLUDED
 #define XFORM_PEN_H_IS_INCLUDED
 
-#include "geom/command.H"
-#include "gtex/ref_image.H"
-#include "mesh/bmesh.H"
-#include "gest/pen.H"
+#include "geom/command.hpp"
+#include "gtex/ref_image.hpp"
+#include "mesh/bmesh.hpp"
+#include "gest/pen.hpp"
 
 /*****************************************************************
  * XformPen

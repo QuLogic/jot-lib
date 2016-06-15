@@ -18,10 +18,10 @@
 #ifndef PATCH_PEN_H_IS_INCLUDED
 #define PATCH_PEN_H_IS_INCLUDED
 
-#include "geom/command.H"
-#include "gtex/ref_image.H"
-#include "mesh/bmesh.H"
-#include "pen.H"
+#include "geom/command.hpp"
+#include "gtex/ref_image.hpp"
+#include "mesh/bmesh.hpp"
+#include "pen.hpp"
 
 /*****************************************************************
  * CHANGE_PATCH_CMD

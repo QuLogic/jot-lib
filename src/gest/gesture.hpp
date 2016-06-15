@@ -18,13 +18,13 @@
 #ifndef GESTURE_H_HAS_BEEN_INCLUDED
 #define GESTURE_H_HAS_BEEN_INCLUDED
 
-#include "disp/view.H"
-#include "geom/command.H"
-#include "geom/fsa.H"
-#include "mlib/points.H"
-#include "mlib/vec2.H"
-#include "std/stop_watch.H"
-#include "std/config.H"
+#include "disp/view.hpp"
+#include "geom/command.hpp"
+#include "geom/fsa.hpp"
+#include "mlib/points.hpp"
+#include "mlib/vec2.hpp"
+#include "std/stop_watch.hpp"
+#include "std/config.hpp"
 
 #include <vector>
 

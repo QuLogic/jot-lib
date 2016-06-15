@@ -27,20 +27,20 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "std/support.H"
-#include "std/file.H"
+#include "std/support.hpp"
+#include "std/file.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "glui/glui_jot.H"
-#include "base_jotapp/base_jotapp.H"
-#include "stroke/base_stroke.H"
+#include "geom/winsys.hpp"
+#include "glui/glui_jot.hpp"
+#include "base_jotapp/base_jotapp.hpp"
+#include "stroke/base_stroke.hpp"
 
 #include <fstream>
 #include <map>
 
-#include "pattern_pen.H"
-#include "pattern_pen_ui.H"
+#include "pattern_pen.hpp"
+#include "pattern_pen_ui.hpp"
 
 using mlib::Wvec;
 using mlib::Wtransf;

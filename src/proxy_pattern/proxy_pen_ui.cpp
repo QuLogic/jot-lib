@@ -15,22 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "glui/glui_jot.H"
+#include "geom/winsys.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "gui/light_ui.H"
-#include "gui/patch_ui.H"
-#include "gui/hatching_ui.H"
-#include "gui/halftone_ui.H"
-#include "gui/tone_shader_ui.H"
-#include "gui/proxy_texture_ui.H"
-#include "gui/gui.H"
-#include "gui/painterly_ui.H"
+#include "gui/light_ui.hpp"
+#include "gui/patch_ui.hpp"
+#include "gui/hatching_ui.hpp"
+#include "gui/halftone_ui.hpp"
+#include "gui/tone_shader_ui.hpp"
+#include "gui/proxy_texture_ui.hpp"
+#include "gui/gui.hpp"
+#include "gui/painterly_ui.hpp"
 
-#include "proxy_pen_ui.H"
+#include "proxy_pen_ui.hpp"
 
 ProxyPenUI::ProxyPenUI() :
    BaseUI("Proxy Pen UI")   

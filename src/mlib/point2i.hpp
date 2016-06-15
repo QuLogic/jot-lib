@@ -19,14 +19,14 @@
 #define POINT2I_H_IS_INCLUDED
 
 /*!
- *  \file Point2i.H
+ *  \file Point2i.hpp
  *  \brief Contains the definitions of the Point2i and Vec2i classes.
  *  \ingroup group_MLIB
  *
  */
 
 #include <cmath>
-#include "std/support.H"
+#include "std/support.hpp"
 
 namespace mlib {
 

@@ -18,12 +18,12 @@
 #ifndef PANEL_H_IS_INCLUDED
 #define PANEL_H_IS_INCLUDED
 
-#include "mesh/lmesh.H"
-#include "map3d/bnode.H"
-#include "bcurve.H"
-#include "bsurface.H"
-#include "blending_meme.H"
-#include "geom/command.H"
+#include "mesh/lmesh.hpp"
+#include "map3d/bnode.hpp"
+#include "bcurve.hpp"
+#include "bsurface.hpp"
+#include "blending_meme.hpp"
+#include "geom/command.hpp"
 
 #include <set>
 #include <vector>

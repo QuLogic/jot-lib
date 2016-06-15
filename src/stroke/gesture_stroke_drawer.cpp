@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "geom/gl_view.H"
-#include "std/config.H"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
 
-#include "gesture_stroke_drawer.H"
+#include "gesture_stroke_drawer.hpp"
 
 using mlib::PIXEL;
 using mlib::PIXEL_list;

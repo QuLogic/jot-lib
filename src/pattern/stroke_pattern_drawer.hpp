@@ -19,8 +19,8 @@
 #define _STROKE_PATTERN_DRAWER_H_
 
 #include <vector>
-#include "disp/gel.H"
-#include "stroke_pattern.H"
+#include "disp/gel.hpp"
+#include "stroke_pattern.hpp"
 
 /*****************************************************************
  * StrokePatternDrawer

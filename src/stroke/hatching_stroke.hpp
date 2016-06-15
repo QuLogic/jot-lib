@@ -27,12 +27,12 @@
 //
 ////////////////////////////////////////////
 
-#include "geom/hspline.H"
-#include "geom/texture.H"
-#include "std/support.H"
-#include "std/ref.H"
+#include "geom/hspline.hpp"
+#include "geom/texture.hpp"
+#include "std/support.hpp"
+#include "std/ref.hpp"
 
-#include "base_stroke.H"
+#include "base_stroke.hpp"
 
 #include <cmath>
 

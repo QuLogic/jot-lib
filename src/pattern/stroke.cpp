@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "stroke.H"
-#include "mlib/points.H"
+#include "stroke.hpp"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 

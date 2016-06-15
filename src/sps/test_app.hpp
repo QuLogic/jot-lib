@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "base_jotapp/base_jotapp.H"
-#include "sps.H"
+#include "base_jotapp/base_jotapp.hpp"
+#include "sps.hpp"
 
 class TestSPSapp : public BaseJOTapp {
  public:

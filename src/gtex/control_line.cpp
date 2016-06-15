@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "control_line.H"
+#include "control_line.hpp"
 
 ControlLineTexture::ControlLineTexture(Patch* patch) :
    OGLTexture(patch),

@@ -18,10 +18,10 @@
 
 
 
-#include "gtex/ref_image.H"
-#include "stroke/edge_stroke.H"
-#include "mesh/simplex_filter.H"
-#include "std/config.H"
+#include "gtex/ref_image.hpp"
+#include "stroke/edge_stroke.hpp"
+#include "mesh/simplex_filter.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 

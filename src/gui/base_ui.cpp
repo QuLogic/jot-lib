@@ -16,13 +16,13 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "disp/view.H"
-#include "geom/winsys.H"
+#include "disp/view.hpp"
+#include "geom/winsys.hpp"
 #include <GL/glew.h>
-#include "glui/glui_jot.H"
-#include "std/support.H"
-#include "std/file.H"
-#include "base_ui.H"
+#include "glui/glui_jot.hpp"
+#include "std/support.hpp"
+#include "std/file.hpp"
+#include "base_ui.hpp"
 
 
 BaseUI::BaseUI(string n)

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "pattern/ref_frame_drawer.H"
-#include "geom/gl_view.H"
-#include "pattern/stroke_group.H"
+#include "pattern/ref_frame_drawer.hpp"
+#include "geom/gl_view.hpp"
+#include "pattern/stroke_group.hpp"
 
 
 

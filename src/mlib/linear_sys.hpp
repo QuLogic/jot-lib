@@ -19,7 +19,7 @@
 #define LINEAR_SYS_H_IS_INCLUDED
 
 /*!
- *  \file linear_sys.H
+ *  \file linear_sys.hpp
  *  \brief Solution of systems of linear equations and eigenvalue decomposition.
  *  Some are patterned after the code in Numerical Recipes, but with a bit of
  *  the fancy C++ template thing happening.

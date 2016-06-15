@@ -16,20 +16,20 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "ref_image_ui.H"
-#include "npr/npr_view.H"
-#include "gtex/halo_ref_image.H"
+#include "ref_image_ui.hpp"
+#include "npr/npr_view.hpp"
+#include "gtex/halo_ref_image.hpp"
 
-#include "wnpr/sky_box.H"
-#include "npr/skybox_texture.H"
+#include "wnpr/sky_box.hpp"
+#include "npr/skybox_texture.hpp"
 
 using namespace mlib;
 

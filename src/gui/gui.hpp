@@ -18,8 +18,8 @@
 #ifndef _GUI_H_IS_INCLUDED_
 #define _GUI_H_IS_INCLUDED_
 
-#include "mesh/patch.H"
-#include "mesh/bmesh.H"
+#include "mesh/patch.hpp"
+#include "mesh/bmesh.hpp"
 
 namespace GUI
 {

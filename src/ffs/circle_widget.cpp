@@ -16,30 +16,30 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file circle_widget.C
+ *  \file circle_widget.cpp
  *  \brief Contains the definition of the CIRCLE_WIDGET widget.
  *
  *  \ingroup group_FFS
- *  \sa circle_widget.H
+ *  \sa circle_widget.hpp
  *
  */
-#include "disp/colors.H"
-#include "geom/gl_view.H"     // for GL_VIEW::draw_pts()
-#include "geom/world.H"       // for message display
-#include "gtex/ref_image.H"
-#include "mesh/lmesh.H"
-#include "mesh/mi.H"
-#include "tess/panel.H"
-#include "tess/bsurface.H"
-#include "tess/tex_body.H"
-#include "tess/ti.H"
-#include "tess/action.H"
-#include "std/config.H"
+#include "disp/colors.hpp"
+#include "geom/gl_view.hpp"     // for GL_VIEW::draw_pts()
+#include "geom/world.hpp"       // for message display
+#include "gtex/ref_image.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/mi.hpp"
+#include "tess/panel.hpp"
+#include "tess/bsurface.hpp"
+#include "tess/tex_body.hpp"
+#include "tess/ti.hpp"
+#include "tess/action.hpp"
+#include "std/config.hpp"
 
-#include "ffs/ffs_util.H"
-#include "ffs/draw_pen.H"
+#include "ffs/ffs_util.hpp"
+#include "ffs/draw_pen.hpp"
 
-#include "circle_widget.H"
+#include "circle_widget.hpp"
 
 using namespace mlib;
 using namespace tess;

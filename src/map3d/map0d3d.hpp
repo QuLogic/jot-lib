@@ -18,8 +18,8 @@
 #ifndef MAP0D3D_H_IS_INCLUDED
 #define MAP0D3D_H_IS_INCLUDED
 
-#include "coord_frame.H"
-#include "map3d.H"
+#include "coord_frame.hpp"
+#include "map3d.hpp"
 
 /*****************************************************************
  * Map0D3D:

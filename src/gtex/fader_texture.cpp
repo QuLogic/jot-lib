@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/gl_view.H"
-#include "mesh/patch.H"
-#include "fader_texture.H"
+#include "geom/gl_view.hpp"
+#include "mesh/patch.hpp"
+#include "fader_texture.hpp"
 
 /**********************************************************************
  * FaderTexture:

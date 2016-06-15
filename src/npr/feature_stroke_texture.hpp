@@ -18,9 +18,9 @@
 #ifndef FEATURE_STROKE_TEXTURE_HEADER
 #define FEATURE_STROKE_TEXTURE_HEADER
 
-#include "mesh/patch.H"
-#include "npr/sil_and_crease_texture.H"
-#include "stroke/decal_stroke_pool.H"
+#include "mesh/patch.hpp"
+#include "npr/sil_and_crease_texture.hpp"
+#include "stroke/decal_stroke_pool.hpp"
 
 class DecalLineStroke;
 

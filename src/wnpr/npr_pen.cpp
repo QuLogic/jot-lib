@@ -21,12 +21,12 @@
 
 
 
-#include "npr/npr_texture.H"
+#include "npr/npr_texture.hpp"
 
-// #include "draw.H"
-#include "npr_pen.H"
+// #include "draw.hpp"
+#include "npr_pen.hpp"
 
-#include "npr_pen_ui.H"
+#include "npr_pen_ui.hpp"
 
 class FooGestureDrawer : public GestureDrawer{
  public:

@@ -19,7 +19,7 @@
 #ifndef TRI_STRIP_H_IS_INCLUDED
 #define TRI_STRIP_H_IS_INCLUDED
 
-#include "bface.H"
+#include "bface.hpp"
 
 #include <vector>
 

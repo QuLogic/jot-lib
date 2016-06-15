@@ -16,17 +16,17 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file fsa.C
+ *  \file fsa.cpp
  *  \brief Contains the implementation of FSA (finite state automata) classes.
  *
  *  \note The implementations for some other classes are in here as well, but
  *  they should probably be moved to another file.
  *
- *  \sa fsa.H
+ *  \sa fsa.hpp
  *
  */
 
-#include "fsa.H"
+#include "fsa.hpp"
 
 map<CVIEWptr,VIEWint*> *VIEWint_list::_dhash = nullptr;
 

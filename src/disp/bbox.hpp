@@ -18,8 +18,8 @@
 #ifndef BBOX_H
 #define BBOX_H
 
-#include "std/support.H"
-#include "mlib/points.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 

@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include <fstream>
-#include "disp/recorder.H"
+#include "disp/recorder.hpp"
 
 static string recorder_image_path = Config::get_var_str("RECORDER_IMAGE_PATH","imagedir/");
 

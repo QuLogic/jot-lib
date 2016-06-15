@@ -20,19 +20,19 @@
 #ifndef BMESH_H_HAS_BEEN_INCLUDED
 #define BMESH_H_HAS_BEEN_INCLUDED
 
-#include "disp/view.H"
-#include "dlhandler/dlhandler.H"
-#include "geom/body.H"
-#include "geom/geom.H"          // XXX - For _geom member; should remove
-#include "std/thread_mutex.H"
-#include "std/name_lookup.H"
+#include "disp/view.hpp"
+#include "dlhandler/dlhandler.hpp"
+#include "geom/body.hpp"
+#include "geom/geom.hpp"          // XXX - For _geom member; should remove
+#include "std/thread_mutex.hpp"
+#include "std/name_lookup.hpp"
 
-#include "mesh/bmesh_curvature.H"
-#include "mesh/edge_strip.H"
-#include "mesh/patch.H"
-#include "mesh/tri_strip.H"
-#include "mesh/vert_strip.H"
-#include "mesh/zcross_path.H"
+#include "mesh/bmesh_curvature.hpp"
+#include "mesh/edge_strip.hpp"
+#include "mesh/patch.hpp"
+#include "mesh/tri_strip.hpp"
+#include "mesh/vert_strip.hpp"
+#include "mesh/zcross_path.hpp"
 
 #include <map>
 #include <set>
@@ -698,7 +698,7 @@ class BMESH : public BODY, public NameLookup<BMESH> {
 
    uint   version()     const   { return _version; }
 
-   // XXX - static function in bmesh.C, unused elsewhere
+   // XXX - static function in bmesh.cpp, unused elsewhere
    static void grow_oriented_face_lists(Bface*, vector<Bface*>&,
                                         vector<Bface*>&);
 

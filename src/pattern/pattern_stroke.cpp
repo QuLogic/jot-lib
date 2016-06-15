@@ -31,7 +31,7 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "pattern_stroke.H"
+#include "pattern_stroke.hpp"
 
 PatternStroke::PatternStroke(CNDCZvec_list& g) 
 {   

@@ -18,11 +18,11 @@
 #ifndef BCURVE_H_IS_INCLUDED
 #define BCURVE_H_IS_INCLUDED
 
-#include "geom/command.H"
-#include "map3d/map1d3d.H"
-#include "mesh/simplex_filter.H"
-#include "mesh/vert_frame.H"
-#include "tess/bpoint.H"
+#include "geom/command.hpp"
+#include "map3d/map1d3d.hpp"
+#include "mesh/simplex_filter.hpp"
+#include "mesh/vert_frame.hpp"
+#include "tess/bpoint.hpp"
 
 #include <vector>
 
@@ -253,7 +253,7 @@ class Bcurve : public Bbase{
    Wpt center() const { return verts().center(); }
 
    //! Returns the winding number WRT the given point and direction.
-   //! See mlib/point3.H for details
+   //! See mlib/point3.hpp for details
    double winding_number(CWpt& o, CWvec& t) const {
       // XXX - using object space points, ignoring mesh xform
       return full_verts().pts().winding_number(o, t);

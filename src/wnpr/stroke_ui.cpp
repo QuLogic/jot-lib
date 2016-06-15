@@ -56,16 +56,16 @@
 #define STROKEUI_DEFAULT_TEX_FILE        (Config::JOT_ROOT() + "nprdata/stroke_textures/1D--dark-8.png")
 #define STROKEUI_DEFAULT_PAPER_FILE      ""
 
-#include "gtex/gl_extensions.H"
-#include "base_jotapp/base_jotapp.H"
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
-#include "std/file.H"
+#include "gtex/gl_extensions.hpp"
+#include "base_jotapp/base_jotapp.hpp"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
+#include "std/file.hpp"
 #include <fstream>
 
-#include "stroke_ui.H"
+#include "stroke_ui.hpp"
 
 using namespace mlib;
 

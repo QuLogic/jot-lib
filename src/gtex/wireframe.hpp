@@ -18,7 +18,7 @@
 #ifndef WIREFRAME_H_IS_INCLUDED
 #define WIREFRAME_H_IS_INCLUDED
 
-#include "color_id_texture.H"
+#include "color_id_texture.hpp"
 
 /**********************************************************************
  * WireframeTexture:

@@ -18,10 +18,10 @@
 #ifndef PATTERN_TEXTURE_H
 #define PATTERN_TEXTURE_H
 
-#include "std/config.H"
-#include "mesh/patch.H"
-#include "gtex/basic_texture.H"
-#include "gtex/smooth_shade.H"
+#include "std/config.hpp"
+#include "mesh/patch.hpp"
+#include "gtex/basic_texture.hpp"
+#include "gtex/smooth_shade.hpp"
 
 class PatternTexture : public BasicTexture, public CAMobs  {
 public: 

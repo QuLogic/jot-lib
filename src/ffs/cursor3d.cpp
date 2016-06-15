@@ -17,22 +17,22 @@
  *****************************************************************/
 
 /*!
- *  \file cursor3d.C
+ *  \file cursor3d.cpp
  *  \brief Contains the definition of the Cursor3D class, plus helper functions.
  *
  *  \ingroup group_FFS
- *  \sa cursor3d.H
+ *  \sa cursor3d.hpp
  *
  */
 
-#include "geom/gl_util.H"       // for GL_COL()
-#include "geom/gl_view.H"
-#include "geom/world.H"         // for WORLD::undisplay
-#include "manip/cam_pz.H"       // for CamFocus
+#include "geom/gl_util.hpp"       // for GL_COL()
+#include "geom/gl_view.hpp"
+#include "geom/world.hpp"         // for WORLD::undisplay
+#include "manip/cam_pz.hpp"       // for CamFocus
 
-#include "ffs/ffs_util.H"
-#include "ffs/floor.H"
-#include "ffs/cursor3d.H"
+#include "ffs/ffs_util.hpp"
+#include "ffs/floor.hpp"
+#include "ffs/cursor3d.hpp"
 
 using namespace mlib;
 

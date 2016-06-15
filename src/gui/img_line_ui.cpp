@@ -15,27 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "img_line_ui.H"
-#include "light_ui.H"
-#include "color_ui.H"
-#include "detail_ctrl_ui.H" 
-#include "basecoat_ui.H" 
+#include "img_line_ui.hpp"
+#include "light_ui.hpp"
+#include "color_ui.hpp"
+#include "detail_ctrl_ui.hpp"
+#include "basecoat_ui.hpp"
 
-#include "presets_ui.H"
-#include "tone_shader_ui.H"
-#include "gui.H"
+#include "presets_ui.hpp"
+#include "tone_shader_ui.hpp"
+#include "gui.hpp"
 
-#include "npr/img_line.H"
-#include "npr/img_line_shader.H"
-#include "npr/npr_view.H"
+#include "npr/img_line.hpp"
+#include "npr/img_line_shader.hpp"
+#include "npr/npr_view.hpp"
 
 using namespace mlib;
 

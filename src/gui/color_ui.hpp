@@ -22,8 +22,8 @@
 // ColorUI
 ////////////////////////////////////////////
 
-#include "disp/colors.H"
-#include "gui/base_ui.H"
+#include "disp/colors.hpp"
+#include "gui/base_ui.hpp"
 #include <vector>
 
 class PresetsUI;

@@ -18,8 +18,8 @@
 #ifndef PAPER_EFFECT_BASE_IS_INCLUDED
 #define PAPER_EFFECT_BASE_IS_INCLUDED
 
-#include "std/support.H"
-#include "mlib/global.H" // for bool
+#include "std/support.hpp"
+#include "mlib/global.hpp" // for bool
 
 #include <set>
 
@@ -42,12 +42,12 @@ class PaperEffectObs {
 /*****************************************************************
  * PaperEffectBase:
  *
- *   Base class for PaperEffect (see npr/paper_effect.H),
+ *   Base class for PaperEffect (see npr/paper_effect.hpp),
  *   which achieves the media simulation described in the
  *   Siggraph 2002 paper: WYSIWYG NPR.
  *
  *   This is here in the disp library so serialization code
- *   in view.C can read and write parameters used by the
+ *   in view.cpp can read and write parameters used by the
  *   PaperEffect class without referencing the npr library.
  *
  *****************************************************************/

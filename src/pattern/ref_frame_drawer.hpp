@@ -19,7 +19,7 @@
 #define _REF_FRAME_DRAWER_H_
 
 #include <vector>
-#include "disp/gel.H"
+#include "disp/gel.hpp"
 
 /*****************************************************************
  * RefFrameDrawer

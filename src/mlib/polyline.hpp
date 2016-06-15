@@ -18,7 +18,7 @@
 #ifndef POLYLINE_H_IS_INCLUDED
 #define POLYLINE_H_IS_INCLUDED
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 template <class L>
 inline L

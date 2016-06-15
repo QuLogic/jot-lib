@@ -37,14 +37,14 @@
 //during the size fix up computations.
 #define HATCHING_SLIDER_W            250
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "glui/glui_jot.H"
+#include "geom/winsys.hpp"
+#include "glui/glui_jot.hpp"
 
-#include "wnpr/hatching_pen.H"
-#include "wnpr/hatching_pen_ui.H"
+#include "wnpr/hatching_pen.hpp"
+#include "wnpr/hatching_pen_ui.hpp"
 
 
 /*****************************************************************

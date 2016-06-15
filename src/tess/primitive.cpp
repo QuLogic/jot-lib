@@ -17,28 +17,28 @@
  *****************************************************************/
 
 /*!
- *  \file primitive.C
+ *  \file primitive.cpp
  *  \brief Contains the definition of the Primitive class.
  *
  *  Contains the Primitive class, as well as the static methods
  *  for creating new Primitives.
- *  \sa primitive.H
+ *  \sa primitive.hpp
  *
  */
 
-#include "geom/world.H"
-#include "mesh/edge_frame.H"
-#include "mesh/mi.H"
-#include "std/config.H"
+#include "geom/world.hpp"
+#include "mesh/edge_frame.hpp"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
 
-#include "tess/action.H"
-#include "tess/skel_frame.H"
-#include "tess/skin.H"
-#include "tess/panel.H"
-#include "tess/tex_body.H"
-#include "tess/ti.H"
-#include "tess/xf_meme.H"
-#include "tess/primitive.H"
+#include "tess/action.hpp"
+#include "tess/skel_frame.hpp"
+#include "tess/skin.hpp"
+#include "tess/panel.hpp"
+#include "tess/tex_body.hpp"
+#include "tess/ti.hpp"
+#include "tess/xf_meme.hpp"
+#include "tess/primitive.hpp"
 
 using namespace mlib;
 using namespace tess;

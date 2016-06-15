@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "pattern/bbox_cell.H"
+#include "pattern/bbox_cell.hpp"
 
-#include "geom/gl_view.H"
-#include "std/config.H"
+#include "geom/gl_view.hpp"
+#include "std/config.hpp"
 
 using namespace std;
 using namespace mlib;
@@ -145,7 +145,7 @@ BBoxCell::draw_cell_bound(){
   glEnd();
 		    
   // I tried to implement some code for corner getting highlighted
-  // it is on the gesture.C version on Unnameable
+  // it is on the gesture.cpp version on Unnameable
 		  
   GL_VIEW::end_line_smooth();
 		  

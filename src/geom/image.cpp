@@ -16,11 +16,11 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * image.H
+ * image.hpp
  *****************************************************************/
 #include <fstream>
-#include "std/config.H"
-#include "geom/image.H"
+#include "std/config.hpp"
+#include "geom/image.hpp"
 
 /*****************************************************************
  * utilities

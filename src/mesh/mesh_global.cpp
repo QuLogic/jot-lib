@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "lmesh.H"
-#include "mesh_global.H"
-#include "patch.H"
+#include "std/config.hpp"
+#include "lmesh.hpp"
+#include "mesh_global.hpp"
+#include "patch.hpp"
 
 // static data
 Bface_list MeshGlobal::_selected_faces;

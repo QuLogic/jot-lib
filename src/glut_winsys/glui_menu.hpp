@@ -18,8 +18,8 @@
 #ifndef GLUI_MOVE_MENU_DEF
 #define GLUI_MOVE_MENU_DEF
 
-#include "widgets/menu.H"
-#include "std/support.H"
+#include "widgets/menu.hpp"
+#include "std/support.hpp"
 
 #include <vector>
 

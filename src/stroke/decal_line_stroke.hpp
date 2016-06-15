@@ -19,8 +19,8 @@
 #ifndef DECAL_LINE_STROKE_HEADER
 #define DECAL_LINE_STROKE_HEADER
 
-#include "stroke/outline_stroke.H"
-#include "mlib/points.H"
+#include "stroke/outline_stroke.hpp"
+#include "mlib/points.hpp"
 
 #include <vector>
 

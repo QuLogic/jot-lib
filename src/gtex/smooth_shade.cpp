@@ -16,18 +16,18 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file smooth_shade.C
+ *  \file smooth_shade.cpp
  *  \brief Contains the implementation of the SmoothShadeTexture GTexture and
  *  related classes.
  *
- *  \sa smooth_shade.H
+ *  \sa smooth_shade.hpp
  *
  */
 
-#include "geom/texturegl.H"
-#include "mesh/uv_data.H"
+#include "geom/texturegl.hpp"
+#include "mesh/uv_data.hpp"
 
-#include "smooth_shade.H"
+#include "smooth_shade.hpp"
 
 /**********************************************************************
  * SmoothShadeStripCB:

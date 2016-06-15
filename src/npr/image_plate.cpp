@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "image_plate.H"
-#include "mesh/bmesh.H"
-#include "geom/texturegl.H"
-#include "gtex/tone_shader.H"
-#include "npr/img_line_shader.H"
+#include "image_plate.hpp"
+#include "mesh/bmesh.hpp"
+#include "geom/texturegl.hpp"
+#include "gtex/tone_shader.hpp"
+#include "npr/img_line_shader.hpp"
 
 ImagePlate::ImagePlate() : GEOM()
 {

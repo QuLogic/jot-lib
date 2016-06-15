@@ -16,14 +16,14 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file points.C
+ *  \file points.cpp
  *  \brief Contains the definitions of various static constants for the
  *  coordinate system classes.  Also contains the implementation of various
  *  non-inlined functions for these classes.
  *
  */
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 using namespace mlib;
 

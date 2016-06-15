@@ -18,10 +18,10 @@
 #ifndef HIDDEN_LINE_H_IS_INCLUDED
 #define HIDDEN_LINE_H_IS_INCLUDED
 
-#include "geom/gl_view.H"
+#include "geom/gl_view.hpp"
 
-#include "solid_color.H"
-#include "wireframe.H"
+#include "solid_color.hpp"
+#include "wireframe.hpp"
 
 /**********************************************************************
  * HiddenLineTexture:

@@ -18,16 +18,16 @@
 #ifndef VIEW_H
 #define VIEW_H
 
-#include "disp/gel.H"
-#include "disp/cam.H"
-#include "disp/gel_filt.H"
-#include "disp/color.H"
-#include "disp/ray.H"
-#include "disp/light.H"
-#include "geom/image.H"         // disp should not include geom
-#include "geom/texture.H"       //  ditto
-#include "std/support.H"
-#include "std/stop_watch.H"
+#include "disp/gel.hpp"
+#include "disp/cam.hpp"
+#include "disp/gel_filt.hpp"
+#include "disp/color.hpp"
+#include "disp/ray.hpp"
+#include "disp/light.hpp"
+#include "geom/image.hpp"         // disp should not include geom
+#include "geom/texture.hpp"       //  ditto
+#include "std/support.hpp"
+#include "std/stop_watch.hpp"
 
 #include <set>
 
@@ -308,7 +308,7 @@ class VIEW : public SCHEDULER, public DISPobs, public DATA_ITEM,
    set<CLEARobsptr> _clear_obs;  // callbacks for when display is cleared
 
 
-   static VIEWlist _views;       // view stack used by points.H types
+   static VIEWlist _views;       // view stack used by points.hpp types
    static vector<string> _rend_types;  // list of rendering styles
 
    VIEWimpl     *_impl;          // display implementation

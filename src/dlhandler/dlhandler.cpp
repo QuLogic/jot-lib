@@ -21,11 +21,11 @@
  *  DESCR: 
  ***********************************************************************/
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "dlhandler.H"
-#include "std/config.H"
+#include "dlhandler.hpp"
+#include "std/config.hpp"
 
 
 static bool dl_per_view = Config::get_var_bool("JOT_MULTITHREAD",false,true) ||

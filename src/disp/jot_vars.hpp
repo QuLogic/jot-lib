@@ -18,8 +18,8 @@
 #ifndef JOT_VARS_IN_DA_HOUSE
 #define JOT_VARS_IN_DA_HOUSE
 
-#include "std/support.H"
-#include "net/data_item.H"
+#include "std/support.hpp"
+#include "net/data_item.hpp"
 
 //
 //  Special TAG for JOTvars.  This TAG is different from a normal TAG_val

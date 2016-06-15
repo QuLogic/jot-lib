@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "bmesh.H"
-#include "stripcb.H"
+#include "bmesh.hpp"
+#include "stripcb.hpp"
 
 /**********************************************************************
  * ZcrossPath:

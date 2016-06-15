@@ -20,8 +20,8 @@
 
 #include <map>
 
-#include "geom/texturegl.H"    // for ConventionalTexture
-#include "gtex/basic_texture.H"
+#include "geom/texturegl.hpp"    // for ConventionalTexture
+#include "gtex/basic_texture.hpp"
 
 class ToonTexCB : public GLStripCB {
  public:

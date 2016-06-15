@@ -18,7 +18,7 @@
 #ifndef TTY_WIN_HAS_BEEN_INCLUDED
 #define TTY_WIN_HAS_BEEN_INCLUDED
 
-#include "dev/tty.H"
+#include "dev/tty.hpp"
 
 #include <vector>
 

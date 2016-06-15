@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/view.H"
-#include "geom/world.H"
-#include "std/config.H"
-#include "fps.H"
+#include "disp/view.hpp"
+#include "geom/world.hpp"
+#include "std/config.hpp"
+#include "fps.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_FPS",false);
 

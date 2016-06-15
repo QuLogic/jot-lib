@@ -19,18 +19,18 @@
 // ColorUI
 ////////////////////////////////////////////
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 #include <fstream>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "glui/glui_jot.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/config.hpp"
 
-#include "color_ui.H"
-#include "presets_ui.H"
-#include "disp/colors.H"
+#include "color_ui.hpp"
+#include "presets_ui.hpp"
+#include "disp/colors.hpp"
 
 using namespace mlib;
 

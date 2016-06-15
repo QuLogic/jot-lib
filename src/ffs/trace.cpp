@@ -16,21 +16,21 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file trace.C
+ *  \file trace.cpp
  *  \brief Contains the definition of the TRACE widget.
  *
  *  \ingroup group_FFS
- *  \sa trace.H
+ *  \sa trace.hpp
  *
  */
-#include "disp/colors.H"
-#include "geom/gl_util.H"       // for GL_COL()
-#include "geom/world.H"         // for WORLD::undisplay()
-#include "geom/texturegl.H"
-#include "gtex/ref_image.H"     // for VisRefImage
-#include "widgets/file_select.H"
+#include "disp/colors.hpp"
+#include "geom/gl_util.hpp"       // for GL_COL()
+#include "geom/world.hpp"         // for WORLD::undisplay()
+#include "geom/texturegl.hpp"
+#include "gtex/ref_image.hpp"     // for VisRefImage
+#include "widgets/file_select.hpp"
 
-#include "trace.H"
+#include "trace.hpp"
 
 using mlib::XYpt;
 using mlib::Point2i;

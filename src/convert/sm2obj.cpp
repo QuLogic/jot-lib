@@ -20,8 +20,8 @@
  *
  *   Usage: sm2obj < input.sm > output.obj
  **********************************************************************/
-#include "std/config.H"
-#include "mesh/mi.H"
+#include "std/config.hpp"
+#include "mesh/mi.hpp"
 
 #include <string>
 

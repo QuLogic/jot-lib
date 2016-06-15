@@ -19,15 +19,15 @@
 #define MODE_NAME_IS_INCLUDED
 
 /*!
- *  \file mode_name.H
+ *  \file mode_name.hpp
  *  \brief Contains the definition of the ModeName class.
  *
- *  \sa mode_name.C
+ *  \sa mode_name.cpp
  *
  */
 
-#include "std/support.H"
-#include "geom/text2d.H"
+#include "std/support.hpp"
+#include "geom/text2d.hpp"
 
 /*!
  *  \brief Simple interface for setting the name of the current "mode"

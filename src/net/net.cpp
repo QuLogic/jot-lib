@@ -23,15 +23,15 @@
  *
  * ------------------------------------------------------------------------- */
 
-#include "std/config.H"
+#include "std/config.hpp"
 
 /* ANSI includes */
 #ifdef macosx
 #include <sys/ioctl.h>
 #endif
 
-#include "std/support.H"
-#include "net.H"
+#include "std/support.hpp"
+#include "net.hpp"
 
 /* Includes for ioctl (for num_bytes_to_read()) */
 #if defined(__linux__) || defined(linux) || defined(_AIX)
@@ -39,7 +39,7 @@
 #elif !defined(WIN32)
 #include <sys/filio.h>
 #else
-/* #include "net/net.H" */
+/* #include "net/net.hpp" */
 #endif
 
 

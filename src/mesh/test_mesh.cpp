@@ -22,8 +22,8 @@
  *  currently testing indexing in SimplexArrays
  *     ... and they do seem to work
  **********************************************************************/
-#include "std/config.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 inline uint
 num_data(CBsimplex* s)

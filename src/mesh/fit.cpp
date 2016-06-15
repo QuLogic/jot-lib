@@ -30,9 +30,9 @@
  *      see: G. H. Golub and C. F. van Loan. Matrtix Computations, 3rd
  *      Edition. Section 10.1.1, page 510.)
  **********************************************************************/
-#include "std/stop_watch.H"
-#include "mi.H"
-#include "lmesh.H"
+#include "std/stop_watch.hpp"
+#include "mi.hpp"
+#include "lmesh.hpp"
 
 void
 fit(LMESHptr& mesh, bool do_gauss_seidel)

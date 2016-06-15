@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/ray.H"
-#include "geom/gl_util.H"
-#include "geom/world.H"
-#include "geom/line3d.H"
+#include "disp/ray.hpp"
+#include "geom/gl_util.hpp"
+#include "geom/world.hpp"
+#include "geom/line3d.hpp"
 
 using mlib::Wpt;
 using mlib::CWpt;

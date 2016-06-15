@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "bfilters.H"
-#include "stripcb.H"
-#include "mi.H"
+#include "bfilters.hpp"
+#include "stripcb.hpp"
+#include "mi.hpp"
 
 /**********************************************************************
  * EdgeStrip:

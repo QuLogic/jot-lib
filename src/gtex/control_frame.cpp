@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/gl_view.H"
-#include "mesh/lpatch.H"
-#include "mesh/mi.H"
-#include "std/config.H"
-#include "control_frame.H"
+#include "geom/gl_view.hpp"
+#include "mesh/lpatch.hpp"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
+#include "control_frame.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_CONTROL_FRAME",false,true);
 

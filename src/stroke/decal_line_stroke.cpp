@@ -18,9 +18,9 @@
 
 
 
-#include "decal_line_stroke.H"
-#include "mesh/patch.H"
-#include "gtex/ref_image.H"
+#include "decal_line_stroke.hpp"
+#include "mesh/patch.hpp"
+#include "gtex/ref_image.hpp"
 
 using namespace mlib;
 

@@ -16,15 +16,15 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file random.C
+ *  \file random.cpp
  *  \brief Contains the implementation of the non-inline functions of the
  *  RandomGen class.
  *  \ingroup group_MLIB
  *
  */
 
-#include "std/support.H"
-#include "random.H"
+#include "std/support.hpp"
+#include "random.hpp"
 
 long mlib::RandomGen::R_MAX = RAND_MAX;
 

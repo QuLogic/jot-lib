@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/time.H"
-#include "disp/view.H"
-#include "stroke/stroke_generator.H"
+#include "std/time.hpp"
+#include "disp/view.hpp"
+#include "stroke/stroke_generator.hpp"
 
 #include <cstdlib>
 

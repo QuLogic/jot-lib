@@ -29,11 +29,11 @@
 #ifndef _PATTERN_STROKE_H_IS_INCLUDED_
 #define _PATTERN_STROKE_H_IS_INCLUDED_
 
-//#include "stroke/base_stroke.H"
-//#include "pattern/quad_cell.H"
+//#include "stroke/base_stroke.hpp"
+//#include "pattern/quad_cell.hpp"
 //#include <map>
-#include "std/config.H"
-#include "geom/gl_view.H"
+#include "std/config.hpp"
+#include "geom/gl_view.hpp"
 // *****************************************************************
 // * PatternStroke
 // *****************************************************************

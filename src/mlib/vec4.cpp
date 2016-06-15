@@ -16,15 +16,15 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file Vec4.C
+ *  \file Vec4.cpp
  *  \brief Contains implementations of non-inlined functions for the Vec4 class.
  *  \libgfx Most of the code in this file has been adapted from libgfx.
  *
  */
 
-#include "mlib/points.H"
-#include "mlib/global.H"
-#include "mlib/vec4.H"
+#include "mlib/points.hpp"
+#include "mlib/global.hpp"
+#include "mlib/vec4.hpp"
 
 std::ostream &
 mlib::operator<<(std::ostream &out, const Vec4& v)

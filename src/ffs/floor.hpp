@@ -19,23 +19,23 @@
 #define FLOOR_H_IS_INCLUDED
 
 /*!
- *  \file floor.H
+ *  \file floor.hpp
  *  \brief Contains the declaration of the FLOOR interactor.
  *
  *  \ingroup group_FFS
- *  \sa floor.C
+ *  \sa floor.cpp
  *
  */
  
-#include "geom/command.H"
-#include "geom/geom.H"
-#include "geom/world.H"
-#include "gest/draw_widget.H"
-#include "manip/manip.H"
-#include "map3d/map2d3d.H"
-#include "mesh/bmesh.H"
-#include "std/config.H"
-#include "std/stop_watch.H"
+#include "geom/command.hpp"
+#include "geom/geom.hpp"
+#include "geom/world.hpp"
+#include "gest/draw_widget.hpp"
+#include "manip/manip.hpp"
+#include "map3d/map2d3d.hpp"
+#include "mesh/bmesh.hpp"
+#include "std/config.hpp"
+#include "std/stop_watch.hpp"
 
 /*!
  * The FLOOR is under development; the basic idea is to provide a

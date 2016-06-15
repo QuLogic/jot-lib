@@ -18,11 +18,11 @@
 #ifndef INCLUDE_TESS_CMD_H
 #define INCLUDE_TESS_CMD_H
 
-#include "geom/command.H"
-#include "map3d/map1d3d.H"
-#include "map3d/map2d3d.H"
-#include "mesh/bmesh.H"
-#include "bbase.H"
+#include "geom/command.hpp"
+#include "map3d/map1d3d.hpp"
+#include "map3d/map2d3d.hpp"
+#include "mesh/bmesh.hpp"
+#include "bbase.hpp"
 
 /*****************************************************************
  * MOVE_CMD

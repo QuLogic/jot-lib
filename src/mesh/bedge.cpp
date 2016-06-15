@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "std/run_avg.H"
-#include "disp/ray.H"
-#include "lmesh.H"
-#include "bfilters.H"
-#include "uv_data.H"
-#include "tex_coord_gen.H"
+#include "std/config.hpp"
+#include "std/run_avg.hpp"
+#include "disp/ray.hpp"
+#include "lmesh.hpp"
+#include "bfilters.hpp"
+#include "uv_data.hpp"
+#include "tex_coord_gen.hpp"
 
 using namespace mlib;
 

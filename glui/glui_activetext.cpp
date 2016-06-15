@@ -1,4 +1,4 @@
-#include "glui/glui_jot.H"
+#include "glui/glui_jot.hpp"
 #include "glui_internal.h"
 #include "glui_internal_control.h"
 

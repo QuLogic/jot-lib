@@ -19,11 +19,11 @@
 #ifndef MMENU_H
 #define MMENU_H
 
-#include "disp/gel.H"
-#include "disp/view.H"
-#include "geom/geom.H"
-#include "geom/text2d.H"
-#include "manip/manip.H"
+#include "disp/gel.hpp"
+#include "disp/view.hpp"
+#include "geom/geom.hpp"
+#include "geom/text2d.hpp"
+#include "manip/manip.hpp"
 
 
 //------------------------------------------------------

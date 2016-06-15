@@ -19,22 +19,22 @@
 #define PEN_H_IS_INCLUDED
 
 /*!
- *  \file pen.H
+ *  \file pen.hpp
  *  \brief Contains the definition of the Pen class.
  *
- *  \sa pen.C
+ *  \sa pen.cpp
  *
  */
 
-#include "disp/view.H"
-#include "geom/world.H"
-#include "manip/manip.H"
-#include "mesh/bface.H"
-#include "std/stop_watch.H"
+#include "disp/view.hpp"
+#include "geom/world.hpp"
+#include "manip/manip.hpp"
+#include "mesh/bface.hpp"
+#include "std/stop_watch.hpp"
 
-#include "gest/gest_int.H"
-#include "gest/gest_guards.H"
-#include "gest/mode_name.H"
+#include "gest/gest_int.hpp"
+#include "gest/gest_guards.hpp"
+#include "gest/mode_name.hpp"
 
 using namespace mlib;
 /******************************************************************

@@ -18,8 +18,8 @@
 #ifndef PARAM_LIST_H_IS_INCUDED
 #define PARAM_LIST_H_IS_INCUDED
 
-#include "mlib/points.H"
-#include "std/support.H"
+#include "mlib/points.hpp"
+#include "std/support.hpp"
 
 #include <vector>
 

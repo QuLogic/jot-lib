@@ -18,7 +18,7 @@
 #ifndef _PATCH_RENDER_DATA_
 #define _PATCH_RENDER_DATA_
 
-#include "mesh/patch.H"
+#include "mesh/patch.hpp"
 
 class CompBody;
 

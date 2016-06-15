@@ -22,9 +22,9 @@
 // LinePen
 ////////////////////////////////////////////
 
-#include "wnpr/stroke_ui.H"
-#include "stroke/gesture_stroke_drawer.H"
-#include "gest/pen.H"
+#include "wnpr/stroke_ui.hpp"
+#include "stroke/gesture_stroke_drawer.hpp"
+#include "gest/pen.hpp"
 
 #define COutlineStroke const OutlineStroke
 

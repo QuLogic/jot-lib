@@ -65,7 +65,7 @@ using namespace std;
 
 
 
-//YYY - Moved here from geom/fsa.H (and fixed)
+//YYY - Moved here from geom/fsa.hpp (and fixed)
 #if (defined(__sgi) && !defined(__GNUC__) && defined(_STANDARD_C_PLUS_PLUS)) || defined(__VACPP_MULTI__)
 #define TYPENAME typename
 #elif (defined(__GNUC__) && (__GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ >= 2 )))

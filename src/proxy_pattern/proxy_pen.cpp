@@ -16,16 +16,16 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "gtex/buffer_ref_image.H"
-#include "gtex/ref_image.H"
-#include "geom/command.H"
-#include "mesh/mesh_global.H"
+#include "gtex/buffer_ref_image.hpp"
+#include "gtex/ref_image.hpp"
+#include "geom/command.hpp"
+#include "mesh/mesh_global.hpp"
 
 
-#include "stroke/gesture_stroke_drawer.H"
+#include "stroke/gesture_stroke_drawer.hpp"
 
-#include "proxy_pen.H"
-#include "proxy_pen_ui.H"
+#include "proxy_pen.hpp"
+#include "proxy_pen_ui.hpp"
 #include <iterator>
 #include <list>
 #include <stack>

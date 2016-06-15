@@ -18,7 +18,7 @@
 #ifndef _JOT_MESH_BASE_VIS_REF_IMAGE_H
 #define _JOT_MESH_BASE_VIS_REF_IMAGE_H
 
-#include "disp/view.H"
+#include "disp/view.hpp"
 
 #include <map>
 

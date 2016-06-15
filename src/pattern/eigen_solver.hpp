@@ -18,7 +18,7 @@
 #ifndef EIGEN_SOLVER_H
 #define EIGEN_SOLVER_H
 
-#include "mlib/points.H"
+#include "mlib/points.hpp"
 
 class EigenSolver{
 public:

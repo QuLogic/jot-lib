@@ -16,16 +16,16 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "base_jotapp/base_jotapp.H"
-#include "gest/vieweasel.H"
-#include "npr/npr_texture.H"
+#include "base_jotapp/base_jotapp.hpp"
+#include "gest/vieweasel.hpp"
+#include "npr/npr_texture.hpp"
 
-#include "line_pen.H"
+#include "line_pen.hpp"
 
-#include "line_pen_ui.H"
+#include "line_pen_ui.hpp"
 
-#include "stroke/edge_stroke.H"
-#include "stroke/decal_line_stroke.H"
+#include "stroke/edge_stroke.hpp"
+#include "stroke/decal_line_stroke.hpp"
 
 using namespace mlib;
 

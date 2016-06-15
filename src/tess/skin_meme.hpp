@@ -18,7 +18,7 @@
 #ifndef SKIN_MEME_H_IS_INCLUDED
 #define SKIN_MEME_H_IS_INCLUDED
 
-#include "tess/meme.H"
+#include "tess/meme.hpp"
 
 #include <set>
 

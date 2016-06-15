@@ -18,10 +18,10 @@
 #ifndef IMG_LINE_SHADER_HE_IS_INCLUDED
 #define IMG_LINE_SHADER_HE_IS_INCLUDED
 
-#include "gtex/glsl_shader.H"
-#include "gtex/multi_lights_tone.H"
-#include "gtex/basecoat_shader.H"
-#include "gtex/blur_shader.H"
+#include "gtex/glsl_shader.hpp"
+#include "gtex/multi_lights_tone.hpp"
+#include "gtex/basecoat_shader.hpp"
+#include "gtex/blur_shader.hpp"
 
 /**********************************************************************
  * ImageLineStripCB:

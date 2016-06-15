@@ -26,16 +26,16 @@
 
 
 
-#include "hatching_stroke.H"
-#include "geom/gl_util.H"
-#include "geom/texturegl.H"
-#include "disp/view.H"
+#include "hatching_stroke.hpp"
+#include "geom/gl_util.hpp"
+#include "geom/texturegl.hpp"
+#include "disp/view.hpp"
 #include <cmath>
-#include "npr/hatching_group_free.H"
-#include "npr/hatching_group_base.H"
-#include "mesh/uv_mapping.H"
+#include "npr/hatching_group_free.hpp"
+#include "npr/hatching_group_base.hpp"
+#include "mesh/uv_mapping.hpp"
 
-#include "base_stroke.H"
+#include "base_stroke.hpp"
 
 using mlib::Wpt;
 using mlib::Wvec;

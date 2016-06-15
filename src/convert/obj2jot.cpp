@@ -100,9 +100,9 @@
 #include <string>
 #include <sstream>
 #include <limits>
-#include "mesh/lmesh.H"
-#include "std/config.H"
-#include "net/io_manager.H"
+#include "mesh/lmesh.hpp"
+#include "std/config.hpp"
+#include "net/io_manager.hpp"
 
 inline void
 skip_line(istream& in)

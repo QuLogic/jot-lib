@@ -18,9 +18,9 @@
 #ifndef ACTION_H_IS_INCLUDED
 #define ACTION_H_IS_INCLUDED
 
-#include "net/data_item.H"
-#include "tess/tess_cmd.H"
-#include "tess/bsurface.H"
+#include "net/data_item.hpp"
+#include "tess/tess_cmd.hpp"
+#include "tess/bsurface.hpp"
 
 #include <vector>
 

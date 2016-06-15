@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "data_item.H"
-#include "mlib/points.H"
+#include "std/config.hpp"
+#include "data_item.hpp"
+#include "mlib/points.hpp"
 #include "ctype.h"
 
 using mlib::Wpt;

@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "gtex/ref_image.H"
-#include "glsl_paper.H"
+#include "gtex/gl_extensions.hpp"
+#include "gtex/ref_image.hpp"
+#include "glsl_paper.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_GLSL_PAPER", false);
 

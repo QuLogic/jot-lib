@@ -29,9 +29,9 @@
 //
 ////////////////////////////////////////////
 
-#include "gtex/aux_ref_image.H"
-#include "gtex/paper_effect.H"
-#include "stroke/base_stroke.H"
+#include "gtex/aux_ref_image.hpp"
+#include "gtex/paper_effect.hpp"
+#include "stroke/base_stroke.hpp"
 
 #include <map>
 #include <vector>

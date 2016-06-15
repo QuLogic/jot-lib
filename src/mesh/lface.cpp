@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/lmesh.H"
-#include "mesh/patch.H"
+#include "mesh/lmesh.hpp"
+#include "mesh/patch.hpp"
 
 using namespace mlib;
 

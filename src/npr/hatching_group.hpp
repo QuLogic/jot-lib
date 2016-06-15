@@ -18,10 +18,10 @@
 #ifndef HATCHING_GROUP_HEADER
 #define HATCHING_GROUP_HEADER
 
-#include "std/time.H"
-#include "mesh/patch.H"
-#include "mesh/bmesh.H"
-#include "stroke/hatching_stroke.H"
+#include "std/time.hpp"
+#include "mesh/patch.hpp"
+#include "mesh/bmesh.hpp"
+#include "stroke/hatching_stroke.hpp"
 
 ////////////////////////////////////////////
 // HatchingGroupParams

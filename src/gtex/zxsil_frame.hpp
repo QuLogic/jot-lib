@@ -18,8 +18,8 @@
 #ifndef ZXSIL_FRAME_H_IS_INCLUDED
 #define ZXSIL_FRAME_H_IS_INCLUDED
 
-#include "zxsils_texture.H"
-#include "creases_texture.H"
+#include "zxsils_texture.hpp"
+#include "creases_texture.hpp"
 
 /**********************************************************************
  * SilFrameTexture:

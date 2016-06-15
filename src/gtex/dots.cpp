@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "mesh/mi.H"
-#include "dots.H"
-#include "gtex/tone_shader.H"
-#include "gtex/ref_image.H"
+#include "mesh/mi.hpp"
+#include "dots.hpp"
+#include "gtex/tone_shader.hpp"
+#include "gtex/ref_image.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_DOTS", false);
 

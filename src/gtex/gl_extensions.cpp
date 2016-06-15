@@ -16,18 +16,18 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file gl_extensions.C
+ *  \file gl_extensions.cpp
  *  \brief Contains the implementation of the Jot interface for loading OpenGL
  *  extensions.
  *
- *  \sa gl_extensions.H
+ *  \sa gl_extensions.hpp
  *
  */
 
 #include <GL/glew.h>
-#include "glew/glew_singleton.H"
-#include "gl_extensions.H"
-#include "std/config.H"
+#include "glew/glew_singleton.hpp"
+#include "gl_extensions.hpp"
+#include "std/config.hpp"
 
 //YYY - Seems newer Redhats come with gluts that want to see these GLX extensions
 //      while the latest nvidia drivers fail to provide them.  Likely, they'd

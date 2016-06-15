@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- *      Used in disp/view.C for antialiasing.
+ *      Used in disp/view.cpp for antialiasing.
  *****************************************************************/
 #ifndef JITTER_H
 #define JITTER_H

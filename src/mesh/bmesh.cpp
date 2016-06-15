@@ -16,21 +16,21 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include <fstream>
-#include "std/run_avg.H"
-#include "std/stop_watch.H"
-#include "std/config.H"
+#include "std/run_avg.hpp"
+#include "std/stop_watch.hpp"
+#include "std/config.hpp"
 
-#include "disp/ray.H"
-#include "net/io_manager.H"
+#include "disp/ray.hpp"
+#include "net/io_manager.hpp"
 
-#include "mesh/patch.H"
-#include "mesh/uv_data.H"
-#include "mesh/base_ref_image.H"
-#include "mesh/ioblock.H"
-#include "mesh/gtexture.H"
-#include "mesh/bfilters.H"
-#include "mesh/lmesh.H"      // because of DECODER_ADD(LMESH) hack, below
-#include "mesh/patch_blend_weight.H"
+#include "mesh/patch.hpp"
+#include "mesh/uv_data.hpp"
+#include "mesh/base_ref_image.hpp"
+#include "mesh/ioblock.hpp"
+#include "mesh/gtexture.hpp"
+#include "mesh/bfilters.hpp"
+#include "mesh/lmesh.hpp"      // because of DECODER_ADD(LMESH) hack, below
+#include "mesh/patch_blend_weight.hpp"
 
 using namespace mlib;
 
@@ -3426,7 +3426,7 @@ BMESH::put_vertices(TAGformat &d) const
       for (int i = 0; i< nverts(); i++)
          verts[i] = bv(i)->loc();
 
-   // XXX - copied code from net_type.H,
+   // XXX - copied code from net_type.hpp,
    //       want to avoid super long lines that may be
    //       causing bugs...
    d.id();
@@ -3479,7 +3479,7 @@ BMESH::put_faces(TAGformat &d) const
       }
    }
 
-   // XXX - copied code from net_type.H,
+   // XXX - copied code from net_type.hpp,
    //       want to avoid super long lines that may be
    //       causing bugs...
    d.id();

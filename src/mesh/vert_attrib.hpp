@@ -24,7 +24,7 @@ by Karol Szerszen
 #ifndef VERT_ATTRIB_H_IS_INCLUDED
 #define VERT_ATTRIB_H_IS_INCLUDED
 
-#include "bface.H"
+#include "bface.hpp"
 
 
 template <typename AttType, typename RetType>

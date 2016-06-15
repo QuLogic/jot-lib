@@ -21,7 +21,7 @@
  *    DATE: Wed Jan  6 17:10:03 US/Eastern 1999
  *************************************************************************/
 
-#include "ioblock.H"
+#include "ioblock.hpp"
 
 string
 get_word(istream &is, vector<string> &list)

@@ -25,10 +25,10 @@
 #include <sys/filio.h>
 #endif
 
-#include "dev.H"
-#include "tablet.H"
+#include "dev.hpp"
+#include "tablet.hpp"
 
-#include "std/config.H"
+#include "std/config.hpp"
 
 using namespace mlib;
 

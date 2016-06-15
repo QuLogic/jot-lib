@@ -21,10 +21,10 @@
 #ifndef _PROXY_STROKE_H_IS_INCLUDED_
 #define _PROXY_STROKE_H_IS_INCLUDED_
 
-#include "std/config.H"
-#include "geom/gl_view.H"
-#include "stroke/base_stroke.H"
-#include "mesh/patch.H"
+#include "std/config.hpp"
+#include "geom/gl_view.hpp"
+#include "stroke/base_stroke.hpp"
+#include "mesh/patch.hpp"
 
 // *****************************************************************
 // * ProxyStroke

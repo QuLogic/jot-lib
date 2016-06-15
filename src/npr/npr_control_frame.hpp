@@ -18,7 +18,7 @@
 #ifndef NPR_CONTROL_FRAME_H_IS_INCLUDED
 #define NPR_CONTROL_FRAME_H_IS_INCLUDED
 
-#include "gtex/basic_texture.H"
+#include "gtex/basic_texture.hpp"
 
 #include <vector>
 

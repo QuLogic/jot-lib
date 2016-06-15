@@ -19,8 +19,8 @@
  *      Takes an .sm file as input, splits it into disconnected
  *      pieces, and creates a separate patch for each piece.
  **********************************************************************/
-#include "std/config.H"
-#include "mi.H"
+#include "std/config.hpp"
+#include "mi.hpp"
 
 int 
 main(int argc, char *argv[])

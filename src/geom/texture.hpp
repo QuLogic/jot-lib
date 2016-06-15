@@ -18,11 +18,11 @@
 #ifndef __TEXTURE_H
 #define __TEXTURE_H
 
-#include "std/ref.H"
-#include "std/support.H"
-#include "mlib/points.H"
-#include "geom/image.H"
-#include "disp/bbox.H"
+#include "std/ref.hpp"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "geom/image.hpp"
+#include "disp/bbox.hpp"
 
 MAKE_SHARED_PTR(TEXTURE);
 

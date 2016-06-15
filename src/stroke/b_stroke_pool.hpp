@@ -18,7 +18,7 @@
 
 #ifndef B_STROKE_POOL_HEADER
 #define B_STROKE_POOL_HEADER
-#include "outline_stroke.H"
+#include "outline_stroke.hpp"
 
 #include <vector>
 

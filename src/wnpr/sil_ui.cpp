@@ -30,20 +30,20 @@
 
 #define BUFFER_DIRECTORY         "nprdata/debugging/"
 
-#include "std/support.H"
-#include "std/file.H"
+#include "std/support.hpp"
+#include "std/file.hpp"
 #include <fstream>
 #include <GL/glew.h>
 
-#include "geom/winsys.H"
-#include "geom/world.H"
-#include "tess/tex_body.H"
-#include "glui/glui_jot.H"
-#include "std/stop_watch.H"
-#include "npr/npr_texture.H"
-#include "std/config.H"
+#include "geom/winsys.hpp"
+#include "geom/world.hpp"
+#include "tess/tex_body.hpp"
+#include "glui/glui_jot.hpp"
+#include "std/stop_watch.hpp"
+#include "npr/npr_texture.hpp"
+#include "std/config.hpp"
 
-#include "sil_ui.H"
+#include "sil_ui.hpp"
 
 /*****************************************************************
  * SilUI

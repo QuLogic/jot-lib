@@ -18,12 +18,12 @@
 #ifndef SUPPORT_H
 #define SUPPORT_H
 
-#include "platform.H"
+#include "platform.hpp"
 #include <stdint.h>
 #include <string>
 #include <vector>
-#include "error.H"
-#include "ref.H"
+#include "error.hpp"
+#include "ref.hpp"
 
 #define REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr; class FOO
 #define FD_REF_CLASS(FOO)  FOO; typedef REFptr<FOO> FOO##ptr

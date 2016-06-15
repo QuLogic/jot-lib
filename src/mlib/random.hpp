@@ -19,7 +19,7 @@
 #define RANDOM_H_IS_INCLUDED
 
 /*!
- *  \file random.H
+ *  \file random.hpp
  *  \brief Contains the definition of the RandomGen class.
  *  \ingroup group_MLIB
  *

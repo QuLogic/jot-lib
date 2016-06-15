@@ -21,7 +21,7 @@
 #include <vector>
 
 /*!
- *  \file statistics.H
+ *  \file statistics.hpp
  *  \brief Statistical functions.
  *  \ingroup group_MLIB
  *

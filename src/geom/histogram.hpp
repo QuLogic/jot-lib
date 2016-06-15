@@ -23,7 +23,7 @@
 #ifndef HISTOGRAM_H_HAS_BEEN_INCLUDED
 #define HISTOGRAM_H_HAS_BEEN_INCLUDED
 
-#include "geom/image.H"
+#include "geom/image.hpp"
 
 using namespace std;
 

@@ -18,8 +18,8 @@
 #ifndef _IMG_LINE_STROKE_H_
 #define _IMG_LINE_STROKE_H_
 
-#include "stroke/base_stroke.H"
-#include "mesh/patch.H"
+#include "stroke/base_stroke.hpp"
+#include "mesh/patch.hpp"
 
 #include <vector>
 

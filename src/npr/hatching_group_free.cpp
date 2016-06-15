@@ -28,11 +28,11 @@
 
 #define INTERPOLATION_RANDOM_FACTOR 0.15
 
-#include "geom/world.H"
-#include "mesh/uv_data.H"
-#include "mesh/lmesh.H"
-#include "npr/hatching_group_free.H"
-#include "std/config.H"
+#include "geom/world.hpp"
+#include "mesh/uv_data.hpp"
+#include "mesh/lmesh.hpp"
+#include "npr/hatching_group_free.hpp"
+#include "std/config.hpp"
 
 using namespace mlib;
 

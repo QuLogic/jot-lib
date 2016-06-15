@@ -19,9 +19,9 @@
 #ifndef EDGE_STROKE_POOL_HEADER
 #define EDGE_STROKE_POOL_HEADER
 
-#include "stroke/b_stroke_pool.H"
-#include "mesh/edge_strip.H"
-#include "net/data_item.H"
+#include "stroke/b_stroke_pool.hpp"
+#include "mesh/edge_strip.hpp"
+#include "net/data_item.hpp"
 
 class EdgeStroke;
 

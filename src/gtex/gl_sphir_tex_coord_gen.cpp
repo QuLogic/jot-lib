@@ -15,8 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gl_sphir_tex_coord_gen.H"
-#include "mesh/bmesh.H"
+#include "gl_sphir_tex_coord_gen.hpp"
+#include "mesh/bmesh.hpp"
 
 
 

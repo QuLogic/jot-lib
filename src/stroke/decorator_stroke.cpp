@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "decorator_stroke.H"
-#include "mesh/patch.H"
+#include "decorator_stroke.hpp"
+#include "mesh/patch.hpp"
 
 using mlib::Wpt;
 using mlib::NDCZpt;

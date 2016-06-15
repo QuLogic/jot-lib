@@ -18,11 +18,11 @@
 #ifndef __TEXTUREGL_H
 #define __TEXTUREGL_H
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h> // must come first
 
-#include "texture.H"
-#include "disp/view.H"
+#include "texture.hpp"
+#include "disp/view.hpp"
 
 /**********************************************************************
  * TEXTUREgl:

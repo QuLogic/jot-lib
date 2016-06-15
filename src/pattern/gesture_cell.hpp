@@ -19,8 +19,8 @@
 #define _GESTURE_CELL_H_
 
 #include <vector>
-#include "gest/gesture.H"
-#include "mlib/points.H"
+#include "gest/gesture.hpp"
+#include "mlib/points.hpp"
 
 class GestureCell{
 public:

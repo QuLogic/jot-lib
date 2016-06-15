@@ -18,21 +18,21 @@
 #ifndef REF_IMAGE_H_IS_INCLUDED
 #define REF_IMAGE_H_IS_INCLUDED
 
-#include "std/support.H"
+#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "disp/colors.H"         // Color namespace and utility functions
-#include "disp/ref_img_client.H" 
-#include "disp/rgba.H"           // RGBA conversions
-#include "geom/image.H"          // Image
-#include "geom/texturegl.H"      // tex mem ref img
-#include "geom/winsys.H"         // bits per component
-#include "mesh/base_ref_image.H"
-#include "mesh/patch.H"
-#include "mesh/simplex_filter.H"
-#include "mlib/point2i.H"
+#include "disp/colors.hpp"         // Color namespace and utility functions
+#include "disp/ref_img_client.hpp"
+#include "disp/rgba.hpp"           // RGBA conversions
+#include "geom/image.hpp"          // Image
+#include "geom/texturegl.hpp"      // tex mem ref img
+#include "geom/winsys.hpp"         // bits per component
+#include "mesh/base_ref_image.hpp"
+#include "mesh/patch.hpp"
+#include "mesh/simplex_filter.hpp"
+#include "mlib/point2i.hpp"
 
-#include "gtex/util.H"
+#include "gtex/util.hpp"
 
 #include <map>
 
@@ -830,25 +830,25 @@ class VisRefImage : public    IDRefImage,
 
    static Patch* get_patch(CNDCpt& cur = get_cursor(),
                            double screen_rad=1) {
-      // see mesh/patch.H:
+      // see mesh/patch.hpp:
       return ::get_patch(get_simplex(cur, screen_rad));
    }
 
    static Patch* get_ctrl_patch(CNDCpt& cur = get_cursor(),
                                 double screen_rad=1) {
-      // see mesh/patch.H:
+      // see mesh/patch.hpp:
       return ::get_ctrl_patch(get_simplex(cur, screen_rad));
    }
 
    static BMESHptr get_mesh(CNDCpt& cur = get_cursor(),
                           double screen_rad=1) {
-      // see mesh/bsimplex.H:
+      // see mesh/bsimplex.hpp:
       return ::get_mesh(get_simplex(cur, screen_rad));
    }
 
    static BMESHptr get_ctrl_mesh(CNDCpt& cur = get_cursor(),
                                double screen_rad=1) {
-      // see mesh/lmesh.H
+      // see mesh/lmesh.hpp
       return ::get_ctrl_mesh(get_mesh(cur, screen_rad));
    }
 

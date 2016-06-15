@@ -16,10 +16,10 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "std/time.H"
-#include "geom/text2d.H"
-#include "geom/world.H"
-#include "mmenu.H"
+#include "std/time.hpp"
+#include "geom/text2d.hpp"
+#include "geom/world.hpp"
+#include "mmenu.hpp"
 
 using mlib::Wpt;
 using mlib::Wtransf;

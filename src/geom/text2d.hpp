@@ -17,12 +17,12 @@
  *****************************************************************/
 #ifndef TEXT2D_H
 #define TEXT2D_H
-#include "std/support.H"
-#include "disp/cam.H"
-#include "disp/ray.H"
-#include "geom/geom.H"
-#include "disp/view.H"
-#include "dlhandler/dlhandler.H"
+#include "std/support.hpp"
+#include "disp/cam.hpp"
+#include "disp/ray.hpp"
+#include "geom/geom.hpp"
+#include "disp/view.hpp"
+#include "dlhandler/dlhandler.hpp"
 
 // this defines a TEXT2Dptr which inherits (sort of) from a
 // GEOMptr.  Thus, TEXT2Dptr's can be used wherever GEOMptr's are.

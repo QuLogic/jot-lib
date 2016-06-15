@@ -18,7 +18,7 @@
 #ifndef UV_DATA_H_IS_INCLUDED
 #define UV_DATA_H_IS_INCLUDED
 
-#include "lface.H"
+#include "lface.hpp"
 
 class UVMapping;
 

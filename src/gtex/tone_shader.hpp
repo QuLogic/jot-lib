@@ -18,7 +18,7 @@
 #ifndef TONE_SHADER_H_IS_INCLUDED
 #define TONE_SHADER_H_IS_INCLUDED
 
-#include "glsl_shader.H"
+#include "glsl_shader.hpp"
 
 /*****************************************************************
  * ToneStripCB:

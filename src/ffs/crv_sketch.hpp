@@ -19,17 +19,17 @@
 #define CRV_SKETCH_H_IS_INCLUDED
 
 /*!
- *  \file crv_sketch.H
+ *  \file crv_sketch.hpp
  *  \brief Contains the declaration of the CRV_SKETCH widget.
  *
  *  \ingroup group_FFS
- *  \sa crv_sketch.C
+ *  \sa crv_sketch.cpp
  *
  */
 
-#include "npr/stylized_line3d.H"
-#include "tess/bcurve.H"
-#include "gest/draw_widget.H"
+#include "npr/stylized_line3d.hpp"
+#include "tess/bcurve.hpp"
+#include "gest/draw_widget.hpp"
 
 #include <vector>
 

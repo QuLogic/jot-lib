@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "sil_stroke_pool.H"
-#include "npr/sil_and_crease_texture.H"
+#include "gtex/gl_extensions.hpp"
+#include "sil_stroke_pool.hpp"
+#include "npr/sil_and_crease_texture.hpp"
 
 /*****************************************************************
  * SilStrokePool

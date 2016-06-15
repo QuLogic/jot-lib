@@ -18,8 +18,8 @@
 #ifndef DEV_H
 #define DEV_H
 
-#include "std/support.H"
-#include "mlib/points.H"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
 
 #include <set>
 #include <vector>
@@ -109,7 +109,7 @@
 //   In practice, the generic DEVice_xxx's event() 
 // functions get called by first registering the 
 // file descriptor for the real device with the 
-// application's highest level FD_MANAGER (see tty.H).  
+// application's highest level FD_MANAGER (see tty.hpp).
 // Then, when the file descriptor has available data, 
 // the device specific callback function is invoked.
 // This callback will then read the data from

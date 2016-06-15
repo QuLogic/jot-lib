@@ -18,7 +18,7 @@
 #ifndef TRI_STRIPS_TEXTURE_H_IS_INCLUDED
 #define TRI_STRIPS_TEXTURE_H_IS_INCLUDED
 
-#include "flat_shade.H"
+#include "flat_shade.hpp"
 
 /**********************************************************************
  * TriStripsTexture:

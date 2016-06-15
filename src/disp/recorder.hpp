@@ -20,9 +20,9 @@
 
 #include <vector>
 
-#include "disp/cam.H"
-#include "disp/view.H"
-#include "std/stop_watch.H"
+#include "disp/cam.hpp"
+#include "disp/view.hpp"
+#include "std/stop_watch.hpp"
 
 class RecorderUIBase;
 

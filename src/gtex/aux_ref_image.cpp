@@ -17,8 +17,8 @@
  *****************************************************************/
 
 
-#include "geom/gl_view.H"
-#include "aux_ref_image.H"
+#include "geom/gl_view.hpp"
+#include "aux_ref_image.hpp"
 
 
 /**********************************************************************

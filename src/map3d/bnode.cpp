@@ -16,7 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include <fstream>
-#include "bnode.H"
+#include "bnode.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_BNODE", false);
 

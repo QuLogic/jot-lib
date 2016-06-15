@@ -18,7 +18,7 @@
 #ifndef GEOM_OBS_H_HAS_BEEN_INCLUDED
 #define GEOM_OBS_H_HAS_BEEN_INCLUDED
 
-#include "geom/geom.H"
+#include "geom/geom.hpp"
 #include <map>
 #include <set>
 

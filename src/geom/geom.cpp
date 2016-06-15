@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/cam_focus.H"
-#include "disp/ray.H"
-#include "disp/view.H"
-#include "geom/geom.H"
-#include "geom/body.H"
-#include "geom/gl_view.H"
-#include "geom/gl_util.H"
-#include "std/config.H"
+#include "disp/cam_focus.hpp"
+#include "disp/ray.hpp"
+#include "disp/view.hpp"
+#include "geom/geom.hpp"
+#include "geom/body.hpp"
+#include "geom/gl_view.hpp"
+#include "geom/gl_util.hpp"
+#include "std/config.hpp"
 
-#include "std/thread_mutex.H"
+#include "std/thread_mutex.hpp"
 
 using namespace mlib;
 
@@ -45,7 +45,7 @@ MAKE_NET_HASHVAR (XFORM_ON_BODY, int, 0);
 MAKE_NET_HASHVAR (HIGHLIGHTED  , int, 0);
 XformConstraint CONSTRAINT("CONSTRAINT", GEOM::TRANS_FREE, 1);
 
-// See net/data_item.H for more information
+// See net/data_item.hpp for more information
 static int gm=DECODER_ADD(GEOM);
 
 STDdstream &

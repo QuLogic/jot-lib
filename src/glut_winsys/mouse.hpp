@@ -18,8 +18,8 @@
 #ifndef GLUT_MOUSE_H
 #define GLUT_MOUSE_H
 
-#include "std/support.H"
-#include "dev/dev.H"
+#include "std/support.hpp"
+#include "dev/dev.hpp"
 
 #include <vector>
 

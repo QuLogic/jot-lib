@@ -19,7 +19,7 @@
 #ifndef TEX_COORD_GEN_H_IS_INCLUDED
 #define TEX_COORD_GEN_H_IS_INCLUDED
 
-#include "bface.H"
+#include "bface.hpp"
 
 class TexCoordGen {
  protected:
@@ -53,7 +53,7 @@ protected:
    The function will consitently change only one coordinate per face, so you can call it
    with the same coordinates in different order and it will only do the fix once.
 
-   If you're still unsure how to use it see "gl_sphir_tex_coord.C"  for reference
+   If you're still unsure how to use it see "gl_sphir_tex_coord.cpp"  for reference
    */
    UVpt fix_seems(CUVpt& fix_this_coord, CUVpt& coord2, CUVpt& coord3);
 

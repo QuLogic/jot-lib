@@ -19,16 +19,16 @@
 #define LINE_DRAWING_H_IS_INCLUDED
 
 /*!
- *  \file line_drawing.H
+ *  \file line_drawing.hpp
  *  \brief Contains the definitions of the classes that implement the
  *  "Line Drawing" rendering style GTexture.
  *
- *  \sa line_drawing.C
+ *  \sa line_drawing.cpp
  *
  */
 
-#include "gtex/basic_texture.H"
-#include "gtex/solid_color.H"
+#include "gtex/basic_texture.hpp"
+#include "gtex/solid_color.hpp"
 
 /*!
  *  \brief GTexture that implements the "Line Drawing" rendering style.

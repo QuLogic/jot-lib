@@ -19,18 +19,18 @@
 #define DRAW_MANIP_H_HAS_BEEN_INCLUDED
 
 /*!
- *  \file draw_manip.H
+ *  \file draw_manip.hpp
  *  \brief Contains the declaration of the DrawManip class.
  *
  *  \ingroup group_FFS
- *  \sa draw_manip.C
+ *  \sa draw_manip.cpp
  *
  */
 
-#include "manip/manip.H"
-#include "tess/bpoint.H"
-#include "tess/bcurve.H"
-#include "tess/tess_cmd.H"
+#include "manip/manip.hpp"
+#include "tess/bpoint.hpp"
+#include "tess/bcurve.hpp"
+#include "tess/tess_cmd.hpp"
 
 /******************************************************************
  * DrawManip:

@@ -19,13 +19,13 @@
 #define CURVATURE_TEXTURE_H_IS_INCLUDED
 
 /*!
- *  \file curvature_texture.H
+ *  \file curvature_texture.hpp
  *  \brief Contains the definitions of the classes that implement the curvature
  *  visualization gTexture.
  *
  */
 
-#include "gtex/basic_texture.H"
+#include "gtex/basic_texture.hpp"
 
 /*!
  *  \brief gTexture that implements curvature visualization for a mesh.

@@ -20,13 +20,13 @@
 
 #include <cmath>
 
-#include "disp/colors.H"
-#include "disp/rgba.H"
-#include "std/support.H"
-#include "mlib/points.H"
-#include "mlib/point2i.H"
+#include "disp/colors.hpp"
+#include "disp/rgba.hpp"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "mlib/point2i.hpp"
 
-#include "disp/rgba.H"
+#include "disp/rgba.hpp"
 
 using namespace mlib;
 
@@ -129,7 +129,7 @@ class Image {
 
    // Return the RGBA value of the given pixel. RGBA components are
    // packed into a single unsigned int using the format defined in
-   // rgba.H:
+   // rgba.hpp:
    uint pixel_rgba(uint x, uint y) const;
 
    // get RGB value of a pixel as a COLOR:

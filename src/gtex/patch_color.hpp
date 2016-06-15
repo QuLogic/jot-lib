@@ -18,7 +18,7 @@
 #ifndef PATCH_COLOR_H_IS_INCLUDED
 #define PATCH_COLOR_H_IS_INCLUDED
 
-#include "hidden_line.H"
+#include "hidden_line.hpp"
 
 /**********************************************************************
  * PatchColorTexture:

@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "std/support.H" 
+#include "std/config.hpp"
+#include "std/support.hpp"
 #include <GL/glew.h> // XXX - remove when debugging phase is over
 
-#include "lmesh.H"
-#include "uv_data.H"
-#include "uv_mapping.H"
+#include "lmesh.hpp"
+#include "uv_data.hpp"
+#include "uv_mapping.hpp"
 
 using namespace mlib;
 

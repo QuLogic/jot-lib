@@ -18,17 +18,17 @@
 #ifndef SIL_AND_CREASE_TEXTURE_HEADER
 #define SIL_AND_CREASE_TEXTURE_HEADER
 
-#include "gtex/basic_texture.H"
-#include "gtex/ref_image.H"
+#include "gtex/basic_texture.hpp"
+#include "gtex/ref_image.hpp"
 
-#include "geom/text2d.H"
+#include "geom/text2d.hpp"
 
-#include "stroke/sil_stroke_pool.H"
-#include "stroke/edge_stroke_pool.H"
+#include "stroke/sil_stroke_pool.hpp"
+#include "stroke/edge_stroke_pool.hpp"
 
-#include "std/config.H"
+#include "std/config.hpp"
 
-#include "npr/zxedge_stroke_texture.H"
+#include "npr/zxedge_stroke_texture.hpp"
 
 #include <vector>
 

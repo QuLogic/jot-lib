@@ -19,18 +19,18 @@
 #define INFLATE_H_IS_INCLUDED
 
 /*!
- *  \file inflate.H
+ *  \file inflate.hpp
  *  \brief Contains the declaration of the INFLATE widget and INFLATE_CMD.
  *
  *  \ingroup group_FFS
- *  \sa inflate.C
+ *  \sa inflate.cpp
  *
  */
 
-#include "geom/command.H"
-#include "tess/bsurface.H"
+#include "geom/command.hpp"
+#include "tess/bsurface.hpp"
 
-#include "gest/draw_widget.H"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * INFLATE:

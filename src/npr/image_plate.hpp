@@ -18,7 +18,7 @@
 #ifndef _IMAGE_PLATE_H_
 #define _IMAGE_PLATE_H_
 
-#include "geom/geom.H"
+#include "geom/geom.hpp"
 
 MAKE_PTR_SUBC(ImagePlate, GEOM);
 typedef const ImagePlateptr CImagePlateptr;

@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "mesh/patch_blend_weight.H" // for debugging
-#include "solid_color.H"
+#include "mesh/patch_blend_weight.hpp" // for debugging
+#include "solid_color.hpp"
 
 static bool debug_patch_blend =
    Config::get_var_bool("DEBUG_PATCH_BLEND_WEIGHTS",false);

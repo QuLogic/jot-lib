@@ -29,9 +29,9 @@
 //
 ////////////////////////////////////////////
 
-#include "npr/hatching_group.H"
-#include "stroke/gesture_stroke_drawer.H"
-#include "gest/pen.H"
+#include "npr/hatching_group.hpp"
+#include "stroke/gesture_stroke_drawer.hpp"
+#include "gest/pen.hpp"
 
 class NPRTexture;
 class HatchingPenUI;

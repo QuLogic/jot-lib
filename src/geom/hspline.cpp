@@ -20,7 +20,7 @@
  *    USER: jdn
  *    DATE: Wed Jul 29 12:58:54 US/Eastern 1998
  *************************************************************************/
-#include "hspline.H"
+#include "hspline.hpp"
 
 using mlib::CWpt;
 using mlib::CWpt_list;

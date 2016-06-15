@@ -21,14 +21,14 @@
 
 #include <GL/glew.h> // must come first
 
-#include "std/config.H"
-#include "glut_winsys.H"
-#include "tty_glut.H"
-#include "mouse.H" 
-#include "kbd.H"
-#include "glui/glui_jot.H"
-#include "glui_menu.H"
-#include "glui_dialogs.H"
+#include "std/config.hpp"
+#include "glut_winsys.hpp"
+#include "tty_glut.hpp"
+#include "mouse.hpp"
+#include "kbd.hpp"
+#include "glui/glui_jot.hpp"
+#include "glui_menu.hpp"
+#include "glui_dialogs.hpp"
 
 // obsolete:
 #ifdef USE_GLUT_WACOM

@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/world.H"
-#include "mesh/mi.H"
-#include "std/config.H"
+#include "geom/world.hpp"
+#include "mesh/mi.hpp"
+#include "std/config.hpp"
 
-#include "bcurve.H"
-#include "inflate_vert_data.H"
+#include "bcurve.hpp"
+#include "inflate_vert_data.hpp"
 
 using Wpt;
 using Wvec;

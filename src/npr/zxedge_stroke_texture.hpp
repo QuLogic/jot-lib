@@ -18,11 +18,11 @@
 #ifndef ZXEDGE_STROKE_TEXTURE_HEADER
 #define ZXEDGE_STROKE_TEXTURE_HEADER
 
-#include "gtex/basic_texture.H"
-#include "gtex/ref_image.H"
-#include "mesh/uv_data.H"
-#include "mesh/bsimplex.H"
-#include "stroke/base_stroke.H"
+#include "gtex/basic_texture.hpp"
+#include "gtex/ref_image.hpp"
+#include "mesh/uv_data.hpp"
+#include "mesh/bsimplex.hpp"
+#include "stroke/base_stroke.hpp"
 
 #include <vector>
 

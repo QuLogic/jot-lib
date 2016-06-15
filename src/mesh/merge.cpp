@@ -23,8 +23,8 @@
  *      list of input meshes, followed by the name of the
  *      output mesh.
  **********************************************************************/
-#include "mesh/lmesh.H"
-#include "std/config.H"
+#include "mesh/lmesh.hpp"
+#include "std/config.hpp"
 
 inline BMESHptr
 read_mesh(char* infile)

@@ -19,17 +19,17 @@
 #define ROOF_H_IS_INCLUDED
 
 /*!
- *  \file roof.H
+ *  \file roof.hpp
  *  \brief Contains the declaration of the ROOF widget.
  *
  *  \ingroup group_FFS
- *  \sa roof.C
+ *  \sa roof.cpp
  *
  */
 
-#include "mesh/ledge_strip.H"
+#include "mesh/ledge_strip.hpp"
 
-#include "gest/draw_widget.H"
+#include "gest/draw_widget.hpp"
 
 /*****************************************************************
  * ROOF:

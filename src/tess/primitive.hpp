@@ -19,19 +19,19 @@
 #define PRIMITIVE_H_IS_INCLUDED
 
 /*!
- *  \file primitive.H
+ *  \file primitive.hpp
  *  \brief Contains the declaration of the Primitive class.
  *
  *  Contains the Primitive class, as well as the static methods
  *  for creating new Primitives.
- *  \sa primitive.C
+ *  \sa primitive.cpp
  *
  */
 
-#include "geom/command.H"
-#include "mesh/simplex_frame.H"
+#include "geom/command.hpp"
+#include "mesh/simplex_frame.hpp"
 
-#include "tess/bsurface.H"
+#include "tess/bsurface.hpp"
 
 #include <vector>
 

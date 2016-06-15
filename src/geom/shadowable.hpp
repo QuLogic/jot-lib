@@ -17,8 +17,8 @@
  *****************************************************************/
 #ifndef __SHADOWABLE_H__
 #define __SHADOWABLE_H__
-#include "mlib/points.H"
-#include "geom/geom.H"
+#include "mlib/points.hpp"
+#include "geom/geom.hpp"
 #ifndef SHADOW_PTR_DEFINED
 #define SHADOW_PTR_DEFINED
 MAKE_PTR_SUBC(Shadow, GEOM);

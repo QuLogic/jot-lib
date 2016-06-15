@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*!
- *  \file global.C
- *  \brief Contains values of epsilon constants from global.H and the
+ *  \file global.cpp
+ *  \brief Contains values of epsilon constants from global.hpp and the
  *  implementation of the setEpsAbsMath function.
  *  \ingroup group_MLIB
  *
@@ -25,7 +25,7 @@
  
 #include <cassert>
 
-#include "global.H"
+#include "global.hpp"
 
 using namespace std;
 

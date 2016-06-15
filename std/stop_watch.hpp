@@ -18,9 +18,9 @@
 #ifndef STOP_WATCH_H_HAS_BEEN_INCLUDED
 #define STOP_WATCH_H_HAS_BEEN_INCLUDED
 
-#include "time.H"
-#include "error.H"          
-#include "platform.H"             
+#include "time.hpp"
+#include "error.hpp"
+#include "platform.hpp"
 
 /**********************************************************************
  * stop_watch:

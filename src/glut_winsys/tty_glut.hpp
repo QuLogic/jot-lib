@@ -18,10 +18,10 @@
 #ifndef TTY_GLUT_HAS_BEEN_INCLUDED
 #define TTY_GLUT_HAS_BEEN_INCLUDED
 
-#include "std/support.H"
-#include "std/stop_watch.H"
-#include "std/config.H"
-#include "dev/tty.H"
+#include "std/support.hpp"
+#include "std/stop_watch.hpp"
+#include "std/config.hpp"
+#include "dev/tty.hpp"
 
 #include <set>
 #include <vector>

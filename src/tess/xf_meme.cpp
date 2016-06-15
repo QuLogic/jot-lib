@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "tess/disk_map.H"      // debugging
-#include "tess/primitive.H"
-#include "tess/xf_meme.H"
+#include "tess/disk_map.hpp"      // debugging
+#include "tess/primitive.hpp"
+#include "tess/xf_meme.hpp"
 
 
 static bool debug = Config::get_var_bool("DEBUG_PRIMITIVE",false);

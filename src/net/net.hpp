@@ -26,7 +26,7 @@
 #ifndef NETWORK_HAS_BEEN_INCLUDED
 #define NETWORK_HAS_BEEN_INCLUDED
 
-#include "std/platform.H" //#include <windows.h>
+#include "std/platform.hpp" //#include <windows.h>
 
 #ifdef WIN32
 #define ssize_t int
@@ -39,7 +39,7 @@
 #include <netdb.h>
 #endif
 
-#include "std/support.H"
+#include "std/support.hpp"
 
 #ifdef WIN32
 ssize_t write_win32(int fildes, const void *buf, size_t nbyte);

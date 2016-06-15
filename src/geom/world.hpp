@@ -18,11 +18,11 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "std/support.H"
-#include "std/time.H"
-#include "dev/tty.H"
-#include "geom/geom.H"
-#include "geom/command.H"
+#include "std/support.hpp"
+#include "std/time.hpp"
+#include "dev/tty.hpp"
+#include "geom/geom.hpp"
+#include "geom/command.hpp"
 
 #include <vector>
 

@@ -20,7 +20,7 @@
 
 #include <map>
 
-#include "bmesh.H"
+#include "bmesh.hpp"
 
 /*****************************************************************
  * PatchBlendWeight:

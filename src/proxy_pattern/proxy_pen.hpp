@@ -18,9 +18,9 @@
 #ifndef _PROXY_PEN_H_IS_INCLUDED_
 #define _PROXY_PEN_H_IS_INCLUDED_
 
-#include "stroke/gesture_stroke_drawer.H"
-#include "gest/pen.H"
-#include "proxy_texture.H"
+#include "stroke/gesture_stroke_drawer.hpp"
+#include "gest/pen.hpp"
+#include "proxy_texture.hpp"
 
 class ProxyPenUI;
 class ProxySurface;

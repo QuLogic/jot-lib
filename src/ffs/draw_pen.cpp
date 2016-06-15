@@ -17,54 +17,54 @@
  *****************************************************************/
 
 /*!
- *  \file draw_pen.C
+ *  \file draw_pen.cpp
  *  \brief Contains the definition of the DrawPen Pen, plus helpers.
  *  Also: WidgetGuard,
  *
  *  \ingroup group_FFS
- *  \sa draw_pen.H
+ *  \sa draw_pen.hpp
  *
  */
 
-#include "disp/ray.H"
-#include "gtex/ref_image.H"
-#include "gtex/solid_color.H"
-#include "gtex/control_line.H"
-#include "manip/mmenu.H"
-#include "map3d/map1d3d.H"
-#include "mesh/lmesh.H"
-#include "mesh/mi.H"
-#include "mesh/mesh_select_cmd.H"
+#include "disp/ray.hpp"
+#include "gtex/ref_image.hpp"
+#include "gtex/solid_color.hpp"
+#include "gtex/control_line.hpp"
+#include "manip/mmenu.hpp"
+#include "map3d/map1d3d.hpp"
+#include "mesh/lmesh.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/mesh_select_cmd.hpp"
 
-#include "mlib/points.H"
-#include "mlib/polyline.H"
+#include "mlib/points.hpp"
+#include "mlib/polyline.hpp"
 
-#include "tess/action.H"
-#include "std/config.H"
-#include "std/time.H"
-#include "tess/panel.H"
-#include "tess/primitive.H"
-#include "tess/uv_surface.H"
-#include "tess/skin.H"
-#include "tess/skin_meme.H"
-#include "tess/ti.H"
+#include "tess/action.hpp"
+#include "std/config.hpp"
+#include "std/time.hpp"
+#include "tess/panel.hpp"
+#include "tess/primitive.hpp"
+#include "tess/uv_surface.hpp"
+#include "tess/skin.hpp"
+#include "tess/skin_meme.hpp"
+#include "tess/ti.hpp"
 
-#include "ffs/circle_widget.H"
-#include "ffs/crv_sketch.H"
-#include "ffs/cursor3d.H"
-#include "ffs/extender.H"
-#include "ffs/ffs_util.H"
-#include "ffs/floor.H"
-#include "ffs/inflate.H"
-//#include "ffs/oversketch.H"
-#include "ffs/profile.H"
-#include "ffs/roof.H"
-#include "ffs/paper_doll.H"
-#include "ffs/crease_widget.H"
-#include "ffs/select_widget.H"
-#include "ffs/sweep.H"
+#include "ffs/circle_widget.hpp"
+#include "ffs/crv_sketch.hpp"
+#include "ffs/cursor3d.hpp"
+#include "ffs/extender.hpp"
+#include "ffs/ffs_util.hpp"
+#include "ffs/floor.hpp"
+#include "ffs/inflate.hpp"
+//#include "ffs/oversketch.hpp"
+#include "ffs/profile.hpp"
+#include "ffs/roof.hpp"
+#include "ffs/paper_doll.hpp"
+#include "ffs/crease_widget.hpp"
+#include "ffs/select_widget.hpp"
+#include "ffs/sweep.hpp"
 
-#include "draw_pen.H"
+#include "draw_pen.hpp"
 
 using namespace tess;
 using namespace FFS;

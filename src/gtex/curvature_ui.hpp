@@ -19,18 +19,18 @@
 #define CURVATURE_UI_H_IS_INCLUDED
 
 /*!
- *  \file curvature_ui.H
+ *  \file curvature_ui.hpp
  *  \brief Contains the definitions of classes for the UI for manipulating
  *  curvature related gTextures (i.e. LineDrawingTexture, CurvatureTexture, etc.).
  *
- *  \sa curvature_ui.C
+ *  \sa curvature_ui.cpp
  *
  */
 
 #include <vector>
 #include <map>
 
-#include "disp/view.H"
+#include "disp/view.hpp"
 
 class CurvatureUI;
 

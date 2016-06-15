@@ -17,11 +17,11 @@
  *****************************************************************/
 
 
-#include "gtex/gl_extensions.H"
-#include "paper_effect.H"
-#include "geom/texturegl.H"
-#include "geom/gl_util.H"
-#include "geom/gl_view.H"
+#include "gtex/gl_extensions.hpp"
+#include "paper_effect.hpp"
+#include "geom/texturegl.hpp"
+#include "geom/gl_util.hpp"
+#include "geom/gl_view.hpp"
 
 /*****************************************************************
  * Paper Texture Remapping

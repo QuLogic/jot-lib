@@ -18,8 +18,8 @@
 #ifndef ZCROSS_PATH_H_IS_INCLUDED
 #define ZCROSS_PATH_H_IS_INCLUDED
 
-#include "bvert.H"
-#include "bsimplex.H"
+#include "bvert.hpp"
+#include "bsimplex.hpp"
 
 /*!
  *  \brief A segment of a zero crossing line on a surface.
@@ -304,7 +304,7 @@ protected:
    int    patch_index() const           { return _index; }
 };
 
-// XXX - transplanted from npr/zxedge_stroke_texture.H 7/10/2005:
+// XXX - transplanted from npr/zxedge_stroke_texture.hpp 7/10/2005:
 // TYPES of LINES  that zxedge_stroke ( and thus sil&crease) may encounter
 enum { STYPE_SIL=0, STYPE_BF_SIL, STYPE_BORDER, STYPE_CREASE, STYPE_SUGLINE, STYPE_WPATH, STYPE_POLYLINE, STYPE_NUM } ;
 

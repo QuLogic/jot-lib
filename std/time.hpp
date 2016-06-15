@@ -18,7 +18,7 @@
 #ifndef  TIME_H
 #define TIME_H
 
-#include "platform.H" /* gives windows.h or the *nix equiv that serves up sys/time.h*/
+#include "platform.hpp" /* gives windows.h or the *nix equiv that serves up sys/time.h*/
 
 #ifdef WIN32
 

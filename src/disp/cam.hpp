@@ -19,12 +19,12 @@
 #define CAM_H_IS_INCLUDED
 
 
-#include "disp/base_collide.H"
-#include "std/support.H"
-#include "mlib/points.H"
-#include "disp/gel.H"
-#include "disp/bbox.H"
-#include "std/stop_watch.H"
+#include "disp/base_collide.hpp"
+#include "std/support.hpp"
+#include "mlib/points.hpp"
+#include "disp/gel.hpp"
+#include "disp/bbox.hpp"
+#include "std/stop_watch.hpp"
 
 #include <set>
 
@@ -154,7 +154,7 @@ class REF_CLASS(CAMdata) : public REFcounter {
    // coordinates, transformed by the given screen and eye specs if
    // needed for stereo viewing.  The matrix returned should be loaded
    // into the MODELVIEW stack whenever drawing is about to start. This
-   // is already done by gl_view.C.
+   // is already done by gl_view.cpp.
    virtual mlib::CWtransf& xform(SCREENptr, eye e=MIDDLE) const;
 
    // CAMdata::projection_xform() returns the matrix that

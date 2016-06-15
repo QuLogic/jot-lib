@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "std/config.H"
-#include "geom/world.H"
-#include "kbd_nav.H"
+#include "std/config.hpp"
+#include "geom/world.hpp"
+#include "kbd_nav.hpp"
 
 using mlib::Wvec;
 using mlib::CWvec;

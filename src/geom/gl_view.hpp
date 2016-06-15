@@ -18,11 +18,11 @@
 #ifndef GL_VIEW_H
 #define GL_VIEW_H
 
-#include "std/config.H"
-#include "disp/view.H"
-#include "geom/winsys.H"
-#include "geom/appear.H"
-#include "geom/gl_util.H"
+#include "std/config.hpp"
+#include "disp/view.hpp"
+#include "geom/winsys.hpp"
+#include "geom/appear.hpp"
+#include "geom/gl_util.hpp"
 
 MAKE_SHARED_PTR(GL_VIEW);
 //----------------------------------------------
@@ -90,8 +90,8 @@ class GL_VIEW: public VIEWimpl {
    static  void init_point_smooth(GLfloat size, GLbitfield mask=0, GLfloat* a=nullptr);
 
    // XXX - g++ 4.0 on Mac OS X insists that the following function
-   // not be defined in the .C file (because then g++ "can't find" it).
-   // So we jump thru a hoop and define it entirely in the .H file:
+   // not be defined in the .cpp file (because then g++ "can't find" it).
+   // So we jump thru a hoop and define it entirely in the .hpp file:
    //
    // calls glPushAttrib with: mask |
    //   GL_ENABLE_BIT | GL_LINE_BIT  | GL_HINT_BIT | GL_COLOR_BUFFER_BIT

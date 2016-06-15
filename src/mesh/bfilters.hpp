@@ -18,8 +18,8 @@
 #ifndef BFILTERS_H_HAS_BEEN_INCLUDED
 #define BFILTERS_H_HAS_BEEN_INCLUDED
 
-#include "bmesh.H"
-#include "mesh_global.H"
+#include "bmesh.hpp"
+#include "mesh_global.hpp"
 
 /*****************************************************************
  * FoldVertFilter:

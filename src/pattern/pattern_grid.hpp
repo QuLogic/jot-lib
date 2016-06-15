@@ -29,11 +29,11 @@
 #ifndef _PATTERN_GRID_H_IS_INCLUDED_
 #define _PATTERN_GRID_H_IS_INCLUDED_
 
-#include "manip/manip.H"
-#include "quad_cell.H"
-#include "pattern_stroke.H"
-#include "geom/command.H"
-#include "mesh/uv_data.H"
+#include "manip/manip.hpp"
+#include "quad_cell.hpp"
+#include "pattern_stroke.hpp"
+#include "geom/command.hpp"
+#include "mesh/uv_data.hpp"
 
 #include <vector>
 

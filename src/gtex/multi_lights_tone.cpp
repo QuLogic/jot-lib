@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "gtex/gl_extensions.H"
-#include "tone_shader.H"
-#include "multi_lights_tone.H"
+#include "gtex/gl_extensions.hpp"
+#include "tone_shader.hpp"
+#include "multi_lights_tone.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_MULTI_LIGHTS_TONE", false);
 TAGlist* MLToneShader::_tags = nullptr;

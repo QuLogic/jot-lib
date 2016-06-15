@@ -18,13 +18,13 @@
 #ifndef JOT_CAM_FP_H
 #define JOT_CAM_FP_H
 
-#include "disp/cam.H"
-#include "manip/manip.H"
-#include "manip/cam_pz.H"
-#include "widgets/collide.H"
-#include "std/stop_watch.H"
-#include "base_jotapp/base_jotapp.H"
-#include "widgets/collide.H"
+#include "disp/cam.hpp"
+#include "manip/manip.hpp"
+#include "manip/cam_pz.hpp"
+#include "widgets/collide.hpp"
+#include "std/stop_watch.hpp"
+#include "base_jotapp/base_jotapp.hpp"
+#include "widgets/collide.hpp"
 
 #include <set>
 

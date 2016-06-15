@@ -20,8 +20,8 @@
 
 #include <map>
 
-#include "disp/paper_effect_base.H"
-#include "geom/texturegl.H"
+#include "disp/paper_effect_base.hpp"
+#include "geom/texturegl.hpp"
 
 /*****************************************************************
  * PaperEffect

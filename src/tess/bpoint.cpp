@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "disp/colors.H"                // Color::grey7 etc.
-#include "disp/view.H"
-#include "geom/gl_view.H"
-#include "gtex/color_id_texture.H"
-#include "gtex/ref_image.H"
-#include "bpoint.H"
-#include "bcurve.H"
+#include "disp/colors.hpp"                // Color::grey7 etc.
+#include "disp/view.hpp"
+#include "geom/gl_view.hpp"
+#include "gtex/color_id_texture.hpp"
+#include "gtex/ref_image.hpp"
+#include "bpoint.hpp"
+#include "bcurve.hpp"
 
-#include "tex_body.H"
+#include "tex_body.hpp"
 
 using namespace mlib;
 

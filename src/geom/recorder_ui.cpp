@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "geom/winsys.H"
+#include "geom/winsys.hpp"
 
 
-#include "recorder_ui.H"
+#include "recorder_ui.hpp"
 
 Recorder*               RecorderUI::_rec            = nullptr;
 RecorderUI*             RecorderUI::_instance       = nullptr;

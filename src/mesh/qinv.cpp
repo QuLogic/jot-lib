@@ -18,9 +18,9 @@
 /**********************************************************************
  *   Do quasi-interlopolation using Loop subdivision
  **********************************************************************/
-#include "std/config.H"
-#include "mi.H"
-#include "lmesh.H"
+#include "std/config.hpp"
+#include "mi.hpp"
+#include "lmesh.hpp"
 
 inline Wpt
 qinv_loc(CBvert* v)

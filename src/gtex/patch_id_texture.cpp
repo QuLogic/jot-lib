@@ -16,8 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-#include "patch_id_texture.H"
-#include "ref_image.H"
+#include "patch_id_texture.hpp"
+#include "ref_image.hpp"
 
 /**********************************************************************
  * PatchIDStripCB:

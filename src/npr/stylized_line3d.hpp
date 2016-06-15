@@ -18,8 +18,8 @@
 #ifndef STYLIZED_LINE_3D_H_IS_INCLUDED
 #define STYLIZED_LINE_3D_H_IS_INCLUDED
 
-#include "geom/line3d.H"
-#include "wpath_stroke.H"
+#include "geom/line3d.hpp"
+#include "wpath_stroke.hpp"
 
 /*****************************************************************
  * StylizedLine3D:

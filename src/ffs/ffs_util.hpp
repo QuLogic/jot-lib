@@ -25,17 +25,17 @@
  */
 
 /*!
- *  \file ffs_util.H
+ *  \file ffs_util.hpp
  *  \brief Contains utility functions for the ffs module.
  *
  *  \ingroup group_FFS
- *  \sa ffs_util.C
+ *  \sa ffs_util.cpp
  *
  */
 
-#include "mlib/points.H"
-#include "tess/bpoint.H"
-#include "disp/view.H"
+#include "mlib/points.hpp"
+#include "tess/bpoint.hpp"
+#include "disp/view.hpp"
 
 inline double
 smooth_step(double e1, double e2, double x)

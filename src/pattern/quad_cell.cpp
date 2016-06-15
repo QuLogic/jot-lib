@@ -25,11 +25,11 @@
 #pragma warning(disable: 4786)
 #endif
 
-#include "pattern/pattern_pen.H"
-#include "std/config.H"
-#include "stroke/base_stroke.H"
-#include "mesh/mi.H"
-#include "mesh/uv_data.H"
+#include "pattern/pattern_pen.hpp"
+#include "std/config.hpp"
+#include "stroke/base_stroke.hpp"
+#include "mesh/mi.hpp"
+#include "mesh/uv_data.hpp"
 
 #include <vector>
 #include <map>
@@ -37,9 +37,9 @@
 #include <algorithm>
 
 
-#include "quad_cell.H"
-#include "pattern_texture.H"
-#include "pattern_stroke.H"
+#include "quad_cell.hpp"
+#include "pattern_texture.hpp"
+#include "pattern_stroke.hpp"
 
 using namespace mlib;
 

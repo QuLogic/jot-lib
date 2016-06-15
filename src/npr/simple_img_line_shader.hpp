@@ -18,9 +18,9 @@
 #ifndef SIMPLE_IMG_LINE_SHADER_HE_IS_INCLUDED
 #define SIMPLE_IMG_LINE_SHADER_HE_IS_INCLUDED
 
-#include "gtex/glsl_shader.H"
-#include "gtex/multi_lights_tone.H"
-#include "gtex/blur_shader.H"
+#include "gtex/glsl_shader.hpp"
+#include "gtex/multi_lights_tone.hpp"
+#include "gtex/blur_shader.hpp"
 
 /**********************************************************************
  * SimpleImageLineShader:

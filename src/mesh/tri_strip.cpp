@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-#include "bmesh.H"
-#include "mesh_global.H"        // for debugging (selecting bad faces)
-#include "stripcb.H"
+#include "bmesh.hpp"
+#include "mesh_global.hpp"        // for debugging (selecting bad faces)
+#include "stripcb.hpp"
 
 // Values used in finding triangle strips.
 //

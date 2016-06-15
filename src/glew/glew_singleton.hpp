@@ -2,10 +2,10 @@
 #define GLEW_SINGLETON_H_IS_INCLUDED
 
 /*!
- *  \file glew_singleton.H
+ *  \file glew_singleton.hpp
  *  \brief Contains the definition of the GLEWSingleton class.
  *
- *  \sa glew_singleton.C
+ *  \sa glew_singleton.cpp
  *
  */
 

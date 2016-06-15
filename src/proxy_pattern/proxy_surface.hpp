@@ -18,9 +18,9 @@
 #ifndef PROXYSURFACE_H_IS_INCLUDED
 #define PROXYSURFACE_H_IS_INCLUDED
 
-#include "mesh/patch.H"
-#include "proxy_stroke.H"
-#include "stroke/base_stroke.H"
+#include "mesh/patch.hpp"
+#include "proxy_stroke.hpp"
+#include "stroke/base_stroke.hpp"
 
 #include <vector>
 #include <map>

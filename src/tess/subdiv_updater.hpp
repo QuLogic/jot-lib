@@ -18,9 +18,9 @@
 #ifndef SUBDIV_UPDATER_H_IS_INCLUDED
 #define SUBDIV_UPDATER_H_IS_INCLUDED
 
-#include "mesh/lmesh.H"
+#include "mesh/lmesh.hpp"
 
-#include "bbase.H"
+#include "bbase.hpp"
 
 /*****************************************************************
  * SubdivUpdater:

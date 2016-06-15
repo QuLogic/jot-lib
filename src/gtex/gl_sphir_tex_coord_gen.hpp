@@ -23,7 +23,7 @@
 #ifndef GL_SPHIR_TEX_COORD_GEN_H_IS_INCLUDED
 #define GL_SPHIR_TEX_COORD_GEN_H_IS_INCLUDED
 
-#include "mesh/tex_coord_gen.H"
+#include "mesh/tex_coord_gen.hpp"
 
 class GLSphirTexCoordGen : public TexCoordGen {
 

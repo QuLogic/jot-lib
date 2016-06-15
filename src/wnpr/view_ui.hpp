@@ -22,7 +22,7 @@
 // ViewUI
 ////////////////////////////////////////////
 
-#include "disp/view.H"
+#include "disp/view.hpp"
 
 #include <map>
 #include <vector>

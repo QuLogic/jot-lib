@@ -18,9 +18,9 @@
 #ifndef CAM_PZ_H_IS_INCLUDED
 #define CAM_PZ_H_IS_INCLUDED
 
-#include "disp/cam_focus.H"
-#include "manip/manip.H"
-#include "base_jotapp/base_jotapp.H"
+#include "disp/cam_focus.hpp"
+#include "manip/manip.hpp"
+#include "base_jotapp/base_jotapp.hpp"
 
 #include <set>
 #include <vector>

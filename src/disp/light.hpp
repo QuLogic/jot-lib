@@ -19,8 +19,8 @@
 #ifndef LIGHT_H_IS_INCLUDED
 #define LIGHT_H_IS_INCLUDED
 
-#include "disp/color.H"
-#include "mlib/points.H"
+#include "disp/color.hpp"
+#include "mlib/points.hpp"
 
 /*! Class for managing lights */
 
