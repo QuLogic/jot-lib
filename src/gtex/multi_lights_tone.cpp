@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * multi_lights_tone.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "tone_shader.H"
 #include "multi_lights_tone.H"
@@ -177,5 +174,3 @@ MLToneShader::set_gl_state(GLbitfield mask) const
    GL_MAT_COLOR(GL_FRONT_AND_BACK, GL_SPECULAR, _patch->specular_color(), alpha());
    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, static_cast<GLfloat>(_patch->shininess()));
 }
-
-// end of file multi_lights_tone.C

@@ -250,5 +250,3 @@ class LinePenUI : public StrokeUIClient {
 
 
 #endif // _LINE_PEN_UI_H_IS_INCLUDED_
-
-/* end of file line_pen_ui.H */

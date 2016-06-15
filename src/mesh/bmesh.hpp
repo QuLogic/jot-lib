@@ -17,9 +17,6 @@
  *****************************************************************/
 
 
-/**********************************************************************/
-/*! \file bmesh.H                                                     */
-/**********************************************************************/
 #ifndef BMESH_H_HAS_BEEN_INCLUDED
 #define BMESH_H_HAS_BEEN_INCLUDED
 
@@ -1159,5 +1156,3 @@ inline CWpt&     Patch::eye_local()  const   { return _mesh->eye_local(); }
 inline double    Patch::pix_size()   const   { return _mesh->pix_size(); }
 
 #endif  // BMESH_H_HAS_BEEN_INCLUDED
-
-// end of file bmesh.H

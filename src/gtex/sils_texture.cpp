@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * sils_texture.C
- **********************************************************************/
 #include "std/config.H"
 #include "geom/gl_view.H"
 #include "sils_texture.H"
@@ -75,5 +72,3 @@ SilsTexture::draw_vis_ref()
    EdgeStrip sils = _patch->cur_sils().get_filtered(!BorderEdgeFilter());
    return ColorIDTexture::draw_edges(&sils, 3.0);
 }
-
-/* end of file sils_texture.C */

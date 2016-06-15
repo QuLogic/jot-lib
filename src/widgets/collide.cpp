@@ -288,5 +288,3 @@ void Gravity::set_world(Wvec d)
    _landscape      = false;
    _world          = true;
 }
-
-/* end of file collide.C */

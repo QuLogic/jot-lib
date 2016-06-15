@@ -491,8 +491,3 @@ EdgeStroke::check_vert_visibility(CBaseStrokeVertex &v)
    
    return false;
 }
-
-
-
-
-/* end of file edge_stroke.C */

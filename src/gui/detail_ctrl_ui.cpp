@@ -468,6 +468,3 @@ DetailCtrlUI::apply_changes_to_texture(operation_id_t op, ImageLineShader* tex, 
 
    _last_op = op;
 }
-
-
-// patch_ui.C

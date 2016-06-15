@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * dots_tx_pattern.C
- *****************************************************************/
 #include "gtex/ref_image.H"
 #include "gtex/halo_ref_image.H"
 #include "glui/glui_jot.H"
@@ -511,5 +508,3 @@ layer_hatching_t::send_to_glsl()  const
    glUniform1f  (_tone_push_loc, _tone_push);  
    GL_VIEW_PRINT_GL_ERRORS("");
 }
-
-// end of file hatching_tx.C

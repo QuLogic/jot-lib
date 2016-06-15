@@ -548,7 +548,3 @@ DecalLineStroke::xform_locations(CWtransf& t)
       elem.loc = t * elem.loc;
    }
 }
-
-
-/* end of file decal_line_stroke.C */
-

@@ -76,5 +76,3 @@ FFS::get_draw_plane(CPIXEL_list& p, Wvec& t, Wvec& b)
    t = b = Wvec::null();
    return Wplane();
 }
-
-// end of file ffs_util.C

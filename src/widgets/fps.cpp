@@ -119,5 +119,3 @@ FPS::tick(void)
 
    return 0; // returning -1 removes and destroys this timer
 }
-
-/* end of file fps.C */

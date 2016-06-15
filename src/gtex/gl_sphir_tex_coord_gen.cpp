@@ -78,5 +78,3 @@ GLSphirTexCoordGen ::uv_from_vert(CBvert *v, CBface *f)
   
    return fix_seems(tex_coord,ts1,ts2);
 }
-
-// end of file gl_sphir_tex_coord_gen.C

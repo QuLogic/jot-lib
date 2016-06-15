@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * map1d3d.C:
- *****************************************************************/
 #include "map2d3d.H"
 #include "std/config.H"
 
@@ -481,5 +478,3 @@ SurfaceCurveMap::set_uvs(CUVpt_list& uvs)
    // recomputed
    invalidate();
 }
-
-/* end of file curve.C */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * ledge.C
- **********************************************************************/
 #include "std/config.H"
 #include "subdiv_calc.H"
 #include "lmesh.H"
@@ -681,5 +678,3 @@ get_subdiv_chain(CBvert_list& chain, int level, Bvert_list& ret)
       
    return true;
 }
-
-// end of file ledge.C

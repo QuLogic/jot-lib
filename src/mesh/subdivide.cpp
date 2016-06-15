@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * subdivide.C:
- **********************************************************************/
 #include "std/config.H"
 #include "mi.H"
 #include "lmesh.H"
@@ -56,5 +53,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-/* end of file subdivide.C */

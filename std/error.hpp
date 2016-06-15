@@ -129,5 +129,3 @@ err_adv(bool doit, const char *fmt, ...)
 }
 
 #endif // ERROR_H_IS_INCLUDED
-
-/* end of file error.H */

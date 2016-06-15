@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * xform_pen.C:
- **********************************************************************/
 #include "ffs/cursor3d.H"
 #include "ffs/floor.H"
 #include "ffs/xform_pen.H"
@@ -144,4 +141,3 @@ XformPen::cancel_cb(CGESTUREptr&, DrawState*&)
    _mesh = nullptr;
    return 0;
 }
-// end of file xform_pen.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * normals_texture.C
- **********************************************************************/
 #include "normals_texture.H"
 #include "std/config.H"
 #include "gtex/gl_sphir_tex_coord_gen.H"
@@ -294,4 +291,3 @@ NormalsTexture::draw(CVIEWptr& v)
    return _patch->num_faces();
 }
    
-// end of file normals_texture.C

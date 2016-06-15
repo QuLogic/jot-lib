@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * painterly.H:
- **********************************************************************/
 #ifndef PAINTERLY_H_IS_INCLUDED
 #define PAINTERLY_H_IS_INCLUDED
 
@@ -169,5 +166,3 @@ class Painterly : public GLSLShader_Layer_Base {
 };
 
 #endif // PAINTERLY_H_IS_INCLUDED
-
-// end of file painterly.H

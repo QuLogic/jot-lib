@@ -396,5 +396,3 @@ SkinMeme::track_to_target(CWpt& target, Wpt& near_pt)
 
    return (track_simplex() != nullptr);
 }
-
-// end of file skin_meme.C

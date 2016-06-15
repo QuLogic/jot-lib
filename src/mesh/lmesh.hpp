@@ -590,5 +590,3 @@ child_verts(const L& list)
 }
 
 #endif  // LMESH_H_HAS_BEEN_INCLUDED
-
-// end of file lmesh.H

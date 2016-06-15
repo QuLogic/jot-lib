@@ -305,5 +305,3 @@ class REF_CLASS(SCREENbasic) : public SCREEN
 };
 
 #endif // CAM_H_IS_INCLUDED
-
-/* end of file cam.H */

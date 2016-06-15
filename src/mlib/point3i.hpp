@@ -156,6 +156,3 @@ class Point3i
 } // namespace mlib
 
 #endif // POINT3I_H_IS_INCLUDED
-
-/* end of file Point3i.H */
-

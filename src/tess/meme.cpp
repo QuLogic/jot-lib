@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * meme.C:
- **********************************************************************/
 #include "mesh/mi.H"
 #include "std/config.H"
 #include "meme.H"
@@ -1164,5 +1161,3 @@ VertMemeList::meme_count(const string& class_name)
          ret++;
    return ret;
 }
-
-/* end of file meme.C */

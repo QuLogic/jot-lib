@@ -635,6 +635,3 @@ HatchingUI::save_preset()
    }  
    return true;
 }
-
-
-// hatching_ui.C

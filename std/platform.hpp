@@ -259,5 +259,3 @@ XOR(bool x, bool y)
 #endif
 
 #endif // CONFIG_H_IS_INCLUDED
-
-/* end of file platform.H */

@@ -64,5 +64,3 @@ vert_normal(CBvert* v, CBface* f, CSimplexFilter& filter)
       );
    return ret.normalized();
 }
-
-// end of file mi.C

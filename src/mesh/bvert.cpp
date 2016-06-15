@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bvert.C
- **********************************************************************/
 #include "disp/ray.H"
 #include "mi.H"
 
@@ -1316,5 +1313,3 @@ Bvert_list::connected_verts(Bsimplex* s)
    err_adv(debug, "Bvert_list::connected_verts: found %d verts", ret.size());
    return ret;
 }
-
-// end of file bvert.C

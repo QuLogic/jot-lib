@@ -76,5 +76,3 @@ class HatchingTexture : public BasicTexture  {
 
 
 #endif  // HATCHING_TEXTURE_H
-
-// end of file hatching_texture.H

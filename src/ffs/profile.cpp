@@ -1232,5 +1232,3 @@ PROFILE::dec_aoi()
    _n--;
    select_faces();
 }
-
-// end of file profile.C

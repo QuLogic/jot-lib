@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * npr_control_frame.H:
- **********************************************************************/
 #ifndef NPR_CONTROL_FRAME_H_IS_INCLUDED
 #define NPR_CONTROL_FRAME_H_IS_INCLUDED
 
@@ -78,5 +75,3 @@ class NPRControlFrameTexture : public BasicTexture {
 };
 
 #endif // NPR_CONTROL_FRAME_H_IS_INCLUDED
-
-/* end of file npr_control_frame.H */

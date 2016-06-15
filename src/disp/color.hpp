@@ -105,6 +105,3 @@ inline HSVCOLOR operator *(double s, const HSVCOLOR& p) { return p * s;}
 #endif
 
 #endif // _COLOR_H_INC
-
-// end of file color.H
-

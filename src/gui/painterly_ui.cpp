@@ -642,6 +642,3 @@ PainterlyUI::save_preset()
    }  
    return true;
 }
-
-
-// painterly_ui.C

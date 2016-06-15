@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    proxy_stroke.H
-    
     ProxyStroke
         -Stroke used to render Proxy3dStroke(proxy_group.c) in 2d
         -Derives from BaseStroke
@@ -275,5 +273,3 @@ ProxyUVStroke::stroke_setup(Bface* face, bool selected)
       cerr << "ProxyUVStroke::stroke_setup baseUVpt not found" << endl;
    }
 }
-
-// proxy_stroke.C

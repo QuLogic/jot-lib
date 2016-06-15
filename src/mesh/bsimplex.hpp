@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bsimplex.H
- *****************************************************************/
 #ifndef BSIMPLEX_H_IS_INCLUDED
 #define BSIMPLEX_H_IS_INCLUDED
 
@@ -321,5 +318,3 @@ get_bface(CBsimplex* s)
 }
 
 #endif // BSIMPLEX_H_IS_INCLUDED
-
-// end of file bsimplex.H

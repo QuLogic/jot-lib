@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * lvert_strip.C:
- **********************************************************************/
-
 
 #include "lvert_strip.H"
 #include "lmesh.H"
@@ -78,5 +74,3 @@ LvertStrip::clear_subdivision(int level)
       _substrip->clear_subdivision(level - 1);
    }
 }
-
-/* end of file lvert_strip.C */

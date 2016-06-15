@@ -880,5 +880,3 @@ PatternPen::add_stroke_to_proxy(CGESTUREptr& gest)
    //_pattern_texture->proxy_surface()->add(
    //   gest->pts(),gest->pressures(), _gesture_drawer->base_stroke_proto());
 }
-
-// end of file pattern_pen.C

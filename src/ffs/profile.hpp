@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * profile.H
- *****************************************************************/
 #ifndef PROFILE_H_IS_INCLUDED
 #define PROFILE_H_IS_INCLUDED
 
@@ -151,5 +148,3 @@ class PROFILE : public DrawWidget {
 };
 
 #endif // PROFILE_H_IS_INCLUDED
-
-/* end of file profile.H */

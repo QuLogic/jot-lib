@@ -299,6 +299,3 @@ BasecoatUI::listbox_cb(int id)
       break;
    }
 }
-
-
-// basecoat_ui.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    proxy_pen.H
-***************************************************************************/
 #ifndef _PROXY_PEN_H_IS_INCLUDED_
 #define _PROXY_PEN_H_IS_INCLUDED_
 
@@ -58,5 +55,3 @@ class ProxyPen : public Pen {
 };
 
 #endif   // _PATTERN_PEN_H_IS_INCLUDED_
-
-/* end of file proxy_pen.H */

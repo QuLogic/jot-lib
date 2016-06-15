@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * patch_color.H:
- **********************************************************************/
 #ifndef PATCH_COLOR_H_IS_INCLUDED
 #define PATCH_COLOR_H_IS_INCLUDED
 
@@ -45,5 +42,3 @@ class PatchColorTexture : public HiddenLineTexture {
 };
 
 #endif // PATCH_COLOR_H_IS_INCLUDED
-
-// end of file patch_color.H

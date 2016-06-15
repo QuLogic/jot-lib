@@ -229,5 +229,3 @@ class SilStrokePool : public BStrokePool {
 
 
 #endif // SIL_STROKE_POOL_HEADER
-
-/* end of file sil_stroke_pool.H */

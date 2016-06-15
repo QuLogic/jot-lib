@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    proxy_texture.C
-   -------------------
     Simon Breslav
     Fall 2004
 ***************************************************************************/
@@ -326,5 +324,3 @@ ProxyTexture::move_old_samples(double pos)
       _tmp_debug_sample.push_back(get_new_pixel(elem.get_pix(), pos));
    }
 }
-
-/* end of file proxy_texture.C */

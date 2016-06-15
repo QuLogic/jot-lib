@@ -16,11 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * npr_control_frame.C
- **********************************************************************/
-
-
 #include "geom/gl_view.H"
 #include "geom/world.H"
 #include "mesh/ledge_strip.H"
@@ -198,4 +193,3 @@ NPRControlFrameTexture::draw_final(CVIEWptr& v)
    }
    return n;
 }
-/* end of file npr_control_frame.C */

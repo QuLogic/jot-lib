@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    proxy_pen.C
- ***************************************************************************/
 
 #include "gtex/buffer_ref_image.H"
 #include "gtex/ref_image.H"
@@ -150,6 +147,3 @@ ProxyPen::add_direcction_stroke(Patch* p, NDCpt_list& pts)
 
    return true;
 }
-
-
-// end of file proxy_pen.C

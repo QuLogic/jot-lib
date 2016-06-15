@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
-* perlin.H:
 * perlin texture emulating the built in perlin noise
 * by Karol Szerszen
 **********************************************************************/
@@ -91,5 +90,3 @@ protected:
 };
 
 #endif // PERLIN_TEX_H_IS_INCLUDED
-
-// perlin.H

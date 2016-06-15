@@ -25,5 +25,3 @@ GELFILT::static_name()
 {
    RET_STAT_STR("GELFILT");
 }
-
-/* end of file gel_filt.C */

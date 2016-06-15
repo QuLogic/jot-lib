@@ -137,5 +137,3 @@ class SkinMeme : public VertMeme {
 };
 
 #endif // SKIN_MEME_H_IS_INCLUDED
-
-// end of file skin_meme.H

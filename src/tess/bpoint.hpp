@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bpoint.H
- *****************************************************************/
 #ifndef BPOINT_H_IS_INCLUDED
 #define BPOINT_H_IS_INCLUDED
 
@@ -453,5 +450,3 @@ class BsimplexMap : public Map0D3D {
 };
 
 #endif // BPOINT_H_IS_INCLUDED
-
-// end of file bpoint.H

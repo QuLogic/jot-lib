@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_normal.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "glsl_normal.H"
 #include "gtex/glsl_toon.H"
@@ -72,5 +69,3 @@ GLSLNormalShader::set_uniform_variables() const
 
    return false;
 }
-
-// end of file glsl_normal.C

@@ -284,5 +284,3 @@ class A##ptr : public REFptr<A>, public A##subc {  \
 }
 
 #endif // REF_H_HAS_BEEN_INCLUDED
-
-/* end of file ref.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * dots_EX.H:
- **********************************************************************/
 #ifndef DOTS_EX_H_IS_INCLUDED
 #define DOTS_EX_H_IS_INCLUDED
 
@@ -114,5 +111,3 @@ class DotsShader_EX : public GLSLShader {
 };
 
 #endif // DOTS_EX_H_IS_INCLUDED
-
-// end of file dots.H

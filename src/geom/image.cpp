@@ -851,5 +851,3 @@ Image::mult_by(double s)
       d[i] = uchar(round(clamp(d[i]*s, 0.0, 255.0)));
    }
 }
-
-// end of file image.C

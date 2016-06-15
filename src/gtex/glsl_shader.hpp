@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * glsl_shader.H:
- **********************************************************************/
 #ifndef GLSL_SHADER_H_IS_INCLUDED
 #define GLSL_SHADER_H_IS_INCLUDED
 
@@ -280,5 +277,3 @@ class GLSLLightingShader : public GLSLShader {
 };
 
 #endif // GLSL_SHADER_H_IS_INCLUDED
-
-// end of file glsl_shader.H

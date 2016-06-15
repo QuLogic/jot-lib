@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * zkey_line.C
- **********************************************************************/
-
 
 #include "geom/gl_view.H"
 #include "gtex/solid_color.H"
@@ -122,5 +118,3 @@ ZkeyLineTexture::draw_non_filled_tris(double alpha)
 {
    _zx_stroke->draw_with_alpha(alpha);
 }
-
-/* end of file key_line.C */

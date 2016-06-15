@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * fader_texture.H:
- **********************************************************************/
 #ifndef FADER_TEXTURE_H_IS_INCLUDED
 #define FADER_TEXTURE_H_IS_INCLUDED
 
@@ -64,5 +61,3 @@ class FaderTexture : public GTexture {
 };
 
 #endif // FADER_TEXTURE_H_IS_INCLUDED
-
-/* end of file fader_texture.H */

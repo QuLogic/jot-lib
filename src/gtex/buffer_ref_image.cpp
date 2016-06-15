@@ -160,5 +160,3 @@ BufferRefImage::tick()
       update();
    return 1;
 }
-
-/* end of file buffer_ref_image.C */

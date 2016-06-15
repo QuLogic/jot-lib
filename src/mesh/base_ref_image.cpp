@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * base_ref_image.C:
- **********************************************************************/
 #include "base_ref_image.H"
 
 map<VIEWimpl*,BaseVisRefImage*> BaseVisRefImage::_hash;
@@ -47,5 +44,3 @@ BaseVisRefImage::lookup(CVIEWptr& v)
 
    return ret;
 }
-
-/* end of file base_ref_image.C */

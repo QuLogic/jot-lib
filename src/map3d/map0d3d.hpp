@@ -279,5 +279,3 @@ class SurfacePtMap : public Map0D3D {
 };
 
 #endif // MAP0D3D_H_IS_INCLUDED
-
-// end of file map0d3d.H

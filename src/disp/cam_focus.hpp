@@ -258,5 +258,3 @@ class CamCruise : public FRAMEobs,
 };
 
 #endif // CAM_FOCUS_H_IS_INCLUDED
-
-// end of file cam_focus.H 

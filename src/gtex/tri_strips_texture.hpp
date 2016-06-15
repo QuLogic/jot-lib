@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * tri_strips_texture.H:
- **********************************************************************/
 #ifndef TRI_STRIPS_TEXTURE_H_IS_INCLUDED
 #define TRI_STRIPS_TEXTURE_H_IS_INCLUDED
 
@@ -141,5 +138,3 @@ class TriStripsTexture : public FlatShadeTexture {
 };
 
 #endif // TRI_STRIPS_TEXTURE_H_IS_INCLUDED
-
-/* end of file tri_strips_texture.H */

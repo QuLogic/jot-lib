@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * sm2iv.C:
- **********************************************************************/
 #include "mesh/mi.H"
 #include "mesh/patch.H"
 #include "mesh/stripcb.H"
@@ -200,5 +197,3 @@ main(int argc, char *argv[])
    write_mesh(*mesh, cout);
    return 0;
 }
-
-/* end of file sm2iv.C */

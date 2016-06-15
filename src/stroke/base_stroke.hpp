@@ -1017,5 +1017,3 @@ class BaseStrokeArray : public vector<BaseStroke*> {
 };
 
 #endif // _BASE_STROKE_HEADER
-
-/* end of file base_stroke.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * basecoat_shader.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "tone_shader.H"
 #include "basecoat_shader.H"
@@ -225,5 +222,3 @@ BasecoatShader::get_basecoat_mode() const
 { 
    return _basecoat_mode; 
 }
-
-// end of file basecoat_shader.C

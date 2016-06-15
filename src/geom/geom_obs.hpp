@@ -83,5 +83,3 @@ class XFORMobs {
 };
 
 #endif // GEOM_OBS_H_HAS_BEEN_INCLUDED
-
-// end of file geom_obs.H

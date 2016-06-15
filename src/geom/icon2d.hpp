@@ -111,5 +111,3 @@ class ICON2D : public GEOM {
 };
 
 #endif // ICON2D_H_IS_INCLUDED
-
-// end of file ICON2d.H

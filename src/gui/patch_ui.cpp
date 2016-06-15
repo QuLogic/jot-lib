@@ -591,5 +591,3 @@ PatchUI::get_current_tex_name()
       r = "Other...";
    return r;
 }
-
-// patch_ui.C

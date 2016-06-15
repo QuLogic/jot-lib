@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * edge_strip.C:
- **********************************************************************/
 #include "bfilters.H"
 #include "stripcb.H"
 #include "mi.H"
@@ -390,5 +387,3 @@ EdgeStrip::get_unified() const
    }
    return ret;
 }
-
-// end of file edge_strip.C

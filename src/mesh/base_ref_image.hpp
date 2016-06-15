@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * base_vis_ref_image.H
- *****************************************************************/
 #ifndef _JOT_MESH_BASE_VIS_REF_IMAGE_H
 #define _JOT_MESH_BASE_VIS_REF_IMAGE_H
 
@@ -78,5 +75,3 @@ class BaseVisRefImage {
 };
 
 #endif // _JOT_MESH_BASE_VIS_REF_IMAGE_H
-
-// end of file base_ref_image.H

@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * color_id_texture.C
- **********************************************************************/
-
 
 #include "color_id_texture.H"
 #include "ref_image.H"
@@ -179,6 +175,3 @@ ColorIDTexture::draw_verts(VertStrip* verts, GLfloat width, bool z_test)
    // what do they want us to return?
    return verts->num();
 }
-
-/* end of file color_id_texture.C */
-

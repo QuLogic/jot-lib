@@ -16,11 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * p2h.C:
- *
  *  read a "paper texture" png file and output a corresponding
  *  halftone screen. (take alpha values and write to rgb channels).
- *
  **********************************************************************/
 #include "geom/image.H"
 #include "std/config.H"
@@ -68,5 +65,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file p2h.C

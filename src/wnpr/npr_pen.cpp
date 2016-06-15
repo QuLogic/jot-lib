@@ -254,5 +254,3 @@ NPRPen::deselect_current_texture()
    _ui->update();
 
 }
-
-/* end of file npr_pen.C */

@@ -94,5 +94,3 @@ class WrapCoord {
 };
 
 #endif // MAP_3D_H_IS_INCUDED
-
-// end of file map_3d.H

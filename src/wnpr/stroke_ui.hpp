@@ -354,5 +354,3 @@ class StrokeUI : public PaperEffectObs {
 
 
 #endif // _STROKE_UI_H_IS_INCLUDED_
-
-/* end of file stroke_ui.H */

@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * fit.C:
- *
  *      Read a mesh from stdin (.sm format).
  *
  *      Treating it as the control mesh for a loop subdivision
@@ -123,5 +121,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-/* end of file fit.C */

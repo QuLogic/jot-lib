@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * inflate_vert_data.H
- *****************************************************************/
 #ifndef INFLATE_VERT_DATA_H_IS_INCLUDED
 #define INFLATE_VERT_DATA_H_IS_INCLUDED
 
@@ -114,5 +111,3 @@ class InflateVertData : public SimplexData {
 };
 
 #endif // INFLATE_VERT_DATA_H_IS_INCLUDED
-
-/* end of file inflate_vert_data.H */

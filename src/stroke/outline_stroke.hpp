@@ -125,7 +125,3 @@ class OutlineStroke : public BaseStroke {
 };
 
 #endif // OUTLINE_STROKE_HEADER
-
-/* end of file outline_stroke.H */
-
-

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * ref_img_drawer.H
- **********************************************************************/
 #ifndef REF_IMG_DRAWER_IS_INCLUDED
 #define REF_IMG_DRAWER_IS_INCLUDED
 
@@ -114,5 +111,3 @@ class FinalDrawer : public RefImgDrawer {
 };
 
 #endif // REF_IMG_DRAWER_IS_INCLUDED
-
-// ref_img_drawer.H

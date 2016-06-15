@@ -107,5 +107,3 @@ HSVCOLOR::HSVCOLOR(CCOLOR &c)
    }
 
 }
-
-/* end of file color.C */

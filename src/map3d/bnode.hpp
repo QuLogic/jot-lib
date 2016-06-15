@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bnode.H
- *****************************************************************/
 #ifndef BNODE_H_IS_INCLUDED
 #define BNODE_H_IS_INCLUDED
 
@@ -419,5 +416,3 @@ Bnode_list::set_flags(int f) const
 }
 
 #endif // BNODE_H_IS_INCLUDED
-
-// end of file bnode.H

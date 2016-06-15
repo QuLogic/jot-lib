@@ -113,5 +113,3 @@ ControlLineTexture::draw_vis_ref()
    _sils ->draw_vis_ref();
    return _patch->num_faces();
 }
-
-// end of file control_line.C

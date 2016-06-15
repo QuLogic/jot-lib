@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    proxy_texture.H
     ProxyTexture
     -------------------
     Simon Breslav
@@ -149,5 +148,3 @@ class ProxyTexture : public BasicTexture, public CAMobs {
 };
 
 #endif  // PROXY_TEXTURE_H
-
-// end of file proxy_texture.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * lstrip.C:
- **********************************************************************/
 
 #include "mesh/lstrip.H"
 #include "mesh/lmesh.H"
@@ -139,5 +136,3 @@ Lstrip::generate_substrips()
       } 
    }
 }
-
-/* end of file lstrip.C */

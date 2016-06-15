@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * stripcb.H:
- **********************************************************************/
 #ifndef STRIPCB_H_IS_INCLUDED
 #define STRIPCB_H_IS_INCLUDED
 
@@ -63,5 +60,3 @@ class StripCB {
 };
 
 #endif // STRIPCB_H_IS_INCLUDED
-
-/* end of file stripcb.H */

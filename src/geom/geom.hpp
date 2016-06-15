@@ -326,5 +326,3 @@ class GEOMlist : public GEL_list<GEOMptr> {
 typedef const GEOMlist CGEOMlist;
 
 #endif // GEOM_H_IS_INCLUDED
-
-// geom.H

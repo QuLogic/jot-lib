@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * gtexture.C
- *****************************************************************/
 #include "mesh/gtexture.H"
 #include "mesh/patch.H"
 #include "mlib/points.H"
@@ -62,5 +59,3 @@ GTexture::alpha() const
    double a = _patch ? _patch->transp() : 1.0;
    return a * (_alphas.empty() ? 1.0 : _alphas.back());
 }
-
-// end of file gtexture.C

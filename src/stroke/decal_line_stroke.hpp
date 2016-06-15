@@ -176,5 +176,3 @@ class DecalLineStroke : public OutlineStroke {
 
 
 #endif // DECAL_LINE_STROKE_HEADER
-
-/* end of file decal_line_stroke.H */

@@ -931,5 +931,3 @@ PanelAction::tags() const
 
    return *_tags;
 }
-
-// end of file action.H

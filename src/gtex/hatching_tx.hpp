@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * hatching_tx_pattern.H:
- **********************************************************************/
 #ifndef HATCHING_TX_H_IS_INCLUDED
 #define HATCHING_TX_H_IS_INCLUDED
 
@@ -160,5 +157,3 @@ class HatchingTX : public GLSLShader_Layer_Base {
 };
 
 #endif // HATCHING_TX_H_IS_INCLUDED
-
-// end of file hatching_tx_pattern.H

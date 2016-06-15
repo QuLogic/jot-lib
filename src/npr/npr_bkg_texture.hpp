@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * npr_bkg_texture.H
- **********************************************************************/
 #ifndef NPR_BKG_TEXTURE_H_IS_INCLUDED
 #define NPR_BKG_TEXTURE_H_IS_INCLUDED
 
@@ -80,5 +77,3 @@ class NPRBkgTexture : public BasicTexture {
 };
 
 #endif // NPR_BKG_TEXTURE_H_IS_INCLUDED
-
-/* end of file npr_bkg_texture.H */

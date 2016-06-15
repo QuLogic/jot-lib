@@ -222,5 +222,3 @@ class FLOOR : public DrawWidget {
 };
 
 #endif // FLOOR_H_IS_INCLUDED
-
-// end of file floor.H

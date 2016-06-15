@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*************************************************************************
- *    FILE: ICON2d.C
- *************************************************************************/
 
 #include "std/support.H"
 #include <GL/glew.h>
@@ -269,5 +266,3 @@ ICON2D::update_skin()
    if (_currentTex >= _texture.size())
       _currentTex = 0;
 }
-
-// icon2d.C

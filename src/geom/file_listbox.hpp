@@ -70,5 +70,3 @@ class FileListbox {
 };
 
 #endif // _FILE_LISTBOX_H_IS_INCLUDED_
-
-/* end of file paper_ui.H */

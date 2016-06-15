@@ -3811,7 +3811,3 @@ HatchingPositionFreeInst::transform(CUVpt& pt, UVpt& transpt)
 
    _mapping->apply_wrap(transpt);
 }
-
-
-
-// End of HatchingGroupFree.C

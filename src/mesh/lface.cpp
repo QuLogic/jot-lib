@@ -655,7 +655,3 @@ Lface::parent(int rel_level)
 
    return ret;
 }
-
-/* end of file lface.C */
-
-

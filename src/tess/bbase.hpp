@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bbase.H
- *****************************************************************/
 #ifndef BBASE_H_IS_INCLUDED
 #define BBASE_H_IS_INCLUDED
 
@@ -698,5 +695,3 @@ class BbaseBoundaryFilter : public SimplexFilter {
 };
 
 #endif // BBASE_H_IS_INCLUDED
-
-/* end of file bbase.H */

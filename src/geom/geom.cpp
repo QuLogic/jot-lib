@@ -461,5 +461,3 @@ XFORMobs::notify_xform_every_obs(
    for (i = _every_xf.begin(); i != _every_xf.end(); ++i)
       (*i)->notify_xform(g, EVERY);
 }
-
-// end of file geom.C

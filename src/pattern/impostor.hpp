@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * impostor.H
- *****************************************************************/
 #ifndef IMPOSTOR_H_IS_INCLUDED
 #define IMPOSTOR_H_IS_INCLUDED
 
@@ -49,5 +46,3 @@ class Impostor : public GEL {
 
 
 #endif // IMPOSTOR_H_IS_INCLUDED
-
-/* end of file impostor.H */

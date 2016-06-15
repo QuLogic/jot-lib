@@ -19,8 +19,6 @@
 #define RTTI_H_IS_INCLUDED
 
 /*****************************************************************
- * rtti.H:
- *
  *      Macros for run-time type identification.
  *****************************************************************/
 
@@ -71,5 +69,3 @@
    DEFINE_UPCAST(CLASS_PTR, BASECLASS_PTR)
 
 #endif // RTTI_H_IS_INCLUDED
-
-/* end of file rtti.H */

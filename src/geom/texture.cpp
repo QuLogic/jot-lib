@@ -76,5 +76,3 @@ TEXTURE::expand_image()
          );
    }
 }
-
-// end of file texture.C

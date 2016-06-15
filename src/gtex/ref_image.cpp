@@ -1429,5 +1429,3 @@ VisRefImage::get_edit_face(
    else
       return nullptr;
 }
-
-// end of file ref_image.C

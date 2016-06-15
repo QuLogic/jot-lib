@@ -143,5 +143,3 @@ make_uvpt_list(double u, Cparam_list_t& vvals)
 }
 
 #endif // PARAM_LIST_H_IS_INCUDED
-
-/* end of file param_list.H */

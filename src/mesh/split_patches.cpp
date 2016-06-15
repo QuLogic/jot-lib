@@ -16,11 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * split.C:
- *
  *      Takes an .sm file as input, splits it into disconnected
  *      pieces, and creates a separate patch for each piece.
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mi.H"
@@ -43,5 +40,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file split_patches.C

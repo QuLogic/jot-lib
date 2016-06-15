@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * simplex_data.C
- *****************************************************************/
 #include "bsimplex.H"
 
 void
@@ -44,5 +41,3 @@ SimplexDataList::~SimplexDataList()
 {
    // do nothing at this time
 }
-
-/* end of file simplex_data.C */

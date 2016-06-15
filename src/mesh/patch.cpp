@@ -1650,5 +1650,3 @@ Patch::get_direction_vec() const
    return VEXEL(_direction_stroke.average(), w_vec);
 
 }
-
-// end of file patch.C

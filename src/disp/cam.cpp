@@ -723,5 +723,3 @@ SCREEN::pop_eye_offset(
    // This is called a lot, so do not do any REFptr op's
    *((CAMdata *)c->data_ptr()) = *_saved_cam->data_ptr();
 }
-
-/* end of file cam.C */

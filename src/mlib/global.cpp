@@ -56,5 +56,3 @@ mlib::fn_gdb_will_recognize_so_i_can_set_a_fuggin_breakpoint()
    if (n < 2)
       n++;
 }
-
-// end of file global.C

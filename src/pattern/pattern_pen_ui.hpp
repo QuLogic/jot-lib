@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    pattern_pen_ui.H
-    
     PatternPenUI 
         -GLUI interface for PatternPen       
     -------------------

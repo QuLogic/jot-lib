@@ -120,5 +120,3 @@ StylizedLine3D::draw_id_ref_pre4()
    else
       return 0;
 }
-
-// end of file line3d.C

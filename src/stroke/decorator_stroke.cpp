@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * decorator_stroke.C:
- **********************************************************************/
-
 
 #include "decorator_stroke.H"
 #include "mesh/patch.H"
@@ -102,5 +98,3 @@ DecoratorStroke::add_vert_loc(CBedge* e, double t)
    _surface_pts.push_back(loc);
    _dirty = true;
 }
-
-/* end of file feature_stroke.C */

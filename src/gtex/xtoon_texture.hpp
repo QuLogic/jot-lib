@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * xtoon_texture.H
- **********************************************************************/
 #ifndef TOON_TEXTURE_H_IS_INCLUDED
 #define TOON_TEXTURE_H_IS_INCLUDED
 
@@ -188,5 +185,3 @@ class XToonTexture : public BasicTexture {
 };
 
 #endif // TOON_TEXTURE_H_IS_INCLUDED
-
-// end of file xtoon_texture.H

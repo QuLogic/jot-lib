@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * ref_img_client.H
- **********************************************************************/
 #ifndef REF_IMG_CLIENT_IS_INCLUDED
 #define REF_IMG_CLIENT_IS_INCLUDED
 
@@ -215,6 +212,3 @@ inline void print_names(std::ostream& out, const L& list)
 }
 
 #endif // REF_IMG_CLIENT_IS_INCLUDED
-
-// end of file ref_img_client.H
-

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bcurve.C:
- **********************************************************************/
 #include <fstream>
 #include "disp/colors.H"                // Color::grey7 etc.
 #include "geom/gl_view.H"               // for GL_VIEW::init_line_smooth()
@@ -3691,5 +3688,3 @@ Bcurve_list::reachable_curves(Bpoint* b)
 
    return ret;
 }
-
-// end of file bcurve.C

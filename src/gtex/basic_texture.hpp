@@ -129,5 +129,3 @@ class BasicTexture : public OGLTexture {
 };
 
 #endif // _JOT_GTEX_BASIC_TEXTURE_H
-
-/* end of file basic_texture.H */

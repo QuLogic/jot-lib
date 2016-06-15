@@ -194,5 +194,3 @@ class GELFILTlist : public GELFILT, public vector<GELFILT*> {
 };
 
 #endif // __GEL_FILTER_H__
-
-/* end of file gel_filt.H */

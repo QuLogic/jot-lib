@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * npr_bkg_texture.C
- **********************************************************************/
 
 #include "gtex/gl_extensions.H"
 #include "gtex/paper_effect.H"
@@ -526,6 +523,3 @@ NPRBkgTexture::get_annotate(TAGformat &d)
 
    *d >> _annotate;
 }
-
-
-/* end of file npr_bkg_texture.C */

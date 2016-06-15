@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * map2d3d.C:
- *****************************************************************/
 #include "map2d3d.H"
 #include "std/config.H"
 
@@ -648,5 +645,3 @@ TubeMap::transform(CWtransf& xf, CMOD& m)
       Map2D3D::transform(xf, m);
    }
 }
-
-/* end of file mapping2d3d.C */

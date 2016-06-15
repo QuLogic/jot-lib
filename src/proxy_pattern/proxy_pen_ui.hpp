@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    proxy_pen_ui.H
- ***************************************************************************/
 #ifndef _PROXY_PEN_UI_H_IS_INCLUDED_
 #define _PROXY_PEN_UI_H_IS_INCLUDED_
 

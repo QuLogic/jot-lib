@@ -157,5 +157,3 @@ class PainterlyUI : public BaseUI {
 
 
 #endif // _HATCHING_UI_H_IS_INCLUDED_
-
-/* end of file hatching_ui.H */

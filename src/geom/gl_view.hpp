@@ -207,6 +207,3 @@ class GL_VIEW: public VIEWimpl {
 #define GL_VIEW_PRINT_GL_ERRORS(loc) GL_VIEW::print_gl_errors(__FUNCTION__, loc)
 
 #endif // GL_VIEW_H
-
-// end of file gl_view.H
-

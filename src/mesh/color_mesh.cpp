@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * color_mesh.C:
- **********************************************************************/
 #include "disp/colors.H"
 #include "std/config.H"
 #include "mi.H"
@@ -78,5 +75,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file color_mesh.C

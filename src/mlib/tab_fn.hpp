@@ -188,5 +188,3 @@ class TabulatedFunction
 } // namespace mlib
 
 #endif // TAB_FN_H_IS_INCLUDED
-
-/* end of file tab_fn.H */

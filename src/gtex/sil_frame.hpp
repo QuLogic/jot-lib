@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * sil_frame.H:
- **********************************************************************/
 #ifndef SIL_FRAME_H_IS_INCLUDED
 #define SIL_FRAME_H_IS_INCLUDED
 
@@ -94,5 +91,3 @@ class SilFrameTexture : public OGLTexture {
 };
 
 #endif // SIL_FRAME_H_IS_INCLUDED
-
-/* end of file sil_frame.H */

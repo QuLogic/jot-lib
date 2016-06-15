@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * vert_strip.C:
- **********************************************************************/
 #include "patch.H"
 #include "stripcb.H"
 #include "vert_strip.H"
@@ -52,5 +49,3 @@ VertStrip::draw(StripCB* cb)
 
    cb->end_verts(this);
 }
-
-/* end of file vert_strip.C */

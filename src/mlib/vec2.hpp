@@ -273,5 +273,3 @@ line_angle(const V& v1, const V& v2)
 } // namespace mlib
 
 #endif // VEC2_H_IS_INCLUDED
-
-/* end of file Vec2.H */

@@ -957,5 +957,3 @@ ToonTexture_1D::get_annotate(TAGformat &d)
    
    *d >> _annotate;
 }
-
-// end of file toon_texture.C

@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * png2sm.C:
- * 
  *   convert from png heightmap to mesh
- *
  **********************************************************************/
 #include "geom/image.H"
 #include "std/config.H"

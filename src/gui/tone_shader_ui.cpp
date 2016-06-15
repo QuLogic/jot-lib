@@ -345,6 +345,3 @@ ToneShaderUI::apply_changes_to_texture(operation_id_t op, ToneShader* tex, int l
 
    _last_op = op;
 }
-
-
-// patch_ui.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * HaloBlurShader.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "halo_blur_shader.H"
 #include "gtex/ref_image.H"
@@ -252,6 +249,3 @@ HaloBlurShader::draw(CVIEWptr& v)
 
    return 0;
 }
-
-
-// end of file blur_shader.C

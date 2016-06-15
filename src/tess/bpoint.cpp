@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bpoint.C:
- **********************************************************************/
 #include "disp/colors.H"                // Color::grey7 etc.
 #include "disp/view.H"
 #include "geom/gl_view.H"
@@ -841,5 +838,3 @@ BsimplexMap::set_pt(CWpt& p)
 {
    return true;
 }
-
-// end of file bpoint.C

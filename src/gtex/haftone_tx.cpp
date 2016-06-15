@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * dots_tx_pattern.C
- *****************************************************************/
 #include "mesh/mi.H"
 #include "haftone_tx.H"
 #include "std/stop_watch.H"
@@ -1265,5 +1262,3 @@ Halftone_TX::get_layer(TAGformat &d)
       }
    }
 }
-
-// end of file halftone_tx.C

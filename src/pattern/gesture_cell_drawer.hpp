@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * gesture_cell_drawer.H
- *
- **********************************************************************/
 #ifndef _GESTURE_CELL_DRAWER_H_
 #define _GESTURE_CELL_DRAWER_H_
 

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-////////////////////////////////////////////
-// line_pen.C
-////////////////////////////////////////////
 
 #include "base_jotapp/base_jotapp.H"
 #include "gest/vieweasel.H"
@@ -2472,5 +2469,3 @@ LinePen::selection_changed(line_pen_selection_t t)
       break;
    }  
 }
-
-/* end of file line_pen.C */

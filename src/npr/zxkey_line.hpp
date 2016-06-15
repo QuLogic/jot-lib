@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * zxkey_line.H:
- **********************************************************************/
 #ifndef ZZXKEY_LINE_H_IS_INCLUDED
 #define ZZXKEY_LINE_H_IS_INCLUDED
 
@@ -64,6 +61,3 @@ class ZkeyLineTexture : public OGLTexture {
 };
 
 #endif // ZZXKEY_LINE_H_IS_INCLUDED
-
-/* end of file zxkey_line.H */
-

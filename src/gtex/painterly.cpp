@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * painterly.C
- *****************************************************************/
 #include "mesh/mi.H"
 #include "std/stop_watch.H"
 #include "gtex/ref_image.H"
@@ -486,5 +483,3 @@ layer_paint_t::tags() const
 
    return *_lh_tags;
 }
-
-// end of file painterly.C

@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * zcross_path.C:
- **********************************************************************/
-
 
 #include "bmesh.H"
 #include "stripcb.H"
@@ -379,5 +375,3 @@ ZcrossPath::sil_finish(Bface *last, Bface * f)
 {
    return f;
 }
-
-/* end of file zcross_list.C */

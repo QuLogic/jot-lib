@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * simplex_frame.H
- *****************************************************************/
 #ifndef SIMPLEX_FRAME_H_IS_INCLUDED
 #define SIMPLEX_FRAME_H_IS_INCLUDED
 
@@ -128,5 +125,3 @@ class SimplexFrame : public SimplexData, public CoordFrame {
 typedef const SimplexFrame CSimplexFrame;
 
 #endif // SIMPLEX_FRAME_H_IS_INCLUDED
-
-// end of file simplex_frame.H

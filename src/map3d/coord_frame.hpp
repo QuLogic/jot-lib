@@ -103,5 +103,3 @@ class CoordFrame {
 };
 
 #endif // _COORD_FRAME_H_IS_INCLUDED_
-
-// end of file coord_frame.H

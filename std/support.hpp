@@ -553,5 +553,3 @@ fsleep(double dur)
 }
 
 #endif  // SUPPORT_H
-
-/* end of file support.H */

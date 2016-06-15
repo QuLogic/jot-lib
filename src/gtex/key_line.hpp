@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * key_line.H:
- **********************************************************************/
 #ifndef KEY_LINE_H_IS_INCLUDED
 #define KEY_LINE_H_IS_INCLUDED
 
@@ -92,6 +89,3 @@ class KeyLineTexture : public OGLTexture {
 };
 
 #endif // KEY_LINE_H_IS_INCLUDED
-
-// end of file key_line.H
-

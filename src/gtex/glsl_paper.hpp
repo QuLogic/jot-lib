@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * glsl_toon.H:
- **********************************************************************/
 #ifndef GLSL_PAPER_H_IS_INCLUDED
 #define GLSL_PAPER_H_IS_INCLUDED
 
@@ -117,5 +114,3 @@ class GLSLPaperShader : public GLSLShader {
 };
 
 #endif // GLSL_PAPER_H_IS_INCLUDED
-
-// end of file glsl_paper.H

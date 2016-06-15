@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * draw_widget.C
- *****************************************************************/
 
 #include "geom/world.H"         // for WORLD::create() etc.
 
@@ -134,5 +131,3 @@ DrawWidget::notify(CCAMdataptr&)
    // (Don't timeout while the user changes the camera).
    reset_timeout();
 }
-
-// end of file draw_widget.C

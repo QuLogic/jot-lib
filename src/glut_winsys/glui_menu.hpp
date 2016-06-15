@@ -56,5 +56,3 @@ class GLUIMoveMenu : public MoveMenu {
                              // menu is recreated).       
 };
 #endif
-
-/* end of file glui_menu.H */

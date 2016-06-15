@@ -98,5 +98,3 @@ mlib::Point3list<L,M,P,V,S>::winding_number(const P& o, const V& n) const
                           n);
    return ret / TWO_PI;
 }
-
-/* end of file point3d.C */

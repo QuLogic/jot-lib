@@ -142,5 +142,3 @@ class FlatShadeTexture : public BasicTexture {
 };
 
 #endif // FLAT_SHADE_H_IS_INCLUDED
-
-// end of file flat_shade.H

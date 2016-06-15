@@ -340,5 +340,3 @@ class MULTI_CMD : public COMMAND {
 };
 
 #endif // COMMAND_H_IS_INCLUDED
-
-/* end of file command.H */

@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * creases_texture.C
- **********************************************************************/
-
 
 #include "geom/gl_view.H"
 #include "creases_texture.H"
@@ -62,4 +58,3 @@ CreasesTexture::draw(CVIEWptr& v)
    return 1;
 }
    
-/* end of file creases_texture.C */

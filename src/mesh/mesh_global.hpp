@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * mesh_global.H
- **********************************************************************/
 #ifndef MESH_GLOBAL_H_IS_INCLUDED
 #define MESH_GLOBAL_H_IS_INCLUDED
 
@@ -176,5 +173,3 @@ class MeshGlobal {
 
 
 #endif  // MESH_GLOBAL_IS_INCLUDED
-
-/* end of file mesh_global.H */

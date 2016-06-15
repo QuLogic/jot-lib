@@ -148,5 +148,3 @@ class HatchingPenUI : public StrokeUIClient {
 
 
 #endif // _HATCHING_PEN_UI_H_IS_INCLUDED_
-
-/* end of file hatching_pen_ui.H */

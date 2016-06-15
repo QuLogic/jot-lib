@@ -16,11 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * align.C:
- *
  *      read an .sm file, transform it so its principal directions
  *      align with world X, Y, Z axes.
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mi.H"
@@ -259,5 +256,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file align.C

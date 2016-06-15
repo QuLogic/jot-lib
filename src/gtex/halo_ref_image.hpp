@@ -100,5 +100,3 @@ class HaloRefImage :  public RefImage {
 };
 
 #endif // HALO_IMAGE_H_IS_INCLUDED
-
-//end of HaloRefImage.H

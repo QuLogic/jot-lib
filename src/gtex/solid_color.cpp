@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * solid_color.C
- **********************************************************************/
 
 #include "mesh/patch_blend_weight.H" // for debugging
 #include "solid_color.H"
@@ -163,5 +160,3 @@ SolidColorTexture::read_stream(istream& is, vector<string> &leftover)
 
    return 1;
 }
-
-/* end of file solid_color.C */

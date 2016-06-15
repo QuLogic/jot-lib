@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * edge_strip.H:
- **********************************************************************/
 #ifndef EDGE_STRIP_H_IS_INCLUDED
 #define EDGE_STRIP_H_IS_INCLUDED
 
@@ -210,5 +207,3 @@ class EdgeStrip {
 };
 
 #endif // EDGE_STRIP_H_IS_INCLUDED
-
-/* end of file edge_strip.H */

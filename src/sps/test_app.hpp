@@ -60,5 +60,3 @@ class TestSPSapp : public BaseJOTapp {
    bool _show_sample;
    bool _show_grid;
 };
-
-// end of file test_app.H

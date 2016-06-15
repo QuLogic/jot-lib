@@ -277,5 +277,3 @@ PresetsUI::preset_save_text()
 
 
 }
-
-// presets_ui.C

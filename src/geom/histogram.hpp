@@ -16,12 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * histogram.H:
- *
  *  Code to do histogram equalization on an image, following:
  *
  *    http://en.wikipedia.org/wiki/Histogram_equalization
- *
  **********************************************************************/
 #ifndef HISTOGRAM_H_HAS_BEEN_INCLUDED
 #define HISTOGRAM_H_HAS_BEEN_INCLUDED
@@ -220,5 +217,3 @@ class prob_fn_t {
 };
 
 #endif // HISTOGRAM_H_HAS_BEEN_INCLUDED
-
-// end of file histogram.H

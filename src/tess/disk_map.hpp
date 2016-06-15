@@ -123,5 +123,3 @@ class DiskMap : public Map0D3D {
 };
 
 #endif // DISK_MAP_H_IS_INCLUDED
-
-// end of file disk_map.H

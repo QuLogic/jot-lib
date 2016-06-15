@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * skin.H
- *****************************************************************/
 #ifndef SKIN_H_IS_INCLUDED
 #define SKIN_H_IS_INCLUDED
 
@@ -362,5 +359,3 @@ class SkinCurveMap : public Map1D3D {
 };
 
 #endif // SKIN_H_IS_INCLUDED
-
-// end of file skin.H

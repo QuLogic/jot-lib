@@ -100,5 +100,3 @@ protected:
 
 
 #endif // _REF_IMAGE_UI_H_IS_INCLUDED_
-
-// end of ref_image_ui.H

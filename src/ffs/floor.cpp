@@ -373,5 +373,3 @@ FLOOR::toggle()
    assert(_instance);
    WORLD::toggle_display(_instance, false);
 }
-
-/* end of file floor.C */

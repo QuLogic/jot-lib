@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    quad_cell.C
-
     QuadCell
    -------------------
     Simon Breslav
@@ -1916,4 +1914,3 @@ QuadCell::orient_to_uv()
 
 
 }
-/* end of file quad_cell.C */

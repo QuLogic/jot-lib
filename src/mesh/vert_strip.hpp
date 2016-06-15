@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * vert_strip.H:
- **********************************************************************/
 #ifndef VERT_STRIP_H_IS_INCLUDED
 #define VERT_STRIP_H_IS_INCLUDED
 
@@ -75,5 +72,3 @@ class VertStrip {
 };
 
 #endif // VERT_STRIP_H_IS_INCLUDED
-
-/* end of file vert_strip.H */

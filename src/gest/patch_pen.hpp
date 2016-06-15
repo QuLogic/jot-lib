@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * patch_pen.H:
- *****************************************************************/
 #ifndef PATCH_PEN_H_IS_INCLUDED
 #define PATCH_PEN_H_IS_INCLUDED
 
@@ -132,5 +129,3 @@ class PatchPen : public Pen {
 };
 
 #endif // PATCH_PEN_H_IS_INCLUDED
-
-// end of file patch_pen.H

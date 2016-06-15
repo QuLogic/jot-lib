@@ -16,15 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * reverse.C:
- *
  *   Usage:
  *      % reverse [ -c ] < input.sm > output.sm
  *
  *   With -c option, just reverses the normals of each connected
  *   component with negative "volume." Otherwise reverses all the
  *   normals for the whole mesh.
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mi.H"

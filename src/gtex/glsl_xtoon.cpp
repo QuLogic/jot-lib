@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_xtoon.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "gtex/util.H"
 #include "geom/gl_util.H"
@@ -259,5 +256,3 @@ GLSLXToonShader::set_uniform_variables() const
    glUniform3fv(_Lcoord_loc, 1, float3(_light_coords));
    return true;
 }
-
-// end of file glsl_xtoon.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * decorator_stroke.H:
- **********************************************************************/
 #ifndef DECORATOR_STROKE_HEADER
 #define DECORATOR_STROKE_HEADER
 
@@ -74,5 +71,3 @@ class DecoratorStroke : public ViewStroke {
 
 
 #endif // DECORATOR_STROKE_HEADER
-
-/* end of file decorator_stroke.H */

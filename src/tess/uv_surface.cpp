@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * uv_surface.C:
- **********************************************************************/
 #include "geom/world.H"
 #include "mesh/mi.H"
 #include "std/config.H"
@@ -1269,5 +1266,3 @@ UVsurface::notify_xform(BMESHptr, CWtransf& xf, CMOD& mod)
          _map->transform(xf, mod);
    }
 }
-
-/* end of file uv_surface.C */

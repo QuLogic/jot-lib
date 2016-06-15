@@ -60,5 +60,3 @@ err_(int flags, const char *fmt, va_list ap)
 #endif
    }
 }
-
-// end of file error.C

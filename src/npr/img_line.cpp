@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
-* img_line.C
-**********************************************************************/
 #include "gtex/util.H"
 #include "mesh/patch.H"
 #include "mlib/point2i.H"
@@ -576,5 +573,3 @@ ImgLineTexture::lu_back_substitution(const int matrix_size, vector<Vec2d> &sols)
       sols[i] = (ys[i] - sum) / _upper_matrix[i][i-i];
    }
 }
-
-// end of file img_line.C

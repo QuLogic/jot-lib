@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * proxy_surface.H
- *****************************************************************/
 #ifndef PROXYSURFACE_H_IS_INCLUDED
 #define PROXYSURFACE_H_IS_INCLUDED
 
@@ -195,5 +192,3 @@ class PixelsData : public SimplexData {
 };
 
 #endif // PROXYSURFACE_H_IS_INCLUDED
-
-// end of file proxy_surface.H

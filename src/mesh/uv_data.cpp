@@ -925,5 +925,3 @@ UVdata::subdiv_uv(CBedge* e, CBface* f) const
       return LoopUV(f).subdiv_val(e);
    }
 }
-
-/* end of file uv_data.C */

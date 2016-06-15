@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * jitter.H
- *
  *      Used in disp/view.C for antialiasing.
  *****************************************************************/
 #ifndef JITTER_H
@@ -205,5 +203,3 @@ int jnum[] =
 };
 
 #endif
-
-/* end of file jitter.H */

@@ -140,5 +140,3 @@ class ColorUI : public BaseUI {
 
 
 #endif // _COLOR_UI_H_IS_INCLUDED_
-
-/* end of file color_ui.H */

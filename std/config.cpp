@@ -300,5 +300,3 @@ Config::get_var_bool(const string& var, bool def_bool_val, bool store)
 
    return bool_val;   
 }
-
-/* end of file config.C */

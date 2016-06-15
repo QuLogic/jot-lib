@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * creases_texture.H:
- **********************************************************************/
 #ifndef CREASES_TEXTURE_H_IS_INCLUDED
 #define CREASES_TEXTURE_H_IS_INCLUDED
 
@@ -56,6 +53,3 @@ class CreasesTexture : public BasicTexture {
 };
 
 #endif // CREASES_TEXTURE_H_IS_INCLUDED
-
-/* end of file creases_texture.H */
-

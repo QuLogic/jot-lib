@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    pattern_stroke.H
-    
     PatternStroke
         -Stroke used to render Pattern3dStroke(pattern_group.c) in 2d
         -Derives from BaseStroke

@@ -54,5 +54,3 @@ class FRAME_TIME_OBSERVER {
 };
 
 #endif // FRAME_TIME_OBSERVER_H_IS_INCLUDED
-
-// end of file frame_time_observer.H

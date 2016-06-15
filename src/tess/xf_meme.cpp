@@ -86,5 +86,3 @@ XFMeme::vert_changed_externally()
    err_adv(debug, "XFMeme::compute_update: changing local coords");
    //_local = _frame->inv()*loc();
 }
-
-// end of file xf_meme.C

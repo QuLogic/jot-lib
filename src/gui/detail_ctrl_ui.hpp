@@ -144,5 +144,3 @@ class DetailCtrlUI : public BaseUI {
 
 
 #endif // _DETAIL_CTRL_UI_H_IS_INCLUDED_
-
-/* end of file detail_ctrl_ui.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
-* proxy_surface.C
-*****************************************************************/
 #include "disp/colors.H"
 #include "disp/bbox.H"
 #include "geom/gl_view.H"
@@ -662,4 +659,3 @@ ProxySurface::baseUVpt(Bface* f, UVpt& uv)
    }
    return false;
 }
-// end of proxy_surface.C

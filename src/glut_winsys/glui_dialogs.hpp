@@ -512,5 +512,3 @@ class GLUIFileSelect : public FileSelect, public GLUIPopUp {
 
 
 #endif
-
-/* end of file glui_dialogs.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * dots_tx_pattern.H:
- **********************************************************************/
 #ifndef DOTS_TX_H_IS_INCLUDED
 #define DOTS_TX_H_IS_INCLUDED
 
@@ -223,5 +220,3 @@ class Halftone_TX : public GLSLShader_Layer_Base {
 };
 
 #endif // DOTS_TX_H_IS_INCLUDED
-
-// end of file dots_tx_pattern.H

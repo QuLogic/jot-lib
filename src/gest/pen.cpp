@@ -183,5 +183,3 @@ Pen::deactivate(State *start)
    }
    return true;
 }
-
-/* end of file pen.C */

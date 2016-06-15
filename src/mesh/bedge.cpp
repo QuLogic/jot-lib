@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bedge.C
- **********************************************************************/
 #include "std/config.H"
 #include "std/run_avg.H"
 #include "disp/ray.H"
@@ -1438,5 +1435,3 @@ PatchBlendBoundaryFilter::accept(CBsimplex* s) const
       e->f1()->patch() != e->f2()->patch() // between different patches
       );
 }
-
-// end of file bedge.C

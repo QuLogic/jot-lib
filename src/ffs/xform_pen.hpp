@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * xform_pen.H:
- *****************************************************************/
 #ifndef XFORM_PEN_H_IS_INCLUDED
 #define XFORM_PEN_H_IS_INCLUDED
 
@@ -68,5 +65,3 @@ class XformPen : public Pen {
 };
 
 #endif // XFORM_PEN_H_IS_INCLUDED
-
-// end of file xform_pen.H

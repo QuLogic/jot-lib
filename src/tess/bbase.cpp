@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bbase.C:
- **********************************************************************/
 #include "disp/colors.H"        // Color::grey7 etc.
 #include "geom/gl_view.H"       // GL_VIEW::draw_pts()
 #include "geom/world.H"         // WORLD::is_displayed()
@@ -884,5 +881,3 @@ VertMemeList::print_debug(int iter)
       cerr << n << " uv, ";
    err_msg("%3d total", size());
 }
-
-// end of file bbase.C

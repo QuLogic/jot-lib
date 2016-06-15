@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_shader.C
- *
- *****************************************************************/
 #include <fstream>
 #include "gtex/gl_extensions.H"
 #include "gtex/util.H"
@@ -631,5 +627,3 @@ GLSLLightingShader::draw(CVIEWptr& v)
    // Execute the GLSL program:
    return GLSLShader::draw(v);
 }
-
-// end of file glsl_shader.C

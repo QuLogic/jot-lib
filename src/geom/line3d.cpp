@@ -201,5 +201,3 @@ LINE3D::draw_end()
 
    glPopAttrib();
 }
-
-// end of file line3d.C

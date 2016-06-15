@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**************************************************************************
- * haltone_shader_ex.C
- *************************************************************************/
 #include <map>
 
 #include "halftone_shader_ex.H"
@@ -433,6 +430,3 @@ HalftoneShaderEx::changed()
    ((StripTexCoordsCB2*)cb())->inv_valid_grad();
    GLSLShader::changed();
 }
-
-
-// End of file halftone_shader_EX.C

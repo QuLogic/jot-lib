@@ -1364,5 +1364,3 @@ GestureDrawer::draw(const GESTURE* gest, CVIEWptr& v)
 
    return 0;
 }
-
-/* end of file gesture.C */

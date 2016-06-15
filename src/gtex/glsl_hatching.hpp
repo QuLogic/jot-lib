@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * glsl_hatching.H:
- **********************************************************************/
 #ifndef GLSL_HATCHING_H_IS_INCLUDED
 #define GLSL_HATCHING_H_IS_INCLUDED
 
@@ -133,5 +130,3 @@ class GLSLHatching : public GLSLPaperShader {
 };
 
 #endif // GLSL_HATCHING_H_IS_INCLUDED
-
-// end of file glsl_hatching.H

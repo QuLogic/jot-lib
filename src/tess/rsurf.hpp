@@ -16,11 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * rsurf.H
- *
  *  Replica surface (Rsurface):
  *     it takes on the shape of an existing set of faces.
- *
  *****************************************************************/
 #ifndef RSURF_H_IS_INCLUDED
 #define RSURF_H_IS_INCLUDED
@@ -336,5 +333,3 @@ Rsurface::rmeme(int i) const
 }
 
 #endif // RSURF_H_IS_INCLUDED
-
-// end of file rsurf.H

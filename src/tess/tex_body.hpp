@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * tex_body.H:
- **********************************************************************/
 #ifndef TEX_BODY_H_IS_INCLUDED
 #define TEX_BODY_H_IS_INCLUDED
 
@@ -326,5 +323,3 @@ bmesh_to_geom(CBMESHptr& mesh)
 }
 
 #endif // TEX_BODY_H_IS_INCLUDED
-
-// end of file tex_body.H

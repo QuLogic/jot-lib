@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * patch_pen.C:
- **********************************************************************/
 #include "gtex/patch_color.H"
 
 #include "patch_pen.H"
@@ -180,5 +177,3 @@ PatchPen::stroke_cb(CGESTUREptr& stroke, DrawState*&)
    }
    return 0;
 }
-
-// end of file patch_pen.C

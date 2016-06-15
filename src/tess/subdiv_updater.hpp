@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * subdiv_updater.H
- *****************************************************************/
 #ifndef SUBDIV_UPDATER_H_IS_INCLUDED
 #define SUBDIV_UPDATER_H_IS_INCLUDED
 
@@ -124,5 +121,3 @@ class SubdivUpdater : public Bnode, public BMESHobs {
 };
 
 #endif // SUBDIV_UPDATER_H_IS_INCLUDED
-
-/* end of file subdiv_updater.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * texture.H
- **********************************************************************/
 #ifndef __TEXTURE_H
 #define __TEXTURE_H
 
@@ -82,5 +79,3 @@ class TEXTURE {
 };
 
 #endif // __TEXTURE_H
-
-// end of file texture.H

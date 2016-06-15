@@ -1164,6 +1164,3 @@ public:
 };
 
 #endif // ZXEDGE_STROKE_TEXTURE_HEADER
-
-/* end of file zxedge_stroke_texture.H */
-

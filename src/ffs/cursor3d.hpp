@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * cursor3d.H
- *****************************************************************/
 #ifndef CURSOR3D_H_IS_INCLUDED
 #define CURSOR3D_H_IS_INCLUDED
 
@@ -272,5 +269,3 @@ class Cursor3D : public DrawWidget {
 };
 
 #endif // CURSOR3D_H_IS_INCLUDED
-
-// end of file cursor3d.H

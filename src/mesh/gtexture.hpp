@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * gtexture.H
- **********************************************************************/
 #ifndef GTEXTURE_H_IS_INCLUDED
 #define GTEXTURE_H_IS_INCLUDED
 
@@ -354,5 +351,3 @@ get_sublist(const L& list)
 }
 
 #endif // GTEXTURE_H_IS_INCLUDED
-
-// end of file gtexture.H

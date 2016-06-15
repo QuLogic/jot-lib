@@ -325,5 +325,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file ply2sm.C

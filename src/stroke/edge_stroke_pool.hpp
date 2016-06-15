@@ -121,5 +121,3 @@ class EdgeStrokePool : public BStrokePool {
 
 
 #endif // EDGE_STROKE_POOL_HEADER
-
-/* end of file edge_stroke_pool.H */

@@ -281,5 +281,3 @@ class Point3list : public Pointlist<L,P,V,S> {
 #endif
 
 #endif // POINT3_H_IS_INCLUDED
-
-/* end of file Point3.H */

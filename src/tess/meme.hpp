@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * meme.H
- *****************************************************************/
 #ifndef MEME_H_IS_INCLUDED
 #define MEME_H_IS_INCLUDED
 
@@ -747,5 +744,3 @@ class FaceMemeList : public MemeList<FaceMeme> {
 typedef const FaceMemeList CFaceMemeList;
 
 #endif // MEME_H_IS_INCLUDED
-
-// end of file meme.H

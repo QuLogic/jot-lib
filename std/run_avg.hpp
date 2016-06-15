@@ -54,5 +54,3 @@ class RunningAvg {
 };
 
 #endif // RUNNING_AVG_IS_INCLUDED
-
-/* end of file run_avg.H */

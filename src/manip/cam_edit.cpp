@@ -809,5 +809,3 @@ Cam_int_edit::toggle_buttons(
    BaseJOTapp::button_toggle(e,s);
    return 0;
 }
-
-// cam_edit.C

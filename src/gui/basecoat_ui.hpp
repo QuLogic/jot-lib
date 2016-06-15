@@ -131,5 +131,3 @@ class BasecoatUI : public BaseUI {
 
 
 #endif // _BASECOAT_UI_H_IS_INCLUDED_
-
-/* end of file basecoat_ui.H */

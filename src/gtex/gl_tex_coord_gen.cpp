@@ -16,5 +16,3 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "gl_tex_coord_gen.H"
-
-/* end of file gl_tex_coord_gen.C */

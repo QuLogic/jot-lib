@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * control_frame.C
- **********************************************************************/
 #include "geom/gl_view.H"
 #include "mesh/lpatch.H"
 #include "mesh/mi.H"
@@ -356,5 +353,3 @@ ControlFrameTexture::draw_selected_verts()
    double a = SELECTED_SIMPLEX_ALPHA*alpha();
    GL_VIEW::draw_pts(sub_verts.pts(), Color::tan, a, 8.0);
 }
-
-// end of file control_frame.C

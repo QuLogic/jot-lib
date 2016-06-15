@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * img_line_shader.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "img_line_shader.H"
 #include "gtex/ref_image.H"
@@ -306,5 +303,3 @@ ImageLineShader::get_ndcz_bounding_box_size()
 
    return (max_pt-min_pt).planar_length();
 }
-
-// end of file img_line_shader.C

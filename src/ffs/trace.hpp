@@ -167,5 +167,3 @@ class TraceGuard : public DrawGuard {
 };
 
 #endif // TRACE_H_IS_INCLUDED
-
-/* end of file trace.H */

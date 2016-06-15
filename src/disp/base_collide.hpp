@@ -84,5 +84,3 @@ class BaseGravity {
 };
 
 #endif // BASE_COLLIDE_H_IS_INCLUDED
-
-/* end of file base_collide.H */

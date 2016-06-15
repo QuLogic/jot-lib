@@ -82,5 +82,3 @@ class TEXT2D : public GEOM {
 };
 
 #endif
-
-// end of file text2d.H

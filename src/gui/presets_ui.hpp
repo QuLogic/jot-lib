@@ -102,5 +102,3 @@ class PresetsUI : public BaseUI {
 
 
 #endif // _PRESETS_UI_H_IS_INCLUDED_
-
-/* end of file presets_ui.H */

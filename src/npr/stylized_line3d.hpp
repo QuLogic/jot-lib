@@ -72,5 +72,3 @@ class StylizedLine3D : public LINE3D {
 };
 
 #endif // STYLIZED_LINE_3D_H_IS_INCLUDED
-
-// end of file stylized_line3d.H

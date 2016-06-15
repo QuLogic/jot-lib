@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * UV_SURFACE.H
- *****************************************************************/
 #ifndef UV_SURFACE_H_IS_INCLUDED
 #define UV_SURFACE_H_IS_INCLUDED
 
@@ -285,5 +282,3 @@ UVsurface::get_uv(CBface* f, UVpt& uv) const
 }
 
 #endif // UV_SURFACE_H_IS_INCLUDED
-
-/* end of file UV_SURFACE.H */

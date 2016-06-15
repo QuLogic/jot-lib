@@ -155,5 +155,3 @@ class SHOW_TRIS : public GEL {
 };
 
 #endif // SHOW_TRIS_H_IS_INCLUDED
-
-// end of file show_tris.H

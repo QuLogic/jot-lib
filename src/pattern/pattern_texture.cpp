@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    pattern_texture.C
- ***************************************************************************/
 
 #if (defined (WIN32) && defined(_MSC_VER) && (_MSC_VER <=1300)) /*VS 6.0*/
 #pragma warning(disable: 4786)
@@ -114,5 +111,3 @@ PatternTexture::tags() const
    }
    return *_pt_tags;
 }
-
-/* end of file pattern_texture.C */

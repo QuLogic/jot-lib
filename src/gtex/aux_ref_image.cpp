@@ -153,5 +153,3 @@ AuxRefImage::AuxRefImage(CVIEWptr& v) :
    _cam(make_shared<CAM>("AuxRefImage cam"))
 {
 }
-
-/* end of file aux_ref_image.C */

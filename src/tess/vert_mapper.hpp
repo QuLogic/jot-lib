@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * vert_mapper.H
- *
  *   Class that tracks correspondence between two sets of vertices.
- *
  *****************************************************************/
 #ifndef VERT_MAPPER_H_IS_INCLUDED
 #define VERT_MAPPER_H_IS_INCLUDED
@@ -183,5 +180,3 @@ class VertMapper {
 };
 
 #endif // VERT_MAPPER_H_IS_INCLUDED
-
-// end of file vert_mapper.H

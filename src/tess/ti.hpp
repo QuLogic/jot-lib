@@ -19,7 +19,7 @@
 #define INCLUDE_TESS_INLINE_H
 
 /*****************************************************************
- * ti.H: (tess inline include file):
+ * tess inline include file:
  *
  *      Convenient inlined methods for the tess library.
  *****************************************************************/

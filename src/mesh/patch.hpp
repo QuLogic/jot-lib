@@ -930,5 +930,3 @@ class PatchBlend : public SimplexData {
 };
 
 #endif // PATCH_H_IS_INCLUDED
-
-// end of file patch.H

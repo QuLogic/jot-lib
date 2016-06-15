@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*! ********************************************************************
- * \file gesture.H
- *
- **********************************************************************/
 #ifndef GESTURE_H_HAS_BEEN_INCLUDED
 #define GESTURE_H_HAS_BEEN_INCLUDED
 
@@ -352,5 +348,3 @@ class GestureDrawer {
 };
 
 #endif  // GESTURE_H_HAS_BEEN_INCLUDED
-
-// end of file gesture.H

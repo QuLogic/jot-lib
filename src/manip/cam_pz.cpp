@@ -810,5 +810,3 @@ Cam_int::make_view(
    
    reset(1);
 }
-
-// end of file cam_pz.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * panel.C:
- **********************************************************************/
 #include "mesh/mi.H"
 #include "std/config.H"
 #include "mlib/polyline.H"
@@ -1598,5 +1595,3 @@ PNL_RETESS_CMD::undoit()
 
    return COMMAND::undoit();
 }
-
-/* end of file panel.C */

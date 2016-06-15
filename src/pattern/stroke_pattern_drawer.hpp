@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * stroke_pattern_drawer.H
- *
- **********************************************************************/
 #ifndef _STROKE_PATTERN_DRAWER_H_
 #define _STROKE_PATTERN_DRAWER_H_
 

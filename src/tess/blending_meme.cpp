@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * blending_meme.C:
- **********************************************************************/
 #include "blending_meme.H"
 
 /************************************************************
@@ -74,5 +71,3 @@ BlendingMeme::_gen_child(Lvert* lv) const
    // the subdiv mesh.
    return new BlendingMeme(c, lv);
 }
-
-/* end of file blending_meme.C */

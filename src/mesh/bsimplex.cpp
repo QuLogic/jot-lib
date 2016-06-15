@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bsimplex.C
- **********************************************************************/
 #include "mesh/bsimplex.H"
 #include "mesh/simplex_filter.H"
 #include "mesh/simplex_array.H"
@@ -174,5 +171,3 @@ Bsimplex::walk_to_target(CWpt& target, const SimplexFilter& f) const
    // otherwise recurse to the neighbor that was closest:
    return (closest == this) ? closest : closest->walk_to_target(target, f);
 }
-
-// end of file bsimplex.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * paper_doll.H
- *****************************************************************/
 #ifndef PAPER_DOLL_H_IS_INCLUDED
 #define PAPER_DOLL_H_IS_INCLUDED
 
@@ -113,5 +110,3 @@ class PAPER_DOLL : public DrawWidget {
 };
 
 #endif // PAPER_DOLL_H_IS_INCLUDED
-
-// end of file paper_doll.H

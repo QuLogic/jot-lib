@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * split.C:
- *
  *      Takes an .sm file as input, splits the mesh into
  *      disconnected pieces, then writes each piece to file
  *      as a separate mesh.
@@ -25,7 +23,6 @@
  *      If the input is named bar.sm, and there are found to
  *      be 3 separate pieces, then they will be written to
  *      the files bar0.sm, bar1.sm, and bar2.sm.
- *
  **********************************************************************/
 #include <fstream>
 #include "std/config.H"
@@ -92,5 +89,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-/* end of file split.C */

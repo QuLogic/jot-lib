@@ -229,5 +229,3 @@ protected:
 };
 
 #endif // _IMG_LINE_UI_H_IS_INCLUDED_
-
-/* end of file im_line_ui.H */

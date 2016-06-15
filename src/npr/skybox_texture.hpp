@@ -65,5 +65,3 @@ class Skybox_Texture : public BasicTexture {
 };
 
 #endif // SKYBOX_TEXTURE_H_IS_INCLUDED
-
-// end of file skybox_texture.H

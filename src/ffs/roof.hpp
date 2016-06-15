@@ -108,5 +108,3 @@ class ROOF : public DrawWidget {
 };
 
 #endif // ROOF_H_IS_INCLUDED
-
-/* end of file roof.H */

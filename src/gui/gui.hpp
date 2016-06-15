@@ -75,5 +75,3 @@ inline bool exists_in_the_world()
 };
 
 #endif // _GUI_H_IS_INCLUDED_
-
-// end of file gui.H

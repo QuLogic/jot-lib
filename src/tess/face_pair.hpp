@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * face_pair.H
- *****************************************************************/
 #ifndef FACE_PAIR_H_IS_INCLUDED
 #define FACE_PAIR_H_IS_INCLUDED
 
@@ -122,5 +119,3 @@ class FacePairFilter : public SimplexFilter {
 typedef const FacePair CFacePair;
 
 #endif // FACE_PAIR_H_IS_INCLUDED
-
-/* end of file face_pair.H */

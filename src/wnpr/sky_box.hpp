@@ -109,5 +109,3 @@ class SKY_BOX : public GEOM {
 };
 
 #endif // SKY_BOX_H_IS_INCLUDED
-
-// end of file sky_box.H

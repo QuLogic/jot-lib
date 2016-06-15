@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * patch_id_texture.H:
- **********************************************************************/
 #ifndef PATCH_ID_TEXTURE_H_IS_INCLUDED
 #define PATCH_ID_TEXTURE_H_IS_INCLUDED
 
@@ -68,5 +65,3 @@ class PatchIDTexture : public BasicTexture {
 };
 
 #endif // PATCH_ID_TEXTURE_H_IS_INCLUDED
-
-/* end of file color_id_texture.H */

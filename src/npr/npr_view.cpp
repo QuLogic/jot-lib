@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * npr_view.H:
- **********************************************************************/
 #include "disp/colors.H"
 #include "wnpr/view_ui.H"
 #include "geom/world.H"
@@ -682,5 +679,3 @@ NPRview::next_ref_img()
       assert(0);
    }
 }
-
-// end of file npr_view.C

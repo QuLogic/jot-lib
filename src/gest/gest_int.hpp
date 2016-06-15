@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * gest_int.H
- **********************************************************************/
 #ifndef GEST_INT_H_HAS_BEEN_INCLUDED
 #define GEST_INT_H_HAS_BEEN_INCLUDED
 
@@ -210,5 +207,3 @@ GestObs_list::notify_up()
 }
 
 #endif  // GEST_INT_H_HAS_BEEN_INCLUDED
-
-// end of file gest_int.H

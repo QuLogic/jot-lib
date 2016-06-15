@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * gesture_rect_drawer.H
- *
- **********************************************************************/
 #ifndef _GESTURE_RECT_DRAWER_H_
 #define _GESTURE_RECT_DRAWER_H_
 

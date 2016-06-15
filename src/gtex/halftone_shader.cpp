@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**************************************************************************
- * haltone_shader.C
- *************************************************************************/
 
 #include "gtex/gl_extensions.H"
 #include "gtex/util.H"
@@ -145,5 +142,3 @@ HalftoneShader::draw_color_ref(int i)
    // Draw the reference image for tone.
    return (i == 0) ? m_toon_tone_shader->draw(VIEW::peek()) : 0;
 }
-
-// End of file halftone_shader.C

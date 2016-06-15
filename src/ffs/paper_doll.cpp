@@ -644,5 +644,3 @@ PAPER_DOLL::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 
    return 1; // This means we did use up the gesture
 }
-
-// end of file paper_doll.C

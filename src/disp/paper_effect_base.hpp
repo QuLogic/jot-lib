@@ -96,5 +96,3 @@ class PaperEffectBase {
 };
 
 #endif // PAPER_EFFECT_BASE_IS_INCLUDED
-
-/* end of file paper_effect_base.H */

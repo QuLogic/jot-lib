@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * lmesh.C
- **********************************************************************/
 #include "disp/ray.H"
 #include "disp/colors.H"
 #include "geom/world.H"   // XXX - for debugging
@@ -1289,5 +1286,3 @@ LMESH::tags() const
 {
    return BMESH::tags();
 }
-
-// end of file lmesh.C

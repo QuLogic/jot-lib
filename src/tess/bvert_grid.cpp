@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bvert_grid.C:
- **********************************************************************/
 #include "bvert_grid.H"
 
 #include <iterator>
@@ -203,5 +200,3 @@ BvertGrid::vband(int i) const
    // not necessarily the most efficient, but easy and correct:
    return col(i).one_ring_faces().intersect(col(i+1).one_ring_faces());
 }
-
-// end of file bvert_grid.C

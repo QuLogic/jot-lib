@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    base_ui.H
- ***************************************************************************/
 #ifndef _BASE_UI_H_IS_INCLUDED_
 #define _BASE_UI_H_IS_INCLUDED_
 
@@ -123,5 +120,3 @@ class BaseUI
 };
 
 #endif // _BASE_UI_H_IS_INCLUDED_
-
-/* end of file base_ui.H */

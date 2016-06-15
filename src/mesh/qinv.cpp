@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * qinv.C:
- *
  *   Do quasi-interlopolation using Loop subdivision
  **********************************************************************/
 #include "std/config.H"
@@ -94,5 +92,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file qinv.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * solid_color.H:
- **********************************************************************/
 #ifndef SOLID_COLOR_H_IS_INCLUDED
 #define SOLID_COLOR_H_IS_INCLUDED
 
@@ -105,5 +102,3 @@ class VertColorTexture : public SolidColorTexture {
 };
 
 #endif // SOLID_COLOR_H_IS_INCLUDED
-
-/* end of file solid_color.H */

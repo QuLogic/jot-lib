@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * sils_texture.C
- **********************************************************************/
 
 #include "std/config.H"
 #include "geom/gl_view.H"
@@ -199,5 +196,3 @@ ZcrossTexture::draw(CVIEWptr& v)
 
    return 1;
 }
-
-// end of file sils_texture.C

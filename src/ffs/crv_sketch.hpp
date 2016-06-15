@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * crv_sketch.H
- *****************************************************************/
 #ifndef CRV_SKETCH_H_IS_INCLUDED
 #define CRV_SKETCH_H_IS_INCLUDED
 
@@ -322,5 +319,3 @@ class CRV_SKETCH_CMD : public COMMAND {
 };
 
 #endif // CRV_SKETCH_H_IS_INCLUDED
-
-/* end of file crv_sketch.H */

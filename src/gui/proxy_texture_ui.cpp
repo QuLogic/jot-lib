@@ -321,5 +321,3 @@ ProxyTextureUI::fill_basecoat_listbox(GLUI_Listbox *lb)
    }
    
 }
-
-// patch_ui.C

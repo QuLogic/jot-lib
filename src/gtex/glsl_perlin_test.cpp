@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_toon.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "glsl_perlin_test.H"
 
@@ -101,5 +98,3 @@ GLSLPerlinTest::set_uniform_variables() const
 
    return true;
 }
-
-// end of file glsl_toon.C

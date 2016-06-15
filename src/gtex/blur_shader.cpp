@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * ridge.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "blur_shader.H"
 #include "gtex/ref_image.H"
@@ -152,4 +149,3 @@ BlurShader::draw_color_ref(int i)
    // Draw the reference image for tone.
    return (i == 0) ? _patch->get_tex("ToneShader")->draw(VIEW::peek()) : 0;
 }
-// end of file blur_shader.C

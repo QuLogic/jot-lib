@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * cursor3d.C
- *****************************************************************/
 
 /*!
  *  \file cursor3d.C
@@ -1008,5 +1005,3 @@ Cursor3D::do_cam_focus(CVIEWptr& view, CRAYhit& r)
    new CamFocus(view, f, a, f + u, c, data->width(), data->height());
    return true;
 }
-
-// end of file cursor3d.C

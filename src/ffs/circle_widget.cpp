@@ -459,5 +459,3 @@ CIRCLE_WIDGET::draw(CVIEWptr& v)
 
    return 1;
 }
-
-// end of file circle_widget.C

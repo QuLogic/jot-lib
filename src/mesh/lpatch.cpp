@@ -286,5 +286,3 @@ Lpatch::get_parent_patch(TAGformat &d)
 		_parent = nullptr;
 	
 }
-
-/* end of file lpatch.C */

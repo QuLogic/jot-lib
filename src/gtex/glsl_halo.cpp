@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_halo.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "glsl_halo.H"
 
@@ -104,7 +101,3 @@ void GLSLHaloShader::set_gl_state(GLbitfield mask) const
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
-
-
-
-// end of file glsl_halo.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * crease_widget.H
- *****************************************************************/
 #ifndef CREASE_WIDGET_H_IS_INCLUDED
 #define CREASE_WIDGET_H_IS_INCLUDED
 
@@ -126,5 +123,3 @@ class CREASE_WIDGET : public DrawWidget {
 };
 
 #endif // CREASE_WIDGET_H_IS_INCLUDED
-
-// end of file crease_widget.H

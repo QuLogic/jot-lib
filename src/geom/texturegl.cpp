@@ -568,5 +568,3 @@ TEXTUREgl::copy_texture(CBBOX2D& bb, CVIEWptr &v)
    _save_img = false;
    _img.clear();
 }
-
-// end of file texturegl.C

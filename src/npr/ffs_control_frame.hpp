@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * ffs_control_frame.H:
- **********************************************************************/
 #ifndef FFS_CONTROL_FRAME_H_IS_INCLUDED
 #define FFS_CONTROL_FRAME_H_IS_INCLUDED
 
@@ -58,5 +55,3 @@ class FFSControlFrameTexture : public ControlFrameTexture {
 };
 
 #endif // CONTROL_FRAME_H_IS_INCLUDED
-
-// end of file control_frame.H

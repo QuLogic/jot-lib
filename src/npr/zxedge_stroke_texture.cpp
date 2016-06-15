@@ -4779,6 +4779,3 @@ VoteGroup::sort()
       _end = 0;
    }
 }
-
-
-/* end of file zxedge_stroke_texture.C */

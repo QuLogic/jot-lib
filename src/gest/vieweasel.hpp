@@ -79,5 +79,3 @@ class VIEW_EASEL {
 
 
 #endif // VIEW_EASEL_H_IS_INCLUDED
-
-/* end of file vieweasel.H */

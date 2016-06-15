@@ -44,5 +44,3 @@ protected:
 };
 
 #endif
-
-/* end of file patch_render_data.H */

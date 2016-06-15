@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_paper.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "gtex/ref_image.H"
 #include "glsl_paper.H"
@@ -297,5 +294,3 @@ GLSLPaperShader::end_glsl_paper()
    paper->set_patch(nullptr);
    GL_VIEW_PRINT_GL_ERRORS("end");
 }
-
-// end of file glsl_paper.C

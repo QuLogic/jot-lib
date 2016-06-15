@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * subdiv_calc.H
- *****************************************************************/
 #ifndef SUBDIV_CALC_H_IS_INCLUDED
 #define SUBDIV_CALC_H_IS_INCLUDED
 
@@ -809,5 +806,3 @@ typedef VolPreserve<CatmullClarkLoc>    CCVolPreserve;
 typedef VolPreserve<HybridLoc>          HybridVolPreserve;
 
 #endif // SUBDIV_CALC_H_IS_INCLUDED
-
-// end of file subdiv_calc.H

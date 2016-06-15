@@ -35,5 +35,3 @@ class PaperUI : public FileListbox {
 };
 
 #endif // PAPER_UI_H_IS_INCLUDED
-
-/* end of file paper_ui.H */

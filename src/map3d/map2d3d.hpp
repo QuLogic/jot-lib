@@ -782,5 +782,3 @@ class TubeMap : public Map2D3D {
 
 
 #endif // MAP2D3D_H_IS_INCLUDED
-
-/* end of file mapping2d3d.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bface.H
- **********************************************************************/
 #ifndef BFACE_H_HAS_BEEN_INCLUDED
 #define BFACE_H_HAS_BEEN_INCLUDED
 
@@ -1116,5 +1113,3 @@ class PrimaryVertFilter : public SimplexFilter {
 };
 
 #endif  // BFACE_H_HAS_BEEN_INCLUDED
-
-/* end of file bface.H */

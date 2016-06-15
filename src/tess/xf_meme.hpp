@@ -64,5 +64,3 @@ class XFMeme : public VertMeme, public CoordFrameObs {
 };
 
 #endif // XF_MEME_IS_INCLUDED
-
-// end of file xf_meme.H

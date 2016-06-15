@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bface.C
- **********************************************************************/
 #include "mesh/patch.H"
 #include "mesh/mi.H"
 #include "mesh/uv_data.H"
@@ -1732,5 +1729,3 @@ Bface_list::unpush_layer(bool unpush_boundary) const
 
    return true;
 }
-
-/* end of file bface.C */

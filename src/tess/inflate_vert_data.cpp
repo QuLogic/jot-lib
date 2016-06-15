@@ -145,5 +145,3 @@ InflateVertData::get_twin(CBvert* v, CBsimplex* s)
    }
    return ret;
 }
-
-/* end of file inflate_vert_data.C */

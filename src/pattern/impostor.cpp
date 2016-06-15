@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * impostor.C
- *****************************************************************/
 #include "impostor.H"
 #include "geom/gl_view.H"
 
@@ -114,4 +111,3 @@ Impostor::draw_end(){
   glPopClientAttrib();
   glPopAttrib();
 }
-// end of file impostor.C

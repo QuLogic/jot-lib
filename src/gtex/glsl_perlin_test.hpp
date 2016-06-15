@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * glsl_perlin_test.H:
- **********************************************************************/
 #ifndef GLSL_PERLIN_TEST_H_IS_INCLUDED
 #define GLSL_PERLIN_TEST_H_IS_INCLUDED
 
@@ -76,5 +73,3 @@ class GLSLPerlinTest : public GLSLShader {
 };
 
 #endif // GLSL_TOON_H_IS_INCLUDED
-
-// end of file glsl_toon.H

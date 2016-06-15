@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * key_line.C
- **********************************************************************/
 #include "disp/colors.H"
 #include "geom/gl_view.H"
 #include "mesh/patch.H"
@@ -177,5 +174,3 @@ KeyLineTexture::draw_non_filled_tris(double alpha)
 {
    _sil_frame->draw_with_alpha(alpha);
 }
-
-// end of file key_line.C

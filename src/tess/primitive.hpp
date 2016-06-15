@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * primitive.H
- *****************************************************************/
 #ifndef PRIMITIVE_H_IS_INCLUDED
 #define PRIMITIVE_H_IS_INCLUDED
 
@@ -266,5 +263,3 @@ class Primitive :  public Bsurface {
 };
 
 #endif // PRIMITIVE_H_IS_INCLUDED
-
-// end of file primitive.H

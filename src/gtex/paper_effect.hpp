@@ -126,5 +126,3 @@ class PaperEffect : public PaperEffectBase {
 };
 
 #endif /* PAPER_EFFECT_HEADER */
-
-/* end of file paper_effect.H */

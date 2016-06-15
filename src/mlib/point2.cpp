@@ -339,5 +339,3 @@ mlib::Point2list<L,P,V,S>::winding_number(const P& p) const
       ret += signed_angle((pt(i-1) - p), (pt(i) - p));
    return ret / TWO_PI;
 }
-
-/* end of file Point2.C */

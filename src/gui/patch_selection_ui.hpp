@@ -140,5 +140,3 @@ class PatchSelectionUI : public BaseUI {
 
 
 #endif // _PATCH_SELECTION_UI_H_IS_INCLUDED_
-
-/* end of file patch_selection_ui.H */

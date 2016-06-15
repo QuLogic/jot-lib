@@ -154,5 +154,3 @@ class DrawWidget : public GEOM,
 };
 
 #endif // DRAW_WIDGET_H_IS_INCLUDED
-
-/* end of file draw_widget.H */

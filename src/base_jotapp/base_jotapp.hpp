@@ -287,5 +287,3 @@ class BaseJOTapp : public MAPPED_CB, public FD_TIMEOUT {
 };
 
 #endif // BASEJOTAPP_H
-
-// end of file base_jotapp.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * sps.C
- *****************************************************************/
 // comments to be added
 #include "sps.H"
 #include <queue>
@@ -568,5 +565,3 @@ QuadtreeNode::urand_pick()
       pt = (_v2 + _v3) + (-pt);
    return pt;
 }
-
-// end of file sps.C

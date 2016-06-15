@@ -197,5 +197,3 @@ VertMapper::a_edges() const
    return _a_verts.get_inner_edges().filter(MappableEdgeFilter(*this));
    
 }
-
-// end of file vert_mapper.C

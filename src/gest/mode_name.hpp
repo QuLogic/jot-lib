@@ -61,5 +61,3 @@ class ModeName {
 };
 
 #endif // MODE_NAME_IS_INCLUDED
-
-// end of file mode_name.H

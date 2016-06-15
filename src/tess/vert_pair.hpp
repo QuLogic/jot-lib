@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * vert_pair.H
- *****************************************************************/
 #ifndef VERT_PAIR_H_IS_INCLUDED
 #define VERT_PAIR_H_IS_INCLUDED
 
@@ -114,5 +111,3 @@ class VertPair : public SimplexData {
 typedef const VertPair CVertPair;
 
 #endif // VERT_PAIR_H_IS_INCLUDED
-
-/* end of file vert_pair.H */

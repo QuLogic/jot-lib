@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * select_widget.H
- *****************************************************************/
 #ifndef SELECT_WIDGET_H_IS_INCLUDED
 #define SELECT_WIDGET_H_IS_INCLUDED
 
@@ -166,5 +163,3 @@ class SELECT_WIDGET : public DrawWidget {
 };
 
 #endif // SELECT_WIDGET_H_IS_INCLUDED
-
-// end of file select_widget.H

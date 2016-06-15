@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * binary_image.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "binary_image.H"
 
@@ -177,5 +174,3 @@ BinaryImageShader::draw_end()
    // resture gl state
    get_instance()->restore_gl_state();
 }
-
-// end of file binary_image.C

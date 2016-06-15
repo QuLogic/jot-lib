@@ -160,5 +160,3 @@ class PatchUI : public BaseUI {
 
 
 #endif // _PATCH_UI_H_IS_INCLUDED_
-
-/* end of file patch_ui.H */

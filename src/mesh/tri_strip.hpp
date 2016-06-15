@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * tri_strip.H:
- **********************************************************************/
 #ifndef TRI_STRIP_H_IS_INCLUDED
 #define TRI_STRIP_H_IS_INCLUDED
 
@@ -70,5 +67,3 @@ class TriStrip {
 };
 
 #endif // TRI_STRIP_H_IS_INCLUDED
-
-/* end of file tri_strip.H */

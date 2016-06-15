@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * skel_frame.H
- *****************************************************************/
 #ifndef SKEL_FRAME_H_IS_INCLUDED
 #define SKEL_FRAME_H_IS_INCLUDED
 
@@ -155,5 +152,3 @@ class SkelFrame : public VertFrame {
 };
 
 #endif // SKEL_FRAME_H_IS_INCLUDED
-
-/* end of file skel_frame.H */

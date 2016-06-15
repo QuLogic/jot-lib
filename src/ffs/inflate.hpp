@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * inflate.H
- *****************************************************************/
 #ifndef INFLATE_H_IS_INCLUDED
 #define INFLATE_H_IS_INCLUDED
 
@@ -222,5 +219,3 @@ class INFLATE_CMD : public COMMAND {
 };
 
 #endif // INFLATE_H_IS_INCLUDED
-
-// end of file inflate.H

@@ -1274,5 +1274,3 @@ Cam_int_fp::toggle_buttons(
    BaseJOTapp::button_toggle(e,s);
    return 0;
 }
-
-// end of file cam_fp.C

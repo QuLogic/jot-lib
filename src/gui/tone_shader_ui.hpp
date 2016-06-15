@@ -138,5 +138,3 @@ class ToneShaderUI : public BaseUI {
 
 
 #endif // _TONE_SHADER_UI_H_IS_INCLUDED_
-
-/* end of file tone_shader_ui.H */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * tone_shader.H:
- **********************************************************************/
 #ifndef MULTILIGHTSTONE_H_IS_INCLUDED
 #define MULTILIGHTSTONE_H_IS_INCLUDED
 
@@ -107,5 +104,3 @@ class MLToneShader : public ToneShader {
 };
 
 #endif // MULTILIGHTSTONE_H
-
-// end of file multi_lights_tone.H

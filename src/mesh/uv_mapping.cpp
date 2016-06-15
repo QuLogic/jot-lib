@@ -998,4 +998,3 @@ UVMapping::apply_wrap(
       }
 
 }
-/* end of file uv_mapping.C */

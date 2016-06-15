@@ -15,8 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*! \file light.H
- */
 
 #ifndef LIGHT_H_IS_INCLUDED
 #define LIGHT_H_IS_INCLUDED
@@ -132,5 +130,3 @@ class Light {
 };
 
 #endif // LIGHT_H_IS_INCLUDED
-
-// end of file light.H

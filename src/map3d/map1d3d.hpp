@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * map1d3d.H
- *****************************************************************/
 #ifndef MAP1D3D_H_IS_INCLUDED
 #define MAP1D3D_H_IS_INCLUDED
 
@@ -540,5 +537,3 @@ class RayMap : public Map1D3D {
 };
 
 #endif // MAP1D3D_H_IS_INCLUDED
-
-/* end of file map1d3d.H */

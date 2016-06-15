@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * wireframe.H:
- **********************************************************************/
 #ifndef WIREFRAME_H_IS_INCLUDED
 #define WIREFRAME_H_IS_INCLUDED
 
@@ -93,5 +90,3 @@ class WireframeTexture : public BasicTexture {
 };
 
 #endif // WIREFRAME_H_IS_INCLUDED
-
-// end of file wireframe.H

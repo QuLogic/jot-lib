@@ -16,15 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * merge.C:
- *
  *      Takes multiple .sm files as input, merges them into
  *      a single mesh, then writes the result to file.
  *
  *      Input parameters on the command line should be the
  *      list of input meshes, followed by the name of the
  *      output mesh.
- *
  **********************************************************************/
 #include "mesh/lmesh.H"
 #include "std/config.H"
@@ -64,5 +61,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-/* end of file merge.C */

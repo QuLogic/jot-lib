@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_hatching.C
- *****************************************************************/
 #include "glsl_hatching.H"
 #include "gtex/glsl_toon.H"
 #include "gtex/tone_shader.H"
@@ -459,5 +456,3 @@ GLSLHatching::gtextures() const
 {
    return _tone_shader ? GTexture_list(_tone_shader) : GTexture_list();
 }
-
-// end of file glsl_hatching.C

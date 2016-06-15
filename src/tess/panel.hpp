@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * panel.H
- *****************************************************************/
 #ifndef PANEL_H_IS_INCLUDED
 #define PANEL_H_IS_INCLUDED
 
@@ -312,5 +309,3 @@ class PNL_RETESS_CMD : public COMMAND {
 };
 
 #endif // PANEL_H_IS_INCLUDED
-
-// end of file panel.H

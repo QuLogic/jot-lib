@@ -113,5 +113,3 @@ class RecorderUI : public RecorderUIBase {
 };
 
 #endif // _RECORDER_UI_H_IS_INCLUDED_
-
-/* end of file recorder_ui.H */

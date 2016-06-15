@@ -826,4 +826,3 @@ HatchingPen::update_gesture_proto()
 	
 
 }
-/* end of file hatching_pen.C */

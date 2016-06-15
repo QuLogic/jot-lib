@@ -85,5 +85,3 @@ resample_polyline(const L& poly, int num_samples)
 }
 
 #endif // POLYLINE_H_IS_INCLUDED
-
-// end of file polyline.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * wireframe.C
- **********************************************************************/
 #include "disp/colors.H"
 #include "std/config.H"
 #include "geom/gl_view.H"
@@ -171,5 +168,3 @@ WireframeTexture::draw_d2d_samples()
    }
    GL_VIEW::end_point_smooth();
 }
-
-// end of file wireframe.C

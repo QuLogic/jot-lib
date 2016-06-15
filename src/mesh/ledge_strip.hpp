@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * ledge_strip.H:
- **********************************************************************/
 #ifndef LEDGE_STRIP_H_IS_INCLUDED
 #define LEDGE_STRIP_H_IS_INCLUDED
 
@@ -104,5 +101,3 @@ class LedgeStrip : public EdgeStrip {
 };
 
 #endif // LEDGE_STRIP_H_IS_INCLUDED
-
-/* end of file ledge_strip.H */

@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * patch_id_texture.C
- **********************************************************************/
-
 
 #include "patch_id_texture.H"
 #include "ref_image.H"
@@ -74,8 +70,3 @@ PatchIDTexture::draw(CVIEWptr& v)
 
    return _patch->num_faces();
 }
-
-
-
-/* end of file color_id_texture.C */
-

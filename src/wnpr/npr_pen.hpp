@@ -88,6 +88,3 @@ class NPRPen : public Pen {
 };
 
 #endif // _NPR_PEN_H_IS_INCLUDED_
-
-/* end of file npr_pen.H */
-

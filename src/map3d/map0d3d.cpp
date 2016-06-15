@@ -192,5 +192,3 @@ SurfacePtMap::tan() const
 {
    return _surf->du(_uv).normalized();
 }
-
-/* end of file map0d3d.C */

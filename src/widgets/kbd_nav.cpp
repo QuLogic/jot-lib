@@ -152,5 +152,3 @@ kbd_nav::tick()
  
    return 0;
 }
-
-/* end of file kbd_nav.C */

@@ -154,5 +154,3 @@ class DrawPen : public Pen, public CAMobs, public FRAMEobs,
 };
 
 #endif // _DRAW_PEN_H_IS_INCLUDED_
-
-// end of file draw_pen.H

@@ -187,5 +187,3 @@ class LINE3D_list : public GEL_list<LINE3Dptr> {
 };
 
 #endif // LINE_3D_H_IS_INCLUDED
-
-// end of file line3d.H

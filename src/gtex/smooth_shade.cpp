@@ -142,5 +142,3 @@ SmoothShadeTexture::draw(CVIEWptr& v)
 
    return _patch->num_faces();
 }
-
-/* end of file smooth_shade.C */

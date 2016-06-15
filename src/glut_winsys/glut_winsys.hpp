@@ -129,5 +129,3 @@ public:
 };
 
 #endif // GLUT_WINSYS_H_IS_INCLUDED
-
-/* end of file glut_winsys.H */

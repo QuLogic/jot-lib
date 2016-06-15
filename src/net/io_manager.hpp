@@ -106,6 +106,3 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 };
 
 #endif // IO_MANAGER_H_IS_INCLUDED
-
-// end of file io_manager.H
-

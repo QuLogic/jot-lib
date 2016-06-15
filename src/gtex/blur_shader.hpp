@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * blur_shader.H:
- **********************************************************************/
 #ifndef BLUR_SHADER_H_IS_INCLUDED
 #define BLUR_SHADER_H_IS_INCLUDED
 
@@ -136,5 +133,3 @@ class BlurShader : public GLSLShader {
 };
 
 #endif // RIDGE_H_IS_INCLUDED
-
-// end of file blur_shader.H

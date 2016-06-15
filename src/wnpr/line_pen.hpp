@@ -240,6 +240,3 @@ class LinePen : public Pen, public CAMobs {
 };
 
 #endif // _LINE_PEN_H_IS_INCLUDED_
-
-/* end of file line_pen.H */
-

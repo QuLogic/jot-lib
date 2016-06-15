@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * SimpleImageLineShader.H:
- **********************************************************************/
 #ifndef SIMPLE_IMG_LINE_SHADER_HE_IS_INCLUDED
 #define SIMPLE_IMG_LINE_SHADER_HE_IS_INCLUDED
 
@@ -146,5 +143,3 @@ class SimpleImageLineShader : public GLSLShader {
 };
 
 #endif // IMG_LINE_SHADER_H_IS_INCLUDED
-
-// end of file img_line_shader.H

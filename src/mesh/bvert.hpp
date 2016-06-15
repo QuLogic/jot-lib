@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
- /**********************************************************************
- * bvert.H
- **********************************************************************/
 #ifndef BVERT_H_HAS_BEEN_INCLUDED
 #define BVERT_H_HAS_BEEN_INCLUDED
 
@@ -616,5 +613,3 @@ class Bvert_list : public SimplexArray<Bvert_list,Bvert*> {
 typedef const Bvert_list CBvert_list;
 
 #endif // BVERT_H_HAS_BEEN_INCLUDED
-
-// end of file bvert.H

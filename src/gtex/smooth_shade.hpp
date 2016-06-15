@@ -109,5 +109,3 @@ class SmoothShadeTexture : public BasicTexture {
 };
 
 #endif // SMOOTH_SHADE_H_IS_INCLUDED
-
-// end of file smooth_shade.H

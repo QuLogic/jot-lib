@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * buffer_ref_image.H
- *****************************************************************/
 #ifndef AUX_REF_IMAGE_HEADER
 #define AUX_REF_IMAGE_HEADER
 
@@ -120,5 +117,3 @@ class AuxRefImage : public RefImage {
 };
 
 #endif // AUX_REF_IMAGE_HEADER
-
-/* end of file aux_ref_image.H */

@@ -262,5 +262,3 @@ FlatShadeTexture::draw(CVIEWptr& v)
 
    return _patch->num_faces();
 }
-
-// end of file flat_shade.C

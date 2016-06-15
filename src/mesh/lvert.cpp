@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * lvert.C
- **********************************************************************/
 #include "std/config.H"
 #include "mesh/mi.H"
 #include "mesh/lmesh.H"
@@ -472,4 +469,3 @@ Lvert::set_mask()
             CORNER_VERTEX);                             // wow! a whole bunch
 }       
  
-// end of file lvert.C

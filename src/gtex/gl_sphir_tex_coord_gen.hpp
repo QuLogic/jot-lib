@@ -40,5 +40,3 @@ class GLSphirTexCoordGen : public TexCoordGen {
 };
 
 #endif // GL_SPHIR_TEX_COORD_GEN_H_IS_INCLUDED
-
-// end of file gl_sphir_tex_coord_gen.H

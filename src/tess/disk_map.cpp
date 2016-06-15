@@ -116,5 +116,3 @@ DiskMap::set_pt(CWpt& pt)
    outputs().invalidate();
    return true;
 }
-
-// end of file disk_map.C

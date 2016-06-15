@@ -116,5 +116,3 @@ class EXTENDER : public DrawWidget {
 };
 
 #endif // EXTENDER_H_IS_INCLUDED
-
-/* end of file extender.H */

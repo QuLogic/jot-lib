@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * basecoat_shader.H:
- **********************************************************************/
 #ifndef BASECOAT_SHADER_H_IS_INCLUDED
 #define BASECOAT_SHADER_H_IS_INCLUDED
 
@@ -123,5 +120,3 @@ class BasecoatShader : public ToneShader {
 };
 
 #endif // BASECOAT_SHADER_H_
-
-// end of file basecoat_shader.H

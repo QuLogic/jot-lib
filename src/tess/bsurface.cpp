@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bsurface.C:
- **********************************************************************/
 #include "disp/colors.H"
 #include "geom/gl_view.H"       // GL_VIEW::init_line_smooth()
 #include "gtex/basic_texture.H"
@@ -982,6 +979,3 @@ Bsurface::inputs()  const
 { 
   return Bbase::inputs();
 }
-
-
-/* end of file bsurface.C */

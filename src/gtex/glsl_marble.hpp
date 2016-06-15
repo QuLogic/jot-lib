@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
-* glsl_marble.H:
-**********************************************************************/
 #ifndef GLSL_MARBLE_H_IS_INCLUDED
 #define GLSL_MARBLE_H_IS_INCLUDED
 
@@ -84,5 +81,3 @@ protected:
 };
 
 #endif // GLSL_MARBLE_H_IS_INCLUDED
-
-// end of file glsl_marble.H

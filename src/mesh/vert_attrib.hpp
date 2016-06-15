@@ -137,5 +137,3 @@ class VertAttrib {
 };
 
 #endif // VERT_ATTRIB_H_IS_INCLUDED
-
-// end of file vert_attrib.H

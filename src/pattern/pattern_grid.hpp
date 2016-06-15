@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    pattern_grid.H
-    
     PatternGrid 
         -Recieves Strokes from Pattern Pen and distrubites them to
          the appropriate cell
@@ -356,5 +354,3 @@ class UVdiscontinuousEdgeFilter : public SimplexFilter {
 };
 
 #endif // _PATTERN_GRID_H_IS_INCLUDED_
-
-/* end of file pattern_grid.H */

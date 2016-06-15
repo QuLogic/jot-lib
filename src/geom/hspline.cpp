@@ -18,7 +18,6 @@
 /*************************************************************************
  *    NAME: J.D. Northrup
  *    USER: jdn
- *    FILE: hspline.C
  *    DATE: Wed Jul 29 12:58:54 US/Eastern 1998
  *************************************************************************/
 #include "hspline.H"
@@ -147,5 +146,3 @@ CRSpline::get_seg(double u, int& seg, double& t) const
    seg = m;
    t = (u-_u[m])/delt(m);
 }
-
-/* end of file hspline.C */

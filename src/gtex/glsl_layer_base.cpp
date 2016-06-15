@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- *   Layer Base .C
- *****************************************************************/
 #include "glsl_layer_base.H"
 #include "mesh/patch_blend_weight.H"
 
@@ -512,5 +509,3 @@ StripOpCB::faceCB(CBvert* v, CBface* f)
    glNormal3dv(f->vert_normal(v).data());
    glVertex3dv(v->loc().data());
 }
-
-// glsl_layer_base.C

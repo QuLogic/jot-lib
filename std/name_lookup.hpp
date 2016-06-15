@@ -158,5 +158,3 @@ class NameLookup {
 };
 
 #endif // NAME_LOOKUP_H_IS_INCLUDED
-
-// name_lookup.H

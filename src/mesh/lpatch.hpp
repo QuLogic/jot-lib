@@ -166,6 +166,3 @@ class Lpatch : public Patch {
 };
 
 #endif  // LPATCH_H_HAS_BEEN_INCLUDED
-
-/* end of file lpatch.H */
-

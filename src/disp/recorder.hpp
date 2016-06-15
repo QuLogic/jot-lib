@@ -220,5 +220,3 @@ class RecorderUIBase {
 };
 
 #endif // _RECORDER_H_IS_INCLUDED_
-
-/* end of file recorder.H */

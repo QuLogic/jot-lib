@@ -970,6 +970,3 @@ void
 ImageLineUI::listbox_cb(int id)
 {
 }
-
-
-// img_line_ui.C

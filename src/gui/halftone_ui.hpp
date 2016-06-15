@@ -155,5 +155,3 @@ class HalftoneUI : public BaseUI {
 };
 
 #endif // _HALFTONE_UI_H_IS_INCLUDED_
-
-/* end of file hafltone_ui.H */

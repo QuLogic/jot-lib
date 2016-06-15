@@ -861,5 +861,3 @@ extern hashvar<int> DONOT_CLIP_OBJ;  // objs unaffected by clip plane
 double at_length(mlib::CWpt& p, double length);
 
 #endif // VIEW_H
-
-// end of file view.H

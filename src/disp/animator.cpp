@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-// animator.C
 
 #include "disp/animator.H"
 #include "net/io_manager.H"
@@ -442,5 +441,3 @@ Animator::put_name (TAGformat &d) const
    }
    d.end_id();
 }
-
-// end of file animator.C

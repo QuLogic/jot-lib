@@ -61,6 +61,3 @@ PaperEffectBase::notify_usage_toggled()
    for (it=_obs.begin(); it!=_obs.end(); ++it)
       (*it)->usage_changed();
 }
-
-/* end of file paper_effect_base.C */
-

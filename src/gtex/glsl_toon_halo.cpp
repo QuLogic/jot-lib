@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * glsl_toon_halo.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "glsl_toon_halo.H"
 
@@ -85,5 +82,3 @@ GLSLToonShaderHalo::set_uniform_variables() const
    glUniform1i(_tex_loc, _tex->get_tex_unit() - GL_TEXTURE0);
    return true;
 }
-
-// end of file glsl_toon_halo.C

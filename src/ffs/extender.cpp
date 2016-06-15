@@ -923,5 +923,3 @@ EXTENDER::stroke_cb(CGESTUREptr& gest, DrawState*& s)
 
    return 1;  // this means we did use up the gesture
 }
-
-/* end of file extender.C */

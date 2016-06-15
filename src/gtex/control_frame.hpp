@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * control_frame.H:
- **********************************************************************/
 #ifndef CONTROL_FRAME_H_IS_INCLUDED
 #define CONTROL_FRAME_H_IS_INCLUDED
 
@@ -81,5 +78,3 @@ class ControlFrameTexture : public BasicTexture {
 };
 
 #endif // CONTROL_FRAME_H_IS_INCLUDED
-
-/* end of file control_frame.H */

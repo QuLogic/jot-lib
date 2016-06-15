@@ -158,5 +158,3 @@ class Gravity : public BaseGravity {
 };
 
 #endif // COLLIDE_H_IS_INCLUDED
-
-/* end of file collide.H */

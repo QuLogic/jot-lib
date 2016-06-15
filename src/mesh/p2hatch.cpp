@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * p2hatch.C:
- *
  *   Read a set of hatching textures and combine them into one for use
  *   by the "dynamic 2D patterns" hatching shader (gtex/hatching_tx.H). 
  *
@@ -149,5 +147,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file p2h.C

@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    pattern_grid.C
-    
     PatternGrid
        
     -------------------
@@ -878,4 +876,3 @@ EXPEND_CELL_CMD::undoit()
    c->pg()->get_grid_lines()->set_modify_stamp();
    return COMMAND::undoit();
 }
-/* end of file pattern_grid.C */

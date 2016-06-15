@@ -41,5 +41,3 @@ class GLUT_KBD {
 };
 
 #endif 
-
-/* end of file kbd.H */

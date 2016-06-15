@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * action.H
- **********************************************************************/
 #ifndef ACTION_H_IS_INCLUDED
 #define ACTION_H_IS_INCLUDED
 
@@ -522,5 +519,3 @@ class PanelAction : public Action {
 };
 
 #endif // ACTION_H_IS_INCLUDED
-
-// end of file action.H

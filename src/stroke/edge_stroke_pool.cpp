@@ -382,6 +382,3 @@ EdgeStrokePool::write_stream(ostream &os) const
          
    return os;
 }
-
-
-/* end of file crease_stroke_pool.C */

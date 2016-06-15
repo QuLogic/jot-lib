@@ -410,5 +410,3 @@ class SilUI : public FRAMEobs, SilDebugObs, public DATA_ITEM,
 };
 
 #endif // _SIL_UI_H_IS_INCLUDED_
-
-/* end of file sil_ui.H */

@@ -450,5 +450,3 @@ HaloRefImage::draw_output()
    else
       glReadBuffer(GL_BACK);
 }
-
-// end of halo_ref_image.C

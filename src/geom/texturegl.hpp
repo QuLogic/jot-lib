@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * texturegl.H
- **********************************************************************/
 #ifndef __TEXTUREGL_H
 #define __TEXTUREGL_H
 
@@ -121,5 +118,3 @@ protected:
 };
 
 #endif // __TEXTUREGL_H
-
-// end of file texturegl.H

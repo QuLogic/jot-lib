@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * img_line.H:
- **********************************************************************/
 #ifndef IMG_LINE_H_IS_INCLUDED
 #define IMG_LINE_H_IS_INCLUDED
 
@@ -216,5 +213,3 @@ public:
 
 
 #endif // IMG_LINE_H_IS_INCLUDED
-
-// end of file img_line.H

@@ -258,5 +258,3 @@ class ViewUI {
 
 
 #endif // _VIEW_UI_H_IS_INCLUDED_
-
-/* end of file view_ui.H */

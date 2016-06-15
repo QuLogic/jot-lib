@@ -183,5 +183,3 @@ PatchBlendWeight::set_weight(Bvert* v, double w, Patch* p)
    assert(pbw);
    pbw->set_weight(p, w);
 }
-
-// end of file patch_blend_weight.C

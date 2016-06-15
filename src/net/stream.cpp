@@ -454,5 +454,3 @@ STDdstream::ws(const char *x)
 {
    (*this) << x;
 }
-
-// end of file stream.C

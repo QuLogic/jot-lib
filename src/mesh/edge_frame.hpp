@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * edge_frame.H
- *
  *                         n                                   
  *                         |                                   
  *                         |                                   
@@ -95,5 +93,3 @@ class EdgeFrame : public SimplexFrame {
 typedef const EdgeFrame CEdgeFrame;
 
 #endif // EDGE_FRAME_H_IS_INCLUDED
-
-// end of file edge_frame.H

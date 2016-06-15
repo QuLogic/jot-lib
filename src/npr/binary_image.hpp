@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * binary_image.H:
- **********************************************************************/
 #ifndef BINARY_IMAGE_H_IS_INCLUDED
 #define BINARY_IMAGE_H_IS_INCLUDED
 
@@ -115,5 +112,3 @@ class BinaryImageShader : public GLSLShader {
 };
 
 #endif // BINARY_IMAGE_H_IS_INCLUDED
-
-// end of file binary_image.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * bmesh.C
- **********************************************************************/
 #include <fstream>
 #include "std/run_avg.H"
 #include "std/stop_watch.H"
@@ -4878,5 +4875,3 @@ BMESHobs_list::print_names() const
       cerr << (*i)->name() << " ";
    cerr << endl;
 }
-
-// end of file bmesh.C

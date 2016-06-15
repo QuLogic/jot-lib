@@ -237,5 +237,3 @@ Ledge::ctrl_face() const
 }
 
 #endif  // LFACE_H_HAS_BEEN_INCLUDED
-
-// end of file lface.H

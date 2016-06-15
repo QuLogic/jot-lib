@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * normals_texture.H:
- **********************************************************************/
 #ifndef NORMALS_TEXTURE_H_IS_INCLUDED
 #define NORMALS_TEXTURE_H_IS_INCLUDED
 
@@ -160,5 +157,3 @@ class NormalsTexture : public OGLTexture {
 };
 
 #endif // NORMALS_TEXTURE_H_IS_INCLUDED
-
-/* end of file normals_texture.H */

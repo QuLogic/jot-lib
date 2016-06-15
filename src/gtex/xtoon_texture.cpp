@@ -2173,5 +2173,3 @@ XToonTexture::print_frame_rate(){
   _frame_rate = 0.0;
   _nb_stat_frames = 0;
 }
-
-// end of file xtoon_texture.C

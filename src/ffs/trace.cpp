@@ -347,5 +347,3 @@ TRACE::do_calibrate()
    _calib_mode_flag = true;
    _cur_calib_pt_index = 0;
 }
-
-// end of file trace.C

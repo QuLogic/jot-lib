@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * rsurf.C:
- **********************************************************************/
 #include "disp/colors.H"
 #include "geom/world.H"
 #include "gtex/util.H"
@@ -1424,5 +1421,3 @@ Rsurface::handle_punch(CBface_list& region, MULTI_CMDptr cmd)
    err_adv(debug, "sewing ribbons");
    return sew_ribbons(Bk, cmd);
 }
-
-// end of file rsurf.C

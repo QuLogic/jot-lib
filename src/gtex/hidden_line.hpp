@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * hidden_line.H:
- **********************************************************************/
 #ifndef HIDDEN_LINE_H_IS_INCLUDED
 #define HIDDEN_LINE_H_IS_INCLUDED
 
@@ -102,5 +99,3 @@ class HiddenLineTexture : public OGLTexture {
 };
 
 #endif // HIDDEN_LINE_H_IS_INCLUDED
-
-// end of file hidden_line.H

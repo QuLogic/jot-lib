@@ -272,6 +272,3 @@ namespace mlib {
 } // namespace mlib
 
 #endif // LINE_H_IS_INCLUDED
-
-/* end of file Line.H */
-

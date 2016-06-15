@@ -310,6 +310,3 @@ class FUNC_ITEM : public DATA_ITEM {
 };
 
 #endif // JOT_DATA_ITEM_H_IS_INCLUDED
-
-// end of file data_item.H
-

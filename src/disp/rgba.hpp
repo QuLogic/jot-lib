@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * rgba.H
- *
  *      RGBA conversions.
  *
  *      Convenience methods to extract components of an RGBA
@@ -117,10 +115,3 @@ rgba_to_tone_d(uint c)
 }
 
 #endif // RGBA_H_IS_INCLUDED
-
-/* end of file rgba.H */
-
-
-
-
-

@@ -146,5 +146,3 @@ class CircleWidgetGuard : public DrawGuard {
 };
 
 #endif // CIRCLE_WIDGET_H_IS_INCLUDED
-
-/* end of file circle_widget.H */

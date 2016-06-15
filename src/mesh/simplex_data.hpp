@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * simplex_data.H
- *****************************************************************/
 #ifndef SIMPLEX_DATA_H_IS_INCLUDED
 #define SIMPLEX_DATA_H_IS_INCLUDED
 
@@ -169,5 +166,3 @@ class SimplexDataList : public vector<SimplexData*> {
 };
 
 #endif // SIMPLEX_DATA_H_IS_INCLUDED
-
-// end of file simplex_data.H

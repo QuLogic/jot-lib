@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bsurface.H
- *****************************************************************/
 #ifndef BSURFACE_H_IS_INCLUDED
 #define BSURFACE_H_IS_INCLUDED
 
@@ -350,5 +347,3 @@ Bsurface::get_surface(CBface_list& faces)
 }
 
 #endif // BSURFACE_H_IS_INCLUDED
-
-/* end of file bsurface.H */

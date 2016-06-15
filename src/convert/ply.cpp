@@ -3279,4 +3279,3 @@ int matches_rule_name (char *name)
 
   return (0);
 }
-

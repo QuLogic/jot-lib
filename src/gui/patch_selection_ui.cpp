@@ -250,5 +250,3 @@ PatchSelectionUI::fill_my_patch_listbox()
    fill_listbox(_listbox[LIST_PATCH], list);
    _listbox[LIST_PATCH]->set_int_val(index);
 }
-
-// patch_selection_ui.C

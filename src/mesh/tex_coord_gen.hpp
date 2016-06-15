@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * tex_coord_gen.H:
- **********************************************************************/
 #ifndef TEX_COORD_GEN_H_IS_INCLUDED
 #define TEX_COORD_GEN_H_IS_INCLUDED
 
@@ -66,5 +63,3 @@ protected:
 };
 
 #endif // TEX_COORD_GEN_H_IS_INCLUDED
-
-/* end of file tex_coord_gen.H */

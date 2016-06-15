@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-hatching_texture.C
-***************************************************************************/
 #include "proxy_stroke.H"
 #include "proxy_texture.H"
 #include "hatching_texture.H"

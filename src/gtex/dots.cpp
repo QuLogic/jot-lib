@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * dots.C
- *****************************************************************/
 #include "mesh/mi.H"
 #include "dots.H"
 #include "gtex/tone_shader.H"
@@ -152,5 +149,3 @@ DotsShader::draw_color_ref(int i)
    // Draw the reference image for tone.
    return (i == 0) ? _tone_shader->draw(VIEW::peek()) : 0;
 }
-
-// end of file dots.C

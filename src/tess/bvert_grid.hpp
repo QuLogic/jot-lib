@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * bvert_grid.H
- *****************************************************************/
 #ifndef BVERT_GRID_H_IS_INCLUDED
 #define BVERT_GRID_H_IS_INCLUDED
 
@@ -124,5 +121,3 @@ class BvertGrid {
 };
 
 #endif // BVERT_GRID_H_IS_INCLUDED
-
-/* end of file bvert_grid.H */

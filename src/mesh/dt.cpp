@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * dt.C:
- *
  *  apply a distance transform to an input image...
- *
  **********************************************************************/
 #include "geom/image.H"
 #include "std/config.H"
@@ -170,5 +167,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file dt.C

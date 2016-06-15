@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * vert_frame.H
- *
  *                         n                                   
  *                         |                                   
  *                         |                                   
@@ -66,5 +64,3 @@ class VertFrame : public SimplexFrame {
 typedef const VertFrame CVertFrame;
 
 #endif // VERT_FRAME_H_IS_INCLUDED
-
-// end of file vert_frame.H

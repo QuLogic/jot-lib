@@ -37,5 +37,3 @@ class DecalStrokePool : public BStrokePool {
 
 
 #endif // DECAL_STROKE_POOL_HEADER
-
-/* end of file decal_stroke_pool.H */

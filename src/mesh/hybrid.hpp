@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * hybrid.H
- *****************************************************************/
 #ifndef HYBRID_H_IS_INCLUDED
 #define HYBRID_H_IS_INCLUDED
 
@@ -165,5 +162,3 @@ class Hybrid2Loc : public HybridCalc2<Wpt> {
 typedef VolPreserve<Hybrid2Loc> Hybrid2VolPreserve;
 
 #endif // HYBRID_H_IS_INCLUDED
-
-/* end of file hybrid.H */

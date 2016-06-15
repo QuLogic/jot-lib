@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * npr_view.H:
- **********************************************************************/
 #ifndef NPRVIEW_HEADER
 #define NPRVIEW_HEADER
 
@@ -87,5 +84,3 @@ class NPRview : public GL_VIEW {
 };
 
 #endif // NPRVIEW_HEADER
-
-/* end of file npr_view.H */

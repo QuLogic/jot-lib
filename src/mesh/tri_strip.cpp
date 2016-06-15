@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * tri_strip.C:
- **********************************************************************/
 #include "bmesh.H"
 #include "mesh_global.H"        // for debugging (selecting bad faces)
 #include "stripcb.H"
@@ -243,5 +240,3 @@ TriStrip::draw(StripCB* cb)
 
    cb->end_faces(this);
 }
-
-/* end of file tri_strip.C */

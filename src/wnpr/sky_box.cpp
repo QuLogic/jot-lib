@@ -282,5 +282,3 @@ SKY_BOX::update_position() //centers the sky box around the camera
       err_adv(debug, "SKY_BOX::update_position: updated skybox");
    }
 }
-
-// sky_box.C

@@ -1058,5 +1058,3 @@ GL_VIEW::draw_bb(CWpt_list &bb_pts) const
 
    PRINT_GL_ERRORS("");
 }
-
-// end of file gl_view.C

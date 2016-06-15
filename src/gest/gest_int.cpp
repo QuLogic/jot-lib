@@ -225,5 +225,3 @@ GEST_INT::tick()
 
    return 1;
 }
-
-/* end of file gest_int.C */

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * control_line.H:
- **********************************************************************/
 #ifndef CONTROL_LINE_H_IS_INCLUDED
 #define CONTROL_LINE_H_IS_INCLUDED
 
@@ -73,5 +70,3 @@ class ControlLineTexture : public OGLTexture {
 };
 
 #endif // CONTROL_LINE_H_IS_INCLUDED
-
-// end of file control_line.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * stop_watch.H
- **********************************************************************/
 #ifndef STOP_WATCH_H_HAS_BEEN_INCLUDED
 #define STOP_WATCH_H_HAS_BEEN_INCLUDED
 
@@ -144,5 +141,3 @@ class egg_timer : public stop_watch {
 };
 
 #endif  // STOP_WATCH_H_HAS_BEEN_INCLUDED
-
-// end of file stop_watch.H

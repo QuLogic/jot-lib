@@ -559,5 +559,3 @@ MeshGlobal::edit_level_changed(BMESHptr mesh, int from, int to)
    select(new_selected_edges);
    select(new_selected_verts);
 }
-
-/* end of file mesh_global.C */

@@ -279,5 +279,3 @@ class NPRPenUI {
 
 
 #endif // _NPR_PEN_UI_H_IS_INCLUDED_
-
-/* end of file npr_pen_ui.H */

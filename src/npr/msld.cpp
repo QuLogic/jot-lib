@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * msld.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "gtex/ref_image.H"
 #include "npr/binary_image.H"
@@ -221,5 +218,3 @@ MSLDShader::draw_color_ref(int i)
    // Draw the reference image for tone.
    return (i == 0) ? _tone_shader->draw(VIEW::peek()) : 0;
 }
-
-// end of file msld.C

@@ -139,5 +139,3 @@ class UVMapping {
 };
 
 #endif  // UV_MAPPING_H_HAS_BEEN_INCLUDED
-
-/* end of file uv_mapping.H */

@@ -352,5 +352,3 @@ signed_angle(const V &v1, const V &v2, const V& n)
 } // namespace mlib
 
 #endif // VEC3_H_IS_INCLUDED
-
-/* end of file Vec3.H */

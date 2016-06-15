@@ -43,5 +43,3 @@ class MOD {
 };
 
 #endif // MOD_H_IS_INCLUDED
-
-// end of file mod.H

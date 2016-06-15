@@ -262,6 +262,3 @@ class Point2i
 } // namespace mlib
 
 #endif // POINT2I_H_IS_INCLUDED
-
-/* end of file Point2i.H */
-

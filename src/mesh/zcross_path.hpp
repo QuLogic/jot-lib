@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * zcross_path.H:
- **********************************************************************/
 #ifndef ZCROSS_PATH_H_IS_INCLUDED
 #define ZCROSS_PATH_H_IS_INCLUDED
 
@@ -312,5 +309,3 @@ protected:
 enum { STYPE_SIL=0, STYPE_BF_SIL, STYPE_BORDER, STYPE_CREASE, STYPE_SUGLINE, STYPE_WPATH, STYPE_POLYLINE, STYPE_NUM } ;
 
 #endif // ZCROSS_PATH_H_IS_INCLUDED
-
-/* end of file zcross_path.H */

@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    pattern_pen.H
-    
     PatternPen
     * Activates/Shows the PatternPenUI 
     * Derives Gesture callback functions
@@ -228,5 +226,3 @@ private:
 };
 
 #endif   // _PATTERN_PEN_H_IS_INCLUDED_
-
-/* end of file pattern_pen.H */

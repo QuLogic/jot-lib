@@ -385,5 +385,3 @@ Bnode_list::inputs() const
       ret += _array[i]->inputs();
    return ret;
 }
-
-// end of file bnode.C

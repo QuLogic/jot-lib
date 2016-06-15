@@ -127,6 +127,3 @@ class HatchingPen : public Pen {
 };
 
 #endif // _HATCHING_PEN_H_IS_INCLUDED_
-
-/* end of file hatch_pen.H */
-

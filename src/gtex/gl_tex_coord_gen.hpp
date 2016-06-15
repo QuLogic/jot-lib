@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * gl_tex_coord_gen.H:
- **********************************************************************/
 #ifndef GL_TEX_COORD_GEN_H_IS_INCLUDED
 #define GL_TEX_COORD_GEN_H_IS_INCLUDED
 
@@ -38,5 +35,3 @@ class GLTexCoordGen : public TexCoordGen {
 };
 
 #endif // GL_TEX_COORD_GEN_H_IS_INCLUDED
-
-// end of file gl_tex_coord_gen.H

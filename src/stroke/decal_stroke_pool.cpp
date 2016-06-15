@@ -93,5 +93,3 @@ DecalStrokePool::draw_flat(CVIEWptr& v) {
       }
    }
 }
-
-/* end of file decal_stroke_pool.C */

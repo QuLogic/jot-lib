@@ -588,5 +588,3 @@ CREATE_RIBBONS_CMD::clear()
 
    return true;
 }
-
-// end of file tess_cmd.C

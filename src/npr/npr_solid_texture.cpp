@@ -1553,6 +1553,3 @@ NPRSolidTexture::get_annotate(TAGformat &d)
 
    *d >> _annotate;
 }
-
-
-/* end of file npr_solid_texture.C */

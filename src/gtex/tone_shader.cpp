@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * tone_shader.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "tone_shader.H"
 #include "mesh/uv_data.H"
@@ -535,5 +532,3 @@ ToneShader::put_layer (TAGformat &d) const
       d.end_id();
    }   
 }
-
-// end of file tone_shader.C

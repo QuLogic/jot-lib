@@ -1782,5 +1782,3 @@ ViewUI::rotation_cb(int id)
       break;   
    }
 }
-
-// view_ui.C

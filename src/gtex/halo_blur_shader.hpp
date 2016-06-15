@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * HaloBlurShader.H:
- **********************************************************************/
 #ifndef HALO_BLUR_SHADER_H_IS_INCLUDED
 #define HALO_BLUR_SHADER_H_IS_INCLUDED
 
@@ -119,5 +116,3 @@ class HaloBlurShader : public GLSLShader {
 };
 
 #endif // 
-
-// end of file halo_blur_shader.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * lvert.H
- **********************************************************************/
 #ifndef LVERT_H_HAS_BEEN_INCLUDED
 #define LVERT_H_HAS_BEEN_INCLUDED
 
@@ -226,5 +223,3 @@ class Lvert : public Bvert {
 };
 
 #endif  // LVERT_H_HAS_BEEN_INCLUDED
-
-// end of file lvert.H

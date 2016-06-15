@@ -19,8 +19,6 @@
 #define COLORS_H_IS_INCLUDED
 
 /*****************************************************************
- * colors.H
- *
  *      Definitions of additional named colors.  New named colors
  *      can be added here without changing color.H. The reason to
  *      avoid changing color.H is that many jot files depend on
@@ -28,7 +26,6 @@
  *      Relatively few files depend on this header, so new colors
  *      can be defined here without causing excessively long
  *      recompilation times.
- *
  *****************************************************************/
 #include "disp/rgba.H"  // should be moved to disp
 #include "std/config.H"
@@ -167,5 +164,3 @@ namespace Color {
 }
 
 #endif // COLORS_H_IS_INCLUDED
-
-// end of file colors.H

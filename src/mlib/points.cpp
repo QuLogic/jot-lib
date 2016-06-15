@@ -703,5 +703,3 @@ mlib::Wpt_list::get_plane(Wplane &P, double len_scale) const
 
    return 1;
 }
-
-/* end of file points.C */

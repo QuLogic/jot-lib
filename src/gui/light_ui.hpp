@@ -147,5 +147,3 @@ class LightUI : public BaseUI {
 
 
 #endif // _LIGHT_UI_H_IS_INCLUDED_
-
-/* end of file light_ui.H */

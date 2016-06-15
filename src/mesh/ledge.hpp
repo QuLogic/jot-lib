@@ -259,5 +259,3 @@ class EdgeChildFilter : public SimplexFilter {
 };
 
 #endif  // LEDGE_H_HAS_BEEN_INCLUDED
-
-// end of file ledge.H

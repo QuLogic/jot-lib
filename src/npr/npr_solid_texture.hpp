@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * npr_solid_texture.H
- **********************************************************************/
 #ifndef NPR_SOLID_TEXTURE_H_IS_INCLUDED
 #define NPR_SOLID_TEXTURE_H_IS_INCLUDED
 
@@ -128,5 +125,3 @@ class NPRSolidTexture : public BasicTexture {
 };
 
 #endif // TOON_TEXTURE_H_IS_INCLUDED
-
-/* end of file npr_solid_texture.H */

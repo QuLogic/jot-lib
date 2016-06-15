@@ -107,5 +107,3 @@ class Pen : public Simple_int, public GestObs {
 };
 
 #endif  // PEN_H_IS_INCLUDED
-
-/* end of file pen.H */

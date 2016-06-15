@@ -205,5 +205,3 @@ class IDVisibilityTest : public VisibilityTest {
 };
 
 #endif // GTEX_UTIL_H_IS_INCLUDED
-
-// end of file util.H

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * simplex_filter.H
- *****************************************************************/
 #ifndef SIMPLEX_FILTER_H_IS_INCLUDED
 #define SIMPLEX_FILTER_H_IS_INCLUDED
 
@@ -240,5 +237,3 @@ class SelectedSimplexFilter : public SimplexFilter {
 typedef const SelectedSimplexFilter CSelectedSimplexFilter;
 
 #endif // SIMPLEX_FILTER_H_IS_INCLUDED
-
-// end of file simplex_filter.H

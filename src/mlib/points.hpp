@@ -1529,5 +1529,3 @@ obj_length(CWpt& o, double r, CWtransf& M, CWtransf& I)
 } // namespace mlib
 
 #endif // POINTS_H_IS_INCLUDED
-
-/* end of file points.H */

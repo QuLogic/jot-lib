@@ -753,5 +753,3 @@ GLUT_WINSYS::operator<<(STDdstream &ds)
 
    return ds;
 }
-
-// end of file glut_winsys.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * control_frame.C
- **********************************************************************/
 #include "gtex/gl_extensions.H"
 #include "geom/gl_view.H"
 #include "mesh/lpatch.H"
@@ -136,5 +133,3 @@ FFSControlFrameTexture::draw_level(CVIEWptr& v, int k)
 
    //PaperEffect::end_paper_effect(paper);
 }  
-
-// end of file control_frame.C

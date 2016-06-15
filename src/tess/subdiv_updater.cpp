@@ -127,5 +127,3 @@ SubdivUpdater::recompute()
    for (Bvert_list::size_type i=0; i<_verts.size(); i++)
       update_vert((Lvert*)_verts[i]);
 }
-
-/* end of file subdiv_updater.C */

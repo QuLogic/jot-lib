@@ -196,4 +196,3 @@ SilStrokePool::set_prototype_internal(OutlineStroke* p)
       }
    }
 }
-/* end of file sil_stroke_pool.C */

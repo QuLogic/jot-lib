@@ -132,5 +132,3 @@ MULTI_CMD::clear()
       _commands[i]->clear();
    return true;
 }
-
-/* end of file command.C */

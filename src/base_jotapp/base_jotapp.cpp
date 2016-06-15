@@ -1111,5 +1111,3 @@ BaseJOTapp::keymenu_quit_cb(const Event&, State *&)
 
    return 0;
 }
-
-// end of file base_jotapp.C

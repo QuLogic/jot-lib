@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    gel_set.H
-    
     GELset
     * A GEL container for rapid display/undisplay mechanisms 
 

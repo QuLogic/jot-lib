@@ -201,5 +201,3 @@ class EdgeStroke : public OutlineStroke {
 
 
 #endif // FEATURE_STROKE_HEADER
-
-/* end of file feature_stroke.H */

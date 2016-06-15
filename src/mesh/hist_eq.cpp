@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * hist_eq.C:
- *
  *  experimental code to do histogram equalization on an image
- *
  **********************************************************************/
 #include "geom/histogram.H"
 #include "std/config.H"
@@ -80,5 +77,3 @@ main(int argc, char *argv[])
 
    return 0;
 }
-
-// end of file hist_eq.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * image.H
- **********************************************************************/
 #ifndef IMAGE_H_HAS_BEEN_INCLUDED
 #define IMAGE_H_HAS_BEEN_INCLUDED
 
@@ -211,5 +208,3 @@ class Image {
 };
 
 #endif  // IMAGE_H_HAS_BEEN_INCLUDED
-
-/* end of file image.H */

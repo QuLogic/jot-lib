@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * primitive.C:
- **********************************************************************/
 
 /*!
  *  \file primitive.C
@@ -2340,6 +2337,3 @@ get_xf(CWpt& o, CWvec& t, CWvec& n)
    Wvec b = cross(n,t).normalized();
    return Wtransf(o, t, b, cross(t,b).normalized());
 }
-
-
-// end of file primitive.C

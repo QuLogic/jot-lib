@@ -16,9 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 
-/**********************************************************************
- * lvert_strip.H:
- **********************************************************************/
 #ifndef LVERT_STRIP_H_IS_INCLUDED
 #define LVERT_STRIP_H_IS_INCLUDED
 
@@ -65,5 +62,3 @@ class LvertStrip : public VertStrip {
 };
 
 #endif // LVERT_STRIP_H_IS_INCLUDED
-
-/* end of file lvert_strip.H */

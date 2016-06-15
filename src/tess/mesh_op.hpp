@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /*****************************************************************
- * mesh_op.H
- *
  *   Operations for splitting and joining seams in a BMESH
- *
  *****************************************************************/
 #ifndef MESH_OP_H_IS_INCLUDED
 #define MESH_OP_H_IS_INCLUDED
@@ -218,5 +215,3 @@ class CREASE_INC_CMD : public COMMAND {
 };
 
 #endif // MESH_OP_H_IS_INCLUDED
-
-// end of file mesh_op.H

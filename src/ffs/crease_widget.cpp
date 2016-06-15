@@ -511,5 +511,3 @@ CREASE_WIDGET::draw(CVIEWptr& v)
 
    return 0;
 }
-
-// end of file crease_widget.C

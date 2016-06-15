@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * msld.H:
- **********************************************************************/
 #ifndef MSLD_H_IS_INCLUDED
 #define MSLD_H_IS_INCLUDED
 
@@ -105,5 +102,3 @@ class MSLDShader : public GLSLShader {
 };
 
 #endif // MSLD_H_IS_INCLUDED
-
-// end of file msld.H

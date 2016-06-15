@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * uv_data.H
- *****************************************************************/
 #ifndef UV_DATA_H_IS_INCLUDED
 #define UV_DATA_H_IS_INCLUDED
 
@@ -321,5 +318,3 @@ class UVdata : public SimplexData {
 };
 
 #endif // UV_DATA_H_IS_INCLUDED
-
-/* end of file uv_data.H */

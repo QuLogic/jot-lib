@@ -128,5 +128,3 @@ class Animator : public DATA_ITEM {
 typedef const Animator CAnimator;
 
 #endif // ANIMATOR_H_IS_INCLUDED
-
-// end of file animator.H

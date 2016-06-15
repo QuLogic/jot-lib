@@ -1004,5 +1004,3 @@ CREASE_INC_CMD::undoit()
 
    return COMMAND::undoit();
 }
-
-// end of file mesh_op.C

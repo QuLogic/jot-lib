@@ -295,5 +295,3 @@ minor_gl_version()
 }
 
 #endif // GL_UTIL_H_IS_INCLUDED
-
-// end of file gl_util.H

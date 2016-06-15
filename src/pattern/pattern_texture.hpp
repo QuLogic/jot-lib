@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/***************************************************************************
-    pattern_texture.H
- ***************************************************************************/
 #ifndef PATTERN_TEXTURE_H
 #define PATTERN_TEXTURE_H
 
@@ -64,5 +61,3 @@ private:
 };
 
 #endif  // PATTERN_TEXTURE_H
-
-/* end of file pattern_texture.H */

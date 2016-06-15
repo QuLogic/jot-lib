@@ -2002,6 +2002,3 @@ DrawPen::drag_up_cb(CEvent &, State *&)
    
    return 0;
 }
-
-// end of file draw_pen.C
-

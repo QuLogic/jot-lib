@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * sps.H
- *****************************************************************/
 // comments to be added
 #ifndef SPS_H_IS_INCLUDED
 #define SPS_H_IS_INCLUDED
@@ -313,4 +310,3 @@ int
 pick_triangle(vector<QuadtreeNode*>& fs);
 
 #endif // SPS_H_IS_INCLUDED
-// end of file sps.H

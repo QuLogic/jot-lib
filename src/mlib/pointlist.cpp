@@ -575,5 +575,3 @@ mlib::Pointlist<L,P,V,S>::prepend(
    clear();   // Is this necessary?
    (*this) = pts;
 }
-
-/* end of file Pointlist.C */

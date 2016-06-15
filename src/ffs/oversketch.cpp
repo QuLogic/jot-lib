@@ -520,5 +520,3 @@ OVERSKETCH::draw(CVIEWptr& v)
                      compute_yardstick(_selected_sils.edges()));
    return 0;
 }
-
-// end of file oversketch.C

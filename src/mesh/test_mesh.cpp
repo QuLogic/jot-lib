@@ -16,14 +16,11 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * test_mesh.C:
- *
  *  used to test whatever mesh functionality is lately being developed.
  *  change the code as needed...
  *
  *  currently testing indexing in SimplexArrays
  *     ... and they do seem to work
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mi.H"
@@ -153,5 +150,3 @@ main(int argc, char *argv[])
    
    return 0;
 }
-
-// end of file test_mesh.C

@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * blending_meme.H
- *****************************************************************/
 #ifndef BLENDING_MEME_H_IS_INCLUDED
 #define BLENDING_MEME_H_IS_INCLUDED
 
@@ -66,5 +63,3 @@ class BlendingMeme : public VertMeme {
 };
 
 #endif // BLENDING_MEME_H_IS_INCLUDED
-
-/* end of file blending_meme.H */

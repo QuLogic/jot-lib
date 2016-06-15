@@ -83,5 +83,3 @@ statistics(
 } // namespace mlib
 
 #endif // STATISTICS_H_IS_INCLUDED
-
-// End of file statistics.H

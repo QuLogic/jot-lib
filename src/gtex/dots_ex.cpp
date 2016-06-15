@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * dots_EX.C
- *****************************************************************/
 #include <map>
 
 #include "mesh/mi.H"
@@ -403,5 +400,3 @@ DotsShader_EX::changed()
    ((StripTexCoordsCB3*)cb())->inv_valid_grad();
    GLSLShader::changed();
 }
-
-// end of file dots_EX.C

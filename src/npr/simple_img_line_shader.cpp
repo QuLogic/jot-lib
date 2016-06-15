@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * img_line_shader.C
- *****************************************************************/
 #include "gtex/gl_extensions.H"
 #include "simple_img_line_shader.H"
 #include "gtex/ref_image.H"
@@ -189,5 +186,3 @@ SimpleImageLineShader::draw_id_ref()
 
    return 0;
 }
-
-// end of file img_line_shader.C

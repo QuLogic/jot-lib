@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * sweep.C
- *****************************************************************/
 
 /*!
  *  \file sweep.C
@@ -1433,5 +1430,3 @@ SWEEP_POINT::create_line(CWvec& v)
 {
    return false;
 }
-
-// end of file sweep.C

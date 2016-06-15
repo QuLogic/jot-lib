@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**************************************************************************
- *	halftone_shader.H
- *************************************************************************/
 
 #ifndef HALFTONE_SHADER_IS_INCLUDED
 #define HALFTONE_SHADER_IS_INCLUDED
@@ -97,5 +94,3 @@ class HalftoneShader : public GLSLShader {
 };
 
 #endif // HALFTONE_SHADER_IS_INCLUDED
-
-// End of file halftone_shader.H

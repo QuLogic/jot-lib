@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /***************************************************************************
-    quad_cell.H
-    
     QuadCell
       -2D array of Bverts, given in rows that run left to right, 
        from the bottom to the top.
@@ -281,5 +279,3 @@ class Cell_List : public vector<QuadCell *>
   
 };
 #endif // QUAD_CELL_H_IS_INCLUDED
-
-/* end of file quad_cell.H */

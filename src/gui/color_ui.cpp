@@ -512,7 +512,3 @@ ColorUI::edittext_cb(int id)
        _ui[id >> ID_SHIFT]->_parent->child_callback(_ui[id >> ID_SHIFT], 0);
    }
 }
-
-
-
-// color_ui.C

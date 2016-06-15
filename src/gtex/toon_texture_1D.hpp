@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * toon_texture_1D.H
  * Legacy toon shader, uses 1D textures, no pixel shaders
  * formerly the oryginal toon shader, reintroduced on Dec,28,2005
  **********************************************************************/
@@ -141,5 +140,3 @@ class ToonTexture_1D : public BasicTexture {
 };
 
 #endif // TOON_TEXTURE_1D_H_IS_INCLUDED
-
-// end of file toon_texture.H

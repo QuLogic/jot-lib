@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * oversketch.H
- *****************************************************************/
 #ifndef OVERSKETCH_H_IS_INCLUDED
 #define OVERSKETCH_H_IS_INCLUDED
 
@@ -134,5 +131,3 @@ class OVERSKETCH : public DrawWidget {
 };
 
 #endif // OVERSKETCH_H_IS_INCLUDED
-
-/* end of file oversketch.H */

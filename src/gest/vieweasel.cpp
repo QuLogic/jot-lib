@@ -147,5 +147,3 @@ VIEW_EASEL::extract_closest_pix(
    cerr << "VIEW_EASEL::extract_closest_pix: not implemented" << endl;
    return nullptr;
 }
-
-/* end of file vieweasel.C */

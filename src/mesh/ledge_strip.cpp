@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * ledge_strip.C:
- **********************************************************************/
 #include "mesh/ledge_strip.H"
 #include "mesh/lmesh.H"
 
@@ -116,5 +113,3 @@ LedgeStrip::clear_subdivision(int level)
       _substrip->clear_subdivision(level - 1);
    }
 }
-
-/* end of file ledge_strip.C */

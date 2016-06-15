@@ -243,5 +243,3 @@ class GLUT_MANAGER : public FD_MANAGER {
 };
 
 #endif // TTY_GLUT_HAS_BEEN_INCLUDED
-
-// end of file tty_glut.H

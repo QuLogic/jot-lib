@@ -240,5 +240,3 @@ class  LOADobs {
 };
 
 #endif // GEL_OBS_H_HAS_BEEN_INCLUDED
-
-// end of file gel_obs.H

@@ -283,5 +283,3 @@ class Point2list : public Pointlist<L,P,V,S> {
 #include "point2.C"
 #endif
 #endif // POINT2_H_IS_INCLUDED
-
-/* end of file Point2.H */

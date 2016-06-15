@@ -1492,5 +1492,3 @@ toggle_curvature_ui(const Event&, State *&)
    return 0;
    
 }
-
-// end of file jot.C

@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * m2sm.C:
- * 
  *   convert from Hugues Hoppe's .m format to jot .sm format.
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mesh/mi.H"

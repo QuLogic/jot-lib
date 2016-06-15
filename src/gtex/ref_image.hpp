@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * ref_image.H
- *****************************************************************/
 #ifndef REF_IMAGE_H_IS_INCLUDED
 #define REF_IMAGE_H_IS_INCLUDED
 
@@ -919,5 +916,3 @@ class VisRefImage : public    IDRefImage,
 };
 
 #endif // REF_IMAGE_H_IS_INCLUDED
-
-// end of file ref_image.H

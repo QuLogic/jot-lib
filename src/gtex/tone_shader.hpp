@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * tone_shader.H:
- *****************************************************************/
 #ifndef TONE_SHADER_H_IS_INCLUDED
 #define TONE_SHADER_H_IS_INCLUDED
 
@@ -316,5 +313,3 @@ class ToneShader : public GLSLShader {
 };
 
 #endif // TONE_SHADER_H_IS_INCLUDED
-
-// end of file tone_shader.H

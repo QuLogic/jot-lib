@@ -16,12 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * sm2obj.C:
- *
  *   Convert from .sm format to .obj
  *
  *   Usage: sm2obj < input.sm > output.obj
- *
  **********************************************************************/
 #include "std/config.H"
 #include "mesh/mi.H"

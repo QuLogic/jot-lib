@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * sils_texture.H:
- **********************************************************************/
 #ifndef SILS_TEXTURE_H_IS_INCLUDED
 #define SILS_TEXTURE_H_IS_INCLUDED
 
@@ -72,5 +69,3 @@ class SilsTexture : public OGLTexture {
 };
 
 #endif // SILS_TEXTURE_H_IS_INCLUDED
-
-/* end of file sils_texture.H */

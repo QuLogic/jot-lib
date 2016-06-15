@@ -15,10 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * gesture_stroke_drawer.C
- *
- **********************************************************************/
 
 #include "geom/gl_view.H"
 #include "std/config.H"
@@ -126,6 +122,3 @@ GestureStrokeDrawer::draw(const GESTURE* gest, CVIEWptr& v)
 
    return 0;
 }
-
-
-/* end of file gesture_stroke_drawer.C */

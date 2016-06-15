@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * draw_fsa.H
- **********************************************************************/
 #ifndef DRAW_FSA_H_HAS_BEEN_INCLUDED
 #define DRAW_FSA_H_HAS_BEEN_INCLUDED
 
@@ -157,5 +154,3 @@ class StrokeGuard : public DrawGuard {
 };
 
 #endif  // DRAW_FSA_H_HAS_BEEN_INCLUDED
-
-// end of file draw_fsa.H

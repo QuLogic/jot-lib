@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**********************************************************************
- * mi.H
- *
  *      (mesh inline)
  **********************************************************************/
 #ifndef MI_H_HAS_BEEN_INCLUDED
@@ -247,5 +245,3 @@ log2(double x)
 #endif // log2
 
 #endif  // MI_H_HAS_BEEN_INCLUDED
-
-/* end of file mi.H */

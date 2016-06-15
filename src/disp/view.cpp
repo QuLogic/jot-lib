@@ -2150,5 +2150,3 @@ double at_length(CWpt& p, double length)
    CWpt new_q = new_p + (right * length);
    return PIXEL(new_p).dist(new_q);
 }
-
-/* end of file view.C */

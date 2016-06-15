@@ -154,6 +154,3 @@ Skybox_Texture::load_texture(string file_name)
            << _tex->file() << endl;
    }
 }
-
-
-// skybox_texture.C

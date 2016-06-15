@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/*****************************************************************
- * select_widget.C
- *****************************************************************/
 
 /*!
  *  \file select_widget.C
@@ -969,5 +966,3 @@ SELECT_WIDGET::select_edges(CPIXEL_list& pts)
 
    return true;
 }
-
-// end of file select_widget.C

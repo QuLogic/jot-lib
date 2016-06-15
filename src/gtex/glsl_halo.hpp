@@ -15,9 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
-/**********************************************************************
- * glsl_halo.H:
- **********************************************************************/
 #ifndef GLSL_HALO_H_IS_INCLUDED
 #define GLSL_HALO_H_IS_INCLUDED
 
@@ -89,5 +86,3 @@ class GLSLHaloShader : public GLSLToonShader {
 };
 
 #endif // GLSL_HALO_H_IS_INCLUDED
-
-// end of file glsl_halo.H

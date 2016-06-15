@@ -73,5 +73,3 @@ VIEWint::handle_event(
    }
    VIEW::pop();
 }
-
-/* end of file fsa.C */

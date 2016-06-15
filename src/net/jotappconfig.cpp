@@ -963,5 +963,3 @@ main_config(bool init)
       config = nullptr;
    }
 }
-
-// end of file jotappconfig.C

@@ -452,5 +452,3 @@ CamCruise::set_cruise(mlib::XYpt o, mlib::XYpt e)
 
    _move_vec  = data->at() - data->from();
 }
-
-// end of file cam_focus.C

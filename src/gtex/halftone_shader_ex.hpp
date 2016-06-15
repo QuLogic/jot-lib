@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 /**************************************************************************
- *	halftone_shader_ex.H
  *  Karol's implementation that uses object space UV 
  *************************************************************************/
 
@@ -102,5 +101,3 @@ class HalftoneShaderEx : public GLSLShader {
 
 
 #endif // HALFTONE_SHADER_IS_INCLUDED
-
-// End of file halftone_shader_EX.H
