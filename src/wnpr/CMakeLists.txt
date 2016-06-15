@@ -1,17 +1,17 @@
 
 ADD_LIBRARY(wnpr
-	halo_sphere.C
-	hatching_pen.C
-	hatching_pen_ui.C
-	line_pen.C
-	line_pen_ui.C
-	npr_pen.C
-	npr_pen_ui.C
-	paper_ui.C
-	sil_ui.C
-	sky_box.C
-	stroke_ui.C
-	view_ui.C)
+	halo_sphere.cpp
+	hatching_pen.cpp
+	hatching_pen_ui.cpp
+	line_pen.cpp
+	line_pen_ui.cpp
+	npr_pen.cpp
+	npr_pen_ui.cpp
+	paper_ui.cpp
+	sil_ui.cpp
+	sky_box.cpp
+	stroke_ui.cpp
+	view_ui.cpp)
 
 TARGET_LINK_LIBRARIES(wnpr
 	base_jotapp

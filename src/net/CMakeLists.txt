@@ -1,11 +1,11 @@
 
 ADD_LIBRARY(net
-	stream.C
-	net.C
-	net_types.C
-	data_item.C
-	jotappconfig.C
-	io_manager.C)
+	stream.cpp
+	net.cpp
+	net_types.cpp
+	data_item.cpp
+	jotappconfig.cpp
+	io_manager.cpp)
 
 TARGET_LINK_LIBRARIES(net
 	disp
@@ -14,11 +14,11 @@ TARGET_LINK_LIBRARIES(net
 	std)
 
 ADD_EXECUTABLE(netiotest EXCLUDE_FROM_ALL
-	io.C
-	net.C
-	stream.C
-	jotappconfig.C
-	data_item.C)
+	io.cpp
+	net.cpp
+	stream.cpp
+	jotappconfig.cpp
+	data_item.cpp)
 
 TARGET_LINK_LIBRARIES(netiotest
 	std)

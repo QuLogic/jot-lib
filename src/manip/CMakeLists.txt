@@ -1,11 +1,11 @@
 
 ADD_LIBRARY(manip
-	cam_pz.C
-	cam_fp.C
-	cam_edit.C
-	manip.C
-	mmenu.C
-	key_menu.C)
+	cam_pz.cpp
+	cam_fp.cpp
+	cam_edit.cpp
+	manip.cpp
+	mmenu.cpp
+	key_menu.cpp)
 
 TARGET_LINK_LIBRARIES(manip
 	base_jotapp

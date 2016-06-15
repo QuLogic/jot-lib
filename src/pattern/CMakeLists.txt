@@ -1,26 +1,26 @@
 
 SET(PATTERN_FILES
-	stroke_pattern.C
-	stroke_pattern_drawer.C
-	ref_frame_drawer.C
-	stroke_group.C
-	stroke_path.C
-	gesture_stroke.C
-	gesture_cell.C
-	gesture_cell_drawer.C
-	pattern_stroke.C
-	pattern_texture.C
-	pattern_pen.C
-	pattern_pen_ui.C
-	bbox_cell.C
-	rect_cell.C
-	path_cell.C
-	carriers_cell.C
-	gesture_rect_drawer.C
-	gesture_path_drawer.C
-	gesture_carrier_drawer.C
-	eigen_solver.C
-	impostor.C)
+	stroke_pattern.cpp
+	stroke_pattern_drawer.cpp
+	ref_frame_drawer.cpp
+	stroke_group.cpp
+	stroke_path.cpp
+	gesture_stroke.cpp
+	gesture_cell.cpp
+	gesture_cell_drawer.cpp
+	pattern_stroke.cpp
+	pattern_texture.cpp
+	pattern_pen.cpp
+	pattern_pen_ui.cpp
+	bbox_cell.cpp
+	rect_cell.cpp
+	path_cell.cpp
+	carriers_cell.cpp
+	gesture_rect_drawer.cpp
+	gesture_path_drawer.cpp
+	gesture_carrier_drawer.cpp
+	eigen_solver.cpp
+	impostor.cpp)
 
 ADD_LIBRARY(pattern ${PATTERN_FILES})
 

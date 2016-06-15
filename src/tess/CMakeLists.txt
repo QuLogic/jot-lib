@@ -1,25 +1,25 @@
 
 ADD_LIBRARY(tess
-	meme.C
-	blending_meme.C
-	bbase.C
-	bpoint.C
-	bcurve.C
-	bsurface.C
-	bvert_grid.C
-	uv_surface.C
-	panel.C
-	primitive.C
-	skin.C
-	skin_meme.C
-	xf_meme.C
-	tex_body.C
-	subdiv_updater.C
-	disk_map.C
-	vert_mapper.C
-	mesh_op.C
-	tess_cmd.C
-	action.C)
+	meme.cpp
+	blending_meme.cpp
+	bbase.cpp
+	bpoint.cpp
+	bcurve.cpp
+	bsurface.cpp
+	bvert_grid.cpp
+	uv_surface.cpp
+	panel.cpp
+	primitive.cpp
+	skin.cpp
+	skin_meme.cpp
+	xf_meme.cpp
+	tex_body.cpp
+	subdiv_updater.cpp
+	disk_map.cpp
+	vert_mapper.cpp
+	mesh_op.cpp
+	tess_cmd.cpp
+	action.cpp)
 
 TARGET_LINK_LIBRARIES(tess
 	disp

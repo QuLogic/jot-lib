@@ -1,6 +1,6 @@
 
 ADD_LIBRARY(std
-	config.C
-	file.C
-	error.C)
+	config.cpp
+	file.cpp
+	error.cpp)
 

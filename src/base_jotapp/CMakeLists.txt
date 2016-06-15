@@ -1,6 +1,6 @@
 
 ADD_LIBRARY(base_jotapp
-	base_jotapp.C)
+	base_jotapp.cpp)
 
 TARGET_LINK_LIBRARIES(base_jotapp
 	disp

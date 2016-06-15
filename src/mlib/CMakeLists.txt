@@ -1,17 +1,17 @@
 
 SET(NORMAL_SOURCES
-	global.C
-	points.C
-	vec4.C)
+	global.cpp
+	points.cpp
+	vec4.cpp)
 
 SET(TEMPLATED_SOURCES
-	plane.C
-	pointlist.C
-	point2.C
-	point3.C
-	mat4.C
-	quat.C
-	random.C)
+	plane.cpp
+	pointlist.cpp
+	point2.cpp
+	point3.cpp
+	mat4.cpp
+	quat.cpp
+	random.cpp)
 
 SET(JOT_NEEDS_TEMPLATES_IN_H_FILE BOOL False)
 

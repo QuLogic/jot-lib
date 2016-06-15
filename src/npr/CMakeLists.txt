@@ -1,31 +1,31 @@
 
 ADD_LIBRARY(npr
-	npr_view.C
-	sil_and_crease_texture.C
-	zxedge_stroke_texture.C
-	zxkey_line.C
-	feature_stroke_texture.C
-	hatching_collection.C
-	hatching_group_base_.C
-	hatching_group_fixed.C
-	hatching_group_free.C
-	hatching_group.C
-	npr_texture.C
-	ffstexture.C
-	ffs_control_frame.C
-	npr_solid_texture.C
-	npr_bkg_texture.C
-	npr_control_frame.C
-	wpath_stroke.C
-	stylized_line3d.C
-	image_proc.C
-	skybox_texture.C
-	img_line.C
-	binary_image.C
-	ridge.C
-	img_line_shader.C
-	simple_img_line_shader.C
-	image_plate.C)
+	npr_view.cpp
+	sil_and_crease_texture.cpp
+	zxedge_stroke_texture.cpp
+	zxkey_line.cpp
+	feature_stroke_texture.cpp
+	hatching_collection.cpp
+	hatching_group_base_.cpp
+	hatching_group_fixed.cpp
+	hatching_group_free.cpp
+	hatching_group.cpp
+	npr_texture.cpp
+	ffstexture.cpp
+	ffs_control_frame.cpp
+	npr_solid_texture.cpp
+	npr_bkg_texture.cpp
+	npr_control_frame.cpp
+	wpath_stroke.cpp
+	stylized_line3d.cpp
+	image_proc.cpp
+	skybox_texture.cpp
+	img_line.cpp
+	binary_image.cpp
+	ridge.cpp
+	img_line_shader.cpp
+	simple_img_line_shader.cpp
+	image_plate.cpp)
 
 TARGET_LINK_LIBRARIES(npr
 	base_jotapp

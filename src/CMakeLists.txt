@@ -7,7 +7,7 @@ ENDIF(WIN32)
 #
 # Program 1 - jot
 #
-ADD_EXECUTABLE(jot jot.C ${JOTRC})
+ADD_EXECUTABLE(jot jot.cpp ${JOTRC})
 TARGET_LINK_LIBRARIES(jot
 	base_jotapp
 	dev
@@ -31,7 +31,7 @@ TARGET_LINK_LIBRARIES(jot
 #
 # Program 2 - smview
 #
-ADD_EXECUTABLE(smview smview.C ${JOTRC})
+ADD_EXECUTABLE(smview smview.cpp ${JOTRC})
 TARGET_LINK_LIBRARIES(smview
 	base_jotapp
 	disp

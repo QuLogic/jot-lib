@@ -1,6 +1,6 @@
 
 ADD_LIBRARY(dlhandler
-	dlhandler.C)
+	dlhandler.cpp)
 
 TARGET_LINK_LIBRARIES(dlhandler
 	disp

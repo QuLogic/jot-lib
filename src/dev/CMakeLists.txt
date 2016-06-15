@@ -1,8 +1,8 @@
 
 ADD_LIBRARY(dev
-	dev.C
-	tty.C
-	tablet.C)
+	dev.cpp
+	tty.cpp
+	tablet.cpp)
 
 TARGET_LINK_LIBRARIES(dev
 	mlib

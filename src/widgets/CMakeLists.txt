@@ -1,8 +1,8 @@
 
 ADD_LIBRARY(widgets
-	fps.C
-	kbd_nav.C
-	collide.C)
+	fps.cpp
+	kbd_nav.cpp
+	collide.cpp)
 
 TARGET_LINK_LIBRARIES(widgets
 	disp

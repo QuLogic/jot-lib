@@ -1,10 +1,10 @@
 
 ADD_LIBRARY(glut_winsys
-	glut_winsys.C
-	kbd.C
-	mouse.C
-	glui_menu.C
-	glui_dialogs.C)
+	glut_winsys.cpp
+	kbd.cpp
+	mouse.cpp
+	glui_menu.cpp
+	glui_dialogs.cpp)
 
 TARGET_LINK_LIBRARIES(glut_winsys
 	widgets

@@ -1,20 +1,20 @@
 
 SET(GUI_FILES
-	base_ui.C
-	color_ui.C
-	halftone_ui.C
-	hatching_ui.C
-	light_ui.C
-	patch_selection_ui.C
-	patch_ui.C
-	painterly_ui.C
-	presets_ui.C
-	proxy_texture_ui.C
-	tone_shader_ui.C
-	img_line_ui.C
-	ref_image_ui.C
-	detail_ctrl_ui.C
-	basecoat_ui.C)
+	base_ui.cpp
+	color_ui.cpp
+	halftone_ui.cpp
+	hatching_ui.cpp
+	light_ui.cpp
+	patch_selection_ui.cpp
+	patch_ui.cpp
+	painterly_ui.cpp
+	presets_ui.cpp
+	proxy_texture_ui.cpp
+	tone_shader_ui.cpp
+	img_line_ui.cpp
+	ref_image_ui.cpp
+	detail_ctrl_ui.cpp
+	basecoat_ui.cpp)
 
 ADD_LIBRARY(gui ${GUI_FILES})
 

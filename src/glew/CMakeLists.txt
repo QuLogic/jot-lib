@@ -1,6 +1,6 @@
 
 ADD_LIBRARY(glew
-	glew_singleton.C)
+	glew_singleton.cpp)
 
 TARGET_LINK_LIBRARIES(glew
 	${OPENGL_LIBRARIES}
