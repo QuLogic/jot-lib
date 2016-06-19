@@ -27,26 +27,8 @@
 
 #if defined(__GNUC__)
 
-#if (__GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ >= 2 ))
-#define JOT_NEW_STYLE_IOSTREAM
-//#include <bits/stl_algobase.h>
-#define JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
 #include <algorithm>
 using namespace std;
-
-#elif (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 97))
-#define JOT_BACKWARD_IOSTREAM
-//#include <bits/stl_algobase.h>
-#define JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
-#include <algorithm>
-using namespace std;
-
-#elif (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)
-//#include <stl_algobase.h>
-#define JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
-#include <algorithm>
-using namespace std;
-#endif 
 
 // _MSC_VER defines the version of the Microsoft Compiler.
 // 12xx = Visual Studio 6.0
@@ -54,44 +36,12 @@ using namespace std;
 #elif defined(WIN32)
 //#ifdef _MSC_VER
 //#if(_MSC_VER >= 1300)
-#define JOT_NEW_STYLE_IOSTREAM
 #include <ios>
-#define JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
 #include <algorithm>
 using namespace std;
 //#endif
 //#endif
 #endif 
-
-
-
-//YYY - Moved here from geom/fsa.H (and fixed)
-#if (defined(__sgi) && !defined(__GNUC__) && defined(_STANDARD_C_PLUS_PLUS)) || defined(__VACPP_MULTI__)
-#define TYPENAME typename
-#elif (defined(__GNUC__) && (__GNUC__ > 3 || ( __GNUC__ == 3 && __GNUC_MINOR__ >= 2 )))
-#define TYPENAME typename
-#elif (defined(WIN32) && defined(_MSC_VER) && (_MSC_VER >= 1300))
-#define TYPENAME typename
-#else
-#define TYPENAME
-#endif
-
-// Let us define 'bool' to look the same as the proposed standard C++ 
-// data type 'bool'. Try to avoid redefining it if some other header 
-// file already defined it.
-//
-#if !defined(true) && !defined(__GNUC__) && !defined(WIN32) && !defined(_ABIN32) && !defined(__VACPP_MULTI__)
-#if !defined(__SUNPRO_CC) || __SUNPRO_CC < 0x500
-#if !defined(sgi) || !defined(_BOOL)
-#if !defined(__KCC)
-typedef int bool;     
-const   int true  = 1;
-const   int false = 0;
-#endif
-#endif
-#endif
-#endif
-
 
 #ifdef WIN32
 #ifdef _MSC_VER
@@ -174,35 +124,10 @@ template <class T>
 inline T sqr(const T& x)                       { return x*x; }
 
 // Rounding:
-#if (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 97)))
+#if (defined(__GNUC__))
 //#include <cmath>
 #else
 inline int round(double x) { return int(x + ((x<0) ? -0.5 : 0.5)); }
-#endif
-
-// Swap values:
-// XXX - hack!  This depends on knowing what symbols are defined when
-// stl_algobase.h is included
-// YYY - Added new symbol...
-//#if (!defined(_XUTILITY_) && !defined(ALGOBASE_H) && !defined(__SGI_STL_ALGOBASE_H) && !defined(__SGI_STL_INTERNAL_ALGO_H) && !defined(__SGI_STL_INTERNAL_ALGOBASE_H) && !defined(__GLIBCPP_INTERNAL_ALGOBASE_H) )
-//#if !(defined(JOT_NEW_STYLE_IOSTREAM) || defined(JOT_BACKWARD_IOSTREAM))
-#ifndef JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
-template <class T>
-inline void swap(T &a, T &b)      { T c(a); a = b; b = c; }
-#endif
-
-// Define templated swap, min, & max methods, but only if they haven't
-// already been defined by STL
-// XXX - hack!  This depends on knowing what symbols are defined when
-// stl_algobase.h is included
-// YYY - Added new symbol...
-//#if  !defined(ALGOBASE_H) && !defined(__SGI_STL_ALGOBASE_H) && !defined(__SGI_STL_INTERNAL_ALGOBASE_H) && !defined(__GLIBCPP_INTERNAL_ALGOBASE_H) && !defined(_ALGORITHM_)
-//#if defined(WIN32) || !(defined(JOT_NEW_STYLE_IOSTREAM) || defined(JOT_BACKWARD_IOSTREAM))
-#ifndef JOT_STDCPP_HEADER_ALGORITHM_INCLUDED
-template <class T>
-inline T min(const T& a, const T& b)         { return a < b ? a : b; }
-template <class T>
-inline T max(const T& a, const T& b)         { return a > b ? a : b; }
 #endif
 
 // Clamp value a to range [b,c], where b < c:
@@ -249,12 +174,7 @@ XOR(bool x, bool y)
    return (x && !y) || (!x && y);
 }
 
-#if (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x510)
-#define JOT_NEW_STYLE_IOSTREAM
-#endif
-
 #if defined(__PGI)
-#define JOT_NEW_STYLE_IOSTREAM
 #define JOT_AVOID_STATIC_LOCAL_INLINE_VAR
 #endif
 

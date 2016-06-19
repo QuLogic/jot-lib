@@ -373,8 +373,6 @@ State_t<EVENT>::event(const EVENT& e, State_t<EVENT>* start, int* ret) const
  *  \brief A convenience class that makes it easy for an object that has
  *  CallBack functions to generate the proper CallBack data structure.
  *
- *  \todo Try to remove use of TYPENAME macro if possible.
- *
  */
 template <class T, class EVENT, class STATE>
 class Interactor {
@@ -386,13 +384,13 @@ class Interactor {
    
       virtual ~Interactor() { }
       
-      _callb *Cb(TYPENAME _callb::_method m)
+      _callb *Cb(typename _callb::_method m)
          { return new _callb((T*)this,m);  }
          
-      _callb *Cb(TYPENAME _callb::_method m,State_t<EVENT> *s)
+      _callb *Cb(typename _callb::_method m,State_t<EVENT> *s)
          { return new _callb((T*)this,m,s);}
                                         
-      _guard *Gd(const EVENT &e, TYPENAME _guard::_method m)
+      _guard *Gd(const EVENT &e, typename _guard::_method m)
          { return new _guard(e,(T*)this,m);}
                                         
       STATE *entry() { return &_entry; }
