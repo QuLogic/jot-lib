@@ -35,7 +35,6 @@ ADD_LIBRARY(mesh
 
 TARGET_LINK_LIBRARIES(mesh
 	disp
-	dlhandler
 	geom
 	gtex
 	map3d

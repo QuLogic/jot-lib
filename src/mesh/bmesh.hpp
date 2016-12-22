@@ -21,7 +21,6 @@
 #define BMESH_H_HAS_BEEN_INCLUDED
 
 #include "disp/view.hpp"
-#include "dlhandler/dlhandler.hpp"
 #include "geom/body.hpp"
 #include "geom/geom.hpp"          // XXX - For _geom member; should remove
 #include "std/thread_mutex.hpp"
