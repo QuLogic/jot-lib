@@ -20,6 +20,94 @@
 
 #include "disp/gel.hpp"
 
+#define CSAVEobs_list const SAVEobs_list
+#define CSAVEobs      const SAVEobs
+class SAVEobs;
+typedef set<SAVEobs*> SAVEobs_list;
+//--------------------------------------------
+// SAVEobs -
+//   An object that can be notified when some
+// other object is saved
+//--------------------------------------------
+class SAVEobs {
+ public:
+   enum save_status_t {
+      SAVE_ERROR_NONE=0,   //no problems
+      SAVE_ERROR_STREAM,   //bad stream
+      SAVE_ERROR_WRITE,    //good stream, failed writing
+      SAVE_ERROR_CWD       //good stream, good write, failed changing cwd
+   };
+
+ protected:
+   static SAVEobs_list *_save_obs;
+   static SAVEobs_list *_presave_obs;
+   static SAVEobs_list *_postsave_obs;
+
+   static SAVEobs_list *saveobs_list()    { if (!_save_obs) _save_obs=new SAVEobs_list; return _save_obs; }
+   static SAVEobs_list *presaveobs_list() { if (!_presave_obs) _presave_obs=new SAVEobs_list; return _presave_obs; }
+   static SAVEobs_list *postsaveobs_list(){ if (!_postsave_obs) _postsave_obs=new SAVEobs_list; return _postsave_obs; }
+ public:
+   virtual ~SAVEobs() {}
+   virtual void notify_presave (STDdstream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_postsave(STDdstream &s, save_status_t &status, bool full_scene) {}
+   virtual void notify_save    (STDdstream &s, save_status_t &status, bool full_scene) {}
+
+   static  void notify_save_obs(STDdstream &s, save_status_t &status, bool full_scene);
+
+   /* ---  object save observer --- */
+   void   presave_obs  ()  { presaveobs_list()->insert(this); }
+   void   postsave_obs  () { postsaveobs_list()->insert(this); }
+   void   save_obs  ()     { saveobs_list()->insert(this); }
+   void   unobs_save()     { saveobs_list()->erase(this); }
+   void   unobs_presave()  { presaveobs_list()->erase(this); }
+   void   unobs_postsave() { postsaveobs_list()->erase(this); }
+};
+
+
+#define CLOADobs_list const LOADobs_list
+#define CLOADobs      const LOADobs
+class LOADobs;
+typedef set<LOADobs*> LOADobs_list;
+//--------------------------------------------
+// LOADobs -
+//   An object that can be notified when some
+// other object is loaded
+//--------------------------------------------
+class  LOADobs {
+ public:
+   enum load_status_t {
+      LOAD_ERROR_NONE= 0,  //no problems
+      LOAD_ERROR_STREAM,   //bad stream
+      LOAD_ERROR_JOT,      //good stream, good header, failed conventional load
+      LOAD_ERROR_CWD,      //good stream, good header, good conventional load, failed cwd change
+      LOAD_ERROR_AUX,      //good stream, no header or failed conv. load, but succeeded aux load
+      LOAD_ERROR_READ      //good stream, no header, failed aux load
+   };
+ protected:
+   static LOADobs_list *_load_obs;
+   static LOADobs_list *_preload_obs;
+   static LOADobs_list *_postload_obs;
+
+   static LOADobs_list *loadobs_list()    { if (!_load_obs) _load_obs=new LOADobs_list; return _load_obs; }
+   static LOADobs_list *preloadobs_list() { if (!_preload_obs) _preload_obs=new LOADobs_list; return _preload_obs; }
+   static LOADobs_list *postloadobs_list(){ if (!_postload_obs) _postload_obs=new LOADobs_list; return _postload_obs; }
+ public:
+   virtual ~LOADobs() {}
+   virtual void notify_preload (STDdstream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_postload(STDdstream &s, load_status_t &status, bool full_scene) {}
+   virtual void notify_load    (STDdstream &s, load_status_t &status, bool full_scene) {}
+
+   static  void notify_load_obs(STDdstream &s, load_status_t &status, bool full_scene);
+
+   /* ---  object load observer --- */
+   void   preload_obs ()        { preloadobs_list()->insert(this); }
+   void   postload_obs()        { postloadobs_list()->insert(this); }
+   void   load_obs    ()        { loadobs_list()->insert(this); }
+   void   unobs_load  ()        { loadobs_list()->erase(this); }
+   void   unobs_preload()       { preloadobs_list()->erase(this); }
+   void   unobs_postload()      { postloadobs_list()->erase(this); }
+};
+
 /*****************************************************************
  * IOManager
  *****************************************************************/

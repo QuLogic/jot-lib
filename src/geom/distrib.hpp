@@ -19,6 +19,7 @@
 #define _JOT_GEOM_DISTRIB_H
 
 #include "net/stream.hpp"
+#include "net/io_manager.hpp"
 #include "disp/cam.hpp"
 #include "geom/geom.hpp"
 #include "geom/world.hpp"
