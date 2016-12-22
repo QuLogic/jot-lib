@@ -36,7 +36,7 @@
 namespace mlib {
 
 #ifndef likely
-#  if !defined(__GNUC__) || (__GNUC__ == 2 && __GNUC_MINOR__ < 96)
+#  if !defined(__GNUC__)
 #    define likely(x) (x)
 #    define unlikely(x) (x)
 #  else

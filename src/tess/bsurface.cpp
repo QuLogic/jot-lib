@@ -620,11 +620,7 @@ typedef GLvoid (CALLBACK *glu_tess_func)();
 typedef GLvoid (*glu_tess_func)(void); 
 #else
 #ifdef __GNUC__
-#if (defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 96)))
-typedef GLvoid (*glu_tess_func)(void); 
-#else 
-typedef GLvoid (*glu_tess_func)(...); 
-#endif 
+typedef GLvoid (*glu_tess_func)(void);
 #else
 typedef GLvoid (*glu_tess_func)(void); 
 #endif 
