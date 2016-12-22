@@ -6,6 +6,8 @@ addons:
     packages:
     - freeglut3-dev
     - libglew-dev
+    - libxi-dev
+    - libxmu-dev
 compiler:
     - gcc
     - clang
