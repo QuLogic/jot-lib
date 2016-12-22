@@ -4,6 +4,7 @@ sudo: false
 addons:
   apt:
     packages:
+    - freeglut3-dev
     - libglew-dev
 compiler:
     - gcc
