@@ -15,4 +15,4 @@ before_script:
     - mkdir build
     - cd build
     - cmake ..
-script: make -j2
+script: make -j4
