@@ -18,12 +18,16 @@
 #ifndef IO_MANAGER_H_IS_INCLUDED
 #define IO_MANAGER_H_IS_INCLUDED
 
-#include "disp/gel.hpp"
+#include <set>
+#include <string>
+#include <vector>
+#include "data_item.hpp"
+#include "stream.hpp"
 
 #define CSAVEobs_list const SAVEobs_list
 #define CSAVEobs      const SAVEobs
 class SAVEobs;
-typedef set<SAVEobs*> SAVEobs_list;
+typedef std::set<SAVEobs*> SAVEobs_list;
 //--------------------------------------------
 // SAVEobs -
 //   An object that can be notified when some
@@ -67,7 +71,7 @@ class SAVEobs {
 #define CLOADobs_list const LOADobs_list
 #define CLOADobs      const LOADobs
 class LOADobs;
-typedef set<LOADobs*> LOADobs_list;
+typedef std::set<LOADobs*> LOADobs_list;
 //--------------------------------------------
 // LOADobs -
 //   An object that can be notified when some
@@ -137,12 +141,12 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 
    static void    add_state(state_t s) { instance()->_state.push_back(s); }
    static state_t state()           { return instance()->state_(); }
-   static string  basename()        { return instance()->basename_(); }
-   static string  cwd()             { return instance()->cwd_(); }
-   static string  cached_prefix()   { return instance()->cached_prefix_(); }
-   static string  current_prefix()  { return instance()->current_prefix_(); }
-   static string  load_prefix()     { return instance()->load_prefix_(); }
-   static string  save_prefix()     { return instance()->save_prefix_(); }
+   static std::string basename()       { return instance()->basename_(); }
+   static std::string cwd()            { return instance()->cwd_(); }
+   static std::string cached_prefix()  { return instance()->cached_prefix_(); }
+   static std::string current_prefix() { return instance()->current_prefix_(); }
+   static std::string load_prefix()    { return instance()->load_prefix_(); }
+   static std::string save_prefix()    { return instance()->save_prefix_(); }
 
    /******** LOADobs METHODS ********/
    virtual void notify_preload (STDdstream &, load_status_t &, bool);
@@ -159,34 +163,34 @@ class IOManager : public SAVEobs, public LOADobs, public DATA_ITEM {
 
  protected:
    /******** MEMBER VARIABLES ********/
-   vector<state_t>      _state;
+   std::vector<state_t> _state;
 
-   string               _basename;
-   string               _cached_cwd_plus_basename;
+   std::string          _basename;
+   std::string          _cached_cwd_plus_basename;
 
-   string               _old_cwd;
-   string               _old_basename;
+   std::string          _old_cwd;
+   std::string          _old_basename;
 
    /******** STATIC MEMBER VARIABLES ********/
    static TAGlist*      _io_tags;
    static IOManager*    _instance;
 
    /******** INTERNAL MEMBER METHODS ********/
-   bool split_filename(const string &, string &, string &, string &);
+   bool split_filename(const std::string &, std::string &, std::string &, std::string &);
 
    /******** MEMBER METHODS FOR STATIC ACCESSORS********/
 
    state_t state_() const { assert(_state.size()>0); return _state.back(); }
    
-   string  basename_() { return _basename; }
+   std::string basename_() { return _basename; }
    
-   string  cwd_();
+   std::string cwd_();
 
-   string  cached_prefix_();
-   string  current_prefix_();
+   std::string cached_prefix_();
+   std::string current_prefix_();
 
-   string  load_prefix_();
-   string  save_prefix_();
+   std::string load_prefix_();
+   std::string save_prefix_();
 
    /******** I/O Methods ********/
    virtual void get_basename(TAGformat &d);

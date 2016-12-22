@@ -8,7 +8,6 @@ ADD_LIBRARY(net
 	io_manager.cpp)
 
 TARGET_LINK_LIBRARIES(net
-	disp
 	dev
 	mlib
 	std)
