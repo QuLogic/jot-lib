@@ -17,7 +17,6 @@
  *****************************************************************/
 
 #include "disp/view.hpp"
-#include "geom/winsys.hpp"
 #include "gtex/paper_effect.hpp"
 #include "glui/glui_jot.hpp"
 

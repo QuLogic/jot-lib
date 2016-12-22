@@ -31,13 +31,8 @@
 #include "npr_pen.hpp"
 #include "npr_pen_ui.hpp"
 #include "tess/tex_body.hpp"
-#include "std/config.hpp"
 
 #include "npr/npr_texture.hpp"
-#include "npr/npr_bkg_texture.hpp"
-#include "npr/npr_solid_texture.hpp"
-#include "gtex/glsl_xtoon.hpp"
-#include "gtex/xtoon_texture.hpp"
 
 using namespace mlib;
 

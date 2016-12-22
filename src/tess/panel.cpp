@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "mesh/mi.hpp"
-#include "std/config.hpp"
 #include "mlib/polyline.hpp"
 #include "bvert_grid.hpp"
 #include "panel.hpp"

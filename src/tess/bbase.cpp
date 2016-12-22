@@ -19,13 +19,10 @@
 #include "geom/gl_view.hpp"       // GL_VIEW::draw_pts()
 #include "geom/world.hpp"         // WORLD::is_displayed()
 #include "gtex/ref_image.hpp"     // for VisRefImage::lookup()
-#include "mesh/mi.hpp"
-#include "std/config.hpp"
 
 #include "tess/tex_body.hpp"
 #include "tess/bpoint.hpp"
 #include "tess/bcurve.hpp"
-#include "tess/bsurface.hpp"
 
 #include "tess/uv_surface.hpp"         // debug: UVmeme
 #include "tess/blending_meme.hpp"      // debug: BlendingMeme

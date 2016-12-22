@@ -19,7 +19,6 @@
 #include "geom/gl_view.hpp"
 #include "geom/world.hpp"
 #include "gtex/glsl_perlin_test.hpp"
-#include "mesh/bmesh.hpp"
 #include "npr/skybox_texture.hpp"
 
 #include "sky_box.hpp"

@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "mesh/bsimplex.hpp"
-#include "mesh/simplex_filter.hpp"
 #include "mesh/simplex_array.hpp"
 
 Bsimplex::IDtable Bsimplex::_table(1<<14);

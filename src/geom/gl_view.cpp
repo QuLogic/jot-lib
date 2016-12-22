@@ -19,11 +19,8 @@
 #include <GL/glew.h>
 
 #include "disp/animator.hpp"
-#include "disp/colors.hpp"
 #include "geom/gl_view.hpp"
 #include "geom/geom.hpp"
-#include "disp/recorder.hpp"
-#include "std/thread_mutex.hpp"
 
 using namespace mlib;
 

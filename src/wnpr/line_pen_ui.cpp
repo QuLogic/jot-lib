@@ -33,11 +33,8 @@
 #include "glui/glui_jot.hpp"
 #include "wnpr/line_pen.hpp"
 #include "wnpr/line_pen_ui.hpp"
-#include "tess/tex_body.hpp"
-#include "std/config.hpp"
 
 #include "npr/npr_texture.hpp"
-#include "npr/sil_and_crease_texture.hpp"
 
 using namespace mlib;
 

@@ -20,20 +20,13 @@
 ////////////////////////////////////////////
 
 #include "mesh/bmesh.hpp"
-#include "mesh/patch.hpp"
-#include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "geom/winsys.hpp"
-#include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "patch_selection_ui.hpp"
 #include "patch_ui.hpp"
 #include "ref_image_ui.hpp"
-
-#include "detail_ctrl_ui.hpp"
 
 using namespace mlib;
 

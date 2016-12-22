@@ -28,11 +28,9 @@
 #include "disp/colors.hpp"                // Color::blue_pencil_d
 #include "gtex/util.hpp"                  // for draw_strip
 #include "gtex/ref_image.hpp"             // for VisRefImage
-#include "gtex/basic_texture.hpp"         // GLStripCB
 #include "tess/mesh_op.hpp"               // SUBDIV_OFFSET_CMD
 #include "tess/primitive.hpp"
 #include "tess/xf_meme.hpp"
-#include <map>
 
 #include "profile.hpp"
 

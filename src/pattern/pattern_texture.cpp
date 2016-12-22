@@ -24,10 +24,7 @@
 #include "geom/gl_view.hpp"
 #include "geom/world.hpp"
 #include "mesh/ledge_strip.hpp"
-#include "mesh/bfilters.hpp"
 #include "gtex/hidden_line.hpp"
-#include "mesh/uv_data.hpp"
-#include "stroke/base_stroke.hpp"
 
 //#include "pattern_stroke.hpp"
 #include "pattern_texture.hpp"

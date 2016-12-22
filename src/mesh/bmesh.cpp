@@ -27,14 +27,11 @@
 #include "mesh/uv_data.hpp"
 #include "mesh/base_ref_image.hpp"
 #include "mesh/ioblock.hpp"
-#include "mesh/gtexture.hpp"
-#include "mesh/bfilters.hpp"
 #include "mesh/lmesh.hpp"      // because of DECODER_ADD(LMESH) hack, below
 #include "mesh/patch_blend_weight.hpp"
 
 using namespace mlib;
 
-#include <string>
 using namespace std;
 
 //******** STATICS ********

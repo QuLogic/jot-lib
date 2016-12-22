@@ -19,7 +19,6 @@
 #include "simple_img_line_shader.hpp"
 #include "gtex/ref_image.hpp"
 #include "gtex/patch_id_texture.hpp"
-#include "gtex/color_id_texture.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_IMAGE_LINE_SHADER", false);
 

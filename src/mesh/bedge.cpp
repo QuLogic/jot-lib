@@ -19,9 +19,7 @@
 #include "std/run_avg.hpp"
 #include "disp/ray.hpp"
 #include "lmesh.hpp"
-#include "bfilters.hpp"
 #include "uv_data.hpp"
-#include "tex_coord_gen.hpp"
 
 using namespace mlib;
 

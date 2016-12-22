@@ -20,7 +20,6 @@
  **********************************************************************/
 #include "std/config.hpp"
 #include "mi.hpp"
-#include "lmesh.hpp"
 
 inline Wpt
 qinv_loc(CBvert* v)

@@ -24,9 +24,6 @@
  */
 
 #include "mesh/bmesh.hpp"
-#include "mesh/base_ref_image.hpp"
-#include "std/config.hpp"
-#include "geom/winsys.hpp"
 
 #include "pen.hpp"
 

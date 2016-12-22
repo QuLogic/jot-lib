@@ -27,14 +27,10 @@
 #include "geom/gl_view.hpp"     // for GL_VIEW::draw_pts()
 #include "geom/world.hpp"       // for message display
 #include "gtex/ref_image.hpp"
-#include "mesh/lmesh.hpp"
-#include "mesh/mi.hpp"
 #include "tess/panel.hpp"
-#include "tess/bsurface.hpp"
 #include "tess/tex_body.hpp"
 #include "tess/ti.hpp"
 #include "tess/action.hpp"
-#include "std/config.hpp"
 
 #include "ffs/ffs_util.hpp"
 #include "ffs/draw_pen.hpp"

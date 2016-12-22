@@ -32,7 +32,6 @@
 #endif
 
 #include "gtex/ref_image.hpp"
-#include "mesh/uv_data.hpp"
 
 #include "proxy_stroke.hpp"
 #include "proxy_surface.hpp"

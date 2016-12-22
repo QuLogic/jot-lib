@@ -26,11 +26,9 @@
 #include "geom/winsys.hpp"
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "color_ui.hpp"
 #include "presets_ui.hpp"
-#include "disp/colors.hpp"
 
 using namespace mlib;
 

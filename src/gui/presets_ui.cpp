@@ -25,11 +25,9 @@
 #include "geom/winsys.hpp"
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "presets_ui.hpp"
 
-#include <vector>
 using namespace mlib;
 
 #define ID_SHIFT                     10

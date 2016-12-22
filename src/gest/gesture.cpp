@@ -19,8 +19,6 @@
 #include "geom/gl_view.hpp"
 #include "geom/world.hpp"         // for DEBUG_ELLIPSE
 #include "gest_int.hpp"
-#include "mlib/point2.hpp"        // XXX - Probably doesn't need to be included.
-#include "std/config.hpp"
 #include "std/run_avg.hpp"
 
 using namespace mlib;

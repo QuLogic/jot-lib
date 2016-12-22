@@ -21,7 +21,6 @@
 #include "geom/gl_view.hpp"
 #include "mesh/uv_data.hpp"
 #include "npr_solid_texture.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

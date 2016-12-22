@@ -27,8 +27,6 @@
 
 #include "geom/gl_view.hpp"     // for GL_VIEW::draw_pts()
 #include "gtex/ref_image.hpp"
-#include "mesh/lmesh.hpp"
-#include "mesh/mi.hpp"
 #include "mesh/mesh_select_cmd.hpp"
 #include "tess/tex_body.hpp"
 

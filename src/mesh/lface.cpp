@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "mesh/lmesh.hpp"
-#include "mesh/patch.hpp"
 
 using namespace mlib;
 

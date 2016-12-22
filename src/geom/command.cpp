@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "geom/world.hpp"
-#include "geom/command.hpp"
 
 /*****************************************************************
  * COMMAND:

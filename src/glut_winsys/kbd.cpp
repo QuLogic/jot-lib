@@ -20,10 +20,8 @@
 
 #include "glut_winsys.hpp"
 #include "tty_glut.hpp"
-#include "glui/glui_jot.hpp"
 #include "kbd.hpp"
 #include "geom/fsa.hpp"
-#include "std/config.hpp"
 
 using mlib::PIXEL;
 using mlib::CXYpt;

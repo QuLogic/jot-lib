@@ -32,7 +32,6 @@
 #include "mesh/uv_data.hpp"
 #include "mesh/lmesh.hpp"
 #include "npr/hatching_group_free.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

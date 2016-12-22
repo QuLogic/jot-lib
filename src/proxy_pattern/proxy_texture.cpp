@@ -22,18 +22,14 @@
 #include "disp/colors.hpp"
 #include "geom/gl_view.hpp"
 #include "geom/world.hpp"
-#include "stroke/base_stroke.hpp"
 #include "stroke/outline_stroke.hpp"
 
 #include "gtex/solid_color.hpp"
-#include "gtex/sil_frame.hpp"
-#include "gtex/hidden_line.hpp"
 #include "gtex/tone_shader.hpp"
 #include "gtex/glsl_paper.hpp"
 #include "gtex/glsl_solid.hpp"
 
 #include "gtex/ref_image.hpp"
-#include "gtex/wireframe.hpp"
 #include "gtex/flat_shade.hpp"
 #include "gtex/smooth_shade.hpp"
 
@@ -45,10 +41,6 @@
 #include "gtex/haftone_tx.hpp"
 #include "gtex/glsl_hatching.hpp"
 #include "gtex/halftone_shader.hpp"
-#include "gtex/sil_frame.hpp"
-
-#include "npr/feature_stroke_texture.hpp"
-#include "npr/sil_and_crease_texture.hpp"
 
 static bool    debug = Config::get_var_bool("DEBUG_PROXY_TEXTURE",false);
 static double  animation_dur = 2.0;

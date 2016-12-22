@@ -18,10 +18,7 @@
 #include "gtex/gl_extensions.hpp"
 #include "gtex/paper_effect.hpp"
 #include "geom/gl_view.hpp"
-#include "std/config.hpp"
 #include "xtoon_texture.hpp"
-
-#include <iostream>
 
 using namespace std;
 using namespace mlib;

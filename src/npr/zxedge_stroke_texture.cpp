@@ -23,9 +23,6 @@
 #include "mesh/lmesh.hpp"
 #include "npr/npr_view.hpp"
 #include "zxedge_stroke_texture.hpp"
-#include "sil_and_crease_texture.hpp"
-#include "std/config.hpp"
-#include "gtex/curvature_ui.hpp"
 // Must have std/support.hpp (actually windows.h) before gl.h so
 // Windows is happy:
 #include <GL/glu.h>

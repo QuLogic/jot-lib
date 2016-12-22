@@ -17,7 +17,6 @@
  *****************************************************************/
 
 #include "base_jotapp/base_jotapp.hpp"
-#include "gest/vieweasel.hpp"
 #include "npr/npr_texture.hpp"
 
 #include "line_pen.hpp"

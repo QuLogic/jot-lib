@@ -24,10 +24,7 @@
  */
 
 #include "appear.hpp"
-#include "net/stream.hpp"
-#include "net/net_types.hpp"
 #include "geom/texturegl.hpp"
-#include "std/config.hpp"
 
 void
 APPEAR::get_texture(TAGformat &d)

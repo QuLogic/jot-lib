@@ -29,8 +29,6 @@
 #include "geom/gl_view.hpp"
 #include "gtex/util.hpp"
 #include "mesh/uv_data.hpp"
-#include "mesh/lmesh.hpp"
-#include "mesh/ledge_strip.hpp"
 
 #include "flat_shade.hpp"
 

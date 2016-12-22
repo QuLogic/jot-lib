@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "glsl_hatching.hpp"
-#include "gtex/glsl_toon.hpp"
 #include "gtex/tone_shader.hpp"
 #include "gtex/ref_image.hpp"
 static bool debug = Config::get_var_bool("DEBUG_GLSL_HATCHING", false);

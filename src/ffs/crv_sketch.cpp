@@ -29,11 +29,8 @@
 #include "geom/gl_view.hpp"       // for GL_VIEW::init_line_smooth()
 #include "geom/world.hpp"         // for WORLD::undisplay()
 #include "gtex/ref_image.hpp"     // for VisRefImage
-#include "mesh/mi.hpp"
-#include "std/config.hpp"
 
 #include "crv_sketch.hpp"
-#include "tess/tess_cmd.hpp"
 
 using namespace mlib;
 

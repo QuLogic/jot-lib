@@ -36,7 +36,6 @@
 #include "gtex/paper_effect.hpp"
 #include "mesh/ioblock.hpp"
 #include "net/io_manager.hpp"
-#include "std/config.hpp"
 
 #include "npr_texture.hpp"
 

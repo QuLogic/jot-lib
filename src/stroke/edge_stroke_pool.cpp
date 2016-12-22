@@ -19,7 +19,6 @@
 #include "edge_stroke.hpp"
 #include "gtex/gl_extensions.hpp"
 #include "mesh/bmesh.hpp"
-#include "std/config.hpp"
 
 #include <iterator>
 

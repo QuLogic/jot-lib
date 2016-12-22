@@ -19,7 +19,6 @@
 #include "proxy_texture.hpp"
 #include "hatching_texture.hpp"
 #include "npr/hatching_group_base.hpp"  //for smooth_gesture
-#include "mesh/bfilters.hpp"
 
 /**********************************************************************
 * ProxyTexture:

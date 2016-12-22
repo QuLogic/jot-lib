@@ -18,9 +18,7 @@
 #include "disp/view.hpp"
 #include "gtex/gl_extensions.hpp" // has to come before any gl.h include
 #include "gtex/paper_effect.hpp"
-#include "geom/texturegl.hpp"
 #include "geom/gl_util.hpp"
-#include "std/config.hpp"
 #include "base_stroke.hpp"
 
 using namespace mlib;

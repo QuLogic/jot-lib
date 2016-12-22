@@ -28,7 +28,6 @@
 #include <sstream>
 #include <vector>
 #include <map>
-#include <string>
 #include <limits>
 #include <algorithm>
 
@@ -36,9 +35,6 @@ using namespace std;
 
 #include "geom/texturegl.hpp"
 #include "mesh/bmesh.hpp"
-#include "mesh/patch.hpp"
-#include "mlib/points.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

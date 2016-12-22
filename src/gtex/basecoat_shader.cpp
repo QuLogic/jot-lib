@@ -18,7 +18,6 @@
 #include "gtex/gl_extensions.hpp"
 #include "tone_shader.hpp"
 #include "basecoat_shader.hpp"
-#include "multi_lights_tone.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_BASECOAT_SHADER", false);
 TAGlist* BasecoatShader::_tags = nullptr;

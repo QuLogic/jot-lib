@@ -23,8 +23,6 @@
 #include "std/config.hpp"
 #include "mesh/mi.hpp"
 
-#include <string>
-
 void
 write_verts(const BMESH &mesh, ostream &os)
 {

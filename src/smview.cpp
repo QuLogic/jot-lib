@@ -21,36 +21,22 @@
 #include "disp/recorder.hpp"
 #include "geom/distrib.hpp"
 #include "geom/recorder_ui.hpp"
-#include "geom/texture.hpp"
-#include "geom/world.hpp"
 #include "gtex/ref_image.hpp"
 #include "gtex/buffer_ref_image.hpp"
 #include "gtex/curvature_ui.hpp"
-#include "gtex/fader_texture.hpp"
 #include "gtex/flat_shade.hpp"
 #include "gtex/key_line.hpp"
 #include "gtex/sil_frame.hpp"
 #include "manip/cam_pz.hpp"
-#include "manip/cam_fp.hpp"
 #include "mesh/hybrid.hpp"
-#include "mesh/lmesh.hpp"
 #include "mesh/objreader.hpp"
-#include "mesh/patch.hpp"
-#include "mlib/points.hpp"
 
 using namespace mlib;
 
-#include "net/io_manager.hpp"
 #include "std/run_avg.hpp"
-#include "std/stop_watch.hpp"
-#include "std/support.hpp"
-#include "std/time.hpp"
 #include "widgets/alert_box.hpp"
 #include "widgets/file_select.hpp"
 #include "widgets/fps.hpp"
-#include "widgets/menu.hpp"
-
-#include "base_jotapp/base_jotapp.hpp"
 
 /* KeyMenu Callback Function Prototypes */
 

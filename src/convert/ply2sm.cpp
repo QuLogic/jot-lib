@@ -39,7 +39,6 @@
  *****************************************************************/
 
 #include "mesh/lmesh.hpp"
-#include "std/config.hpp"
 
 #include "ply.hpp"
 

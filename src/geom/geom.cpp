@@ -16,15 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/cam_focus.hpp"
-#include "disp/ray.hpp"
-#include "disp/view.hpp"
 #include "geom/geom.hpp"
-#include "geom/body.hpp"
 #include "geom/gl_view.hpp"
-#include "geom/gl_util.hpp"
-#include "std/config.hpp"
-
-#include "std/thread_mutex.hpp"
 
 using namespace mlib;
 

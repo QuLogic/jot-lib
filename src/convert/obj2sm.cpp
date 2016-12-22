@@ -107,7 +107,6 @@
 #include <sstream>
 #include <limits>
 #include "mesh/lmesh.hpp"
-#include "std/config.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_OBJ2SM",false,true);
 

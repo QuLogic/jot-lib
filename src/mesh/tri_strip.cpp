@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "bmesh.hpp"
 #include "mesh_global.hpp"        // for debugging (selecting bad faces)
-#include "stripcb.hpp"
 
 // Values used in finding triangle strips.
 //

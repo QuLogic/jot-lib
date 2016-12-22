@@ -17,7 +17,6 @@
  *****************************************************************/
 
 #include "geom/gl_view.hpp"
-#include "std/config.hpp"
 
 #include "gesture_rect_drawer.hpp"
 

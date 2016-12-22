@@ -32,22 +32,16 @@
 #include "gtex/control_line.hpp"
 #include "manip/mmenu.hpp"
 #include "map3d/map1d3d.hpp"
-#include "mesh/lmesh.hpp"
-#include "mesh/mi.hpp"
 #include "mesh/mesh_select_cmd.hpp"
 
-#include "mlib/points.hpp"
 #include "mlib/polyline.hpp"
 
 #include "tess/action.hpp"
-#include "std/config.hpp"
-#include "std/time.hpp"
 #include "tess/panel.hpp"
 #include "tess/primitive.hpp"
 #include "tess/uv_surface.hpp"
 #include "tess/skin.hpp"
 #include "tess/skin_meme.hpp"
-#include "tess/ti.hpp"
 
 #include "ffs/circle_widget.hpp"
 #include "ffs/crv_sketch.hpp"

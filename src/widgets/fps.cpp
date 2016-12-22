@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "disp/view.hpp"
 #include "geom/world.hpp"
-#include "std/config.hpp"
 #include "fps.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_FPS",false);

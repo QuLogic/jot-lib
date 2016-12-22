@@ -19,7 +19,6 @@
 #include "gtex/gl_extensions.hpp"
 
 #include "texturegl.hpp"
-#include "appear.hpp"
 #include "gl_view.hpp"
 
 #include <GL/glu.h>

@@ -17,9 +17,6 @@
  *****************************************************************/
 
 #include "gtex/buffer_ref_image.hpp"
-#include "gtex/ref_image.hpp"
-#include "geom/command.hpp"
-#include "mesh/mesh_global.hpp"
 
 
 #include "stroke/gesture_stroke_drawer.hpp"

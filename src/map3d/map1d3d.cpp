@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "map2d3d.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

@@ -22,12 +22,7 @@
 #include "std/support.hpp"
 #include <GL/glew.h>
 
-#include "std/stop_watch.hpp"
 #include "gtex/buffer_ref_image.hpp"
-#include "gtex/ref_image.hpp"
-#include "geom/command.hpp"
-#include "mesh/bmesh.hpp"
-#include "mesh/mesh_global.hpp"
 #include "gtex/smooth_shade.hpp"
 #include "pattern/pattern_texture.hpp"
 //#include "pattern/pattern_grid.hpp"
@@ -42,7 +37,6 @@
 #include "pattern/pattern_pen.hpp"
 #include "pattern/pattern_pen_ui.hpp"
 #include "pattern/stroke_group.hpp"
-#include <list> 
 #include <stack>
 
 using namespace mlib;

@@ -21,7 +21,6 @@
 #include "geom/winsys.hpp"
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "img_line_ui.hpp"
 #include "light_ui.hpp"
@@ -29,13 +28,10 @@
 #include "detail_ctrl_ui.hpp"
 #include "basecoat_ui.hpp"
 
-#include "presets_ui.hpp"
 #include "tone_shader_ui.hpp"
-#include "gui.hpp"
 
 #include "npr/img_line.hpp"
 #include "npr/img_line_shader.hpp"
-#include "npr/npr_view.hpp"
 
 using namespace mlib;
 

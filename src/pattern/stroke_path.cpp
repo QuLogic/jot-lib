@@ -16,15 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "pattern/stroke_path.hpp"
-#include "pattern/gesture_stroke.hpp"
 #include "pattern/eigen_solver.hpp"
-#include "stroke/base_stroke.hpp"
 
 using namespace mlib;
 
 
 // debug
-#include "geom/world.hpp"
 
 ///////////////////
 // constructor

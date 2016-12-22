@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "geom/world.hpp"
 #include "mesh/mi.hpp"
-#include "std/config.hpp"
 #include "panel.hpp"
 #include "tess_cmd.hpp"
 #include "uv_surface.hpp"

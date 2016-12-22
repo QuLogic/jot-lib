@@ -32,8 +32,6 @@
 #include "geom/world.hpp"
 #include "gtex/key_line.hpp"
 #include "gtex/sil_frame.hpp"
-#include "gtex/solid_color.hpp"
-#include "std/config.hpp"
 
 #include "floor.hpp"
 

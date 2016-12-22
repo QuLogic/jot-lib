@@ -19,10 +19,7 @@
  *  apply a distance transform to an input image...
  **********************************************************************/
 #include "geom/image.hpp"
-#include "std/config.hpp"
 #include "mi.hpp"
-
-#include <string>
 
 using namespace std;
 

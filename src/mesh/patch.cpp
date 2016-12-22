@@ -26,8 +26,6 @@
 #include "ioblock.hpp"
 #include "gtexture.hpp"
 #include "bfilters.hpp"
-#include "patch.hpp"
-#include "std/config.hpp"
 #include "sps/sps.hpp"
 
 // example defined in src/jot.cpp:

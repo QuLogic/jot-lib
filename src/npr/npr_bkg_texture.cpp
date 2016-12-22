@@ -22,7 +22,6 @@
 #include "mesh/uv_data.hpp"
 #include "npr_bkg_texture.hpp"
 #include "npr/hatching_group_fixed.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

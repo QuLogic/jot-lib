@@ -29,14 +29,11 @@
 #include "geom/world.hpp"
 #include "mesh/edge_frame.hpp"
 #include "mesh/mi.hpp"
-#include "std/config.hpp"
 
 #include "tess/action.hpp"
 #include "tess/skel_frame.hpp"
 #include "tess/skin.hpp"
 #include "tess/panel.hpp"
-#include "tess/tex_body.hpp"
-#include "tess/ti.hpp"
 #include "tess/xf_meme.hpp"
 #include "tess/primitive.hpp"
 

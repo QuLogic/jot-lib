@@ -33,7 +33,6 @@
 #include "geom/world.hpp"
 #include "mesh/lmesh.hpp"
 #include "npr/hatching_group_fixed.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

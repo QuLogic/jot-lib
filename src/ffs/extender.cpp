@@ -35,10 +35,8 @@
 #include "tess/uv_surface.hpp"
 #include "tess/tex_body.hpp"
 #include "tess/ti.hpp"
-#include "std/config.hpp"
 
 #include "ffs/draw_pen.hpp"
-#include "ffs/floor.hpp"
 
 #include "extender.hpp"
 

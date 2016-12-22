@@ -18,8 +18,6 @@
 #include "disp/ray.hpp"
 #include "geom/world.hpp"
 #include "gtex/smooth_shade.hpp"  // used in CAMwidget_anchor
-#include "mesh/lmesh.hpp"
-#include "std/time.hpp"
 #include "manip/cam_fp.hpp"
 
 using namespace mlib;

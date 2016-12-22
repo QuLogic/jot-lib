@@ -20,8 +20,6 @@
 #include "gtex/util.hpp"
 #include "gtex/glsl_toon.hpp"             // Temp for testing ref images.
 #include "gtex/ref_image.hpp"
-//#include "geom/gl_util.hpp"
-#include "mesh/patch.hpp"
 #include "halftone_shader.hpp"
 
 /**********************************************************************

@@ -19,8 +19,6 @@
 #include "disp/view.hpp"
 #include "stroke/stroke_generator.hpp"
 
-#include <cstdlib>
-
 static const int    INITIAL_WINDOW_SIZE   = 4;
 static const double INITIAL_RHO_PERCENT   = 0.01;
 static const double INITIAL_Q_TOLERANCE   = 10.0;

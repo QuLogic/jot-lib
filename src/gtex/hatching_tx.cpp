@@ -17,9 +17,6 @@
  *****************************************************************/
 #include "gtex/ref_image.hpp"
 #include "gtex/halo_ref_image.hpp"
-#include "glui/glui_jot.hpp"
-#include "mesh/mi.hpp"
-#include "std/stop_watch.hpp"
 
 #include "hatching_tx.hpp"
 

@@ -23,8 +23,6 @@
 #include "gtex/ref_image.hpp"
 
 #include "mesh/uv_data.hpp"
-#include "mesh/lmesh.hpp"
-#include "mesh/ledge_strip.hpp"
 
 #include "mesh/vert_attrib.hpp"
 #include "gl_sphir_tex_coord_gen.hpp"

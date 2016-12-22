@@ -17,7 +17,6 @@
  *****************************************************************/
 
 #if defined(__linux__) || defined(_AIX)
-#include <sys/ioctl.h>
 #elif WIN32
 // XXX: Temporary until win32 serial support gets figured out
 #define ioctl(a,b,c)

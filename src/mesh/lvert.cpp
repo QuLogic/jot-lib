@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "std/config.hpp"
 #include "mesh/mi.hpp"
-#include "mesh/lmesh.hpp"
 
 using namespace mlib;
 

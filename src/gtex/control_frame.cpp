@@ -17,8 +17,6 @@
  *****************************************************************/
 #include "geom/gl_view.hpp"
 #include "mesh/lpatch.hpp"
-#include "mesh/mi.hpp"
-#include "std/config.hpp"
 #include "control_frame.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_CONTROL_FRAME",false,true);

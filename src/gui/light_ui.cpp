@@ -26,7 +26,6 @@
 #include "geom/winsys.hpp"
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "light_ui.hpp"
 #include "color_ui.hpp"

@@ -19,8 +19,6 @@
 
 #include "gtex/gl_extensions.hpp"
 #include "paper_effect.hpp"
-#include "geom/texturegl.hpp"
-#include "geom/gl_util.hpp"
 #include "geom/gl_view.hpp"
 
 /*****************************************************************

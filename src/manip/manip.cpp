@@ -19,7 +19,6 @@
 #include "disp/ray.hpp"
 #include "geom/fsa.hpp"
 #include "geom/geom.hpp"
-#include "geom/world.hpp"
 #include "manip/manip.hpp"
 
 using mlib::Wpt;

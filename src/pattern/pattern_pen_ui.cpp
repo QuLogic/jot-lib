@@ -37,7 +37,6 @@
 #include "stroke/base_stroke.hpp"
 
 #include <fstream>
-#include <map>
 
 #include "pattern_pen.hpp"
 #include "pattern_pen_ui.hpp"

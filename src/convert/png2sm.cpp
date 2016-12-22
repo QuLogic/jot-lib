@@ -19,7 +19,6 @@
  *   convert from png heightmap to mesh
  **********************************************************************/
 #include "geom/image.hpp"
-#include "std/config.hpp"
 #include "mesh/mi.hpp"
 
 static bool debug    = Config::get_var_bool("DEBUG_PNG2SM",false,true);

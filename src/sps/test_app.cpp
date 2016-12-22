@@ -18,7 +18,6 @@
 #include "test_app.hpp"
 #include "gtex/smooth_shade.hpp"  // used in BALLwidget_anchor
 #include "gtex/wireframe.hpp"  // used in GRIDwidget_anchor
-#include "mesh/lmesh.hpp"
 
 const int HEIGHT = 6;
 const double REGULARITY = 20;

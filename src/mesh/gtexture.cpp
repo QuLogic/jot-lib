@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "mesh/gtexture.hpp"
 #include "mesh/patch.hpp"
-#include "mlib/points.hpp"
 
 const string GTexture::_type_name("GTEXTURE");
 const string GTexture::_begin_tag(string("#BEGIN ") + _type_name + string("\n"));

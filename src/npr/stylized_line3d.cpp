@@ -19,7 +19,6 @@
 #include "geom/gl_util.hpp"
 #include "geom/world.hpp"
 #include "gtex/ref_image.hpp"
-#include "mesh/mi.hpp"
 
 #include "ffstexture.hpp"
 #include "stylized_line3d.hpp"

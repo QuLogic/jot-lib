@@ -18,7 +18,6 @@
 
 #include "geom/gl_view.hpp"
 #include "gtex/solid_color.hpp"
-#include "mesh/patch.hpp"
 
 #include "zxedge_stroke_texture.hpp"
 #include "zxkey_line.hpp"

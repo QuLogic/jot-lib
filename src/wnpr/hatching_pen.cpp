@@ -29,7 +29,6 @@
 
 
 #include "npr/npr_texture.hpp"
-#include "npr/hatching_group.hpp"
 
 #include "hatching_pen.hpp"
 
@@ -176,8 +175,6 @@ HatchingPen::deactivate(State* s)
 
 }
 
-
-#include "mesh/uv_data.hpp"
 
 /////////////////////////////////////
 // key()
@@ -806,8 +803,6 @@ HatchingPen::handle_event(CEvent&, State* &)
 
    return 0;
 }
-
-#include "stroke/base_stroke.hpp"
 
 /////////////////////////////////////
 // update_gesture_proto()

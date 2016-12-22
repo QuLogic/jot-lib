@@ -20,7 +20,6 @@
 #include "geom/winsys.hpp"
 #include <GL/glew.h>
 #include "glui/glui_jot.hpp"
-#include "std/support.hpp"
 #include "std/file.hpp"
 #include "base_ui.hpp"
 

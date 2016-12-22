@@ -29,7 +29,6 @@
 using namespace mlib;
 
 #include "mesh/bmesh.hpp"
-#include "disp/view.hpp"
 #include "ffs/cursor3d.hpp"
 #include "ffs/floor.hpp"
 

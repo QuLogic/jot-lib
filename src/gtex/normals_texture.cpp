@@ -16,10 +16,7 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "normals_texture.hpp"
-#include "std/config.hpp"
 #include "gtex/gl_sphir_tex_coord_gen.hpp"
-#include "gtex/gl_extensions.hpp"
-#include "gtex/util.hpp"
 #include "mesh/uv_data.hpp"
 #include "mesh/vert_attrib.hpp"
 

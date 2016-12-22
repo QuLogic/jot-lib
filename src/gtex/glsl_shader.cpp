@@ -18,8 +18,6 @@
 #include <fstream>
 #include "gtex/gl_extensions.hpp"
 #include "gtex/util.hpp"
-#include "geom/gl_util.hpp"
-#include "mesh/patch.hpp"
 #include "paper_effect.hpp"
 #include "glsl_shader.hpp"
 

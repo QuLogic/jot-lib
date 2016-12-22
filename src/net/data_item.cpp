@@ -17,8 +17,6 @@
  *****************************************************************/
 #include "std/config.hpp"
 #include "data_item.hpp"
-#include "mlib/points.hpp"
-#include "ctype.h"
 
 using mlib::Wpt;
 using mlib::Wvec;

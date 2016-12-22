@@ -28,7 +28,6 @@
 #include "disp/colors.hpp"                // Color::blue_pencil_d
 #include "gtex/util.hpp"                  // for draw_strip
 #include "gtex/ref_image.hpp"             // for VisRefImage
-#include "gtex/basic_texture.hpp"         // GLStripCB
 #include "tess/mesh_op.hpp"               // FIT_VERTS_CMD
 #include "tess/primitive.hpp"
 

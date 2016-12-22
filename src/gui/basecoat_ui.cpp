@@ -23,9 +23,7 @@
 #include <GL/glew.h>
 
 #include "geom/winsys.hpp"
-#include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "gtex/tone_shader.hpp"
 

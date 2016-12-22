@@ -18,8 +18,6 @@
 #include "std/support.hpp"
 #include "std/config.hpp"
 #include "disp/cam_focus.hpp"
-#include "net/stream.hpp"
-#include "net/net_types.hpp"
 
 
 using namespace mlib;

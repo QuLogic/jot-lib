@@ -24,7 +24,6 @@
  *      output mesh.
  **********************************************************************/
 #include "mesh/lmesh.hpp"
-#include "std/config.hpp"
 
 inline BMESHptr
 read_mesh(char* infile)

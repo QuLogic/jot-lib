@@ -22,8 +22,6 @@
 #include "mesh/bvert.hpp"
 #include "mesh/mi.hpp"
 #include "mesh/uv_data.hpp"
-#include "npr/hatching_group_base.hpp"
-#include "std/run_avg.hpp"
 
 #include "proxy_surface.hpp"
 

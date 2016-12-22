@@ -4,9 +4,8 @@
 # Send complaints to rkalnins
 #####################################
 
+import Blender
 import Blender210
-import Blender 
-import math
 import string
 
 #Defaults

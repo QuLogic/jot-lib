@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "std/config.hpp"
 #include "mi.hpp"
-#include "lmesh.hpp"
 
 int 
 main(int argc, char *argv[])

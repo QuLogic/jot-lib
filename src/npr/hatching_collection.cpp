@@ -34,7 +34,6 @@
 #include "base_jotapp/base_jotapp.hpp"
 #include "manip/cam_pz.hpp"
 #include "manip/cam_fp.hpp"
-#include "manip/cam_edit.hpp"
 
 using mlib::CWtransf;
 using mlib::CNDCpt;

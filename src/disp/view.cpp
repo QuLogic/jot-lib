@@ -20,11 +20,9 @@
 #include "std/config.hpp"
 
 #include "std/stop_watch.hpp"
-#include "std/thread.hpp"
 
 #include "disp/colors.hpp"
 #include "disp/ray.hpp"
-#include "disp/gel.hpp"
 #include "disp/cam_focus.hpp"
 #include "disp/recorder.hpp"
 #include "disp/animator.hpp"

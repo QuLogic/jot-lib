@@ -23,8 +23,6 @@
  */
 
 #include "mlib/points.hpp"
-#include "mlib/global.hpp"
-#include "mlib/vec4.hpp"
 
 std::ostream &
 mlib::operator<<(std::ostream &out, const Vec4& v)

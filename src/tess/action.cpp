@@ -18,7 +18,6 @@
 #include "tess/action.hpp"
 #include "tess/panel.hpp"
 #include "tess/tex_body.hpp"
-#include "tess/ti.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_ACTION",false);
 

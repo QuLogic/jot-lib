@@ -19,8 +19,6 @@
 #include "stroke_path.hpp"
 
 #include <queue>
-#include <vector>
-#include "geom/world.hpp"
 
 using namespace mlib;
 

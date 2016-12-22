@@ -24,20 +24,14 @@
 
 #include <iostream>
 #include <vector>
-#include <algorithm>
-#include <typeinfo>
 #include <cstring>
-#include <cassert>
 
 using namespace std;
 
 #include "gtex/gl_extensions.hpp"
 #include "gtex/rendering_mode.hpp"
-#include "gtex/basic_texture.hpp"
 #include "gtex/solid_color.hpp"
 #include "gtex/line_drawing.hpp"
-
-#include "mlib/points.hpp"
 
 using namespace mlib;
 

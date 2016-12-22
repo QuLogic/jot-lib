@@ -23,14 +23,11 @@
  *
  * ------------------------------------------------------------------------- */
 
-#include "std/config.hpp"
-
 /* ANSI includes */
 #ifdef macosx
 #include <sys/ioctl.h>
 #endif
 
-#include "std/support.hpp"
 #include "net.hpp"
 
 /* Includes for ioctl (for num_bytes_to_read()) */

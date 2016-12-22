@@ -17,8 +17,6 @@
  *****************************************************************/
 #include "std/config.hpp"
 #include "lmesh.hpp"
-#include "mesh_global.hpp"
-#include "patch.hpp"
 
 // static data
 Bface_list MeshGlobal::_selected_faces;

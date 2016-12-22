@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "buffer_ref_image.hpp"
-#include "geom/world.hpp"
-#include "geom/gl_view.hpp"
 
 /**********************************************************************
  * BufferRefImage:

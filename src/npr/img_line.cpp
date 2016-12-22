@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "gtex/util.hpp"
-#include "mesh/patch.hpp"
-#include "mlib/point2i.hpp"
 
 #include "img_line.hpp"
 

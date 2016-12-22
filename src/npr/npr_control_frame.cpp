@@ -19,7 +19,6 @@
 #include "geom/gl_view.hpp"
 #include "geom/world.hpp"
 #include "mesh/ledge_strip.hpp"
-#include "mesh/bfilters.hpp"
 #include "stroke/base_stroke.hpp"
 #include "npr_control_frame.hpp"
 

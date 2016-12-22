@@ -16,11 +16,8 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "feature_stroke_texture.hpp"
-#include "gtex/color_id_texture.hpp"
-#include "gtex/ref_image.hpp"
 #include "stroke/decal_line_stroke.hpp"
 #include "mesh/ioblock.hpp"
-#include "geom/gl_view.hpp"
 
 using namespace mlib;
 

@@ -42,8 +42,6 @@ using namespace mlib;
 #include "mesh/bface.hpp"
 #include "mesh/bmesh.hpp"
 
-#include "mesh/bmesh_curvature.hpp"
-
 /* Helper Functions for Computing Curvature */
 
 void rot_coord_sys(const Wvec &old_u, const Wvec &old_v,

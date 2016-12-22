@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "gesture_cell.hpp"
-#include "mlib/points.hpp"
 #include "pattern_pen_ui.hpp"
 
 using namespace mlib;

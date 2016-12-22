@@ -21,7 +21,6 @@
 #include "geom/world.hpp"
 #include "gtex/glsl_toon.hpp"
 #include "gtex/glsl_halo.hpp"
-#include "mesh/lmesh.hpp"
 #include "net/io_manager.hpp"
 
 #include "tex_body.hpp"

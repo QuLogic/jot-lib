@@ -16,16 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "base_jotapp/base_jotapp.hpp"
-#include "disp/ref_img_client.hpp"
 #include "mesh/lmesh.hpp"
 #include "wnpr/line_pen.hpp"
 #include "wnpr/sil_ui.hpp"
 #include "stroke/edge_stroke.hpp"
-#include "stroke/edge_stroke_pool.hpp"
 
 //QQQ #include "svd_fit.hpp"
-#include "npr_view.hpp"
-#include "sil_and_crease_texture.hpp"
 
 using namespace mlib;
 

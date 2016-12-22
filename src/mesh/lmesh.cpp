@@ -16,15 +16,12 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/ray.hpp"
-#include "disp/colors.hpp"
 #include "geom/world.hpp"   // XXX - for debugging
 #include "mlib/statistics.hpp"
-#include "std/config.hpp"
 #include "lpatch.hpp"
 
 using namespace mlib;
 
-#include <string>
 using namespace std;
 
 // add LMESH to decoder hash table:

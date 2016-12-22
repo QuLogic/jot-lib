@@ -19,10 +19,7 @@
  *  experimental code to do histogram equalization on an image
  **********************************************************************/
 #include "geom/histogram.hpp"
-#include "std/config.hpp"
 #include "mi.hpp"
-
-#include <string>
 
 using namespace std;
 

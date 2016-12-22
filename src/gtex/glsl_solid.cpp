@@ -17,7 +17,7 @@
  *****************************************************************/
 #include "gtex/gl_extensions.hpp"
 #include "glsl_solid.hpp"
-#include "disp/colors.hpp"
+
 /**********************************************************************
  * GLSLSolidShader:
  *

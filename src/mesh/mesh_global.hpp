@@ -21,6 +21,7 @@
 
 #include "bedge.hpp"
 #include "bface.hpp"
+#include "bmesh.hpp"
 
 /*****************************************************************
  * MeshGlobal:

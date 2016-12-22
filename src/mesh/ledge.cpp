@@ -18,7 +18,6 @@
 #include "std/config.hpp"
 #include "subdiv_calc.hpp"
 #include "lmesh.hpp"
-#include "mi.hpp"
 
 Ledge::~Ledge() 
 {

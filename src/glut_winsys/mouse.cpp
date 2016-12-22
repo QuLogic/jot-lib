@@ -17,8 +17,6 @@
  *****************************************************************/
 
 #include "dev/dev.hpp"
-#include "mlib/points.hpp"
-#include "std/stop_watch.hpp"
 #include "std/config.hpp"
 
 #include <GL/glut.h>

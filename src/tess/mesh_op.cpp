@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "disp/colors.hpp"
 #include "geom/world.hpp"
-#include "std/config.hpp"
 #include "mesh/mi.hpp"
 
 #include "tess/bbase.hpp"

@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/colors.hpp"
-#include "std/config.hpp"
 #include "geom/gl_view.hpp"
 #include "mesh/bfilters.hpp"
 #include "wireframe.hpp"

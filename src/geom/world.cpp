@@ -23,11 +23,7 @@
 #include "geom/text2d.hpp"
 #include "geom/line3d.hpp"
 #include "geom/world.hpp"
-#include "geom/winsys.hpp"
 
-#include "std/config.hpp"
-#include "std/thread.hpp"
-#include "std/time.hpp"
 #include "std/run_avg.hpp"
 
 using namespace mlib;

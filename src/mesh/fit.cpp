@@ -32,7 +32,6 @@
  **********************************************************************/
 #include "std/stop_watch.hpp"
 #include "mi.hpp"
-#include "lmesh.hpp"
 
 void
 fit(LMESHptr& mesh, bool do_gauss_seidel)

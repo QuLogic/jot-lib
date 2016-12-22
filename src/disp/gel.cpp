@@ -16,10 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "geom/distrib.hpp"
-#include "std/config.hpp"
-#include "gel_filt.hpp"
-#include "ray.hpp"
-#include "jot_vars.hpp"
 
 using namespace mlib;
 

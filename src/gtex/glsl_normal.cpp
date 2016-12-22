@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "gtex/gl_extensions.hpp"
 #include "glsl_normal.hpp"
-#include "gtex/glsl_toon.hpp"
 #include "gtex/ref_image.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_GLSL_NORMAL", false);

@@ -17,7 +17,6 @@
  *****************************************************************/
 
 #include "geom/gl_view.hpp"
-#include "std/config.hpp"
 #include "pattern_pen_ui.hpp"
 #include "gesture_cell_drawer.hpp"
 

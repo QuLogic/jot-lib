@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "mesh/mi.hpp"
 #include "haftone_tx.hpp"
-#include "std/stop_watch.hpp"
 
 #include "gtex/ref_image.hpp"
 #include "gtex/halo_ref_image.hpp"

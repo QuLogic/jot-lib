@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "gesture_stroke.hpp"
-#include "mlib/points.hpp"
-#include "disp/gel.hpp"
 
 using namespace mlib;
 

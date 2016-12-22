@@ -19,8 +19,6 @@
 #include "geom/gl_view.hpp"       // GL_VIEW::init_line_smooth()
 #include "gtex/basic_texture.hpp"
 #include "gtex/ref_image.hpp"     // for VisRefImage::lookup()
-#include "std/config.hpp"
-#include "geom/world.hpp"
 
 #include "bpoint.hpp"
 #include "bcurve.hpp"

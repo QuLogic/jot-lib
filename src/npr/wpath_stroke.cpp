@@ -16,11 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "base_jotapp/base_jotapp.hpp"
-#include "disp/ref_img_client.hpp"
 #include "mesh/lmesh.hpp"
 #include "wnpr/line_pen.hpp"
 #include "wnpr/sil_ui.hpp"
-#include "npr/npr_view.hpp"
 #include "wpath_stroke.hpp"
 
 #include <fstream>

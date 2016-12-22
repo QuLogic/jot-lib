@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "patch.hpp"
-#include "stripcb.hpp"
 #include "vert_strip.hpp"
 
 /**********************************************************************

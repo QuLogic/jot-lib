@@ -18,7 +18,6 @@
 #include "pattern/bbox_cell.hpp"
 
 #include "geom/gl_view.hpp"
-#include "std/config.hpp"
 
 using namespace std;
 using namespace mlib;

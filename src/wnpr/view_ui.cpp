@@ -36,7 +36,6 @@
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
 #include "gtex/paper_effect.hpp"
-#include "std/config.hpp"
 
 #include "view_ui.hpp"
 

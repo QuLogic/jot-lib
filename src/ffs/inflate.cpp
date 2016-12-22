@@ -29,16 +29,10 @@
 #include "geom/gl_view.hpp"               // for GL_VIEW::init_line_smooth()
 #include "geom/world.hpp"                 // for WORLD::undisplay()
 #include "gtex/ref_image.hpp"             // for VisRefImage
-#include "gtex/basic_texture.hpp"         // for GLStripCB
 #include "mesh/mi.hpp"
-#include "std/config.hpp"
-#include "std/run_avg.hpp"
 
 #include "tess/ti.hpp"
 #include "tess/skin.hpp"
-#include "tess/tess_cmd.hpp"
-#include "tess/tess_debug.hpp"
-#include "tess/uv_surface.hpp"
 
 #include "inflate.hpp"
 

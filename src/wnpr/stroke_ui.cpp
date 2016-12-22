@@ -58,10 +58,7 @@
 
 #include "gtex/gl_extensions.hpp"
 #include "base_jotapp/base_jotapp.hpp"
-#include "geom/winsys.hpp"
-#include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 #include "std/file.hpp"
 #include <fstream>
 

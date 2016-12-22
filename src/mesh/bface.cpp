@@ -18,7 +18,6 @@
 #include "mesh/patch.hpp"
 #include "mesh/mi.hpp"
 #include "mesh/uv_data.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

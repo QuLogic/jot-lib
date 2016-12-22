@@ -16,15 +16,9 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/view.hpp"
-#include "disp/colors.hpp"
 #include "geom/world.hpp"
 #include "gtex/util.hpp"
-#include "std/config.hpp"
 
-#include "tess/mesh_op.hpp"
-#include "tess/skin.hpp"
-#include "tess/skin_meme.hpp"
-#include "tess/subdiv_updater.hpp"
 #include "tess/mesh_op.hpp"
 
 using namespace mlib;

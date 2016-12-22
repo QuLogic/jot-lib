@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "gel_set.hpp"
-#include "ray.hpp"        // for GEL_list<T>::intersect
 
 using namespace mlib;
 

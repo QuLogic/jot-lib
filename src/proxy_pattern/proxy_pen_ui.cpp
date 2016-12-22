@@ -25,9 +25,7 @@
 #include "gui/patch_ui.hpp"
 #include "gui/hatching_ui.hpp"
 #include "gui/halftone_ui.hpp"
-#include "gui/tone_shader_ui.hpp"
 #include "gui/proxy_texture_ui.hpp"
-#include "gui/gui.hpp"
 #include "gui/painterly_ui.hpp"
 
 #include "proxy_pen_ui.hpp"

@@ -24,9 +24,7 @@
  */
 
 #include "mesh/bvert.hpp"
-#include "mesh/bedge.hpp"
 #include "mesh/bface.hpp"
-#include "mesh/bmesh.hpp"
 #include "mesh/mesh_global.hpp"
 
 #include "mesh_select_cmd.hpp"

@@ -18,9 +18,6 @@
 #include "gtex/gl_extensions.hpp"
 #include "geom/gl_view.hpp"
 #include "mesh/lpatch.hpp"
-#include "mesh/mi.hpp"
-#include "gtex/paper_effect.hpp"
-#include "std/config.hpp"
 
 #include "ffs_control_frame.hpp"
 

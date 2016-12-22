@@ -25,14 +25,11 @@
 #include "geom/winsys.hpp"
 #include "geom/world.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/config.hpp"
 
 #include "proxy_pattern/proxy_texture.hpp"
 #include "proxy_texture_ui.hpp"
 #include "color_ui.hpp"
 #include "patch_selection_ui.hpp"
-
-#include "gui.hpp"
 
 using namespace mlib;
 

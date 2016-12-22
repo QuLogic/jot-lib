@@ -18,7 +18,6 @@
 
 #include "disp/animator.hpp"
 #include "net/io_manager.hpp"
-#include "std/config.hpp"
 
 // The disp library shouldn't reference anything in the geom
 // library.  (Doing so causes link problems in some apps,

@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "std/config.hpp"
-#include "std/support.hpp"
 #include <GL/glew.h> // XXX - remove when debugging phase is over
 
 #include "lmesh.hpp"

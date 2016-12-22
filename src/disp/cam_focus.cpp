@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/cam_focus.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

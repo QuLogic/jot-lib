@@ -30,8 +30,6 @@
 #include "gtex/rendering_mode.hpp"
 #include "gtex/curvature_texture.hpp"
 
-#include "mlib/points.hpp"
-
 using namespace std;
 using namespace mlib;
 

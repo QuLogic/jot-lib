@@ -16,11 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "distrib.hpp"
-#include "geom/world.hpp"
-#include "geom/gl_view.hpp"
-#include "geom/texturegl.hpp"
-#include "net/io_manager.hpp"
-#include "std/config.hpp"
 
 using namespace mlib;
 

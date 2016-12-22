@@ -16,8 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "mesh/mi.hpp"
-#include "mesh/patch.hpp"
-#include "mesh/stripcb.hpp"
 
 char header[] =
 "#Inventor V2.1 ascii\n"

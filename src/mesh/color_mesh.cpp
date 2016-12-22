@@ -16,7 +16,6 @@
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
 #include "disp/colors.hpp"
-#include "std/config.hpp"
 #include "mi.hpp"
 
 using namespace mlib;

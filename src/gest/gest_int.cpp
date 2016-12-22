@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "geom/world.hpp"
 #include "gtex/buffer_ref_image.hpp"
-#include "std/config.hpp"
 
 #include "gest_int.hpp"
 

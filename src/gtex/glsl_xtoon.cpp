@@ -17,8 +17,6 @@
  *****************************************************************/
 #include "gtex/gl_extensions.hpp"
 #include "gtex/util.hpp"
-#include "geom/gl_util.hpp"
-#include "mesh/patch.hpp"
 #include "glsl_xtoon.hpp"
 
 static bool debug = Config::get_var_bool("DEBUG_GLSL_XTOON", false);

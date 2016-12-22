@@ -22,17 +22,11 @@
 #include "gtex/color_id_texture.hpp"      // for ColorIDTexture::draw_edges()
 #include "gtex/ref_image.hpp"             // for VisRefImage::lookup()
 #include "mesh/mi.hpp"
-#include "mlib/statistics.hpp"
 #include "npr/ffstexture.hpp"
 #include "npr/wpath_stroke.hpp"
-#include "std/config.hpp"
 
 #include "ti.hpp"
 #include "action.hpp"
-#include "tess_cmd.hpp"
-#include "tex_body.hpp"
-#include "bcurve.hpp"
-#include "bsurface.hpp"
 #include "uv_surface.hpp"
 #include "skin.hpp"
 #include "skin_meme.hpp"

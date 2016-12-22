@@ -17,7 +17,6 @@
  *****************************************************************/
 #include "geom/world.hpp"
 #include "gtex/util.hpp"  // XXX - remove after done debugging
-#include "std/config.hpp"
 #include "mesh/uv_data.hpp"
 
 using namespace mlib;
@@ -734,7 +733,6 @@ UVdata::set_subdiv_uv(Lvert* v, Lface* f)
 /*****************************************************************
  * Computing subdivision uv-coords
  *****************************************************************/
-#include "subdiv_calc.hpp"
 
 // Need this operator defined to instantiate LoopCalc<UVpt> below:
 UVpt

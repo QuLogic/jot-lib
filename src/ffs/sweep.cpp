@@ -28,14 +28,11 @@
 #include "disp/colors.hpp"                // named colors, e.g. blue_pencil
 #include "geom/world.hpp"                 // for WORLD::undisplay()
 #include "gtex/ref_image.hpp"             // for VisRefImage
-#include "gtex/basic_texture.hpp"         // for GLStripCB
-#include "mesh/mi.hpp"                    // mesh inline methods
 
 #include "tess/bcurve.hpp"                // Bcurve
 #include "tess/action.hpp"
 #include "tess/uv_surface.hpp"            // UVsurface
 #include "tess/ti.hpp"                    // tess inline methods
-#include "std/config.hpp"                 // variables
 
 #include "ffs/ffs_util.hpp"
 

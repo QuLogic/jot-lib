@@ -97,11 +97,9 @@
  * map_Kd string                Texture map_Kd (filename)
  ********************************************************************************/
 #include <fstream>
-#include <string>
 #include <sstream>
 #include <limits>
 #include "mesh/lmesh.hpp"
-#include "std/config.hpp"
 #include "net/io_manager.hpp"
 
 inline void

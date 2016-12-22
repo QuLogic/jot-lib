@@ -39,11 +39,7 @@
 #include "geom/world.hpp"
 #include "tess/tex_body.hpp"
 #include "glui/glui_jot.hpp"
-#include "std/stop_watch.hpp"
 #include "npr/npr_texture.hpp"
-#include "std/config.hpp"
-
-#include "sil_ui.hpp"
 
 /*****************************************************************
  * SilUI
