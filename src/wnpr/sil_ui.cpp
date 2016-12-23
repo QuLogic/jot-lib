@@ -2398,9 +2398,10 @@ SilUI::select_gel(GEL *g)
    
    _selectedGEL = g;
 
-   assert(TEXBODY::isa(g));
-   
-   CBMESHptr b = ((TEXBODY*)&*g)->cur_rep();
+   auto tb = dynamic_cast<TEXBODY*>(g);
+   assert(tb);
+
+   CBMESHptr b = tb->cur_rep();
    
    assert(b != nullptr);
    
@@ -2605,9 +2606,10 @@ SilUI::select_next_patch()
    {
       assert(_selectedPatch);
 
-      assert(TEXBODY::isa(_selectedGEL));
-   
-      CBMESHptr b = ((TEXBODY*)_selectedGEL)->cur_rep();
+      auto tb = dynamic_cast<TEXBODY*>(_selectedGEL);
+      assert(tb);
+
+      CBMESHptr b = tb->cur_rep();
    
       assert(b != nullptr);
    

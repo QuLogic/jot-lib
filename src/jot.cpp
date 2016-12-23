@@ -1646,7 +1646,7 @@ inline void
 demote_surface_meme(CBvert* v)
 {
    VertMeme* vm = Bbase::find_boss_vmeme(v);
-   if (vm && Bsurface::isa(vm->bbase()))
+   if (vm && dynamic_cast<Bsurface*>(vm->bbase()))
       vm->get_demoted();
 }
 
@@ -2114,9 +2114,7 @@ write(const Event&, State *&)
 
    string fname;
 
-   if ( TEXBODY::isa(mesh->geom()) ) {
-      TEXBODY *t = (TEXBODY*)mesh->geom();
-
+   if (auto t = dynamic_cast<TEXBODY*>(mesh->geom())) {
       if (t->mesh_file() == "") {
          fname = "out.sm";
       } else {

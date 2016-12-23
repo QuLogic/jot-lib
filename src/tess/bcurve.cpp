@@ -100,7 +100,7 @@ qr_centroid_skincurve(SkinCurveMap* m, Bvert* v)
    Bedge_list star;
    for (Bedge_list::size_type i = 0; i < nbrs.size(); i++) {
       Bbase* ctrl = Bbase::find_controller(nbrs[i]);
-      if (Bcurve::isa(ctrl) || Skin::isa(ctrl))
+      if (dynamic_cast<Bcurve*>(ctrl) || dynamic_cast<Skin*>(ctrl))
          star.push_back(nbrs[i]);
    }
 
@@ -115,8 +115,10 @@ qr_centroid_skincurve(SkinCurveMap* m, Bvert* v)
          // add contribution from r neighbor
          double w = e->length()/avg_len;
          Bbase* ctrl = Bbase::find_controller(e);
-         if (Bcurve::isa(ctrl) && ((Bcurve*)ctrl)->map()==m)
-            w = 0.5;
+         if (auto bc = dynamic_cast<Bcurve*>(ctrl)) {
+            if (bc->map() == m)
+               w = 0.5;
+         }
 	      ret = ret + w*e->other_vertex(v)->loc();
          net_weight += w;
          Bface* f = ccw_face(e, v);
@@ -138,8 +140,8 @@ CurveMeme::smooth_target() const
 {
    // Target location for being more "relaxed":
 
-   if (SkinCurveMap::isa(map())) {
-      return qr_centroid_skincurve((SkinCurveMap*)map(), vert());
+   if (auto scm = dynamic_cast<SkinCurveMap*>(map())) {
+      return qr_centroid_skincurve(scm, vert());
    }
    return VertMeme::smooth_target();
 
@@ -636,7 +638,8 @@ Bcurve::Bcurve(
        _move_by(0),
        _cur_reshape_mode(RESHAPE_NONE)
 {
-   assert(Skin::isa(surf));
+   Skin* skin = dynamic_cast<Skin*>(surf);
+   assert(skin);
 
    // create bcurve that lives on a specified set of vertices on a skin
    bool debug = Config::get_var_bool("DEBUG_BCURVE_ON_SKIN",false);
@@ -652,7 +655,6 @@ Bcurve::Bcurve(
       err_adv(debug, "vert list is closed");
    }   
    
-   Skin* skin = (Skin*)surf;
    Bvert_list s_verts = skin->get_mapper()->a_to_b(verts);
    if (s_verts.empty())
       s_verts = verts;
@@ -729,8 +731,8 @@ Bcurve::Bcurve(
    Bsimplex_list simps;
    std::vector<Wvec> bcs;
    for (Bvert_list::size_type i = !is_closed; i < s_verts.size()-!is_closed; i++) {
-      assert(SkinMeme::isa(Bbase::find_boss_meme(s_verts[i])));
-      SkinMeme* meme = (SkinMeme*)Bbase::find_boss_meme(s_verts[i]);
+      SkinMeme* meme = dynamic_cast<SkinMeme*>(Bbase::find_boss_meme(s_verts[i]));
+      assert(meme);
       simps.push_back(meme->track_simplex());
       bcs.push_back(meme->get_bc());
    }
@@ -963,8 +965,8 @@ bool
 Bcurve::apply_update()
 {
    for (VertMemeList::size_type i = 0; i < _vmemes.size(); i++) {
-      if (CurveMeme::isa(_vmemes[i]))
-         ((CurveMeme*)_vmemes[i])->reset_count();
+      if (auto cm = dynamic_cast<CurveMeme*>(_vmemes[i]))
+         cm->reset_count();
    }
    return Bbase::apply_update();
 }
@@ -3351,8 +3353,9 @@ Bcurve::reshape_on_surface(const PIXEL_list &new_curve)
       new_uvs.push_back(new_uvs.front());
    }
 
-   assert(SurfaceCurveMap::isa(_map));
-   ((SurfaceCurveMap*)_map)->set_uvs(new_uvs);
+   auto scm = dynamic_cast<SurfaceCurveMap*>(_map);
+   assert(scm);
+   scm->set_uvs(new_uvs);
   
    err_adv(debug, "end Bcurve::reshape_on_surface()");
 
@@ -3463,7 +3466,8 @@ Bcurve::reshape_along_normals(const PIXEL_list &new_curve)
 {
    cerr << "Bcurve::reshape_along_normals()" << endl;
 
-   if (!Wpt_listMap::isa(_map)) {
+   auto listmap = dynamic_cast<Wpt_listMap*>(_map);
+   if (!listmap) {
       cerr << "Bcurve::reshape_along_normals(): ERROR " 
          "must have a Wpt_listMap" 
            << endl;
@@ -3532,7 +3536,7 @@ Bcurve::reshape_along_normals(const PIXEL_list &new_curve)
       }
    }
   
-   ((Wpt_listMap*)_map)->set_pts(new_pts);
+   listmap->set_pts(new_pts);
 
    return true;
 }
@@ -3595,13 +3599,13 @@ Bcurve::get_map_tvals() const
    // this is sort of undefined for RayMaps
    size_t i;
 
-   if (Wpt_listMap::isa(_map)) {
-      Wpt_list wpts = ((Wpt_listMap*)_map)->pts();
+   if (auto wmap = dynamic_cast<Wpt_listMap*>(_map)) {
+      Wpt_list wpts = wmap->pts();
       for (i = 0; i < wpts.size(); i++) {
          ret.push_back(wpts.partial_length(i) / wpts.length());
       }
-   } else if (SurfaceCurveMap::isa(_map)) {
-      UVpt_list uvs = ((SurfaceCurveMap*)_map)->uvs();
+   } else if (auto uvmap = dynamic_cast<SurfaceCurveMap*>(_map)) {
+      UVpt_list uvs = uvmap->uvs();
       for (i = 0; i < uvs.size(); i++) {
          ret.push_back(uvs.partial_length(i) / uvs.length());
       }

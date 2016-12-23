@@ -138,7 +138,7 @@ check_tube_side(Bedge* e)
    // of the tube
    Bsurface_list surfs = Primitive::get_primitives(
       get_top_level(e->get_all_faces()));
-   if (surfs.num() != 1 || !Primitive::isa(surfs[0]))
+   if (surfs.num() != 1 || !dynamic_cast<Primitive*>(surfs[0]))
       return false;   
    if (is_cap(e->f1()) || is_cap(e->f2()))
       return false;

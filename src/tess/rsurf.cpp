@@ -695,7 +695,7 @@ Rsurface::parent_edge(Rmeme* child_vert_B) const
 inline void
 inhibit_new_subdivision(CBface_list& faces)
 {
-   if (!LMESH::isa(faces.mesh())) {
+   if (!dynamic_cast<LMESH*>(faces.mesh())) {
       err_adv(debug, "inhibit_new_subdivision: non-LMESH");
       return;
    }
@@ -708,7 +708,7 @@ inhibit_new_subdivision(CBface_list& faces)
 inline void
 select_childless(CBvert_list& verts)
 {
-   assert(LMESH::isa(verts.mesh()));
+   assert(dynamic_cast<LMESH*>(verts.mesh()));
    for (int i=0; i<verts.num(); i++) {
       Lvert* v = (Lvert*)verts[i];
       if (!v->subdiv_vertex())
@@ -719,7 +719,7 @@ select_childless(CBvert_list& verts)
 inline void
 select_childless(CBedge_list& edges)
 {
-   assert(LMESH::isa(edges.mesh()));
+   assert(dynamic_cast<LMESH*>(edges.mesh()));
    for (int i=0; i<edges.num(); i++) {
       Ledge* e = (Ledge*)edges[i];
       if (!(e->subdiv_edge1() &&
@@ -732,7 +732,7 @@ select_childless(CBedge_list& edges)
 inline void
 select_childless(CBface_list& faces)
 {
-   assert(LMESH::isa(faces.mesh()));
+   assert(dynamic_cast<LMESH*>(faces.mesh()));
    for (int i=0; i<faces.num(); i++) {
       Lface* f = (Lface*)faces[i];
       if (!(f->subdiv_face1() &&

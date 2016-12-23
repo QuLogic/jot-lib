@@ -371,8 +371,8 @@ class Bcurve : public Bbase{
    //! Returns the surface this curve is constrained in,
    //! if it is constrained in one.
    Map2D3D* constraining_surface() const {
-      if (SurfaceCurveMap::isa(_map)) {
-         return ((SurfaceCurveMap*)_map)->surface();
+      if (auto scm = dynamic_cast<SurfaceCurveMap*>(_map)) {
+         return scm->surface();
       }
       return nullptr;
    }

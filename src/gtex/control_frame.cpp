@@ -114,7 +114,13 @@ ControlFrameTexture::draw_level(CVIEWptr& v, int k)
 inline Patch*
 get_sub_patch(Patch* p, int k)
 {
-   return (k == 0) ? p : Lpatch::isa(p) ? ((Lpatch*)p)->sub_patch(k) : nullptr;
+   if (k == 0) {
+      return p;
+   } else if (auto lp = dynamic_cast<Lpatch*>(p)) {
+      return lp->sub_patch(k);
+   } else {
+      return nullptr;
+   }
 }
 
 bool

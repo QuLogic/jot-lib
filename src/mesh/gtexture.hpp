@@ -344,7 +344,7 @@ get_sublist(const L& list)
 {
    L ret(list.num());
    for (int i=0; i<list.num(); i++) {
-      if (T::isa(list[i]))
+      if (dynamic_cast<T*>(list[i]))
          ret += list[i];
    }
    return ret;

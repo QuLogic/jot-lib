@@ -107,7 +107,7 @@ PointMeme::compute_update()
    if (debug) {
       print_debug("PointMeme::compute_update", this);
    }
-   if (is_cold() && CurvePtMap::isa(map()))
+   if (is_cold() && dynamic_cast<CurvePtMap*>(map()))
       map()->set_pt(loc());
    return (_update = map()->map());
 }

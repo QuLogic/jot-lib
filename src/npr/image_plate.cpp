@@ -75,9 +75,10 @@ ImagePlate::ImagePlate(const string& filename) : GEOM()
 
       GTexture* tex = p->cur_tex(VIEW::peek());
 
-      assert(ImageLineShader::isa(tex));
-      ((ImageLineShader*)tex)->get_tone_shader()->set_tex_2d(texture);
-      ((ImageLineShader*)tex)->get_basecoat_shader()->set_tex_2d(texture);
+      auto ils = dynamic_cast<ImageLineShader*>(tex);
+      assert(ils);
+      ils->get_tone_shader()->set_tex_2d(texture);
+      ils->get_basecoat_shader()->set_tex_2d(texture);
 
       cerr<<tex->type()<<endl;
 

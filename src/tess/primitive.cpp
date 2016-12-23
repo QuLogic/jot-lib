@@ -213,7 +213,7 @@ Primitive::Primitive(LMESHptr mesh, LMESHptr skel)
 {
 
    // Ensure preconditions
-   assert(mesh && skel && TEXBODY::isa(mesh->geom()));
+   assert(mesh && skel && dynamic_cast<TEXBODY*>(mesh->geom()));
 
    // Record the mesh
    set_mesh(mesh);

@@ -368,7 +368,7 @@ SurfaceCurveMap::recompute()
       }
 
       if (needfix) {
-         if (RuledSurfCurveVec::isa(_surf)) {
+         if (dynamic_cast<RuledSurfCurveVec*>(_surf)) {
             // we do a special case if we are in a ruled surface
             // defined by a curve
 

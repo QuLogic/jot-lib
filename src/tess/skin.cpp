@@ -215,8 +215,9 @@ Skin::create_cover_skin(
    Skin* ret = dynamic_cast<Skin*>(cur->control());
 
    for (int i = 0; i < Bsurface::get_surfaces(region).num(); i++) {
-      if (Skin::isa(Bsurface::get_surfaces(region)[i]))
-         ((Skin*)Bsurface::get_surfaces(region)[i])->_covers.push_back(ret);
+      if (auto ss = dynamic_cast<Skin*>(Bsurface::get_surfaces(region)[i])) {
+         ss->_covers.push_back(ret);
+      }
    }
    // XXX - only work for faces(region) on the same skin
    if (region.size()>0 && Skin::find_controller(region[0])) {

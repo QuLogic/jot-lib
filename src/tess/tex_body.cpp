@@ -207,10 +207,9 @@ TEXBODY::add(BMESHptr m)
       // We require that each mesh has only one GEOM ...
       // so we have to take it away from the other GEOM.
 
-      if (TEXBODY::isa(m->geom())) {
+      if (auto tb = dynamic_cast<TEXBODY*>(m->geom())) {
          // we know how to deal with a TEXBODY...
-         ((TEXBODY*)m->geom())->remove
-            (m);
+         tb->remove(m);
       } else {
          err_msg("TEXBODY::add: can't add mesh with pre-existing owner");
          return false;
@@ -247,10 +246,9 @@ TEXBODY::push(BMESHptr m)
       // We require that each mesh has only one GEOM ...
       // so we have to take it away from the other GEOM.
 
-      if (TEXBODY::isa(m->geom())) {
+      if (auto tb = dynamic_cast<TEXBODY*>(m->geom())) {
          // we know how to deal with a TEXBODY...
-         ((TEXBODY*)m->geom())->remove
-            (m);
+         tb->remove(m);
       } else {
          err_msg("TEXBODY::add: can't add mesh with pre-existing owner");
          return false;

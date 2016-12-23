@@ -470,7 +470,7 @@ ImageLineUI::update_non_lives()
 void
 ImageLineUI::toggle_enable_me()
 {
-   if(ImageLineShader::isa(Patch::focus()->cur_tex(VIEW::peek()))){
+   if (dynamic_cast<ImageLineShader*>(Patch::focus()->cur_tex(VIEW::peek()))){
       _rollout[ROLLOUT_MAIN]->enable();
       _rollout[ROLLOUT_MAIN]->open();
    } else {

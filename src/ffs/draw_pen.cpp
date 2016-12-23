@@ -343,14 +343,14 @@ DrawPen::tapat(PIXEL x)
       AddToSelection(bpt);
       err_adv(debug, "select bpoint");
    } else if ((bcurve = Bcurve::hit_ctrl_curve(x))) {
-      if (Wpt_listMap::isa(bcurve->map()))
+      if (dynamic_cast<Wpt_listMap*>(bcurve->map()))
          err_adv(debug, "bcurve map is wpt_list map");
       AddToSelection(bcurve);
       err_adv(debug, "select bcurve");
    } else if ((bsurface = Bsurface::hit_ctrl_surface(x))) {
-      if (UVsurface::isa(bsurface))
+      if (dynamic_cast<UVsurface*>(bsurface))
          err_adv(debug, "bsurface is a uvsurface");
-      if (Skin::isa(bsurface))
+      if (dynamic_cast<Skin*>(bsurface))
          err_adv(debug, "bsurface is a skin");
       AddToSelection(bsurface);
       err_adv(debug, "select bsurface");
@@ -823,7 +823,7 @@ static bool
 try_punch(CBface_list& region, bool debug)
 {
    BMESHptr mesh = region.mesh();
-   if (!mesh || FLOOR::isa(mesh->geom())) {
+   if (!mesh || dynamic_cast<FLOOR*>(mesh->geom())) {
       err_adv(debug, "bad mesh");
       return 0;
    }
@@ -859,42 +859,45 @@ try_punch(CBface_list& region, bool debug)
          continue;
       }
 
-      if ((Bsurface::get_surfaces(regions[i]).num() != 0) && 
-          (UVsurface::isa(Bsurface::get_surfaces(regions[i])[0]))) {
-         UVsurface* surf = (UVsurface*)(Bsurface::get_surfaces(regions[i])[0]);
-
-         UVpt_list uvpts;
-         UVpt pt;
-         for (auto & cvlist : curve_verts_lists) {
-            uvpts.clear();
-            for (auto & bvlist : cvlist) {
-               surf->get_uv(bvlist, pt);
-               uvpts.push_back(pt);
+      bool handled = false;
+      if (Bsurface::get_surfaces(regions[i]).num() != 0) {
+         if (auto surf = dynamic_cast<UVsurface*>(Bsurface::get_surfaces(regions[i])[0])) {
+            UVpt_list uvpts;
+            UVpt pt;
+            for (auto & cvlist : curve_verts_lists) {
+               uvpts.clear();
+               for (auto & bvlist : cvlist) {
+                  surf->get_uv(bvlist, pt);
+                  uvpts.push_back(pt);
+               }
+               uvpts.update_length();
+               Bcurve* new_curve =
+                  new Bcurve(cvlist, uvpts, surf->map(),
+                             dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
+               cmd->add(make_shared<SHOW_BBASE_CMD>(new_curve));
             }
-            uvpts.update_length();
-            Bcurve* new_curve =
-               new Bcurve(cvlist, uvpts, surf->map(),
-                          dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
-            cmd->add(make_shared<SHOW_BBASE_CMD>(new_curve));
+
+            push(regions[i], cmd);
+            handled = true;
+
+         } else if (auto c_skin = dynamic_cast<Skin*>(Bsurface::get_surfaces(regions[i])[0])) {
+            if (!c_skin->get_partner()) {
+               push(regions[i], cmd);
+               cov_inf_punch(c_skin, regions[i], cmd);//punch on the cover of either side of the inflation
+
+               for (auto & list : curve_verts_lists) {
+                  Bcurve* b_curve =
+                     new Bcurve(list, c_skin,
+                                dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
+                  cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
+               }
+               handled = true;
+            }
          }
+      }
 
-         push(regions[i], cmd);
-
-      } else if ((Bsurface::get_surfaces(regions[i]).num() != 0) &&
-         (Skin::isa(Bsurface::get_surfaces(regions[i])[0])) &&
-         !((Skin*)Bsurface::get_surfaces(regions[i])[0])->get_partner()) {
-         Skin* c_skin = (Skin*)(Bsurface::get_surfaces(regions[i])[0]);
-
-         push(regions[i], cmd);
-         cov_inf_punch(c_skin, regions[i], cmd);//punch on the cover of either side of the inflation
-
-         for (auto & list : curve_verts_lists) {
-            Bcurve* b_curve =
-               new Bcurve(list, c_skin,
-                          dynamic_pointer_cast<LMESH>(mesh)->subdiv_level());
-            cmd->add(make_shared<SHOW_BBASE_CMD>(b_curve));
-         }
-
+      if (handled) {
+         // handled above
       } else if (get_skin(skins, regions[i])) {
          cerr << "multiple knockout on the same patch" << endl;
          Skin* c_skin = get_skin(skins, regions[i]);
@@ -959,7 +962,7 @@ try_punch(Bface* f, CSimplexFilter& impassable, bool debug=false)
       return 0;
    }
 
-   if (FLOOR::isa(f->mesh()->geom())) {
+   if (dynamic_cast<FLOOR*>(f->mesh()->geom())) {
       err_adv(debug, "try_punch: no punching the floor");
       return 0;
    }
@@ -1549,9 +1552,9 @@ DrawPen::handle_extrude(Bsurface* surf_sel, CGESTUREptr& gest)
       Bface_list faces = Bface_list::reachable_faces(face, !SelectedFaceBoundaryEdgeFilter());
       INFLATE::init(faces, dist);
    } else {
-      if (!INFLATE::init( face, dist ) && Skin::isa(surf_sel)) {
+      if (!INFLATE::init(face, dist)) {
          Skin* skin = dynamic_cast<Skin*>(surf_sel);
-         if (skin->is_inflate()) {
+         if (skin && skin->is_inflate()) {
             skin->add_offsets(dist);
          }
       }

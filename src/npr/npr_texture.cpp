@@ -140,12 +140,12 @@ NPRTexture::get_color() const
    if (_basecoats.num() == 0) {
       return _bkg_tex->get_color();
    } else {
-      if (NPRSolidTexture::isa(_basecoats[0])) {
-         return (((NPRSolidTexture*)_basecoats[0])->get_color());
-      } else if (XToonTexture::isa(_basecoats[0])) {
-         return (((XToonTexture*)_basecoats[0])->get_color());
-      } else if (GLSLXToonShader::isa(_basecoats[0])) {
-         return (((GLSLXToonShader*)_basecoats[0])->get_color());
+      if (auto solid = dynamic_cast<NPRSolidTexture*>(_basecoats[0])) {
+         return solid->get_color();
+      } else if (auto toon = dynamic_cast<XToonTexture*>(_basecoats[0])) {
+         return toon->get_color();
+      } else if (auto xtoon = dynamic_cast<GLSLXToonShader*>(_basecoats[0])) {
+         return xtoon->get_color();
       } else
          return COLOR(1,0,0);
    }
@@ -160,12 +160,12 @@ NPRTexture::get_alpha() const
    if (_basecoats.num() == 0) {
       return _bkg_tex->get_alpha();
    } else {
-      if (NPRSolidTexture::isa(_basecoats[0])) {
-         return (((NPRSolidTexture*)_basecoats[0])->get_alpha());
-      } else if (XToonTexture::isa(_basecoats[0])) {
-         return (((XToonTexture*)_basecoats[0])->get_alpha());
-      } else if (GLSLXToonShader::isa(_basecoats[0])) {
-         return (((GLSLXToonShader*)_basecoats[0])->get_alpha());
+      if (auto solid = dynamic_cast<NPRSolidTexture*>(_basecoats[0])) {
+         return solid->get_alpha();
+      } else if (auto toon = dynamic_cast<XToonTexture*>(_basecoats[0])) {
+         return toon->get_alpha();
+      } else if (auto xtoon = dynamic_cast<GLSLXToonShader*>(_basecoats[0])) {
+         return xtoon->get_alpha();
       } else
          return 1.0;
    }
@@ -206,7 +206,7 @@ NPRTexture::draw(CVIEWptr& v)
       //layer...infact in messes it up, might be a easier way to set
       //this up though with the get_transparent function.
       if (get_transparent() && _basecoats.num() != 0 &&
-          !(GLSLXToonShader::isa(_basecoats[0])))
+          !(dynamic_cast<GLSLXToonShader*>(_basecoats[0])))
          n += _bkg_tex->draw(v);
 
       //for all basecoats activated draw

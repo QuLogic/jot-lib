@@ -477,8 +477,10 @@ VertMeme::smooth_target() const
       Bsurface* p = Bsurface::find_controller(all_edges[k]);
       if (p && (p->name()=="roof_panel") && (Bbase::find_controller(v)!=p))
          continue;
-      if (Primitive::isa(p) && ((Primitive*)p)->is_roof())
-         continue;
+      if (auto pp = dynamic_cast<Primitive*>(p)) {
+         if (pp->is_roof())
+            continue;
+      }
       star.push_back(all_edges[k]);
    }
    bool special = (star.size()!=all_edges.size());

@@ -92,7 +92,7 @@ find_face(CPIXEL& pix, double rad, Wvec& bc)
    Bface* f = VisRefImage::get_edit_face(bc, pix, rad);
 
    // Only select faces belonging to a TEXBODY
-   if (!(f && f->mesh() && TEXBODY::isa(f->mesh()->geom())))
+   if (!(f && f->mesh() && dynamic_cast<TEXBODY*>(f->mesh()->geom())))
       return nullptr;
 
    return f;

@@ -43,7 +43,7 @@ inline bool
 are_all_bsurfaces(const Bsurface_list& surfs)
 {
    for (int i=0; i<surfs.num(); i++)
-      if (!T::isa(surfs[i]))
+      if (!dynamic_cast<T*>(surfs[i]))
          return false;
    return true;
 }
