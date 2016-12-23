@@ -98,13 +98,10 @@ Example:
 
 #endif // MLIB_H_IS_INCLUDED
 
-// end of file mlib.H
-
-(A comment should indicate the end of the file, as above).
-
 1e. File Names
 
-File names should end in '.C' for C++ source files and '.H' for C++ header files.
+File names should end in '.cpp' for C++ source files and '.hpp' for C++ header
+files.
 
 1f. Line Length
 

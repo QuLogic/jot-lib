@@ -1,16 +1,16 @@
 
 ADD_LIBRARY(stroke
-	hatching_stroke.C
-	b_stroke_pool.C
-	decal_line_stroke.C
-	base_stroke.C
-	stroke_generator.C
-	sil_stroke_pool.C
-	edge_stroke.C
-	edge_stroke_pool.C
-	decal_stroke_pool.C
-	outline_stroke.C
-	gesture_stroke_drawer.C)
+	hatching_stroke.cpp
+	b_stroke_pool.cpp
+	decal_line_stroke.cpp
+	base_stroke.cpp
+	stroke_generator.cpp
+	sil_stroke_pool.cpp
+	edge_stroke.cpp
+	edge_stroke_pool.cpp
+	decal_stroke_pool.cpp
+	outline_stroke.cpp
+	gesture_stroke_drawer.cpp)
 
 TARGET_LINK_LIBRARIES(stroke
 	disp

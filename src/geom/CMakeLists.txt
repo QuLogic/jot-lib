@@ -1,21 +1,21 @@
 
 SET(GEOM_FILES
-	geom.C
-	gl_view.C
-	fsa.C
-	text2d.C
-	icon2d.C
-	line3d.C
-	command.C
-	world.C
-	texture.C
-	image.C
-	hspline.C
-	appear.C
-	texturegl.C
-	distrib.C
-	recorder_ui.C
-	file_listbox.C)
+	geom.cpp
+	gl_view.cpp
+	fsa.cpp
+	text2d.cpp
+	icon2d.cpp
+	line3d.cpp
+	command.cpp
+	world.cpp
+	texture.cpp
+	image.cpp
+	hspline.cpp
+	appear.cpp
+	texturegl.cpp
+	distrib.cpp
+	recorder_ui.cpp
+	file_listbox.cpp)
 
 ADD_LIBRARY(geom ${GEOM_FILES})
 

@@ -1,23 +1,23 @@
 
 ADD_LIBRARY(ffs
-	circle_widget.C
-	crease_widget.C
-	crv_sketch.C
-	cursor3d.C
-	draw_manip.C
-	draw_pen.C
-	extender.C
-	roof.C
-	ffs_util.C
-	floor.C
-	inflate.C
-	oversketch.C
-	profile.C
-	paper_doll.C
-	select_widget.C
-	sweep.C
-	trace.C
-	xform_pen.C)
+	circle_widget.cpp
+	crease_widget.cpp
+	crv_sketch.cpp
+	cursor3d.cpp
+	draw_manip.cpp
+	draw_pen.cpp
+	extender.cpp
+	roof.cpp
+	ffs_util.cpp
+	floor.cpp
+	inflate.cpp
+	oversketch.cpp
+	profile.cpp
+	paper_doll.cpp
+	select_widget.cpp
+	sweep.cpp
+	trace.cpp
+	xform_pen.cpp)
 
 TARGET_LINK_LIBRARIES(ffs
 	disp
