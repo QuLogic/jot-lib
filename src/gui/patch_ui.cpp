@@ -570,15 +570,15 @@ PatchUI::get_current_tex_name()
   
    const char *r;
    
-   if(tex->is_of_type("Smooth Shading"))
+   if (tex->static_name() == "Smooth Shading")
       r = "Smooth Shading";
-   else if(tex->is_of_type("HatchingTX"))
+   else if (tex->static_name() == "HatchingTX")
       r = "HatchingTX";
-   else if(tex->is_of_type("Halftone_TX"))
+   else if (tex->static_name() == "Halftone_TX")
       r = "Halftone_TX";
-   else if(tex->is_of_type("Painterly"))
+   else if (tex->static_name() == "Painterly")
       r = "Painterly";
-   else if(tex->is_of_type("ProxyTexture"))
+   else if (tex->static_name() == "ProxyTexture")
       r = "ProxyTexture";
    else
       r = "Other...";

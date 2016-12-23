@@ -468,7 +468,7 @@ Bsurface::draw(CVIEWptr& v)
    // Not supposed to fail (of course):
    assert(is_control());
 
-   if (draw_skin_only && !is_of_type("Skin"))
+   if (draw_skin_only && static_name() != "Skin")
       return 0;
 
    if (!_is_shown)

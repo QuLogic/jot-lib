@@ -1657,7 +1657,7 @@ BMESH::read_jot_stream(istream& in, BMESHptr ret)
 
       // If we don't yet have a mesh, or the mesh we have is the wrong
       // type, then get one of the right type:
-      if (!(ret && ret->is_of_type(class_name))) {
+      if (!(ret && ret->static_name() == class_name)) {
          DATA_ITEM* di = DATA_ITEM::lookup(class_name);
          if (!di) {
             err_msg(

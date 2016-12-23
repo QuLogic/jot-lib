@@ -93,7 +93,7 @@ class GELFILTclass_desc : public GELFILTclass_name {
    //******** VIRTUAL METHOD ********
    virtual bool accept(CGELptr &g) {
       for (auto & elem : _cn)
-         if (g->is_of_type(elem))
+         if (g->static_name() == elem)
             return true;
       return false;
    }
