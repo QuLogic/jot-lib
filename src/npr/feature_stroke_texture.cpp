@@ -125,14 +125,18 @@ FeatureStrokeTexture::get_decal_pool(TAGformat &d)
 
    // XXX - More hackery!
    BaseStroke* s = _decal_strokes.get_prototype();
-   assert(s && s->is_of_type(DecalLineStroke::static_name()));
+   assert(s);
+   DecalLineStroke* dls = dynamic_cast<DecalLineStroke*>(s);
+   assert(dls != nullptr);
 
-   ((DecalLineStroke*)s)->set_patch(_patch);
+   dls->set_patch(_patch);
 
    for (int j=0; j<_decal_strokes.num_strokes(); j++) {
       s = _decal_strokes.stroke_at(j);
-      assert(s && s->is_of_type(DecalLineStroke::static_name()));
-      ((DecalLineStroke*)s)->set_patch(_patch);
+      assert(s);
+      dls = dynamic_cast<DecalLineStroke*>(s);
+      assert(dls != nullptr);
+      dls->set_patch(_patch);
    }
 
    DecalLineStroke::set_mesh(nullptr);
@@ -410,16 +414,18 @@ FeatureStrokeTexture::read_stream(istream &is, vector<string>& leftover)
 
    BaseStroke* s = _decal_strokes.get_prototype();
    assert(s);
-   assert(s->is_of_type(DecalLineStroke::static_name()));
+   DecalLineStroke* dls = dynamic_cast<DecalLineStroke*>(s);
+   assert(dls != nullptr);
 
-   ((DecalLineStroke*)s)->set_patch(_patch);
+   dls->set_patch(_patch);
 
    for (int j=0; j<_decal_strokes.num_strokes(); j++) {
       s = _decal_strokes.stroke_at(j);
       assert(s);
-      assert(s->is_of_type(DecalLineStroke::static_name()));
+      dls = dynamic_cast<DecalLineStroke*>(s);
+      assert(dls != nullptr);
 
-      ((DecalLineStroke*)s)->set_patch(_patch);
+      dls->set_patch(_patch);
    }
 
    DecalLineStroke::set_mesh(nullptr);
@@ -498,14 +504,13 @@ FeatureStrokeTexture::get_decal_stroke()
    // patch must be set for decal strokes to work
    assert(_patch);
 
-   if(!_decal_strokes.get_prototype() ||
-      !_decal_strokes.get_prototype()
-      ->is_of_type(DecalLineStroke::static_name()))
+   if (!dynamic_cast<DecalLineStroke*>(_decal_strokes.get_prototype()))
       _decal_strokes.set_prototype(new DecalLineStroke(_patch));
 
    BaseStroke* s = _decal_strokes.get_stroke();
-   assert(s->is_of_type(DecalLineStroke::static_name()));
-   return  (DecalLineStroke*)s;
+   DecalLineStroke* dls = dynamic_cast<DecalLineStroke*>(s);
+   assert(dls != nullptr);
+   return dls;
 }
 
 
@@ -515,9 +520,7 @@ FeatureStrokeTexture::get_decal_stroke_proto()
    // patch must be set for decal strokes to work
    assert(_patch);
 
-   if(!_decal_strokes.get_prototype() ||
-      !_decal_strokes.get_prototype()
-      ->is_of_type(DecalLineStroke::static_name())) {
+   if (!dynamic_cast<DecalLineStroke*>(_decal_strokes.get_prototype())) {
       _decal_strokes.set_prototype(new DecalLineStroke(_patch));
    }
    return (DecalLineStroke*)_decal_strokes.get_prototype();
@@ -531,9 +534,7 @@ FeatureStrokeTexture::get_decal_stroke_pool()
    assert(_patch);
 
    // make sure stroke pool is inited correctly
-   if(!_decal_strokes.get_prototype() ||
-      !_decal_strokes.get_prototype()
-      ->is_of_type(DecalLineStroke::static_name())) {
+   if (!dynamic_cast<DecalLineStroke*>(_decal_strokes.get_prototype())) {
       _decal_strokes.set_prototype(new DecalLineStroke(_patch));
    }
 

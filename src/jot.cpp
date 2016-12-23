@@ -1210,8 +1210,8 @@ debug_cb(const Event& ev, State *&)
       Patch* patch = VisRefImage::get_ctrl_patch();
       if (patch) {
          GTexture* cur_texture = patch->cur_tex();
-         if (cur_texture->is_of_type(ProxyTexture::static_name())) {
-            ProxyTexture* pt = (ProxyTexture*)cur_texture;
+         ProxyTexture* pt = dynamic_cast<ProxyTexture*>(cur_texture);
+         if (pt != nullptr) {
             pt->animate_samples();
          }
       }

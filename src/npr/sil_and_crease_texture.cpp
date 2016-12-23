@@ -766,14 +766,16 @@ SilAndCreaseTexture::set_crease_vis_step_size(double s)
    for (EdgeStrokePool* cur_pool : _crease_stroke_pools) {
       OutlineStroke* cur_stroke = cur_pool->get_prototype();
       if (cur_stroke) {
-         assert(cur_stroke->is_of_type(EdgeStroke::static_name()));
-         ((EdgeStroke*)cur_stroke)->set_vis_step_pix_size(s);
+         EdgeStroke* edge_stroke = dynamic_cast<EdgeStroke*>(cur_stroke);
+         assert(edge_stroke != nullptr);
+         edge_stroke->set_vis_step_pix_size(s);
       }
 
       for (int l=0; l<cur_pool->num_strokes(); l++) {
          OutlineStroke* cur_stroke = cur_pool->stroke_at(l);
-         assert(cur_stroke->is_of_type(EdgeStroke::static_name()));
-         ((EdgeStroke*)cur_stroke)->set_vis_step_pix_size(s);
+         EdgeStroke* edge_stroke = dynamic_cast<EdgeStroke*>(cur_stroke);
+         assert(edge_stroke != nullptr);
+         edge_stroke->set_vis_step_pix_size(s);
       }
    }
 }

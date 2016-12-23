@@ -156,10 +156,9 @@ NPRPen::tap_cb(CGESTUREptr& gest, DrawState*&)
    p->set_texture(NPRTexture::static_name());
 
    GTexture* cur_texture = p->cur_tex();
-   if(!cur_texture->is_of_type(NPRTexture::static_name()))
+   NPRTexture* nt = dynamic_cast<NPRTexture*>(cur_texture);
+   if (nt == nullptr)
       return 0; //Shouldn't happen
-
-   NPRTexture* nt = (NPRTexture*)cur_texture;
 
    if (_curr_npr_tex)
       {

@@ -330,8 +330,8 @@ HatchingPen::tap_cb(CGESTUREptr& gest, DrawState*&)
                   // collection:
                   Patch* p = _curr_hatching_group->patch();
                   GTexture* cur_texture = p->cur_tex();
-                  if (cur_texture->is_of_type(NPRTexture::static_name())) {
-                     NPRTexture* npr_tex = (NPRTexture*)cur_texture;
+                  NPRTexture* npr_tex = dynamic_cast<NPRTexture*>(cur_texture);
+                  if (npr_tex != nullptr) {
                      // first just take out the old one:
                      if (Config::get_var_bool("REMOVE_ORIG_GROUP"))
                         npr_tex->hatching_collection()->remove_group(
@@ -376,10 +376,8 @@ HatchingPen::tap_cb(CGESTUREptr& gest, DrawState*&)
    }
 
    GTexture* cur_texture = p->cur_tex();
-   if(cur_texture->is_of_type(NPRTexture::static_name()))
-   {
-      NPRTexture* hatch_stroke_texture = (NPRTexture*)cur_texture;
-             
+   NPRTexture* hatch_stroke_texture = dynamic_cast<NPRTexture*>(cur_texture);
+   if (hatch_stroke_texture != nullptr) {
       HatchingGroup *hg = hatch_stroke_texture->hatching_collection()->
          next_group(NDCpt(XYpt(gest->center())), _curr_hatching_group);
 
@@ -484,8 +482,8 @@ HatchingPen::generate_stroke(CGESTUREptr& gest)
    Patch* p = get_ctrl_patch(f);       assert(p);
    p->set_texture(NPRTexture::static_name());
    GTexture* cur_texture = p->cur_tex();
-   if(!cur_texture->is_of_type(NPRTexture::static_name())) return 0;
-   NPRTexture* npr_texture = (NPRTexture*)cur_texture;
+   NPRTexture* npr_texture = dynamic_cast<NPRTexture*>(cur_texture);
+   if (npr_texture == nullptr) return 0;
 
    bool new_group = false;
 
@@ -642,8 +640,8 @@ HatchingPen::destroy_current()
    _curr_hatching_group->deselect();
         
    GTexture* cur_texture = _curr_hatching_group->patch()->cur_tex();
-   assert(cur_texture->is_of_type(NPRTexture::static_name()));
-   NPRTexture* hatch_stroke_texture = (NPRTexture*)cur_texture;
+   NPRTexture* hatch_stroke_texture = dynamic_cast<NPRTexture*>(cur_texture);
+   assert(hatch_stroke_texture != nullptr);
 
    bool ret = hatch_stroke_texture->hatching_collection()->
                                  delete_group(_curr_hatching_group);
