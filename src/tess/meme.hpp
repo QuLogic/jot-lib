@@ -708,7 +708,7 @@ class VertMemeList : public MemeList<VertMeme> {
    //******** DIAGNOSTIC ********
 
    // report the number of memes of the given type
-   int meme_count(const string& class_name);
+   int meme_count(const std::type_info& class_type);
 
    // print debugging info about what kinds of memes are here:
    // (optionaly print 'iter' value if >= 0)

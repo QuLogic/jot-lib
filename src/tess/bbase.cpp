@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
+#include <typeinfo>
+
 #include "disp/colors.hpp"        // Color::grey7 etc.
 #include "geom/gl_view.hpp"       // GL_VIEW::draw_pts()
 #include "geom/world.hpp"         // WORLD::is_displayed()
@@ -867,13 +869,13 @@ VertMemeList::print_debug(int iter)
    cerr << "\t";
    if (iter >= 0)
       cerr << iter << ": ";
-   int n = meme_count(CurveMeme::static_name());
+   int n = meme_count(typeid(CurveMeme));
    if (n > 0)
       cerr << n << " curve, ";
-   n = meme_count(BlendingMeme::static_name());
+   n = meme_count(typeid(BlendingMeme));
    if (n > 0)
       cerr << n << " panel, ";
-   n = meme_count(UVmeme::static_name());
+   n = meme_count(typeid(UVmeme));
    if (n > 0)
       cerr << n << " uv, ";
    err_msg("%3d total", size());

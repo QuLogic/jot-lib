@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with jot-lib.  If not, see <http://www.gnu.org/licenses/>.`
  *****************************************************************/
+#include <typeinfo>
+
 #include "mesh/mi.hpp"
 #include "meme.hpp"
 #include "bbase.hpp"
@@ -1152,11 +1154,11 @@ FaceMeme::gen_subdiv_memes() const
 
 
 int
-VertMemeList::meme_count(const string& class_name)
+VertMemeList::meme_count(const std::type_info& class_type)
 {
    int ret = 0;
    for (VertMemeList::size_type i=0; i<size(); i++)
-      if (at(i)->is_of_type(class_name))
+      if (typeid(*at(i)) == class_type)
          ret++;
    return ret;
 }
