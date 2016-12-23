@@ -203,8 +203,9 @@ HalftoneUI::update_non_lives()
    if(!layer)
       return;
 
-   if (_parent->class_name() == ProxyPenUI::static_name())
-      ((ProxyPenUI*)_parent)->get_light_ui()->set_current_light(layer->_channel);
+   ProxyPenUI* proxy = dynamic_cast<ProxyPenUI*>(_parent);
+   if (proxy)
+      proxy->get_light_ui()->set_current_light(layer->_channel);
 
    _texture_selection_ui->set_channel_num(layer->_channel);
 
@@ -350,7 +351,7 @@ bool
 HalftoneUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if (sender->class_name() == PatchSelectionUI::static_name()) {
+   if (dynamic_cast<PatchSelectionUI*>(sender)) {
       switch(event)
       {
       case PatchSelectionUI::SELECT_FILL_PATCHES:
@@ -379,10 +380,10 @@ HalftoneUI::child_callback(BaseUI* sender, int event)
          break;
       } 
    }    
-   if (sender->class_name() == ColorUI::static_name()) {
+   if (dynamic_cast<ColorUI*>(sender)) {
       apply_changes_to_texture(OP_COLOR, _current_halftone, _texture_selection_ui->get_layer_num());
    }
-   if (sender->class_name() == PresetsUI::static_name()) {
+   if (dynamic_cast<PresetsUI*>(sender)) {
       switch(event)
       {
       case PresetsUI::PRESET_SELECTED:
@@ -398,7 +399,7 @@ HalftoneUI::child_callback(BaseUI* sender, int event)
          break;   
       } 
    }     
-   if (sender->class_name() == ToneShaderUI::static_name()) {
+   if (dynamic_cast<ToneShaderUI*>(sender)) {
        _last_op = OP_TONE_SHADER;
    }     
    

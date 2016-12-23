@@ -99,7 +99,7 @@ HatchingStroke::set_group(HatchingGroupBase *hgb)
 { 
    _group = hgb; 
 
-   if ((_group)&&(_group->group()->is_of_type(HatchingGroupFree::static_name())))
+   if (_group && dynamic_cast<HatchingGroupFree*>(_group->group()))
       _free = true;
    else
       _free= false;

@@ -1208,9 +1208,8 @@ LinePenUI::update_coherence()
 
    if (curr_mode == LinePen::EDIT_MODE_SIL)
    {
-      assert(curr_pool && (curr_pool->class_name() == SilStrokePool::static_name()));
-      
-      SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+      SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+      assert(sil_pool);
       
       bool coher_global = sil_pool->get_coher_global();
          
@@ -1359,8 +1358,8 @@ LinePenUI::update_noise()
       assert(curr_pool);
       if (curr_mode == LinePen::EDIT_MODE_SIL)
       {
-         assert(curr_pool->class_name() == SilStrokePool::static_name());
-         SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+         SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+         assert(sil_pool);
 
          sprintf(text, "%d of %d", sil_pool->get_edit_proto() + 1, sil_pool->get_num_protos());
 
@@ -1382,7 +1381,7 @@ LinePenUI::update_noise()
       }
       else
       {
-         assert(curr_pool->class_name() != SilStrokePool::static_name());
+         assert(!dynamic_cast<SilStrokePool*>(curr_pool));
 
          sprintf(text, " N/A");
 
@@ -1441,8 +1440,8 @@ LinePenUI::update_edit()
    if (curr_mode == LinePen::EDIT_MODE_SIL)
    {
       assert(curr_tex);
-      assert(curr_pool && (curr_pool->class_name() == SilStrokePool::static_name()));
-      SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+      SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+      assert(sil_pool);
 
       OutlineStroke *p = sil_pool->get_prototype();
 
@@ -1520,8 +1519,8 @@ LinePenUI::update_edit()
    else if (curr_mode == LinePen::EDIT_MODE_CREASE)
    {
       assert(curr_tex);
-      assert(curr_pool && (curr_pool->class_name() == EdgeStrokePool::static_name()));
-      EdgeStrokePool* edge_pool = (EdgeStrokePool*)curr_pool;
+      EdgeStrokePool* edge_pool = dynamic_cast<EdgeStrokePool*>(curr_pool);
+      assert(edge_pool);
 
       _button[BUT_EDIT_CYCLE_LINE_TYPES]->enable();
       _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->enable();
@@ -1620,8 +1619,8 @@ LinePenUI::update_edit()
    else if (curr_mode == LinePen::EDIT_MODE_DECAL)
    {
       assert(curr_tex);
-      assert(curr_pool && (curr_pool->class_name() == DecalStrokePool::static_name()));
-//      DecalStrokePool* decal_pool = (DecalStrokePool*)curr_pool;
+      DecalStrokePool* decal_pool = dynamic_cast<DecalStrokePool*>(curr_pool);
+      assert(decal_pool);
 
       _button[BUT_EDIT_CYCLE_LINE_TYPES]->enable();
       _button[BUT_EDIT_CYCLE_DECAL_GROUPS]->enable();
@@ -1819,9 +1818,8 @@ LinePenUI::apply_coherence()
 
    assert(curr_mode == LinePen::EDIT_MODE_SIL);
    assert(curr_tex);
-   assert(curr_pool && (curr_pool->class_name() == SilStrokePool::static_name()));
-
-   SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+   SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+   assert(sil_pool);
 
    sil_pool->set_coher_global(_checkbox[CHECK_COHER_GLOBAL]->get_int_val()==1);
    sil_pool->set_coher_sigma_one(_checkbox[CHECK_COHER_SIG_1]->get_int_val()==1);
@@ -1901,13 +1899,13 @@ LinePenUI::apply_noise()
 
    if (curr_mode == LinePen::EDIT_MODE_SIL)
    {
-      assert(curr_pool->class_name() == SilStrokePool::static_name());
-      SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+      SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+      assert(sil_pool);
       sil_pool->set_lock_proto(_checkbox[CHECK_NOISE_PROTOTYPE_LOCK]->get_int_val() == 1);
    }
    else
    {
-      assert(curr_pool->class_name() != SilStrokePool::static_name());
+      assert(!dynamic_cast<SilStrokePool*>(curr_pool));
    }
 
    curr_tex->stroke_tex()->sil_and_crease_tex()->set_noise_motion(_checkbox[CHECK_NOISE_OBJECT_MOTION]->get_int_val()==1);
@@ -1940,8 +1938,8 @@ LinePenUI::apply_edit()
 
    if (curr_mode == LinePen::EDIT_MODE_SIL)
    {
-      assert(curr_pool->class_name() == SilStrokePool::static_name());
-      SilStrokePool* sil_pool = (SilStrokePool*)curr_pool;
+      SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(curr_pool);
+      assert(sil_pool);
 
       OutlineStroke *p = sil_pool->get_prototype();
 
@@ -1955,8 +1953,8 @@ LinePenUI::apply_edit()
    }
    else if (curr_mode == LinePen::EDIT_MODE_CREASE)
    {
-      assert(curr_pool->class_name() == EdgeStrokePool::static_name());
-//      EdgeStrokePool* edge_pool = (EdgeStrokePool*)curr_pool;
+      EdgeStrokePool* edge_pool = dynamic_cast<EdgeStrokePool*>(curr_pool);
+      assert(edge_pool);
 
       assert(curr_stroke);
       
@@ -1969,8 +1967,8 @@ LinePenUI::apply_edit()
    }
    else if (curr_mode == LinePen::EDIT_MODE_DECAL)
    {
-      assert(curr_pool->class_name() == DecalStrokePool::static_name());
-//      DecalStrokePool* decal_pool = (DecalStrokePool*)curr_pool;
+      DecalStrokePool* decal_pool = dynamic_cast<DecalStrokePool*>(curr_pool);
+      assert(decal_pool);
 
       assert(curr_stroke);
       

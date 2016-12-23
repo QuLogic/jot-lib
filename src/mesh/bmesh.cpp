@@ -2369,8 +2369,11 @@ BMESH::operator =(CBMESH& m)
 BMESH&
 BMESH::operator =(BODY& body)
 {
-   if (body.is_of_type(static_name()))
-      return *this = *((BMESH*)&body);
+   try {
+      BMESH& bmesh_body = dynamic_cast<BMESH&>(body);
+      return *this = bmesh_body;
+   }
+   catch (std::bad_cast & e) {}
 
    delete_elements();
 

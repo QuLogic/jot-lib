@@ -367,9 +367,9 @@ BStrokePool::add_prototype()
    //an OStrokePool...
 
    assert(_prototypes[_edit_proto]);
-   assert(_prototypes[_edit_proto]->class_name() == OutlineStroke::static_name());   
-
-   OutlineStroke *s = (OutlineStroke *)_prototypes[_edit_proto]->dup(); assert(s);
+   OutlineStroke *s = dynamic_cast<OutlineStroke*>(_prototypes[_edit_proto]);
+   assert(s);
+   s = static_cast<OutlineStroke*>(s->dup()); assert(s);
 
    s->set_propagate_offsets(true);
    s->set_propagate_patch(true);

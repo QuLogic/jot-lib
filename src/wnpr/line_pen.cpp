@@ -284,10 +284,14 @@ LinePen::pick_stroke(
    {
       assert(ret_pool && ret_stroke);
       assert(min_dist <= radius);
-      if (     ret_pool->class_name() == SilStrokePool::static_name())   ret_mode   = EDIT_MODE_SIL;
-      else if (ret_pool->class_name() == EdgeStrokePool::static_name())  ret_mode   = EDIT_MODE_CREASE;
-      else if (ret_pool->class_name() == DecalStrokePool::static_name()) ret_mode   = EDIT_MODE_DECAL;
-      else assert(0);
+      if (dynamic_cast<SilStrokePool*>(ret_pool))
+         ret_mode = EDIT_MODE_SIL;
+      else if (dynamic_cast<EdgeStrokePool*>(ret_pool))
+         ret_mode = EDIT_MODE_CREASE;
+      else if (dynamic_cast<DecalStrokePool*>(ret_pool))
+         ret_mode = EDIT_MODE_DECAL;
+      else
+         assert(0);
       return true;
    }
 }
@@ -320,7 +324,7 @@ LinePen::update_gesture_drawer()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
 
       s = _curr_pool->get_prototype();
@@ -329,7 +333,7 @@ LinePen::update_gesture_drawer()
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
       s = _curr_stroke;
@@ -338,7 +342,7 @@ LinePen::update_gesture_drawer()
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
       s = nullptr;
@@ -408,17 +412,14 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
 
    if ((p = VisRefImage::get_ctrl_patch(gest->center(),PICK_PATCH_RADIUS)))
    {
-      GTexture* t = p->cur_tex();   
-      
-      if (!t || !(t->class_name() == NPRTexture::static_name()))
-      {
+      new_tex = dynamic_cast<NPRTexture*>(p->cur_tex());
+      if (!new_tex) {
          //Set the selected face's patch to using NPRTexture
          p->set_texture(NPRTexture::static_name());
 
-         t = p->cur_tex();  assert(t && (t->class_name() == NPRTexture::static_name()));
+         new_tex = dynamic_cast<NPRTexture*>(p->cur_tex());
+         assert(new_tex);
       }         
-         
-      new_tex = (NPRTexture*)t;
 
       if (pick_stroke(new_tex, gest->center(), 
                         PICK_STROKE_RADIUS, new_pool, new_stroke, new_mode))
@@ -451,7 +452,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
                      assert(!new_pool->get_selected_stroke());
                      new_pool->set_selected_stroke_index(0);
                      OutlineStroke* s = new_pool->get_selected_stroke(); 
-                     assert(s && s->is_of_type(EdgeStroke::static_name()));
+                     assert(dynamic_cast<EdgeStroke*>(s));
                      new_stroke = s;        
                   }
                   new_mode = EDIT_MODE_CREASE;
@@ -486,7 +487,7 @@ LinePen::tap_cb(CGESTUREptr& gest, DrawState*&)
             assert(!new_pool->get_selected_stroke());
             new_pool->set_selected_stroke_index(0); 
             OutlineStroke* s = new_pool->get_selected_stroke(); 
-            assert(s && s->is_of_type(DecalLineStroke::static_name()));
+            assert(dynamic_cast<DecalLineStroke*>(s));
             new_stroke = s;        
          }
          new_mode = EDIT_MODE_DECAL;
@@ -660,14 +661,14 @@ LinePen::retrieve_active_prototype()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
    
       s = _curr_pool->get_prototype();
    }
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
       s = _curr_stroke;
@@ -675,7 +676,7 @@ LinePen::retrieve_active_prototype()
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
       s = _curr_stroke;
@@ -703,7 +704,7 @@ LinePen::modify_active_prototype(COutlineStroke *s)
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
    
       _curr_pool->get_prototype()->copy(*s);
       int flag = _curr_pool->set_prototype(_curr_pool->get_prototype());
@@ -725,7 +726,7 @@ LinePen::modify_active_prototype(COutlineStroke *s)
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
       if (_curr_stroke) _curr_stroke->copy(*s);
@@ -733,7 +734,7 @@ LinePen::modify_active_prototype(COutlineStroke *s)
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
       if (_curr_stroke) _curr_stroke->copy(*s);
@@ -775,9 +776,9 @@ LinePen::button_noise_prototype_next()
    assert(_curr_tex);
    assert(_curr_pool);
    assert(_curr_mode == EDIT_MODE_SIL);
-   assert(_curr_pool->class_name() == SilStrokePool::static_name());
 
-   SilStrokePool* sil_pool = (SilStrokePool*)_curr_pool;
+   SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(_curr_pool);
+   assert(sil_pool);
 
    assert(sil_pool->get_num_protos()>1);
 
@@ -806,9 +807,9 @@ LinePen::button_noise_prototype_del()
    assert(_curr_tex);
    assert(_curr_pool);
    assert(_curr_mode == EDIT_MODE_SIL);
-   assert(_curr_pool->class_name() == SilStrokePool::static_name());
 
-   SilStrokePool* sil_pool = (SilStrokePool*)_curr_pool;
+   SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(_curr_pool);
+   assert(sil_pool);
 
    assert(sil_pool->get_num_protos()>1);
 
@@ -833,9 +834,9 @@ LinePen::button_noise_prototype_add()
    assert(_curr_tex);
    assert(_curr_pool);
    assert(_curr_mode == EDIT_MODE_SIL);
-   assert(_curr_pool->class_name() == SilStrokePool::static_name());
 
-   SilStrokePool* sil_pool = (SilStrokePool*)_curr_pool;
+   SilStrokePool* sil_pool = dynamic_cast<SilStrokePool*>(_curr_pool);
+   assert(sil_pool);
 
    sil_pool->add_prototype();
 
@@ -866,7 +867,7 @@ LinePen::button_edit_cycle_line_types()
 
    if (_curr_mode == EDIT_MODE_SIL)
    {
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
 
       SilAndCreaseTexture::sil_stroke_pool_t sil_type;
       for (int i=0; i<SilAndCreaseTexture::SIL_STROKE_POOL_NUM; i++) 
@@ -918,7 +919,7 @@ LinePen::button_edit_cycle_decal_groups()
 
    if(_curr_mode == EDIT_MODE_DECAL)
    {
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
 
       new_pool = _curr_pool;
 
@@ -984,8 +985,8 @@ LinePen::button_edit_cycle_crease_paths()
    assert(pools->size()>0);
 
    if (_curr_mode == EDIT_MODE_CREASE) {
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
-      EdgeStrokePool* edge_pool = (EdgeStrokePool*)_curr_pool;
+      EdgeStrokePool* edge_pool = dynamic_cast<EdgeStrokePool*>(_curr_pool);
+      assert(edge_pool);
 
       vector<EdgeStrokePool*>::iterator it = std::find(pools->begin(), pools->end(), edge_pool);
       assert(it != pools->end());
@@ -1024,7 +1025,7 @@ LinePen::button_edit_cycle_crease_strokes()
 
    assert(_curr_mode == EDIT_MODE_CREASE);
 
-   assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+   assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
 
    assert(_curr_pool->num_strokes() > 0);
 
@@ -1082,7 +1083,7 @@ LinePen::button_edit_offset_clear()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
 
       OutlineStroke o;
@@ -1094,7 +1095,7 @@ LinePen::button_edit_offset_clear()
       COutlineStroke *op;
 
       op = retrieve_active_prototype();   assert(op);
-      assert(op->class_name() == OutlineStroke::static_name());
+      assert(dynamic_cast<const OutlineStroke*>(op));
       //assert(op->get_offsets() != nullptr);
       assert(op->get_patch() == _curr_tex->patch());
 
@@ -1110,7 +1111,7 @@ LinePen::button_edit_offset_clear()
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
 
@@ -1122,7 +1123,7 @@ LinePen::button_edit_offset_clear()
       COutlineStroke *op;
 
       op = retrieve_active_prototype();   assert(op);
-      assert(op->class_name() == EdgeStroke::static_name());
+      assert(dynamic_cast<const EdgeStroke*>(op));
       //assert(op->get_offsets() != nullptr);
 
       o.copy(*op);
@@ -1135,13 +1136,13 @@ LinePen::button_edit_offset_clear()
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
       //Trash selected decal
       
       OutlineStroke *s = _curr_stroke;   assert(s);
-      assert(s->is_of_type(DecalLineStroke::static_name()));
+      assert(dynamic_cast<DecalLineStroke*>(s));
 
       apply_undo_prototype();
 
@@ -1365,7 +1366,7 @@ LinePen::button_edit_offset_apply()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
 
       BaseStrokeOffsetLISTptr os = get_offsets(_gestures, _virtual_baseline ? nullptr : _curr_stroke);
@@ -1393,7 +1394,7 @@ LinePen::button_edit_offset_apply()
       COutlineStroke *op;
 
       op = retrieve_active_prototype();   assert(op);
-      assert(op->class_name() == OutlineStroke::static_name());
+      assert(dynamic_cast<const OutlineStroke*>(op));
       assert(op->get_patch() == _curr_tex->patch());
 
       o.copy(*op);
@@ -1407,7 +1408,7 @@ LinePen::button_edit_offset_apply()
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
 
@@ -1434,7 +1435,7 @@ LinePen::button_edit_offset_apply()
       COutlineStroke *op;
 
       op = retrieve_active_prototype();   assert(op);
-      assert(op->class_name() == EdgeStroke::static_name());
+      assert(dynamic_cast<const EdgeStroke*>(op));
 
       o.copy(*op);
       o.set_offsets(os);
@@ -1446,7 +1447,7 @@ LinePen::button_edit_offset_apply()
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(!_curr_stroke);
 
@@ -1471,8 +1472,8 @@ LinePen::button_edit_offset_apply()
       if (filtered_pix.size() < 2) continue;
 
       OutlineStroke *s = _curr_pool->get_stroke(); 
-      assert(s && s->is_of_type(DecalLineStroke::static_name()));
-      DecalLineStroke *ds = (DecalLineStroke*)s;
+      DecalLineStroke *ds = dynamic_cast<DecalLineStroke*>(s);
+      assert(ds);
       assert(ds->get_offsets() == nullptr);
 
       ds->clear();
@@ -1531,20 +1532,20 @@ LinePen::button_edit_style_apply()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
    }
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
    }
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
    }
@@ -1576,20 +1577,20 @@ LinePen::button_edit_style_get()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
    }
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
    }
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
    }
@@ -1618,13 +1619,13 @@ LinePen::button_edit_stroke_add()
 
    assert(_curr_mode == EDIT_MODE_CREASE);
    assert(_curr_tex);
-   assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+   assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
    assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
    OutlineStroke *s = _curr_pool->get_stroke();   assert(s);
 
    s->clear();
-   assert(s->is_of_type(EdgeStroke::static_name()));
+   assert(dynamic_cast<EdgeStroke*>(s));
    s->set_offsets(nullptr);
 
    easel_clear();
@@ -1650,11 +1651,11 @@ LinePen::button_edit_stroke_del()
 {
    assert(_curr_mode == EDIT_MODE_CREASE);
    assert(_curr_tex);
-   assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+   assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
    assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
 
    OutlineStroke *s = _curr_stroke;   assert(s);
-   assert(s->is_of_type(EdgeStroke::static_name()));
+   assert(dynamic_cast<EdgeStroke*>(s));
 
    easel_clear();
 
@@ -1777,7 +1778,7 @@ LinePen::create_stroke(CGESTUREptr &g)
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       assert(_curr_pool->get_prototype());
       
       accept_gesture = true;
@@ -1785,7 +1786,7 @@ LinePen::create_stroke(CGESTUREptr &g)
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
       if (_curr_stroke) accept_gesture = true;
@@ -1793,7 +1794,7 @@ LinePen::create_stroke(CGESTUREptr &g)
    else if (_curr_mode == EDIT_MODE_DECAL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       
       //If a decal's selected -- unselect it...
@@ -2010,13 +2011,13 @@ LinePen::easel_update_baseline()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       s = _curr_stroke;
    }
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(_curr_stroke);
       s = _curr_stroke;
@@ -2025,7 +2026,7 @@ LinePen::easel_update_baseline()
    {
       assert(_curr_mode == EDIT_MODE_DECAL);
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       assert(!_curr_stroke);
       s = nullptr;
@@ -2085,13 +2086,13 @@ LinePen::easel_populate()
    if (_curr_mode == EDIT_MODE_SIL)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+      assert(dynamic_cast<SilStrokePool*>(_curr_pool));
       s = _curr_pool->get_prototype();
    }
    else if (_curr_mode == EDIT_MODE_CREASE)
    {
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == EdgeStrokePool::static_name()));
+      assert(dynamic_cast<EdgeStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       s = _curr_stroke;
    }
@@ -2099,7 +2100,7 @@ LinePen::easel_populate()
    {
       assert(_curr_mode == EDIT_MODE_DECAL);
       assert(_curr_tex);
-      assert(_curr_pool && (_curr_pool->class_name() == DecalStrokePool::static_name()));
+      assert(dynamic_cast<DecalStrokePool*>(_curr_pool));
       assert(!_curr_stroke || (_curr_pool->get_selected_stroke() == _curr_stroke));
       //Shouldn't happen at all, really...
       assert(0);
@@ -2446,7 +2447,7 @@ LinePen::selection_changed(line_pen_selection_t t)
    {
       case LINE_PEN_SELECTION_CHANGED__SIL_TRACKING:
          assert(_curr_tex);
-         assert(_curr_pool && (_curr_pool->class_name() == SilStrokePool::static_name()));
+         assert(dynamic_cast<SilStrokePool*>(_curr_pool));
 
          _curr_stroke = _curr_pool->get_selected_stroke();
 

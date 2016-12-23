@@ -226,7 +226,7 @@ public:
         MaskData *one;
         if(s) {
           one = (MaskData*)(s->find_data(uintptr_t(p)));
-          if(one && !one->is_of_type(MaskData::static_name())) return 0;
+          if (one && !dynamic_cast<MaskData*>(one)) return 0;
           return (one) ? one : 0;
         }
         return 0;

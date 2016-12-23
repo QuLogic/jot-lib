@@ -299,7 +299,7 @@ bool
 LightUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if (sender->class_name() == PresetsUI::static_name()) {
+   if (dynamic_cast<PresetsUI*>(sender)) {
       switch(event)
       {
       case PresetsUI::PRESET_SELECTED:

@@ -253,7 +253,7 @@ bool
 PatchUI::child_callback(BaseUI* sender, int event)
 {
    bool s = false;  
-   if (sender->class_name() == PatchSelectionUI::static_name()) {
+   if (dynamic_cast<PatchSelectionUI*>(sender)) {
       switch(event)
       {
       case PatchSelectionUI::SELECT_FILL_PATCHES:

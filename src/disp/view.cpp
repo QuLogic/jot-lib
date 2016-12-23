@@ -1494,8 +1494,7 @@ VIEW::intersect(
    // Only add default GELFILTpickable filter if no such filter already exists
    bool has_pickable = false;
    for (GELFILTlist::size_type f = 0; !has_pickable && f < filter_list.size(); f++)
-      has_pickable = 
-         filter_list[f]->class_name() == GELFILTpickable::static_name();
+      has_pickable = dynamic_cast<GELFILTpickable*>(filter_list[f]) != nullptr;
 
    GELFILTpickable pick(0);  // The default filter
    if (!has_pickable)

@@ -191,7 +191,6 @@ EdgeStrokePool::~EdgeStrokePool()
    for (i = 0; i < _strip.edges().size(); i++) {
       Bedge* edge = _strip.edges()[i];
       assert(edge);
-      //SimplexData* d = edge->find_data(this->static_name());
       SimplexData* d = edge->find_data((uintptr_t)&(this->foo));
 
       edge->rem_simplex_data(d);
@@ -199,8 +198,9 @@ EdgeStrokePool::~EdgeStrokePool()
 
    i = 0;
    while (i < size()) {
-      assert(at(i)->is_of_type(EdgeStroke::static_name()));
-      ((EdgeStroke*)at(i++))->clear_simplex_data();
+      EdgeStroke* es = dynamic_cast<EdgeStroke*>(at(i++));
+      assert(es);
+      es->clear_simplex_data();
    }
 }
 
@@ -210,12 +210,14 @@ void EdgeStrokePool::set_stroke_strips()
    assert(_draw_proto == 0);
 
    assert(get_prototype());
-   assert(get_prototype()->is_of_type(EdgeStroke::static_name()));
-   ((EdgeStroke*)get_prototype())->set_edge_strip(&_strip);
+   EdgeStroke* es = dynamic_cast<EdgeStroke*>(get_prototype());
+   assert(es);
+   es->set_edge_strip(&_strip);
  
    for (vector<BaseStrokeOffset>::size_type i = 0; i < size(); i++) {
-      assert(at(i)->is_of_type(EdgeStroke::static_name()));
-      ((EdgeStroke*)at(i))->set_edge_strip(&_strip);
+      EdgeStroke* es = dynamic_cast<EdgeStroke*>(at(i));
+      assert(es);
+      es->set_edge_strip(&_strip);
    }
 }
 

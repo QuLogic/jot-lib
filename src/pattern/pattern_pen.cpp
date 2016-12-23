@@ -141,8 +141,8 @@ PatternPen::init_proxy(Bface* f) {
     
       p->set_texture(PatternTexture::static_name());
       GTexture* cur_texture = p->cur_tex();
-      if(!cur_texture->is_of_type(PatternTexture::static_name())) return;
-      _pattern_texture = (PatternTexture*)cur_texture;
+      if (!dynamic_cast<PatternTexture*>(cur_texture)) return;
+      _pattern_texture = static_cast<PatternTexture*>(cur_texture);
       _pattern_texture->set_patch(p);
       _ui->update();
 
